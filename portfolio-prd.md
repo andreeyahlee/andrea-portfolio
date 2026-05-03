@@ -56,9 +56,11 @@ Export every asset as **PNG at 2×**, named exactly as listed. Drop into `/asset
 | `hero-letter-p.png` | node-id `458-93` | **State 3** — zoomed into round of letter "p" (GSAP end state reference) |
 | `work-initial.png` | node-id `458-140` | **Work initial state** — 3 columns, titles only, no hover |
 | `work-hover-reveal.png` | node-id `848-1667` | Work hover state — reference for column expand end state |
-| `about-portrait.png` | node-id `953-14453` | Andrea portrait photo |
-| `about-split-closed.png` | node-id `707-16514` | Rectangle before split |
-| `about-split-open.png` | node-id `713-16765` | Rectangle post-split (portrait visible) |
+| `about-initial.png` | node-id `707-16514` | About initial state — text visible, no portrait |
+| `about-portrait-split.png` | node-id `713-16765` | Portrait popped up, text split apart |
+| `about-portrait-anchored.png` | node-id `953-14453` | Portrait bottom-left, rectangle expanded |
+| `about-info-swap.png` | node-id `953-14527` | Info content swapped, portrait stays |
+| `sayhello.png` | node-id `953-14585` | Say Hi / Contact section |
 | `arvo-cta.png` | node-id `952-14418` | Work card CTA thumbnail |
 | `seletar-cta.png` | node-id `952-14422` | Work card CTA thumbnail |
 | `pethaus-cta.png` | node-id `952-14428` | Work card CTA thumbnail |
@@ -283,31 +285,116 @@ On mouseleave:
 
 ### 5.3 Section: ABOUT
 
-**Source screens:** `node-id 707-16514` → `713-16765` → `953-14453` → `953-14527`
+**5-state scroll sequence:**
 
-**Sub-section A — The Rectangle Split (node `707-16514` → `713-16765`):**
+| State | Figma node | What happens |
+|---|---|---|
+| Transition | Work → `707-16514` | Work columns staircase upward off screen, About initial state revealed |
+| 1 — About lands | `707-16514` | Clean About page, text block visible, portrait not yet shown |
+| 2 — Portrait pop + text split | `713-16765` | Profile image rises from centre, surrounding text splits apart |
+| 3 — Portrait anchors, rectangle expands | `953-14453` | Portrait slides to bottom, name locks left, rectangle grows to fill bottom half with info |
+| 4 — Info swap | `953-14527` | Portrait and layout stay fixed, content in rectangle changes |
+| 5 — Exit | `953-14585` | Scrolls into Say Hi section |
 
-Layout: White/cream full-width rectangle, centered, ~70% viewport width × ~40vh.  
-Text "Andrea Lee — UX Designer" split into two halves (left / right).
+**Exports needed (add to list):**
+- `about-initial.png` — node `707-16514`
+- `about-portrait-split.png` — node `713-16765`
+- `about-portrait-anchored.png` — node `953-14453`
+- `about-info-swap.png` — node `953-14527`
+- `sayhello.png` — node `953-14585`
+
+---
+
+**Transition — Work columns staircase off screen:**
+
+When user scrolls past the Work section, the three columns do not disappear together. They exit in a staggered cascade — left column first, then centre, then right — each sliding upward out of the viewport. As the last column clears, the About initial state is underneath.
+
+```js
+// No pin on Work for this — ScrollTrigger one-shot on scroll exit
+// Stagger uses GSAP, triggered when Work bottom reaches viewport bottom
+gsap.to(".work-col", {
+  yPercent: -120,
+  stagger: 0.12,       // left → centre → right, 120ms apart
+  ease: "power2.inOut",
+  scrollTrigger: {
+    trigger: "#work",
+    start: "bottom bottom",
+    end: "+=300",
+    scrub: 1
+  }
+});
+```
+
+---
+
+**State 1 — About initial (node `707-16514`):**
+
+- Background: `--bg` (cream — first light section since hero)
+- Full viewport, centred text layout
+- Large headline: *"Andrea Lee"* — `--font-display`, `--ink`
+- Subline: role descriptor e.g. *"UX Designer · Singapore"*
+- Portrait: NOT visible yet — opacity 0, scale 0, positioned at vertical centre
+- Section label "About" small caps top-left in `--muted`
+
+---
+
+**State 2 — Portrait pops up, text splits (scrub: node `713-16765`):**
+
+GSAP ScrollTrigger pins the About section for states 2–4.
 
 ```
-ScrollTrigger scrub:
-  - rect-left: x: 0 → -15vw
-  - rect-right: x: 0 → +15vw
-  - about-portrait.webp: scale 0 → 1 (portrait pops up from center as rect splits)
-  - Portrait: transformOrigin "bottom center"
+On scrub 0 → 0.3:
+  - about-portrait.png: scale 0 → 1, opacity 0 → 1
+    transformOrigin "bottom center" (rises up from below)
+  - Headline left half (.text-left): x: 0 → -12vw
+  - Headline right half (.text-right): x: 0 → +12vw
+  - Both halves stay at same y — text tears apart horizontally, portrait rises through the gap
 ```
 
-**Sub-section B — Text + Photo Shift (node `953-14453`):**
+**HTML structure for the split:**
+```html
+<div class="about-headline">
+  <span class="text-left">Andrea</span>
+  <span class="text-right">Lee</span>
+</div>
+<img id="about-portrait" src="assets/about-portrait.png" alt="Andrea Lee">
+```
 
-On next scroll milestone:
-- Portrait `about-portrait.webp` shifts right
-- Body copy block (3–4 sentences, Andrea's background, warm voice) slides in from left
-- Use `ScrollTrigger` with `start: "top 60%"` — no pin, standard scroll reveal
-- `gsap.from(".about-body", { x: -40, opacity: 0, duration: 0.6 })`
+---
 
-**Copy (use exactly):**
+**State 3 — Portrait anchors, rectangle expands (scrub 0.3 → 0.65, node `953-14453`):**
+
+```
+- #about-portrait: y moves downward to bottom-left quadrant of screen
+- .about-name: slides in from left, locks beside portrait
+- #about-rect: height 0 → 50vh, expands upward from bottom of screen
+  background: --ink, sits behind portrait
+  contains: bio copy, skills grid (initially hidden)
+- Bio copy and skills: fade in as rect reaches full height
+```
+
+**Bio copy (use exactly):**
 > "So the way this started was — I kept finding myself redesigning every process I touched. At LaSalle I built an internal resource interface before I even knew what IA was. Running Magnolia & Pine taught me that every event is just a service blueprint in disguise. The bootcamp gave me the vocabulary for what I'd already been doing."
+
+---
+
+**State 4 — Info swap (scrub 0.65 → 1.0, node `953-14527`):**
+
+Portrait stays. Layout stays. Only the content inside `#about-rect` changes.
+
+```
+- Bio copy: opacity 1 → 0
+- Skills grid fades out
+- New content fades in: experience timeline / tools list / what I'm looking for
+  (match whatever is visible in node 953-14527)
+- #about-rect background can shift subtly: --ink → slightly lighter dark tone
+- At scrub 1.0: unpin fires, Say Hi section enters
+```
+
+**Skills to include (from resume):**
+User Research · Information Architecture · Usability Testing · Service Blueprinting · Prototyping · Stakeholder Management · Agile · KPI Tracking
+
+---
 
 **Sub-section C — Bottom half change (node `953-14527`):**
 
