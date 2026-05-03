@@ -3,1005 +3,1013 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Andrea Lee — UX Designer & Researcher</title>
-  <meta name="description" content="Andrea Lee is a Singapore-based UX Designer and Researcher who makes complex things stupidly simple.">
+  <title>Andrea Lee — UX Designer</title>
+  <meta name="description" content="Andrea Lee, UX Designer based in Singapore. Making complex things stupidly simple.">
 
-  <!-- ─── FONTS ─────────────────────────────────────────────
-       Cormorant Garamond : headers, nav, buttons, tags, quotes
-       Plus Jakarta Sans  : body copy, labels
-  ──────────────────────────────────────────────────────── -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,600;1,700&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@1,300;1,400&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+  <script>gsap.registerPlugin(ScrollTrigger);</script>
 
   <style>
-    /* ═══════════════════════════════════════════════════
+    /* ============================================
        DESIGN TOKENS
-       Single source of truth — change here, changes everywhere
-    ═══════════════════════════════════════════════════ */
+    ============================================ */
     :root {
-      /* ── Colours ── */
-      --cream:       #F3F2EC;   /* page background */
-      --forest:      #1F2B1F;   /* primary dark — nav, headings, buttons */
-      --accent:      #DCE888;   /* lime accent — CTAs, highlights, hover states */
+      --cream:     #F3F2EC;
+      --forest:    #1F2B1F;
+      --accent:    #DCE888;
+      --cream-60:  rgba(243, 242, 236, 0.60);
+      --cream-30:  rgba(243, 242, 236, 0.30);
+      --forest-60: rgba(31, 43, 31, 0.60);
+      --forest-15: rgba(31, 43, 31, 0.15);
 
-      /* Derived tones */
-      --forest-80:   rgba(31, 43, 31, 0.80);
-      --forest-40:   rgba(31, 43, 31, 0.40);
-      --forest-12:   rgba(31, 43, 31, 0.12);
-      --cream-60:    rgba(243, 242, 236, 0.60);
-      --accent-dim:  #C8D660;   /* accent darkened for hover */
+      --fh: 'Cormorant Garamond', Georgia, serif;
+      --fb: 'Plus Jakarta Sans', system-ui, sans-serif;
 
-      /* ── Typography ── */
-      --fh: 'Cormorant Garamond', Georgia, serif;   /* headers, nav, buttons, quotes */
-      --fb: 'Plus Jakarta Sans', system-ui, sans-serif; /* body, labels */
-
-      /* ── Type scale (fluid — clamps between mobile/desktop) ── */
-      --text-xs:     clamp(10px, 1.1vw, 11px);
-      --text-sm:     clamp(12px, 1.3vw, 13px);
-      --text-base:   clamp(14px, 1.5vw, 16px);
-      --text-md:     clamp(16px, 1.8vw, 18px);
-      --text-lg:     clamp(20px, 2.2vw, 24px);
-      --text-xl:     clamp(28px, 3.2vw, 36px);
-      --text-2xl:    clamp(36px, 4.5vw, 52px);
-      --text-3xl:    clamp(48px, 6.5vw, 80px);
-      --text-4xl:    clamp(64px, 9vw, 120px);
-
-      /* ── Spacing ── */
-      --space-1:  4px;
-      --space-2:  8px;
-      --space-3:  12px;
-      --space-4:  16px;
-      --space-5:  20px;
-      --space-6:  24px;
-      --space-8:  32px;
-      --space-10: 40px;
-      --space-12: 48px;
-      --space-16: 64px;
-      --space-20: 80px;
-      --space-24: 96px;
-
-      /* ── Layout ── */
-      --nav-h:     64px;   /* nav height — all sections offset by this */
-      --max-w:     1200px; /* max content width */
-      --gutter:    clamp(20px, 5vw, 52px); /* responsive side padding */
-
-      /* ── Radius ── */
-      --r-sm:  6px;
-      --r-md:  12px;
-      --r-lg:  20px;
-      --r-full: 100px;
-
-      /* ── Transitions ── */
-      --ease-out:   cubic-bezier(0.16, 1, 0.3, 1);
-      --ease-in:    cubic-bezier(0.7, 0, 0.84, 0);
-      --ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
-      --t-fast:  0.18s;
-      --t-base:  0.28s;
-      --t-slow:  0.45s;
-
-      /* ── Shadows ── */
-      --shadow-sm:  0 2px 8px rgba(31,43,31,0.08);
-      --shadow-md:  0 8px 32px rgba(31,43,31,0.10);
-      --shadow-lg:  0 24px 64px rgba(31,43,31,0.14);
-      --shadow-xl:  0 40px 100px rgba(31,43,31,0.20);
+      --gutter: clamp(24px, 5vw, 64px);
+      --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
     }
 
-    /* ═══════════════════════════════════════════════════
-       RESET + BASE
-    ═══════════════════════════════════════════════════ */
-    *, *::before, *::after {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-    }
-
-    html {
-      scroll-behavior: smooth;
-      -webkit-text-size-adjust: 100%;
-    }
-
+    /* ============================================
+       RESET
+    ============================================ */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
     body {
+      font-family: var(--fb);
       background: var(--cream);
       color: var(--forest);
-      font-family: var(--fb);
-      font-size: var(--text-base);
-      line-height: 1.6;
       overflow-x: hidden;
       -webkit-font-smoothing: antialiased;
-      -moz-osx-font-smoothing: grayscale;
     }
+    a { text-decoration: none; color: inherit; }
+    img { display: block; max-width: 100%; }
+    button { cursor: pointer; border: none; background: none; font-family: inherit; }
 
-    img, video {
-      display: block;
-      max-width: 100%;
-      height: auto;
-    }
-
-    a {
-      color: inherit;
-      text-decoration: none;
-    }
-
-    button {
-      cursor: pointer;
-      border: none;
-      background: none;
-      font-family: inherit;
-    }
-
-    ul, ol { list-style: none; }
-
-    /* ── Accessibility ── */
-    .sr-only {
-      position: absolute;
-      width: 1px; height: 1px;
-      padding: 0; margin: -1px;
-      overflow: hidden;
-      clip: rect(0,0,0,0);
-      white-space: nowrap;
-      border: 0;
-    }
-
-    :focus-visible {
-      outline: 2px solid var(--accent);
-      outline-offset: 3px;
-      border-radius: var(--r-sm);
-    }
-
-    /* Skip link */
-    .skip-link {
-      position: absolute;
-      top: -100%; left: var(--space-4);
-      background: var(--forest);
-      color: var(--cream);
-      padding: var(--space-2) var(--space-4);
-      border-radius: 0 0 var(--r-sm) var(--r-sm);
-      font-family: var(--fb);
-      font-size: var(--text-sm);
-      z-index: 9999;
-      transition: top var(--t-fast);
-    }
-    .skip-link:focus { top: 0; }
-
-    /* ── Reduced motion ── */
-    @media (prefers-reduced-motion: reduce) {
-      *, *::before, *::after {
-        animation-duration: 0.01ms !important;
-        transition-duration: 0.01ms !important;
-        scroll-behavior: auto !important;
-      }
-    }
-
-    /* ═══════════════════════════════════════════════════
-       TYPOGRAPHY HELPERS
-       Use these classes directly in HTML
-    ═══════════════════════════════════════════════════ */
-
-    /* Display — giant editorial headings */
-    .t-display {
-      font-family: var(--fh);
-      font-size: var(--text-4xl);
-      font-weight: 300;
-      line-height: 0.92;
-      letter-spacing: -0.02em;
-    }
-
-    /* H1 */
-    .t-h1 {
-      font-family: var(--fh);
-      font-size: var(--text-3xl);
-      font-weight: 400;
-      line-height: 0.95;
-    }
-
-    /* H2 */
-    .t-h2 {
-      font-family: var(--fh);
-      font-size: var(--text-2xl);
-      font-weight: 400;
-      line-height: 1.0;
-    }
-
-    /* H3 */
-    .t-h3 {
-      font-family: var(--fh);
-      font-size: var(--text-xl);
-      font-weight: 500;
-      line-height: 1.1;
-    }
-
-    /* Quote / italic Cormorant */
-    .t-quote {
-      font-family: var(--fh);
-      font-style: italic;
-      font-size: var(--text-lg);
-      font-weight: 300;
-      line-height: 1.3;
-    }
-
-    /* Eyebrow — small tracked uppercase label */
-    .t-eyebrow {
-      font-family: var(--fb);
-      font-size: var(--text-xs);
-      font-weight: 600;
-      letter-spacing: 0.14em;
-      text-transform: uppercase;
-      color: var(--forest-40);
-    }
-
-    /* Body */
-    .t-body {
-      font-family: var(--fb);
-      font-size: var(--text-base);
-      line-height: 1.7;
-    }
-
-    /* Tag — Cormorant, small, bordered pill */
-    .t-tag {
-      display: inline-flex;
-      align-items: center;
-      font-family: var(--fh);
-      font-size: var(--text-sm);
-      font-weight: 500;
-      letter-spacing: 0.04em;
-      border: 1px solid var(--forest);
-      border-radius: var(--r-full);
-      padding: 4px 14px;
-      transition: background var(--t-fast), color var(--t-fast);
-    }
-    .t-tag:hover {
-      background: var(--forest);
-      color: var(--cream);
-    }
-
-    /* ═══════════════════════════════════════════════════
-       BUTTON SYSTEM
-    ═══════════════════════════════════════════════════ */
-
-    /* Primary — accent fill */
-    .btn {
-      display: inline-flex;
-      align-items: center;
-      gap: var(--space-2);
-      font-family: var(--fh);
-      font-size: var(--text-md);
-      font-weight: 600;
-      letter-spacing: 0.04em;
-      padding: 12px 32px;
-      border-radius: var(--r-full);
-      transition:
-        background var(--t-base) var(--ease-out),
-        color var(--t-base) var(--ease-out),
-        transform var(--t-fast) var(--ease-spring),
-        gap var(--t-base);
-    }
-    .btn:hover { transform: translateY(-2px); }
-    .btn:active { transform: translateY(0); }
-    .btn:focus-visible { outline-color: var(--forest); }
-
-    .btn-primary {
-      background: var(--accent);
-      color: var(--forest);
-      border: 2px solid var(--accent);
-    }
-    .btn-primary:hover {
-      background: var(--accent-dim);
-      border-color: var(--accent-dim);
-      gap: var(--space-3);
-    }
-
-    .btn-ghost {
-      background: transparent;
-      color: var(--cream);
-      border: 1.5px solid rgba(243,242,236,0.45);
-    }
-    .btn-ghost:hover {
-      background: rgba(243,242,236,0.1);
-      border-color: var(--cream);
-      gap: var(--space-3);
-    }
-
-    .btn-outline {
-      background: transparent;
-      color: var(--forest);
-      border: 1.5px solid var(--forest);
-    }
-    .btn-outline:hover {
-      background: var(--forest);
-      color: var(--cream);
-      gap: var(--space-3);
-    }
-
-    /* ═══════════════════════════════════════════════════
-       LAYOUT HELPERS
-    ═══════════════════════════════════════════════════ */
-    .container {
-      width: 100%;
-      max-width: var(--max-w);
-      margin: 0 auto;
-      padding: 0 var(--gutter);
-    }
-
-    .section {
-      padding: var(--space-24) 0;
-    }
-
-    /* ═══════════════════════════════════════════════════
-       NAVIGATION
-       Forest green bar, fixed at top
-       Left: ANDREA + flower logo
-       Right: Work | Playground | About Me | [Say Hi!]
-    ═══════════════════════════════════════════════════ */
+    /* ============================================
+       NAV — floating pill, inverts on dark sections
+    ============================================ */
     .nav {
       position: fixed;
-      top: 0; left: 0; right: 0;
-      z-index: 900;
-      height: var(--nav-h);
+      top: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 100;
+      display: flex;
+      align-items: center;
+      gap: 28px;
       background: var(--forest);
-      display: flex;
-      align-items: center;
-      padding: 0 var(--gutter);
-      transition: box-shadow var(--t-base);
-    }
-    .nav.scrolled {
-      box-shadow: 0 1px 0 rgba(243,242,236,0.08),
-                  0 4px 24px rgba(0,0,0,0.18);
+      border-radius: 100px;
+      padding: 10px 10px 10px 20px;
+      transition: background 0.35s ease;
+      white-space: nowrap;
     }
 
-    .nav-inner {
-      width: 100%;
-      max-width: var(--max-w);
-      margin: 0 auto;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
+    /* On dark-background sections: invert to cream pill */
+    .nav.on-dark {
+      background: var(--cream);
     }
 
-    /* Logo — ANDREA + flower image */
     .nav-logo {
       display: flex;
       align-items: center;
-      gap: var(--space-2);
-      font-family: var(--fh);
-      font-size: 17px;
-      font-weight: 700;
-      letter-spacing: 0.22em;
-      text-transform: uppercase;
+      gap: 9px;
       color: var(--cream);
-      text-decoration: none;
-      transition: opacity var(--t-fast);
+      transition: color 0.35s ease;
     }
-    .nav-logo:hover { opacity: 0.82; }
-    .nav-logo:focus-visible { outline-color: var(--accent); }
-    .nav-logo img {
-      height: 28px;
-      width: auto;
-      filter: brightness(0) invert(1);
-    }
+    .nav.on-dark .nav-logo { color: var(--forest); }
 
-    /* Nav links */
     .nav-links {
       display: flex;
       align-items: center;
-      gap: var(--space-10);
+      gap: 24px;
     }
 
     .nav-link {
-      font-family: var(--fh);
-      font-size: 15px;
-      font-weight: 400;
-      letter-spacing: 0.04em;
-      color: rgba(243,242,236,0.62);
-      text-decoration: none;
-      position: relative;
-      padding: 4px 0;
-      transition: color var(--t-fast);
-      cursor: pointer;
-      background: none;
-      border: none;
-    }
-
-    /* Animated underline */
-    .nav-link::after {
-      content: '';
-      position: absolute;
-      bottom: -2px; left: 0;
-      width: 0; height: 1px;
-      background: var(--accent);
-      transition: width var(--t-base) var(--ease-out);
+      font-family: var(--fb);
+      font-size: 13.5px;
+      font-weight: 500;
+      color: var(--cream-60);
+      transition: color 0.2s, font-weight 0.1s;
     }
     .nav-link:hover { color: var(--cream); }
-    .nav-link:hover::after { width: 100%; }
-    .nav-link.active {
-      color: var(--cream);
-      font-weight: 600;
-    }
-    .nav-link.active::after { width: 100%; }
-    .nav-link:focus-visible { outline-color: var(--accent); }
+    .nav-link.active { color: var(--cream); font-weight: 700; }
 
-    /* Say Hi CTA */
+    .nav.on-dark .nav-link       { color: var(--forest-60); }
+    .nav.on-dark .nav-link:hover { color: var(--forest); }
+    .nav.on-dark .nav-link.active { color: var(--forest); }
+
     .nav-cta {
-      font-family: var(--fh);
-      font-size: 15px;
-      font-weight: 700;
-      letter-spacing: 0.06em;
+      font-size: 13px;
+      font-weight: 600;
+      letter-spacing: 0.01em;
+      background: var(--cream);
       color: var(--forest);
-      background: var(--accent);
-      border: none;
-      border-radius: var(--r-full);
-      padding: 8px 26px;
-      cursor: pointer;
-      transition:
-        background var(--t-base),
-        transform var(--t-fast) var(--ease-spring);
+      border-radius: 100px;
+      padding: 9px 20px;
+      transition: background 0.2s, color 0.2s, border-color 0.35s;
     }
-    .nav-cta:hover {
-      background: var(--accent-dim);
-      transform: translateY(-2px);
-    }
-    .nav-cta:active { transform: translateY(0); }
-    .nav-cta:focus-visible { outline-color: var(--cream); }
+    .nav-cta:hover { background: var(--accent); }
 
-    /* ── Mobile nav hamburger (≤768px) ── */
+    .nav.on-dark .nav-cta {
+      background: transparent;
+      border: 1.5px solid var(--forest);
+      color: var(--forest);
+      padding: 7.5px 18.5px;
+    }
+    .nav.on-dark .nav-cta:hover { background: var(--forest); color: var(--cream); }
+
+    /* Mobile hamburger — hidden on desktop */
     .nav-hamburger {
       display: none;
       flex-direction: column;
-      gap: 5px;
-      padding: var(--space-2);
-      background: none;
-      border: none;
-      cursor: pointer;
+      gap: 4.5px;
+      padding: 5px;
     }
     .nav-hamburger span {
       display: block;
-      width: 24px; height: 1.5px;
+      width: 21px;
+      height: 1.5px;
       background: var(--cream);
       border-radius: 2px;
-      transition: transform var(--t-base) var(--ease-out),
-                  opacity var(--t-fast);
+      transition: transform 0.3s var(--ease-out), opacity 0.2s;
     }
-    .nav-hamburger.open span:nth-child(1) { transform: translateY(6.5px) rotate(45deg); }
+    .nav.on-dark .nav-hamburger span { background: var(--forest); }
+    .nav-hamburger.open span:nth-child(1) { transform: translateY(6px) rotate(45deg); }
     .nav-hamburger.open span:nth-child(2) { opacity: 0; }
-    .nav-hamburger.open span:nth-child(3) { transform: translateY(-6.5px) rotate(-45deg); }
+    .nav-hamburger.open span:nth-child(3) { transform: translateY(-6px) rotate(-45deg); }
 
-    /* Mobile menu drawer */
-    .nav-drawer {
+    /* Mobile full-screen overlay */
+    .nav-overlay {
       display: none;
       position: fixed;
-      top: var(--nav-h); left: 0; right: 0;
+      inset: 0;
       background: var(--forest);
-      padding: var(--space-6) var(--gutter) var(--space-8);
-      border-top: 1px solid rgba(243,242,236,0.1);
-      z-index: 899;
-      flex-direction: column;
-      gap: var(--space-5);
-      transform: translateY(-8px);
-      opacity: 0;
-      pointer-events: none;
-      transition:
-        opacity var(--t-base) var(--ease-out),
-        transform var(--t-base) var(--ease-out);
-    }
-    .nav-drawer.open {
-      opacity: 1;
-      transform: translateY(0);
-      pointer-events: all;
-    }
-    .nav-drawer .nav-link {
-      font-size: 22px;
-      font-weight: 400;
-    }
-    .nav-drawer .nav-cta {
-      align-self: flex-start;
-      font-size: 18px;
-      margin-top: var(--space-2);
-    }
-
-    /* ═══════════════════════════════════════════════════
-       PLACEHOLDER SECTIONS
-       These will be replaced one-by-one in later sessions
-    ═══════════════════════════════════════════════════ */
-
-    /* Page body offset for fixed nav */
-    .page-body {
-      padding-top: var(--nav-h);
-    }
-
-    /* Section placeholders — visual reference only */
-    .placeholder {
-      display: flex;
+      z-index: 99;
       flex-direction: column;
       align-items: center;
       justify-content: center;
-      text-align: center;
-      gap: var(--space-3);
-      min-height: 100vh;
-      border-bottom: 1px solid var(--forest-12);
+      gap: 44px;
     }
-
-    .placeholder-label {
-      font-family: var(--fb);
-      font-size: var(--text-xs);
-      letter-spacing: 0.14em;
-      text-transform: uppercase;
-      color: var(--forest-40);
-    }
-
-    .placeholder-title {
+    .nav-overlay.open { display: flex; }
+    .nav-overlay a, .nav-overlay button {
       font-family: var(--fh);
-      font-size: var(--text-2xl);
-      font-weight: 400;
-      color: var(--forest);
-    }
-
-    .placeholder-note {
-      font-family: var(--fb);
-      font-size: var(--text-sm);
-      color: var(--forest-40);
-    }
-
-    /* ═══════════════════════════════════════════════════
-       FOOTER
-    ═══════════════════════════════════════════════════ */
-    .footer {
-      background: var(--forest);
-      padding: var(--space-20) 0 var(--space-10);
-    }
-
-    .footer-inner {
-      width: 100%;
-      max-width: var(--max-w);
-      margin: 0 auto;
-      padding: 0 var(--gutter);
-    }
-
-    /* Top row — big SAY HI + links */
-    .footer-top {
-      display: flex;
-      align-items: flex-end;
-      justify-content: space-between;
-      gap: var(--space-8);
-      padding-bottom: var(--space-12);
-      border-bottom: 1px solid rgba(243,242,236,0.1);
-      flex-wrap: wrap;
-    }
-
-    .footer-heading {
-      font-family: var(--fh);
-      font-size: var(--text-4xl);
+      font-size: 52px;
       font-weight: 300;
-      line-height: 0.88;
-      color: var(--cream);
-    }
-    .footer-heading em {
       font-style: italic;
-      color: var(--accent);
+      color: var(--cream);
+      letter-spacing: -0.01em;
+      background: none;
+      padding: 0;
     }
 
-    .footer-connect {
-      display: flex;
-      flex-direction: column;
-      gap: var(--space-3);
-      padding-bottom: var(--space-2); /* align to baseline of heading */
-    }
-
-    .footer-connect-label {
-      font-family: var(--fb);
-      font-size: var(--text-xs);
-      letter-spacing: 0.14em;
-      text-transform: uppercase;
-      color: rgba(243,242,236,0.38);
-      margin-bottom: var(--space-1);
-    }
-
-    /* External links — LinkedIn, Instagram */
-    .footer-social-links {
-      display: flex;
-      gap: var(--space-4);
-    }
-
-    .footer-social-link {
+    /* ============================================
+       HERO
+    ============================================ */
+    #hero {
+      position: relative;
+      width: 100vw;
+      height: 100vh;
+      background: var(--cream);
       display: flex;
       align-items: center;
-      gap: var(--space-2);
-      font-family: var(--fh);
-      font-size: var(--text-md);
-      font-weight: 500;
-      color: rgba(243,242,236,0.62);
-      text-decoration: none;
-      transition: color var(--t-fast);
-      padding: var(--space-2) 0;
+      justify-content: center;
+      overflow: hidden;
     }
-    .footer-social-link:hover { color: var(--accent); }
-    .footer-social-link:focus-visible { outline-color: var(--accent); }
 
-    /* Contact button */
-    .footer-cta-wrap { margin-top: var(--space-5); }
+    /* The desk / collage photograph */
+    #hero-desktop {
+      width: 58vw;
+      max-width: 820px;
+      height: auto;
+      object-fit: contain;
+      flex-shrink: 0;
+      will-change: transform;
+      /* GSAP owns all transforms — no CSS transform here */
+    }
 
-    /* Bottom row — logo + sitemap + copyright */
-    .footer-bottom {
+    /* "complex" overlay — hidden until GSAP Phase 2 */
+    .hero-complex-wrap {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      /* Centered via gsap.set xPercent/yPercent — not CSS transform */
+      opacity: 0;
+      pointer-events: none;
+      will-change: transform, opacity;
+    }
+
+    .word-complex {
+      font-family: var(--fb);
+      font-size: clamp(60px, 8vw, 100px);
+      font-weight: 700;
+      letter-spacing: -0.035em;
+      line-height: 1;
+      color: var(--forest);
+      display: block;
+      white-space: nowrap;
+    }
+
+    /* The "p" letter — GSAP scales this independently in Phase 3 */
+    .letter-p {
+      display: inline;
+      will-change: transform;
+      /* transformOrigin set in GSAP: "50% 55%" (centre of bowl) */
+    }
+
+    /* Scroll indicator */
+    .hero-scroll {
+      position: absolute;
+      bottom: 36px;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 10px;
+      pointer-events: none;
+    }
+    .hero-scroll-line {
+      display: block;
+      width: 1px;
+      height: 42px;
+      background: var(--forest-60);
+    }
+    .hero-scroll-text {
+      font-family: var(--fh);
+      font-size: 13px;
+      font-style: italic;
+      color: var(--forest-60);
+      letter-spacing: 0.05em;
+    }
+
+    /* ============================================
+       WORK
+    ============================================ */
+    #work {
+      position: relative;
+      width: 100%;
+      min-height: 100vh;
+      background: var(--forest);
+      display: flex;
+      flex-direction: column;
+    }
+
+    .work-header {
+      padding: 80px var(--gutter) 0;
+    }
+
+    .work-title {
+      font-family: var(--fb);
+      font-size: clamp(44px, 6.5vw, 88px);
+      font-weight: 700;
+      line-height: 0.95;
+      letter-spacing: -0.025em;
+      color: var(--cream);
+    }
+
+    .work-cols {
+      display: flex;
+      flex: 1;
+      margin-top: 44px;
+      border-top: 1px solid var(--cream-30);
+    }
+
+    .work-col {
+      flex-grow: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      padding: 0 32px 52px;
+      border-right: 1px solid var(--cream-30);
+      min-height: 55vh;
+      cursor: pointer;
+      position: relative;
+      overflow: hidden;
+      transition: flex-grow 0.4s ease;
+      text-decoration: none;
+    }
+    .work-col:last-child { border-right: none; }
+
+    /* Column width expansion on hover via :has() */
+    .work-cols:has(.work-col:hover) .work-col      { flex-grow: 0.75; }
+    .work-cols:has(.work-col:hover) .work-col:hover { flex-grow: 1.5;  }
+
+    /* Background image fills column on hover */
+    .work-col-img {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      opacity: 0;
+      transition: opacity 0.4s ease;
+      z-index: 0;
+    }
+    .work-col:hover .work-col-img { opacity: 0.85; }
+
+    /* Dark gradient so text stays legible over image */
+    .work-col::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(to top, rgba(31,43,31,0.92) 0%, rgba(31,43,31,0.4) 50%, transparent 100%);
+      opacity: 0;
+      transition: opacity 0.4s ease;
+      z-index: 1;
+    }
+    .work-col:hover::after { opacity: 1; }
+
+    /* Project name — fades out when hover overlay appears */
+    .work-col-name {
+      font-family: var(--fb);
+      font-size: clamp(17px, 2vw, 24px);
+      font-weight: 500;
+      color: var(--cream);
+      opacity: 0.85;
+      position: relative;
+      z-index: 3;
+      transition: opacity 0.25s ease;
+    }
+    .work-col:hover .work-col-name { opacity: 0; }
+
+    /* Hover overlay — slides up on enter */
+    .work-col-overlay {
+      position: absolute;
+      bottom: 0; left: 0; right: 0;
+      padding: 0 32px 48px;
+      opacity: 0;
+      transform: translateY(14px);
+      transition: opacity 0.32s ease, transform 0.32s ease;
+      z-index: 2;
+    }
+    .work-col:hover .work-col-overlay {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .work-col-tags {
+      font-family: var(--fb);
+      font-size: 9.5px;
+      font-weight: 600;
+      letter-spacing: 0.13em;
+      text-transform: uppercase;
+      color: var(--cream-60);
+      margin-bottom: 14px;
+    }
+
+    .work-col-headline {
+      font-family: var(--fb);
+      font-size: clamp(20px, 2.4vw, 32px);
+      font-weight: 700;
+      color: var(--cream);
+      line-height: 1.1;
+      letter-spacing: -0.02em;
+      margin-bottom: 12px;
+    }
+
+    .work-col-desc {
+      font-size: 12.5px;
+      color: var(--cream-60);
+      line-height: 1.65;
+      margin-bottom: 20px;
+      max-width: 280px;
+    }
+
+    .work-col-cta {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-family: var(--fb);
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--forest);
+      background: var(--cream);
+      border-radius: 100px;
+      padding: 8px 16px;
+      transition: background 0.2s;
+    }
+    .work-col-cta:hover { background: var(--accent); }
+
+    .work-scroll-hint {
+      position: absolute;
+      right: var(--gutter);
+      bottom: 52px;
+      font-family: var(--fh);
+      font-size: 13px;
+      font-style: italic;
+      color: var(--cream-30);
+      letter-spacing: 0.04em;
+      pointer-events: none;
+    }
+
+    /* ============================================
+       ABOUT
+    ============================================ */
+    #about {
+      width: 100%;
+      background: var(--cream);
+    }
+
+    /* ── Intro: "Hi! I'm [photo] Andrea" ── */
+    .about-intro {
+      position: relative;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 100px var(--gutter) 80px;
+    }
+
+    .about-scroll-hint {
+      position: absolute;
+      top: 28px; right: var(--gutter);
+      font-family: var(--fh);
+      font-size: 13px;
+      font-style: italic;
+      color: var(--forest-60);
+      letter-spacing: 0.04em;
+      pointer-events: none;
+    }
+
+    .about-headline {
+      display: flex;
+      align-items: center;
+      gap: clamp(16px, 2.5vw, 32px);
+      font-family: var(--fb);
+      font-size: clamp(52px, 10vw, 130px);
+      font-weight: 800;
+      line-height: 1;
+      letter-spacing: -0.04em;
+      color: var(--forest);
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+
+    /* Portrait placeholder box — swap src when export is ready */
+    .about-portrait-inline {
+      width: clamp(110px, 16vw, 210px);
+      height: clamp(130px, 19vw, 250px);
+      flex-shrink: 0;
+      border-radius: 6px;
+      overflow: hidden;
+      background: rgba(31,43,31,0.08);
+    }
+    .about-portrait-inline img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: center top;
+    }
+
+    /* ── Bio: two-column ── */
+    .about-bio {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0 clamp(40px, 6vw, 100px);
+      padding: 80px var(--gutter) 80px;
+      border-top: 1px solid var(--forest-15);
+    }
+
+    .about-bio-location {
       display: flex;
       align-items: flex-start;
-      justify-content: space-between;
-      padding-top: var(--space-10);
-      gap: var(--space-8);
-      flex-wrap: wrap;
+      gap: 12px;
+      font-family: var(--fh);
+      font-size: clamp(20px, 2.4vw, 28px);
+      font-style: italic;
+      font-weight: 300;
+      line-height: 1.35;
+      color: var(--forest);
+      margin-bottom: 20px;
+    }
+    .about-bio-location svg { margin-top: 4px; flex-shrink: 0; opacity: 0.6; }
+
+    .about-bio-body {
+      font-size: 14px;
+      color: var(--forest-60);
+      line-height: 1.78;
+      margin-bottom: 10px;
     }
 
-    .footer-logo {
-      display: flex;
-      align-items: center;
-      gap: var(--space-2);
+    .about-bio-credit {
       font-family: var(--fh);
       font-size: 16px;
-      font-weight: 700;
-      letter-spacing: 0.22em;
-      text-transform: uppercase;
-      color: var(--cream);
-      text-decoration: none;
-      opacity: 0.7;
-      transition: opacity var(--t-fast);
-    }
-    .footer-logo:hover { opacity: 1; }
-    .footer-logo img {
-      height: 22px; width: auto;
-      filter: brightness(0) invert(1);
-      opacity: 0.7;
-    }
-    .footer-logo:focus-visible { outline-color: var(--accent); }
-
-    /* Sitemap */
-    .footer-sitemap {
-      display: flex;
-      gap: var(--space-16);
+      font-style: italic;
+      color: var(--forest-60);
     }
 
-    .footer-sitemap-col {
-      display: flex;
-      flex-direction: column;
-      gap: var(--space-3);
-    }
-
-    .footer-sitemap-heading {
-      font-family: var(--fb);
-      font-size: var(--text-xs);
-      font-weight: 600;
-      letter-spacing: 0.14em;
-      text-transform: uppercase;
-      color: rgba(243,242,236,0.35);
-      margin-bottom: var(--space-1);
-    }
-
-    .footer-sitemap-link {
+    .about-philosophy-heading {
       font-family: var(--fh);
-      font-size: var(--text-base);
-      font-weight: 400;
-      color: rgba(243,242,236,0.55);
-      text-decoration: none;
-      transition: color var(--t-fast);
+      font-size: clamp(20px, 2.4vw, 28px);
+      font-style: italic;
+      font-weight: 300;
+      line-height: 1.35;
+      color: var(--forest);
+      margin-bottom: 20px;
     }
-    .footer-sitemap-link:hover { color: var(--accent); }
-    .footer-sitemap-link:focus-visible { outline-color: var(--accent); }
 
-    /* Copyright */
-    .footer-copy {
+    .about-philosophy-body {
+      font-size: 14px;
+      color: var(--forest-60);
+      line-height: 1.78;
+      margin-bottom: 14px;
+    }
+
+    .about-philosophy-strong {
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--forest);
+      line-height: 1.6;
+    }
+
+    /* ── Off the record: tag cloud ── */
+    .about-fun {
+      padding: 80px var(--gutter) 120px;
+      border-top: 1px solid var(--forest-15);
+      text-align: center;
+    }
+
+    .about-fun-heading {
+      font-family: var(--fh);
+      font-size: clamp(28px, 4vw, 48px);
+      font-style: italic;
+      font-weight: 300;
+      color: var(--forest);
+      margin-bottom: 48px;
+    }
+
+    .about-tags-wrap {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px 12px;
+      justify-content: center;
+      max-width: 860px;
+      margin: 0 auto;
+    }
+
+    .about-tag {
       font-family: var(--fb);
-      font-size: var(--text-xs);
-      color: rgba(243,242,236,0.22);
-      letter-spacing: 0.03em;
-      align-self: flex-end;
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--forest);
+      border: 1.5px solid var(--forest-15);
+      border-radius: 100px;
+      padding: 8px 18px;
+      transition: background 0.2s, border-color 0.2s, color 0.2s;
+      cursor: default;
+    }
+    .about-tag:hover {
+      background: var(--forest);
+      border-color: var(--forest);
+      color: var(--cream);
     }
 
-    /* ═══════════════════════════════════════════════════
-       RESPONSIVE — TABLET (≤1024px)
-    ═══════════════════════════════════════════════════ */
-    @media (max-width: 1024px) {
-      :root { --gutter: 36px; }
-
-      .footer-sitemap { gap: var(--space-10); }
+    /* ============================================
+       CONTACT
+    ============================================ */
+    #contact {
+      width: 100%;
+      min-height: 100vh;
+      background: var(--cream);
+      padding: 140px var(--gutter) 100px;
     }
 
-    /* ═══════════════════════════════════════════════════
-       RESPONSIVE — MOBILE (≤768px)
-    ═══════════════════════════════════════════════════ */
+    .contact-heading {
+      font-family: var(--fb);
+      font-size: clamp(76px, 13vw, 168px);
+      font-weight: 800;
+      line-height: 0.88;
+      letter-spacing: -0.045em;
+      color: var(--forest);
+      margin-bottom: 24px;
+    }
+
+    .contact-sub {
+      font-size: clamp(14px, 1.4vw, 16px);
+      color: var(--forest-60);
+      max-width: 460px;
+      line-height: 1.65;
+      margin-bottom: 60px;
+    }
+
+    .contact-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 24px 80px;
+      max-width: 640px;
+    }
+
+    .contact-item {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      font-size: 14px;
+      color: var(--forest);
+      line-height: 1.4;
+      transition: opacity 0.2s;
+    }
+    a.contact-item:hover { opacity: 0.55; }
+
+    .contact-item svg { flex-shrink: 0; opacity: 0.65; }
+
+    /* ============================================
+       RESPONSIVE
+    ============================================ */
     @media (max-width: 768px) {
-      :root { --gutter: 20px; }
-
-      /* Nav: hide links, show hamburger */
-      .nav-links { display: none; }
+      /* Pill nav: hide links + CTA, show hamburger */
+      .nav { gap: 0; padding: 8px 8px 8px 16px; }
+      .nav-links, .nav-cta { display: none; }
       .nav-hamburger { display: flex; }
-      .nav-drawer { display: flex; }
 
-      /* Footer top: stack vertically */
-      .footer-top {
-        flex-direction: column;
-        align-items: flex-start;
+      /* Hero */
+      #hero-desktop { width: 94vw; }
+      .hero-scroll { display: none; }
+
+      /* Work: stack columns vertically */
+      .work-cols { flex-direction: column; }
+      .work-col {
+        border-right: none;
+        border-bottom: 1px solid var(--cream-30);
+        min-height: 180px;
       }
+      .work-scroll-hint { display: none; }
 
-      /* Footer bottom: stack */
-      .footer-bottom {
-        flex-direction: column;
-        gap: var(--space-8);
-      }
-
-      .footer-sitemap {
-        flex-wrap: wrap;
-        gap: var(--space-8);
-      }
-
-      .footer-copy { align-self: flex-start; }
-    }
-
-    @media (max-width: 480px) {
-      :root { --gutter: 16px; }
-      .footer-social-links { flex-direction: column; }
+      /* Contact */
+      .contact-grid { grid-template-columns: 1fr; }
     }
   </style>
 </head>
 <body>
 
-  <!-- Skip link for accessibility -->
-  <a class="skip-link" href="#main">Skip to main content</a>
-
-  <!-- ═══════════════════════════════════════
-       NAVIGATION
-  ═══════════════════════════════════════ -->
+  <!-- ===========================
+       NAV
+  =========================== -->
   <nav class="nav" id="nav" role="navigation" aria-label="Main navigation">
-    <div class="nav-inner">
 
-      <!-- Left: ANDREA + flower logo -->
-      <a class="nav-logo" href="#hero"
-         onclick="scrollTo('hero',event)"
-         aria-label="Andrea Lee — back to top">
-        ANDREA
-        <img src="assets/Flower (white).png" alt="" aria-hidden="true">
-      </a>
+    <a href="#hero" class="nav-logo" aria-label="Home">
+      <!-- Wildflower icon — hand-drawn style -->
+      <svg width="20" height="25" viewBox="0 0 20 25" fill="none" aria-hidden="true">
+        <circle cx="10" cy="9.5" r="3.2" fill="currentColor"/>
+        <ellipse cx="10" cy="3"   rx="2.2" ry="3.8" fill="currentColor" opacity="0.82"/>
+        <ellipse cx="17" cy="9.5" rx="3.8" ry="2.2" fill="currentColor" opacity="0.82"/>
+        <ellipse cx="10" cy="16"  rx="2.2" ry="3.8" fill="currentColor" opacity="0.82"/>
+        <ellipse cx="3"  cy="9.5" rx="3.8" ry="2.2" fill="currentColor" opacity="0.82"/>
+        <path d="M10 13 C10 17 8.5 21 7.5 25" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" fill="none"/>
+        <path d="M9.5 19 C7.5 17.5 5.5 18 5 19" stroke="currentColor" stroke-width="1.1" stroke-linecap="round" fill="none"/>
+      </svg>
+    </a>
 
-      <!-- Right: desktop links -->
-      <div class="nav-links" role="list">
-        <a class="nav-link" role="listitem"
-           href="#work" onclick="scrollTo('work',event)"
-           id="nl-work">Work</a>
-        <a class="nav-link" role="listitem"
-           href="#playground" onclick="scrollTo('playground',event)"
-           id="nl-playground">Playground</a>
-        <a class="nav-link" role="listitem"
-           href="#about" onclick="scrollTo('about',event)"
-           id="nl-about">About Me</a>
-        <button class="nav-cta"
-           onclick="scrollTo('footer',event)"
-           aria-label="Say Hi — jump to contact">
-          Say Hi!
-        </button>
-      </div>
-
-      <!-- Mobile hamburger -->
-      <button class="nav-hamburger" id="hamburger"
-              aria-label="Open menu" aria-expanded="false"
-              aria-controls="nav-drawer">
-        <span></span>
-        <span></span>
-        <span></span>
-      </button>
-
+    <div class="nav-links" role="list">
+      <a class="nav-link" href="#work"  role="listitem" id="nl-work">Work</a>
+      <a class="nav-link" href="#about" role="listitem" id="nl-about">About</a>
     </div>
+
+    <button class="nav-cta" id="nav-sayhi" aria-label="Jump to contact">Say Hi!</button>
+
+    <button class="nav-hamburger" id="hamburger"
+            aria-label="Open navigation menu" aria-expanded="false">
+      <span></span><span></span><span></span>
+    </button>
   </nav>
 
-  <!-- Mobile drawer -->
-  <div class="nav-drawer" id="nav-drawer" role="dialog" aria-label="Mobile navigation">
-    <a class="nav-link" href="#work"       onclick="closeMobile();scrollTo('work',event)">Work</a>
-    <a class="nav-link" href="#playground" onclick="closeMobile();scrollTo('playground',event)">Playground</a>
-    <a class="nav-link" href="#about"      onclick="closeMobile();scrollTo('about',event)">About Me</a>
-    <button class="nav-cta"               onclick="closeMobile();scrollTo('footer',event)">Say Hi!</button>
+  <!-- Mobile overlay -->
+  <div class="nav-overlay" id="nav-overlay" role="dialog" aria-label="Navigation menu">
+    <a href="#work">Work</a>
+    <a href="#about">About</a>
+    <button id="overlay-sayhi">Say Hi!</button>
   </div>
 
-  <!-- ═══════════════════════════════════════
-       MAIN CONTENT
-       Placeholder sections — replaced in later sessions
-  ═══════════════════════════════════════ -->
-  <main id="main" class="page-body">
 
-    <!-- SECTION 1: Hero (Session 2) -->
-    <section id="hero" class="placeholder" style="background: var(--cream);">
-      <p class="placeholder-label">Section 1</p>
-      <h1 class="placeholder-title">Hero — Scroll Zoom</h1>
-      <p class="placeholder-note">Collage assets + GSAP zoom → built in Session 2</p>
-    </section>
+  <!-- ===========================
+       HERO
+  =========================== -->
+  <section id="hero">
 
-    <!-- SECTION 2: Work / Case Studies (Session 3) -->
-    <section id="work" class="placeholder" style="background: var(--forest); color: var(--cream);">
-      <p class="placeholder-label" style="color:rgba(243,242,236,0.4)">Section 2</p>
-      <h2 class="placeholder-title" style="color:var(--cream)">Work — Case Studies</h2>
-      <p class="placeholder-note" style="color:rgba(243,242,236,0.4)">3 folders: ARVO, Seletar, Pet Haus → built in Session 3</p>
-    </section>
+    <!-- Desk / collage photograph — GSAP Phase 1 zooms this -->
+    <img
+      id="hero-desktop"
+      src="assets.webp/hero-initial.png"
+      alt="Andrea Lee's workspace: monitor, desk plants, books and objects"
+      fetchpriority="high"
+      width="820"
+      height="618"
+    >
 
-    <!-- SECTION 3: Playground (Session 4) -->
-    <section id="playground" class="placeholder" style="background: var(--cream);">
-      <p class="placeholder-label">Section 3</p>
-      <h2 class="placeholder-title">Playground — Side Projects</h2>
-      <p class="placeholder-note">Scrapbook layout → built in Session 4</p>
-    </section>
+    <!-- "complex" overlay — only visible during GSAP Phase 2–3
+         GSAP owns all transforms: xPercent/yPercent centres it,
+         scale: 5 zooms it, never use CSS translate here           -->
+    <div class="hero-complex-wrap" id="hero-complex" aria-hidden="true">
+      <span class="word-complex">com<span class="letter-p" id="letter-p">p</span>lex</span>
+    </div>
 
-    <!-- SECTION 4: About Me (Session 5) -->
-    <section id="about" class="placeholder" style="background: var(--cream);">
-      <p class="placeholder-label">Section 4</p>
-      <h2 class="placeholder-title">About Me — Post-its</h2>
-      <p class="placeholder-note">Draggable post-it notes → built in Session 5</p>
-    </section>
+    <!-- Scroll indicator -->
+    <div class="hero-scroll" id="hero-scroll" aria-hidden="true">
+      <span class="hero-scroll-line"></span>
+      <span class="hero-scroll-text">scroll down</span>
+    </div>
 
-  </main>
+  </section>
 
-  <!-- ═══════════════════════════════════════
-       FOOTER
-  ═══════════════════════════════════════ -->
-  <footer class="footer" id="footer" role="contentinfo">
-    <div class="footer-inner">
 
-      <!-- Top: Say Hi + social links -->
-      <div class="footer-top">
-        <div>
-          <h2 class="footer-heading">
-            Let's make<br>
-            something <em>good.</em>
-          </h2>
+  <!-- ===========================
+       WORK
+  =========================== -->
+  <section id="work" aria-label="Selected works">
+
+    <div class="work-header">
+      <h2 class="work-title">Selected<br>Works</h2>
+    </div>
+
+    <div class="work-cols" role="list">
+
+      <a class="work-col" href="case-studies/arvo.html" role="listitem" aria-label="ARVO case study">
+        <img class="work-col-img" src="assets.webp/arvo-cta.png" alt="" aria-hidden="true" loading="lazy">
+        <div class="work-col-overlay">
+          <p class="work-col-tags">Project Lead · Team of 6 · AI for Managers</p>
+          <h3 class="work-col-headline">Pushing back 71% of issues to the client</h3>
+          <p class="work-col-desc">Six weeks. A team of six. A brief that required uncomfortable honesty.</p>
+          <span class="work-col-cta">Read the case study →</span>
         </div>
+        <span class="work-col-name">ARVO</span>
+      </a>
 
-        <div class="footer-connect">
-          <p class="footer-connect-label">Find me on</p>
-          <div class="footer-social-links">
-            <a class="footer-social-link"
-               href="https://linkedin.com/in/andrealeesg"
-               target="_blank" rel="noopener noreferrer"
-               aria-label="Andrea Lee on LinkedIn (opens in new tab)">
-              LinkedIn ↗
-            </a>
-            <a class="footer-social-link"
-               href="https://instagram.com/andreeleesg"
-               target="_blank" rel="noopener noreferrer"
-               aria-label="Andrea Lee on Instagram (opens in new tab)">
-              Instagram ↗
-            </a>
-          </div>
-          <div class="footer-cta-wrap">
-            <a class="btn btn-primary"
-               href="contact.html"
-               aria-label="Open contact page">
-              Get in touch →
-            </a>
-          </div>
+      <a class="work-col" href="case-studies/seletar.html" role="listitem" aria-label="Seletar Airport case study">
+        <img class="work-col-img" src="assets.webp/seletar-cta.png" alt="" aria-hidden="true" loading="lazy">
+        <div class="work-col-overlay">
+          <p class="work-col-tags">Lead UX Researcher · Team of 3 · Omni-channel / Info</p>
+          <h3 class="work-col-headline">Great airport, nobody knew!</h3>
+          <p class="work-col-desc">13 interviews. 2 rounds of testing. One painful pivot. How research saved our team from shipping the wrong product.</p>
+          <span class="work-col-cta">Read the case study →</span>
         </div>
+        <span class="work-col-name">Seletar Airport</span>
+      </a>
+
+      <a class="work-col" href="case-studies/pethaus.html" role="listitem" aria-label="Pet Haus case study">
+        <img class="work-col-img" src="assets.webp/pethaus-cta.png" alt="" aria-hidden="true" loading="lazy">
+        <div class="work-col-overlay">
+          <p class="work-col-tags">Solo Designer · End-to-end · E-commerce</p>
+          <h3 class="work-col-headline">Trust, designed in.</h3>
+          <p class="work-col-desc">A solo e-commerce build for the most anxious shopper on the internet — Pawrents. 92% said the same thing in different words.</p>
+          <span class="work-col-cta">Read the case study →</span>
+        </div>
+        <span class="work-col-name">Pet Haus</span>
+      </a>
+
+    </div>
+
+    <span class="work-scroll-hint" aria-hidden="true">scroll up to return ↑</span>
+
+  </section>
+
+
+  <!-- ===========================
+       ABOUT
+  =========================== -->
+  <section id="about" aria-label="About Andrea">
+
+    <!-- ── Intro: "Hi! I'm [portrait] Andrea" ── -->
+    <div class="about-intro" id="about-intro">
+      <span class="about-scroll-hint" aria-hidden="true">scroll down ↓</span>
+      <h2 class="about-headline">
+        <span class="about-hi">Hi! I'm</span>
+        <!-- Portrait: export from Figma as about-portrait.png and set src below -->
+        <div class="about-portrait-inline" id="about-portrait">
+          <img src="assets.webp/about-portrait-split.png" alt="Andrea Lee" loading="lazy">
+        </div>
+        <span class="about-name">Andrea</span>
+      </h2>
+    </div>
+
+    <!-- ── Bio: two-column ── -->
+    <div class="about-bio">
+      <div class="about-bio-left" id="about-bio-left">
+        <div class="about-bio-location">
+          <svg width="16" height="20" viewBox="0 0 16 20" fill="none" aria-hidden="true">
+            <path d="M8 1C4.13 1 1 4.13 1 8c0 5 7 11 7 11s7-6 7-11c0-3.87-3.13-7-7-7Z" stroke="currentColor" stroke-width="1.4"/>
+            <circle cx="8" cy="8" r="2.2" stroke="currentColor" stroke-width="1.4"/>
+          </svg>
+          <span>Raised in a land of<br><em>'maximum'</em></span>
+        </div>
+        <p class="about-bio-body">I learned that clutter is just friction. In a city of 5-star noise, less isn't a limitation — it's a decision to prioritise what actually moves the needle.</p>
+        <p class="about-bio-credit">Majulah Singapura!</p>
       </div>
 
-      <!-- Bottom: logo + sitemap + copyright -->
-      <div class="footer-bottom">
-
-        <a class="footer-logo" href="#hero"
-           onclick="scrollTo('hero',event)"
-           aria-label="Andrea Lee — back to top">
-          ANDREA
-          <img src="assets/Flower (white).png" alt="" aria-hidden="true">
-        </a>
-
-        <!-- Sitemap -->
-        <nav class="footer-sitemap" aria-label="Site map">
-
-          <div class="footer-sitemap-col">
-            <p class="footer-sitemap-heading">Portfolio</p>
-            <a class="footer-sitemap-link" href="#work" onclick="scrollTo('work',event)">Work</a>
-            <a class="footer-sitemap-link" href="#playground" onclick="scrollTo('playground',event)">Playground</a>
-            <a class="footer-sitemap-link" href="#about" onclick="scrollTo('about',event)">About Me</a>
-          </div>
-
-          <div class="footer-sitemap-col">
-            <p class="footer-sitemap-heading">Case Studies</p>
-            <a class="footer-sitemap-link" href="arvo.html">ARVO</a>
-            <a class="footer-sitemap-link" href="seletar.html">Seletar Airport</a>
-            <a class="footer-sitemap-link" href="pethaus.html">Pet Haus</a>
-          </div>
-
-          <div class="footer-sitemap-col">
-            <p class="footer-sitemap-heading">Connect</p>
-            <a class="footer-sitemap-link"
-               href="https://linkedin.com/in/andrealeesg"
-               target="_blank" rel="noopener">LinkedIn ↗</a>
-            <a class="footer-sitemap-link"
-               href="https://instagram.com/andreeleesg"
-               target="_blank" rel="noopener">Instagram ↗</a>
-            <a class="footer-sitemap-link" href="contact.html">Contact</a>
-          </div>
-
-        </nav>
-
-        <p class="footer-copy">© 2026 Andrea Lee · Singapore</p>
-
+      <div class="about-bio-right" id="about-bio-right">
+        <h3 class="about-philosophy-heading">Designing 🏔 is like<br>practicing Pilates</h3>
+        <p class="about-philosophy-body">Everyone sees the heavy rowing. Nobody sees the core work holding it together. If your form is off by two inches, you're not building strength. You're just creating a future ache.</p>
+        <p class="about-philosophy-body">I design the same way. The sitemap nobody questions. The label that prevents the wrong click. The shortcut that saves thirty seconds, every time.</p>
+        <p class="about-philosophy-strong">The invisible adjustments are usually the whole job.</p>
       </div>
     </div>
-  </footer>
 
-  <!-- ═══════════════════════════════════════
-       JAVASCRIPT — foundations only
-  ═══════════════════════════════════════ -->
+    <!-- ── Off the record: tag cloud ── -->
+    <div class="about-fun" id="about-fun">
+      <h3 class="about-fun-heading"><em>Off the record</em></h3>
+      <div class="about-tags-wrap">
+        <span class="about-tag">Pilates core. UX brain.</span>
+        <span class="about-tag">Allergic to Comic Sans</span>
+        <span class="about-tag">Too much screentime</span>
+        <span class="about-tag">Love British Royal History</span>
+        <span class="about-tag">Absolute caffeine addict</span>
+        <span class="about-tag">Recovering event stylist</span>
+        <span class="about-tag">Picking up pickleball</span>
+        <span class="about-tag">Aspiring to side hustle as a pilates instructor</span>
+        <span class="about-tag">Adore fantasy novels, ACOTAR!!!!</span>
+        <span class="about-tag">I secretly like not knowing much — so everything still amazes me</span>
+        <span class="about-tag">Majulah Singapura!</span>
+      </div>
+    </div>
+
+  </section>
+
+
+  <!-- ===========================
+       CONTACT
+  =========================== -->
+  <section id="contact" aria-label="Contact">
+
+    <h1 class="contact-heading">Say hi!</h1>
+    <p class="contact-sub">Open to product design and UX research roles locally and overseas.</p>
+
+    <div class="contact-grid">
+
+      <a class="contact-item" href="mailto:andreeyahlee@gmail.com">
+        <svg width="22" height="18" viewBox="0 0 22 18" fill="none">
+          <rect x="1" y="1" width="20" height="16" rx="2" stroke="currentColor" stroke-width="1.4"/>
+          <path d="M1 4.5 L11 11 L21 4.5" stroke="currentColor" stroke-width="1.4"/>
+        </svg>
+        andreeyahlee@gmail.com
+      </a>
+
+      <a class="contact-item" href="#" aria-label="Resume (link coming soon)">
+        <svg width="18" height="22" viewBox="0 0 18 22" fill="none">
+          <rect x="1" y="1" width="16" height="20" rx="2" stroke="currentColor" stroke-width="1.4"/>
+          <path d="M4.5 7.5H13.5 M4.5 11H13.5 M4.5 14.5H9.5" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/>
+        </svg>
+        Resume
+      </a>
+
+      <a class="contact-item" href="https://www.linkedin.com/in/andrealee-/" target="_blank" rel="noopener noreferrer">
+        <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+          <rect x="1" y="1" width="18" height="18" rx="3" stroke="currentColor" stroke-width="1.4"/>
+          <circle cx="5.5" cy="5.5" r="1" fill="currentColor"/>
+          <path d="M5.5 8V15" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/>
+          <path d="M8.5 8V15 M8.5 11C8.5 8.5 15 8 15 11.5V15" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/>
+        </svg>
+        linkedin.com/in/andrealee-/
+      </a>
+
+      <a class="contact-item" href="https://github.com" target="_blank" rel="noopener noreferrer">
+        <svg width="18" height="22" viewBox="0 0 18 22" fill="none">
+          <rect x="1" y="1" width="16" height="20" rx="2" stroke="currentColor" stroke-width="1.4"/>
+          <path d="M4.5 7.5H13.5 M4.5 11H13.5 M4.5 14.5H9.5" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/>
+        </svg>
+        GitHub
+      </a>
+
+      <a class="contact-item" href="https://instagram.com/lee.andrea" target="_blank" rel="noopener noreferrer">
+        <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+          <rect x="1" y="1" width="18" height="18" rx="5" stroke="currentColor" stroke-width="1.4"/>
+          <circle cx="10" cy="10" r="3.5" stroke="currentColor" stroke-width="1.4"/>
+          <circle cx="15" cy="5" r="1" fill="currentColor"/>
+        </svg>
+        @lee.andrea
+      </a>
+
+      <span class="contact-item">
+        <svg width="16" height="22" viewBox="0 0 16 22" fill="none">
+          <path d="M8 1C4.13 1 1 4.13 1 8c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7Z" stroke="currentColor" stroke-width="1.4"/>
+          <circle cx="8" cy="8" r="2.5" stroke="currentColor" stroke-width="1.4"/>
+        </svg>
+        Singapore-based
+      </span>
+
+    </div>
+
+  </section>
+
+
   <script>
   'use strict';
 
-  /* ── Smooth scroll helper ──────────────────────────
-     All nav/footer links call this instead of
-     relying on CSS scroll-behavior (more reliable
-     cross-browser, especially on iOS Safari)
-  ─────────────────────────────────────────────────── */
-  function scrollTo(id, e) {
-    if (e) e.preventDefault();
-    const el = document.getElementById(id);
-    if (!el) return;
-    const offset = el.getBoundingClientRect().top + window.scrollY
-                   - document.getElementById('nav').offsetHeight;
-    window.scrollTo({ top: offset, behavior: 'smooth' });
-  }
-
-  /* ── Nav: scrolled shadow ──────────────────────── */
+  /* =============================================
+     NAV — scroll to contact + active highlights
+  ============================================= */
   const nav = document.getElementById('nav');
-  window.addEventListener('scroll', () => {
-    nav.classList.toggle('scrolled', window.scrollY > 10);
-  }, { passive: true });
 
-  /* ── Nav: active section highlight ─────────────── */
-  const sections = ['work', 'playground', 'about'];
-  const navLinks  = {
-    work:       document.getElementById('nl-work'),
-    playground: document.getElementById('nl-playground'),
-    about:      document.getElementById('nl-about'),
-  };
+  document.getElementById('nav-sayhi').addEventListener('click', () => {
+    document.getElementById('contact').scrollIntoView({ behavior: 'smooth' });
+  });
 
-  const sectionObs = new IntersectionObserver(entries => {
-    entries.forEach(entry => {
-      if (!entry.isIntersecting) return;
-      Object.values(navLinks).forEach(l => l?.classList.remove('active'));
-      const link = navLinks[entry.target.id];
-      if (link) link.classList.add('active');
+  // Invert nav when Work section (dark bg) is centred in viewport
+  const bgObs = new IntersectionObserver(entries => {
+    entries.forEach(e => {
+      if (e.target.id === 'work') nav.classList.toggle('on-dark', e.isIntersecting);
     });
-  }, { threshold: 0.4, rootMargin: `-${64}px 0px 0px 0px` });
+  }, { threshold: 0, rootMargin: '-50% 0px -50% 0px' });
+  bgObs.observe(document.getElementById('work'));
 
-  sections.forEach(id => {
-    const el = document.getElementById(id);
-    if (el) sectionObs.observe(el);
-  });
+  // Active link
+  const navLinks = { work: document.getElementById('nl-work'), about: document.getElementById('nl-about') };
+  const activeObs = new IntersectionObserver(entries => {
+    entries.forEach(e => {
+      if (!e.isIntersecting) return;
+      Object.values(navLinks).forEach(l => l?.classList.remove('active'));
+      navLinks[e.target.id]?.classList.add('active');
+    });
+  }, { threshold: 0.4, rootMargin: '-64px 0px 0px 0px' });
+  ['work', 'about'].forEach(id => { const el = document.getElementById(id); if (el) activeObs.observe(el); });
 
-  /* ── Mobile hamburger ──────────────────────────── */
+  /* =============================================
+     MOBILE NAV
+  ============================================= */
   const hamburger = document.getElementById('hamburger');
-  const drawer    = document.getElementById('nav-drawer');
-  let menuOpen    = false;
+  const overlay   = document.getElementById('nav-overlay');
+  let menuOpen = false;
 
-  function openMobile() {
-    menuOpen = true;
-    hamburger.classList.add('open');
-    drawer.classList.add('open');
-    hamburger.setAttribute('aria-expanded', 'true');
-    document.body.style.overflow = 'hidden'; /* prevent scroll behind */
-  }
+  function openMenu()  { menuOpen = true;  hamburger.classList.add('open');    hamburger.setAttribute('aria-expanded', 'true');  overlay.classList.add('open');    document.body.style.overflow = 'hidden'; }
+  function closeMenu() { menuOpen = false; hamburger.classList.remove('open'); hamburger.setAttribute('aria-expanded', 'false'); overlay.classList.remove('open'); document.body.style.overflow = '';        }
 
-  function closeMobile() {
-    menuOpen = false;
-    hamburger.classList.remove('open');
-    drawer.classList.remove('open');
-    hamburger.setAttribute('aria-expanded', 'false');
-    document.body.style.overflow = '';
-  }
-
-  hamburger.addEventListener('click', () => {
-    menuOpen ? closeMobile() : openMobile();
+  hamburger.addEventListener('click', () => menuOpen ? closeMenu() : openMenu());
+  overlay.querySelectorAll('a').forEach(a => a.addEventListener('click', closeMenu));
+  document.getElementById('overlay-sayhi').addEventListener('click', () => {
+    closeMenu();
+    document.getElementById('contact').scrollIntoView({ behavior: 'smooth' });
   });
+  document.addEventListener('keydown', e => { if (e.key === 'Escape' && menuOpen) closeMenu(); });
 
-  /* Close on Escape */
-  document.addEventListener('keydown', e => {
-    if (e.key === 'Escape' && menuOpen) closeMobile();
-  });
+  /* =============================================
+     GSAP — HERO SCROLL SEQUENCE
+     All three phases wrapped in matchMedia so
+     they are completely disabled on mobile.
+     GSAP conflict rules (PRD §4) enforced:
+       - No CSS sticky on #hero (GSAP pins it)
+       - No CSS transform on hero-complex-wrap
+         (GSAP owns via xPercent / yPercent)
+       - No dual-axis animation on same element
+       - scrub: 1 throughout
+  ============================================= */
+  const mm = gsap.matchMedia();
 
-  /* Close on outside click */
-  document.addEventListener('click', e => {
-    if (menuOpen && !nav.contains(e.target) && !drawer.contains(e.target)) {
-      closeMobile();
-    }
+  mm.add('(min-width: 768px)', () => {
+
+    const heroDesktop = document.getElementById('hero-desktop');
+    const heroComplex = document.getElementById('hero-complex');
+    const letterP     = document.getElementById('letter-p');
+    const heroScroll  = document.getElementById('hero-scroll');
+
+    // Centre the overlay using GSAP transforms only — never CSS translate
+    gsap.set(heroComplex, { xPercent: -50, yPercent: -50 });
+
+    const tl = gsap.timeline({
+      scrollTrigger: {
+        trigger: '#hero',
+        start:   'top top',
+        end:     '+=300%',
+        scrub:   1,
+        pin:     true,      // GSAP pins — no CSS position:sticky on #hero
+        anticipatePin: 1,
+      }
+    });
+
+    // ── Phase 1 (0 → 0.4) ──────────────────────────────
+    // Desk image zooms in; scroll indicator fades out
+    tl.to(heroDesktop, { scale: 1.6, ease: 'none', duration: 0.4 }, 0)
+      .to(heroScroll,  { opacity: 0, ease: 'none', duration: 0.15 }, 0);
+
+    // ── Phase 2 (0.4 → 0.7) ────────────────────────────
+    // Image fades; "complex" fades in at viewport centre and scales up
+    tl.to(heroDesktop, { opacity: 0,  ease: 'none', duration: 0.12 }, 0.4)
+      .to(heroComplex, {
+        opacity: 1,
+        scale: 5,
+        ease: 'none',
+        duration: 0.3,
+        transformOrigin: '50% 50%',
+      }, 0.4);
+
+    // ── Phase 3 (0.7 → 1.0) ────────────────────────────
+    // Letter "p" (the bowl = circle) scales to ~100× original,
+    // filling the viewport; body bg transitions to forest
+    tl.to(letterP, {
+        scale: 20,              // × 5 parent = 100× effective
+        ease: 'none',
+        duration: 0.3,
+        transformOrigin: '50% 55%',   // centre of the "p" bowl
+      }, 0.7)
+      .to('body', { backgroundColor: '#1F2B1F', ease: 'none', duration: 0.15 }, 0.82);
+
+    // Cleanup when breakpoint exits
+    return () => {
+      ScrollTrigger.getAll().forEach(t => t.kill());
+      gsap.set([heroComplex, heroDesktop, heroScroll, letterP], { clearProps: 'all' });
+      gsap.set('body', { clearProps: 'backgroundColor' });
+    };
   });
   </script>
 

@@ -415,32 +415,298 @@ User Research · Information Architecture · Usability Testing · Service Bluepr
 
 ---
 
-## 6. Case Study Page Template
+## 6. Case Study Pages — Animation Specs
 
-All three case study pages share the same HTML structure. Only the accent colour variable and content differ.
+### Base pattern (all three case studies)
 
-```html
-<!-- Set per case study: -->
-<style>
-  :root { --case-accent: #2a4a6b; } /* ARVO = navy, Seletar = #2b5e3a, PetHaus = #7b3f6e */
-</style>
+Every section on every case study page uses this as the default entrance — no exceptions unless a signature moment overrides it.
+
+```js
+// Apply to every .cs-section on page load
+gsap.utils.toArray(".cs-section").forEach(section => {
+  gsap.from(section, {
+    y: 40,
+    opacity: 0,
+    duration: 0.7,
+    ease: "power2.out",
+    scrollTrigger: {
+      trigger: section,
+      start: "top 80%",
+      toggleActions: "play none none none"
+    }
+  });
+});
 ```
 
-**Page sections (in order):**
-1. **Nav** — "← Back" link returns to `index.html#work`
-2. **Hero** — Full-width `[project]-hero.webp`, project title in `--font-display`, role label, year
-3. **Problem** — 2–3 sentence problem statement (concise, hirer-scanner view)
-4. **Research** — Key method + participant data (XX% format for ratios)
-5. **Insight → Decision** — The pivotal moment (Seletar: kill hypothesis; ARVO: scope down to 2/6; PetHaus: reframe to check-first)
-6. **Solution** — Figma prototype CTA button (opens in new tab)
-7. **Outcomes** — Metric callouts (Likert scores, task success rates)
-8. **Reflection** — 1–2 honest lessons (Seletar mobile context; ARVO scope communication)
-9. **Speaking Notes toggle** — `<details>` element, hidden by default, for interview prep
+Images and screen mockups within sections get a slight extra offset:
+```js
+gsap.from(".cs-screen", { y: 60, opacity: 0, duration: 0.9, ease: "power3.out", ... })
+```
 
-**Prototype CTA links:**
-- ARVO: `https://www.figma.com/make/1VklSkodi8LYoZ755bvRfi/Arvo-B--Final-copy---Copy-`
-- Seletar: `https://www.figma.com/make/VX9LWSLRU1wf0NH2pPaJbv/Version-3--Use-This--`
-- PetHaus: styled placeholder CTA (link TBC)
+Multi-item rows (cards, stat blocks, findings lists) stagger:
+```js
+gsap.from(".cs-card", { y: 30, opacity: 0, stagger: 0.1, duration: 0.6, ... })
+```
+
+---
+
+### Shared page structure (all three)
+
+```html
+<style>:root { --case-accent: [colour]; }</style>
+```
+
+| Element | Value per project |
+|---|---|
+| `--case-accent` | ARVO `#2a4a6b` · Seletar `#2b5e3a` · PetHaus `#7b3f6e` |
+| Back link | `← Back` → `index.html#work` |
+| Prototype CTA | ARVO: figma.com/make/1VklSkodi8LYoZ755bvRfi · Seletar: figma.com/make/VX9LWSLRU1wf0NH2pPaJbv · PetHaus: placeholder |
+| Speaking notes | `<details>` toggle, hidden by default |
+
+---
+
+### 6.1 ARVO — `case-studies/arvo.html`
+
+**Accent:** `#2a4a6b` navy | **12 sections**
+
+**Exports needed:**
+
+| File | Node |
+|---|---|
+| `arvo-hero.png` | `869-255` |
+| `arvo-tldr.png` | `737-247` |
+| `arvo-research.png` | `858-1810` |
+| `arvo-brightspots.png` | `898-456` |
+| `arvo-pivot.png` | `894-116` |
+| `arvo-results2.png` | `899-903` |
+| `arvo-designfixes.png` | `755-200` |
+| `arvo-strategic.png` | `763-3884` |
+| `arvo-finalsolution.png` | `908-108` |
+| `arvo-outcome.png` | `755-1121` |
+| `arvo-testimony.png` | `765-7912` |
+| `arvo-retro.png` | `765-7946` |
+
+**Section-by-section animation:**
+
+**Hero (`869-255`)** — Full bleed navy, page load entrance:
+```
+- Project title: y: 60 → 0, opacity 0 → 1, 0.8s, delay 0.2s
+- Role + year tag: y: 20 → 0, opacity 0 → 1, delay 0.5s
+- Hero image: scale 1.05 → 1.0, opacity 0 → 1, 1s (subtle zoom-in on load)
+- Prototype CTA button: fades in last, delay 0.8s
+```
+
+**TLDR (`737-247`)** — Stat cards stagger in:
+```
+- Section label slides in from left
+- Each TLDR card: stagger 0.12s, y: 30 → 0, opacity 0 → 1
+```
+
+**Initial Research (`858-1810`)** — Base scroll reveal, no special animation.
+
+**Bright Spots (`898-456`)** — Items reveal one by one left to right:
+```
+- Each bright spot item: stagger 0.15s, x: -20 → 0, opacity 0 → 1
+```
+
+**⭐ SIGNATURE MOMENT — The Pivot / Co-creation (`894-116`):**
+
+This is the "2 of 6 problems" scoping decision — the senior signal of the project. Pin this section and build the diagram on scroll.
+
+```
+ScrollTrigger pin: true on this section, end: "+=500"
+
+6 problem cards arranged in a grid, scrub 1:
+- All 6 cards fade in together at scrub 0
+- scrub 0.3 → 0.6: Cards 3–6 dim to 20% opacity (the 4 problems scoped out)
+- scrub 0.6 → 0.8: Cards 1–2 scale up slightly (1.0 → 1.05), border glows accent navy
+- scrub 0.8 → 1.0: Annotation text fades in — "Scoped to 2 of 6 — communicated to founder"
+- Unpin at scrub 1.0
+```
+
+**Second Round Results (`899-903`)** — Results cards stagger in with slight scale:
+```
+- Each result: scale 0.95 → 1.0, opacity 0 → 1, stagger 0.1s
+```
+
+**Design Fixes (`755-200`)** — Screen mockups slide in from right:
+```
+- .cs-screen elements: x: 40 → 0, opacity 0 → 1, stagger 0.15s
+```
+
+**Strategic Deliverable (`763-3884`)** — Base scroll reveal.
+
+**Final Solution (`908-108`)** — Prototype mockup enters with slow zoom:
+```
+- Main screen: scale 0.92 → 1.0, opacity 0 → 1, duration 1.0s
+- Prototype CTA button pulses once after entrance (scale 1.0 → 1.03 → 1.0, 600ms)
+```
+
+**The Outcome (`755-1121`)** — ⭐ Metric numbers count up:
+```js
+// CountUp on scroll enter — no GSAP needed, use CountUp.js or vanilla JS
+// Trigger when section enters viewport
+// Example: "4.2 → 4.7 satisfaction" counts up over 1.2s
+```
+
+**Client Testimony (`765-7912`)** — Quote reveal:
+```
+- Quote marks scale in: scale 0 → 1, 0.4s
+- Quote text: opacity 0 → 1, y: 20 → 0, 0.7s, delay 0.3s
+- Attribution: fades in last, delay 0.8s
+```
+
+**Retrospective (`765-7946`)** — Base scroll reveal.
+
+---
+
+### 6.2 Seletar Airport — `case-studies/seletar.html`
+
+**Accent:** `#2b5e3a` forest green | **10 sections**
+
+**Exports needed:**
+
+| File | Node |
+|---|---|
+| `seletar-hero.png` | `780-10685` |
+| `seletar-tldr.png` | `780-10686` |
+| `seletar-problem.png` | `781-10873` |
+| `seletar-found.png` | `782-11152` |
+| `seletar-design.png` | `922-230` |
+| `seletar-validation.png` | `783-11728` |
+| `seletar-outcome.png` | `785-11746` |
+| `seletar-retro.png` | `791-686` |
+| `seletar-last.png` | `791-1662` |
+
+**Section-by-section animation:**
+
+**Hero (`780-10685`)** — Same load pattern as ARVO, green accent.
+
+**TLDR (`780-10686`)** — Stagger cards, same as ARVO TLDR.
+
+**The Problem (`781-10873`)** — Problem statement types on:
+```
+- Headline: character-by-character reveal using CSS animation or GSAP text split
+  (split text into chars with SplitText plugin or manual spans)
+- Body copy: fades in after headline completes
+```
+
+**What We Found (`782-11152`)** — Findings stagger in:
+```
+- Each finding item: x: -30 → 0, opacity 0 → 1, stagger 0.12s
+```
+
+**Turning Research into Design (`922-230`)** — Screen mockups reveal:
+```
+- Wireframe/design screens: y: 50 → 0, opacity 0 → 1, stagger 0.2s
+```
+
+**⭐ SIGNATURE MOMENT — Validation (`783-11728`):**
+
+The 3.0 → 4.8 score journey. This is the pivot proof — hypothesis killed, speed-first redesign vindicated.
+
+```
+Pin section, scrub 1, end: "+=400"
+
+Two score displays side by side: Round 1 | Round 2
+
+Round 1 score:
+- "3.0 / 5" counts up from 0 → 3.0 on section enter (CountUp, 1s)
+- Background tint: warm red at 8% opacity behind Round 1 card
+
+scrub 0 → 0.4:
+- "HYPOTHESIS KILLED" label fades in below Round 1 (opacity 0 → 1)
+- Round 1 card: subtle shake animation (keyframes, x ±3px, 3 times)
+
+scrub 0.4 → 1.0:
+- Round 2 card scales in: scale 0.8 → 1.0, opacity 0 → 1
+- "4.8 / 5" counts up from 0 → 4.8, duration 1.2s
+- Background tint: green at 8% behind Round 2 card
+- Annotation: "Speed-first redesign. 100% task success." fades in
+
+Unpin at scrub 1.0
+```
+
+**Outcome (`785-11746`)** — Metrics count up, base reveal.
+
+**Retrospective (`791-686`)** — Base scroll reveal.
+
+**Last but not least (`791-1662`)** — Prototype CTA with pulse, same as ARVO final solution.
+
+---
+
+### 6.3 PetHaus — `case-studies/pethaus.html`
+
+**Accent:** `#7b3f6e` mauve | **9 sections**
+
+**Exports needed:**
+
+| File | Node |
+|---|---|
+| `pethaus-hero.png` | `799-149` |
+| `pethaus-tldr.png` | `799-893` |
+| `pethaus-sitch.png` | `803-1689` |
+| `pethaus-research.png` | `804-1734` |
+| `pethaus-design.png` | `804-1757` |
+| `pethaus-hifi.png` | `806-1798` |
+| `pethaus-testing.png` | `950-8212` |
+| `pethaus-results.png` | `950-12042` |
+| `pethaus-reflection.png` | `806-1862` |
+
+**Section-by-section animation:**
+
+**Hero (`799-149`)** — Same load pattern, mauve accent.
+
+**TLDR (`799-893`)** — Stagger cards.
+
+**Sitch on the Ground (`803-1689`)** — Context items reveal left to right, stagger 0.15s.
+
+**Research (`804-1734`)** — Findings stagger in from bottom.
+
+**The Design (`804-1757`)** — Base scroll reveal.
+
+**Hi-Fi Screens (`806-1798`)** — Screens fan in:
+```
+- 3–4 screen mockups arranged in slight overlap/stack
+- Each screen: y: 60 → 0, opacity 0 → 1, stagger 0.2s
+- Slight rotation corrects on enter: rotate: 2deg → 0deg for side screens
+```
+
+**⭐ SIGNATURE MOMENT — Usability Testing & Iteration (`950-8212`):**
+
+The reorder feature failure — placed in cart, should be in Order History. Wrong → right.
+
+```
+Pin section, scrub 1, end: "+=400"
+
+Two UI states shown side by side: Wrong placement | Correct placement
+
+scrub 0 → 0.3:
+- "Wrong placement" screen slides in from left
+- Red X icon fades in over it
+- Label: "Smart Re-order in Cart" fades in below
+
+scrub 0.3 → 0.6:
+- Wrong screen: opacity 1 → 0.2, slight blur (filter: blur(2px))
+- "Correct placement" screen slides in from right
+- Green checkmark fades in over it
+- Label: "Moved to Order History" fades in
+
+scrub 0.6 → 1.0:
+- Correct screen scales up slightly (1.0 → 1.04) — holds as hero state
+- Annotation: "100% of participants found it immediately" fades in
+
+Unpin at scrub 1.0
+```
+
+**Results (`950-12042`)** — ⭐ Two metrics count up on enter:
+```
+- "100%" task success rate — counts 0 → 100 over 1s
+- "4.8 / 5" trust rating — counts 0 → 4.8 over 1.2s
+- Each metric has a thin progress bar that fills left → right as number counts
+```
+
+**Reflection (`806-1862`)** — Base scroll reveal, no special animation.
 
 ---
 
