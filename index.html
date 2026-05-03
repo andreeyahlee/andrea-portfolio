@@ -4,55 +4,43 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Andrea Lee — UX Designer</title>
-  <meta name="description" content="Andrea Lee, UX Designer based in Singapore. Making complex things stupidly simple.">
+  <meta name="description" content="Andrea Lee, UX Designer. Making complex things stupidly simple.">
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@1,300;1,400&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
-  <script>gsap.registerPlugin(ScrollTrigger);</script>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@1,300&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
 
   <style>
-    /* ============================================
-       DESIGN TOKENS
-    ============================================ */
     :root {
-      --cream:     #F3F2EC;
-      --forest:    #1F2B1F;
-      --accent:    #DCE888;
-      --cream-60:  rgba(243, 242, 236, 0.60);
-      --cream-30:  rgba(243, 242, 236, 0.30);
-      --forest-60: rgba(31, 43, 31, 0.60);
-      --forest-15: rgba(31, 43, 31, 0.15);
-
-      --fh: 'Cormorant Garamond', Georgia, serif;
-      --fb: 'Plus Jakarta Sans', system-ui, sans-serif;
-
-      --gutter: clamp(24px, 5vw, 64px);
-      --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+      --bg:           #F6F6F4;
+      --ink:          #0A0A0A;
+      --muted:        #8A8A86;
+      --accent:       #A64A2E;
+      --arvo:         #2a4a6b;
+      --seletar:      #2b5e3a;
+      --pethaus:      #7b3f6e;
+      --font-display: 'Fraunces', serif;
+      --font-body:    'Inter', sans-serif;
+      --sp-xs:  8px;
+      --sp-sm:  16px;
+      --sp-md:  32px;
+      --sp-lg:  64px;
+      --sp-xl:  128px;
     }
 
-    /* ============================================
-       RESET
-    ============================================ */
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-    html { scroll-behavior: smooth; }
     body {
-      font-family: var(--fb);
-      background: var(--cream);
-      color: var(--forest);
+      font-family: var(--font-body);
+      background: var(--bg);
+      color: var(--ink);
       overflow-x: hidden;
       -webkit-font-smoothing: antialiased;
     }
     a { text-decoration: none; color: inherit; }
     img { display: block; max-width: 100%; }
-    button { cursor: pointer; border: none; background: none; font-family: inherit; }
+    button { cursor: pointer; border: none; font-family: inherit; background: none; }
 
-    /* ============================================
-       NAV — floating pill, inverts on dark sections
-    ============================================ */
+    /* ── NAV ── */
     .nav {
       position: fixed;
       top: 20px;
@@ -61,170 +49,68 @@
       z-index: 100;
       display: flex;
       align-items: center;
-      gap: 28px;
-      background: var(--forest);
+      gap: 20px;
+      background: var(--ink);
       border-radius: 100px;
-      padding: 10px 10px 10px 20px;
-      transition: background 0.35s ease;
+      padding: 10px 10px 10px 16px;
       white-space: nowrap;
-    }
-
-    /* On dark-background sections: invert to cream pill */
-    .nav.on-dark {
-      background: var(--cream);
     }
 
     .nav-logo {
       display: flex;
       align-items: center;
-      gap: 9px;
-      color: var(--cream);
-      transition: color 0.35s ease;
+      color: var(--bg);
     }
-    .nav.on-dark .nav-logo { color: var(--forest); }
 
     .nav-links {
       display: flex;
       align-items: center;
-      gap: 24px;
+      gap: 20px;
     }
 
     .nav-link {
-      font-family: var(--fb);
-      font-size: 13.5px;
+      font-family: var(--font-body);
+      font-size: 13px;
       font-weight: 500;
-      color: var(--cream-60);
-      transition: color 0.2s, font-weight 0.1s;
+      color: rgba(246, 246, 244, 0.70);
     }
-    .nav-link:hover { color: var(--cream); }
-    .nav-link.active { color: var(--cream); font-weight: 700; }
-
-    .nav.on-dark .nav-link       { color: var(--forest-60); }
-    .nav.on-dark .nav-link:hover { color: var(--forest); }
-    .nav.on-dark .nav-link.active { color: var(--forest); }
+    .nav-link:hover { color: var(--bg); }
 
     .nav-cta {
+      font-family: var(--font-body);
       font-size: 13px;
-      font-weight: 600;
-      letter-spacing: 0.01em;
-      background: var(--cream);
-      color: var(--forest);
+      font-weight: 500;
+      color: var(--bg);
+      border: 1.5px solid rgba(246, 246, 244, 0.45);
       border-radius: 100px;
-      padding: 9px 20px;
-      transition: background 0.2s, color 0.2s, border-color 0.35s;
+      padding: 7px 18px;
     }
-    .nav-cta:hover { background: var(--accent); }
+    .nav-cta:hover { border-color: var(--bg); }
 
-    .nav.on-dark .nav-cta {
-      background: transparent;
-      border: 1.5px solid var(--forest);
-      color: var(--forest);
-      padding: 7.5px 18.5px;
-    }
-    .nav.on-dark .nav-cta:hover { background: var(--forest); color: var(--cream); }
-
-    /* Mobile hamburger — hidden on desktop */
-    .nav-hamburger {
-      display: none;
-      flex-direction: column;
-      gap: 4.5px;
-      padding: 5px;
-    }
-    .nav-hamburger span {
-      display: block;
-      width: 21px;
-      height: 1.5px;
-      background: var(--cream);
-      border-radius: 2px;
-      transition: transform 0.3s var(--ease-out), opacity 0.2s;
-    }
-    .nav.on-dark .nav-hamburger span { background: var(--forest); }
-    .nav-hamburger.open span:nth-child(1) { transform: translateY(6px) rotate(45deg); }
-    .nav-hamburger.open span:nth-child(2) { opacity: 0; }
-    .nav-hamburger.open span:nth-child(3) { transform: translateY(-6px) rotate(-45deg); }
-
-    /* Mobile full-screen overlay */
-    .nav-overlay {
-      display: none;
-      position: fixed;
-      inset: 0;
-      background: var(--forest);
-      z-index: 99;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      gap: 44px;
-    }
-    .nav-overlay.open { display: flex; }
-    .nav-overlay a, .nav-overlay button {
-      font-family: var(--fh);
-      font-size: 52px;
-      font-weight: 300;
-      font-style: italic;
-      color: var(--cream);
-      letter-spacing: -0.01em;
-      background: none;
-      padding: 0;
-    }
-
-    /* ============================================
-       HERO
-    ============================================ */
+    /* ── HERO ── */
     #hero {
       position: relative;
       width: 100vw;
       height: 100vh;
-      background: var(--cream);
+      background: var(--bg);
       display: flex;
       align-items: center;
       justify-content: center;
       overflow: hidden;
     }
 
-    /* The desk / collage photograph */
-    #hero-desktop {
-      width: 58vw;
-      max-width: 820px;
+    #hero-img {
+      width: 60vw;
+      max-width: 860px;
       height: auto;
       object-fit: contain;
       flex-shrink: 0;
-      will-change: transform;
-      /* GSAP owns all transforms — no CSS transform here */
     }
 
-    /* "complex" overlay — hidden until GSAP Phase 2 */
-    .hero-complex-wrap {
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      /* Centered via gsap.set xPercent/yPercent — not CSS transform */
-      opacity: 0;
-      pointer-events: none;
-      will-change: transform, opacity;
-    }
-
-    .word-complex {
-      font-family: var(--fb);
-      font-size: clamp(60px, 8vw, 100px);
-      font-weight: 700;
-      letter-spacing: -0.035em;
-      line-height: 1;
-      color: var(--forest);
-      display: block;
-      white-space: nowrap;
-    }
-
-    /* The "p" letter — GSAP scales this independently in Phase 3 */
-    .letter-p {
-      display: inline;
-      will-change: transform;
-      /* transformOrigin set in GSAP: "50% 55%" (centre of bowl) */
-    }
-
-    /* Scroll indicator */
+    /* ── Scroll indicator ── */
     .hero-scroll {
       position: absolute;
-      bottom: 36px;
+      bottom: 40px;
       left: 50%;
       transform: translateX(-50%);
       display: flex;
@@ -233,816 +119,72 @@
       gap: 10px;
       pointer-events: none;
     }
+
     .hero-scroll-line {
       display: block;
       width: 1px;
-      height: 42px;
-      background: var(--forest-60);
+      height: 40px;
+      background: var(--muted);
     }
+
     .hero-scroll-text {
-      font-family: var(--fh);
+      font-family: var(--font-body);
       font-size: 13px;
-      font-style: italic;
-      color: var(--forest-60);
-      letter-spacing: 0.05em;
+      font-weight: 400;
+      color: var(--muted);
+      letter-spacing: 0.01em;
     }
 
-    /* ============================================
-       WORK
-    ============================================ */
-    #work {
-      position: relative;
-      width: 100%;
-      min-height: 100vh;
-      background: var(--forest);
-      display: flex;
-      flex-direction: column;
-    }
-
-    .work-header {
-      padding: 80px var(--gutter) 0;
-    }
-
-    .work-title {
-      font-family: var(--fb);
-      font-size: clamp(44px, 6.5vw, 88px);
-      font-weight: 700;
-      line-height: 0.95;
-      letter-spacing: -0.025em;
-      color: var(--cream);
-    }
-
-    .work-cols {
-      display: flex;
-      flex: 1;
-      margin-top: 44px;
-      border-top: 1px solid var(--cream-30);
-    }
-
-    .work-col {
-      flex-grow: 1;
-      display: flex;
-      flex-direction: column;
-      justify-content: flex-end;
-      padding: 0 32px 52px;
-      border-right: 1px solid var(--cream-30);
-      min-height: 55vh;
-      cursor: pointer;
-      position: relative;
-      overflow: hidden;
-      transition: flex-grow 0.4s ease;
-      text-decoration: none;
-    }
-    .work-col:last-child { border-right: none; }
-
-    /* Column width expansion on hover via :has() */
-    .work-cols:has(.work-col:hover) .work-col      { flex-grow: 0.75; }
-    .work-cols:has(.work-col:hover) .work-col:hover { flex-grow: 1.5;  }
-
-    /* Background image fills column on hover */
-    .work-col-img {
-      position: absolute;
-      inset: 0;
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      opacity: 0;
-      transition: opacity 0.4s ease;
-      z-index: 0;
-    }
-    .work-col:hover .work-col-img { opacity: 0.85; }
-
-    /* Dark gradient so text stays legible over image */
-    .work-col::after {
-      content: '';
-      position: absolute;
-      inset: 0;
-      background: linear-gradient(to top, rgba(31,43,31,0.92) 0%, rgba(31,43,31,0.4) 50%, transparent 100%);
-      opacity: 0;
-      transition: opacity 0.4s ease;
-      z-index: 1;
-    }
-    .work-col:hover::after { opacity: 1; }
-
-    /* Project name — fades out when hover overlay appears */
-    .work-col-name {
-      font-family: var(--fb);
-      font-size: clamp(17px, 2vw, 24px);
-      font-weight: 500;
-      color: var(--cream);
-      opacity: 0.85;
-      position: relative;
-      z-index: 3;
-      transition: opacity 0.25s ease;
-    }
-    .work-col:hover .work-col-name { opacity: 0; }
-
-    /* Hover overlay — slides up on enter */
-    .work-col-overlay {
-      position: absolute;
-      bottom: 0; left: 0; right: 0;
-      padding: 0 32px 48px;
-      opacity: 0;
-      transform: translateY(14px);
-      transition: opacity 0.32s ease, transform 0.32s ease;
-      z-index: 2;
-    }
-    .work-col:hover .work-col-overlay {
-      opacity: 1;
-      transform: translateY(0);
-    }
-
-    .work-col-tags {
-      font-family: var(--fb);
-      font-size: 9.5px;
-      font-weight: 600;
-      letter-spacing: 0.13em;
-      text-transform: uppercase;
-      color: var(--cream-60);
-      margin-bottom: 14px;
-    }
-
-    .work-col-headline {
-      font-family: var(--fb);
-      font-size: clamp(20px, 2.4vw, 32px);
-      font-weight: 700;
-      color: var(--cream);
-      line-height: 1.1;
-      letter-spacing: -0.02em;
-      margin-bottom: 12px;
-    }
-
-    .work-col-desc {
-      font-size: 12.5px;
-      color: var(--cream-60);
-      line-height: 1.65;
-      margin-bottom: 20px;
-      max-width: 280px;
-    }
-
-    .work-col-cta {
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-      font-family: var(--fb);
-      font-size: 12px;
-      font-weight: 600;
-      color: var(--forest);
-      background: var(--cream);
-      border-radius: 100px;
-      padding: 8px 16px;
-      transition: background 0.2s;
-    }
-    .work-col-cta:hover { background: var(--accent); }
-
-    .work-scroll-hint {
-      position: absolute;
-      right: var(--gutter);
-      bottom: 52px;
-      font-family: var(--fh);
-      font-size: 13px;
-      font-style: italic;
-      color: var(--cream-30);
-      letter-spacing: 0.04em;
-      pointer-events: none;
-    }
-
-    /* ============================================
-       ABOUT
-    ============================================ */
-    #about {
-      width: 100%;
-      background: var(--cream);
-    }
-
-    /* ── Intro: "Hi! I'm [photo] Andrea" ── */
-    .about-intro {
-      position: relative;
-      min-height: 100vh;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      padding: 100px var(--gutter) 80px;
-    }
-
-    .about-scroll-hint {
-      position: absolute;
-      top: 28px; right: var(--gutter);
-      font-family: var(--fh);
-      font-size: 13px;
-      font-style: italic;
-      color: var(--forest-60);
-      letter-spacing: 0.04em;
-      pointer-events: none;
-    }
-
-    .about-headline {
-      display: flex;
-      align-items: center;
-      gap: clamp(16px, 2.5vw, 32px);
-      font-family: var(--fb);
-      font-size: clamp(52px, 10vw, 130px);
-      font-weight: 800;
-      line-height: 1;
-      letter-spacing: -0.04em;
-      color: var(--forest);
-      flex-wrap: wrap;
-      justify-content: center;
-    }
-
-    /* Portrait placeholder box — swap src when export is ready */
-    .about-portrait-inline {
-      width: clamp(110px, 16vw, 210px);
-      height: clamp(130px, 19vw, 250px);
-      flex-shrink: 0;
-      border-radius: 6px;
-      overflow: hidden;
-      background: rgba(31,43,31,0.08);
-    }
-    .about-portrait-inline img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      object-position: center top;
-    }
-
-    /* ── Bio: two-column ── */
-    .about-bio {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 0 clamp(40px, 6vw, 100px);
-      padding: 80px var(--gutter) 80px;
-      border-top: 1px solid var(--forest-15);
-    }
-
-    .about-bio-location {
-      display: flex;
-      align-items: flex-start;
-      gap: 12px;
-      font-family: var(--fh);
-      font-size: clamp(20px, 2.4vw, 28px);
+    .hero-scroll-text em {
+      font-family: var(--font-display);
       font-style: italic;
       font-weight: 300;
-      line-height: 1.35;
-      color: var(--forest);
-      margin-bottom: 20px;
-    }
-    .about-bio-location svg { margin-top: 4px; flex-shrink: 0; opacity: 0.6; }
-
-    .about-bio-body {
-      font-size: 14px;
-      color: var(--forest-60);
-      line-height: 1.78;
-      margin-bottom: 10px;
-    }
-
-    .about-bio-credit {
-      font-family: var(--fh);
-      font-size: 16px;
-      font-style: italic;
-      color: var(--forest-60);
-    }
-
-    .about-philosophy-heading {
-      font-family: var(--fh);
-      font-size: clamp(20px, 2.4vw, 28px);
-      font-style: italic;
-      font-weight: 300;
-      line-height: 1.35;
-      color: var(--forest);
-      margin-bottom: 20px;
-    }
-
-    .about-philosophy-body {
-      font-size: 14px;
-      color: var(--forest-60);
-      line-height: 1.78;
-      margin-bottom: 14px;
-    }
-
-    .about-philosophy-strong {
-      font-size: 14px;
-      font-weight: 700;
-      color: var(--forest);
-      line-height: 1.6;
-    }
-
-    /* ── Off the record: tag cloud ── */
-    .about-fun {
-      padding: 80px var(--gutter) 120px;
-      border-top: 1px solid var(--forest-15);
-      text-align: center;
-    }
-
-    .about-fun-heading {
-      font-family: var(--fh);
-      font-size: clamp(28px, 4vw, 48px);
-      font-style: italic;
-      font-weight: 300;
-      color: var(--forest);
-      margin-bottom: 48px;
-    }
-
-    .about-tags-wrap {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 10px 12px;
-      justify-content: center;
-      max-width: 860px;
-      margin: 0 auto;
-    }
-
-    .about-tag {
-      font-family: var(--fb);
-      font-size: 13px;
-      font-weight: 500;
-      color: var(--forest);
-      border: 1.5px solid var(--forest-15);
-      border-radius: 100px;
-      padding: 8px 18px;
-      transition: background 0.2s, border-color 0.2s, color 0.2s;
-      cursor: default;
-    }
-    .about-tag:hover {
-      background: var(--forest);
-      border-color: var(--forest);
-      color: var(--cream);
-    }
-
-    /* ============================================
-       CONTACT
-    ============================================ */
-    #contact {
-      width: 100%;
-      min-height: 100vh;
-      background: var(--cream);
-      padding: 140px var(--gutter) 100px;
-    }
-
-    .contact-heading {
-      font-family: var(--fb);
-      font-size: clamp(76px, 13vw, 168px);
-      font-weight: 800;
-      line-height: 0.88;
-      letter-spacing: -0.045em;
-      color: var(--forest);
-      margin-bottom: 24px;
-    }
-
-    .contact-sub {
-      font-size: clamp(14px, 1.4vw, 16px);
-      color: var(--forest-60);
-      max-width: 460px;
-      line-height: 1.65;
-      margin-bottom: 60px;
-    }
-
-    .contact-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 24px 80px;
-      max-width: 640px;
-    }
-
-    .contact-item {
-      display: flex;
-      align-items: center;
-      gap: 14px;
-      font-size: 14px;
-      color: var(--forest);
-      line-height: 1.4;
-      transition: opacity 0.2s;
-    }
-    a.contact-item:hover { opacity: 0.55; }
-
-    .contact-item svg { flex-shrink: 0; opacity: 0.65; }
-
-    /* ============================================
-       RESPONSIVE
-    ============================================ */
-    @media (max-width: 768px) {
-      /* Pill nav: hide links + CTA, show hamburger */
-      .nav { gap: 0; padding: 8px 8px 8px 16px; }
-      .nav-links, .nav-cta { display: none; }
-      .nav-hamburger { display: flex; }
-
-      /* Hero */
-      #hero-desktop { width: 94vw; }
-      .hero-scroll { display: none; }
-
-      /* Work: stack columns vertically */
-      .work-cols { flex-direction: column; }
-      .work-col {
-        border-right: none;
-        border-bottom: 1px solid var(--cream-30);
-        min-height: 180px;
-      }
-      .work-scroll-hint { display: none; }
-
-      /* About */
-      .about-headline { font-size: clamp(44px, 12vw, 80px); gap: 12px; }
-      .about-bio { grid-template-columns: 1fr; }
-      .about-portrait-inline { width: clamp(90px, 20vw, 140px); height: clamp(108px, 24vw, 168px); }
-
-      /* Work: disable flex expansion on touch — columns stay equal */
-      .work-cols:has(.work-col:hover) .work-col,
-      .work-cols:has(.work-col:hover) .work-col:hover { flex-grow: 1; }
-
-      /* Contact */
-      .contact-grid { grid-template-columns: 1fr; }
     }
   </style>
 </head>
 <body>
 
-  <!-- ===========================
-       NAV
-  =========================== -->
+  <!-- NAV -->
   <nav class="nav" id="nav" role="navigation" aria-label="Main navigation">
-
     <a href="#hero" class="nav-logo" aria-label="Home">
-      <!-- Wildflower icon — hand-drawn style -->
-      <svg width="20" height="25" viewBox="0 0 20 25" fill="none" aria-hidden="true">
-        <circle cx="10" cy="9.5" r="3.2" fill="currentColor"/>
-        <ellipse cx="10" cy="3"   rx="2.2" ry="3.8" fill="currentColor" opacity="0.82"/>
-        <ellipse cx="17" cy="9.5" rx="3.8" ry="2.2" fill="currentColor" opacity="0.82"/>
-        <ellipse cx="10" cy="16"  rx="2.2" ry="3.8" fill="currentColor" opacity="0.82"/>
-        <ellipse cx="3"  cy="9.5" rx="3.8" ry="2.2" fill="currentColor" opacity="0.82"/>
-        <path d="M10 13 C10 17 8.5 21 7.5 25" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" fill="none"/>
-        <path d="M9.5 19 C7.5 17.5 5.5 18 5 19" stroke="currentColor" stroke-width="1.1" stroke-linecap="round" fill="none"/>
+      <svg width="20" height="24" viewBox="0 0 20 24" fill="none" aria-hidden="true">
+        <circle cx="10" cy="9" r="2.8" fill="currentColor"/>
+        <ellipse cx="10" cy="3"   rx="2"   ry="3.5" fill="currentColor" opacity="0.8"/>
+        <ellipse cx="16.5" cy="9" rx="3.5" ry="2"   fill="currentColor" opacity="0.8"/>
+        <ellipse cx="10" cy="15"  rx="2"   ry="3.5" fill="currentColor" opacity="0.8"/>
+        <ellipse cx="3.5"  cy="9" rx="3.5" ry="2"   fill="currentColor" opacity="0.8"/>
+        <path d="M10 12 C10 16 8.5 20 7.5 24" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" fill="none"/>
+        <path d="M9.5 18.5 C7.5 17 5.5 17.5 5 18.5" stroke="currentColor" stroke-width="1.1" stroke-linecap="round" fill="none"/>
       </svg>
     </a>
 
-    <div class="nav-links" role="list">
-      <a class="nav-link" href="#work"  role="listitem" id="nl-work">Work</a>
-      <a class="nav-link" href="#about" role="listitem" id="nl-about">About</a>
+    <div class="nav-links">
+      <a class="nav-link" href="#work">Work</a>
+      <a class="nav-link" href="#about">About</a>
     </div>
 
-    <button class="nav-cta" id="nav-sayhi" aria-label="Jump to contact">Say Hi!</button>
-
-    <button class="nav-hamburger" id="hamburger"
-            aria-label="Open navigation menu" aria-expanded="false">
-      <span></span><span></span><span></span>
-    </button>
+    <button class="nav-cta" id="nav-sayhi">Say Hi!</button>
   </nav>
 
-  <!-- Mobile overlay -->
-  <div class="nav-overlay" id="nav-overlay" role="dialog" aria-label="Navigation menu">
-    <a href="#work">Work</a>
-    <a href="#about">About</a>
-    <button id="overlay-sayhi">Say Hi!</button>
-  </div>
 
-
-  <!-- ===========================
-       HERO
-  =========================== -->
+  <!-- HERO -->
   <section id="hero">
 
-    <!-- Desk / collage photograph — GSAP Phase 1 zooms this -->
     <img
-      id="hero-desktop"
+      id="hero-img"
       src="assets.webp/hero-initial.png"
-      alt="Andrea Lee's workspace: monitor, desk plants, books and objects"
+      alt="Andrea Lee's workspace: a mid-century desk with monitor, lamp, plants and design objects"
       fetchpriority="high"
-      width="820"
-      height="618"
+      width="860"
+      height="648"
     >
 
-    <!-- "complex" overlay — only visible during GSAP Phase 2–3
-         GSAP owns all transforms: xPercent/yPercent centres it,
-         scale: 5 zooms it, never use CSS translate here           -->
-    <div class="hero-complex-wrap" id="hero-complex" aria-hidden="true">
-      <span class="word-complex">com<span class="letter-p" id="letter-p">p</span>lex</span>
-    </div>
-
-    <!-- Scroll indicator -->
-    <div class="hero-scroll" id="hero-scroll" aria-hidden="true">
+    <div class="hero-scroll" aria-hidden="true">
       <span class="hero-scroll-line"></span>
-      <span class="hero-scroll-text">scroll down</span>
+      <span class="hero-scroll-text"><em>scroll</em> down</span>
     </div>
 
   </section>
-
-
-  <!-- ===========================
-       WORK
-  =========================== -->
-  <section id="work" aria-label="Selected works">
-
-    <div class="work-header">
-      <h2 class="work-title">Selected<br>Works</h2>
-    </div>
-
-    <div class="work-cols" role="list">
-
-      <a class="work-col" href="case-studies/arvo.html" role="listitem" aria-label="ARVO case study">
-        <img class="work-col-img" src="assets.webp/arvo-cta.png" alt="" aria-hidden="true" loading="lazy">
-        <div class="work-col-overlay">
-          <p class="work-col-tags">Project Lead · Team of 6 · AI for Managers</p>
-          <h3 class="work-col-headline">Pushing back 71% of issues to the client</h3>
-          <p class="work-col-desc">Six weeks. A team of six. A brief that required uncomfortable honesty.</p>
-          <span class="work-col-cta">Read the case study →</span>
-        </div>
-        <span class="work-col-name">ARVO</span>
-      </a>
-
-      <a class="work-col" href="case-studies/seletar.html" role="listitem" aria-label="Seletar Airport case study">
-        <img class="work-col-img" src="assets.webp/seletar-cta.png" alt="" aria-hidden="true" loading="lazy">
-        <div class="work-col-overlay">
-          <p class="work-col-tags">Lead UX Researcher · Team of 3 · Omni-channel / Info</p>
-          <h3 class="work-col-headline">Great airport, nobody knew!</h3>
-          <p class="work-col-desc">13 interviews. 2 rounds of testing. One painful pivot. How research saved our team from shipping the wrong product.</p>
-          <span class="work-col-cta">Read the case study →</span>
-        </div>
-        <span class="work-col-name">Seletar Airport</span>
-      </a>
-
-      <a class="work-col" href="case-studies/pethaus.html" role="listitem" aria-label="Pet Haus case study">
-        <img class="work-col-img" src="assets.webp/pethaus-cta.png" alt="" aria-hidden="true" loading="lazy">
-        <div class="work-col-overlay">
-          <p class="work-col-tags">Solo Designer · End-to-end · E-commerce</p>
-          <h3 class="work-col-headline">Trust, designed in.</h3>
-          <p class="work-col-desc">A solo e-commerce build for the most anxious shopper on the internet — Pawrents. 92% said the same thing in different words.</p>
-          <span class="work-col-cta">Read the case study →</span>
-        </div>
-        <span class="work-col-name">Pet Haus</span>
-      </a>
-
-    </div>
-
-    <span class="work-scroll-hint" aria-hidden="true">scroll up to return ↑</span>
-
-  </section>
-
-
-  <!-- ===========================
-       ABOUT
-  =========================== -->
-  <section id="about" aria-label="About Andrea">
-
-    <!-- ── Intro: "Hi! I'm [portrait] Andrea" ── -->
-    <div class="about-intro" id="about-intro">
-      <span class="about-scroll-hint" aria-hidden="true">scroll down ↓</span>
-      <h2 class="about-headline">
-        <span class="about-hi">Hi! I'm</span>
-        <!-- Portrait: export from Figma as about-portrait.png and set src below -->
-        <div class="about-portrait-inline" id="about-portrait">
-          <img src="assets.webp/about-portrait-split.png" alt="Andrea Lee" loading="lazy">
-        </div>
-        <span class="about-name">Andrea</span>
-      </h2>
-    </div>
-
-    <!-- ── Bio: two-column ── -->
-    <div class="about-bio">
-      <div class="about-bio-left" id="about-bio-left">
-        <div class="about-bio-location">
-          <svg width="16" height="20" viewBox="0 0 16 20" fill="none" aria-hidden="true">
-            <path d="M8 1C4.13 1 1 4.13 1 8c0 5 7 11 7 11s7-6 7-11c0-3.87-3.13-7-7-7Z" stroke="currentColor" stroke-width="1.4"/>
-            <circle cx="8" cy="8" r="2.2" stroke="currentColor" stroke-width="1.4"/>
-          </svg>
-          <span>Raised in a land of<br><em>'maximum'</em></span>
-        </div>
-        <p class="about-bio-body">I learned that clutter is just friction. In a city of 5-star noise, less isn't a limitation — it's a decision to prioritise what actually moves the needle.</p>
-        <p class="about-bio-credit">Majulah Singapura!</p>
-      </div>
-
-      <div class="about-bio-right" id="about-bio-right">
-        <h3 class="about-philosophy-heading">Designing 🏔 is like<br>practicing Pilates</h3>
-        <p class="about-philosophy-body">Everyone sees the heavy rowing. Nobody sees the core work holding it together. If your form is off by two inches, you're not building strength. You're just creating a future ache.</p>
-        <p class="about-philosophy-body">I design the same way. The sitemap nobody questions. The label that prevents the wrong click. The shortcut that saves thirty seconds, every time.</p>
-        <p class="about-philosophy-strong">The invisible adjustments are usually the whole job.</p>
-      </div>
-    </div>
-
-    <!-- ── Off the record: tag cloud ── -->
-    <div class="about-fun" id="about-fun">
-      <h3 class="about-fun-heading"><em>Off the record</em></h3>
-      <div class="about-tags-wrap">
-        <span class="about-tag">Pilates core. UX brain.</span>
-        <span class="about-tag">Allergic to Comic Sans</span>
-        <span class="about-tag">Too much screentime</span>
-        <span class="about-tag">Love British Royal History</span>
-        <span class="about-tag">Absolute caffeine addict</span>
-        <span class="about-tag">Recovering event stylist</span>
-        <span class="about-tag">Picking up pickleball</span>
-        <span class="about-tag">Aspiring to side hustle as a pilates instructor</span>
-        <span class="about-tag">Adore fantasy novels, ACOTAR!!!!</span>
-        <span class="about-tag">I secretly like not knowing much — so everything still amazes me</span>
-        <span class="about-tag">Majulah Singapura!</span>
-      </div>
-    </div>
-
-  </section>
-
-
-  <!-- ===========================
-       CONTACT
-  =========================== -->
-  <section id="contact" aria-label="Contact">
-
-    <h1 class="contact-heading">Say hi!</h1>
-    <p class="contact-sub">Open to product design and UX research roles locally and overseas.</p>
-
-    <div class="contact-grid">
-
-      <a class="contact-item" href="mailto:andreeyahlee@gmail.com">
-        <svg width="22" height="18" viewBox="0 0 22 18" fill="none">
-          <rect x="1" y="1" width="20" height="16" rx="2" stroke="currentColor" stroke-width="1.4"/>
-          <path d="M1 4.5 L11 11 L21 4.5" stroke="currentColor" stroke-width="1.4"/>
-        </svg>
-        andreeyahlee@gmail.com
-      </a>
-
-      <a class="contact-item" href="#" aria-label="Resume (link coming soon)">
-        <svg width="18" height="22" viewBox="0 0 18 22" fill="none">
-          <rect x="1" y="1" width="16" height="20" rx="2" stroke="currentColor" stroke-width="1.4"/>
-          <path d="M4.5 7.5H13.5 M4.5 11H13.5 M4.5 14.5H9.5" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/>
-        </svg>
-        Resume
-      </a>
-
-      <a class="contact-item" href="https://www.linkedin.com/in/andrealee-/" target="_blank" rel="noopener noreferrer">
-        <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
-          <rect x="1" y="1" width="18" height="18" rx="3" stroke="currentColor" stroke-width="1.4"/>
-          <circle cx="5.5" cy="5.5" r="1" fill="currentColor"/>
-          <path d="M5.5 8V15" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/>
-          <path d="M8.5 8V15 M8.5 11C8.5 8.5 15 8 15 11.5V15" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/>
-        </svg>
-        linkedin.com/in/andrealee-/
-      </a>
-
-      <a class="contact-item" href="https://github.com" target="_blank" rel="noopener noreferrer">
-        <svg width="18" height="22" viewBox="0 0 18 22" fill="none">
-          <rect x="1" y="1" width="16" height="20" rx="2" stroke="currentColor" stroke-width="1.4"/>
-          <path d="M4.5 7.5H13.5 M4.5 11H13.5 M4.5 14.5H9.5" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/>
-        </svg>
-        GitHub
-      </a>
-
-      <a class="contact-item" href="https://instagram.com/lee.andrea" target="_blank" rel="noopener noreferrer">
-        <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
-          <rect x="1" y="1" width="18" height="18" rx="5" stroke="currentColor" stroke-width="1.4"/>
-          <circle cx="10" cy="10" r="3.5" stroke="currentColor" stroke-width="1.4"/>
-          <circle cx="15" cy="5" r="1" fill="currentColor"/>
-        </svg>
-        @lee.andrea
-      </a>
-
-      <span class="contact-item">
-        <svg width="16" height="22" viewBox="0 0 16 22" fill="none">
-          <path d="M8 1C4.13 1 1 4.13 1 8c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7Z" stroke="currentColor" stroke-width="1.4"/>
-          <circle cx="8" cy="8" r="2.5" stroke="currentColor" stroke-width="1.4"/>
-        </svg>
-        Singapore-based
-      </span>
-
-    </div>
-
-  </section>
-
-
-  <script>
-  'use strict';
-
-  /* =============================================
-     NAV — scroll to contact + active highlights
-  ============================================= */
-  const nav = document.getElementById('nav');
-
-  document.getElementById('nav-sayhi').addEventListener('click', () => {
-    document.getElementById('contact').scrollIntoView({ behavior: 'smooth' });
-  });
-
-  // Invert nav when Work section (dark bg) is centred in viewport
-  const bgObs = new IntersectionObserver(entries => {
-    entries.forEach(e => {
-      if (e.target.id === 'work') nav.classList.toggle('on-dark', e.isIntersecting);
-    });
-  }, { threshold: 0, rootMargin: '-50% 0px -50% 0px' });
-  bgObs.observe(document.getElementById('work'));
-
-  // Active link
-  const navLinks = { work: document.getElementById('nl-work'), about: document.getElementById('nl-about') };
-  const activeObs = new IntersectionObserver(entries => {
-    entries.forEach(e => {
-      if (!e.isIntersecting) return;
-      Object.values(navLinks).forEach(l => l?.classList.remove('active'));
-      navLinks[e.target.id]?.classList.add('active');
-    });
-  }, { threshold: 0.4, rootMargin: '-64px 0px 0px 0px' });
-  ['work', 'about'].forEach(id => { const el = document.getElementById(id); if (el) activeObs.observe(el); });
-
-  /* =============================================
-     MOBILE NAV
-  ============================================= */
-  const hamburger = document.getElementById('hamburger');
-  const overlay   = document.getElementById('nav-overlay');
-  let menuOpen = false;
-
-  function openMenu()  { menuOpen = true;  hamburger.classList.add('open');    hamburger.setAttribute('aria-expanded', 'true');  overlay.classList.add('open');    document.body.style.overflow = 'hidden'; }
-  function closeMenu() { menuOpen = false; hamburger.classList.remove('open'); hamburger.setAttribute('aria-expanded', 'false'); overlay.classList.remove('open'); document.body.style.overflow = '';        }
-
-  hamburger.addEventListener('click', () => menuOpen ? closeMenu() : openMenu());
-  overlay.querySelectorAll('a').forEach(a => a.addEventListener('click', closeMenu));
-  document.getElementById('overlay-sayhi').addEventListener('click', () => {
-    closeMenu();
-    document.getElementById('contact').scrollIntoView({ behavior: 'smooth' });
-  });
-  document.addEventListener('keydown', e => { if (e.key === 'Escape' && menuOpen) closeMenu(); });
-
-  /* =============================================
-     GSAP — HERO SCROLL SEQUENCE
-     All three phases wrapped in matchMedia so
-     they are completely disabled on mobile.
-     GSAP conflict rules (PRD §4) enforced:
-       - No CSS sticky on #hero (GSAP pins it)
-       - No CSS transform on hero-complex-wrap
-         (GSAP owns via xPercent / yPercent)
-       - No dual-axis animation on same element
-       - scrub: 1 throughout
-  ============================================= */
-  const mm = gsap.matchMedia();
-
-  mm.add('(min-width: 768px)', () => {
-
-    const heroDesktop = document.getElementById('hero-desktop');
-    const heroComplex = document.getElementById('hero-complex');
-    const letterP     = document.getElementById('letter-p');
-    const heroScroll  = document.getElementById('hero-scroll');
-
-    // Centre the overlay using GSAP transforms only — never CSS translate
-    gsap.set(heroComplex, { xPercent: -50, yPercent: -50 });
-
-    const tl = gsap.timeline({
-      scrollTrigger: {
-        trigger: '#hero',
-        start:   'top top',
-        end:     '+=300%',
-        scrub:   1,
-        pin:     true,      // GSAP pins — no CSS position:sticky on #hero
-        anticipatePin: 1,
-      }
-    });
-
-    // ── Phase 1 (0 → 0.4) ──────────────────────────────
-    // Desk image zooms in; scroll indicator fades out
-    tl.to(heroDesktop, { scale: 1.6, ease: 'none', duration: 0.4 }, 0)
-      .to(heroScroll,  { opacity: 0, ease: 'none', duration: 0.15 }, 0);
-
-    // ── Phase 2 (0.4 → 0.7) ────────────────────────────
-    // Image fades; "complex" fades in at viewport centre and scales up
-    tl.to(heroDesktop, { opacity: 0,  ease: 'none', duration: 0.12 }, 0.4)
-      .to(heroComplex, {
-        opacity: 1,
-        scale: 5,
-        ease: 'none',
-        duration: 0.3,
-        transformOrigin: '50% 50%',
-      }, 0.4);
-
-    // ── Phase 3 (0.7 → 1.0) ────────────────────────────
-    // Letter "p" (the bowl = circle) scales to ~100× original,
-    // filling the viewport; body bg transitions to forest
-    tl.to(letterP, {
-        scale: 20,              // × 5 parent = 100× effective
-        ease: 'none',
-        duration: 0.3,
-        transformOrigin: '50% 55%',   // centre of the "p" bowl
-      }, 0.7)
-      .to('body', { backgroundColor: '#1F2B1F', ease: 'none', duration: 0.15 }, 0.82);
-
-    // ── About: portrait scale-in ───────────────────────
-    gsap.from('#about-portrait', {
-      scale: 0, opacity: 0, duration: 0.7, ease: 'back.out(1.5)',
-      scrollTrigger: { trigger: '#about-intro', start: 'top 60%', toggleActions: 'play none none reverse' }
-    });
-
-    // ── About: bio columns slide in ────────────────────
-    gsap.from('#about-bio-left', {
-      x: -40, opacity: 0, duration: 0.6, ease: 'power2.out',
-      scrollTrigger: { trigger: '.about-bio', start: 'top 65%', toggleActions: 'play none none reverse' }
-    });
-    gsap.from('#about-bio-right', {
-      x: 40, opacity: 0, duration: 0.6, delay: 0.1, ease: 'power2.out',
-      scrollTrigger: { trigger: '.about-bio', start: 'top 65%', toggleActions: 'play none none reverse' }
-    });
-
-    // ── About: tags stagger ────────────────────────────
-    gsap.from('.about-tag', {
-      scale: 0.8, opacity: 0, duration: 0.35, stagger: 0.04, ease: 'back.out(1.2)',
-      scrollTrigger: { trigger: '#about-fun', start: 'top 70%', toggleActions: 'play none none reverse' }
-    });
-
-    // Cleanup when breakpoint exits
-    return () => {
-      ScrollTrigger.getAll().forEach(t => t.kill());
-      gsap.set([heroComplex, heroDesktop, heroScroll, letterP], { clearProps: 'all' });
-      gsap.set('body', { clearProps: 'backgroundColor' });
-    };
-  });
-  </script>
 
 </body>
 </html>
