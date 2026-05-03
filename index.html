@@ -639,6 +639,15 @@
       }
       .work-scroll-hint { display: none; }
 
+      /* About */
+      .about-headline { font-size: clamp(44px, 12vw, 80px); gap: 12px; }
+      .about-bio { grid-template-columns: 1fr; }
+      .about-portrait-inline { width: clamp(90px, 20vw, 140px); height: clamp(108px, 24vw, 168px); }
+
+      /* Work: disable flex expansion on touch — columns stay equal */
+      .work-cols:has(.work-col:hover) .work-col,
+      .work-cols:has(.work-col:hover) .work-col:hover { flex-grow: 1; }
+
       /* Contact */
       .contact-grid { grid-template-columns: 1fr; }
     }
@@ -1003,6 +1012,28 @@
         transformOrigin: '50% 55%',   // centre of the "p" bowl
       }, 0.7)
       .to('body', { backgroundColor: '#1F2B1F', ease: 'none', duration: 0.15 }, 0.82);
+
+    // ── About: portrait scale-in ───────────────────────
+    gsap.from('#about-portrait', {
+      scale: 0, opacity: 0, duration: 0.7, ease: 'back.out(1.5)',
+      scrollTrigger: { trigger: '#about-intro', start: 'top 60%', toggleActions: 'play none none reverse' }
+    });
+
+    // ── About: bio columns slide in ────────────────────
+    gsap.from('#about-bio-left', {
+      x: -40, opacity: 0, duration: 0.6, ease: 'power2.out',
+      scrollTrigger: { trigger: '.about-bio', start: 'top 65%', toggleActions: 'play none none reverse' }
+    });
+    gsap.from('#about-bio-right', {
+      x: 40, opacity: 0, duration: 0.6, delay: 0.1, ease: 'power2.out',
+      scrollTrigger: { trigger: '.about-bio', start: 'top 65%', toggleActions: 'play none none reverse' }
+    });
+
+    // ── About: tags stagger ────────────────────────────
+    gsap.from('.about-tag', {
+      scale: 0.8, opacity: 0, duration: 0.35, stagger: 0.04, ease: 'back.out(1.2)',
+      scrollTrigger: { trigger: '#about-fun', start: 'top 70%', toggleActions: 'play none none reverse' }
+    });
 
     // Cleanup when breakpoint exits
     return () => {

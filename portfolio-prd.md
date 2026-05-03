@@ -71,7 +71,7 @@ Export every asset as **PNG at 2×**, named exactly as listed. Drop into `/asset
 > **Note on State 2 + 3 exports:** These are reference images only — export them so Claude Code can see what the zoomed states look like. The actual zoom is built in GSAP code, not image swaps. You do not need to export node `458-140` (Work section) — that section is built as its own HTML block.
 
 **Figma export steps:**
-1. Select node → right panel → Export → `2×` → Format: `WebP`
+1. Select node → right panel → Export → `2×` → Format: `PNG`
 2. Rename to match table above before saving
 3. Run all through TinyPNG before committing
 
@@ -238,41 +238,31 @@ tl.to("#hero-img",      { scale: 1.8, duration: 0.35 })
 
 **Initial state layout (node `458-140`):**
 
-This is what the user lands on when the p's unpin fires. Build this exactly before adding any hover behaviour.
+Build this to match `work-initial.png` exactly. Do not invent column titles, labels, or layout details — read everything from the exported image.
 
-- Full viewport width, min-height 100vh
 - Background: `--ink` (continuous from hero transition — no seam)
-- Three equal vertical columns side by side (`33.3%` each), full viewport height
-- Each column contains only: project title in `--font-display`, large, `--bg` colour, vertically centred
-- No thumbnails visible, no descriptors visible, no CTA arrows visible
-- Thin 1px `--muted` divider lines between columns
-- Section label "Work" small caps top-left in `--muted`
+- Three equal vertical columns, full viewport height
+- Section label, column titles, dividers: match `work-initial.png`
 
 **Hover state (node `848-1667`):**
 
-Triggered on `mouseenter` per column. CSS transitions, no GSAP needed here.
+Build hover behaviour to match `work-hover-reveal.png`. Do not invent descriptors, CTA copy, or thumbnail positions — read from the exported image.
 
 ```
 On mouseenter column:
-  - Hovered column: flex-basis 33.3% → 50%
-  - Other two columns: flex-basis 33.3% → 25% each
+  - Hovered column expands, others compress — match proportions in work-hover-reveal.png
+  - Thumbnail fades in: opacity 0 → 1, 300ms
+  - Text content revealed: match work-hover-reveal.png for position and copy
   - Transition: 400ms ease
-  - cta thumbnail (e.g. arvo-cta.png): opacity 0 → 1, 300ms
-  - Short role descriptor slides up: translateY 20px → 0, opacity 0 → 1, 300ms
-  - CTA arrow appears bottom-right of column
-  - Column background: subtle tint using case study accent colour at 10% opacity
 
 On mouseleave:
   - All reverse, 300ms ease
 ```
 
-**Column content (per project):**
-
-| Column | Title | Role label | Accent tint | CTA image |
-|---|---|---|---|---|
-| ARVO | *Arvo* | B2B SaaS · PM + UX Lead | `--arvo` (#2a4a6b) | `arvo-cta.png` |
-| Seletar Airport | *Seletar Airport* | Lead UX Researcher | `--seletar` (#2b5e3a) | `seletar-cta.png` |
-| PetHaus | *PetHaus* | Solo Product Designer | `--pethaus` (#7b3f6e) | `pethaus-cta.png` |
+**Column accent tints (hover only):**
+- ARVO column: `--arvo` (#2a4a6b) at 10% opacity
+- Seletar column: `--seletar` (#2b5e3a) at 10% opacity
+- PetHaus column: `--pethaus` (#7b3f6e) at 10% opacity
 
 **CTA links:**
 - ARVO → `case-studies/arvo.html`
@@ -329,12 +319,10 @@ gsap.to(".work-col", {
 
 **State 1 — About initial (node `707-16514`):**
 
+Build to match `about-initial.png` exactly. All text, layout, and labels come from the exported image — do not invent copy.
+
 - Background: `--bg` (cream — first light section since hero)
-- Full viewport, centred text layout
-- Large headline: *"Andrea Lee"* — `--font-display`, `--ink`
-- Subline: role descriptor e.g. *"UX Designer · Singapore"*
 - Portrait: NOT visible yet — opacity 0, scale 0, positioned at vertical centre
-- Section label "About" small caps top-left in `--muted`
 
 ---
 
@@ -342,20 +330,21 @@ gsap.to(".work-col", {
 
 GSAP ScrollTrigger pins the About section for states 2–4.
 
+Match the split layout from `about-portrait-split.png` — the exact words that split apart and the portrait position are defined by that image, not this PRD.
+
 ```
 On scrub 0 → 0.3:
   - about-portrait.png: scale 0 → 1, opacity 0 → 1
     transformOrigin "bottom center" (rises up from below)
   - Headline left half (.text-left): x: 0 → -12vw
   - Headline right half (.text-right): x: 0 → +12vw
-  - Both halves stay at same y — text tears apart horizontally, portrait rises through the gap
 ```
 
-**HTML structure for the split:**
+**HTML structure for the split — match text content to about-initial.png:**
 ```html
 <div class="about-headline">
-  <span class="text-left">Andrea</span>
-  <span class="text-right">Lee</span>
+  <span class="text-left">[left words from Figma]</span>
+  <span class="text-right">[right words from Figma]</span>
 </div>
 <img id="about-portrait" src="assets/about-portrait.png" alt="Andrea Lee">
 ```
@@ -364,42 +353,27 @@ On scrub 0 → 0.3:
 
 **State 3 — Portrait anchors, rectangle expands (scrub 0.3 → 0.65, node `953-14453`):**
 
-```
-- #about-portrait: y moves downward to bottom-left quadrant of screen
-- .about-name: slides in from left, locks beside portrait
-- #about-rect: height 0 → 50vh, expands upward from bottom of screen
-  background: --ink, sits behind portrait
-  contains: bio copy, skills grid (initially hidden)
-- Bio copy and skills: fade in as rect reaches full height
-```
+Match `about-portrait-anchored.png` for all layout, text position, and content inside the rectangle. Do not write bio copy or skill tags — use exactly what is in the image.
 
-**Bio copy (use exactly):**
-> "So the way this started was — I kept finding myself redesigning every process I touched. At LaSalle I built an internal resource interface before I even knew what IA was. Running Magnolia & Pine taught me that every event is just a service blueprint in disguise. The bootcamp gave me the vocabulary for what I'd already been doing."
+```
+- #about-portrait: moves to position shown in about-portrait-anchored.png
+- .about-name: slides in to position shown in about-portrait-anchored.png
+- #about-rect: expands from bottom to height shown in about-portrait-anchored.png
+  background: --ink
+- All text content inside rect: read from about-portrait-anchored.png
+```
 
 ---
 
 **State 4 — Info swap (scrub 0.65 → 1.0, node `953-14527`):**
 
-Portrait stays. Layout stays. Only the content inside `#about-rect` changes.
+Portrait stays. Layout stays. Content inside `#about-rect` changes to match `about-info-swap.png`. Do not invent the replacement content — read it from the image.
 
 ```
-- Bio copy: opacity 1 → 0
-- Skills grid fades out
-- New content fades in: experience timeline / tools list / what I'm looking for
-  (match whatever is visible in node 953-14527)
-- #about-rect background can shift subtly: --ink → slightly lighter dark tone
+- Current rect content: opacity 1 → 0
+- New content from about-info-swap.png: opacity 0 → 1
 - At scrub 1.0: unpin fires, Say Hi section enters
 ```
-
-**Skills to include (from resume):**
-User Research · Information Architecture · Usability Testing · Service Blueprinting · Prototyping · Stakeholder Management · Agile · KPI Tracking
-
----
-
-**Sub-section C — Bottom half change (node `953-14527`):**
-
-- Skills grid fades in below the bio (User Research / IA / Prototyping / Stakeholder Management / Service Design / ResearchOps)
-- Each skill tag: `--font-body`, pill shape, 1px border `--ink`, background transparent → hover fills `--accent`
 
 ---
 
@@ -416,6 +390,9 @@ User Research · Information Architecture · Usability Testing · Service Bluepr
 ---
 
 ## 6. Case Study Pages — Animation Specs
+
+> ⚠️ **CONTENT RULE — applies to every section below:**
+> All text copy, labels, headings, stats, annotations, and layout details come from the exported PNG for that section. Claude Code must not write, invent, or assume any content. If text is not legible in the image, flag it and ask — do not fill in the gap.
 
 ### Base pattern (all three case studies)
 
@@ -511,17 +488,16 @@ gsap.from(".cs-card", { y: 30, opacity: 0, stagger: 0.1, duration: 0.6, ... })
 
 **⭐ SIGNATURE MOMENT — The Pivot / Co-creation (`894-116`):**
 
-This is the "2 of 6 problems" scoping decision — the senior signal of the project. Pin this section and build the diagram on scroll.
+Pin this section. Build the scoping diagram on scroll. All labels, card titles, and annotation text come from `arvo-pivot.png` — do not invent them.
 
 ```
-ScrollTrigger pin: true on this section, end: "+=500"
+ScrollTrigger pin: true, end: "+=500", scrub: 1
 
-6 problem cards arranged in a grid, scrub 1:
-- All 6 cards fade in together at scrub 0
-- scrub 0.3 → 0.6: Cards 3–6 dim to 20% opacity (the 4 problems scoped out)
-- scrub 0.6 → 0.8: Cards 1–2 scale up slightly (1.0 → 1.05), border glows accent navy
-- scrub 0.8 → 1.0: Annotation text fades in — "Scoped to 2 of 6 — communicated to founder"
-- Unpin at scrub 1.0
+scrub 0: All problem cards fade in together — match layout to arvo-pivot.png
+scrub 0.3 → 0.6: Cards that were scoped OUT dim to 20% opacity
+scrub 0.6 → 0.8: Cards that were scoped IN scale slightly (1.0 → 1.05), border glows --arvo
+scrub 0.8 → 1.0: Annotation text fades in — read text from arvo-pivot.png
+Unpin at scrub 1.0
 ```
 
 **Second Round Results (`899-903`)** — Results cards stagger in with slight scale:
@@ -603,26 +579,22 @@ ScrollTrigger pin: true on this section, end: "+=500"
 
 **⭐ SIGNATURE MOMENT — Validation (`783-11728`):**
 
-The 3.0 → 4.8 score journey. This is the pivot proof — hypothesis killed, speed-first redesign vindicated.
+Pin this section. The two score states animate on scroll. All scores, labels, and annotation text come from `seletar-validation.png` — do not invent them.
 
 ```
 Pin section, scrub 1, end: "+=400"
 
-Two score displays side by side: Round 1 | Round 2
-
-Round 1 score:
-- "3.0 / 5" counts up from 0 → 3.0 on section enter (CountUp, 1s)
-- Background tint: warm red at 8% opacity behind Round 1 card
+Two score states shown (Round 1 and Round 2) — match layout to seletar-validation.png
 
 scrub 0 → 0.4:
-- "HYPOTHESIS KILLED" label fades in below Round 1 (opacity 0 → 1)
-- Round 1 card: subtle shake animation (keyframes, x ±3px, 3 times)
+- Round 1 score counts up from 0 to the value shown in seletar-validation.png (CountUp, 1s)
+- Round 1 label fades in — read text from image
+- Round 1 card: subtle shake (keyframes, x ±3px, 3 times)
 
 scrub 0.4 → 1.0:
 - Round 2 card scales in: scale 0.8 → 1.0, opacity 0 → 1
-- "4.8 / 5" counts up from 0 → 4.8, duration 1.2s
-- Background tint: green at 8% behind Round 2 card
-- Annotation: "Speed-first redesign. 100% task success." fades in
+- Round 2 score counts up to value shown in seletar-validation.png
+- Round 2 annotation fades in — read text from image
 
 Unpin at scrub 1.0
 ```
@@ -674,37 +646,30 @@ Unpin at scrub 1.0
 
 **⭐ SIGNATURE MOMENT — Usability Testing & Iteration (`950-8212`):**
 
-The reorder feature failure — placed in cart, should be in Order History. Wrong → right.
+Pin this section. The wrong → right placement animation plays on scroll. All UI states, labels, and annotation text come from `pethaus-testing.png` — do not invent them.
 
 ```
 Pin section, scrub 1, end: "+=400"
 
-Two UI states shown side by side: Wrong placement | Correct placement
+Two UI states shown — match layout to pethaus-testing.png
 
 scrub 0 → 0.3:
-- "Wrong placement" screen slides in from left
-- Red X icon fades in over it
-- Label: "Smart Re-order in Cart" fades in below
+- Wrong placement screen slides in from left
+- Label and indicator fades in — read from pethaus-testing.png
 
 scrub 0.3 → 0.6:
-- Wrong screen: opacity 1 → 0.2, slight blur (filter: blur(2px))
-- "Correct placement" screen slides in from right
-- Green checkmark fades in over it
-- Label: "Moved to Order History" fades in
+- Wrong screen: opacity 1 → 0.2, filter: blur(2px)
+- Correct placement screen slides in from right
+- Label and indicator fades in — read from pethaus-testing.png
 
 scrub 0.6 → 1.0:
-- Correct screen scales up slightly (1.0 → 1.04) — holds as hero state
-- Annotation: "100% of participants found it immediately" fades in
+- Correct screen scales up slightly (1.0 → 1.04)
+- Annotation text fades in — read from pethaus-testing.png
 
 Unpin at scrub 1.0
 ```
 
-**Results (`950-12042`)** — ⭐ Two metrics count up on enter:
-```
-- "100%" task success rate — counts 0 → 100 over 1s
-- "4.8 / 5" trust rating — counts 0 → 4.8 over 1.2s
-- Each metric has a thin progress bar that fills left → right as number counts
-```
+**Results (`950-12042`)** — Metrics count up on enter. Read metric values and labels from `pethaus-results.png` — do not hardcode numbers. Each metric gets a thin progress bar that fills left → right as the number counts up.
 
 **Reflection (`806-1862`)** — Base scroll reveal, no special animation.
 
