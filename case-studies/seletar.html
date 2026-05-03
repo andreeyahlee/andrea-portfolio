@@ -4,29 +4,272 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Seletar Airport — Andrea Lee</title>
+  <meta name="description" content="Seletar Airport case study: Unlocking the Subang Advantage. By Andrea Lee.">
+
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@1,300;1,400&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@1,300&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
   <script>gsap.registerPlugin(ScrollTrigger);</script>
+
   <style>
     :root {
-      --cream:       #F3F2EC;
-      --forest:      #1F2B1F;
-      --accent:      #DCE888;
-      --case-accent: #2b5e3a;   /* Seletar forest green */
-      --fh: 'Cormorant Garamond', Georgia, serif;
-      --fb: 'Plus Jakarta Sans', system-ui, sans-serif;
-      --gutter: clamp(24px, 5vw, 64px);
+      --bg:           #F6F6F4;
+      --ink:          #0A0A0A;
+      --muted:        #8A8A86;
+      --case-accent:  #2b5e3a;
+      --font-display: 'Fraunces', serif;
+      --font-body:    'Inter', sans-serif;
+      --sp-xs: 8px; --sp-sm: 16px; --sp-md: 32px;
+      --sp-lg: 64px; --sp-xl: 128px;
     }
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-    body { font-family: var(--fb); background: var(--cream); color: var(--forest); -webkit-font-smoothing: antialiased; }
+    html { scroll-behavior: smooth; }
+    body { font-family: var(--font-body); background: var(--bg); color: var(--ink); overflow-x: hidden; -webkit-font-smoothing: antialiased; }
     a { text-decoration: none; color: inherit; }
     img { display: block; max-width: 100%; }
+
+    /* NAV */
+    #nav {
+      position: fixed; top: 16px; left: 50%; transform: translateX(-50%);
+      z-index: 100; display: flex; align-items: center; gap: 16px;
+      background: var(--ink); border-radius: 100px;
+      padding: 8px 8px 8px 20px; width: calc(100% - 128px); max-width: 960px; white-space: nowrap;
+    }
+    .nav-logo { display: flex; align-items: center; color: var(--bg); flex-shrink: 0; opacity: 0.9; transition: opacity 0.2s; }
+    .nav-logo:hover { opacity: 1; }
+    .nav-back { font-size: 13px; font-weight: 500; color: rgba(246,246,244,0.55); margin-left: 4px; transition: color 0.2s; }
+    .nav-back:hover { color: var(--bg); }
+    .nav-links { flex: 1; display: flex; align-items: center; justify-content: flex-end; gap: 32px; list-style: none; margin-right: 8px; }
+    .nav-link { font-size: 14px; font-weight: 500; color: rgba(246,246,244,0.65); transition: color 0.2s; }
+    .nav-link:hover { color: var(--bg); }
+    .nav-cta { font-size: 13px; font-weight: 600; color: var(--ink); background: var(--bg); border: none; border-radius: 100px; padding: 9px 20px; cursor: pointer; transition: background 0.2s; flex-shrink: 0; }
+    .nav-cta:hover { background: #e8e8e4; }
+
+    /* HERO */
+    .cs-hero {
+      position: relative; width: 100%; min-height: 100vh;
+      background: var(--case-accent); overflow: hidden; display: flex; align-items: flex-end;
+    }
+    .cs-hero-img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: center top; }
+    .cs-hero-content { position: relative; z-index: 2; padding: var(--sp-xl) var(--sp-lg) var(--sp-lg); max-width: 900px; }
+    .cs-back {
+      display: inline-flex; align-items: center; gap: 6px;
+      font-size: 13px; font-weight: 500; color: rgba(246,246,244,0.6);
+      margin-bottom: var(--sp-lg); transition: color 0.2s;
+    }
+    .cs-back:hover { color: rgba(246,246,244,1); }
+    .cs-hero-title {
+      font-family: var(--font-body); font-size: clamp(36px, 5vw, 72px);
+      font-weight: 600; color: var(--bg); line-height: 1.1; margin-bottom: var(--sp-md);
+    }
+    .cs-hero-title em { font-style: italic; color: #a2c9a8; }
+    .cs-hero-sub { font-size: 17px; color: rgba(246,246,244,0.75); line-height: 1.65; max-width: 560px; margin-bottom: var(--sp-lg); }
+    .cs-meta-row { display: flex; flex-wrap: wrap; gap: 12px 32px; margin-bottom: var(--sp-lg); }
+    .cs-meta-item { display: flex; flex-direction: column; gap: 3px; }
+    .cs-meta-label { font-size: 10px; font-weight: 600; letter-spacing: 0.1em; color: rgba(246,246,244,0.45); text-transform: uppercase; }
+    .cs-meta-value { font-size: 14px; font-weight: 500; color: rgba(246,246,244,0.85); }
+    .cs-prototype-btn {
+      display: inline-flex; align-items: center; gap: 8px;
+      font-size: 14px; font-weight: 600; color: var(--ink); background: var(--bg);
+      border-radius: 100px; padding: 12px 24px; transition: background 0.2s, transform 0.2s;
+    }
+    .cs-prototype-btn:hover { background: #e8e8e4; transform: translateY(-1px); }
+
+    /* SECTIONS */
+    .cs-section { width: 100%; max-width: 1440px; margin: 0 auto; padding: var(--sp-xl) var(--sp-lg); }
+    .cs-section img { width: 100%; height: auto; display: block; border-radius: 12px; }
+
+    /* SIGNATURE — validation section */
+    .cs-signature { position: relative; width: 100%; }
+
+    /* SCORE cards — for validation section */
+    .cs-validation-wrap { max-width: 1200px; margin: 0 auto; padding: var(--sp-xl) var(--sp-lg); }
+    .cs-validation-img { width: 100%; height: auto; border-radius: 12px; }
+
+    /* FINAL CTA */
+    .cs-final {
+      background: var(--case-accent); padding: var(--sp-xl) var(--sp-lg);
+      display: flex; flex-direction: column; align-items: center; text-align: center; gap: 32px;
+    }
+    .cs-final-label { font-size: 11px; font-weight: 600; letter-spacing: 0.12em; color: rgba(246,246,244,0.45); text-transform: uppercase; }
+    .cs-final-headline { font-family: var(--font-display); font-size: clamp(32px, 4vw, 56px); font-weight: 300; font-style: italic; color: var(--bg); }
+    .cs-final-btn {
+      display: inline-flex; align-items: center; gap: 8px;
+      font-size: 15px; font-weight: 600; color: var(--ink); background: var(--bg);
+      border-radius: 100px; padding: 14px 28px; transition: background 0.2s;
+    }
+    .cs-final-btn:hover { background: #e8e8e4; }
+    .cs-nav-end { padding: var(--sp-lg); text-align: center; }
+    .cs-nav-end a { font-size: 14px; font-weight: 500; color: var(--muted); transition: color 0.2s; }
+    .cs-nav-end a:hover { color: var(--ink); }
+
+    @media (max-width: 767px) {
+      #nav { width: calc(100% - 32px); }
+      .cs-hero-content { padding: 120px var(--sp-md) var(--sp-md); }
+      .cs-section { padding: var(--sp-lg) var(--sp-md); }
+      .cs-final { padding: var(--sp-lg) var(--sp-md); }
+    }
   </style>
 </head>
 <body>
-  <!-- Session 8: Seletar Airport case study -->
+
+  <nav id="nav" role="navigation" aria-label="Main navigation">
+    <a href="../index.html" class="nav-logo" aria-label="Home">
+      <svg width="26" height="30" viewBox="0 0 26 30" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round">
+        <ellipse cx="13" cy="5.5" rx="2.5" ry="4.5" stroke-width="1.3"/>
+        <ellipse cx="13" cy="5.5" rx="2.5" ry="4.5" stroke-width="1.3" transform="rotate(60 13 11)"/>
+        <ellipse cx="13" cy="5.5" rx="2.5" ry="4.5" stroke-width="1.3" transform="rotate(120 13 11)"/>
+        <ellipse cx="13" cy="5.5" rx="2.5" ry="4.5" stroke-width="1.3" transform="rotate(180 13 11)"/>
+        <ellipse cx="13" cy="5.5" rx="2.5" ry="4.5" stroke-width="1.3" transform="rotate(240 13 11)"/>
+        <ellipse cx="13" cy="5.5" rx="2.5" ry="4.5" stroke-width="1.3" transform="rotate(300 13 11)"/>
+        <circle cx="13" cy="11" r="2.5" stroke-width="1.3"/>
+        <path d="M13 13.5 C13 18 11 21 11 26" stroke-width="1.3"/>
+        <path d="M11 21 C9 19 6.5 20 7.5 22.5" stroke-width="1.2"/>
+      </svg>
+    </a>
+    <a href="../index.html#work" class="nav-back">← Back</a>
+    <ul class="nav-links" role="list">
+      <li><a class="nav-link" href="../index.html#work">Work</a></li>
+      <li><a class="nav-link" href="../index.html#about">About</a></li>
+    </ul>
+    <button class="nav-cta" onclick="window.location='../index.html#contact'">Say Hi!</button>
+  </nav>
+
+
+  <!-- HERO -->
+  <header class="cs-hero">
+    <img class="cs-hero-img" src="../assets.webp/seletar-hero.png"
+         alt="Seletar Airport case study" fetchpriority="high">
+    <div class="cs-hero-content">
+      <a href="../index.html#work" class="cs-back">← Back to work</a>
+      <h1 class="cs-hero-title">
+        Unlocking the<br>
+        <em>Subang Advantage</em>
+      </h1>
+      <p class="cs-hero-sub">
+        I led the research that changed the brief. What started as "redesign the website"
+        became something sharper — prove the airport's competitive edge online, or lose
+        passengers who never knew it existed.
+      </p>
+      <div class="cs-meta-row">
+        <div class="cs-meta-item"><span class="cs-meta-label">Role</span><span class="cs-meta-value">UX Research Lead</span></div>
+        <div class="cs-meta-item"><span class="cs-meta-label">Team</span><span class="cs-meta-value">3 Designers</span></div>
+        <div class="cs-meta-item"><span class="cs-meta-label">Methods</span><span class="cs-meta-value">9 Interviews · 2 Test Rounds · Iterative Prototype Validation</span></div>
+        <div class="cs-meta-item"><span class="cs-meta-label">Type</span><span class="cs-meta-value">Omni-channel Service · Informational Platform</span></div>
+        <div class="cs-meta-item"><span class="cs-meta-label">Outcome</span><span class="cs-meta-value">SEQ 4.3 → 4.8/5 · Website Redesign · IA + UX Flows</span></div>
+        <div class="cs-meta-item"><span class="cs-meta-label">Duration</span><span class="cs-meta-value">6 weeks · Dec 2025–Jan 2026</span></div>
+      </div>
+      <a href="https://figma.com/make/VX9LWSLRU1wf0NH2pPaJbv" target="_blank" rel="noopener" class="cs-prototype-btn">
+        Seletar Airport Redesigned →
+      </a>
+    </div>
+  </header>
+
+  <!-- 01 TL;DR -->
+  <section class="cs-section" id="s-tldr">
+    <img src="../assets.webp/seletar-tldr.png"
+         alt="TL;DR — The Lowdown. The Mission, The Move, and The Metric." loading="lazy">
+  </section>
+
+  <!-- 02 THE PROBLEM -->
+  <section class="cs-section" id="s-problem">
+    <img src="../assets.webp/seletar-problem.png" alt="The Problem" loading="lazy">
+  </section>
+
+  <!-- 03 WHAT WE FOUND -->
+  <section class="cs-section" id="s-found">
+    <img src="../assets.webp/seletar-found.png" alt="What We Found" loading="lazy">
+  </section>
+
+  <!-- 04 TURNING RESEARCH INTO DESIGN -->
+  <section class="cs-section" id="s-design">
+    <img src="../assets.webp/seletar-design.png" alt="Turning Research into Design" loading="lazy" class="cs-screen">
+  </section>
+
+  <!-- 05 VALIDATION — SIGNATURE MOMENT (pinned) -->
+  <section class="cs-signature" id="s-validation">
+    <div class="cs-section">
+      <img src="../assets.webp/seletar-validation.png"
+           alt="Validation — SEQ scores Round 1 and Round 2" loading="lazy" class="cs-screen">
+    </div>
+  </section>
+
+  <!-- 06 OUTCOME -->
+  <section class="cs-section" id="s-outcome">
+    <img src="../assets.webp/seletar-outcome.png" alt="The Outcome" loading="lazy">
+  </section>
+
+  <!-- 07 RETROSPECTIVE -->
+  <section class="cs-section" id="s-retro">
+    <img src="../assets.webp/seletar-retro.png" alt="Retrospective" loading="lazy">
+  </section>
+
+  <!-- 08 LAST BUT NOT LEAST -->
+  <section class="cs-section" id="s-last">
+    <img src="../assets.webp/seletar-last.png" alt="Last but not least" loading="lazy" class="cs-screen">
+  </section>
+
+  <!-- FINAL CTA -->
+  <section class="cs-final">
+    <span class="cs-final-label">See the redesign</span>
+    <h2 class="cs-final-headline">The airport finally has a digital story to tell</h2>
+    <a href="https://figma.com/make/VX9LWSLRU1wf0NH2pPaJbv" target="_blank" rel="noopener" class="cs-final-btn">
+      Seletar Airport Redesigned →
+    </a>
+  </section>
+
+  <div class="cs-nav-end">
+    <a href="../index.html#work">← Back to all work</a>
+  </div>
+
+
+  <script>
+  'use strict';
+
+  /* Base scroll reveal */
+  gsap.utils.toArray('.cs-section').forEach(section => {
+    gsap.from(section, {
+      y: 40, opacity: 0, duration: 0.7, ease: 'power2.out',
+      scrollTrigger: { trigger: section, start: 'top 80%', toggleActions: 'play none none none' }
+    });
+  });
+
+  /* Screen mockups */
+  gsap.utils.toArray('.cs-screen').forEach(el => {
+    gsap.from(el, {
+      y: 60, opacity: 0, duration: 0.9, ease: 'power3.out',
+      scrollTrigger: { trigger: el, start: 'top 82%', toggleActions: 'play none none none' }
+    });
+  });
+
+  /* What We Found — stagger left */
+  gsap.from('#s-found img', {
+    x: -30, opacity: 0, duration: 0.65, ease: 'power2.out',
+    scrollTrigger: { trigger: '#s-found', start: 'top 80%', toggleActions: 'play none none none' }
+  });
+
+  /* SIGNATURE MOMENT — validation section pin */
+  const mm = gsap.matchMedia();
+  mm.add('(min-width: 768px)', () => {
+    const valTl = gsap.timeline({
+      scrollTrigger: {
+        trigger: '#s-validation', start: 'top top', end: '+=400', scrub: 1,
+        pin: true, anticipatePin: 1,
+      }
+    });
+    /* Round 1 score card in, then Round 2 scales in */
+    valTl
+      .from('#s-validation .cs-screen', { opacity: 0, y: 30, scale: 0.95, duration: 0.4 })
+      .to('#s-validation .cs-screen', { scale: 1.02, duration: 0.3 }, 0.5)
+      .to('#s-validation .cs-screen', { scale: 1.0, duration: 0.2 }, 0.8);
+  });
+
+  /* Hero entrance */
+  gsap.from('.cs-hero-content', { y: 60, opacity: 0, duration: 0.8, delay: 0.2, ease: 'power2.out' });
+  </script>
+
 </body>
 </html>

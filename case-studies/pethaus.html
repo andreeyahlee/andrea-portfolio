@@ -4,29 +4,278 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Pet Haus — Andrea Lee</title>
+  <meta name="description" content="Pet Haus case study: Trust, designed in. By Andrea Lee.">
+
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@1,300;1,400&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@1,300&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
   <script>gsap.registerPlugin(ScrollTrigger);</script>
+
   <style>
     :root {
-      --cream:       #F3F2EC;
-      --forest:      #1F2B1F;
-      --accent:      #DCE888;
-      --case-accent: #7b3f6e;   /* Pet Haus mauve */
-      --fh: 'Cormorant Garamond', Georgia, serif;
-      --fb: 'Plus Jakarta Sans', system-ui, sans-serif;
-      --gutter: clamp(24px, 5vw, 64px);
+      --bg:           #F6F6F4;
+      --ink:          #0A0A0A;
+      --muted:        #8A8A86;
+      --case-accent:  #7b3f6e;
+      --font-display: 'Fraunces', serif;
+      --font-body:    'Inter', sans-serif;
+      --sp-xs: 8px; --sp-sm: 16px; --sp-md: 32px;
+      --sp-lg: 64px; --sp-xl: 128px;
     }
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-    body { font-family: var(--fb); background: var(--cream); color: var(--forest); -webkit-font-smoothing: antialiased; }
+    html { scroll-behavior: smooth; }
+    body { font-family: var(--font-body); background: var(--bg); color: var(--ink); overflow-x: hidden; -webkit-font-smoothing: antialiased; }
     a { text-decoration: none; color: inherit; }
     img { display: block; max-width: 100%; }
+
+    /* NAV */
+    #nav {
+      position: fixed; top: 16px; left: 50%; transform: translateX(-50%);
+      z-index: 100; display: flex; align-items: center; gap: 16px;
+      background: var(--ink); border-radius: 100px;
+      padding: 8px 8px 8px 20px; width: calc(100% - 128px); max-width: 960px; white-space: nowrap;
+    }
+    .nav-logo { display: flex; align-items: center; color: var(--bg); flex-shrink: 0; opacity: 0.9; transition: opacity 0.2s; }
+    .nav-logo:hover { opacity: 1; }
+    .nav-back { font-size: 13px; font-weight: 500; color: rgba(246,246,244,0.55); margin-left: 4px; transition: color 0.2s; }
+    .nav-back:hover { color: var(--bg); }
+    .nav-links { flex: 1; display: flex; align-items: center; justify-content: flex-end; gap: 32px; list-style: none; margin-right: 8px; }
+    .nav-link { font-size: 14px; font-weight: 500; color: rgba(246,246,244,0.65); transition: color 0.2s; }
+    .nav-link:hover { color: var(--bg); }
+    .nav-cta { font-size: 13px; font-weight: 600; color: var(--ink); background: var(--bg); border: none; border-radius: 100px; padding: 9px 20px; cursor: pointer; transition: background 0.2s; flex-shrink: 0; }
+    .nav-cta:hover { background: #e8e8e4; }
+
+    /* HERO */
+    .cs-hero {
+      position: relative; width: 100%; min-height: 100vh;
+      background: var(--case-accent); overflow: hidden; display: flex; align-items: flex-end;
+    }
+    .cs-hero-img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: center top; }
+    .cs-hero-content { position: relative; z-index: 2; padding: var(--sp-xl) var(--sp-lg) var(--sp-lg); max-width: 900px; }
+    .cs-back {
+      display: inline-flex; align-items: center; gap: 6px;
+      font-size: 13px; font-weight: 500; color: rgba(246,246,244,0.6);
+      margin-bottom: var(--sp-lg); transition: color 0.2s;
+    }
+    .cs-back:hover { color: rgba(246,246,244,1); }
+    .cs-hero-title {
+      font-family: var(--font-body); font-size: clamp(36px, 5vw, 72px);
+      font-weight: 600; color: var(--bg); line-height: 1.1; margin-bottom: var(--sp-md);
+    }
+    .cs-hero-title em { font-style: italic; color: #d4a8c8; }
+    .cs-hero-sub { font-size: 17px; color: rgba(246,246,244,0.75); line-height: 1.65; max-width: 520px; margin-bottom: var(--sp-lg); }
+    .cs-meta-row { display: flex; flex-wrap: wrap; gap: 12px 32px; margin-bottom: var(--sp-lg); }
+    .cs-meta-item { display: flex; flex-direction: column; gap: 3px; }
+    .cs-meta-label { font-size: 10px; font-weight: 600; letter-spacing: 0.1em; color: rgba(246,246,244,0.45); text-transform: uppercase; }
+    .cs-meta-value { font-size: 14px; font-weight: 500; color: rgba(246,246,244,0.85); }
+    .cs-prototype-btn {
+      display: inline-flex; align-items: center; gap: 8px;
+      font-size: 14px; font-weight: 600; color: var(--ink); background: var(--bg);
+      border-radius: 100px; padding: 12px 24px; transition: background 0.2s, transform 0.2s;
+    }
+    .cs-prototype-btn:hover { background: #e8e8e4; transform: translateY(-1px); }
+
+    /* SECTIONS */
+    .cs-section { width: 100%; max-width: 1440px; margin: 0 auto; padding: var(--sp-xl) var(--sp-lg); }
+    .cs-section img { width: 100%; height: auto; display: block; border-radius: 12px; }
+
+    /* Hi-fi screens — fanned layout */
+    .cs-hifi-wrap { max-width: 1440px; margin: 0 auto; padding: var(--sp-xl) var(--sp-lg); }
+    .cs-hifi-wrap img { width: 100%; height: auto; border-radius: 12px; }
+
+    /* SIGNATURE MOMENT */
+    .cs-signature { position: relative; width: 100%; }
+
+    /* FINAL CTA */
+    .cs-final {
+      background: var(--case-accent); padding: var(--sp-xl) var(--sp-lg);
+      display: flex; flex-direction: column; align-items: center; text-align: center; gap: 32px;
+    }
+    .cs-final-label { font-size: 11px; font-weight: 600; letter-spacing: 0.12em; color: rgba(246,246,244,0.45); text-transform: uppercase; }
+    .cs-final-headline { font-family: var(--font-display); font-size: clamp(32px, 4vw, 56px); font-weight: 300; font-style: italic; color: var(--bg); }
+    .cs-final-btn {
+      display: inline-flex; align-items: center; gap: 8px;
+      font-size: 15px; font-weight: 600; color: var(--ink); background: var(--bg);
+      border-radius: 100px; padding: 14px 28px; transition: background 0.2s;
+    }
+    .cs-final-btn:hover { background: #e8e8e4; }
+    .cs-nav-end { padding: var(--sp-lg); text-align: center; }
+    .cs-nav-end a { font-size: 14px; font-weight: 500; color: var(--muted); transition: color 0.2s; }
+    .cs-nav-end a:hover { color: var(--ink); }
+
+    @media (max-width: 767px) {
+      #nav { width: calc(100% - 32px); }
+      .cs-hero-content { padding: 120px var(--sp-md) var(--sp-md); }
+      .cs-section, .cs-hifi-wrap { padding: var(--sp-lg) var(--sp-md); }
+      .cs-final { padding: var(--sp-lg) var(--sp-md); }
+    }
   </style>
 </head>
 <body>
-  <!-- Session 9: Pet Haus case study -->
+
+  <nav id="nav" role="navigation" aria-label="Main navigation">
+    <a href="../index.html" class="nav-logo" aria-label="Home">
+      <svg width="26" height="30" viewBox="0 0 26 30" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round">
+        <ellipse cx="13" cy="5.5" rx="2.5" ry="4.5" stroke-width="1.3"/>
+        <ellipse cx="13" cy="5.5" rx="2.5" ry="4.5" stroke-width="1.3" transform="rotate(60 13 11)"/>
+        <ellipse cx="13" cy="5.5" rx="2.5" ry="4.5" stroke-width="1.3" transform="rotate(120 13 11)"/>
+        <ellipse cx="13" cy="5.5" rx="2.5" ry="4.5" stroke-width="1.3" transform="rotate(180 13 11)"/>
+        <ellipse cx="13" cy="5.5" rx="2.5" ry="4.5" stroke-width="1.3" transform="rotate(240 13 11)"/>
+        <ellipse cx="13" cy="5.5" rx="2.5" ry="4.5" stroke-width="1.3" transform="rotate(300 13 11)"/>
+        <circle cx="13" cy="11" r="2.5" stroke-width="1.3"/>
+        <path d="M13 13.5 C13 18 11 21 11 26" stroke-width="1.3"/>
+        <path d="M11 21 C9 19 6.5 20 7.5 22.5" stroke-width="1.2"/>
+      </svg>
+    </a>
+    <a href="../index.html#work" class="nav-back">← Back</a>
+    <ul class="nav-links" role="list">
+      <li><a class="nav-link" href="../index.html#work">Work</a></li>
+      <li><a class="nav-link" href="../index.html#about">About</a></li>
+    </ul>
+    <button class="nav-cta" onclick="window.location='../index.html#contact'">Say Hi!</button>
+  </nav>
+
+
+  <!-- HERO -->
+  <header class="cs-hero">
+    <img class="cs-hero-img" src="../assets.webp/pethaus-hero.png"
+         alt="Pet Haus case study" fetchpriority="high">
+    <div class="cs-hero-content">
+      <a href="../index.html#work" class="cs-back">← Back to work</a>
+      <h1 class="cs-hero-title">
+        Pet owners don't shop.<br>
+        <em>They check.</em>
+      </h1>
+      <p class="cs-hero-sub">
+        So I designed Pet Haus — where every product page earns trust before it asks
+        for a click. End-to-end UX, solo.
+      </p>
+      <div class="cs-meta-row">
+        <div class="cs-meta-item"><span class="cs-meta-label">Role</span><span class="cs-meta-value">Solo Designer — End to End</span></div>
+        <div class="cs-meta-item"><span class="cs-meta-label">Methods</span><span class="cs-meta-value">Research · IA · Visual Design · Testing</span></div>
+        <div class="cs-meta-item"><span class="cs-meta-label">Type</span><span class="cs-meta-value">E-commerce Platform</span></div>
+        <div class="cs-meta-item"><span class="cs-meta-label">Participants</span><span class="cs-meta-value">12 Research Interviewees · 5 Usability Testers</span></div>
+        <div class="cs-meta-item"><span class="cs-meta-label">Deliverable</span><span class="cs-meta-value">Full E-commerce UX · Web + Mobile</span></div>
+        <div class="cs-meta-item"><span class="cs-meta-label">Duration</span><span class="cs-meta-value">6-Week Sprint · Oct–Dec 2025</span></div>
+      </div>
+      <a href="#" class="cs-prototype-btn">Try the pet-first flow →</a>
+    </div>
+  </header>
+
+  <!-- 01 TL;DR -->
+  <section class="cs-section" id="s-tldr">
+    <img src="../assets.webp/pethaus-tldr.png"
+         alt="TL;DR — One store. Zero trust." loading="lazy">
+  </section>
+
+  <!-- 02 SITCH ON THE GROUND -->
+  <section class="cs-section" id="s-sitch">
+    <img src="../assets.webp/pethaus-sitch.png" alt="Sitch on the Ground" loading="lazy">
+  </section>
+
+  <!-- 03 RESEARCH -->
+  <section class="cs-section" id="s-research">
+    <img src="../assets.webp/pethaus-research.png" alt="Research findings" loading="lazy">
+  </section>
+
+  <!-- 04 THE DESIGN -->
+  <section class="cs-section" id="s-design">
+    <img src="../assets.webp/pethaus-design.png" alt="The Design" loading="lazy">
+  </section>
+
+  <!-- 05 HI-FI SCREENS -->
+  <section class="cs-hifi-wrap" id="s-hifi">
+    <img src="../assets.webp/pethaus-hifi.png" alt="Hi-Fi screens" loading="lazy" class="cs-screen-a">
+  </section>
+
+  <!-- 06 USABILITY TESTING — SIGNATURE MOMENT (pinned) -->
+  <section class="cs-signature" id="s-testing">
+    <div class="cs-section">
+      <img src="../assets.webp/pethaus-testing.png"
+           alt="Usability Testing and Iteration" loading="lazy" class="cs-screen-b">
+    </div>
+  </section>
+
+  <!-- 07 RESULTS -->
+  <section class="cs-section" id="s-results">
+    <img src="../assets.webp/pethaus-results.png" alt="Results" loading="lazy">
+  </section>
+
+  <!-- 08 REFLECTION -->
+  <section class="cs-section" id="s-reflection">
+    <img src="../assets.webp/pethaus-reflection.png" alt="Reflection" loading="lazy">
+  </section>
+
+  <!-- FINAL CTA -->
+  <section class="cs-final">
+    <span class="cs-final-label">100% task success. 96% trust rating.</span>
+    <h2 class="cs-final-headline">See how trust gets designed in</h2>
+    <a href="#" class="cs-final-btn">Try the pet-first flow →</a>
+  </section>
+
+  <div class="cs-nav-end">
+    <a href="../index.html#work">← Back to all work</a>
+  </div>
+
+
+  <script>
+  'use strict';
+
+  /* Base scroll reveal */
+  gsap.utils.toArray('.cs-section').forEach(section => {
+    gsap.from(section, {
+      y: 40, opacity: 0, duration: 0.7, ease: 'power2.out',
+      scrollTrigger: { trigger: section, start: 'top 80%', toggleActions: 'play none none none' }
+    });
+  });
+
+  /* Context items — stagger */
+  gsap.from('#s-sitch img', {
+    x: -20, opacity: 0, duration: 0.65, stagger: 0.1, ease: 'power2.out',
+    scrollTrigger: { trigger: '#s-sitch', start: 'top 80%', toggleActions: 'play none none none' }
+  });
+
+  /* Research findings */
+  gsap.from('#s-research img', {
+    y: 30, opacity: 0, duration: 0.65, ease: 'power2.out',
+    scrollTrigger: { trigger: '#s-research', start: 'top 80%', toggleActions: 'play none none none' }
+  });
+
+  /* Hi-fi screens — fanned entrance */
+  gsap.from('.cs-screen-a', {
+    y: 60, opacity: 0, rotate: 1, duration: 0.9, ease: 'power3.out',
+    scrollTrigger: { trigger: '#s-hifi', start: 'top 80%', toggleActions: 'play none none none' }
+  });
+
+  /* SIGNATURE MOMENT — testing section pin */
+  const mm = gsap.matchMedia();
+  mm.add('(min-width: 768px)', () => {
+    const testTl = gsap.timeline({
+      scrollTrigger: {
+        trigger: '#s-testing', start: 'top top', end: '+=400', scrub: 1,
+        pin: true, anticipatePin: 1,
+      }
+    });
+    /* Wrong placement slides in, dims; correct placement slides in */
+    testTl
+      .from('.cs-screen-b', { opacity: 0, x: -30, duration: 0.3 })
+      .to('.cs-screen-b', { filter: 'brightness(0.7)', duration: 0.2 }, 0.3)
+      .to('.cs-screen-b', { filter: 'brightness(1)', scale: 1.02, duration: 0.3 }, 0.6)
+      .to('.cs-screen-b', { scale: 1, duration: 0.1 }, 0.9);
+  });
+
+  /* Results metrics */
+  gsap.from('#s-results img', {
+    scale: 0.95, opacity: 0, duration: 0.8, ease: 'power2.out',
+    scrollTrigger: { trigger: '#s-results', start: 'top 80%', toggleActions: 'play none none none' }
+  });
+
+  /* Hero entrance */
+  gsap.from('.cs-hero-content', { y: 60, opacity: 0, duration: 0.8, delay: 0.2, ease: 'power2.out' });
+  </script>
+
 </body>
 </html>
