@@ -47,21 +47,26 @@ Hand this entire file to Claude Code as your opening brief. Work section by sect
 
 ## 2. Asset Export Checklist (Do this in Figma first)
 
-Export every asset as **WebP** at **2×**, named exactly as listed. Drop into `/assets/` in the repo root.
+Export every asset as **PNG at 2×**, named exactly as listed. Drop into `/assets/` in the repo root. Run all through TinyPNG before committing to keep file sizes down.
 
-| File name | Figma node | Notes |
+| File name | Figma node | Role in animation |
 |---|---|---|
-| `hero-desktop.webp` | node-id `458-46` | Full desktop mockup, homepage hero |
-| `work-grid-reveal.webp` | node-id `848-1667` | Work section — all 3 columns visible, used as static fallback |
-| `about-portrait.webp` | node-id `953-14453` | Andrea portrait photo |
-| `about-split-closed.webp` | node-id `707-16514` | Rectangle before split |
-| `about-split-open.webp` | node-id `713-16765` | Rectangle post-split (portrait visible) |
-| `arvo-cta.webp` | node-id `952-14418` | Work card CTA thumbnail |
-| `seletar-cta.webp` | node-id `952-14422` | Work card CTA thumbnail |
-| `pethaus-cta.webp` | node-id `952-14428` | Work card CTA thumbnail |
-| `arvo-hero.webp` | node-id `736-105` | ARVO case study hero |
-| `seletar-hero.webp` | node-id `767-7971` | Seletar case study hero |
-| `pethaus-hero.webp` | node-id `791-1661` | PetHaus case study hero |
+| `hero-initial.png` | node-id `273-31` | **State 1** — page load, static hero layout |
+| `hero-desktop-zoom.png` | node-id `458-46` | **State 2** — desktop mockup scaled up (GSAP end state reference) |
+| `hero-letter-p.png` | node-id `458-93` | **State 3** — zoomed into round of letter "p" (GSAP end state reference) |
+| `work-initial.png` | node-id `458-140` | **Work initial state** — 3 columns, titles only, no hover |
+| `work-hover-reveal.png` | node-id `848-1667` | Work hover state — reference for column expand end state |
+| `about-portrait.png` | node-id `953-14453` | Andrea portrait photo |
+| `about-split-closed.png` | node-id `707-16514` | Rectangle before split |
+| `about-split-open.png` | node-id `713-16765` | Rectangle post-split (portrait visible) |
+| `arvo-cta.png` | node-id `952-14418` | Work card CTA thumbnail |
+| `seletar-cta.png` | node-id `952-14422` | Work card CTA thumbnail |
+| `pethaus-cta.png` | node-id `952-14428` | Work card CTA thumbnail |
+| `arvo-hero.png` | node-id `736-105` | ARVO case study hero |
+| `seletar-hero.png` | node-id `767-7971` | Seletar case study hero |
+| `pethaus-hero.png` | node-id `791-1661` | PetHaus case study hero |
+
+> **Note on State 2 + 3 exports:** These are reference images only — export them so Claude Code can see what the zoomed states look like. The actual zoom is built in GSAP code, not image swaps. You do not need to export node `458-140` (Work section) — that section is built as its own HTML block.
 
 **Figma export steps:**
 1. Select node → right panel → Export → `2×` → Format: `WebP`
@@ -114,86 +119,165 @@ The homepage is **one long scroll** that passes through four states: Hero → Wo
 
 ### 5.1 Section: HERO
 
-**Source screens:** `node-id 458-46` (initial) → `node-id 458-93` (zoom to "complex")
+**4-state scroll sequence:**
 
-**Layout (static):**
-- Full viewport (`100vw × 100vh`)
-- Background: `--bg`
-- Center: `hero-desktop.webp` at ~60% viewport width
-- Headline below image: *"making complex things stupidly simple."* — `--font-display`, 80px, `--ink`
-- Nav bar top: links — Work / About / Say Hi
+| State | Figma node | What happens |
+|---|---|---|
+| 1 — Page load | `273-31` | Initial hero: full layout, cream bg, desktop mockup, headline |
+| 2 — First scroll | `458-46` | Desktop mockup scales up, fills frame |
+| 3 — Second scroll | `458-93` | "complex" surfaces, letter p zooms to fill viewport |
+| 4 — Exit | `458-140` | p strokes fill screen edge to edge, round hole reveals Work section beneath |
 
-**Scroll animation — Phase 1 (trigger: scroll starts):**
+---
+
+**State 1 — Static layout:**
+- Full viewport (`100vw × 100vh`), background `--bg`
+- `hero-initial.webp` centered, ~60% viewport width
+- Headline: *"making complex things stupidly simple."* — `--font-display`, 80px, `--ink`
+- Each word in its own `<span class="word">`. The word `complex` is `<span class="word-complex">`. Inside it, the letter `p` is rendered as an SVG (see State 4 note below).
+- Nav bar top: Work / About / Say Hi
+
+**State 2 — Desktop zoom (scrub 0 → 0.35):**
 ```
-ScrollTrigger pin the hero section.
-On scrub 0→0.4:
-  - hero-desktop.webp: scale 1 → 1.6, transformOrigin "center center"
-  - Headline opacity: 1 → 0
+GSAP pins #hero for the entire sequence (no CSS position:sticky on #hero).
+- #hero-img: scale 1 → 1.8, transformOrigin "center center"
+- All .word spans: opacity 1 → 0
 ```
-This creates the "camera zooming into the desktop" effect.
 
-**Scroll animation — Phase 2 (scrub 0.4→0.7):**
-- Desktop image fades out (`opacity 1 → 0`)
-- Word *"complex"* scales up from ~80px → ~400px, moves to viewport center
-- All other headline words fade out
-- This is a pure CSS text scale on `<span class="word-complex">`, driven by GSAP
+**State 3 — "complex" + letter p zoom (scrub 0.35 → 0.75):**
+```
+- #hero-img: opacity 1 → 0
+- .word-complex: opacity 0 → 1, scale 1 → 6, position moves to viewport centre
+- All other .word spans: remain opacity 0
+- Background: --bg transitions to --ink
 
-**Scroll animation — Phase 3 (scrub 0.7→1.0):**
-- The letter "p" in *"complex"* is a separate `<span>`. Scale it from 1 → 20, with `transformOrigin "50% 55%"` (center of the round of the p).
-- Background transitions from `--bg` to `--ink` as scale hits max.
-- At scrub 1.0, unpin hero → Work section snaps into view.
+scrub 0.55 → 0.75:
+- #letter-p-svg: scale 1 → 20, transformOrigin "50% 55%" (centre of the round of the p)
+- Other letters in .word-complex: opacity 1 → 0
+- Background fully --ink
+```
 
-**Implementation note for Claude Code:**
+**State 4 — p becomes the Work section background (scrub 0.75 → 1.0):**
+
+The p does NOT fade out. It keeps scaling until its thick Fraunces strokes overflow the viewport on all sides. The counter-form — the round hole inside the p — stays transparent. The Work section sits behind the SVG and is visible through that hole as it expands. When the unpin fires at scrub 1.0, the user is already looking at Work.
+
+```
+scrub 0.75 → 1.0:
+- #letter-p-svg: scale continues 20 → 80+, strokes bleed off all edges
+- Work section (#work) is visible through the counter-form hole the entire time
+- At scrub 1.0: unpin fires, normal scroll resumes into Work section
+```
+
+**SVG approach for the p counter-form cutout:**
+```html
+<!-- Place inside #hero, z-index above #work -->
+<svg id="letter-p-svg" viewBox="0 0 300 400" 
+     xmlns="http://www.w3.org/2000/svg"
+     style="position:fixed;top:0;left:0;width:100vw;height:100vh;pointer-events:none;z-index:10;">
+  <text x="50%" y="72%"
+        text-anchor="middle"
+        font-family="Fraunces, serif"
+        font-weight="300"
+        font-style="italic"
+        font-size="380"
+        fill="#0A0A0A">p</text>
+</svg>
+```
+
+```css
+/* Work section sits behind the p SVG */
+#work { position: relative; z-index: 0; }
+
+/* GSAP conflict rule: no CSS transform on #letter-p-svg — GSAP owns it */
+```
+
 ```js
-// Correct pattern — GSAP owns all transforms, no CSS translate on spans
+// GSAP owns all transforms. scrub:1 throughout.
 const tl = gsap.timeline({
   scrollTrigger: {
     trigger: "#hero",
     start: "top top",
-    end: "+=300%",
+    end: "+=400%",
     scrub: 1,
-    pin: true   // GSAP pins — no CSS position:sticky on #hero
+    pin: true
   }
 });
-tl.to("#hero-desktop", { scale: 1.6, duration: 0.4 })
-  .to("#hero-desktop", { opacity: 0, duration: 0.1 }, 0.4)
-  .to(".word-complex", { scale: 5, x: "...", y: "...", duration: 0.3 }, 0.4)
-  // phase 3 — zoom into the p
-  .to(".letter-p", { scale: 20, duration: 0.3 }, 0.7)
-  .to("body", { backgroundColor: "#0A0A0A", duration: 0.1 }, 0.85);
+
+tl.to("#hero-img",      { scale: 1.8, duration: 0.35 })
+  .to("#hero-img",      { opacity: 0, duration: 0.1 }, 0.35)
+  .to(".word-complex",  { opacity: 1, scale: 6, xPercent: -50, yPercent: -50,
+                          left: "50%", top: "50%", position: "absolute",
+                          duration: 0.2 }, 0.35)
+  .to(".word",          { opacity: 0, duration: 0.1 }, 0.35)
+  .to("body",           { backgroundColor: "#0A0A0A", duration: 0.2 }, 0.45)
+  .to(".word-complex .other-letters", { opacity: 0, duration: 0.1 }, 0.55)
+  .to("#letter-p-svg",  { scale: 20, duration: 0.2 }, 0.55)
+  // p fills viewport — Work visible through counter-form hole
+  .to("#letter-p-svg",  { scale: 80, duration: 0.25 }, 0.75);
+  // unpin fires at end, Work section takes over
 ```
 
 ---
 
 ### 5.2 Section: WORK
 
-**Source screens:** `node-id 458-140` (base) + `node-id 848-1667` (hover reveals)
+**Two states:**
 
-**Layout:**
+| State | Figma node | What the user sees |
+|---|---|---|
+| Initial | `458-140` | Work section as it first appears after the p unpin — no hover yet |
+| Hover | `848-1667` | A column is active — expanded width, thumbnail and text revealed |
+
+**Export needed:**
+- `work-initial.png` — node `458-140` (add this to your Figma export list)
+- `work-hover-reveal.png` — node `848-1667` (reference for hover end state)
+
+---
+
+**Initial state layout (node `458-140`):**
+
+This is what the user lands on when the p's unpin fires. Build this exactly before adding any hover behaviour.
+
 - Full viewport width, min-height 100vh
-- Background: `--ink` (carried over from hero transition)
-- Three equal vertical columns: ARVO / Seletar Airport / PetHaus
-- Default state: columns show only the project title in `--font-display` white, reversed
-- Each column has its `cta.webp` thumbnail hidden underneath
+- Background: `--ink` (continuous from hero transition — no seam)
+- Three equal vertical columns side by side (`33.3%` each), full viewport height
+- Each column contains only: project title in `--font-display`, large, `--bg` colour, vertically centred
+- No thumbnails visible, no descriptors visible, no CTA arrows visible
+- Thin 1px `--muted` divider lines between columns
+- Section label "Work" small caps top-left in `--muted`
 
-**Interaction — Column Hover:**
+**Hover state (node `848-1667`):**
+
+Triggered on `mouseenter` per column. CSS transitions, no GSAP needed here.
+
 ```
 On mouseenter column:
-  - Column width expands from 33.3% → 50%, other two compress to 25% each (CSS flex transition 400ms ease)
-  - Thumbnail fades in (opacity 0 → 1, 300ms)
-  - Short descriptor text slides up from bottom (translateY 20px → 0, 300ms)
-  - CTA arrow appears
+  - Hovered column: flex-basis 33.3% → 50%
+  - Other two columns: flex-basis 33.3% → 25% each
+  - Transition: 400ms ease
+  - cta thumbnail (e.g. arvo-cta.png): opacity 0 → 1, 300ms
+  - Short role descriptor slides up: translateY 20px → 0, opacity 0 → 1, 300ms
+  - CTA arrow appears bottom-right of column
+  - Column background: subtle tint using case study accent colour at 10% opacity
 
 On mouseleave:
-  - Reverse all transitions
+  - All reverse, 300ms ease
 ```
 
-**CTA links:**
-- ARVO column CTA → `case-studies/arvo.html`
-- Seletar column CTA → `case-studies/seletar.html`
-- PetHaus column CTA → `case-studies/pethaus.html`
+**Column content (per project):**
 
-**Scroll exit:** Standard scroll, no pin needed. Work section ends, About section begins.
+| Column | Title | Role label | Accent tint | CTA image |
+|---|---|---|---|---|
+| ARVO | *Arvo* | B2B SaaS · PM + UX Lead | `--arvo` (#2a4a6b) | `arvo-cta.png` |
+| Seletar Airport | *Seletar Airport* | Lead UX Researcher | `--seletar` (#2b5e3a) | `seletar-cta.png` |
+| PetHaus | *PetHaus* | Solo Product Designer | `--pethaus` (#7b3f6e) | `pethaus-cta.png` |
+
+**CTA links:**
+- ARVO → `case-studies/arvo.html`
+- Seletar → `case-studies/seletar.html`
+- PetHaus → `case-studies/pethaus.html`
+
+**Scroll exit:** No pin. Work section ends, About section scrolls in normally.
 
 ---
 
