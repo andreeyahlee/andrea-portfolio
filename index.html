@@ -1,7 +1,1009 @@
 <!DOCTYPE html>
-<html>
-<head><title>Andrea Lee</title></head>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Andrea Lee — UX Designer & Researcher</title>
+  <meta name="description" content="Andrea Lee is a Singapore-based UX Designer and Researcher who makes complex things stupidly simple.">
+
+  <!-- ─── FONTS ─────────────────────────────────────────────
+       Cormorant Garamond : headers, nav, buttons, tags, quotes
+       Plus Jakarta Sans  : body copy, labels
+  ──────────────────────────────────────────────────────── -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,600;1,700&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+  <style>
+    /* ═══════════════════════════════════════════════════
+       DESIGN TOKENS
+       Single source of truth — change here, changes everywhere
+    ═══════════════════════════════════════════════════ */
+    :root {
+      /* ── Colours ── */
+      --cream:       #F3F2EC;   /* page background */
+      --forest:      #1F2B1F;   /* primary dark — nav, headings, buttons */
+      --accent:      #DCE888;   /* lime accent — CTAs, highlights, hover states */
+
+      /* Derived tones */
+      --forest-80:   rgba(31, 43, 31, 0.80);
+      --forest-40:   rgba(31, 43, 31, 0.40);
+      --forest-12:   rgba(31, 43, 31, 0.12);
+      --cream-60:    rgba(243, 242, 236, 0.60);
+      --accent-dim:  #C8D660;   /* accent darkened for hover */
+
+      /* ── Typography ── */
+      --fh: 'Cormorant Garamond', Georgia, serif;   /* headers, nav, buttons, quotes */
+      --fb: 'Plus Jakarta Sans', system-ui, sans-serif; /* body, labels */
+
+      /* ── Type scale (fluid — clamps between mobile/desktop) ── */
+      --text-xs:     clamp(10px, 1.1vw, 11px);
+      --text-sm:     clamp(12px, 1.3vw, 13px);
+      --text-base:   clamp(14px, 1.5vw, 16px);
+      --text-md:     clamp(16px, 1.8vw, 18px);
+      --text-lg:     clamp(20px, 2.2vw, 24px);
+      --text-xl:     clamp(28px, 3.2vw, 36px);
+      --text-2xl:    clamp(36px, 4.5vw, 52px);
+      --text-3xl:    clamp(48px, 6.5vw, 80px);
+      --text-4xl:    clamp(64px, 9vw, 120px);
+
+      /* ── Spacing ── */
+      --space-1:  4px;
+      --space-2:  8px;
+      --space-3:  12px;
+      --space-4:  16px;
+      --space-5:  20px;
+      --space-6:  24px;
+      --space-8:  32px;
+      --space-10: 40px;
+      --space-12: 48px;
+      --space-16: 64px;
+      --space-20: 80px;
+      --space-24: 96px;
+
+      /* ── Layout ── */
+      --nav-h:     64px;   /* nav height — all sections offset by this */
+      --max-w:     1200px; /* max content width */
+      --gutter:    clamp(20px, 5vw, 52px); /* responsive side padding */
+
+      /* ── Radius ── */
+      --r-sm:  6px;
+      --r-md:  12px;
+      --r-lg:  20px;
+      --r-full: 100px;
+
+      /* ── Transitions ── */
+      --ease-out:   cubic-bezier(0.16, 1, 0.3, 1);
+      --ease-in:    cubic-bezier(0.7, 0, 0.84, 0);
+      --ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
+      --t-fast:  0.18s;
+      --t-base:  0.28s;
+      --t-slow:  0.45s;
+
+      /* ── Shadows ── */
+      --shadow-sm:  0 2px 8px rgba(31,43,31,0.08);
+      --shadow-md:  0 8px 32px rgba(31,43,31,0.10);
+      --shadow-lg:  0 24px 64px rgba(31,43,31,0.14);
+      --shadow-xl:  0 40px 100px rgba(31,43,31,0.20);
+    }
+
+    /* ═══════════════════════════════════════════════════
+       RESET + BASE
+    ═══════════════════════════════════════════════════ */
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html {
+      scroll-behavior: smooth;
+      -webkit-text-size-adjust: 100%;
+    }
+
+    body {
+      background: var(--cream);
+      color: var(--forest);
+      font-family: var(--fb);
+      font-size: var(--text-base);
+      line-height: 1.6;
+      overflow-x: hidden;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+
+    img, video {
+      display: block;
+      max-width: 100%;
+      height: auto;
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    button {
+      cursor: pointer;
+      border: none;
+      background: none;
+      font-family: inherit;
+    }
+
+    ul, ol { list-style: none; }
+
+    /* ── Accessibility ── */
+    .sr-only {
+      position: absolute;
+      width: 1px; height: 1px;
+      padding: 0; margin: -1px;
+      overflow: hidden;
+      clip: rect(0,0,0,0);
+      white-space: nowrap;
+      border: 0;
+    }
+
+    :focus-visible {
+      outline: 2px solid var(--accent);
+      outline-offset: 3px;
+      border-radius: var(--r-sm);
+    }
+
+    /* Skip link */
+    .skip-link {
+      position: absolute;
+      top: -100%; left: var(--space-4);
+      background: var(--forest);
+      color: var(--cream);
+      padding: var(--space-2) var(--space-4);
+      border-radius: 0 0 var(--r-sm) var(--r-sm);
+      font-family: var(--fb);
+      font-size: var(--text-sm);
+      z-index: 9999;
+      transition: top var(--t-fast);
+    }
+    .skip-link:focus { top: 0; }
+
+    /* ── Reduced motion ── */
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        animation-duration: 0.01ms !important;
+        transition-duration: 0.01ms !important;
+        scroll-behavior: auto !important;
+      }
+    }
+
+    /* ═══════════════════════════════════════════════════
+       TYPOGRAPHY HELPERS
+       Use these classes directly in HTML
+    ═══════════════════════════════════════════════════ */
+
+    /* Display — giant editorial headings */
+    .t-display {
+      font-family: var(--fh);
+      font-size: var(--text-4xl);
+      font-weight: 300;
+      line-height: 0.92;
+      letter-spacing: -0.02em;
+    }
+
+    /* H1 */
+    .t-h1 {
+      font-family: var(--fh);
+      font-size: var(--text-3xl);
+      font-weight: 400;
+      line-height: 0.95;
+    }
+
+    /* H2 */
+    .t-h2 {
+      font-family: var(--fh);
+      font-size: var(--text-2xl);
+      font-weight: 400;
+      line-height: 1.0;
+    }
+
+    /* H3 */
+    .t-h3 {
+      font-family: var(--fh);
+      font-size: var(--text-xl);
+      font-weight: 500;
+      line-height: 1.1;
+    }
+
+    /* Quote / italic Cormorant */
+    .t-quote {
+      font-family: var(--fh);
+      font-style: italic;
+      font-size: var(--text-lg);
+      font-weight: 300;
+      line-height: 1.3;
+    }
+
+    /* Eyebrow — small tracked uppercase label */
+    .t-eyebrow {
+      font-family: var(--fb);
+      font-size: var(--text-xs);
+      font-weight: 600;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--forest-40);
+    }
+
+    /* Body */
+    .t-body {
+      font-family: var(--fb);
+      font-size: var(--text-base);
+      line-height: 1.7;
+    }
+
+    /* Tag — Cormorant, small, bordered pill */
+    .t-tag {
+      display: inline-flex;
+      align-items: center;
+      font-family: var(--fh);
+      font-size: var(--text-sm);
+      font-weight: 500;
+      letter-spacing: 0.04em;
+      border: 1px solid var(--forest);
+      border-radius: var(--r-full);
+      padding: 4px 14px;
+      transition: background var(--t-fast), color var(--t-fast);
+    }
+    .t-tag:hover {
+      background: var(--forest);
+      color: var(--cream);
+    }
+
+    /* ═══════════════════════════════════════════════════
+       BUTTON SYSTEM
+    ═══════════════════════════════════════════════════ */
+
+    /* Primary — accent fill */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: var(--space-2);
+      font-family: var(--fh);
+      font-size: var(--text-md);
+      font-weight: 600;
+      letter-spacing: 0.04em;
+      padding: 12px 32px;
+      border-radius: var(--r-full);
+      transition:
+        background var(--t-base) var(--ease-out),
+        color var(--t-base) var(--ease-out),
+        transform var(--t-fast) var(--ease-spring),
+        gap var(--t-base);
+    }
+    .btn:hover { transform: translateY(-2px); }
+    .btn:active { transform: translateY(0); }
+    .btn:focus-visible { outline-color: var(--forest); }
+
+    .btn-primary {
+      background: var(--accent);
+      color: var(--forest);
+      border: 2px solid var(--accent);
+    }
+    .btn-primary:hover {
+      background: var(--accent-dim);
+      border-color: var(--accent-dim);
+      gap: var(--space-3);
+    }
+
+    .btn-ghost {
+      background: transparent;
+      color: var(--cream);
+      border: 1.5px solid rgba(243,242,236,0.45);
+    }
+    .btn-ghost:hover {
+      background: rgba(243,242,236,0.1);
+      border-color: var(--cream);
+      gap: var(--space-3);
+    }
+
+    .btn-outline {
+      background: transparent;
+      color: var(--forest);
+      border: 1.5px solid var(--forest);
+    }
+    .btn-outline:hover {
+      background: var(--forest);
+      color: var(--cream);
+      gap: var(--space-3);
+    }
+
+    /* ═══════════════════════════════════════════════════
+       LAYOUT HELPERS
+    ═══════════════════════════════════════════════════ */
+    .container {
+      width: 100%;
+      max-width: var(--max-w);
+      margin: 0 auto;
+      padding: 0 var(--gutter);
+    }
+
+    .section {
+      padding: var(--space-24) 0;
+    }
+
+    /* ═══════════════════════════════════════════════════
+       NAVIGATION
+       Forest green bar, fixed at top
+       Left: ANDREA + flower logo
+       Right: Work | Playground | About Me | [Say Hi!]
+    ═══════════════════════════════════════════════════ */
+    .nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 900;
+      height: var(--nav-h);
+      background: var(--forest);
+      display: flex;
+      align-items: center;
+      padding: 0 var(--gutter);
+      transition: box-shadow var(--t-base);
+    }
+    .nav.scrolled {
+      box-shadow: 0 1px 0 rgba(243,242,236,0.08),
+                  0 4px 24px rgba(0,0,0,0.18);
+    }
+
+    .nav-inner {
+      width: 100%;
+      max-width: var(--max-w);
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    /* Logo — ANDREA + flower image */
+    .nav-logo {
+      display: flex;
+      align-items: center;
+      gap: var(--space-2);
+      font-family: var(--fh);
+      font-size: 17px;
+      font-weight: 700;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: var(--cream);
+      text-decoration: none;
+      transition: opacity var(--t-fast);
+    }
+    .nav-logo:hover { opacity: 0.82; }
+    .nav-logo:focus-visible { outline-color: var(--accent); }
+    .nav-logo img {
+      height: 28px;
+      width: auto;
+      filter: brightness(0) invert(1);
+    }
+
+    /* Nav links */
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: var(--space-10);
+    }
+
+    .nav-link {
+      font-family: var(--fh);
+      font-size: 15px;
+      font-weight: 400;
+      letter-spacing: 0.04em;
+      color: rgba(243,242,236,0.62);
+      text-decoration: none;
+      position: relative;
+      padding: 4px 0;
+      transition: color var(--t-fast);
+      cursor: pointer;
+      background: none;
+      border: none;
+    }
+
+    /* Animated underline */
+    .nav-link::after {
+      content: '';
+      position: absolute;
+      bottom: -2px; left: 0;
+      width: 0; height: 1px;
+      background: var(--accent);
+      transition: width var(--t-base) var(--ease-out);
+    }
+    .nav-link:hover { color: var(--cream); }
+    .nav-link:hover::after { width: 100%; }
+    .nav-link.active {
+      color: var(--cream);
+      font-weight: 600;
+    }
+    .nav-link.active::after { width: 100%; }
+    .nav-link:focus-visible { outline-color: var(--accent); }
+
+    /* Say Hi CTA */
+    .nav-cta {
+      font-family: var(--fh);
+      font-size: 15px;
+      font-weight: 700;
+      letter-spacing: 0.06em;
+      color: var(--forest);
+      background: var(--accent);
+      border: none;
+      border-radius: var(--r-full);
+      padding: 8px 26px;
+      cursor: pointer;
+      transition:
+        background var(--t-base),
+        transform var(--t-fast) var(--ease-spring);
+    }
+    .nav-cta:hover {
+      background: var(--accent-dim);
+      transform: translateY(-2px);
+    }
+    .nav-cta:active { transform: translateY(0); }
+    .nav-cta:focus-visible { outline-color: var(--cream); }
+
+    /* ── Mobile nav hamburger (≤768px) ── */
+    .nav-hamburger {
+      display: none;
+      flex-direction: column;
+      gap: 5px;
+      padding: var(--space-2);
+      background: none;
+      border: none;
+      cursor: pointer;
+    }
+    .nav-hamburger span {
+      display: block;
+      width: 24px; height: 1.5px;
+      background: var(--cream);
+      border-radius: 2px;
+      transition: transform var(--t-base) var(--ease-out),
+                  opacity var(--t-fast);
+    }
+    .nav-hamburger.open span:nth-child(1) { transform: translateY(6.5px) rotate(45deg); }
+    .nav-hamburger.open span:nth-child(2) { opacity: 0; }
+    .nav-hamburger.open span:nth-child(3) { transform: translateY(-6.5px) rotate(-45deg); }
+
+    /* Mobile menu drawer */
+    .nav-drawer {
+      display: none;
+      position: fixed;
+      top: var(--nav-h); left: 0; right: 0;
+      background: var(--forest);
+      padding: var(--space-6) var(--gutter) var(--space-8);
+      border-top: 1px solid rgba(243,242,236,0.1);
+      z-index: 899;
+      flex-direction: column;
+      gap: var(--space-5);
+      transform: translateY(-8px);
+      opacity: 0;
+      pointer-events: none;
+      transition:
+        opacity var(--t-base) var(--ease-out),
+        transform var(--t-base) var(--ease-out);
+    }
+    .nav-drawer.open {
+      opacity: 1;
+      transform: translateY(0);
+      pointer-events: all;
+    }
+    .nav-drawer .nav-link {
+      font-size: 22px;
+      font-weight: 400;
+    }
+    .nav-drawer .nav-cta {
+      align-self: flex-start;
+      font-size: 18px;
+      margin-top: var(--space-2);
+    }
+
+    /* ═══════════════════════════════════════════════════
+       PLACEHOLDER SECTIONS
+       These will be replaced one-by-one in later sessions
+    ═══════════════════════════════════════════════════ */
+
+    /* Page body offset for fixed nav */
+    .page-body {
+      padding-top: var(--nav-h);
+    }
+
+    /* Section placeholders — visual reference only */
+    .placeholder {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      gap: var(--space-3);
+      min-height: 100vh;
+      border-bottom: 1px solid var(--forest-12);
+    }
+
+    .placeholder-label {
+      font-family: var(--fb);
+      font-size: var(--text-xs);
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--forest-40);
+    }
+
+    .placeholder-title {
+      font-family: var(--fh);
+      font-size: var(--text-2xl);
+      font-weight: 400;
+      color: var(--forest);
+    }
+
+    .placeholder-note {
+      font-family: var(--fb);
+      font-size: var(--text-sm);
+      color: var(--forest-40);
+    }
+
+    /* ═══════════════════════════════════════════════════
+       FOOTER
+    ═══════════════════════════════════════════════════ */
+    .footer {
+      background: var(--forest);
+      padding: var(--space-20) 0 var(--space-10);
+    }
+
+    .footer-inner {
+      width: 100%;
+      max-width: var(--max-w);
+      margin: 0 auto;
+      padding: 0 var(--gutter);
+    }
+
+    /* Top row — big SAY HI + links */
+    .footer-top {
+      display: flex;
+      align-items: flex-end;
+      justify-content: space-between;
+      gap: var(--space-8);
+      padding-bottom: var(--space-12);
+      border-bottom: 1px solid rgba(243,242,236,0.1);
+      flex-wrap: wrap;
+    }
+
+    .footer-heading {
+      font-family: var(--fh);
+      font-size: var(--text-4xl);
+      font-weight: 300;
+      line-height: 0.88;
+      color: var(--cream);
+    }
+    .footer-heading em {
+      font-style: italic;
+      color: var(--accent);
+    }
+
+    .footer-connect {
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-3);
+      padding-bottom: var(--space-2); /* align to baseline of heading */
+    }
+
+    .footer-connect-label {
+      font-family: var(--fb);
+      font-size: var(--text-xs);
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: rgba(243,242,236,0.38);
+      margin-bottom: var(--space-1);
+    }
+
+    /* External links — LinkedIn, Instagram */
+    .footer-social-links {
+      display: flex;
+      gap: var(--space-4);
+    }
+
+    .footer-social-link {
+      display: flex;
+      align-items: center;
+      gap: var(--space-2);
+      font-family: var(--fh);
+      font-size: var(--text-md);
+      font-weight: 500;
+      color: rgba(243,242,236,0.62);
+      text-decoration: none;
+      transition: color var(--t-fast);
+      padding: var(--space-2) 0;
+    }
+    .footer-social-link:hover { color: var(--accent); }
+    .footer-social-link:focus-visible { outline-color: var(--accent); }
+
+    /* Contact button */
+    .footer-cta-wrap { margin-top: var(--space-5); }
+
+    /* Bottom row — logo + sitemap + copyright */
+    .footer-bottom {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      padding-top: var(--space-10);
+      gap: var(--space-8);
+      flex-wrap: wrap;
+    }
+
+    .footer-logo {
+      display: flex;
+      align-items: center;
+      gap: var(--space-2);
+      font-family: var(--fh);
+      font-size: 16px;
+      font-weight: 700;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: var(--cream);
+      text-decoration: none;
+      opacity: 0.7;
+      transition: opacity var(--t-fast);
+    }
+    .footer-logo:hover { opacity: 1; }
+    .footer-logo img {
+      height: 22px; width: auto;
+      filter: brightness(0) invert(1);
+      opacity: 0.7;
+    }
+    .footer-logo:focus-visible { outline-color: var(--accent); }
+
+    /* Sitemap */
+    .footer-sitemap {
+      display: flex;
+      gap: var(--space-16);
+    }
+
+    .footer-sitemap-col {
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-3);
+    }
+
+    .footer-sitemap-heading {
+      font-family: var(--fb);
+      font-size: var(--text-xs);
+      font-weight: 600;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: rgba(243,242,236,0.35);
+      margin-bottom: var(--space-1);
+    }
+
+    .footer-sitemap-link {
+      font-family: var(--fh);
+      font-size: var(--text-base);
+      font-weight: 400;
+      color: rgba(243,242,236,0.55);
+      text-decoration: none;
+      transition: color var(--t-fast);
+    }
+    .footer-sitemap-link:hover { color: var(--accent); }
+    .footer-sitemap-link:focus-visible { outline-color: var(--accent); }
+
+    /* Copyright */
+    .footer-copy {
+      font-family: var(--fb);
+      font-size: var(--text-xs);
+      color: rgba(243,242,236,0.22);
+      letter-spacing: 0.03em;
+      align-self: flex-end;
+    }
+
+    /* ═══════════════════════════════════════════════════
+       RESPONSIVE — TABLET (≤1024px)
+    ═══════════════════════════════════════════════════ */
+    @media (max-width: 1024px) {
+      :root { --gutter: 36px; }
+
+      .footer-sitemap { gap: var(--space-10); }
+    }
+
+    /* ═══════════════════════════════════════════════════
+       RESPONSIVE — MOBILE (≤768px)
+    ═══════════════════════════════════════════════════ */
+    @media (max-width: 768px) {
+      :root { --gutter: 20px; }
+
+      /* Nav: hide links, show hamburger */
+      .nav-links { display: none; }
+      .nav-hamburger { display: flex; }
+      .nav-drawer { display: flex; }
+
+      /* Footer top: stack vertically */
+      .footer-top {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+
+      /* Footer bottom: stack */
+      .footer-bottom {
+        flex-direction: column;
+        gap: var(--space-8);
+      }
+
+      .footer-sitemap {
+        flex-wrap: wrap;
+        gap: var(--space-8);
+      }
+
+      .footer-copy { align-self: flex-start; }
+    }
+
+    @media (max-width: 480px) {
+      :root { --gutter: 16px; }
+      .footer-social-links { flex-direction: column; }
+    }
+  </style>
+</head>
 <body>
-  <h1>Coming soon.</h1>
+
+  <!-- Skip link for accessibility -->
+  <a class="skip-link" href="#main">Skip to main content</a>
+
+  <!-- ═══════════════════════════════════════
+       NAVIGATION
+  ═══════════════════════════════════════ -->
+  <nav class="nav" id="nav" role="navigation" aria-label="Main navigation">
+    <div class="nav-inner">
+
+      <!-- Left: ANDREA + flower logo -->
+      <a class="nav-logo" href="#hero"
+         onclick="scrollTo('hero',event)"
+         aria-label="Andrea Lee — back to top">
+        ANDREA
+        <img src="assets/Flower (white).png" alt="" aria-hidden="true">
+      </a>
+
+      <!-- Right: desktop links -->
+      <div class="nav-links" role="list">
+        <a class="nav-link" role="listitem"
+           href="#work" onclick="scrollTo('work',event)"
+           id="nl-work">Work</a>
+        <a class="nav-link" role="listitem"
+           href="#playground" onclick="scrollTo('playground',event)"
+           id="nl-playground">Playground</a>
+        <a class="nav-link" role="listitem"
+           href="#about" onclick="scrollTo('about',event)"
+           id="nl-about">About Me</a>
+        <button class="nav-cta"
+           onclick="scrollTo('footer',event)"
+           aria-label="Say Hi — jump to contact">
+          Say Hi!
+        </button>
+      </div>
+
+      <!-- Mobile hamburger -->
+      <button class="nav-hamburger" id="hamburger"
+              aria-label="Open menu" aria-expanded="false"
+              aria-controls="nav-drawer">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+
+    </div>
+  </nav>
+
+  <!-- Mobile drawer -->
+  <div class="nav-drawer" id="nav-drawer" role="dialog" aria-label="Mobile navigation">
+    <a class="nav-link" href="#work"       onclick="closeMobile();scrollTo('work',event)">Work</a>
+    <a class="nav-link" href="#playground" onclick="closeMobile();scrollTo('playground',event)">Playground</a>
+    <a class="nav-link" href="#about"      onclick="closeMobile();scrollTo('about',event)">About Me</a>
+    <button class="nav-cta"               onclick="closeMobile();scrollTo('footer',event)">Say Hi!</button>
+  </div>
+
+  <!-- ═══════════════════════════════════════
+       MAIN CONTENT
+       Placeholder sections — replaced in later sessions
+  ═══════════════════════════════════════ -->
+  <main id="main" class="page-body">
+
+    <!-- SECTION 1: Hero (Session 2) -->
+    <section id="hero" class="placeholder" style="background: var(--cream);">
+      <p class="placeholder-label">Section 1</p>
+      <h1 class="placeholder-title">Hero — Scroll Zoom</h1>
+      <p class="placeholder-note">Collage assets + GSAP zoom → built in Session 2</p>
+    </section>
+
+    <!-- SECTION 2: Work / Case Studies (Session 3) -->
+    <section id="work" class="placeholder" style="background: var(--forest); color: var(--cream);">
+      <p class="placeholder-label" style="color:rgba(243,242,236,0.4)">Section 2</p>
+      <h2 class="placeholder-title" style="color:var(--cream)">Work — Case Studies</h2>
+      <p class="placeholder-note" style="color:rgba(243,242,236,0.4)">3 folders: ARVO, Seletar, Pet Haus → built in Session 3</p>
+    </section>
+
+    <!-- SECTION 3: Playground (Session 4) -->
+    <section id="playground" class="placeholder" style="background: var(--cream);">
+      <p class="placeholder-label">Section 3</p>
+      <h2 class="placeholder-title">Playground — Side Projects</h2>
+      <p class="placeholder-note">Scrapbook layout → built in Session 4</p>
+    </section>
+
+    <!-- SECTION 4: About Me (Session 5) -->
+    <section id="about" class="placeholder" style="background: var(--cream);">
+      <p class="placeholder-label">Section 4</p>
+      <h2 class="placeholder-title">About Me — Post-its</h2>
+      <p class="placeholder-note">Draggable post-it notes → built in Session 5</p>
+    </section>
+
+  </main>
+
+  <!-- ═══════════════════════════════════════
+       FOOTER
+  ═══════════════════════════════════════ -->
+  <footer class="footer" id="footer" role="contentinfo">
+    <div class="footer-inner">
+
+      <!-- Top: Say Hi + social links -->
+      <div class="footer-top">
+        <div>
+          <h2 class="footer-heading">
+            Let's make<br>
+            something <em>good.</em>
+          </h2>
+        </div>
+
+        <div class="footer-connect">
+          <p class="footer-connect-label">Find me on</p>
+          <div class="footer-social-links">
+            <a class="footer-social-link"
+               href="https://linkedin.com/in/andrealeesg"
+               target="_blank" rel="noopener noreferrer"
+               aria-label="Andrea Lee on LinkedIn (opens in new tab)">
+              LinkedIn ↗
+            </a>
+            <a class="footer-social-link"
+               href="https://instagram.com/andreeleesg"
+               target="_blank" rel="noopener noreferrer"
+               aria-label="Andrea Lee on Instagram (opens in new tab)">
+              Instagram ↗
+            </a>
+          </div>
+          <div class="footer-cta-wrap">
+            <a class="btn btn-primary"
+               href="contact.html"
+               aria-label="Open contact page">
+              Get in touch →
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <!-- Bottom: logo + sitemap + copyright -->
+      <div class="footer-bottom">
+
+        <a class="footer-logo" href="#hero"
+           onclick="scrollTo('hero',event)"
+           aria-label="Andrea Lee — back to top">
+          ANDREA
+          <img src="assets/Flower (white).png" alt="" aria-hidden="true">
+        </a>
+
+        <!-- Sitemap -->
+        <nav class="footer-sitemap" aria-label="Site map">
+
+          <div class="footer-sitemap-col">
+            <p class="footer-sitemap-heading">Portfolio</p>
+            <a class="footer-sitemap-link" href="#work" onclick="scrollTo('work',event)">Work</a>
+            <a class="footer-sitemap-link" href="#playground" onclick="scrollTo('playground',event)">Playground</a>
+            <a class="footer-sitemap-link" href="#about" onclick="scrollTo('about',event)">About Me</a>
+          </div>
+
+          <div class="footer-sitemap-col">
+            <p class="footer-sitemap-heading">Case Studies</p>
+            <a class="footer-sitemap-link" href="arvo.html">ARVO</a>
+            <a class="footer-sitemap-link" href="seletar.html">Seletar Airport</a>
+            <a class="footer-sitemap-link" href="pethaus.html">Pet Haus</a>
+          </div>
+
+          <div class="footer-sitemap-col">
+            <p class="footer-sitemap-heading">Connect</p>
+            <a class="footer-sitemap-link"
+               href="https://linkedin.com/in/andrealeesg"
+               target="_blank" rel="noopener">LinkedIn ↗</a>
+            <a class="footer-sitemap-link"
+               href="https://instagram.com/andreeleesg"
+               target="_blank" rel="noopener">Instagram ↗</a>
+            <a class="footer-sitemap-link" href="contact.html">Contact</a>
+          </div>
+
+        </nav>
+
+        <p class="footer-copy">© 2026 Andrea Lee · Singapore</p>
+
+      </div>
+    </div>
+  </footer>
+
+  <!-- ═══════════════════════════════════════
+       JAVASCRIPT — foundations only
+  ═══════════════════════════════════════ -->
+  <script>
+  'use strict';
+
+  /* ── Smooth scroll helper ──────────────────────────
+     All nav/footer links call this instead of
+     relying on CSS scroll-behavior (more reliable
+     cross-browser, especially on iOS Safari)
+  ─────────────────────────────────────────────────── */
+  function scrollTo(id, e) {
+    if (e) e.preventDefault();
+    const el = document.getElementById(id);
+    if (!el) return;
+    const offset = el.getBoundingClientRect().top + window.scrollY
+                   - document.getElementById('nav').offsetHeight;
+    window.scrollTo({ top: offset, behavior: 'smooth' });
+  }
+
+  /* ── Nav: scrolled shadow ──────────────────────── */
+  const nav = document.getElementById('nav');
+  window.addEventListener('scroll', () => {
+    nav.classList.toggle('scrolled', window.scrollY > 10);
+  }, { passive: true });
+
+  /* ── Nav: active section highlight ─────────────── */
+  const sections = ['work', 'playground', 'about'];
+  const navLinks  = {
+    work:       document.getElementById('nl-work'),
+    playground: document.getElementById('nl-playground'),
+    about:      document.getElementById('nl-about'),
+  };
+
+  const sectionObs = new IntersectionObserver(entries => {
+    entries.forEach(entry => {
+      if (!entry.isIntersecting) return;
+      Object.values(navLinks).forEach(l => l?.classList.remove('active'));
+      const link = navLinks[entry.target.id];
+      if (link) link.classList.add('active');
+    });
+  }, { threshold: 0.4, rootMargin: `-${64}px 0px 0px 0px` });
+
+  sections.forEach(id => {
+    const el = document.getElementById(id);
+    if (el) sectionObs.observe(el);
+  });
+
+  /* ── Mobile hamburger ──────────────────────────── */
+  const hamburger = document.getElementById('hamburger');
+  const drawer    = document.getElementById('nav-drawer');
+  let menuOpen    = false;
+
+  function openMobile() {
+    menuOpen = true;
+    hamburger.classList.add('open');
+    drawer.classList.add('open');
+    hamburger.setAttribute('aria-expanded', 'true');
+    document.body.style.overflow = 'hidden'; /* prevent scroll behind */
+  }
+
+  function closeMobile() {
+    menuOpen = false;
+    hamburger.classList.remove('open');
+    drawer.classList.remove('open');
+    hamburger.setAttribute('aria-expanded', 'false');
+    document.body.style.overflow = '';
+  }
+
+  hamburger.addEventListener('click', () => {
+    menuOpen ? closeMobile() : openMobile();
+  });
+
+  /* Close on Escape */
+  document.addEventListener('keydown', e => {
+    if (e.key === 'Escape' && menuOpen) closeMobile();
+  });
+
+  /* Close on outside click */
+  document.addEventListener('click', e => {
+    if (menuOpen && !nav.contains(e.target) && !drawer.contains(e.target)) {
+      closeMobile();
+    }
+  });
+  </script>
+
 </body>
 </html>
