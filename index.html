@@ -307,10 +307,14 @@
     }
     .arvo-col:hover .work-section-label { opacity: 0; }
 
-    /* ── CTA card — fills full column ── */
+    /* ── CTA card — sized to image aspect ratio so contain fills width ── */
     .work-col-bottom {
       position: absolute;
-      top: 0; left: 0; right: 0;
+      top: 50%;
+      left: 0;
+      right: 0;
+      transform: translateY(-50%);
+      aspect-ratio: 960 / 1880;
       overflow: hidden;
       z-index: 1;
     }
@@ -331,10 +335,14 @@
     }
     .work-col:hover .work-name { opacity: 0; }
 
-    /* hover card image — fills full column width, natural height */
+    /* hover card image — full column, fully in view */
     .work-card-img {
+      position: absolute;
+      inset: 0;
       width: 100%;
-      height: auto;
+      height: 100%;
+      object-fit: contain;
+      object-position: center;
       display: block;
       opacity: 0;
       pointer-events: none;
@@ -354,6 +362,61 @@
     }
     .work-col:hover .work-col-link {
       pointer-events: auto;
+    }
+
+    /* "Read the case study →" button — appears on column hover */
+    .work-read-btn {
+      position: absolute;
+      bottom: 44px;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 4;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 12px 22px;
+      background: var(--bg);
+      color: var(--ink);
+      font-family: var(--font-body);
+      font-size: 13px;
+      font-weight: 600;
+      letter-spacing: 0.01em;
+      white-space: nowrap;
+      border-radius: 100px;
+      text-decoration: none;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.3s ease 0.05s,
+                  background 0.15s ease,
+                  transform 0.15s ease,
+                  box-shadow 0.15s ease;
+    }
+    .work-col:hover .work-read-btn {
+      opacity: 1;
+      pointer-events: auto;
+    }
+    .work-read-btn .btn-arrow {
+      display: inline-block;
+      transition: transform 0.15s ease;
+    }
+    /* Hover state — button brightens, arrow nudges right */
+    .work-read-btn:hover {
+      background: #fff;
+      box-shadow: 0 4px 16px rgba(0,0,0,0.18);
+      transform: translateX(-50%) translateY(-2px);
+    }
+    .work-read-btn:hover .btn-arrow {
+      transform: translateX(4px);
+    }
+    /* Pressed state */
+    .work-read-btn:active {
+      background: var(--bg-warm);
+      box-shadow: 0 1px 4px rgba(0,0,0,0.12);
+      transform: translateX(-50%) scale(0.96);
+      transition-duration: 0.06s;
+    }
+    .work-read-btn:active .btn-arrow {
+      transform: translateX(2px);
     }
 
     /* ============================================================
@@ -688,6 +751,7 @@
           <img class="work-card-img" src="assets/arvo-cta.png" alt="ARVO case study" loading="lazy">
         </div>
         <div class="work-name" aria-hidden="true">ARVO</div>
+        <a class="work-read-btn" href="arvo.html">Read the case study <span class="btn-arrow">→</span></a>
         <a class="work-col-link" href="arvo.html" aria-label="Read ARVO case study"></a>
       </div>
 
@@ -697,6 +761,7 @@
           <img class="work-card-img" src="assets/seletar-cta.png" alt="Seletar Airport case study" loading="lazy">
         </div>
         <div class="work-name" aria-hidden="true">Seletar Airport</div>
+        <a class="work-read-btn" href="seletar.html">Read the case study <span class="btn-arrow">→</span></a>
         <a class="work-col-link" href="seletar.html" aria-label="Read Seletar Airport case study"></a>
       </div>
 
@@ -706,6 +771,7 @@
           <img class="work-card-img" src="assets/pethaus-cta.png" alt="Pet Haus case study" loading="lazy">
         </div>
         <div class="work-name" aria-hidden="true">Pet Haus</div>
+        <a class="work-read-btn" href="pethaus.html">Read the case study <span class="btn-arrow">→</span></a>
         <a class="work-col-link" href="pethaus.html" aria-label="Read Pet Haus case study"></a>
       </div>
 

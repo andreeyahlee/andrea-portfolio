@@ -12,22 +12,28 @@ Hand this entire file to Claude Code as your opening brief. Work section by sect
 
 ## 1. Design Tokens (Non-negotiable)
 
+> ⚠️ **Use these exact values — they are live in index.html. Do not revert to any earlier version.**
+
 ```css
 :root {
   /* Colour */
-  --bg:        #F6F6F4;   /* cream, site background */
+  --bg:        #f3f2ec;   /* cream, site background */
+  --bg-warm:   #eae8e0;   /* warm cream, used for About slot framing */
   --ink:       #0A0A0A;   /* primary text */
   --muted:     #8A8A86;   /* captions, labels */
-  --accent:    #A64A2E;   /* red, hover/CTA highlight */
+  --accent:    #a1ad49;   /* lime-green, hover/CTA highlight */
+  --lime:      #dce888;
 
   /* Case study accent overrides */
   --arvo:      #2a4a6b;   /* navy */
   --seletar:   #2b5e3a;   /* forest green */
   --pethaus:   #7b3f6e;   /* mauve */
+  --work-bg:   #1f2b1f;   /* dark green — Work section background */
 
   /* Type */
-  --font-display: 'Fraunces', serif;       /* weight 300, italic */
-  --font-body:    'Inter', sans-serif;
+  --font-display: 'DM Sans', sans-serif;        /* headlines, nav */
+  --font-body:    'Plus Jakarta Sans', sans-serif; /* body text */
+  --font-mono:    'JetBrains Mono', monospace;  /* labels */
 
   /* Spacing scale */
   --sp-xs: 8px;
@@ -38,10 +44,15 @@ Hand this entire file to Claude Code as your opening brief. Work section by sect
 }
 ```
 
-**Google Fonts import:**
+**Google Fonts import (all four families — do not remove any):**
 ```html
-<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@1,300&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,100..1000&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@200..800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@100..800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@1,9..144,300&display=swap" rel="stylesheet">
 ```
+
+> Note: `Fraunces` (italic, weight 300) is used for accent/italic copy inside the About overlay panel only. `DM Sans` and `Plus Jakarta Sans` are the primary display and body fonts.
 
 ---
 
@@ -125,7 +136,17 @@ andrea-portfolio/
 
 ## 5. Homepage — Scroll Sequence Spec
 
-The homepage is **one long scroll** that passes through four states: Hero → Work → About → Contact. Navigation tabs (Work / About / Contact) are anchors into this single scroll.
+> ⚠️ **ARCHITECTURE — read before touching anything:**
+>
+> **Scroll ends at Work.** The scroll sequence is: Hero → Work. That's it. Work is the terminal scroll destination.
+>
+> **About and Contact are overlay panels**, not scroll sections. They are opened by clicking their nav buttons. They must NOT be added to the scroll flow. The existing `#about-overlay` and `#contact-overlay` `<div>` elements (outside the scroll sections) are the correct implementation.
+>
+> **Nav behaviour (locked):**
+> - Flower logo → smooth scroll to top of page
+> - "Work" link → smooth scroll to `#work`
+> - "About" button → opens `#about-overlay` dialog
+> - "Say Hi!" button → opens `#contact-overlay` dialog
 
 ### 5.1 Section: HERO
 
@@ -269,105 +290,82 @@ On mouseleave:
 - PetHaus column: `--pethaus` (#7b3f6e) at 10% opacity
 
 **CTA links:**
-- ARVO → `case-studies/arvo.html`
-- Seletar → `case-studies/seletar.html`
-- PetHaus → `case-studies/pethaus.html`
-
-**Scroll exit:** No pin. Work section ends, About section scrolls in normally.
+- ARVO → `arvo.html`
+- Seletar → `seletar.html`
+- PetHaus → `pethaus.html`
 
 ---
 
-### 5.3 Section: ABOUT
+### ⚠️ LOCKED: CTA Card Implementation — DO NOT CHANGE
 
-**5-state scroll sequence:**
+The CTA card images (`arvo-cta.png`, `seletar-cta.png`, `pethaus-cta.png`) are **960×1880px**. Columns are ~475px wide × 899px tall. The aspect ratios differ slightly. The implementation below solves "full column width fill" AND "object-fit: contain (no cropping)" simultaneously — do not change it.
+
+```css
+/* Container sized to the image aspect ratio, vertically centred.
+   Column overflow:hidden clips ~15px top+bottom — imperceptible. */
+.work-col-bottom {
+  position: absolute;
+  top: 50%;
+  left: 0;
+  right: 0;
+  transform: translateY(-50%);
+  aspect-ratio: 960 / 1880;
+  overflow: hidden;
+  z-index: 1;
+}
+
+.work-card-img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;      /* fills container perfectly — no side gaps, no cropping */
+  object-position: center;
+  display: block;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.35s ease 0.06s;
+}
+.work-col:hover .work-card-img {
+  opacity: 1;
+  pointer-events: auto;
+}
+```
+
+**Why:** The container is forced to the image's own aspect ratio. `contain` then fills both dimensions. Do NOT change `object-fit` to `cover` (crops), change `aspect-ratio` (breaks fill-width), or flatten the container back to `inset: 0` (reintroduces side gaps).
+
+**Work section is the scroll end point. There is no scroll exit from Work.**
+
+---
+
+### 5.3 Section: ABOUT (Overlay Panel)
+
+> ⚠️ **About is NOT a scroll section. It is an overlay panel (`#about-overlay`) opened by the "About" nav button. Do not add it to the scroll flow. Do not add `#about-section` to the HTML. Do not add a staircase exit from Work.**
+
+The `#about-overlay` dialog already exists in index.html. Future animation work builds inside it, triggered on overlay open — not on scroll.
+
+**4-state animation sequence (triggered on overlay open, not scroll):**
 
 | State | Figma node | What happens |
 |---|---|---|
-| Transition | Work → `707-16514` | Work columns staircase upward off screen, About initial state revealed |
-| 1 — About lands | `707-16514` | Clean About page, text block visible, portrait not yet shown |
-| 2 — Portrait pop + text split | `713-16765` | Profile image rises from centre, surrounding text splits apart |
-| 3 — Portrait anchors, rectangle expands | `953-14453` | Portrait slides to bottom, name locks left, rectangle grows to fill bottom half with info |
-| 4 — Info swap | `953-14527` | Portrait and layout stay fixed, content in rectangle changes |
-| 5 — Exit | `953-14585` | Scrolls into Say Hi section |
+| 1 — Overlay opens | `707-16514` | Clean About layout, headline visible, portrait not shown |
+| 2 — Portrait pop + text split | `713-16765` | Portrait rises from centre, surrounding text splits apart |
+| 3 — Portrait anchors, rectangle expands | `953-14453` | Portrait slides to bottom, name locks left, warm rect fills bottom half |
+| 4 — Info swap | `953-14527` | Layout stays, content inside rect changes |
 
-**Exports needed (add to list):**
+**Exports needed:**
 - `about-initial.png` — node `707-16514`
 - `about-portrait-split.png` — node `713-16765`
 - `about-portrait-anchored.png` — node `953-14453`
 - `about-info-swap.png` — node `953-14527`
-- `sayhello.png` — node `953-14585`
+
+All content (text, labels, layout) comes from the exported PNGs. Do not invent copy.
 
 ---
 
-**Transition — Work columns staircase off screen:**
+### 5.4 Section: CONTACT ("Say Hi" — Overlay Panel)
 
-When user scrolls past the Work section, the three columns do not disappear together. They exit in a staggered cascade — left column first, then centre, then right — each sliding upward out of the viewport. As the last column clears, the About initial state is underneath.
-
-```js
-// No pin on Work for this — ScrollTrigger one-shot on scroll exit
-// Stagger uses GSAP, triggered when Work bottom reaches viewport bottom
-gsap.to(".work-col", {
-  yPercent: -120,
-  stagger: 0.12,       // left → centre → right, 120ms apart
-  ease: "power2.inOut",
-  scrollTrigger: {
-    trigger: "#work",
-    start: "bottom bottom",
-    end: "+=300",
-    scrub: 1
-  }
-});
-```
-
----
-
-**State 1 — About initial (node `707-16514`):**
-
-Build to match `about-initial.png` exactly. All text, layout, and labels come from the exported image — do not invent copy.
-
-- Background: `--bg` (cream — first light section since hero)
-- Portrait: NOT visible yet — opacity 0, scale 0, positioned at vertical centre
-
----
-
-**State 2 — Portrait pops up, text splits (scrub: node `713-16765`):**
-
-GSAP ScrollTrigger pins the About section for states 2–4.
-
-The portrait is embedded inside `about-portrait-split.png` — there is no separate portrait file. Claude Code must extract the portrait from the frame visually and match its position exactly. If a separate `about-portrait.png` is needed for the animation, ask Andrea to export just the portrait photo as a standalone PNG.
-
-Match the split layout from `about-portrait-split.png` — exact words that split and portrait position are defined by that image.
-```
-
----
-
-**State 3 — Portrait anchors, rectangle expands (scrub 0.3 → 0.65, node `953-14453`):**
-
-Match `about-portrait-anchored.png` for all layout, text position, and content inside the rectangle. Do not write bio copy or skill tags — use exactly what is in the image.
-
-```
-- #about-portrait: moves to position shown in about-portrait-anchored.png
-- .about-name: slides in to position shown in about-portrait-anchored.png
-- #about-rect: expands from bottom to height shown in about-portrait-anchored.png
-  background: --ink
-- All text content inside rect: read from about-portrait-anchored.png
-```
-
----
-
-**State 4 — Info swap (scrub 0.65 → 1.0, node `953-14527`):**
-
-Portrait stays. Layout stays. Content inside `#about-rect` changes to match `about-info-swap.png`. Do not invent the replacement content — read it from the image.
-
-```
-- Current rect content: opacity 1 → 0
-- New content from about-info-swap.png: opacity 0 → 1
-- At scrub 1.0: unpin fires, Say Hi section enters
-```
-
----
-
-### 5.4 Section: CONTACT ("Say Hi")
+> ⚠️ **Contact is also an overlay panel (`#contact-overlay`), opened by the "Say Hi!" nav button. Do not add it to the scroll flow.**
 
 **Source screen:** `node-id 953-14585` → export as `sayhello.png`
 
