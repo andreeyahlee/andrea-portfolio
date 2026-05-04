@@ -323,12 +323,12 @@
       object-fit: cover; object-position: top center;
       display: block;
     }
-    /* Dark overlay — 92% opacity buries any text baked into the thumbnail image */
+    /* Dark overlay on thumbnail — lets UI shapes show while keeping contrast for card readability */
     .work-thumb-wrap::after {
       content: '';
       position: absolute;
       inset: 0;
-      background: rgba(0, 0, 0, 0.92);
+      background: rgba(0, 0, 0, 0.55);
       pointer-events: none;
     }
     /* project name: top-left of image area */
