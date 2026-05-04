@@ -11,7 +11,6 @@
   <link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,100..1000&display=swap" rel="stylesheet">
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@200..800&display=swap" rel="stylesheet">
   <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@100..800&display=swap" rel="stylesheet">
-
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
   <script>gsap.registerPlugin(ScrollTrigger);</script>
@@ -311,7 +310,7 @@
     /* ── CTA card — fills full column ── */
     .work-col-bottom {
       position: absolute;
-      inset: 0;
+      top: 0; left: 0; right: 0;
       overflow: hidden;
       z-index: 1;
     }
@@ -332,14 +331,10 @@
     }
     .work-col:hover .work-name { opacity: 0; }
 
-    /* hover card image — full column, fully in view */
+    /* hover card image — fills full column width, natural height */
     .work-card-img {
-      position: absolute;
-      inset: 0;
       width: 100%;
-      height: 100%;
-      object-fit: cover;
-      object-position: center;
+      height: auto;
       display: block;
       opacity: 0;
       pointer-events: none;
@@ -434,113 +429,6 @@
       font-weight: 400;
     }
     .about-scroll-hint .scroll-text span {
-      font-family: var(--font-body);
-      font-weight: 500;
-    }
-
-    /* ============================================================
-       ABOUT — scroll section  (States 1–4)
-    ============================================================ */
-    #about-section {
-      position: relative;
-      width: 100%;
-      height: 100vh;
-      background: var(--bg);
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      overflow: hidden;
-    }
-
-    /* ── Headline row: "Hi! I'm Andrea" — slot frames Andrea from behind ── */
-    .abt-headline {
-      display: flex;
-      align-items: center;
-      gap: 0.18em;
-      font-family: var(--font-display);
-      font-size: clamp(56px, 8.5vw, 122px);
-      font-weight: 700;
-      color: var(--ink);
-      line-height: 1.0;
-      letter-spacing: -0.015em;
-      white-space: nowrap;
-      margin: 0;
-    }
-
-    /* ── "Andrea" wrapper — slot sits behind the word as a warm frame ── */
-    .abt-andrea-wrap {
-      position: relative;
-      display: inline-flex;
-      align-items: center;
-    }
-
-    /* slot: absolutely fills the Andrea wrapper + small inset padding */
-    .abt-slot {
-      position: absolute;
-      top: -0.1em;
-      left: -0.12em;
-      right: -0.12em;
-      bottom: -0.1em;
-      background: var(--bg-warm);
-      border-radius: 4px;
-      overflow: hidden;
-      z-index: 0;
-    }
-
-    /* "Andrea" text sits on top of the warm rect */
-    .abt-right {
-      position: relative;
-      z-index: 1;
-    }
-
-    .abt-portrait-img {
-      position: absolute;
-      bottom: 0;
-      left: 50%;
-      transform: translateX(-50%);
-      width: 120%;
-      object-fit: cover;
-      object-position: top center;
-      opacity: 0; /* revealed in State 2 */
-    }
-
-    /* ── Scroll hint ── */
-    .abt-scroll-hint {
-      position: absolute;
-      bottom: 64px;
-      left: 50%;
-      transform: translateX(-50%);
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 7px;
-      color: var(--muted);
-    }
-
-    .abt-scroll-line {
-      display: block;
-      width: 1px;
-      height: 28px;
-      background: currentColor;
-      opacity: 0.4;
-    }
-
-    .abt-scroll-text {
-      display: flex;
-      align-items: baseline;
-      gap: 5px;
-      font-size: 13px;
-      font-weight: 400;
-    }
-
-    .abt-scroll-text em {
-      font-family: var(--font-display);
-      font-style: italic;
-      font-weight: 300;
-    }
-
-    .abt-scroll-text strong {
       font-family: var(--font-body);
       font-weight: 500;
     }
@@ -825,28 +713,6 @@
   </section>
 
 
-  <!-- ============================
-       ABOUT — scroll section (States 1–4)
-  ============================ -->
-  <section id="about-section" aria-label="About Andrea" data-nav-theme="dark">
-
-    <h2 class="abt-headline">
-      <span class="abt-left">Hi! I'm</span>
-      <span class="abt-andrea-wrap">
-        <span class="abt-slot" id="abt-slot" aria-hidden="true">
-          <img class="abt-portrait-img" src="assets/about-portrait.png" alt="">
-        </span>
-        <span class="abt-right">Andrea</span>
-      </span>
-    </h2>
-
-    <div class="abt-scroll-hint" aria-hidden="true">
-      <span class="abt-scroll-line"></span>
-      <span class="abt-scroll-text"><em>scroll</em> <strong>down</strong></span>
-      <span class="abt-scroll-line"></span>
-    </div>
-
-  </section>
 
 
   <!-- ============================
@@ -1092,6 +958,7 @@
         toggleActions: "play none none none"
       }
     });
+
 
   });
   </script>
