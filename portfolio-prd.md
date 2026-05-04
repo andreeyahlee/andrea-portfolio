@@ -433,43 +433,46 @@ gsap.from(".cs-card", { y: 30, opacity: 0, stagger: 0.1, duration: 0.6, ... })
 | Prototype CTA | ARVO: figma.com/make/1VklSkodi8LYoZ755bvRfi · Seletar: figma.com/make/VX9LWSLRU1wf0NH2pPaJbv · PetHaus: placeholder |
 | Speaking notes | `<details>` toggle, hidden by default |
 
-**Page transition — ARVO only (seamless column → hero background):**
+**Page transition — all three case studies (image expand):**
 
-When a user clicks the ARVO column from the Work section, the navy column background must expand and fill the viewport, becoming the background of the ARVO hero section — no page flash or hard cut.
+When a user clicks a Work column CTA, the case study thumbnail image (`arvo-cta.png`, `seletar-cta.png`, `pethaus-cta.png`) expands from its position in the column to fill the entire viewport, and seamlessly becomes the hero image of the case study page. No solid colour overlay. No flash.
 
 ```js
-// On ARVO CTA click:
-// 1. Get the bounding rect of the ARVO column
-// 2. Create a navy overlay div at that exact position
-// 3. GSAP animate it to scale to full viewport (clip-path or transform)
-// 4. Once it fills viewport, navigate to arvo.html
-// arvo.html starts with navy background already showing — no flash
+// On CTA click:
+// 1. Get bounding rect of the thumbnail image inside the clicked column
+// 2. GSAP animate that image from its current size/position to full viewport
+// 3. Once it fills viewport, navigate to the case study page
+// 4. Case study hero opens with its hero image already filling screen — no flash
 
-const arvoCol = document.querySelector('.work-col--arvo');
-const rect = arvoCol.getBoundingClientRect();
+const cta = document.querySelector('.work-col--arvo .cta-img');
+const rect = cta.getBoundingClientRect();
 
-const overlay = document.createElement('div');
-overlay.style.cssText = `
+// Clone image and position it fixed at exact same spot
+const clone = cta.cloneNode();
+clone.style.cssText = `
   position: fixed;
-  background: #2a4a6b;
   top: ${rect.top}px;
   left: ${rect.left}px;
   width: ${rect.width}px;
   height: ${rect.height}px;
   z-index: 1000;
+  object-fit: cover;
 `;
-document.body.appendChild(overlay);
+document.body.appendChild(clone);
 
-gsap.to(overlay, {
+// Expand clone to fill viewport
+gsap.to(clone, {
   top: 0, left: 0,
   width: '100vw', height: '100vh',
-  duration: 0.6,
+  duration: 0.7,
   ease: 'power2.inOut',
   onComplete: () => window.location.href = 'case-studies/arvo.html'
 });
+
+// arvo.html hero opens with arvo-hero.png already full screen — matches the expanded clone
 ```
 
-Apply same pattern for Seletar (`#2b5e3a`) and PetHaus (`#7b3f6e`). All three columns must use this seamless expand transition — no hard page loads on any case study CTA.
+Apply same pattern for Seletar (`seletar-cta.png` → `seletar-hero.png`) and PetHaus (`pethaus-cta.png` → `pethaus-hero.png`). All three must use this image-expand transition — no hard page loads, no solid colour overlays.
 
 ---
 
