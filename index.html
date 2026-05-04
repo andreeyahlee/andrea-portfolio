@@ -111,8 +111,10 @@
       transition: color 0.2s;
     }
     .nav-link:hover { color: var(--bg); }
+    .nav-link--active { font-weight: 700; color: var(--bg); }
     #nav.nav--light .nav-link { color: rgba(10,10,10,0.5); }
     #nav.nav--light .nav-link:hover { color: var(--ink); }
+    #nav.nav--light .nav-link--active { color: var(--ink); font-weight: 700; }
 
     .nav-cta {
       font-size: 13px;
@@ -191,10 +193,11 @@
       display: flex;
       align-items: center;
       justify-content: center;
+      overflow: hidden;
     }
     /* GSAP conflict rule: GSAP is sole owner of transforms on this element */
-    /* transform-origin: 'p' bowl in "stupidly" ≈ 49% × 43% of image element
-       → maps to viewport position 49% × 44% — matches #work-reveal origin */
+    /* transform-origin: bowl interior of 'p' in "stupidly" (upper-right of letter, above descender)
+       ≈ 49% × 41% of image element → viewport 49% × 42% — matches #work-reveal origin */
     #hero-img {
       width: auto;
       max-width: 80vw;
@@ -202,7 +205,7 @@
       height: auto;
       object-fit: contain;
       will-change: transform;
-      transform-origin: 49% 43%;
+      transform-origin: 49% 41%;
     }
     /* Hidden in State 1 — headline lives inside hero-initial.png.
        GSAP crossfades this in during State 3 transition. */
@@ -237,7 +240,7 @@
       position: fixed;
       inset: 0;
       background: var(--work-bg);
-      clip-path: circle(0% at 49% 44%);
+      clip-path: circle(0% at 49% 42%);
       pointer-events: none;
       z-index: 9;
     }
@@ -249,43 +252,32 @@
       position: relative;
       z-index: 0;
       width: 100%;
+      height: 100vh;
       background: var(--work-bg);
-      display: flex;
-      flex-direction: column;
-    }
-    .work-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: flex-start;
-      padding: 52px 56px 36px;
-    }
-    .work-title {
-      font-family: var(--font-display);
-      font-size: clamp(56px, 6.8vw, 98px);
-      font-weight: 700;
-      color: var(--bg);
-      line-height: 1.0;
+      overflow: hidden;
     }
     .work-scroll-hint {
+      position: absolute;
+      top: 28px;
+      right: 56px;
       font-family: var(--font-mono);
       font-size: 13px;
       font-weight: 400;
       font-style: italic;
       color: rgba(243,242,236,0.45);
-      padding-top: 8px;
       white-space: nowrap;
+      z-index: 2;
+      pointer-events: none;
     }
     .work-cols {
       display: flex;
-      flex: 1;
+      height: 100%;
+      overflow: hidden;
       border-top: 1px solid rgba(243,242,236,0.12);
-      min-height: 68vh;
     }
     .work-col {
       flex: 1;
       border-right: 1px solid rgba(243,242,236,0.12);
-      display: flex;
-      flex-direction: column;
       overflow: hidden;
       position: relative;
       text-decoration: none;
@@ -293,14 +285,34 @@
       transition: background-color 0.35s ease;
     }
     .work-col:last-child { border-right: none; }
-    .work-col.arvo-col:hover    { background-color: rgba(42,74,107,0.25); }
-    .work-col.seletar-col:hover { background-color: rgba(43,94,58,0.25); }
-    .work-col.pethaus-col:hover { background-color: rgba(123,63,110,0.25); }
+    /* Full case-study hero color on hover — ties column to the case study */
+    .work-col.arvo-col:hover    { background-color: var(--arvo); }
+    .work-col.seletar-col:hover { background-color: var(--seletar); }
+    .work-col.pethaus-col:hover { background-color: var(--pethaus); }
 
-    /* ── upper half: thumbnail ── */
+    /* "Selected Works" label sits inside the first column, fades on hover */
+    .work-section-label {
+      position: absolute;
+      top: 40px;
+      left: 40px;
+      z-index: 1;
+      pointer-events: none;
+      transition: opacity 0.25s ease;
+    }
+    .work-title {
+      font-family: var(--font-display);
+      font-size: clamp(36px, 4.5vw, 68px);
+      font-weight: 700;
+      color: var(--bg);
+      line-height: 1.0;
+    }
+    .arvo-col:hover .work-section-label { opacity: 0; }
+
+    /* ── upper half: thumbnail — absolutely positioned, hidden until hover ── */
     .work-thumb-wrap {
-      flex: 0 0 50%;
-      position: relative;
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 50%;
       overflow: hidden;
       opacity: 0;
       transition: opacity 0.4s ease;
@@ -311,36 +323,49 @@
       object-fit: cover; object-position: top center;
       display: block;
     }
-    /* project name overlaid on image (hover only) */
+    /* Dark overlay — stops image text competing with the card below */
+    .work-thumb-wrap::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.45);
+      pointer-events: none;
+    }
+    /* project name: top-left of image area */
     .work-name-over {
       position: absolute;
-      bottom: 18px; left: 32px;
+      top: 28px; left: 40px;
       font-family: var(--font-display);
       font-size: clamp(18px, 2.2vw, 32px);
       font-weight: 600;
       color: var(--bg);
       opacity: 0;
+      z-index: 1;
       transition: opacity 0.3s ease 0.12s;
     }
     .work-col:hover .work-name-over { opacity: 1; }
 
-    /* ── lower half: name default / card on hover ── */
+    /* ── lower half: card on hover — absolutely positioned at bottom ── */
     .work-col-bottom {
-      flex: 1;
-      position: relative;
-      min-height: 0;
+      position: absolute;
+      bottom: 0; left: 0; right: 0;
+      height: 50%;
+      overflow: hidden;
     }
-    /* default: big project name, bottom-left */
+    /* default: project name anchored at bottom of full column, centered */
     .work-name {
       position: absolute;
       bottom: 0; left: 0; right: 0;
-      padding: 32px 40px 52px;
+      padding: 24px 32px 48px;
       font-family: var(--font-display);
-      font-size: clamp(28px, 3.5vw, 52px);
+      font-size: clamp(24px, 3.2vw, 52px);
       font-weight: 600;
       color: var(--bg);
       line-height: 1.1;
+      text-align: center;
       transition: opacity 0.25s ease;
+      z-index: 1;
+      pointer-events: none;
     }
     .work-col:hover .work-name { opacity: 0; }
 
@@ -372,11 +397,11 @@
     }
     .work-card-headline {
       font-family: var(--font-display);
-      font-size: clamp(16px, 1.8vw, 26px);
+      font-size: clamp(22px, 2.8vw, 40px);
       font-weight: 700;
-      line-height: 1.2;
+      line-height: 1.15;
       color: var(--bg);
-      margin-bottom: 12px;
+      margin-bottom: 14px;
       flex-shrink: 0;
     }
     .work-card-divider {
@@ -399,15 +424,16 @@
       gap: 6px;
       font-size: 13px;
       font-weight: 500;
-      color: var(--bg);
-      border: 1.5px solid rgba(243,242,236,0.35);
+      color: var(--ink);
+      background: var(--bg);
+      border: none;
       border-radius: 100px;
-      padding: 9px 18px;
+      padding: 10px 20px;
       align-self: flex-start;
       flex-shrink: 0;
-      transition: background 0.2s;
+      transition: opacity 0.2s;
     }
-    .work-card-cta:hover { background: rgba(243,242,236,0.08); }
+    .work-card-cta:hover { opacity: 0.85; }
 
     /* ============================================================
        ABOUT — State 1 static
@@ -601,10 +627,13 @@
 
       #hero-img { max-width: 94vw; max-height: 80vh; }
 
-      .work-header { padding: 36px 24px 24px; }
+      #work { height: auto; }
+      .work-scroll-hint { display: none; }
+      .work-section-label { position: relative; top: auto; left: auto; padding: 32px 24px 20px; }
+      .work-title { font-size: clamp(36px, 10vw, 56px); }
       .work-cols {
         flex-direction: column;
-        min-height: auto;
+        height: auto;
       }
       .work-col {
         flex: none;
@@ -654,8 +683,9 @@
     ============================================================ */
     @media (min-width: 768px) and (max-width: 1023px) {
       #nav { width: calc(100% - 64px); }
-      .work-header { padding: 44px 44px 28px; }
-      .work-name { padding: 24px 28px 40px; }
+      .work-section-label { top: 32px; left: 32px; }
+      .work-scroll-hint { right: 44px; }
+      .work-name { padding: 20px 28px 40px; }
       .work-card { padding: 20px 28px 40px; }
       .work-name-over { left: 24px; }
       #contact { padding: 100px 44px 80px; }
@@ -732,21 +762,20 @@
   ============================ -->
   <section id="work" aria-label="Selected work" data-nav-theme="light">
 
-    <div class="work-header">
-      <h2 class="work-title">Selected<br>Works</h2>
-      <span class="work-scroll-hint">scroll <em>up</em> to return ↑</span>
-    </div>
+    <span class="work-scroll-hint" aria-hidden="true">scroll <em>up</em> to return ↑</span>
 
     <div class="work-cols">
 
-      <!-- ARVO -->
+      <!-- ARVO — "Selected Works" label lives here -->
       <a href="case-studies/arvo.html" class="work-col arvo-col">
+        <div class="work-section-label" aria-hidden="true">
+          <h2 class="work-title">Selected<br>Works</h2>
+        </div>
         <div class="work-thumb-wrap" aria-hidden="true">
           <img class="work-thumb-img" src="assets/arvo-cta.png" alt="" loading="lazy">
           <span class="work-name-over">ARVO</span>
         </div>
         <div class="work-col-bottom">
-          <div class="work-name">ARVO</div>
           <div class="work-card" aria-hidden="true">
             <div class="work-card-tags">Project Lead · Team of 6 · AI for Managers</div>
             <h3 class="work-card-headline">Pushing back 71% of issues to the client</h3>
@@ -755,6 +784,7 @@
             <span class="work-card-cta">Read the case study →</span>
           </div>
         </div>
+        <div class="work-name" aria-hidden="true">ARVO</div>
       </a>
 
       <!-- SELETAR AIRPORT -->
@@ -764,7 +794,6 @@
           <span class="work-name-over">Seletar Airport</span>
         </div>
         <div class="work-col-bottom">
-          <div class="work-name">Seletar Airport</div>
           <div class="work-card" aria-hidden="true">
             <div class="work-card-tags">Lead UX Researcher · Team of 3 · Omni-channel / Info</div>
             <h3 class="work-card-headline">Great airport, nobody knew!</h3>
@@ -773,6 +802,7 @@
             <span class="work-card-cta">Read the case study →</span>
           </div>
         </div>
+        <div class="work-name" aria-hidden="true">Seletar Airport</div>
       </a>
 
       <!-- PET HAUS -->
@@ -782,15 +812,15 @@
           <span class="work-name-over">Pet Haus</span>
         </div>
         <div class="work-col-bottom">
-          <div class="work-name">Pet Haus</div>
           <div class="work-card" aria-hidden="true">
             <div class="work-card-tags">Solo Designer · End-to-End · E-Commerce</div>
             <h3 class="work-card-headline">Trust, designed in.</h3>
             <div class="work-card-divider"></div>
-            <p class="work-card-desc">A solo e-commerce build for the most anxious shopper on the internet — Parents. 92% said the same thing in different words.</p>
+            <p class="work-card-desc">A solo e-commerce build for the most anxious shopper on the internet — Pawrents. 92% said the same thing in different words.</p>
             <span class="work-card-cta">Read the case study →</span>
           </div>
         </div>
+        <div class="work-name" aria-hidden="true">Pet Haus</div>
       </a>
 
     </div>
@@ -936,15 +966,17 @@
   const nav        = document.getElementById('nav');
   const navLogoImg = document.getElementById('nav-logo-img');
 
+  const workNavLink = document.querySelector('.nav-link[href="#work"]');
+
   function applyNavTheme(theme) {
     if (theme === 'light') {
-      // Cream pill — on dark Work section
       nav.classList.add('nav--light');
       navLogoImg.src = 'assets/logo-light.png';
+      if (workNavLink) workNavLink.classList.add('nav-link--active');
     } else {
-      // Dark pill — on cream sections (hero, about, contact)
       nav.classList.remove('nav--light');
       navLogoImg.src = 'assets/logo-dark.png';
+      if (workNavLink) workNavLink.classList.remove('nav-link--active');
     }
   }
 
@@ -1002,25 +1034,28 @@
       scrollTrigger: {
         trigger: "#hero",
         start: "top top",
-        end: "+=300%",
+        end: "+=200%",
         pin: true,
         scrub: 1.5,
         anticipatePin: 1,
       }
     });
 
-    // Phase 1 (0→4): Zoom toward the 'p' bowl in the monitor text
-    heroTl.to("#hero-img", { scale: 5, ease: "none", duration: 4 });
+    // Phase 1 (0→5): Zoom toward the 'p' in "stupidly" on the monitor
+    heroTl.to("#hero-img", { scale: 6, ease: "none", duration: 5 });
 
-    // Phase 2 (1.5→8.5): Dark green circle expands from the 'p' bowl location
+    // Phase 2 (2.5→9.5): Circle emerges from bowl interior once 'p' is large enough to read
     heroTl.to("#work-reveal", {
-      clipPath: "circle(90% at 49% 44%)",
+      clipPath: "circle(90% at 49% 42%)",
       ease: "power2.in",
       duration: 7
-    }, 1.5);
+    }, 2.5);
 
-    // Phase 3 (6.5→8.5): Image fades as circle fills screen
-    heroTl.to("#hero-img", { opacity: 0, ease: "none", duration: 2 }, 6.5);
+    // Phase 3 (7.5→9.5): Image fades as circle fills screen
+    heroTl.to("#hero-img", { opacity: 0, ease: "none", duration: 2 }, 7.5);
+
+    // Phase 4 (9→9.5): Fade out the fixed overlay so work section hover states are visible
+    heroTl.to("#work-reveal", { opacity: 0, ease: "power1.out", duration: 0.5 }, 9);
 
     // ── Work columns: entrance after pin releases ───────────
     gsap.from(".work-col", {
@@ -1033,19 +1068,6 @@
         trigger: "#work",
         start: "top 90%",
         toggleActions: "play none none none"
-      }
-    });
-
-    // ── Work columns: staircase exit (left→centre→right) ───
-    gsap.to(".work-col", {
-      yPercent: -120,
-      stagger: 0.12,
-      ease: "power2.inOut",
-      scrollTrigger: {
-        trigger: "#work",
-        start: "bottom bottom",
-        end: "+=300",
-        scrub: 1
       }
     });
 
