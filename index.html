@@ -364,12 +364,11 @@
       pointer-events: auto;
     }
 
-    /* "Read the case study →" button — appears on column hover */
+    /* "Read the case study →" button — left-aligned, content-hug width */
     .work-read-btn {
       position: absolute;
       bottom: 44px;
-      left: 50%;
-      transform: translateX(-50%);
+      left: 32px;
       z-index: 4;
       display: inline-flex;
       align-items: center;
@@ -399,11 +398,11 @@
       display: inline-block;
       transition: transform 0.15s ease;
     }
-    /* Hover state — button brightens, arrow nudges right */
+    /* Hover state */
     .work-read-btn:hover {
       background: #fff;
       box-shadow: 0 4px 16px rgba(0,0,0,0.18);
-      transform: translateX(-50%) translateY(-2px);
+      transform: translateY(-2px);
     }
     .work-read-btn:hover .btn-arrow {
       transform: translateX(4px);
@@ -412,7 +411,7 @@
     .work-read-btn:active {
       background: var(--bg-warm);
       box-shadow: 0 1px 4px rgba(0,0,0,0.12);
-      transform: translateX(-50%) scale(0.96);
+      transform: scale(0.96);
       transition-duration: 0.06s;
     }
     .work-read-btn:active .btn-arrow {
