@@ -49,26 +49,34 @@ Hand this entire file to Claude Code as your opening brief. Work section by sect
 
 Export every asset as **PNG at 2×**, named exactly as listed. Drop into `/assets/` in the repo root. Run all through TinyPNG before committing to keep file sizes down.
 
-| File name | Figma node | Role in animation |
+> ⚠️ **Duplicate files to delete from assets folder before starting:**
+> `hero-desktop-zoom.png.png`, `hero-letter-p.png.png`, `work-hover-reveal.png.png`, `work-initial.png.png`
+> Run in Terminal: `cd ~/Desktop/andrea-portfolio/assets && rm hero-desktop-zoom.png.png hero-letter-p.png.png work-hover-reveal.png.png work-initial.png.png`
+
+| File name | Figma node | Role |
 |---|---|---|
-| `hero-initial.png` | node-id `273-31` | **State 1** — page load, static hero layout |
-| `hero-desktop-zoom.png` | node-id `458-46` | **State 2** — desktop mockup scaled up (GSAP end state reference) |
-| `hero-letter-p.png` | node-id `458-93` | **State 3** — zoomed into round of letter "p" (GSAP end state reference) |
-| `work-initial.png` | node-id `458-140` | **Work initial state** — 3 columns, titles only, no hover |
-| `work-hover-reveal.png` | node-id `848-1667` | Work hover state — reference for column expand end state |
-| `about-initial.png` | node-id `707-16514` | About initial state — text visible, no portrait |
-| `about-portrait-split.png` | node-id `713-16765` | Portrait popped up, text split apart |
-| `about-portrait-anchored.png` | node-id `953-14453` | Portrait bottom-left, rectangle expanded |
+| `hero-initial.png` | node-id `273-31` | State 1 — page load, full hero graphic including headline inside mockup |
+| `hero-desktop-zoom.png` | node-id `458-46` | State 2 — desktop mockup scaled up (GSAP reference) |
+| `hero-letter-p.png` | node-id `458-93` | State 3 — letter p zoomed (GSAP reference) |
+| `work-initial.png` | node-id `458-140` | Work initial state — 3 columns, no hover |
+| `work-hover-reveal.png` | node-id `848-1667` | Work hover state — column expand reference |
+| `about-initial.png` | node-id `707-16514` | About initial state |
+| `about-portrait-split.png` | node-id `713-16765` | Portrait visible, text split — portrait is embedded in this frame |
+| `about-portrait-anchored.png` | node-id `953-14453` | Portrait anchored bottom, rectangle expanded |
 | `about-info-swap.png` | node-id `953-14527` | Info content swapped, portrait stays |
 | `sayhello.png` | node-id `953-14585` | Say Hi / Contact section |
-| `arvo-cta.png` | node-id `952-14418` | Work card CTA thumbnail |
-| `seletar-cta.png` | node-id `952-14422` | Work card CTA thumbnail |
-| `pethaus-cta.png` | node-id `952-14428` | Work card CTA thumbnail |
-| `arvo-hero.png` | node-id `736-105` | ARVO case study hero |
-| `seletar-hero.png` | node-id `767-7971` | Seletar case study hero |
-| `pethaus-hero.png` | node-id `791-1661` | PetHaus case study hero |
-
-> **Note on State 2 + 3 exports:** These are reference images only — export them so Claude Code can see what the zoomed states look like. The actual zoom is built in GSAP code, not image swaps. You do not need to export node `458-140` (Work section) — that section is built as its own HTML block.
+| `arvo-cta.png` | node-id `952-14418` | Work card CTA thumbnail — ARVO |
+| `seletar-cta.png` | node-id `952-14422` | Work card CTA thumbnail — Seletar |
+| `pethaus-cta.png` | node-id `952-14428` | Work card CTA thumbnail — PetHaus |
+| `arvo-hero.png` | node-id `869-255` | ARVO case study hero |
+| `seletar-hero.png` | node-id `780-10685` | Seletar case study hero |
+| `pethaus-hero.png` | node-id `799-149` | PetHaus case study hero |
+| `nav-light.png` | — | Nav bar on light/cream backgrounds |
+| `nav-dark.png` | — | Nav bar on dark/ink backgrounds |
+| `logo-light.png` | — | Flower logo for light backgrounds |
+| `logo-dark.png` | — | Flower logo for dark backgrounds |
+| `cursor-light.png` | — | Custom flower cursor for light backgrounds |
+| `cursor-dark.png` | — | Custom flower cursor for dark backgrounds |
 
 **Figma export steps:**
 1. Select node → right panel → Export → `2×` → Format: `PNG`
@@ -87,7 +95,7 @@ andrea-portfolio/
 │   ├── seletar.html
 │   └── pethaus.html
 ├── assets/
-│   ├── (all webp exports from §2)
+│   ├── (all PNG exports from §2)
 │   └── favicon.svg
 ├── css/
 │   └── (DO NOT use — all CSS must be inlined in each HTML file)
@@ -134,48 +142,56 @@ The homepage is **one long scroll** that passes through four states: Hero → Wo
 
 **State 1 — Static layout:**
 - Full viewport (`100vw × 100vh`), background `--bg`
-- `hero-initial.webp` centered, ~60% viewport width
-- Headline: *"making complex things stupidly simple."* — `--font-display`, 80px, `--ink`
-- Each word in its own `<span class="word">`. The word `complex` is `<span class="word-complex">`. Inside it, the letter `p` is rendered as an SVG (see State 4 note below).
-- Nav bar top: Work / About / Say Hi
+- Display `hero-initial.png` centred — this is the full graphic including the desktop mockup with the headline text rendered inside it
+- Nav bar sits above using `nav-light.png`
+- No separate HTML headline text visible in State 1 — the text lives inside the graphic
+
+**Critical note on headline text for animation:**
+The headline `"making complex things stupidly simple."` is rendered inside the desktop mockup graphic in `hero-initial.png`. GSAP cannot animate letters inside an image. Therefore:
+
+1. In State 1: show `hero-initial.png` as-is
+2. At the transition to State 3: fade out the image entirely and crossfade to an **HTML text overlay** that matches the exact typography, size, position and colour of the headline as it appears in `hero-initial.png`
+3. The HTML overlay is what GSAP animates — the word `complex` as `<span class="word-complex">`, and the letter `p` as an SVG
+
+Claude Code must match the font size, weight, colour, and position of the HTML overlay text to `hero-initial.png` as closely as possible before animating.
 
 **State 2 — Desktop zoom (scrub 0 → 0.35):**
 ```
-GSAP pins #hero for the entire sequence (no CSS position:sticky on #hero).
-- #hero-img: scale 1 → 1.8, transformOrigin "center center"
-- All .word spans: opacity 1 → 0
+GSAP pins #hero for the entire sequence. No CSS position:sticky on #hero.
+- #hero-img (hero-initial.png): scale 1 → 1.8, transformOrigin "center center"
+- HTML text overlay: opacity 0 (hidden during zoom)
 ```
 
 **State 3 — "complex" + letter p zoom (scrub 0.35 → 0.75):**
 ```
-- #hero-img: opacity 1 → 0
-- .word-complex: opacity 0 → 1, scale 1 → 6, position moves to viewport centre
-- All other .word spans: remain opacity 0
+- #hero-img: opacity 1 → 0 (image fades out)
+- HTML text overlay: opacity 0 → 1 (crossfades in, matching image typography)
+- .word-complex: scale 1 → 6, moves to viewport centre
+- All other .word spans: opacity 1 → 0
 - Background: --bg transitions to --ink
 
 scrub 0.55 → 0.75:
-- #letter-p-svg: scale 1 → 20, transformOrigin "50% 55%" (centre of the round of the p)
+- #letter-p-svg: scale 1 → 20, transformOrigin "50% 55%"
 - Other letters in .word-complex: opacity 1 → 0
 - Background fully --ink
 ```
 
 **State 4 — p becomes the Work section background (scrub 0.75 → 1.0):**
 
-The p does NOT fade out. It keeps scaling until its thick Fraunces strokes overflow the viewport on all sides. The counter-form — the round hole inside the p — stays transparent. The Work section sits behind the SVG and is visible through that hole as it expands. When the unpin fires at scrub 1.0, the user is already looking at Work.
+The p keeps scaling until its strokes fill the viewport. The round counter-form stays transparent — Work section is visible through it. At scrub 1.0 unpin fires.
 
 ```
 scrub 0.75 → 1.0:
-- #letter-p-svg: scale continues 20 → 80+, strokes bleed off all edges
-- Work section (#work) is visible through the counter-form hole the entire time
-- At scrub 1.0: unpin fires, normal scroll resumes into Work section
+- #letter-p-svg: scale continues 20 → 80+
+- Work section visible through counter-form hole
+- At scrub 1.0: unpin fires
 ```
 
-**SVG approach for the p counter-form cutout:**
+**SVG for the p counter-form:**
 ```html
-<!-- Place inside #hero, z-index above #work -->
-<svg id="letter-p-svg" viewBox="0 0 300 400" 
+<svg id="letter-p-svg" viewBox="0 0 300 400"
      xmlns="http://www.w3.org/2000/svg"
-     style="position:fixed;top:0;left:0;width:100vw;height:100vh;pointer-events:none;z-index:10;">
+     style="position:fixed;top:0;left:0;width:100vw;height:100vh;pointer-events:none;z-index:10;opacity:0;">
   <text x="50%" y="72%"
         text-anchor="middle"
         font-family="Fraunces, serif"
@@ -185,38 +201,9 @@ scrub 0.75 → 1.0:
         fill="#0A0A0A">p</text>
 </svg>
 ```
-
 ```css
-/* Work section sits behind the p SVG */
 #work { position: relative; z-index: 0; }
-
-/* GSAP conflict rule: no CSS transform on #letter-p-svg — GSAP owns it */
-```
-
-```js
-// GSAP owns all transforms. scrub:1 throughout.
-const tl = gsap.timeline({
-  scrollTrigger: {
-    trigger: "#hero",
-    start: "top top",
-    end: "+=400%",
-    scrub: 1,
-    pin: true
-  }
-});
-
-tl.to("#hero-img",      { scale: 1.8, duration: 0.35 })
-  .to("#hero-img",      { opacity: 0, duration: 0.1 }, 0.35)
-  .to(".word-complex",  { opacity: 1, scale: 6, xPercent: -50, yPercent: -50,
-                          left: "50%", top: "50%", position: "absolute",
-                          duration: 0.2 }, 0.35)
-  .to(".word",          { opacity: 0, duration: 0.1 }, 0.35)
-  .to("body",           { backgroundColor: "#0A0A0A", duration: 0.2 }, 0.45)
-  .to(".word-complex .other-letters", { opacity: 0, duration: 0.1 }, 0.55)
-  .to("#letter-p-svg",  { scale: 20, duration: 0.2 }, 0.55)
-  // p fills viewport — Work visible through counter-form hole
-  .to("#letter-p-svg",  { scale: 80, duration: 0.25 }, 0.75);
-  // unpin fires at end, Work section takes over
+/* GSAP is sole owner of all transforms on #letter-p-svg and .word-complex */
 ```
 
 ---
@@ -236,9 +223,26 @@ tl.to("#hero-img",      { scale: 1.8, duration: 0.35 })
 
 ---
 
-**Initial state layout (node `458-140`):**
+**Work section entrance — when p unpin fires:**
 
-Build this to match `work-initial.png` exactly. Do not invent column titles, labels, or layout details — read everything from the exported image.
+The columns do not just snap into place. As the p's counter-form expands to reveal Work, the three columns animate in from below, staggered:
+
+```js
+gsap.from(".work-col", {
+  yPercent: 30,
+  opacity: 0,
+  stagger: 0.1,
+  duration: 0.6,
+  ease: "power2.out",
+  scrollTrigger: {
+    trigger: "#work",
+    start: "top 90%",
+    toggleActions: "play none none none"
+  }
+});
+```
+
+Match column count, proportions, and content to `work-initial.png`.
 
 - Background: `--ink` (continuous from hero transition — no seam)
 - Three equal vertical columns, full viewport height
@@ -330,23 +334,9 @@ Build to match `about-initial.png` exactly. All text, layout, and labels come fr
 
 GSAP ScrollTrigger pins the About section for states 2–4.
 
-Match the split layout from `about-portrait-split.png` — the exact words that split apart and the portrait position are defined by that image, not this PRD.
+The portrait is embedded inside `about-portrait-split.png` — there is no separate portrait file. Claude Code must extract the portrait from the frame visually and match its position exactly. If a separate `about-portrait.png` is needed for the animation, ask Andrea to export just the portrait photo as a standalone PNG.
 
-```
-On scrub 0 → 0.3:
-  - about-portrait.png: scale 0 → 1, opacity 0 → 1
-    transformOrigin "bottom center" (rises up from below)
-  - Headline left half (.text-left): x: 0 → -12vw
-  - Headline right half (.text-right): x: 0 → +12vw
-```
-
-**HTML structure for the split — match text content to about-initial.png:**
-```html
-<div class="about-headline">
-  <span class="text-left">[left words from Figma]</span>
-  <span class="text-right">[right words from Figma]</span>
-</div>
-<img id="about-portrait" src="assets/about-portrait.png" alt="Andrea Lee">
+Match the split layout from `about-portrait-split.png` — exact words that split and portrait position are defined by that image.
 ```
 
 ---
@@ -379,13 +369,16 @@ Portrait stays. Layout stays. Content inside `#about-rect` changes to match `abo
 
 ### 5.4 Section: CONTACT ("Say Hi")
 
-**Source screen:** `node-id 953-14585`
+**Source screen:** `node-id 953-14585` → export as `sayhello.png`
 
-**Layout:**
-- Full-viewport dark section, background `--ink`
-- Large centered headline: *"Say Hi."* — `--font-display`, 120px, `--bg` colour
-- Below: email link `andreeyahlee@gmail.com` + LinkedIn icon + subtle footer copyright
-- Entrance: headline does a slow scale-up from 0.8 → 1.0 with opacity 0 → 1 as it enters viewport (standard ScrollTrigger, no pin, no scrub — just a one-shot `gsap.from`)
+Build this section to match `sayhello.png` exactly. All text, layout, links, and elements come from that image — do not invent copy, email addresses, icons, or footer content.
+
+**Entrance animation (one-shot, no pin, no scrub):**
+```js
+// Elements animate in as section enters viewport
+// Match which elements exist to sayhello.png
+// Apply: y: 40 → 0, opacity 0 → 1, staggered by element, ease "power2.out"
+```
 
 ---
 
@@ -440,6 +433,44 @@ gsap.from(".cs-card", { y: 30, opacity: 0, stagger: 0.1, duration: 0.6, ... })
 | Prototype CTA | ARVO: figma.com/make/1VklSkodi8LYoZ755bvRfi · Seletar: figma.com/make/VX9LWSLRU1wf0NH2pPaJbv · PetHaus: placeholder |
 | Speaking notes | `<details>` toggle, hidden by default |
 
+**Page transition — ARVO only (seamless column → hero background):**
+
+When a user clicks the ARVO column from the Work section, the navy column background must expand and fill the viewport, becoming the background of the ARVO hero section — no page flash or hard cut.
+
+```js
+// On ARVO CTA click:
+// 1. Get the bounding rect of the ARVO column
+// 2. Create a navy overlay div at that exact position
+// 3. GSAP animate it to scale to full viewport (clip-path or transform)
+// 4. Once it fills viewport, navigate to arvo.html
+// arvo.html starts with navy background already showing — no flash
+
+const arvoCol = document.querySelector('.work-col--arvo');
+const rect = arvoCol.getBoundingClientRect();
+
+const overlay = document.createElement('div');
+overlay.style.cssText = `
+  position: fixed;
+  background: #2a4a6b;
+  top: ${rect.top}px;
+  left: ${rect.left}px;
+  width: ${rect.width}px;
+  height: ${rect.height}px;
+  z-index: 1000;
+`;
+document.body.appendChild(overlay);
+
+gsap.to(overlay, {
+  top: 0, left: 0,
+  width: '100vw', height: '100vh',
+  duration: 0.6,
+  ease: 'power2.inOut',
+  onComplete: () => window.location.href = 'case-studies/arvo.html'
+});
+```
+
+Apply same pattern for Seletar (`#2b5e3a`) and PetHaus (`#7b3f6e`). All three columns must use this seamless expand transition — no hard page loads on any case study CTA.
+
 ---
 
 ### 6.1 ARVO — `case-studies/arvo.html`
@@ -479,7 +510,7 @@ gsap.from(".cs-card", { y: 30, opacity: 0, stagger: 0.1, duration: 0.6, ... })
 - Each TLDR card: stagger 0.12s, y: 30 → 0, opacity 0 → 1
 ```
 
-**Initial Research (`858-1810`)** — Base scroll reveal, no special animation.
+**Initial Research (`858-1810`)** — Base scroll reveal. Match layout and content to `arvo-research.png` exactly.
 
 **Bright Spots (`898-456`)** — Items reveal one by one left to right:
 ```
@@ -510,7 +541,7 @@ Unpin at scrub 1.0
 - .cs-screen elements: x: 40 → 0, opacity 0 → 1, stagger 0.15s
 ```
 
-**Strategic Deliverable (`763-3884`)** — Base scroll reveal.
+**Strategic Deliverable (`763-3884`)** — Base scroll reveal. Match layout and content to `arvo-strategic.png` exactly.
 
 **Final Solution (`908-108`)** — Prototype mockup enters with slow zoom:
 ```
@@ -518,12 +549,7 @@ Unpin at scrub 1.0
 - Prototype CTA button pulses once after entrance (scale 1.0 → 1.03 → 1.0, 600ms)
 ```
 
-**The Outcome (`755-1121`)** — ⭐ Metric numbers count up:
-```js
-// CountUp on scroll enter — no GSAP needed, use CountUp.js or vanilla JS
-// Trigger when section enters viewport
-// Example: "4.2 → 4.7 satisfaction" counts up over 1.2s
-```
+**The Outcome (`755-1121`)** — ⭐ Metric numbers count up on scroll enter. Read all metric values, labels, and layout from `arvo-outcome.png` — do not hardcode any numbers.
 
 **Client Testimony (`765-7912`)** — Quote reveal:
 ```
@@ -532,7 +558,7 @@ Unpin at scrub 1.0
 - Attribution: fades in last, delay 0.8s
 ```
 
-**Retrospective (`765-7946`)** — Base scroll reveal.
+**Retrospective (`765-7946`)** — Base scroll reveal. Match layout and content to `arvo-retro.png` exactly.
 
 ---
 
@@ -560,22 +586,11 @@ Unpin at scrub 1.0
 
 **TLDR (`780-10686`)** — Stagger cards, same as ARVO TLDR.
 
-**The Problem (`781-10873`)** — Problem statement types on:
-```
-- Headline: character-by-character reveal using CSS animation or GSAP text split
-  (split text into chars with SplitText plugin or manual spans)
-- Body copy: fades in after headline completes
-```
+**The Problem (`781-10873`)** — Base scroll reveal. Match layout and content to `seletar-problem.png` exactly.
 
-**What We Found (`782-11152`)** — Findings stagger in:
-```
-- Each finding item: x: -30 → 0, opacity 0 → 1, stagger 0.12s
-```
+**What We Found (`782-11152`)** — Base scroll reveal. Match layout and content to `seletar-found.png` exactly.
 
-**Turning Research into Design (`922-230`)** — Screen mockups reveal:
-```
-- Wireframe/design screens: y: 50 → 0, opacity 0 → 1, stagger 0.2s
-```
+**Turning Research into Design (`922-230`)** — Base scroll reveal. Match layout and content to `seletar-design.png` exactly.
 
 **⭐ SIGNATURE MOMENT — Validation (`783-11728`):**
 
@@ -599,11 +614,11 @@ scrub 0.4 → 1.0:
 Unpin at scrub 1.0
 ```
 
-**Outcome (`785-11746`)** — Metrics count up, base reveal.
+**Outcome (`785-11746`)** — Metrics count up on scroll enter. Read all values and layout from `seletar-outcome.png` exactly.
 
-**Retrospective (`791-686`)** — Base scroll reveal.
+**Retrospective (`791-686`)** — Base scroll reveal. Match layout and content to `seletar-retro.png` exactly.
 
-**Last but not least (`791-1662`)** — Prototype CTA with pulse, same as ARVO final solution.
+**Last but not least (`791-1662`)** — Match layout and content to `seletar-last.png` exactly. If a prototype CTA is visible, apply pulse animation (scale 1.0 → 1.03 → 1.0, 600ms). Do not assume content — read from image.
 
 ---
 
@@ -631,18 +646,13 @@ Unpin at scrub 1.0
 
 **TLDR (`799-893`)** — Stagger cards.
 
-**Sitch on the Ground (`803-1689`)** — Context items reveal left to right, stagger 0.15s.
+**Sitch on the Ground (`803-1689`)** — Base scroll reveal. Match layout and content to `pethaus-sitch.png` exactly.
 
-**Research (`804-1734`)** — Findings stagger in from bottom.
+**Research (`804-1734`)** — Base scroll reveal. Match layout and content to `pethaus-research.png` exactly.
 
-**The Design (`804-1757`)** — Base scroll reveal.
+**The Design (`804-1757`)** — Base scroll reveal. Match layout and content to `pethaus-design.png` exactly.
 
-**Hi-Fi Screens (`806-1798`)** — Screens fan in:
-```
-- 3–4 screen mockups arranged in slight overlap/stack
-- Each screen: y: 60 → 0, opacity 0 → 1, stagger 0.2s
-- Slight rotation corrects on enter: rotate: 2deg → 0deg for side screens
-```
+**Hi-Fi Screens (`806-1798`)** — Base scroll reveal. Match layout and screen arrangement to `pethaus-hifi.png` exactly. Do not add rotation or stacking not shown in the image.
 
 **⭐ SIGNATURE MOMENT — Usability Testing & Iteration (`950-8212`):**
 
@@ -671,34 +681,63 @@ Unpin at scrub 1.0
 
 **Results (`950-12042`)** — Metrics count up on enter. Read metric values and labels from `pethaus-results.png` — do not hardcode numbers. Each metric gets a thin progress bar that fills left → right as the number counts up.
 
-**Reflection (`806-1862`)** — Base scroll reveal, no special animation.
+**Reflection (`806-1862`)** — Base scroll reveal. Match layout and content to `pethaus-reflection.png` exactly.
 
 ---
 
-## 7. Navigation
+## 7. Navigation, Logo & Cursor
 
-Single sticky nav bar at top of `index.html`:
+**⚠️ All nav layout, logo placement, link labels, spacing and typography must match `nav-light.png` and `nav-dark.png` exactly. Do not invent any nav elements.**
 
+### Nav bar
+- Stays fixed/sticky at top of page on all scroll positions
+- Switches between two states based on section background:
+  - **Light sections** (Hero State 1, About): use `nav-light.png` — match exactly
+  - **Dark sections** (Hero States 2–4, Work, Contact): use `nav-dark.png` — match exactly
+- Colour swap is triggered by IntersectionObserver watching section backgrounds
+- The flower logo is embedded in the nav bar — match position to nav PNGs
+- Use `logo-light.png` when nav is in light mode, `logo-dark.png` when nav is in dark mode
+
+### Custom cursor
+- Replace default browser cursor site-wide with custom flower cursor
+- **Light backgrounds**: use `cursor-light.png`
+- **Dark backgrounds**: use `cursor-dark.png`
+- Switch cursor image when background changes (same trigger as nav colour switch)
+- Implementation:
+```css
+body { cursor: none; }
+#custom-cursor {
+  position: fixed;
+  pointer-events: none;
+  z-index: 9999;
+  width: 32px;
+  height: 32px;
+  transform: translate(-50%, -50%);
+}
 ```
-[AL monogram]    Work    About    Say Hi
+```js
+const cursor = document.getElementById('custom-cursor');
+document.addEventListener('mousemove', e => {
+  cursor.style.left = e.clientX + 'px';
+  cursor.style.top = e.clientY + 'px';
+});
+// Swap cursor src when dark/light mode switches — match same trigger as nav
 ```
 
-- On light backgrounds: `--ink` text
-- On dark backgrounds (Work section, Contact section): `--bg` text
-- JS detects current section via IntersectionObserver, swaps class `nav--light` / `nav--dark`
-- Mobile: hamburger → full-screen overlay with same links
+### Typography
+**⚠️ Do not set any font sizes, weights, letter-spacing or line-height from this PRD. Read all typography from the PNG exports for each section. The only locked values are:**
+- Display font family: `Fraunces` — weight 300, italic
+- Body font family: `Inter`
+- All sizing: match from PNGs
 
 ---
 
 ## 8. Responsive Rules
 
-| Breakpoint | Behaviour |
-|---|---|
-| Desktop ≥ 1280px | All GSAP scroll animations active |
-| Tablet 768–1279px | Scroll animations active, Work columns stack to 2-up grid |
-| Mobile < 768px | **All GSAP scroll animations disabled** — replace with simple fade-in reveals. Work section becomes vertical card stack. Hero desktop mockup hidden, tagline only. |
+Desktop (≥ 1280px): All GSAP scroll animations active — match Figma designs exactly.
 
-**Mobile disable pattern:**
+Mobile (< 768px): Disable all GSAP scroll animations. Layout falls back to static. Do not invent a mobile layout — only implement what is shown in your Figma mobile exports if they exist. If no mobile Figma frame exists for a section, stack content vertically and preserve all text and images.
+
 ```js
 const mm = gsap.matchMedia();
 mm.add("(min-width: 768px)", () => {
@@ -715,7 +754,7 @@ mm.add("(min-width: 768px)", () => {
 | Lighthouse Performance | ≥ 90 |
 | LCP | < 2.5s |
 | CLS | < 0.1 |
-| All images | WebP, lazy-loaded (`loading="lazy"`) except hero |
+| All images | PNG, lazy-loaded (`loading="lazy"`) except hero |
 | Hero image | `fetchpriority="high"`, no lazy |
 | GSAP | Loaded from CDN, defer non-critical JS |
 
@@ -728,15 +767,15 @@ Run these as separate sessions, each with this PRD attached:
 | Session | Deliverable | Assets needed before starting |
 |---|---|---|
 | **1** | `index.html` skeleton: tokens, nav, section scaffolding, font imports | None |
-| **2** | Hero section: static layout + GSAP Phase 1 (desktop zoom) | `hero-desktop.webp` |
-| **3** | Hero scroll Phase 2+3: "complex" zoom + letter-p zoom + bg transition | Same |
-| **4** | Work section: 3-column layout + hover reveal interaction | `arvo-cta.webp`, `seletar-cta.webp`, `pethaus-cta.webp` |
-| **5** | About section: rectangle split + bio + skills grid | `about-portrait.webp`, `about-split-closed.webp`, `about-split-open.webp` |
-| **6** | Contact section + mobile responsive pass | None |
-| **7** | `case-studies/arvo.html` | `arvo-hero.webp` + any ARVO screens |
-| **8** | `case-studies/seletar.html` | `seletar-hero.webp` + any Seletar screens |
-| **9** | `case-studies/pethaus.html` | `pethaus-hero.webp` + any PetHaus screens |
-| **10** | Final QA pass: Lighthouse, GSAP conflict check, mobile test | All assets |
+| **2** | Hero section: static layout only, no animations | `hero-initial.png` |
+| **3** | Hero GSAP: desktop zoom + complex zoom + letter-p + bg transition | `hero-initial.png`, `hero-desktop-zoom.png`, `hero-letter-p.png` |
+| **4** | Work section: 3-column layout + hover reveal | `work-initial.png`, `work-hover-reveal.png`, `arvo-cta.png`, `seletar-cta.png`, `pethaus-cta.png` |
+| **5** | About section: staircase exit + all 4 states | `about-initial.png`, `about-portrait-split.png`, `about-portrait-anchored.png`, `about-info-swap.png` |
+| **6** | Contact section | `sayhello.png` |
+| **7** | `case-studies/arvo.html` | All `arvo-*.png` files |
+| **8** | `case-studies/seletar.html` | All `seletar-*.png` files |
+| **9** | `case-studies/pethaus.html` | All `pethaus-*.png` files |
+| **10** | Final QA pass: GSAP conflict check, mobile test, Netlify deploy | All assets |
 
 ---
 
