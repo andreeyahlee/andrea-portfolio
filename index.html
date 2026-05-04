@@ -293,9 +293,9 @@
     /* "Selected Works" label sits inside the first column, fades on hover */
     .work-section-label {
       position: absolute;
-      top: 40px;
+      top: 100px;
       left: 40px;
-      z-index: 1;
+      z-index: 2;
       pointer-events: none;
       transition: opacity 0.25s ease;
     }
@@ -308,49 +308,12 @@
     }
     .arvo-col:hover .work-section-label { opacity: 0; }
 
-    /* ── upper half: thumbnail — absolutely positioned, hidden until hover ── */
-    .work-thumb-wrap {
-      position: absolute;
-      top: 0; left: 0; right: 0;
-      height: 50%;
-      overflow: hidden;
-      opacity: 0;
-      transition: opacity 0.4s ease;
-    }
-    .work-col:hover .work-thumb-wrap { opacity: 1; }
-    .work-thumb-img {
-      width: 100%; height: 100%;
-      object-fit: cover; object-position: top center;
-      display: block;
-    }
-    /* Dark overlay on thumbnail — lets UI shapes show while keeping contrast for card readability */
-    .work-thumb-wrap::after {
-      content: '';
-      position: absolute;
-      inset: 0;
-      background: rgba(0, 0, 0, 0.55);
-      pointer-events: none;
-    }
-    /* project name: top-left of image area */
-    .work-name-over {
-      position: absolute;
-      top: 28px; left: 40px;
-      font-family: var(--font-display);
-      font-size: clamp(18px, 2.2vw, 32px);
-      font-weight: 600;
-      color: var(--bg);
-      opacity: 0;
-      z-index: 1;
-      transition: opacity 0.3s ease 0.12s;
-    }
-    .work-col:hover .work-name-over { opacity: 1; }
-
-    /* ── lower half: card on hover — absolutely positioned at bottom ── */
+    /* ── CTA card — fills full column ── */
     .work-col-bottom {
       position: absolute;
-      bottom: 0; left: 0; right: 0;
-      height: 50%;
+      inset: 0;
       overflow: hidden;
+      z-index: 1;
     }
     /* default: project name anchored at bottom of full column, centered */
     .work-name {
@@ -364,76 +327,39 @@
       line-height: 1.1;
       text-align: center;
       transition: opacity 0.25s ease;
-      z-index: 1;
+      z-index: 2;
       pointer-events: none;
     }
     .work-col:hover .work-name { opacity: 0; }
 
-    /* hover card: tags + headline + divider + desc + cta */
-    .work-card {
+    /* hover card image — full column, fully in view */
+    .work-card-img {
       position: absolute;
       inset: 0;
-      padding: 24px 40px 44px;
-      display: flex;
-      flex-direction: column;
-      justify-content: flex-end;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: center;
+      display: block;
       opacity: 0;
       pointer-events: none;
-      transition: opacity 0.3s ease 0.06s;
+      transition: opacity 0.35s ease 0.06s;
     }
-    .work-col:hover .work-card {
+    .work-col:hover .work-card-img {
       opacity: 1;
       pointer-events: auto;
     }
-    .work-card-tags {
-      font-family: var(--font-mono);
-      font-size: 10px;
-      font-weight: 500;
-      letter-spacing: 0.06em;
-      text-transform: uppercase;
-      color: rgba(243,242,236,0.45);
-      margin-bottom: 10px;
-      flex-shrink: 0;
+    /* full-column link — activates when CTA card is shown */
+    .work-col-link {
+      position: absolute;
+      inset: 0;
+      z-index: 3;
+      pointer-events: none;
+      cursor: pointer;
     }
-    .work-card-headline {
-      font-family: var(--font-display);
-      font-size: clamp(22px, 2.8vw, 40px);
-      font-weight: 700;
-      line-height: 1.15;
-      color: var(--bg);
-      margin-bottom: 14px;
-      flex-shrink: 0;
+    .work-col:hover .work-col-link {
+      pointer-events: auto;
     }
-    .work-card-divider {
-      width: 100%;
-      height: 1px;
-      background: rgba(243,242,236,0.18);
-      margin-bottom: 14px;
-      flex-shrink: 0;
-    }
-    .work-card-desc {
-      font-family: var(--font-body);
-      font-size: 13px;
-      line-height: 1.65;
-      color: rgba(243,242,236,0.65);
-      margin-bottom: 18px;
-    }
-    .work-card-cta {
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-      font-size: 13px;
-      font-weight: 500;
-      color: var(--ink);
-      background: var(--bg);
-      border: none;
-      border-radius: 100px;
-      padding: 10px 20px;
-      align-self: flex-start;
-      flex-shrink: 0;
-      transition: opacity 0.2s;
-    }
-    .work-card-cta:hover { opacity: 0.85; }
 
     /* ============================================================
        ABOUT — State 1 static
@@ -641,17 +567,9 @@
         border-bottom: 1px solid rgba(243,242,236,0.12);
       }
       .work-col:last-child { border-bottom: none; }
-      /* Static reveal on mobile — always show image + card */
-      .work-thumb-wrap { opacity: 1; flex-basis: 200px; }
+      /* Mobile — always show CTA card */
       .work-name { display: none; }
-      .work-card {
-        position: relative;
-        inset: auto;
-        opacity: 1;
-        pointer-events: auto;
-        padding: 20px 24px 32px;
-      }
-      .work-name-over { opacity: 1; font-size: 16px; bottom: 12px; left: 20px; }
+      .work-card-img { opacity: 1; pointer-events: auto; }
       .work-col.arvo-col:hover,
       .work-col.seletar-col:hover,
       .work-col.pethaus-col:hover { background-color: transparent; }
@@ -698,7 +616,7 @@
        NAV
   ============================ -->
   <nav id="nav" role="navigation" aria-label="Main navigation">
-    <a href="#hero" class="nav-logo" aria-label="Home">
+    <a href="#" class="nav-logo" aria-label="Home" onclick="window.scrollTo({top:0,behavior:'smooth'});return false;">
       <!-- logo-dark.png = white flower, visible on dark nav background -->
       <img src="assets/logo-dark.png" alt="" id="nav-logo-img">
     </a>
@@ -767,61 +685,34 @@
     <div class="work-cols">
 
       <!-- ARVO — "Selected Works" label lives here -->
-      <a href="case-studies/arvo.html" class="work-col arvo-col">
+      <div class="work-col arvo-col">
         <div class="work-section-label" aria-hidden="true">
           <h2 class="work-title">Selected<br>Works</h2>
         </div>
-        <div class="work-thumb-wrap" aria-hidden="true">
-          <img class="work-thumb-img" src="assets/arvo-cta.png" alt="" loading="lazy">
-          <span class="work-name-over">ARVO</span>
-        </div>
         <div class="work-col-bottom">
-          <div class="work-card" aria-hidden="true">
-            <div class="work-card-tags">Project Lead · Team of 6 · AI for Managers</div>
-            <h3 class="work-card-headline">Pushing back 71% of issues to the client</h3>
-            <div class="work-card-divider"></div>
-            <p class="work-card-desc">Six weeks. A team of six. A brief that required uncomfortable honesty.</p>
-            <span class="work-card-cta">Read the case study →</span>
-          </div>
+          <img class="work-card-img" src="assets/arvo-cta.png" alt="ARVO case study" loading="lazy">
         </div>
         <div class="work-name" aria-hidden="true">ARVO</div>
-      </a>
+        <a class="work-col-link" href="arvo.html" aria-label="Read ARVO case study"></a>
+      </div>
 
       <!-- SELETAR AIRPORT -->
-      <a href="case-studies/seletar.html" class="work-col seletar-col">
-        <div class="work-thumb-wrap" aria-hidden="true">
-          <img class="work-thumb-img" src="assets/seletar-cta.png" alt="" loading="lazy">
-          <span class="work-name-over">Seletar Airport</span>
-        </div>
+      <div class="work-col seletar-col">
         <div class="work-col-bottom">
-          <div class="work-card" aria-hidden="true">
-            <div class="work-card-tags">Lead UX Researcher · Team of 3 · Omni-channel / Info</div>
-            <h3 class="work-card-headline">Great airport, nobody knew!</h3>
-            <div class="work-card-divider"></div>
-            <p class="work-card-desc">13 interviews. 2 rounds of testing, one painful pivot. How research saved our team from shipping the wrong product.</p>
-            <span class="work-card-cta">Read the case study →</span>
-          </div>
+          <img class="work-card-img" src="assets/seletar-cta.png" alt="Seletar Airport case study" loading="lazy">
         </div>
         <div class="work-name" aria-hidden="true">Seletar Airport</div>
-      </a>
+        <a class="work-col-link" href="seletar.html" aria-label="Read Seletar Airport case study"></a>
+      </div>
 
       <!-- PET HAUS -->
-      <a href="case-studies/pethaus.html" class="work-col pethaus-col">
-        <div class="work-thumb-wrap" aria-hidden="true">
-          <img class="work-thumb-img" src="assets/pethaus-cta.png" alt="" loading="lazy">
-          <span class="work-name-over">Pet Haus</span>
-        </div>
+      <div class="work-col pethaus-col">
         <div class="work-col-bottom">
-          <div class="work-card" aria-hidden="true">
-            <div class="work-card-tags">Solo Designer · End-to-End · E-Commerce</div>
-            <h3 class="work-card-headline">Trust, designed in.</h3>
-            <div class="work-card-divider"></div>
-            <p class="work-card-desc">A solo e-commerce build for the most anxious shopper on the internet — Pawrents. 92% said the same thing in different words.</p>
-            <span class="work-card-cta">Read the case study →</span>
-          </div>
+          <img class="work-card-img" src="assets/pethaus-cta.png" alt="Pet Haus case study" loading="lazy">
         </div>
         <div class="work-name" aria-hidden="true">Pet Haus</div>
-      </a>
+        <a class="work-col-link" href="pethaus.html" aria-label="Read Pet Haus case study"></a>
+      </div>
 
     </div>
   </section>
