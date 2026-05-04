@@ -8,7 +8,9 @@
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@1,300&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,100..1000&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@200..800&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@100..800&display=swap" rel="stylesheet">
 
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
@@ -19,16 +21,19 @@
        DESIGN TOKENS
     ============================================================ */
     :root {
-      --bg:        #F6F6F4;
+      --bg:        #f3f2ec;
+      --bg-warm:   #eae8e0;
       --ink:       #0A0A0A;
       --muted:     #8A8A86;
-      --accent:    #A64A2E;
+      --accent:    #a1ad49;
+      --lime:      #dce888;
       --arvo:      #2a4a6b;
       --seletar:   #2b5e3a;
       --pethaus:   #7b3f6e;
-      --work-bg:   #1d2c20;
-      --font-display: 'Fraunces', serif;
-      --font-body:    'Inter', sans-serif;
+      --work-bg:   #1f2b1f;
+      --font-display: 'DM Sans', sans-serif;
+      --font-body:    'Plus Jakarta Sans', sans-serif;
+      --font-mono:    'JetBrains Mono', monospace;
       --sp-xs: 8px;
       --sp-sm: 16px;
       --sp-md: 32px;
@@ -102,7 +107,7 @@
     .nav-link {
       font-size: 14px;
       font-weight: 500;
-      color: rgba(246,246,244,0.75);
+      color: rgba(243,242,236,0.75);
       transition: color 0.2s;
     }
     .nav-link:hover { color: var(--bg); }
@@ -114,14 +119,14 @@
       font-weight: 500;
       color: var(--bg);
       background: transparent;
-      border: 1.5px solid rgba(246,246,244,0.4);
+      border: 1.5px solid rgba(243,242,236,0.4);
       border-radius: 100px;
       padding: 8px 20px;
       cursor: pointer;
       transition: background 0.2s, border-color 0.2s, color 0.2s;
       flex-shrink: 0;
     }
-    .nav-cta:hover { background: rgba(246,246,244,0.08); border-color: rgba(246,246,244,0.7); }
+    .nav-cta:hover { background: rgba(243,242,236,0.08); border-color: rgba(243,242,236,0.7); }
     #nav.nav--light .nav-cta {
       color: var(--ink);
       border-color: rgba(10,10,10,0.28);
@@ -168,8 +173,7 @@
     .nav-overlay button {
       font-family: var(--font-display);
       font-size: 52px;
-      font-weight: 300;
-      font-style: italic;
+      font-weight: 700;
       color: var(--bg);
       background: none;
       border: none;
@@ -187,9 +191,10 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      overflow: hidden;
     }
     /* GSAP conflict rule: GSAP is sole owner of transforms on this element */
+    /* transform-origin: 'p' bowl in "stupidly" ≈ 49% × 43% of image element
+       → maps to viewport position 49% × 44% — matches #work-reveal origin */
     #hero-img {
       width: auto;
       max-width: 80vw;
@@ -197,27 +202,42 @@
       height: auto;
       object-fit: contain;
       will-change: transform;
+      transform-origin: 49% 43%;
     }
     /* Hidden in State 1 — headline lives inside hero-initial.png.
        GSAP crossfades this in during State 3 transition. */
     .hero-headline {
       position: absolute;
       font-family: var(--font-display);
-      font-size: clamp(40px, 5.2vw, 80px);
-      font-weight: 300;
-      font-style: italic;
-      color: var(--bg);
-      text-align: center;
+      font-size: clamp(36px, 5.5vw, 84px);
+      font-weight: 700;
+      line-height: 1.1;
+      color: var(--ink);
+      text-align: left;
       opacity: 0;
       pointer-events: none;
-      will-change: opacity;
-      padding: 0 40px;
+      will-change: opacity, transform;
+      display: flex;
+      flex-wrap: wrap;
+      align-items: baseline;
+      gap: 0.18em;
+      max-width: 55vw;
+    }
+    .hero-headline .word { display: inline-block; }
+    .hero-headline .word-complex {
+      display: inline-block;
+      will-change: transform;
+    }
+    .hero-headline .word-stupidly {
+      font-family: var(--font-mono);
+      font-weight: 400;
+      font-style: italic;
     }
     #work-reveal {
       position: fixed;
       inset: 0;
       background: var(--work-bg);
-      clip-path: circle(0% at 50% 52%);
+      clip-path: circle(0% at 49% 44%);
       pointer-events: none;
       z-index: 9;
     }
@@ -240,133 +260,154 @@
       padding: 52px 56px 36px;
     }
     .work-title {
-      font-family: var(--font-body);
+      font-family: var(--font-display);
       font-size: clamp(56px, 6.8vw, 98px);
       font-weight: 700;
       color: var(--bg);
       line-height: 1.0;
     }
     .work-scroll-hint {
-      font-family: var(--font-display);
-      font-size: 14px;
-      font-weight: 300;
+      font-family: var(--font-mono);
+      font-size: 13px;
+      font-weight: 400;
       font-style: italic;
-      color: rgba(246,246,244,0.45);
+      color: rgba(243,242,236,0.45);
       padding-top: 8px;
       white-space: nowrap;
     }
     .work-cols {
       display: flex;
       flex: 1;
-      border-top: 1px solid rgba(246,246,244,0.12);
+      border-top: 1px solid rgba(243,242,236,0.12);
       min-height: 68vh;
     }
     .work-col {
       flex: 1;
-      border-right: 1px solid rgba(246,246,244,0.12);
+      border-right: 1px solid rgba(243,242,236,0.12);
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+      position: relative;
+      text-decoration: none;
+      color: inherit;
+      transition: background-color 0.35s ease;
+    }
+    .work-col:last-child { border-right: none; }
+    .work-col.arvo-col:hover    { background-color: rgba(42,74,107,0.25); }
+    .work-col.seletar-col:hover { background-color: rgba(43,94,58,0.25); }
+    .work-col.pethaus-col:hover { background-color: rgba(123,63,110,0.25); }
+
+    /* ── upper half: thumbnail ── */
+    .work-thumb-wrap {
+      flex: 0 0 50%;
+      position: relative;
+      overflow: hidden;
+      opacity: 0;
+      transition: opacity 0.4s ease;
+    }
+    .work-col:hover .work-thumb-wrap { opacity: 1; }
+    .work-thumb-img {
+      width: 100%; height: 100%;
+      object-fit: cover; object-position: top center;
+      display: block;
+    }
+    /* project name overlaid on image (hover only) */
+    .work-name-over {
+      position: absolute;
+      bottom: 18px; left: 32px;
+      font-family: var(--font-display);
+      font-size: clamp(18px, 2.2vw, 32px);
+      font-weight: 600;
+      color: var(--bg);
+      opacity: 0;
+      transition: opacity 0.3s ease 0.12s;
+    }
+    .work-col:hover .work-name-over { opacity: 1; }
+
+    /* ── lower half: name default / card on hover ── */
+    .work-col-bottom {
+      flex: 1;
+      position: relative;
+      min-height: 0;
+    }
+    /* default: big project name, bottom-left */
+    .work-name {
+      position: absolute;
+      bottom: 0; left: 0; right: 0;
+      padding: 32px 40px 52px;
+      font-family: var(--font-display);
+      font-size: clamp(28px, 3.5vw, 52px);
+      font-weight: 600;
+      color: var(--bg);
+      line-height: 1.1;
+      transition: opacity 0.25s ease;
+    }
+    .work-col:hover .work-name { opacity: 0; }
+
+    /* hover card: tags + headline + divider + desc + cta */
+    .work-card {
+      position: absolute;
+      inset: 0;
+      padding: 24px 40px 44px;
       display: flex;
       flex-direction: column;
       justify-content: flex-end;
-      padding: 32px 40px 52px;
-      cursor: pointer;
-      transition: flex 0.4s ease, background-color 0.35s ease;
-      overflow: hidden;
-      position: relative;
-    }
-    .work-col:last-child { border-right: none; }
-    .work-col:hover { flex: 2.6; }
-    .work-col.arvo-col:hover    { background-color: rgba(42,74,107,0.2); }
-    .work-col.seletar-col:hover { background-color: rgba(43,94,58,0.2); }
-    .work-col.pethaus-col:hover { background-color: rgba(123,63,110,0.2); }
-
-    /* thumbnail */
-    .work-thumb {
-      position: absolute;
-      top: 0; left: 0; right: 0;
-      height: 54%;
-      overflow: hidden;
       opacity: 0;
-      transition: opacity 0.35s ease 0.07s;
+      pointer-events: none;
+      transition: opacity 0.3s ease 0.06s;
     }
-    .work-thumb img { width: 100%; height: 100%; object-fit: cover; object-position: top; }
-    .work-col:hover .work-thumb { opacity: 1; }
-
-    /* hover-revealed content */
-    .work-tags {
+    .work-col:hover .work-card {
+      opacity: 1;
+      pointer-events: auto;
+    }
+    .work-card-tags {
+      font-family: var(--font-mono);
       font-size: 10px;
-      font-weight: 600;
-      letter-spacing: 0.09em;
+      font-weight: 500;
+      letter-spacing: 0.06em;
       text-transform: uppercase;
-      color: rgba(246,246,244,0.45);
-      opacity: 0;
-      transform: translateY(8px);
-      transition: opacity 0.3s ease, transform 0.3s ease;
+      color: rgba(243,242,236,0.45);
       margin-bottom: 10px;
+      flex-shrink: 0;
     }
-    .work-col:hover .work-tags { opacity: 1; transform: translateY(0); }
-
-    .work-hover-headline {
-      font-size: clamp(18px, 2vw, 30px);
+    .work-card-headline {
+      font-family: var(--font-display);
+      font-size: clamp(16px, 1.8vw, 26px);
       font-weight: 700;
-      line-height: 1.15;
+      line-height: 1.2;
       color: var(--bg);
-      margin-bottom: 10px;
-      opacity: 0;
-      transform: translateY(8px);
-      transition: opacity 0.3s ease 0.05s, transform 0.3s ease 0.05s;
+      margin-bottom: 12px;
+      flex-shrink: 0;
     }
-    .work-col:hover .work-hover-headline { opacity: 1; transform: translateY(0); }
-
-    .work-divider {
+    .work-card-divider {
       width: 100%;
       height: 1px;
-      background: rgba(246,246,244,0.18);
+      background: rgba(243,242,236,0.18);
       margin-bottom: 14px;
-      opacity: 0;
-      transition: opacity 0.3s ease 0.07s;
+      flex-shrink: 0;
     }
-    .work-col:hover .work-divider { opacity: 1; }
-
-    .work-desc {
+    .work-card-desc {
+      font-family: var(--font-body);
       font-size: 13px;
       line-height: 1.65;
-      color: rgba(246,246,244,0.65);
+      color: rgba(243,242,236,0.65);
       margin-bottom: 18px;
-      opacity: 0;
-      transform: translateY(8px);
-      transition: opacity 0.3s ease 0.09s, transform 0.3s ease 0.09s;
     }
-    .work-col:hover .work-desc { opacity: 1; transform: translateY(0); }
-
-    .work-cta {
+    .work-card-cta {
       display: inline-flex;
       align-items: center;
       gap: 6px;
       font-size: 13px;
       font-weight: 500;
       color: var(--bg);
-      border: 1.5px solid rgba(246,246,244,0.35);
+      border: 1.5px solid rgba(243,242,236,0.35);
       border-radius: 100px;
       padding: 9px 18px;
       align-self: flex-start;
-      opacity: 0;
-      transform: translateY(8px);
-      transition: opacity 0.3s ease 0.11s, transform 0.3s ease 0.11s, background 0.2s;
-      margin-bottom: 22px;
+      flex-shrink: 0;
+      transition: background 0.2s;
     }
-    .work-col:hover .work-cta { opacity: 1; transform: translateY(0); }
-    .work-cta:hover { background: rgba(246,246,244,0.08); }
-
-    /* project name — always visible, bottom */
-    .work-name {
-      font-family: var(--font-body);
-      font-size: clamp(28px, 3.5vw, 52px);
-      font-weight: 600;
-      color: var(--bg);
-      line-height: 1.1;
-      transition: opacity 0.3s ease;
-    }
-    .work-col:hover .work-name { opacity: 0.3; }
+    .work-card-cta:hover { background: rgba(243,242,236,0.08); }
 
     /* ============================================================
        ABOUT — State 1 static
@@ -383,7 +424,7 @@
       overflow: hidden;
     }
     .about-headline {
-      font-family: var(--font-body);
+      font-family: var(--font-display);
       font-size: clamp(60px, 9vw, 132px);
       font-weight: 700;
       color: var(--ink);
@@ -398,7 +439,7 @@
       display: inline-flex;
       width: clamp(110px, 11.5vw, 168px);
       height: clamp(130px, 13vw, 196px);
-      background: #e6e3de;
+      background: var(--bg-warm);
       border-radius: 5px;
       flex-shrink: 0;
       overflow: hidden;
@@ -436,9 +477,9 @@
       gap: 4px;
     }
     .about-scroll-hint .scroll-text em {
-      font-family: var(--font-display);
+      font-family: var(--font-mono);
       font-style: italic;
-      font-weight: 300;
+      font-weight: 400;
     }
     .about-scroll-hint .scroll-text span {
       font-family: var(--font-body);
@@ -455,7 +496,7 @@
       padding: 140px 56px 96px;
     }
     .contact-headline {
-      font-family: var(--font-body);
+      font-family: var(--font-display);
       font-size: clamp(80px, 12.5vw, 172px);
       font-weight: 800;
       color: var(--ink);
@@ -513,6 +554,41 @@
     }
 
     /* ============================================================
+       OVERLAY PANELS — About + Contact
+       Opened by nav links; scroll ends at Work section.
+    ============================================================ */
+    .overlay-panel {
+      position: fixed;
+      inset: 0;
+      z-index: 200;
+      background: var(--bg);
+      overflow-y: auto;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.35s ease;
+    }
+    .overlay-panel.is-open {
+      opacity: 1;
+      pointer-events: auto;
+    }
+    .overlay-close {
+      position: fixed;
+      top: 20px;
+      right: 28px;
+      background: none;
+      border: none;
+      cursor: pointer;
+      padding: 8px;
+      color: var(--ink);
+      font-size: 28px;
+      line-height: 1;
+      opacity: 0.5;
+      transition: opacity 0.2s;
+      z-index: 201;
+    }
+    .overlay-close:hover { opacity: 1; }
+
+    /* ============================================================
        RESPONSIVE  ≤ 767px
     ============================================================ */
     @media (max-width: 767px) {
@@ -533,20 +609,23 @@
       .work-col {
         flex: none;
         border-right: none;
-        border-bottom: 1px solid rgba(246,246,244,0.12);
-        min-height: 200px;
-        padding: 24px 24px 32px;
+        border-bottom: 1px solid rgba(243,242,236,0.12);
       }
       .work-col:last-child { border-bottom: none; }
-      /* Show hover content statically on mobile */
-      .work-thumb { display: none; }
-      .work-tags,
-      .work-hover-headline,
-      .work-divider,
-      .work-desc,
-      .work-cta { opacity: 1; transform: none; }
-      .work-col:hover { flex: none; }
-      .work-col:hover .work-name { opacity: 1; }
+      /* Static reveal on mobile — always show image + card */
+      .work-thumb-wrap { opacity: 1; flex-basis: 200px; }
+      .work-name { display: none; }
+      .work-card {
+        position: relative;
+        inset: auto;
+        opacity: 1;
+        pointer-events: auto;
+        padding: 20px 24px 32px;
+      }
+      .work-name-over { opacity: 1; font-size: 16px; bottom: 12px; left: 20px; }
+      .work-col.arvo-col:hover,
+      .work-col.seletar-col:hover,
+      .work-col.pethaus-col:hover { background-color: transparent; }
 
       .about-headline {
         font-size: clamp(40px, 11vw, 72px);
@@ -576,7 +655,9 @@
     @media (min-width: 768px) and (max-width: 1023px) {
       #nav { width: calc(100% - 64px); }
       .work-header { padding: 44px 44px 28px; }
-      .work-col { padding: 24px 28px 40px; }
+      .work-name { padding: 24px 28px 40px; }
+      .work-card { padding: 20px 28px 40px; }
+      .work-name-over { left: 24px; }
       #contact { padding: 100px 44px 80px; }
     }
   </style>
@@ -593,7 +674,7 @@
     </a>
     <ul class="nav-links" role="list">
       <li><a class="nav-link" href="#work">Work</a></li>
-      <li><a class="nav-link" href="#about">About</a></li>
+      <li><button class="nav-link" id="nav-about" style="background:none;border:none;cursor:pointer;font:inherit;padding:0;">About</button></li>
     </ul>
     <button class="nav-cta" id="nav-sayhi">Say Hi!</button>
     <button class="nav-hamburger" id="nav-hamburger"
@@ -605,7 +686,7 @@
   <div class="nav-overlay" id="nav-overlay" role="dialog"
        aria-modal="true" aria-label="Navigation menu">
     <a href="#work"  id="overlay-work">Work</a>
-    <a href="#about" id="overlay-about">About</a>
+    <button id="overlay-about">About</button>
     <button id="overlay-sayhi">Say Hi!</button>
   </div>
 
@@ -634,7 +715,11 @@
       Hidden (opacity 0) in State 1 — headline lives inside hero-initial.png.
     -->
     <p class="hero-headline" aria-hidden="true">
-      making <span class="word-complex">complex</span> things stupidly simple.
+      <span class="word">I make</span>
+      <span class="word-complex">complex</span>
+      <span class="word">things</span>
+      <em class="word word-stupidly">stupidly</em>
+      <span class="word">simple</span>
     </p>
 
     <div id="work-reveal" aria-hidden="true"></div>
@@ -655,162 +740,192 @@
     <div class="work-cols">
 
       <!-- ARVO -->
-      <article class="work-col arvo-col">
-        <div class="work-thumb" aria-hidden="true">
-          <img src="assets/arvo-cta.png" alt="" loading="lazy">
+      <a href="case-studies/arvo.html" class="work-col arvo-col">
+        <div class="work-thumb-wrap" aria-hidden="true">
+          <img class="work-thumb-img" src="assets/arvo-cta.png" alt="" loading="lazy">
+          <span class="work-name-over">ARVO</span>
         </div>
-        <span class="work-tags">Project Lead · Team of 6 · AI for Managers</span>
-        <h3 class="work-hover-headline">Pushing back 71% of issues to the client</h3>
-        <div class="work-divider"></div>
-        <p class="work-desc">Six weeks. A team of six. A brief that required uncomfortable honesty.</p>
-        <a href="case-studies/arvo.html" class="work-cta">Read the case study →</a>
-        <div class="work-name">ARVO</div>
-      </article>
+        <div class="work-col-bottom">
+          <div class="work-name">ARVO</div>
+          <div class="work-card" aria-hidden="true">
+            <div class="work-card-tags">Project Lead · Team of 6 · AI for Managers</div>
+            <h3 class="work-card-headline">Pushing back 71% of issues to the client</h3>
+            <div class="work-card-divider"></div>
+            <p class="work-card-desc">Six weeks. A team of six. A brief that required uncomfortable honesty.</p>
+            <span class="work-card-cta">Read the case study →</span>
+          </div>
+        </div>
+      </a>
 
       <!-- SELETAR AIRPORT -->
-      <article class="work-col seletar-col">
-        <div class="work-thumb" aria-hidden="true">
-          <img src="assets/seletar-cta.png" alt="" loading="lazy">
+      <a href="case-studies/seletar.html" class="work-col seletar-col">
+        <div class="work-thumb-wrap" aria-hidden="true">
+          <img class="work-thumb-img" src="assets/seletar-cta.png" alt="" loading="lazy">
+          <span class="work-name-over">Seletar Airport</span>
         </div>
-        <span class="work-tags">Lead UX Researcher · Team of 3 · Omni-channel / Info</span>
-        <h3 class="work-hover-headline">Great airport, nobody knew!</h3>
-        <div class="work-divider"></div>
-        <p class="work-desc">13 interviews. 2 rounds of testing, one painful pivot. How research saved our team from shipping the wrong product.</p>
-        <a href="case-studies/seletar.html" class="work-cta">Read the case study →</a>
-        <div class="work-name">Seletar Airport</div>
-      </article>
+        <div class="work-col-bottom">
+          <div class="work-name">Seletar Airport</div>
+          <div class="work-card" aria-hidden="true">
+            <div class="work-card-tags">Lead UX Researcher · Team of 3 · Omni-channel / Info</div>
+            <h3 class="work-card-headline">Great airport, nobody knew!</h3>
+            <div class="work-card-divider"></div>
+            <p class="work-card-desc">13 interviews. 2 rounds of testing, one painful pivot. How research saved our team from shipping the wrong product.</p>
+            <span class="work-card-cta">Read the case study →</span>
+          </div>
+        </div>
+      </a>
 
       <!-- PET HAUS -->
-      <article class="work-col pethaus-col">
-        <div class="work-thumb" aria-hidden="true">
-          <img src="assets/pethaus-cta.png" alt="" loading="lazy">
+      <a href="case-studies/pethaus.html" class="work-col pethaus-col">
+        <div class="work-thumb-wrap" aria-hidden="true">
+          <img class="work-thumb-img" src="assets/pethaus-cta.png" alt="" loading="lazy">
+          <span class="work-name-over">Pet Haus</span>
         </div>
-        <span class="work-tags">Solo Designer · End-to-End · E-Commerce</span>
-        <h3 class="work-hover-headline">Trust, designed in.</h3>
-        <div class="work-divider"></div>
-        <p class="work-desc">A solo e-commerce build for the most anxious shopper on the internet — Parents. 92% said the same thing in different words.</p>
-        <a href="case-studies/pethaus.html" class="work-cta">Read the case study →</a>
-        <div class="work-name">Pet Haus</div>
-      </article>
+        <div class="work-col-bottom">
+          <div class="work-name">Pet Haus</div>
+          <div class="work-card" aria-hidden="true">
+            <div class="work-card-tags">Solo Designer · End-to-End · E-Commerce</div>
+            <h3 class="work-card-headline">Trust, designed in.</h3>
+            <div class="work-card-divider"></div>
+            <p class="work-card-desc">A solo e-commerce build for the most anxious shopper on the internet — Parents. 92% said the same thing in different words.</p>
+            <span class="work-card-cta">Read the case study →</span>
+          </div>
+        </div>
+      </a>
 
     </div>
   </section>
 
 
   <!-- ============================
-       ABOUT — State 1 static
-       Portrait slot opacity:0 — animates in during Session 5
+       ABOUT — overlay panel
+       Opened via "About" nav link
   ============================ -->
-  <section id="about" aria-label="About" data-nav-theme="dark">
+  <div id="about-overlay" class="overlay-panel" role="dialog"
+       aria-modal="true" aria-label="About Andrea">
+    <button class="overlay-close" id="about-close" aria-label="Close">&#x2715;</button>
 
-    <h2 class="about-headline" id="about-headline">
-      Hi! I'm
-      <span class="about-portrait-slot" id="about-portrait" aria-hidden="true">
-        <img src="assets/about-portrait.png" alt="">
-      </span>
-      Andrea
-    </h2>
+    <section id="about" aria-label="About" style="padding: 0 56px 96px; min-height: 100vh; display: flex; align-items: center;">
+      <h2 class="about-headline" id="about-headline">
+        Hi! I'm
+        <span class="about-portrait-slot" id="about-portrait" aria-hidden="true">
+          <img src="assets/about-portrait.png" alt="">
+        </span>
+        Andrea
+      </h2>
+    </section>
+  </div>
 
-    <div class="about-scroll-hint" aria-hidden="true">
-      <div class="scroll-line"></div>
-      <div class="scroll-text">
-        <em>scroll</em><span>&nbsp;down</span>
+
+  <!-- ============================
+       CONTACT — overlay panel
+       Opened via "Say Hi!" nav button
+  ============================ -->
+  <div id="contact-overlay" class="overlay-panel" role="dialog"
+       aria-modal="true" aria-label="Contact Andrea">
+    <button class="overlay-close" id="contact-close" aria-label="Close">&#x2715;</button>
+
+    <section id="contact" aria-label="Contact" style="padding: 140px 56px 96px; min-height: 100vh;">
+      <h2 class="contact-headline">Say hi!</h2>
+      <p class="contact-sub">Open to product design and UX research roles locally and overseas.</p>
+
+      <div class="contact-grid">
+
+        <a href="mailto:andreeyahlee@gmail.com" class="contact-item">
+          <span class="contact-icon">
+            <svg viewBox="0 0 30 30" aria-hidden="true">
+              <rect x="2" y="6" width="26" height="18" rx="3"/>
+              <path d="m2 9 13 8.5L28 9"/>
+            </svg>
+          </span>
+          andreeyahlee@gmail.com
+        </a>
+
+        <a href="#" class="contact-item">
+          <span class="contact-icon">
+            <svg viewBox="0 0 30 30" aria-hidden="true">
+              <rect x="5" y="2" width="20" height="26" rx="2"/>
+              <path d="M10 10h10M10 15h10M10 20h6"/>
+            </svg>
+          </span>
+          Resume
+        </a>
+
+        <a href="https://www.linkedin.com/in/andrealee-/" target="_blank" rel="noopener" class="contact-item">
+          <span class="contact-icon">
+            <svg viewBox="0 0 30 30" aria-hidden="true">
+              <rect x="2" y="2" width="26" height="26" rx="5"/>
+              <path d="M9 13v8M9 9v.01M14 21v-5a3.5 3.5 0 0 1 7 0v5M14 13v8"/>
+            </svg>
+          </span>
+          LinkedIn
+        </a>
+
+        <a href="https://github.com" target="_blank" rel="noopener" class="contact-item">
+          <span class="contact-icon">
+            <svg viewBox="0 0 30 30" aria-hidden="true">
+              <path d="M10.5 25.5c-5 1.5-5-2.5-7-3m14 6v-4a3.5 3.5 0 0 0-1-2.7c3.1-.35 6.4-1.55 6.4-7A5.3 5.3 0 0 0 21.4 11a4.8 4.8 0 0 0-.1-3.6s-1.2-.38-3.8 1.5a12.5 12.5 0 0 0-6.5 0C8.4 7 7.2 7.4 7.2 7.4A4.8 4.8 0 0 0 7 11a5.3 5.3 0 0 0-1.5 3.7c0 5.4 3.3 6.65 6.4 7A3.5 3.5 0 0 0 10.5 24.5v4"/>
+            </svg>
+          </span>
+          GitHub
+        </a>
+
+        <a href="https://www.instagram.com/lee.andrea" target="_blank" rel="noopener" class="contact-item">
+          <span class="contact-icon">
+            <svg viewBox="0 0 30 30" aria-hidden="true">
+              <rect x="2" y="2" width="26" height="26" rx="7"/>
+              <circle cx="15" cy="15" r="5"/>
+              <circle cx="22" cy="8" r="1.2" fill="currentColor" stroke="none"/>
+            </svg>
+          </span>
+          @lee.andrea
+        </a>
+
+        <span class="contact-item">
+          <span class="contact-icon">
+            <svg viewBox="0 0 30 30" aria-hidden="true">
+              <path d="M15 2a10 10 0 0 1 10 10c0 7-10 17-10 17S5 19 5 12A10 10 0 0 1 15 2z"/>
+              <circle cx="15" cy="12" r="3.5"/>
+            </svg>
+          </span>
+          Singapore-based
+        </span>
+
       </div>
-      <div class="scroll-line"></div>
-    </div>
 
-  </section>
-
-
-  <!-- ============================
-       CONTACT — Say hi!
-  ============================ -->
-  <section id="contact" aria-label="Contact" data-nav-theme="dark">
-
-    <h2 class="contact-headline">Say hi!</h2>
-    <p class="contact-sub">Open to product design and UX research roles locally and overseas.</p>
-
-    <div class="contact-grid">
-
-      <a href="mailto:andreeyahlee@gmail.com" class="contact-item">
-        <span class="contact-icon">
-          <svg viewBox="0 0 30 30" aria-hidden="true">
-            <rect x="2" y="6" width="26" height="18" rx="3"/>
-            <path d="m2 9 13 8.5L28 9"/>
-          </svg>
-        </span>
-        andreeyahlee@gmail.com
-      </a>
-
-      <a href="#" class="contact-item">
-        <span class="contact-icon">
-          <svg viewBox="0 0 30 30" aria-hidden="true">
-            <rect x="5" y="2" width="20" height="26" rx="2"/>
-            <path d="M10 10h10M10 15h10M10 20h6"/>
-          </svg>
-        </span>
-        Resume
-      </a>
-
-      <a href="https://www.linkedin.com/in/andrealee-/" target="_blank" rel="noopener" class="contact-item">
-        <span class="contact-icon">
-          <svg viewBox="0 0 30 30" aria-hidden="true">
-            <rect x="2" y="2" width="26" height="26" rx="5"/>
-            <path d="M9 13v8M9 9v.01M14 21v-5a3.5 3.5 0 0 1 7 0v5M14 13v8"/>
-          </svg>
-        </span>
-        https://www.linkedin.com/in/andrealee-/
-      </a>
-
-      <a href="https://github.com" target="_blank" rel="noopener" class="contact-item">
-        <span class="contact-icon">
-          <svg viewBox="0 0 30 30" aria-hidden="true">
-            <path d="M10.5 25.5c-5 1.5-5-2.5-7-3m14 6v-4a3.5 3.5 0 0 0-1-2.7c3.1-.35 6.4-1.55 6.4-7A5.3 5.3 0 0 0 21.4 11a4.8 4.8 0 0 0-.1-3.6s-1.2-.38-3.8 1.5a12.5 12.5 0 0 0-6.5 0C8.4 7 7.2 7.4 7.2 7.4A4.8 4.8 0 0 0 7 11a5.3 5.3 0 0 0-1.5 3.7c0 5.4 3.3 6.65 6.4 7A3.5 3.5 0 0 0 10.5 24.5v4"/>
-          </svg>
-        </span>
-        GitHub
-      </a>
-
-      <a href="https://www.instagram.com/lee.andrea" target="_blank" rel="noopener" class="contact-item">
-        <span class="contact-icon">
-          <svg viewBox="0 0 30 30" aria-hidden="true">
-            <rect x="2" y="2" width="26" height="26" rx="7"/>
-            <circle cx="15" cy="15" r="5"/>
-            <circle cx="22" cy="8" r="1.2" fill="currentColor" stroke="none"/>
-          </svg>
-        </span>
-        @lee.andrea
-      </a>
-
-      <span class="contact-item">
-        <span class="contact-icon">
-          <svg viewBox="0 0 30 30" aria-hidden="true">
-            <path d="M15 2a10 10 0 0 1 10 10c0 7-10 17-10 17S5 19 5 12A10 10 0 0 1 15 2z"/>
-            <circle cx="15" cy="12" r="3.5"/>
-          </svg>
-        </span>
-        Singapore-based
-      </span>
-
-    </div>
-
-    <div class="contact-footer">
-      © 2025 Andrea Lee. All rights reserved.
-    </div>
-
-  </section>
+      <div class="contact-footer">
+        © 2025 Andrea Lee. All rights reserved.
+      </div>
+    </section>
+  </div>
 
 
   <script>
   'use strict';
 
   /* ----------------------------------------------------------
-     NAV — scroll to contact
+     OVERLAY PANELS — About + Contact
   ---------------------------------------------------------- */
-  function scrollToContact() {
-    document.getElementById('contact').scrollIntoView({ behavior: 'smooth' });
+  function openOverlay(id) {
+    document.getElementById(id).classList.add('is-open');
+    document.body.style.overflow = 'hidden';
   }
-  document.getElementById('nav-sayhi').addEventListener('click', scrollToContact);
+  function closeOverlay(id) {
+    document.getElementById(id).classList.remove('is-open');
+    document.body.style.overflow = '';
+  }
+
+  document.getElementById('nav-about').addEventListener('click', () => openOverlay('about-overlay'));
+  document.getElementById('nav-sayhi').addEventListener('click', () => openOverlay('contact-overlay'));
+  document.getElementById('about-close').addEventListener('click', () => closeOverlay('about-overlay'));
+  document.getElementById('contact-close').addEventListener('click', () => closeOverlay('contact-overlay'));
+  document.getElementById('overlay-about').addEventListener('click', () => { closeMenu(); openOverlay('about-overlay'); });
+  document.addEventListener('keydown', e => {
+    if (e.key === 'Escape') {
+      closeOverlay('about-overlay');
+      closeOverlay('contact-overlay');
+    }
+  });
 
   /* ----------------------------------------------------------
      NAV — dark / light switching via IntersectionObserver
@@ -872,12 +987,69 @@
 
   hamburger.addEventListener('click', () => menuOpen ? closeMenu() : openMenu());
   overlay.querySelectorAll('a').forEach(a => a.addEventListener('click', closeMenu));
-  document.getElementById('overlay-sayhi').addEventListener('click', () => { closeMenu(); scrollToContact(); });
+  document.getElementById('overlay-sayhi').addEventListener('click', () => { closeMenu(); openOverlay('contact-overlay'); });
   document.addEventListener('keydown', e => { if (e.key === 'Escape' && menuOpen) closeMenu(); });
 
   /* ----------------------------------------------------------
-     GSAP animations added in Session 3 (hero scroll sequence) and beyond.
+     SESSION 3 — Hero GSAP scroll sequence + Work entrance/exit
   ---------------------------------------------------------- */
+  const mm = gsap.matchMedia();
+
+  mm.add("(min-width: 768px)", () => {
+
+    // ── Hero: pin + 2-phase scroll timeline ────────────────
+    const heroTl = gsap.timeline({
+      scrollTrigger: {
+        trigger: "#hero",
+        start: "top top",
+        end: "+=300%",
+        pin: true,
+        scrub: 1.5,
+        anticipatePin: 1,
+      }
+    });
+
+    // Phase 1 (0→4): Zoom toward the 'p' bowl in the monitor text
+    heroTl.to("#hero-img", { scale: 5, ease: "none", duration: 4 });
+
+    // Phase 2 (1.5→8.5): Dark green circle expands from the 'p' bowl location
+    heroTl.to("#work-reveal", {
+      clipPath: "circle(90% at 49% 44%)",
+      ease: "power2.in",
+      duration: 7
+    }, 1.5);
+
+    // Phase 3 (6.5→8.5): Image fades as circle fills screen
+    heroTl.to("#hero-img", { opacity: 0, ease: "none", duration: 2 }, 6.5);
+
+    // ── Work columns: entrance after pin releases ───────────
+    gsap.from(".work-col", {
+      yPercent: 30,
+      opacity: 0,
+      stagger: 0.1,
+      duration: 0.6,
+      ease: "power2.out",
+      scrollTrigger: {
+        trigger: "#work",
+        start: "top 90%",
+        toggleActions: "play none none none"
+      }
+    });
+
+    // ── Work columns: staircase exit (left→centre→right) ───
+    gsap.to(".work-col", {
+      yPercent: -120,
+      stagger: 0.12,
+      ease: "power2.inOut",
+      scrollTrigger: {
+        trigger: "#work",
+        start: "bottom bottom",
+        end: "+=300",
+        scrub: 1
+      }
+    });
+
+  });
   </script>
 
 </body>
