@@ -323,12 +323,12 @@
       object-fit: cover; object-position: top center;
       display: block;
     }
-    /* Dark overlay — stops image text competing with the card below */
+    /* Dark overlay — 92% opacity buries any text baked into the thumbnail image */
     .work-thumb-wrap::after {
       content: '';
       position: absolute;
       inset: 0;
-      background: rgba(0, 0, 0, 0.45);
+      background: rgba(0, 0, 0, 0.92);
       pointer-events: none;
     }
     /* project name: top-left of image area */
