@@ -135,14 +135,20 @@
     .cs-hero-bg {
       position: absolute;
       inset: 0;
-      background: url('../assets/arvo-hero-bkg.png') right center / cover no-repeat;
-      opacity: 0.35;
-      -webkit-mask-image: linear-gradient(to right, transparent 42%, rgba(0,0,0,0.7) 72%, black 100%);
-      mask-image: linear-gradient(to right, transparent 42%, rgba(0,0,0,0.7) 72%, black 100%);
+      background: url('../assets/arvo-hero-image.png') center center / cover no-repeat;
+      opacity: 0.75;
+    }
+    .cs-hero::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(to right, rgba(20,28,22,0.72) 0%, rgba(20,28,22,0.45) 38%, rgba(20,28,22,0.1) 65%, transparent 100%);
+      pointer-events: none;
+      z-index: 1;
     }
     .cs-hero-inner {
       position: relative;
-      z-index: 2;
+      z-index: 3;
       max-width: var(--content-max);
       margin: 0 auto;
       padding: 80px var(--pad-x) 80px;
@@ -154,9 +160,9 @@
     }
     .cs-hero-h1 {
       font-family: var(--font-display);
-      font-size: clamp(40px, 5.5vw, 72px);
+      font-size: clamp(52px, 6.8vw, 96px);
       font-weight: 900;
-      line-height: 1.08;
+      line-height: 1.05;
       letter-spacing: -0.03em;
       color: #fff;
       margin-bottom: 28px;
@@ -873,10 +879,8 @@
     <div class="cs-hero-inner">
       <div class="cs-hero-left">
         <h1 class="cs-hero-h1">
-          We came to fix<br>
-          the <em>interface.</em><br>
-          We found a<br>
-          broken <em>model.</em>
+          We came to fix the <em>interface.</em><br>
+          We found a broken <em>model.</em>
         </h1>
         <p class="cs-hero-sub">Six weeks. A team of three. A client who needed convincing. A usability brief that required uncomfortable honesty from everyone in the room to get to the right answer.</p>
         <a class="cs-hero-cta" href="https://www.figma.com/proto/1VklSkodi8LYoZ755bvRfi" target="_blank" rel="noopener">
@@ -911,11 +915,6 @@
       </div>
     </div>
   </section>
-
-  <!-- HERO FULL IMAGE -->
-  <div class="cs-hero-img-full">
-    <img src="../assets/arvo-hero-image.png" alt="ARVO dashboard full view">
-  </div>
 
   <!-- 01 TLDR -->
   <section class="cs-section cs-section--dark cs-tldr" id="cs-tldr" style="background-image: url('../assets/arvo-tldr-bkg.png'); background-size: cover; background-position: center;">
