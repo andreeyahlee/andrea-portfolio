@@ -26,7 +26,7 @@
       --font-mono:    'JetBrains Mono', monospace;
       --content-max:  1100px;
       --pad-x:        clamp(32px, 5vw, 80px);
-      --pad-y:        clamp(80px, 10vw, 130px);
+      --pad-y:        clamp(60px, 8vw, 100px);
     }
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
     html { scroll-behavior: smooth; }
@@ -383,15 +383,16 @@
     }
     .cs-synthesis-img {
       border-radius: 8px;
-      margin-bottom: 28px;
-      width: 100%;
-      object-fit: cover;
+      margin-bottom: 20px;
+      max-height: 130px;
+      width: auto;
+      object-fit: contain;
     }
     .cs-failure-item {
       display: grid;
       grid-template-columns: 140px 1fr;
       gap: 20px;
-      padding: 18px 0;
+      padding: 10px 0;
       border-bottom: 1px solid rgba(10,10,10,0.08);
       align-items: start;
     }
@@ -404,11 +405,11 @@
     }
     .cs-failure-pct {
       font-family: var(--font-display);
-      font-size: 40px;
+      font-size: 30px;
       font-weight: 900;
       color: var(--ink);
       line-height: 1;
-      margin-top: 6px;
+      margin-top: 4px;
     }
     .cs-failure-label {
       font-size: 10px;
@@ -428,33 +429,23 @@
     #cs-brightspots {
       overflow: hidden;
     }
-    #cs-brightspots .cs-inner {
-      padding-right: 46%;
-      max-width: none;
-    }
     .cs-brightspots-grid {
-      margin-top: 48px;
-    }
-    .cs-bs-full-img {
-      position: absolute;
-      right: 0;
-      top: 0;
-      height: 100%;
-      width: 42%;
-      object-fit: cover;
-      object-position: top left;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+      margin-top: 36px;
     }
     .cs-bs-item {
       display: grid;
-      grid-template-columns: 80px 1fr;
-      gap: 20px;
-      padding: 20px 0;
-      border-top: 1px solid rgba(10,10,10,0.1);
+      grid-template-columns: 64px 1fr;
+      gap: 14px;
+      padding: 20px;
+      background: rgba(10,10,10,0.04);
+      border-radius: 12px;
     }
-    .cs-bs-item:last-of-type { border-bottom: 1px solid rgba(10,10,10,0.1); }
     .cs-bs-pct {
       font-family: var(--font-display);
-      font-size: 32px;
+      font-size: 26px;
       font-weight: 900;
       color: var(--ink);
       line-height: 1;
@@ -530,30 +521,30 @@
       margin-bottom: 20px;
     }
     .cs-sprint {
-      padding: 16px 0;
+      padding: 8px 0;
       border-bottom: 1px solid rgba(10,10,10,0.08);
     }
     .cs-sprint:last-of-type { border-bottom: none; }
     .cs-sprint-title {
-      font-size: 14px;
+      font-size: 13px;
       font-weight: 700;
       color: var(--ink);
-      margin-bottom: 5px;
+      margin-bottom: 4px;
     }
     .cs-sprint-body {
-      font-size: 13px;
-      line-height: 1.6;
+      font-size: 12px;
+      line-height: 1.55;
       color: var(--ink-muted);
     }
     .cs-pivot-photos {
       display: flex;
       align-items: center;
       gap: 10px;
-      margin-top: 52px;
+      margin-top: 24px;
       width: 100%;
     }
     .cs-pivot-photos img {
-      height: 290px;
+      height: 144px;
       flex: 1 1 0;
       min-width: 0;
       object-fit: cover;
@@ -654,7 +645,7 @@
     .cs-vocab-table {
       width: 100%;
       border-collapse: collapse;
-      margin-top: 52px;
+      margin-top: 40px;
     }
     .cs-vocab-table th {
       font-size: 13px;
@@ -687,14 +678,14 @@
     /* ── FINAL SOLUTION ── */
     /* ── LAPTOP MOCKUP ── */
     .cs-laptop-mock {
-      margin-top: 52px;
+      margin-top: 32px;
       display: flex;
       flex-direction: column;
       align-items: center;
       filter: drop-shadow(0 24px 48px rgba(0,0,0,0.32)) drop-shadow(0 4px 8px rgba(0,0,0,0.16));
     }
     .cs-laptop-lid {
-      width: 80%;
+      width: 68%;
       background: #d0d0d0;
       border: 1px solid #b6b6b6;
       border-bottom: none;
@@ -708,6 +699,7 @@
       overflow: hidden;
       box-shadow: inset 0 0 2px 1px rgba(0,0,0,0.12);
       line-height: 0;
+      max-height: 340px;
     }
     .cs-laptop-screen-wrap video {
       width: 100%;
@@ -848,18 +840,18 @@
       background: var(--arvo-dark);
     }
     .cs-retro-cards {
-      display: flex;
-      flex-direction: column;
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
       gap: 16px;
-      margin-top: 52px;
+      margin-top: 40px;
     }
     .cs-retro-card {
       background: rgba(255,255,255,0.1);
       border-radius: 10px;
-      padding: 24px 28px;
+      padding: 20px;
       display: grid;
-      grid-template-columns: 28px 1fr;
-      gap: 18px;
+      grid-template-columns: 20px 1fr;
+      gap: 14px;
       align-items: start;
     }
     .cs-retro-dot {
@@ -882,7 +874,7 @@
     .cs-retro-actions {
       display: flex;
       gap: 12px;
-      margin-top: 52px;
+      margin-top: 28px;
     }
     .cs-retro-btn {
       font-family: var(--font-body);
@@ -905,10 +897,9 @@
     .cs-case-nav {
       display: flex;
       justify-content: space-between;
-      padding: 28px var(--pad-x);
+      padding: 20px 0 0;
       border-top: 1px solid rgba(255,255,255,0.08);
-      max-width: var(--content-max);
-      margin: 0 auto;
+      margin-top: 24px;
     }
     .cs-case-nav-link {
       font-size: 12px;
@@ -930,25 +921,56 @@
       border-radius: 20px 20px 0 0;
       box-shadow: 0 -24px 80px rgba(0,0,0,0.22);
     }
-    #cs-tldr          { z-index: 2; }
-    #cs-research      { z-index: 3;  background: var(--bg); }
-    #cs-brightspots   { z-index: 4; }
-    #cs-pivot         { z-index: 5;  background: var(--bg); }
-    #cs-results       { z-index: 6; }
-    #cs-designfixes   { z-index: 7;  background: #eae8e0; }
-    #cs-strategic     { z-index: 8; }
-    #cs-finalsolution { z-index: 9;  background: var(--bg); }
-    #cs-outcome       { z-index: 10; }
-    #cs-testimony     { z-index: 11; }
-    #cs-retro         { z-index: 12; }
+    #cs-tldr           { z-index: 2; }
+    #cs-research       { z-index: 3;  background: var(--bg); }
+    #cs-research-2     { z-index: 4;  background: var(--bg); }
+    #cs-brightspots    { z-index: 5;  background: #f8f7f1; }
+    #cs-pivot          { z-index: 6;  background: var(--bg); }
+    #cs-results        { z-index: 7;  background: #f8f7f1; }
+    #cs-designfixes    { z-index: 8;  background: #eae8e0; }
+    #cs-designfixes-2  { z-index: 9;  background: #eae8e0; }
+    #cs-designfixes-3  { z-index: 10; background: #eae8e0; }
+    #cs-designfixes-4  { z-index: 11; background: #eae8e0; }
+    #cs-designfixes-5  { z-index: 12; background: #eae8e0; }
+    #cs-strategic      { z-index: 13; background: #fff; }
+    #cs-finalsolution  { z-index: 14; background: var(--bg); }
+    #cs-outcome        { z-index: 15; background: #f8f7f1; }
+    #cs-outcome-2      { z-index: 16; background: #f8f7f1; }
+    #cs-testimony      { z-index: 17; background: #fff; }
+    #cs-retro          { z-index: 18; }
+
+    /* ── SECTION-SPECIFIC H2 OVERRIDES (viewport fit) ── */
+    #cs-brightspots .cs-h2,
+    #cs-pivot .cs-h2,
+    #cs-strategic .cs-h2 { font-size: clamp(26px, 3.2vw, 42px); }
+    #cs-research .cs-h2,
+    #cs-results .cs-h2,
+    #cs-outcome .cs-h2   { font-size: clamp(24px, 2.8vw, 38px); }
+
+    /* ── RESEARCH GRID COMPACT ── */
+    #cs-research .cs-research-grid { gap: 48px; margin-top: 18px; }
+    #cs-research .cs-overview-block { margin-bottom: 14px; }
+    #cs-research .cs-overview-label { margin-bottom: 4px; }
+    #cs-research .cs-overview-number { font-size: 36px; margin-bottom: 2px; }
+    #cs-research .cs-overview-sub { font-size: 11px; margin-bottom: 6px; }
+    #cs-research .cs-synthesis-img { max-height: none; width: 100%; border-radius: 10px; }
+    #cs-research .cs-h2 { margin-bottom: 16px; }
+
+    /* ── RESULTS COMPACT ── */
+    #cs-results .cs-body { font-size: 13px; line-height: 1.5; margin-bottom: 12px; }
+    .cs-results-pill { margin-bottom: 16px; }
+    .cs-results-stats { margin-bottom: 20px; }
+    .cs-result-stat { padding: 20px 18px; }
+    .cs-result-stat-num { font-size: 38px; }
+    .cs-results-table td { padding: 10px 16px; }
 
     /* ── DESIGN FIXES ── */
-    .cs-df-panels { display: flex; flex-direction: column; gap: 72px; margin-top: 64px; }
+    .cs-df-panels { display: flex; flex-direction: column; gap: 40px; margin-top: 40px; }
     .cs-df-panel { display: grid; grid-template-columns: 1fr 1fr; gap: 40px; align-items: center; }
     .cs-df-card {
-      background: #fff; border-radius: 30px; padding: 40px;
+      background: #fff; border-radius: 30px; padding: 28px;
       box-shadow: -12px -7px 5px rgba(0,0,0,0.25);
-      display: flex; flex-direction: column; gap: 28px;
+      display: flex; flex-direction: column; gap: 20px;
     }
     .cs-df-card--kept { background: #f3f2ec; box-shadow: -16px -5px 10px rgba(0,0,0,0.25); }
     .cs-df-card-header { display: flex; gap: 16px; align-items: flex-start; }
@@ -968,7 +990,7 @@
     .cs-df-img-col { display: flex; flex-direction: column; gap: 10px; }
     .cs-df-card-col { display: flex; flex-direction: column; gap: 10px; }
     .cs-df-img-wrap { border-radius: 24px; overflow: hidden; line-height: 0; }
-    .cs-df-img-wrap img, .cs-df-img-wrap video { width: 100%; display: block; }
+    .cs-df-img-wrap img, .cs-df-img-wrap video { width: 100%; display: block; max-height: 160px; object-fit: cover; }
     .cs-df-caption { font-family: var(--font-body); font-size: 13px; font-style: italic; color: #1f2b1f; text-align: center; line-height: 1.5; }
     .cs-df-quote-block { padding: 16px; }
     .cs-df-quote { font-family: 'Cormorant Garamond', serif; font-size: clamp(22px, 2.4vw, 32px); font-style: italic; color: #1f2b1f; line-height: 1.25; margin: 0 0 8px; }
@@ -1012,7 +1034,7 @@
       </svg>
       Back
     </a>
-    <a class="cs-nav-cta" href="https://www.figma.com/proto/1VklSkodi8LYoZ755bvRfi" target="_blank" rel="noopener">
+    <a class="cs-nav-cta" href="https://arvo-ai.figma.site/" target="_blank" rel="noopener">
       Try the prototype →
     </a>
   </nav>
@@ -1164,60 +1186,66 @@
         </div>
         <div>
           <img src="../assets/arvo-research-synthesis.png" alt="Research synthesis" class="cs-synthesis-img">
-          <p style="font-size:10px;font-weight:600;letter-spacing:0.1em;text-transform:uppercase;color:var(--ink-muted);margin-bottom:14px;">5 Failures Identified</p>
-          <div class="cs-failure-item">
-            <div class="cs-failure-left">
-              <p class="cs-failure-label">01 Managers Paradox</p>
-              <p class="cs-failure-pct">83%</p>
-            </div>
-            <div class="cs-failure-right">
-              <p class="cs-failure-body">10 of 12 rejected the platform. The tool designed to save time was consuming it. Managers quit before adoption.</p>
-            </div>
-          </div>
-          <div class="cs-failure-item">
-            <div class="cs-failure-left">
-              <p class="cs-failure-label">02 Honesty Gap</p>
-              <p class="cs-failure-pct">67%</p>
-            </div>
-            <div class="cs-failure-right">
-              <p class="cs-failure-body">8 of 12 didn't trust the anonymity aspect. The product's value rested on trust it hadn't earned.</p>
-            </div>
-          </div>
-          <div class="cs-failure-item">
-            <div class="cs-failure-left">
-              <p class="cs-failure-label">03 Jargon Problem</p>
-              <p class="cs-failure-pct">92%</p>
-            </div>
-            <div class="cs-failure-right">
-              <p class="cs-failure-body">11 of 12 struggled with abstract terminology. "Strengths-use fit." Meaningful in research. Paralyzing at 9am.</p>
-            </div>
-          </div>
-          <div class="cs-failure-item">
-            <div class="cs-failure-left">
-              <p class="cs-failure-label">04 Cognitive Overload</p>
-              <p class="cs-failure-pct">67%</p>
-            </div>
-            <div class="cs-failure-right">
-              <p class="cs-failure-body">8 of 12 missed critical signals. Dense text layout. Critical team signals went entirely unnoticed.</p>
-            </div>
-          </div>
-          <div class="cs-failure-item">
-            <div class="cs-failure-left">
-              <p class="cs-failure-label">05 Structural Resignation</p>
-              <p class="cs-failure-pct">58%</p>
-            </div>
-            <div class="cs-failure-right">
-              <p class="cs-failure-body">7 of 12 managers felt powerless. Agreed with recommendations. Couldn't act — the authority to restructure workloads sat with HR, not them.</p>
-            </div>
-          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 02 RESEARCH — Failures -->
+  <section class="cs-section" id="cs-research-2">
+    <div class="cs-inner">
+      <p class="cs-section-label">02 Research — What We Found</p>
+      <p style="font-size:11px;font-weight:600;letter-spacing:0.08em;text-transform:uppercase;color:var(--ink-muted);margin-bottom:28px;">5 Failures Identified Across 12 Sessions</p>
+      <div class="cs-failure-item">
+        <div class="cs-failure-left">
+          <p class="cs-failure-label">01 Managers Paradox</p>
+          <p class="cs-failure-pct">83%</p>
+        </div>
+        <div class="cs-failure-right">
+          <p class="cs-failure-body">10 of 12 rejected the platform. The tool designed to save time was consuming it. Managers quit before adoption.</p>
+        </div>
+      </div>
+      <div class="cs-failure-item">
+        <div class="cs-failure-left">
+          <p class="cs-failure-label">02 Honesty Gap</p>
+          <p class="cs-failure-pct">67%</p>
+        </div>
+        <div class="cs-failure-right">
+          <p class="cs-failure-body">8 of 12 didn't trust the anonymity aspect. The product's value rested on trust it hadn't earned.</p>
+        </div>
+      </div>
+      <div class="cs-failure-item">
+        <div class="cs-failure-left">
+          <p class="cs-failure-label">03 Jargon Problem</p>
+          <p class="cs-failure-pct">92%</p>
+        </div>
+        <div class="cs-failure-right">
+          <p class="cs-failure-body">11 of 12 struggled with abstract terminology. "Strengths-use fit." Meaningful in research. Paralyzing at 9am.</p>
+        </div>
+      </div>
+      <div class="cs-failure-item">
+        <div class="cs-failure-left">
+          <p class="cs-failure-label">04 Cognitive Overload</p>
+          <p class="cs-failure-pct">67%</p>
+        </div>
+        <div class="cs-failure-right">
+          <p class="cs-failure-body">8 of 12 missed critical signals. Dense text layout. Critical team signals went entirely unnoticed.</p>
+        </div>
+      </div>
+      <div class="cs-failure-item">
+        <div class="cs-failure-left">
+          <p class="cs-failure-label">05 Structural Resignation</p>
+          <p class="cs-failure-pct">58%</p>
+        </div>
+        <div class="cs-failure-right">
+          <p class="cs-failure-body">7 of 12 managers felt powerless. Agreed with recommendations. Couldn't act — the authority to restructure workloads sat with HR, not them.</p>
         </div>
       </div>
     </div>
   </section>
 
   <!-- 02 BRIGHT SPOTS -->
-  <section class="cs-section" id="cs-brightspots" style="background:#f8f7f1;">
-    <img src="../assets/arvo-brightspots-image.png" alt="Bright spots findings" class="cs-bs-full-img">
+  <section class="cs-section" id="cs-brightspots">
     <div class="cs-inner">
       <p class="cs-section-label">02 The Bright Spots</p>
       <h2 class="cs-h2">We protected <em>what</em><br><em>was already working.</em></h2>
@@ -1265,8 +1293,7 @@
     <div class="cs-inner">
       <p class="cs-section-label">03 The Pivot — Co-Creation</p>
       <h2 class="cs-h2">Before pixels,<br><em>a workshop.</em></h2>
-      <p class="cs-body">After Round 1 synthesis, the easy move was to return with polished mockups. I made a different call: bring the client into the problem before touching any designs.</p>
-      <div class="cs-pivot-grid">
+      <div class="cs-pivot-grid" style="margin-top:36px;">
         <div>
           <div class="cs-quote-block">
             <p class="cs-quote-text">"It was just one page, so it felt quite cognitively light."</p>
@@ -1409,6 +1436,15 @@
           </div>
         </div>
 
+      </div>
+    </div>
+  </section>
+
+  <!-- 05 DESIGN FIXES — Fix 02 -->
+  <section class="cs-section" id="cs-designfixes-2">
+    <div class="cs-inner">
+      <p class="cs-section-label" style="margin-bottom:36px;">05 Design Fixes — cont.</p>
+
         <!-- Fix 02: Manager's Paradox -->
         <div class="cs-df-panel">
           <div class="cs-df-img-col">
@@ -1438,6 +1474,14 @@
           </div>
         </div>
 
+    </div>
+  </section>
+
+  <!-- 05 DESIGN FIXES — Fix 03 -->
+  <section class="cs-section" id="cs-designfixes-3">
+    <div class="cs-inner">
+      <p class="cs-section-label" style="margin-bottom:36px;">05 Design Fixes — cont.</p>
+
         <!-- Fix 03: Jargon Friction -->
         <div class="cs-df-panel">
           <div class="cs-df-card">
@@ -1460,6 +1504,14 @@
             <p class="cs-df-caption"><em>Academic-like terminologies (Before) → plain english (After)</em><br>The argument is about language, not layout</p>
           </div>
         </div>
+
+    </div>
+  </section>
+
+  <!-- 05 DESIGN FIXES — Fix 04 -->
+  <section class="cs-section" id="cs-designfixes-4">
+    <div class="cs-inner">
+      <p class="cs-section-label" style="margin-bottom:36px;">05 Design Fixes — cont.</p>
 
         <!-- Fix 04: Digital Homework Trap -->
         <div class="cs-df-panel">
@@ -1484,6 +1536,14 @@
           </div>
         </div>
 
+    </div>
+  </section>
+
+  <!-- 05 DESIGN FIXES — Kept -->
+  <section class="cs-section" id="cs-designfixes-5">
+    <div class="cs-inner">
+      <p class="cs-section-label" style="margin-bottom:36px;">05 Design Fixes — cont.</p>
+
         <!-- Keep: Energizers & Drainers -->
         <div class="cs-df-kept">
           <span class="cs-df-kept-pill">WE KEPT THIS!</span>
@@ -1491,7 +1551,7 @@
             <div class="cs-df-card-col">
               <div class="cs-df-card cs-df-card--kept">
                 <div class="cs-df-card-header">
-                  <p class="cs-df-card-title" style="flex:1 0 0; min-width:0;">04 Energizers &amp; Drainers</p>
+                  <p class="cs-df-card-title" style="flex:1 0 0; min-width:0;">05 Energizers &amp; Drainers</p>
                   <span class="cs-df-badge cs-df-badge--keep">Keep</span>
                 </div>
                 <div class="cs-df-card-body">
@@ -1513,12 +1573,11 @@
           </div>
         </div>
 
-      </div>
     </div>
   </section>
 
   <!-- 06 STRATEGIC DELIVERABLE -->
-  <section class="cs-section" id="cs-strategic" style="background:#fff;">
+  <section class="cs-section" id="cs-strategic">
     <div class="cs-inner">
       <p class="cs-section-label">06 Strategic Deliverable</p>
       <h2 class="cs-h2">We rewrote<br><em>the AI's vocabulary.</em></h2>
@@ -1567,7 +1626,7 @@
       <div class="cs-laptop-mock">
         <div class="cs-laptop-lid">
           <div class="cs-laptop-screen-wrap">
-            <video autoplay muted loop playsinline poster="../assets/arvo-finalsolution-laptop.png">
+            <video id="cs-finalsolution-video" muted loop playsinline poster="../assets/arvo-finalsolution-laptop.png">
               <source src="../assets/arvo-finalsolution-video.mov" type="video/mp4">
               <source src="../assets/arvo-finalsolution-video.mov" type="video/quicktime">
             </video>
@@ -1605,7 +1664,13 @@
           <span class="cs-resolved-badge">Resolved</span>
         </div>
       </div>
-      <p class="cs-beyond-label">Beyond surface design; returned to client as product brief</p>
+    </div>
+  </section>
+
+  <!-- 08 OUTCOME — Strategic Decisions -->
+  <section class="cs-section" id="cs-outcome-2" style="background:#f8f7f1;">
+    <div class="cs-inner">
+      <p class="cs-beyond-label" style="padding-top:0; border-top:none; margin-bottom:32px;">Beyond surface design; returned to client as product brief</p>
       <div class="cs-decisions-grid">
         <div class="cs-decision-card">
           <span class="cs-decision-badge cs-decision-badge--partial">Partially Addressed</span>
@@ -1669,14 +1734,10 @@
           </div>
         </div>
       </div>
-      <div class="cs-retro-actions">
-        <a class="cs-retro-btn" href="../index.html#work">← View All Work</a>
-        <a class="cs-retro-btn cs-retro-btn--primary" href="https://www.figma.com/proto/1VklSkodi8LYoZ755bvRfi" target="_blank" rel="noopener">TRY THE MANAGER DASHBOARD →</a>
+      <div class="cs-case-nav">
+        <a class="cs-case-nav-link" href="pethaus.html">← Pet Haus</a>
+        <a class="cs-case-nav-link" href="seletar.html">Seletar Airport →</a>
       </div>
-    </div>
-    <div class="cs-case-nav">
-      <a class="cs-case-nav-link" href="pethaus.html">← Pet Haus</a>
-      <a class="cs-case-nav-link" href="seletar.html">Seletar Airport →</a>
     </div>
   </section>
 
@@ -1756,7 +1817,7 @@
     /* ── OUTCOME DECISIONS ── */
     gsap.from('.cs-decision-card', {
       y: 30, opacity: 0, stagger: 0.1, duration: 0.6, ease: 'power2.out',
-      scrollTrigger: { trigger: '#cs-outcome', start: 'top 70%', toggleActions: 'play none none none' }
+      scrollTrigger: { trigger: '#cs-outcome-2', start: 'top 70%', toggleActions: 'play none none none' }
     });
 
     /* ── TESTIMONY ── */
@@ -1767,6 +1828,18 @@
       .from('.cs-quote-marks',     { scale: 0, opacity: 0, duration: 0.4, ease: 'back.out(1.5)' })
       .from('.cs-testimony-quote', { y: 20, opacity: 0, duration: 0.7, ease: 'power2.out' }, '-=0.1')
       .from('.cs-testimony-attr',  { opacity: 0, duration: 0.5 }, '-=0.1');
+
+    /* ── FINAL SOLUTION VIDEO — play on enter, pause on leave ── */
+    const fsVideo = document.getElementById('cs-finalsolution-video');
+    ScrollTrigger.create({
+      trigger: '#cs-finalsolution',
+      start: 'top 80%',
+      end: 'bottom top',
+      onEnter: () => fsVideo.play(),
+      onLeave: () => fsVideo.pause(),
+      onEnterBack: () => fsVideo.play(),
+      onLeaveBack: () => fsVideo.pause(),
+    });
 
     /* ── RETRO CARDS ── */
     gsap.from('.cs-retro-card', {

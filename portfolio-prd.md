@@ -599,63 +599,37 @@ Apply same pattern for Seletar (`seletar-cta.png` → `seletar-hero.png`) and Pe
 
 ---
 
-### 6.2 Seletar Airport — `case-studies/seletar.html`
+### 6.2 Seletar Airport — `case-studies/seletar.html` ✅ COMPLETE
 
-**Accent:** `#2b5e3a` forest green | **10 sections**
+**Accent:** `--sel-dark: #1f2b1f`, `--sel-lime: #dce888`, `--sel-accent: #a1ad49`, `--sel-green: #458619` | **10 sections**
 
-**Exports needed:**
+**Assets in use:**
 
-| File | Node |
+| File | Role |
 |---|---|
-| `seletar-hero.png` | `780-10685` |
-| `seletar-tldr.png` | `780-10686` |
-| `seletar-problem.png` | `781-10873` |
-| `seletar-found.png` | `782-11152` |
-| `seletar-design.png` | `922-230` |
-| `seletar-validation.png` | `783-11728` |
-| `seletar-outcome.png` | `785-11746` |
-| `seletar-retro.png` | `791-686` |
-| `seletar-last.png` | `791-1662` |
+| `seletar-hero.png` | Hero background |
+| `seletar-tldr.png` | TL;DR background |
+| `seletar-problem.png` | Problem section image |
+| `seletar-found.png` | What We Found section |
+| `seletar-design.png` | Design section |
+| `seletar-validation.png` | Validation section (signature moment) |
+| `seletar-img-outcome1.png` | Outcome row 1 — Homepage V3 desktop |
+| `seletar-img-outcome2.png` | Outcome row 2 — Flight Status |
+| `seletar-img-outcome3.png` | Outcome row 3 — Getting Here |
+| `seletar-img-outcome4.png` | Outcome row 4 — Passenger Guide |
+| `seletar-img-mobile-1.png` | Mobile section — center foreground phone |
+| `seletar-img-mobile-2.png` | Mobile section — left background phone |
+| `seletar-img-mobile-3.png` | Mobile section — right background phone |
 
-**Section-by-section animation:**
+**As-built — key decisions:**
 
-**Hero (`780-10685`)** — Same load pattern as ARVO, green accent.
+**Scroll pinning:** Same GSAP pin pattern as arvo.html. Every `.cs-section:not(.cs-hero)` is pinned at `start: 'bottom bottom'` with `pinSpacing: false`. Sections stack via z-index (hero z:1, tldr z:2, … cs-last z:15).
 
-**TLDR (`780-10686`)** — Stagger cards, same as ARVO TLDR.
+**Outcome split into 4 sections (cs-outcome, cs-outcome-2/3/4):** Row 1 sits inside `cs-outcome` with stats block above it. Rows 2–4 each occupy their own pinned viewport with alternating image/text layout (image left on rows 2/4, image right on row 3). Image column `flex: 0 0 62%`. Stats: 4.8/5 rating and +0.5 score.
 
-**The Problem (`781-10873`)** — Base scroll reveal. Match layout and content to `seletar-problem.png` exactly.
+**Retrospective (cs-retro):** Two-column grid — left column has 4 numbered learnings (01–04) with separator lines; right column "What I'd test next" with 3 items (icon + lime label + muted body). Nav links to ARVO and Pet Haus split to left/right with `justify-content: space-between`.
 
-**What We Found (`782-11152`)** — Base scroll reveal. Match layout and content to `seletar-found.png` exactly.
-
-**Turning Research into Design (`922-230`)** — Base scroll reveal. Match layout and content to `seletar-design.png` exactly.
-
-**⭐ SIGNATURE MOMENT — Validation (`783-11728`):**
-
-Pin this section. The two score states animate on scroll. All scores, labels, and annotation text come from `seletar-validation.png` — do not invent them.
-
-```
-Pin section, scrub 1, end: "+=400"
-
-Two score states shown (Round 1 and Round 2) — match layout to seletar-validation.png
-
-scrub 0 → 0.4:
-- Round 1 score counts up from 0 to the value shown in seletar-validation.png (CountUp, 1s)
-- Round 1 label fades in — read text from image
-- Round 1 card: subtle shake (keyframes, x ±3px, 3 times)
-
-scrub 0.4 → 1.0:
-- Round 2 card scales in: scale 0.8 → 1.0, opacity 0 → 1
-- Round 2 score counts up to value shown in seletar-validation.png
-- Round 2 annotation fades in — read text from image
-
-Unpin at scrub 1.0
-```
-
-**Outcome (`785-11746`)** — Metrics count up on scroll enter. Read all values and layout from `seletar-outcome.png` exactly.
-
-**Retrospective (`791-686`)** — Base scroll reveal. Match layout and content to `seletar-retro.png` exactly.
-
-**Last but not least (`791-1662`)** — Match layout and content to `seletar-last.png` exactly. If a prototype CTA is visible, apply pulse animation (scale 1.0 → 1.03 → 1.0, 600ms). Do not assume content — read from image.
+**Mobile section (cs-last):** 3 staggered overlapping phones absolutely positioned in a `position:relative` container anchored at `bottom:0`. `mobile-1` center/front (z:3, height:90%), `mobile-2` left/back (z:1, height:68%, -6deg rotation, 65% opacity), `mobile-3` right/middle (z:2, height:74%, +5deg rotation, 80% opacity).
 
 ---
 
@@ -811,8 +785,8 @@ Run these as separate sessions, each with this PRD attached:
 | **5b** | About overlay: State 4 — info swap | 🔲 Next | `about-info-swap.png` |
 | **6** | Contact section | ✅ Done | `sayhello.png` |
 | **7** | `case-studies/arvo.html` | ✅ Done | — |
-| **8** | `case-studies/seletar.html` | 🔲 Next | All `seletar-*.png` files |
-| **9** | `case-studies/pethaus.html` | 🔲 Pending | All `pethaus-*.png` files |
+| **8** | `case-studies/seletar.html` | ✅ Done | All `seletar-*.png` files |
+| **9** | `case-studies/pethaus.html` | 🔲 Next | All `pethaus-*.png` files |
 | **10** | Custom cursor + final QA: GSAP conflict check, mobile test, Netlify deploy | 🔲 Pending | `cursor-light.png`, `cursor-dark.png` |
 
 ---
