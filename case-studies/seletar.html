@@ -132,8 +132,11 @@
     #cs-design-3   { z-index: 8;  background: var(--beige2); }
     #cs-validation { z-index: 9;  background: #fff; }
     #cs-outcome    { z-index: 10; background: var(--bg); }
-    #cs-retro      { z-index: 11; background: var(--sel-dark); }
-    #cs-last       { z-index: 12; background: var(--sel-dark); }
+    #cs-outcome-2  { z-index: 11; background: var(--bg); }
+    #cs-outcome-3  { z-index: 12; background: var(--beige2); }
+    #cs-outcome-4  { z-index: 13; background: var(--bg); }
+    #cs-retro      { z-index: 14; background: var(--sel-dark); }
+    #cs-last       { z-index: 15; background: var(--sel-dark); }
 
     /* ── 00 HERO ── */
     .cs-hero {
@@ -332,8 +335,9 @@
     }
     .st-laptop-video {
       position: absolute;
-      left: 9.9%; top: 1%;
-      width: 80.18%; height: 89.38%;
+      left: 10.77%; top: 2.35%;
+      width: 78.44%; height: 87.75%;
+      aspect-ratio: 171/110;
       object-fit: cover;
       z-index: 1;
     }
@@ -456,18 +460,74 @@
       display: grid; grid-template-columns: 1fr 1fr;
       gap: 48px; flex: 1; align-items: center;
     }
+    .st-outcome-screens {
+      display: flex; flex-direction: column;
+      gap: 56px; margin-top: 56px;
+    }
+    .st-outcome-row {
+      display: flex; gap: 40px; align-items: center;
+    }
+    .st-outcome-row-img {
+      flex: 0 0 62%; display: flex;
+      flex-direction: column; gap: 10px; margin: 0;
+    }
+    .st-outcome-row-img img {
+      width: 100%; height: auto; border-radius: 24px; display: block;
+    }
+    .st-outcome-row-img figcaption {
+      font-size: 13px; color: var(--ink-muted);
+      text-align: center; font-style: italic; line-height: 1.5;
+    }
+    .st-outcome-row-text { flex: 1; display: flex; flex-direction: column; justify-content: center; }
+    .st-outcome-row-text strong {
+      display: block; font-size: 16px; font-weight: 700;
+      color: var(--sel-dark); margin-bottom: 10px; line-height: 1.4;
+    }
+    .st-outcome-row-text p {
+      font-size: 15px; line-height: 1.65; color: var(--ink-muted);
+    }
+    @media (max-width: 900px) {
+      .st-outcome-row { flex-direction: column; }
+      .st-outcome-row-img { flex: 0 0 auto; width: 100%; }
+    }
 
     /* ── 08 RETRO ── */
-    .st-retro-cards { display: flex; flex-direction: column; gap: 0; flex: 1; justify-content: center; }
-    .st-retro-card {
-      display: grid; grid-template-columns: 24px 1fr auto;
-      gap: 16px; align-items: center; padding: 18px 0;
+    /* learnings column */
+    .st-retro-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 48px; flex: 1; align-items: start; }
+    .st-retro-learnings { display: flex; flex-direction: column; }
+    .st-retro-item {
+      display: flex; gap: 18px; padding: 16px 0;
       border-bottom: 1px solid rgba(255,255,255,0.07);
     }
-    .st-retro-card:last-child { border-bottom: none; }
-    .st-retro-dot { width: 12px; height: 12px; border-radius: 50%; margin-top: 4px; }
+    .st-retro-item:first-child { padding-top: 0; }
+    .st-retro-item:last-child { border-bottom: none; padding-bottom: 0; }
+    .st-retro-num {
+      font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.06em;
+      color: rgba(255,255,255,0.28); flex-shrink: 0; padding-top: 3px;
+    }
     .st-retro-card-title { font-size: 14px; font-weight: 700; color: #fff; margin-bottom: 6px; }
-    .st-retro-card-body { font-size: 13px; line-height: 1.65; color: rgba(255,255,255,0.58); }
+    .st-retro-card-body { font-size: 13px; line-height: 1.65; color: rgba(255,255,255,0.55); }
+    /* next tests column */
+    .st-retro-next { display: flex; flex-direction: column; gap: 0; height: 100%; }
+    .st-retro-next-label {
+      font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.08em;
+      text-transform: uppercase; color: var(--sel-lime); margin-bottom: 16px;
+    }
+    .st-retro-next-items { display: flex; flex-direction: column; gap: 0; }
+    .st-retro-next-item {
+      display: flex; gap: 16px; align-items: flex-start;
+      padding: 14px 0; border-bottom: 1px solid rgba(255,255,255,0.07);
+    }
+    .st-retro-next-item:last-child { border-bottom: none; }
+    .st-retro-next-icon {
+      width: 52px; height: 52px; object-fit: cover;
+      border-radius: 10px; flex-shrink: 0;
+    }
+    .st-retro-next-text strong {
+      display: block; font-size: 13px; font-weight: 700;
+      color: var(--sel-lime); margin-bottom: 4px;
+    }
+    .st-retro-next-text p { font-size: 12px; line-height: 1.6; color: rgba(255,255,255,0.45); }
     .st-retro-h2 {
       font-family: var(--font-display); font-size: clamp(32px, 4vw, 52px);
       font-weight: 800; line-height: 1.1; letter-spacing: -0.02em;
@@ -486,9 +546,8 @@
     .st-retro-btn--primary:hover { opacity: 0.86; }
     .st-case-nav {
       display: flex; justify-content: space-between;
-      padding: 22px var(--pad-x);
+      padding: 20px 0 0;
       border-top: 1px solid rgba(255,255,255,0.07);
-      max-width: var(--content-max); margin: 0 auto;
     }
     .st-case-nav-link {
       font-size: 11px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase;
@@ -906,29 +965,80 @@
   <section class="cs-section" id="cs-outcome">
     <div class="cs-wrap">
       <p class="cs-label">07 Outcome</p>
-      <div class="st-outcome-layout">
-        <div>
-          <h2 class="st-section-h2">From static brochure<br>to <em>passenger planning tool.</em></h2>
-          <div style="display:flex;flex-direction:column;gap:20px;margin-top:28px;">
-            <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;">
-              <div style="background:var(--sel-dark);border-radius:16px;padding:24px;">
-                <p style="font-family:var(--font-display);font-size:42px;font-weight:900;color:var(--sel-lime);line-height:1;">4.8<span style="font-size:20px;color:rgba(255,255,255,0.5);">/5</span></p>
-                <p style="font-size:13px;color:rgba(255,255,255,0.65);margin-top:8px;line-height:1.5;">Final ease-of-use score<br><span style="color:rgba(255,255,255,0.35);">Up from 4.3 in Round 1</span></p>
-              </div>
-              <div style="background:var(--beige2);border-radius:16px;padding:24px;">
-                <p style="font-family:var(--font-display);font-size:42px;font-weight:900;color:var(--sel-dark);line-height:1;">+0.5</p>
-                <p style="font-size:13px;color:var(--ink-muted);margin-top:8px;line-height:1.5;">SEQ improvement<br><span style="color:rgba(0,0,0,0.35);">Across two test rounds</span></p>
-              </div>
+      <div style="max-width:560px;">
+        <h2 class="st-section-h2">From static brochure<br>to <em>passenger planning tool.</em></h2>
+        <div style="display:flex;flex-direction:column;gap:20px;margin-top:28px;">
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;">
+            <div style="background:var(--sel-dark);border-radius:16px;padding:24px;">
+              <p style="font-family:var(--font-display);font-size:42px;font-weight:900;color:var(--sel-lime);line-height:1;">4.8<span style="font-size:20px;color:rgba(255,255,255,0.5);">/5</span></p>
+              <p style="font-size:13px;color:rgba(255,255,255,0.65);margin-top:8px;line-height:1.5;">Final ease-of-use score<br><span style="color:rgba(255,255,255,0.35);">Up from 4.3 in Round 1</span></p>
             </div>
-            <p style="font-size:14px;line-height:1.7;color:var(--ink-muted);">Delivered: Website redesign · Information architecture · UX flows · Transport module redesign · Payment clarity brief for V3.</p>
-            <img src="../assets/seletar-img-profit.png" alt="Business impact" style="width:100%;height:auto;max-height:80px;object-fit:contain;border-radius:10px;margin-top:8px;">
+            <div style="background:var(--beige2);border-radius:16px;padding:24px;">
+              <p style="font-family:var(--font-display);font-size:42px;font-weight:900;color:var(--sel-dark);line-height:1;">+0.5</p>
+              <p style="font-size:13px;color:var(--ink-muted);margin-top:8px;line-height:1.5;">SEQ improvement<br><span style="color:rgba(0,0,0,0.35);">Across two test rounds</span></p>
+            </div>
           </div>
+          <p style="font-size:14px;line-height:1.7;color:var(--ink-muted);">Delivered: Website redesign · Information architecture · UX flows · Transport module redesign · Payment clarity brief for V3.</p>
         </div>
-        <div style="display:grid;grid-template-columns:1fr 1fr;grid-template-rows:1fr 1fr;gap:8px;min-height:0;">
-          <img src="../assets/seletar-img-outcome1.png" alt="Outcome 1" style="width:100%;height:100%;object-fit:cover;border-radius:12px;min-height:0;">
-          <img src="../assets/seletar-img-outcome2.png" alt="Outcome 2" style="width:100%;height:100%;object-fit:cover;border-radius:12px;min-height:0;">
-          <img src="../assets/seletar-img-outcome3.png" alt="Outcome 3" style="width:100%;height:100%;object-fit:cover;border-radius:12px;min-height:0;">
-          <img src="../assets/seletar-img-outcome4.png" alt="Outcome 4" style="width:100%;height:100%;object-fit:cover;border-radius:12px;min-height:0;">
+      </div>
+
+      <!-- Row 1: text LEFT, image RIGHT -->
+      <div class="st-outcome-row" style="margin-top:16px;">
+        <div class="st-outcome-row-text">
+          <strong>Straightforward, task first</strong>
+          <p>Participants described the site as uncluttered and immediately useful</p>
+        </div>
+        <figure class="st-outcome-row-img" style="flex:0 0 62%;display:flex;flex-direction:column;gap:10px;margin:0;">
+          <img src="../assets/seletar-img-outcome1.png" alt="Homepage V3" style="max-height:clamp(220px,34vh,320px);object-fit:cover;">
+          <figcaption style="font-size:13px;color:var(--ink-muted);text-align:center;font-style:italic;line-height:1.5;">Homepage (Version 3, Desktop) — one action, immediately clear</figcaption>
+        </figure>
+      </div>
+    </div>
+  </section>
+
+  <!-- 07 OUTCOME / 2 of 4 -->
+  <section class="cs-section" id="cs-outcome-2">
+    <div class="cs-wrap">
+      <div class="st-outcome-row" style="flex:1;">
+        <figure class="st-outcome-row-img" style="flex:0 0 62%;display:flex;flex-direction:column;gap:10px;margin:0;">
+          <img src="../assets/seletar-img-outcome2.png" alt="Flight Status">
+          <figcaption style="font-size:13px;color:var(--ink-muted);text-align:center;font-style:italic;line-height:1.5;">Flight Status: In real time — what users came to find</figcaption>
+        </figure>
+        <div class="st-outcome-row-text">
+          <strong>Labels must match user intent.</strong>
+          <p>Renaming "Check Status" to "View Flight Schedule" reduces hesitation and clarifies this is not ticket purchase.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 07 OUTCOME / 3 of 4 -->
+  <section class="cs-section" id="cs-outcome-3">
+    <div class="cs-wrap">
+      <div class="st-outcome-row" style="flex:1;">
+        <div class="st-outcome-row-text">
+          <strong>Elevate intuitive navigation</strong>
+          <p>Transport module previously defaulted to Public Bus, which created immediate friction for taxi-first users. We switched it around to improve experience relevance.</p>
+        </div>
+        <figure class="st-outcome-row-img" style="flex:0 0 62%;display:flex;flex-direction:column;gap:10px;margin:0;">
+          <img src="../assets/seletar-img-outcome3.png" alt="Transport">
+          <figcaption style="font-size:13px;color:var(--ink-muted);text-align:center;font-style:italic;line-height:1.5;">Transport: Getting Home — born from "arrival blindness"</figcaption>
+        </figure>
+      </div>
+    </div>
+  </section>
+
+  <!-- 07 OUTCOME / 4 of 4 -->
+  <section class="cs-section" id="cs-outcome-4">
+    <div class="cs-wrap">
+      <div class="st-outcome-row" style="flex:1;">
+        <figure class="st-outcome-row-img" style="flex:0 0 62%;display:flex;flex-direction:column;gap:10px;margin:0;">
+          <img src="../assets/seletar-img-outcome4.png" alt="Passenger Guide">
+          <figcaption style="font-size:13px;color:var(--ink-muted);text-align:center;font-style:italic;line-height:1.5;">Passenger Guide: Journey steps — replaced turboprop content</figcaption>
+        </figure>
+        <div class="st-outcome-row-text">
+          <strong>Consolidate first-timer essentials into one continuous flow.</strong>
+          <p>Passenger Guide helps, but users lose confidence when info is scattered across multiple sections (timeline + facilities + map).</p>
         </div>
       </div>
     </div>
@@ -939,37 +1049,70 @@
     <div class="cs-wrap" style="justify-content:space-between;">
       <div>
         <p class="cs-label cs-label--light">08 Retrospective</p>
-        <h2 class="st-retro-h2">What leading this<br>actually <em>taught me.</em></h2>
+        <h2 class="st-retro-h2">Research is only useful<br><em>if it changes something.</em></h2>
       </div>
-      <div class="st-retro-cards">
-        <div class="st-retro-card">
-          <span class="st-retro-dot" style="background:#c8a840;"></span>
-          <div style="flex:1;min-width:0;">
-            <p class="st-retro-card-title">Research shapes briefs, not just validates them</p>
-            <p class="st-retro-card-body">We started with a design brief and ended with a different one. That's not scope creep — that's the research working. The skill is knowing when findings are strong enough to reframe the question, then making that case without losing momentum.</p>
+      <div class="st-retro-grid" style="margin-top:28px;">
+
+        <!-- LEFT: 4 numbered learnings -->
+        <div class="st-retro-learnings">
+          <div class="st-retro-item">
+            <span class="st-retro-num">01</span>
+            <div>
+              <p class="st-retro-card-title">The bravest research output is a cut</p>
+              <p class="st-retro-card-body">I recommended removing a whole designed section — turboprop education — because the data was clear. That recommendation was accepted. Research influence means being willing to say "this didn't work" out loud.</p>
+            </div>
           </div>
-          <img src="../assets/seletar-retro-1.png" alt="" style="width:72px;height:72px;object-fit:cover;border-radius:10px;flex-shrink:0;align-self:center;">
-        </div>
-        <div class="st-retro-card">
-          <span class="st-retro-dot" style="background:var(--sel-accent);"></span>
-          <div style="flex:1;min-width:0;">
-            <p class="st-retro-card-title">The cut decision is a design decision</p>
-            <p class="st-retro-card-body">Recommending we remove a whole designed section was harder than any design choice in the project. It required trusting the data over the sunk cost of work already done. The team agreed, and the product is better for it.</p>
+          <div class="st-retro-item">
+            <span class="st-retro-num">02</span>
+            <div>
+              <p class="st-retro-card-title">A single word can be a research finding</p>
+              <p class="st-retro-card-body">"Check Status" vs "View Flight Schedule" — the difference between a confused user and a confident one. I found this by watching people hesitate. SEQ went from 4.3 to 4.8 on that single change.</p>
+            </div>
           </div>
-          <img src="../assets/seletar-retro-2.png" alt="" style="width:72px;height:72px;object-fit:cover;border-radius:10px;flex-shrink:0;align-self:center;">
-        </div>
-        <div class="st-retro-card">
-          <span class="st-retro-dot" style="background:#d94a4a;"></span>
-          <div style="flex:1;min-width:0;">
-            <p class="st-retro-card-title">Measuring language, not just layout</p>
-            <p class="st-retro-card-body">One label change produced the biggest single score jump in the project. It confirmed that language is as much a design material as visual structure. The SEQ doesn't care which button you moved — it cares whether users understood what to do.</p>
+          <div class="st-retro-item">
+            <span class="st-retro-num">03</span>
+            <div>
+              <p class="st-retro-card-title">Research earns its value when it sharpens the brief</p>
+              <p class="st-retro-card-body">My most important output wasn't a report — it was the reframe: Seletar's product is speed. Design to protect it. Every decision that followed was easier because of that one clear principle.</p>
+            </div>
           </div>
-          <img src="../assets/seletar-retro-3.png" alt="" style="width:72px;height:72px;object-fit:cover;border-radius:10px;flex-shrink:0;align-self:center;">
+          <div class="st-retro-item">
+            <span class="st-retro-num">04</span>
+            <div>
+              <p class="st-retro-card-title">Round 2 always finds what Round 1 couldn't</p>
+              <p class="st-retro-card-body">Tourist payment confusion was invisible until we tested our second design iteration. You can't anticipate every edge case from a brief — but you can catch it before it ships.</p>
+            </div>
+          </div>
         </div>
-      </div>
-      <div class="st-retro-actions">
-        <a class="st-retro-btn" href="../index.html#work">← View All Work</a>
-        <a class="st-retro-btn st-retro-btn--primary" href="https://seletar-airport-sg.figma.site/" target="_blank" rel="noopener">TRY THE PROTOTYPE →</a>
+
+        <!-- RIGHT: what I'd test next + CTAs -->
+        <div class="st-retro-next">
+          <p class="st-retro-next-label">What I'd test next</p>
+          <div class="st-retro-next-items">
+            <div class="st-retro-next-item">
+              <img class="st-retro-next-icon" src="../assets/seletar-retro-1.png" alt="Transport">
+              <div class="st-retro-next-text">
+                <strong>Transport default state</strong>
+                <p>Does surfacing Grab/Taxi first actually reduce friction for arriving passengers? I'd run a preference test to confirm the right ordering.</p>
+              </div>
+            </div>
+            <div class="st-retro-next-item">
+              <img class="st-retro-next-icon" src="../assets/seletar-retro-2.png" alt="Payment">
+              <div class="st-retro-next-text">
+                <strong>Tourist payment copy</strong>
+                <p>I identified the EZ-Link confusion. I'd test rewritten copy — global payment methods first, local second — with international users specifically.</p>
+              </div>
+            </div>
+            <div class="st-retro-next-item">
+              <img class="st-retro-next-icon" src="../assets/seletar-retro-3.png" alt="Food">
+              <div class="st-retro-next-text">
+                <strong>Food findability</strong>
+                <p>Users looked for dining and couldn't find it under Passenger Guide. A tree test would confirm where it belongs in the navigation.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
       </div>
       <div class="st-case-nav">
         <a class="st-case-nav-link" href="arvo.html">← ARVO</a>
@@ -987,10 +1130,22 @@
           <h2 class="st-retro-h2" style="font-size:clamp(28px,3.2vw,44px);">Designed for the passenger<br>in their pocket.</h2>
           <p style="font-size:14px;line-height:1.7;color:rgba(255,255,255,0.6);">The redesign is fully responsive. Flight status, transport options, and journey planning — all accessible before they arrive at the gate.</p>
         </div>
-        <div style="flex:1;display:flex;gap:12px;align-items:flex-end;height:100%;">
-          <img src="../assets/seletar-img-mobile-1.png" alt="Mobile view 1" style="flex:1;height:80%;object-fit:cover;border-radius:16px;min-height:0;">
-          <img src="../assets/seletar-img-mobile-2.png" alt="Mobile view 2" style="flex:1;height:100%;object-fit:cover;border-radius:16px;min-height:0;">
-          <img src="../assets/seletar-img-mobile-3.png" alt="Mobile view 3" style="flex:1;height:80%;object-fit:cover;border-radius:16px;min-height:0;">
+        <div style="flex:1;position:relative;height:100%;min-height:0;">
+          <!-- Left: empty frame, behind, rotated -->
+          <img src="../assets/seletar-img-mobile-1.png" alt=""
+            style="position:absolute;height:68%;width:auto;bottom:0;left:2%;
+            transform:rotate(-6deg) translateY(6%);z-index:1;opacity:0.65;
+            filter:drop-shadow(-8px 16px 24px rgba(0,0,0,0.45));">
+          <!-- Centre: Passenger Guide, tallest, front -->
+          <img src="../assets/seletar-img-mobile-2.png" alt="Passenger Guide mobile"
+            style="position:absolute;height:90%;width:auto;bottom:0;left:50%;
+            transform:translateX(-50%);z-index:3;
+            filter:drop-shadow(0 20px 40px rgba(0,0,0,0.55));">
+          <!-- Right: Flight Status, behind, rotated -->
+          <img src="../assets/seletar-img-mobile-3.png" alt="Flight Status mobile"
+            style="position:absolute;height:74%;width:auto;bottom:0;right:2%;
+            transform:rotate(5deg) translateY(4%);z-index:2;opacity:0.8;
+            filter:drop-shadow(8px 16px 24px rgba(0,0,0,0.45));">
         </div>
       </div>
     </div>
@@ -1068,9 +1223,8 @@
         canvas.width = img.naturalWidth;
         canvas.height = img.naturalHeight;
         ctx.drawImage(img, 0, 0);
-        /* clear the screen area so video shows through */
-        /* clear the screen area so video shows through (screen: x=398,y=23, w=3225, h=2094) */
-        ctx.clearRect(398, 23, 3225, 2094);
+        /* clear screen area — inset 50px from edge so frame border remains visible */
+        ctx.clearRect(433, 55, 3155, 2055);
       };
       img.src = '../assets/seletar-img-outcome-laptop.png';
     })();
