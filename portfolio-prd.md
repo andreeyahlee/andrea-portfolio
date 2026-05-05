@@ -75,6 +75,8 @@ Export every asset as **PNG at 2×**, named exactly as listed. Drop into `/asset
 | `about-portrait-split.png` | node-id `713-16765` | Portrait visible, text split — portrait is embedded in this frame |
 | `about-portrait-anchored.png` | node-id `953-14453` | Portrait anchored bottom, rectangle expanded |
 | `about-info-swap.png` | node-id `953-14527` | Info content swapped, portrait stays |
+| `about-singapore.png` | — | Singapore island silhouette watermark (warm beige, transparent bg) — State 3 left column |
+| `icon-geopin.png` | — | Location pin icon (black line-art) — State 3 left column |
 | `sayhello.png` | node-id `953-14585` | Say Hi / Contact section |
 | `arvo-cta.png` | node-id `952-14418` | Work card CTA thumbnail — ARVO |
 | `seletar-cta.png` | node-id `952-14422` | Work card CTA thumbnail — Seletar |
@@ -296,20 +298,14 @@ On mouseleave:
 
 ---
 
-### ⚠️ LOCKED: CTA Card Implementation — DO NOT CHANGE
+### CTA Card Implementation
 
-The CTA card images (`arvo-cta.png`, `seletar-cta.png`, `pethaus-cta.png`) are **960×1880px**. Columns are ~475px wide × 899px tall. The aspect ratios differ slightly. The implementation below solves "full column width fill" AND "object-fit: contain (no cropping)" simultaneously — do not change it.
+The CTA card images (`arvo-cta.png`, `seletar-cta.png`, `pethaus-cta.png`) fill the full column using `inset: 0` + `object-fit: cover`. The previous `aspect-ratio` + `contain` approach left gaps at top/bottom — fixed by user request.
 
 ```css
-/* Container sized to the image aspect ratio, vertically centred.
-   Column overflow:hidden clips ~15px top+bottom — imperceptible. */
 .work-col-bottom {
   position: absolute;
-  top: 50%;
-  left: 0;
-  right: 0;
-  transform: translateY(-50%);
-  aspect-ratio: 960 / 1880;
+  inset: 0;
   overflow: hidden;
   z-index: 1;
 }
@@ -319,7 +315,7 @@ The CTA card images (`arvo-cta.png`, `seletar-cta.png`, `pethaus-cta.png`) are *
   inset: 0;
   width: 100%;
   height: 100%;
-  object-fit: contain;      /* fills container perfectly — no side gaps, no cropping */
+  object-fit: cover;
   object-position: center;
   display: block;
   opacity: 0;
@@ -332,7 +328,7 @@ The CTA card images (`arvo-cta.png`, `seletar-cta.png`, `pethaus-cta.png`) are *
 }
 ```
 
-**Why:** The container is forced to the image's own aspect ratio. `contain` then fills both dimensions. Do NOT change `object-fit` to `cover` (crops), change `aspect-ratio` (breaks fill-width), or flatten the container back to `inset: 0` (reintroduces side gaps).
+**Why:** `inset: 0` fills the column completely. `cover` ensures no gaps at any viewport size — minimal cropping at edges, imperceptible given the image content.
 
 **Work section is the scroll end point. There is no scroll exit from Work.**
 
@@ -340,26 +336,107 @@ The CTA card images (`arvo-cta.png`, `seletar-cta.png`, `pethaus-cta.png`) are *
 
 ### 5.3 Section: ABOUT (Overlay Panel)
 
-> ⚠️ **About is NOT a scroll section. It is an overlay panel (`#about-overlay`) opened by the "About" nav button. Do not add it to the scroll flow. Do not add `#about-section` to the HTML. Do not add a staircase exit from Work.**
+> ⚠️ **About is NOT a scroll section. It is an overlay panel (`#about-overlay`) opened by the "About" nav button. Do not add it to the scroll flow.**
 
-The `#about-overlay` dialog already exists in index.html. Future animation work builds inside it, triggered on overlay open — not on scroll.
+**Architecture:** `#about-overlay` is `position: fixed; inset: 0; overflow-y: auto`. Inside it, `#about` is `height: 340vh` with a `position: sticky; top: 0; height: 100vh` child (`.about-sticky`). A GSAP paused timeline (`aboutSplitTl`) is scrubbed by the overlay's `scrollTop`. `progress = scrollTop / (aboutEl.offsetHeight - innerHeight)`.
 
-**4-state animation sequence (triggered on overlay open, not scroll):**
+**4-state animation sequence (scroll-driven inside the overlay):**
 
-| State | Figma node | What happens |
-|---|---|---|
-| 1 — Overlay opens | `707-16514` | Clean About layout, headline visible, portrait not shown |
-| 2 — Portrait pop + text split | `713-16765` | Portrait rises from centre, surrounding text splits apart |
-| 3 — Portrait anchors, rectangle expands | `953-14453` | Portrait slides to bottom, name locks left, warm rect fills bottom half |
-| 4 — Info swap | `953-14527` | Layout stays, content inside rect changes |
+| State | Figma node | Status | Scroll range |
+|---|---|---|---|
+| 1 — Overlay opens | `707-16514` | ✅ Built | Static (scrollTop = 0) |
+| 2 — Portrait pop + text split | `713-16765` | ✅ Built | 0% → 50% of scroll |
+| 3 — Portrait anchors, rectangle expands | `953-14453` | ✅ Built | 50% → 100% of scroll |
+| 4 — Info swap | `953-14527` | 🔲 Pending | — |
+
+---
+
+**State 1 — Overlay opens (static):**
+- `#about-overlay` fades in (opacity transition on `.is-open`)
+- Headline `"Hi! I'm Andrea"` centred in viewport — `"Hi! I'm"` on one line, `"Andrea"` with portrait slot inline
+- Portrait slot (`.about-portrait-slot`) is a warm-tinted placeholder matching the `a` descender width
+- Portrait photo (`.about-portrait-img`) hidden below viewport at `yPercent: 110`
+- Scroll hint visible at bottom
+- Nav switches to dark mode: `body:has(#about-overlay.is-open) #nav { background: var(--work-bg) }`
+- Logo swaps to `logo-dark.png` on open; restores via `updateNavTheme()` on close
+
+---
+
+**State 2 — Portrait pop + text split (scrub 0 → ~0.53):**
+
+GSAP timeline positions (built in `buildAboutSplitTl()`, called on first overlay scroll):
+```
+0.0  scroll hint fades out
+0.1  portrait rises: yPercent 110 → 0
+0.15 "Andrea" wrap centres: x += centerDeltaX
+0.15 "Hi! I'm" slides left: x = (viewCenter - halfSlot - P) - hiRect.right
+0.15 "Andrea" text slides right: x = (viewCenter + halfSlot + P) - andreaRect.left
+0.15 portrait slot + img widen: width → max(15vw, 120px)
+1.1  clip-path removed from .about-andrea-wrap (allows portrait to escape bounds)
+1.1  portrait slot fades out
+1.1  "Hi! I'm" fades out
+1.1  "Andrea" text fades out
+```
+
+---
+
+**State 3 — Portrait anchors, warm rect expands (scrub ~0.53 → 1.0):**
+
+```
+1.1  warm panel expands: height 0 → 50vh (bottom half of viewport)
+1.1  portrait moves down: y += s3PortraitDeltaY, sized to 28vw × (28vw / naturalRatio)
+     naturalRatio = naturalWidth / naturalHeight of about-portrait.png (986×884 = 1.115)
+     Result: portrait ~403×361px, bottom edge = viewport bottom
+1.25 stacked "Hi! I'm / Andrea" head fades in (top-left, above warm rect)
+1.25 two-column content grid fades in (inside warm rect)
+```
+
+**State 3 content grid layout:**
+```css
+.about-s3-content {
+  position: absolute; bottom: 0; left: 0; right: 0; height: 50%;
+  display: grid;
+  grid-template-columns: 1fr 30vw 1fr;  /* left col | portrait space | right col */
+  align-items: stretch;
+  padding: 0 clamp(32px, 5vw, 80px);
+}
+/* Left col: bottom-aligned */
+.about-s3-col:first-child { justify-content: flex-end; padding-bottom: clamp(28px, 4.5vh, 56px); }
+/* Right col: top-aligned */
+.about-s3-col:last-child  { justify-content: flex-start; padding-top: clamp(28px, 4.5vh, 56px); }
+```
+
+**Left column (Location — Singapore):**
+- Geo pin icon: `<img src="assets/icon-geopin.png">` 24×24px, black line-art
+- Title: `"Raised in a land of 'maximum'"` — DM Sans italic, `clamp(18px, 2vw, 32px)`
+- Body: copy about Singapore minimalism, `Plus Jakarta Sans`, `clamp(12px, 1vw, 15px)`, opacity 0.75
+- Background: Singapore island silhouette (`assets/about-singapore.png`) as `::before` pseudo-element
+  - `position: absolute; right: 0; width: 48vw; height: 120%` — right edge anchors at portrait column start, left bleeds off-screen
+  - `background: url(...) right center / contain no-repeat; opacity: 0.5; z-index: -1`
+
+**Right column (Philosophy — Pilates):**
+- Title: `"Designing 🧘‍♀️ is like practicing Pilates"` — DM Sans italic, same size as left title
+- Emoji wrapped in `.about-s3-emoji` with `font-family: 'Apple Color Emoji', 'Segoe UI Emoji', 'Noto Color Emoji'`
+- Body: copy about invisible design decisions, same body style as left col
+- `"The invisible adjustments are usually the whole job."` — `font-weight: 600`
+
+---
+
+**State 4 — Info swap (🔲 PENDING):**
+
+Reference: `about-info-swap.png` (node `953-14527`). Portrait stays anchored. Content inside warm rect swaps. Read all copy and layout from the image — do not invent.
+
+---
 
 **Exports needed:**
 - `about-initial.png` — node `707-16514`
 - `about-portrait-split.png` — node `713-16765`
-- `about-portrait-anchored.png` — node `953-14453`
+- `about-portrait-anchored.png` — node `953-14453` ← primary State 3 reference
 - `about-info-swap.png` — node `953-14527`
+- `about-singapore.png` — Singapore island silhouette, warm beige on transparent bg
+- `icon-geopin.png` — location pin icon, black line-art
 
-All content (text, labels, layout) comes from the exported PNGs. Do not invent copy.
+All text copy comes from the exported PNGs. Do not invent copy.
 
 ---
 
@@ -765,18 +842,19 @@ mm.add("(min-width: 768px)", () => {
 
 Run these as separate sessions, each with this PRD attached:
 
-| Session | Deliverable | Assets needed before starting |
-|---|---|---|
-| **1** | `index.html` skeleton: tokens, nav, section scaffolding, font imports | None |
-| **2** | Hero section: static layout only, no animations | `hero-initial.png` |
-| **3** | Hero GSAP: desktop zoom + complex zoom + letter-p + bg transition | `hero-initial.png`, `hero-desktop-zoom.png`, `hero-letter-p.png` |
-| **4** | Work section: 3-column layout + hover reveal | `work-initial.png`, `work-hover-reveal.png`, `arvo-cta.png`, `seletar-cta.png`, `pethaus-cta.png` |
-| **5** | About section: staircase exit + all 4 states | `about-initial.png`, `about-portrait-split.png`, `about-portrait-anchored.png`, `about-info-swap.png` |
-| **6** | Contact section | `sayhello.png` |
-| **7** | `case-studies/arvo.html` | All `arvo-*.png` files |
-| **8** | `case-studies/seletar.html` | All `seletar-*.png` files |
-| **9** | `case-studies/pethaus.html` | All `pethaus-*.png` files |
-| **10** | Final QA pass: GSAP conflict check, mobile test, Netlify deploy | All assets |
+| Session | Deliverable | Status | Assets needed before starting |
+|---|---|---|---|
+| **1** | `index.html` skeleton: tokens, nav, section scaffolding, font imports | ✅ Done | None |
+| **2** | Hero section: static layout only, no animations | ✅ Done | `hero-initial.png` |
+| **3** | Hero GSAP: desktop zoom + complex zoom + letter-p + bg transition | ✅ Done | `hero-initial.png`, `hero-desktop-zoom.png`, `hero-letter-p.png` |
+| **4** | Work section: 3-column layout + hover reveal + CTA cards | ✅ Done | `work-initial.png`, `work-hover-reveal.png`, `arvo-cta.png`, `seletar-cta.png`, `pethaus-cta.png` |
+| **5a** | About overlay: States 1, 2, 3 (scroll-driven GSAP, portrait split + anchor, warm rect, two-column layout) | ✅ Done | `about-portrait.png`, `about-portrait-anchored.png`, `about-singapore.png`, `icon-geopin.png` |
+| **5b** | About overlay: State 4 — info swap | 🔲 Next | `about-info-swap.png` |
+| **6** | Contact section | ✅ Done | `sayhello.png` |
+| **7** | `case-studies/arvo.html` | 🔲 Pending | All `arvo-*.png` files |
+| **8** | `case-studies/seletar.html` | 🔲 Pending | All `seletar-*.png` files |
+| **9** | `case-studies/pethaus.html` | 🔲 Pending | All `pethaus-*.png` files |
+| **10** | Custom cursor + final QA: GSAP conflict check, mobile test, Netlify deploy | 🔲 Pending | `cursor-light.png`, `cursor-dark.png` |
 
 ---
 

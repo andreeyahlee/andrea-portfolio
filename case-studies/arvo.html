@@ -1,0 +1,1480 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ARVO — Case Study</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,100..1000&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@200..800&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@1,9..144,300&display=swap" rel="stylesheet">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+  <style>
+    :root {
+      --case-accent:  #2a4a6b;
+      --arvo-dark:    #141c16;
+      --arvo-green:   #96ab1e;
+      --bg:           #f3f2ec;
+      --ink:          #0a0a0a;
+      --ink-muted:    rgba(10,10,10,0.55);
+      --font-display: 'DM Sans', sans-serif;
+      --font-body:    'Plus Jakarta Sans', sans-serif;
+      --content-max:  1100px;
+      --pad-x:        clamp(32px, 5vw, 80px);
+      --pad-y:        clamp(80px, 10vw, 130px);
+    }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: var(--font-body);
+      background: var(--bg);
+      color: var(--ink);
+      overflow-x: hidden;
+    }
+    a { color: inherit; text-decoration: none; }
+    img { display: block; max-width: 100%; }
+
+    /* ── NAV ── */
+    .cs-nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 100;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 18px var(--pad-x);
+      background: var(--arvo-dark);
+      border-bottom: 1px solid rgba(255,255,255,0.06);
+    }
+    .cs-nav-back {
+      font-family: var(--font-body);
+      font-size: 13px;
+      font-weight: 500;
+      color: rgba(255,255,255,0.6);
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      transition: color 0.2s;
+    }
+    .cs-nav-back:hover { color: #fff; }
+    .cs-nav-back svg { width: 16px; height: 16px; }
+    .cs-nav-cta {
+      font-family: var(--font-body);
+      font-size: 13px;
+      font-weight: 500;
+      color: #fff;
+      border: 1.5px solid rgba(255,255,255,0.3);
+      border-radius: 100px;
+      padding: 7px 18px;
+      transition: background 0.2s, border-color 0.2s;
+    }
+    .cs-nav-cta:hover { background: rgba(255,255,255,0.08); border-color: rgba(255,255,255,0.6); }
+
+    /* ── SHARED SECTION ── */
+    .cs-section { position: relative; }
+    .cs-inner {
+      max-width: var(--content-max);
+      margin: 0 auto;
+      padding: var(--pad-y) var(--pad-x);
+    }
+    .cs-section-label {
+      font-family: var(--font-body);
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--ink-muted);
+      margin-bottom: 32px;
+    }
+    .cs-h2 {
+      font-family: var(--font-display);
+      font-size: clamp(36px, 5vw, 60px);
+      font-weight: 800;
+      line-height: 1.1;
+      letter-spacing: -0.02em;
+      margin-bottom: 24px;
+    }
+    .cs-h2 em {
+      font-style: normal;
+      color: var(--arvo-green);
+    }
+    .cs-body {
+      font-size: clamp(15px, 1.2vw, 17px);
+      line-height: 1.7;
+      color: var(--ink-muted);
+      max-width: 640px;
+    }
+    /* light-on-dark variants */
+    .cs-section--dark .cs-section-label { color: rgba(255,255,255,0.4); }
+    .cs-section--dark .cs-h2 { color: #fff; }
+    .cs-section--dark .cs-body { color: rgba(255,255,255,0.65); }
+
+    /* ── 00 HERO ── */
+    .cs-hero {
+      background: var(--arvo-dark);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      padding-top: 60px;
+      overflow: hidden;
+    }
+    .cs-hero-bg {
+      position: absolute;
+      inset: 0;
+      background: url('../assets/arvo-hero-bkg.png') right center / cover no-repeat;
+      opacity: 0.35;
+      -webkit-mask-image: linear-gradient(to right, transparent 42%, rgba(0,0,0,0.7) 72%, black 100%);
+      mask-image: linear-gradient(to right, transparent 42%, rgba(0,0,0,0.7) 72%, black 100%);
+    }
+    .cs-hero-inner {
+      position: relative;
+      z-index: 2;
+      max-width: var(--content-max);
+      margin: 0 auto;
+      padding: 80px var(--pad-x) 80px;
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 60px;
+      align-items: end;
+      width: 100%;
+    }
+    .cs-hero-h1 {
+      font-family: var(--font-display);
+      font-size: clamp(40px, 5.5vw, 72px);
+      font-weight: 900;
+      line-height: 1.08;
+      letter-spacing: -0.03em;
+      color: #fff;
+      margin-bottom: 28px;
+    }
+    .cs-hero-h1 em {
+      font-style: normal;
+      color: var(--arvo-green);
+    }
+    .cs-hero-sub {
+      font-size: clamp(14px, 1.1vw, 16px);
+      line-height: 1.65;
+      color: rgba(255,255,255,0.6);
+      max-width: 480px;
+      margin-bottom: 36px;
+    }
+    .cs-hero-cta {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-family: var(--font-body);
+      font-size: 13px;
+      font-weight: 600;
+      letter-spacing: 0.04em;
+      color: #fff;
+      border: 1.5px solid rgba(255,255,255,0.35);
+      border-radius: 100px;
+      padding: 12px 24px;
+      transition: background 0.2s, border-color 0.2s;
+      cursor: pointer;
+    }
+    .cs-hero-cta:hover { background: rgba(255,255,255,0.08); border-color: rgba(255,255,255,0.7); }
+    .cs-hero-meta {
+      display: flex;
+      flex-direction: column;
+      gap: 0;
+      min-width: 260px;
+    }
+    .cs-meta-row {
+      display: grid;
+      grid-template-columns: 110px 1fr;
+      gap: 12px;
+      padding: 12px 0;
+      border-bottom: 1px solid rgba(255,255,255,0.08);
+    }
+    .cs-meta-row:last-child { border-bottom: none; }
+    .cs-meta-label {
+      font-size: 10px;
+      font-weight: 600;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.35);
+      padding-top: 2px;
+    }
+    .cs-meta-value {
+      font-size: 13px;
+      line-height: 1.5;
+      color: rgba(255,255,255,0.8);
+    }
+
+    /* ── 01 TLDR ── */
+    .cs-tldr {
+      background: #1c2820;
+    }
+    .cs-tldr-grid {
+      display: grid;
+      grid-template-columns: 1fr 1px 1fr;
+      gap: 0 48px;
+      margin-top: 52px;
+    }
+    .cs-tldr-divider {
+      background: rgba(255,255,255,0.1);
+      align-self: stretch;
+    }
+    .cs-tldr-col-label {
+      font-size: 10px;
+      font-weight: 600;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.3);
+      margin-bottom: 28px;
+    }
+    .cs-stat-item {
+      display: flex;
+      gap: 20px;
+      margin-bottom: 36px;
+    }
+    .cs-stat-item:last-child { margin-bottom: 0; }
+    .cs-stat-number {
+      font-family: var(--font-display);
+      font-size: clamp(28px, 3vw, 42px);
+      font-weight: 800;
+      color: #fff;
+      line-height: 1;
+      white-space: nowrap;
+      min-width: 120px;
+    }
+    .cs-stat-number .arrow { color: var(--arvo-green); margin: 0 4px; }
+    .cs-stat-body { flex: 1; }
+    .cs-stat-title {
+      font-size: 14px;
+      font-weight: 700;
+      color: #fff;
+      margin-bottom: 6px;
+    }
+    .cs-stat-desc {
+      font-size: 13px;
+      line-height: 1.6;
+      color: rgba(255,255,255,0.55);
+    }
+    .cs-discovery-item {
+      margin-bottom: 32px;
+    }
+    .cs-discovery-item:last-child { margin-bottom: 0; }
+    .cs-discovery-title {
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--arvo-green);
+      margin-bottom: 8px;
+    }
+    .cs-discovery-body {
+      font-size: 13px;
+      line-height: 1.65;
+      color: rgba(255,255,255,0.55);
+    }
+
+    /* ── 02 RESEARCH ── */
+    .cs-research-grid {
+      display: grid;
+      grid-template-columns: 1fr 1.2fr;
+      gap: 72px;
+      margin-top: 48px;
+    }
+    .cs-overview-block {
+      margin-bottom: 28px;
+    }
+    .cs-overview-block:last-child { margin-bottom: 0; }
+    .cs-overview-label {
+      font-size: 10px;
+      font-weight: 600;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--ink-muted);
+      margin-bottom: 10px;
+    }
+    .cs-overview-number {
+      font-family: var(--font-display);
+      font-size: 52px;
+      font-weight: 900;
+      line-height: 1;
+      color: var(--ink);
+      margin-bottom: 4px;
+    }
+    .cs-overview-sub {
+      font-size: 12px;
+      color: var(--ink-muted);
+      margin-bottom: 12px;
+    }
+    .cs-split-bar {
+      display: flex;
+      height: 8px;
+      border-radius: 4px;
+      overflow: hidden;
+      margin: 8px 0;
+    }
+    .cs-split-bar span:first-child { background: var(--arvo-dark); }
+    .cs-split-bar span:last-child { background: rgba(10,10,10,0.18); }
+    .cs-split-labels {
+      display: flex;
+      justify-content: space-between;
+      font-size: 11px;
+      color: var(--ink-muted);
+      margin-top: 4px;
+    }
+    .cs-tag-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-top: 10px;
+    }
+    .cs-tag {
+      font-size: 11px;
+      padding: 4px 10px;
+      border-radius: 100px;
+      background: rgba(10,10,10,0.08);
+      color: var(--ink);
+    }
+    .cs-synthesis-img {
+      border-radius: 8px;
+      margin-bottom: 28px;
+      width: 100%;
+      object-fit: cover;
+    }
+    .cs-failure-item {
+      display: grid;
+      grid-template-columns: 140px 1fr;
+      gap: 20px;
+      padding: 18px 0;
+      border-bottom: 1px solid rgba(10,10,10,0.08);
+      align-items: start;
+    }
+    .cs-failure-item:last-child { border-bottom: none; }
+    .cs-failure-left {}
+    .cs-failure-right {
+      background: rgba(10,10,10,0.04);
+      border-radius: 8px;
+      padding: 14px 16px;
+    }
+    .cs-failure-pct {
+      font-family: var(--font-display);
+      font-size: 40px;
+      font-weight: 900;
+      color: var(--ink);
+      line-height: 1;
+      margin-top: 6px;
+    }
+    .cs-failure-label {
+      font-size: 10px;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--ink-muted);
+      margin-bottom: 4px;
+    }
+    .cs-failure-body {
+      font-size: 13px;
+      line-height: 1.6;
+      color: var(--ink-muted);
+    }
+
+    /* ── BRIGHT SPOTS ── */
+    .cs-brightspots-grid {
+      display: grid;
+      grid-template-columns: 1fr 0.9fr;
+      gap: 72px;
+      margin-top: 48px;
+      align-items: start;
+    }
+    .cs-bs-item {
+      display: grid;
+      grid-template-columns: 80px 1fr;
+      gap: 20px;
+      padding: 20px 0;
+      border-top: 1px solid rgba(10,10,10,0.1);
+    }
+    .cs-bs-item:last-of-type { border-bottom: 1px solid rgba(10,10,10,0.1); }
+    .cs-bs-pct {
+      font-family: var(--font-display);
+      font-size: 32px;
+      font-weight: 900;
+      color: var(--ink);
+      line-height: 1;
+    }
+    .cs-bs-content {}
+    .cs-bs-label {
+      font-size: 10px;
+      font-weight: 600;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--ink-muted);
+      margin-bottom: 6px;
+    }
+    .cs-bs-title {
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--ink);
+      margin-bottom: 6px;
+    }
+    .cs-bs-body {
+      font-size: 12.5px;
+      line-height: 1.6;
+      color: var(--ink-muted);
+    }
+    .cs-bs-note {
+      font-size: 11px;
+      color: var(--ink-muted);
+      margin-top: 12px;
+    }
+    .cs-bs-img {
+      border-radius: 10px;
+      width: 100%;
+      object-fit: contain;
+      box-shadow: 0 4px 24px rgba(0,0,0,0.08);
+    }
+
+    /* ── PIVOT ── */
+    .cs-pivot-grid {
+      display: grid;
+      grid-template-columns: 0.45fr 1fr;
+      gap: 72px;
+      margin-top: 48px;
+      align-items: start;
+    }
+    .cs-quote-block {
+      background: var(--arvo-dark);
+      border-radius: 10px;
+      padding: 28px 24px;
+    }
+    .cs-quote-text {
+      font-family: 'Fraunces', serif;
+      font-style: italic;
+      font-weight: 300;
+      font-size: 18px;
+      line-height: 1.6;
+      color: #fff;
+      margin-bottom: 14px;
+    }
+    .cs-quote-attr {
+      font-size: 12px;
+      font-weight: 600;
+      color: rgba(255,255,255,0.5);
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+    }
+    .cs-workshop-label {
+      font-size: 10px;
+      font-weight: 600;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--ink-muted);
+      margin-bottom: 20px;
+    }
+    .cs-sprint {
+      padding: 16px 0;
+      border-bottom: 1px solid rgba(10,10,10,0.08);
+    }
+    .cs-sprint:last-of-type { border-bottom: none; }
+    .cs-sprint-title {
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--ink);
+      margin-bottom: 5px;
+    }
+    .cs-sprint-body {
+      font-size: 13px;
+      line-height: 1.6;
+      color: var(--ink-muted);
+    }
+    .cs-pivot-photos {
+      display: grid;
+      grid-template-columns: repeat(6, 1fr);
+      gap: 8px;
+      margin-top: 52px;
+    }
+    .cs-pivot-photos img {
+      width: 100%;
+      aspect-ratio: 1;
+      object-fit: cover;
+      border-radius: 6px;
+    }
+
+    /* ── RESULTS ── */
+    .cs-results-pill {
+      display: inline-block;
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      padding: 6px 14px;
+      border-radius: 100px;
+      border: 1px solid rgba(10,10,10,0.18);
+      color: var(--ink-muted);
+      margin-bottom: 36px;
+    }
+    .cs-results-stats {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 2px;
+      margin-bottom: 48px;
+    }
+    .cs-result-stat {
+      background: rgba(10,10,10,0.04);
+      padding: 28px 24px;
+    }
+    .cs-result-stat:first-child { border-radius: 8px 0 0 8px; }
+    .cs-result-stat:last-child { border-radius: 0 8px 8px 0; }
+    .cs-result-stat-label {
+      font-size: 10px;
+      font-weight: 600;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--ink-muted);
+      margin-bottom: 12px;
+    }
+    .cs-result-stat-num {
+      font-family: var(--font-display);
+      font-size: 52px;
+      font-weight: 900;
+      color: var(--ink);
+      line-height: 1;
+      margin-bottom: 6px;
+    }
+    .cs-result-stat-sub {
+      font-size: 12px;
+      color: var(--ink-muted);
+      line-height: 1.4;
+    }
+    .cs-results-table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+    .cs-results-table th {
+      font-size: 10px;
+      font-weight: 600;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--ink-muted);
+      text-align: left;
+      padding: 10px 16px;
+      border-bottom: 1px solid rgba(10,10,10,0.1);
+    }
+    .cs-results-table th:first-child { padding-left: 0; }
+    .cs-results-table td {
+      padding: 18px 16px;
+      border-bottom: 1px solid rgba(10,10,10,0.06);
+      font-size: 13.5px;
+      vertical-align: top;
+    }
+    .cs-results-table td:first-child { padding-left: 0; }
+    .cs-results-table tr:last-child td { border-bottom: none; }
+    .cs-td-theme-title { font-weight: 700; margin-bottom: 4px; color: var(--ink); }
+    .cs-td-theme-sub { font-size: 12px; color: var(--ink-muted); }
+    .cs-rate-bar {
+      height: 5px;
+      border-radius: 3px;
+      margin-top: 6px;
+    }
+    .cs-rate-bar--old { background: #d94a4a; }
+    .cs-rate-bar--new { background: var(--arvo-green); }
+    .cs-rate-pct { font-weight: 800; font-size: 22px; font-family: var(--font-display); }
+    .cs-rate-note { font-size: 11px; color: var(--ink-muted); margin-top: 3px; }
+
+    /* ── DESIGN FIXES ── */
+    .cs-full-img {
+      margin-top: 48px;
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: 0 8px 40px rgba(0,0,0,0.1);
+    }
+    .cs-full-img img { width: 100%; }
+
+    /* ── STRATEGIC ── */
+    .cs-vocab-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 52px;
+    }
+    .cs-vocab-table th {
+      font-size: 13px;
+      font-weight: 700;
+      color: #fff;
+      background: var(--arvo-dark);
+      padding: 16px 20px;
+      text-align: left;
+    }
+    .cs-vocab-table th:first-child { border-radius: 8px 0 0 0; }
+    .cs-vocab-table th:last-child { border-radius: 0 8px 0 0; }
+    .cs-vocab-table td {
+      padding: 16px 20px;
+      font-size: 13.5px;
+      border-bottom: 1px solid rgba(10,10,10,0.07);
+      vertical-align: top;
+      line-height: 1.5;
+    }
+    .cs-vocab-table tr:last-child td { border-bottom: none; }
+    .cs-vocab-table td:first-child { font-family: var(--font-display); font-size: 12.5px; color: var(--ink-muted); font-style: italic; }
+    .cs-vocab-table td:nth-child(2) { font-weight: 600; color: var(--ink); }
+    .cs-vocab-table td:last-child { font-size: 12.5px; color: var(--ink-muted); }
+    .cs-vocab-caption {
+      text-align: center;
+      font-size: 12px;
+      color: var(--ink-muted);
+      margin-top: 16px;
+    }
+
+    /* ── FINAL SOLUTION ── */
+    .cs-laptop-wrap {
+      margin-top: 52px;
+      border-radius: 12px;
+      overflow: hidden;
+    }
+    .cs-laptop-wrap img { width: 100%; }
+
+    /* ── OUTCOME ── */
+    .cs-outcome-resolved {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin: 36px 0;
+    }
+    .cs-resolved-tag {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 13px;
+      font-weight: 600;
+      padding: 10px 18px;
+      border-radius: 6px;
+      border: 1.5px solid rgba(10,10,10,0.1);
+      color: var(--ink);
+    }
+    .cs-resolved-dot {
+      width: 8px; height: 8px;
+      border-radius: 50%;
+      background: var(--arvo-green);
+    }
+    .cs-resolved-badge {
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      background: var(--arvo-green);
+      color: #fff;
+      padding: 3px 8px;
+      border-radius: 100px;
+      margin-left: 4px;
+    }
+    .cs-beyond-label {
+      font-size: 10px;
+      font-weight: 600;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--ink-muted);
+      margin-bottom: 24px;
+      padding-top: 36px;
+      border-top: 1px solid rgba(10,10,10,0.1);
+    }
+    .cs-decisions-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 16px;
+    }
+    .cs-decision-card {
+      background: rgba(10,10,10,0.04);
+      border-radius: 10px;
+      padding: 22px 20px;
+    }
+    .cs-decision-badge {
+      font-size: 9px;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      padding: 4px 9px;
+      border-radius: 100px;
+      margin-bottom: 14px;
+      display: inline-block;
+    }
+    .cs-decision-badge--partial { background: rgba(218,160,50,0.2); color: #8a6010; }
+    .cs-decision-badge--biz { background: rgba(10,10,10,0.1); color: var(--ink-muted); }
+    .cs-decision-title {
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--ink);
+      margin-bottom: 8px;
+      line-height: 1.35;
+    }
+    .cs-decision-body {
+      font-size: 12px;
+      line-height: 1.6;
+      color: var(--ink-muted);
+    }
+
+    /* ── TESTIMONY ── */
+    .cs-testimony {
+      background: #fff;
+    }
+    .cs-testimony-inner {
+      max-width: 760px;
+      margin: 0 auto;
+      padding: var(--pad-y) var(--pad-x);
+      text-align: center;
+    }
+    .cs-testimony-section-label {
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--ink-muted);
+      margin-bottom: 52px;
+    }
+    .cs-quote-marks {
+      font-family: 'Fraunces', serif;
+      font-size: 96px;
+      line-height: 0.6;
+      color: rgba(10,10,10,0.08);
+      margin-bottom: 32px;
+    }
+    .cs-testimony-quote {
+      font-family: 'Fraunces', serif;
+      font-style: italic;
+      font-weight: 300;
+      font-size: clamp(16px, 1.4vw, 20px);
+      line-height: 1.75;
+      color: var(--ink);
+      margin-bottom: 40px;
+    }
+    .cs-testimony-attr {
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--ink-muted);
+    }
+
+    /* ── RETRO ── */
+    .cs-retro {
+      background: var(--arvo-dark);
+    }
+    .cs-retro-cards {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      margin-top: 52px;
+    }
+    .cs-retro-card {
+      background: rgba(255,255,255,0.1);
+      border-radius: 10px;
+      padding: 24px 28px;
+      display: grid;
+      grid-template-columns: 28px 1fr;
+      gap: 18px;
+      align-items: start;
+    }
+    .cs-retro-dot {
+      width: 14px;
+      height: 14px;
+      border-radius: 50%;
+      margin-top: 3px;
+    }
+    .cs-retro-card-title {
+      font-size: 14px;
+      font-weight: 700;
+      color: #fff;
+      margin-bottom: 8px;
+    }
+    .cs-retro-card-body {
+      font-size: 13px;
+      line-height: 1.65;
+      color: rgba(255,255,255,0.6);
+    }
+    .cs-retro-actions {
+      display: flex;
+      gap: 12px;
+      margin-top: 52px;
+    }
+    .cs-retro-btn {
+      font-family: var(--font-body);
+      font-size: 13px;
+      font-weight: 600;
+      letter-spacing: 0.04em;
+      color: #fff;
+      border: 1.5px solid rgba(255,255,255,0.25);
+      border-radius: 100px;
+      padding: 12px 24px;
+      cursor: pointer;
+      transition: background 0.2s, border-color 0.2s;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .cs-retro-btn--primary { background: #fff; border-color: #fff; color: var(--arvo-dark); }
+    .cs-retro-btn:hover { background: rgba(255,255,255,0.08); border-color: rgba(255,255,255,0.55); }
+    .cs-retro-btn--primary:hover { background: rgba(255,255,255,0.88); border-color: rgba(255,255,255,0.88); }
+    .cs-case-nav {
+      display: flex;
+      justify-content: space-between;
+      padding: 28px var(--pad-x);
+      border-top: 1px solid rgba(255,255,255,0.08);
+      max-width: var(--content-max);
+      margin: 0 auto;
+    }
+    .cs-case-nav-link {
+      font-size: 12px;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.4);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      transition: color 0.2s;
+    }
+    .cs-case-nav-link:hover { color: #fff; }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 768px) {
+      .cs-hero-inner { grid-template-columns: 1fr; }
+      .cs-hero-meta { min-width: unset; }
+      .cs-tldr-grid { grid-template-columns: 1fr; }
+      .cs-research-grid { grid-template-columns: 1fr; }
+      .cs-brightspots-grid { grid-template-columns: 1fr; }
+      .cs-pivot-grid { grid-template-columns: 1fr; }
+      .cs-results-stats { grid-template-columns: 1fr; gap: 2px; }
+      .cs-decisions-grid { grid-template-columns: 1fr 1fr; }
+      .cs-pivot-photos { grid-template-columns: repeat(3, 1fr); }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- NAV -->
+  <nav class="cs-nav">
+    <a class="cs-nav-back" href="../index.html#work">
+      <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8">
+        <path d="M10 3L5 8l5 5"/>
+      </svg>
+      Back
+    </a>
+    <a class="cs-nav-cta" href="https://www.figma.com/proto/1VklSkodi8LYoZ755bvRfi" target="_blank" rel="noopener">
+      Try the prototype →
+    </a>
+  </nav>
+
+  <!-- 00 HERO -->
+  <section class="cs-section cs-hero" id="cs-hero">
+    <div class="cs-hero-bg"></div>
+    <div class="cs-hero-inner">
+      <div class="cs-hero-left">
+        <h1 class="cs-hero-h1">
+          We came to fix<br>
+          the <em>interface.</em><br>
+          We found a<br>
+          broken <em>model.</em>
+        </h1>
+        <p class="cs-hero-sub">Six weeks. A team of three. A client who needed convincing. A usability brief that required uncomfortable honesty from everyone in the room to get to the right answer.</p>
+        <a class="cs-hero-cta" href="https://www.figma.com/proto/1VklSkodi8LYoZ755bvRfi" target="_blank" rel="noopener">
+          TRY THE MANAGER DASHBOARD →
+        </a>
+      </div>
+      <div class="cs-hero-meta">
+        <div class="cs-meta-row">
+          <span class="cs-meta-label">Role</span>
+          <span class="cs-meta-value">Project Manager</span>
+        </div>
+        <div class="cs-meta-row">
+          <span class="cs-meta-label">Team</span>
+          <span class="cs-meta-value">6 Designers</span>
+        </div>
+        <div class="cs-meta-row">
+          <span class="cs-meta-label">Methods</span>
+          <span class="cs-meta-value">Moderated Usability Testing, Co-Creation Workshop, Iterative Prototype Validation</span>
+        </div>
+        <div class="cs-meta-row">
+          <span class="cs-meta-label">Type</span>
+          <span class="cs-meta-value">B2B SaaS HR Tech</span>
+        </div>
+        <div class="cs-meta-row">
+          <span class="cs-meta-label">Deliverable</span>
+          <span class="cs-meta-value">Strategic Roadmap + Production-Ready Design</span>
+        </div>
+        <div class="cs-meta-row">
+          <span class="cs-meta-label">Duration</span>
+          <span class="cs-meta-value">6-Week Sprint Feb–Mar 2026</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 01 TLDR -->
+  <section class="cs-section cs-section--dark cs-tldr" id="cs-tldr">
+    <div class="cs-inner">
+      <p class="cs-section-label">01 TL;DR</p>
+      <h2 class="cs-h2">What we set out to do.<br>What we actually found.</h2>
+      <div class="cs-tldr-grid">
+        <div>
+          <p class="cs-tldr-col-label">What Shifted</p>
+
+          <div class="cs-stat-item">
+            <div class="cs-stat-number">17%<span class="arrow">→</span>92%</div>
+            <div class="cs-stat-body">
+              <p class="cs-stat-title">Adoption: Instant Scannability</p>
+              <p class="cs-stat-desc">By replacing dense data with traffic-light dials, we cut the time it takes to read team health to under three minutes, solving the "Manager's Paradox."</p>
+            </div>
+          </div>
+          <div class="cs-stat-item">
+            <div class="cs-stat-number">33%<span class="arrow">→</span>70%</div>
+            <div class="cs-stat-body">
+              <p class="cs-stat-title">Cognitive Overload</p>
+              <p class="cs-stat-desc">8 of 12 missed critical signals. Zero reported overload after redesign.</p>
+            </div>
+          </div>
+          <div class="cs-stat-item">
+            <div class="cs-stat-number">3</div>
+            <div class="cs-stat-body">
+              <p class="cs-stat-title">WCAG Violations Resolved</p>
+              <p class="cs-stat-desc">8 of 12 accessibility issues documented, scoped, and fixed in the final iteration.</p>
+            </div>
+          </div>
+        </div>
+        <div class="cs-tldr-divider"></div>
+        <div>
+          <p class="cs-tldr-col-label">What We Discovered</p>
+          <div class="cs-discovery-item">
+            <p class="cs-discovery-title">The deepest friction wasn't on the screen</p>
+            <p class="cs-discovery-body">3 of 7 issues survived every design iteration — because they were business-model problems. No UI change fixes anonymity trust, manager authority, or cadence assumptions.</p>
+          </div>
+          <div class="cs-discovery-item">
+            <p class="cs-discovery-title">Managers could see problems they couldn't fix</p>
+            <p class="cs-discovery-body">The authority to restructure workloads sits with HR — not with the managers ARVO was built for. The platform prescribed solutions its users couldn't execute.</p>
+          </div>
+          <div class="cs-discovery-item">
+            <p class="cs-discovery-title">77% didn't trust the anonymity</p>
+            <p class="cs-discovery-body">The product's signal quality depends on psychological safety it hadn't earned. A privacy badge won't fix that. It requires a fundamental architecture decision.</p>
+          </div>
+        </div>
+      </div>
+      <div class="cs-full-img" style="margin-top:52px;">
+        <img src="../assets/arvo-tldr.png" alt="TLDR overview">
+      </div>
+    </div>
+  </section>
+
+  <!-- 02 INITIAL RESEARCH -->
+  <section class="cs-section" id="cs-research">
+    <div class="cs-inner">
+      <p class="cs-section-label">02 Initial Research</p>
+      <h2 class="cs-h2">We recruited<br><em>for precision,</em><br><em>not volume.</em></h2>
+      <p class="cs-body">12 managers across 8 industries — specifically line managers and managers of managers. Not a broad net. The exact users ARVO would live or die by.</p>
+      <div class="cs-research-grid">
+        <div>
+          <p class="cs-overview-label">Participant Overview</p>
+          <div class="cs-overview-block">
+            <p class="cs-overview-label">Total Participants</p>
+            <p class="cs-overview-number">12</p>
+            <p class="cs-overview-sub">managers</p>
+          </div>
+          <div class="cs-overview-block">
+            <p class="cs-overview-label">Seniority Split</p>
+            <div class="cs-split-bar">
+              <span style="width:50%"></span>
+              <span style="width:50%"></span>
+            </div>
+            <div class="cs-split-labels">
+              <span>50% — 6 line managers</span>
+              <span>50% — 6 managers of managers</span>
+            </div>
+          </div>
+          <div class="cs-overview-block">
+            <p class="cs-overview-label">Team Size Range</p>
+            <div class="cs-split-bar">
+              <span style="width:59%"></span>
+              <span style="width:41%"></span>
+            </div>
+            <div class="cs-split-labels">
+              <span>59% Small 3–10</span>
+              <span>41% Large 11+</span>
+            </div>
+            <p style="font-size:11px;color:var(--ink-muted);margin-top:6px;">Roughly three in five lead a tight pod; the rest oversee broader org structures.</p>
+          </div>
+          <div class="cs-overview-block">
+            <p class="cs-overview-label">Industry Spread</p>
+            <div class="cs-tag-row">
+              <span class="cs-tag">Technology</span>
+              <span class="cs-tag">F&amp;B</span>
+              <span class="cs-tag">Hospitality</span>
+              <span class="cs-tag">Education</span>
+              <span class="cs-tag">Retail</span>
+              <span class="cs-tag">Finance</span>
+              <span class="cs-tag">Energy</span>
+              <span class="cs-tag">Consulting</span>
+            </div>
+          </div>
+        </div>
+        <div>
+          <img src="../assets/arvo-research.png" alt="Research synthesis board" class="cs-synthesis-img">
+          <p style="font-size:10px;font-weight:600;letter-spacing:0.1em;text-transform:uppercase;color:var(--ink-muted);margin-bottom:14px;">5 Failures Identified</p>
+          <div class="cs-failure-item">
+            <div class="cs-failure-left">
+              <p class="cs-failure-label">01 Managers Paradox</p>
+              <p class="cs-failure-pct">83%</p>
+            </div>
+            <div class="cs-failure-right">
+              <p class="cs-failure-body">10 of 12 rejected the platform. The tool designed to save time was consuming it. Managers quit before adoption.</p>
+            </div>
+          </div>
+          <div class="cs-failure-item">
+            <div class="cs-failure-left">
+              <p class="cs-failure-label">02 Honesty Gap</p>
+              <p class="cs-failure-pct">67%</p>
+            </div>
+            <div class="cs-failure-right">
+              <p class="cs-failure-body">8 of 12 didn't trust the anonymity aspect. The product's value rested on trust it hadn't earned.</p>
+            </div>
+          </div>
+          <div class="cs-failure-item">
+            <div class="cs-failure-left">
+              <p class="cs-failure-label">03 Jargon Problem</p>
+              <p class="cs-failure-pct">92%</p>
+            </div>
+            <div class="cs-failure-right">
+              <p class="cs-failure-body">11 of 12 struggled with abstract terminology. "Strengths-use fit." Meaningful in research. Paralyzing at 9am.</p>
+            </div>
+          </div>
+          <div class="cs-failure-item">
+            <div class="cs-failure-left">
+              <p class="cs-failure-label">04 Cognitive Overload</p>
+              <p class="cs-failure-pct">67%</p>
+            </div>
+            <div class="cs-failure-right">
+              <p class="cs-failure-body">8 of 12 missed critical signals. Dense text layout. Critical team signals went entirely unnoticed.</p>
+            </div>
+          </div>
+          <div class="cs-failure-item">
+            <div class="cs-failure-left">
+              <p class="cs-failure-label">05 Structural Resignation</p>
+              <p class="cs-failure-pct">58%</p>
+            </div>
+            <div class="cs-failure-right">
+              <p class="cs-failure-body">7 of 12 managers felt powerless. Agreed with recommendations. Couldn't act — the authority to restructure workloads sat with HR, not them.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 02 BRIGHT SPOTS -->
+  <section class="cs-section" id="cs-brightspots" style="background:#f8f7f1;">
+    <div class="cs-inner">
+      <p class="cs-section-label">02 The Bright Spots</p>
+      <h2 class="cs-h2">We protected <em>what</em><br><em>was already working.</em></h2>
+      <p class="cs-body">Most redesigns tear everything down. I briefed the team to find the instinct worth keeping. The traffic-light system was the product's best idea — every design decision was built around it, not over it.</p>
+      <div class="cs-brightspots-grid">
+        <div>
+          <div class="cs-bs-item">
+            <p class="cs-bs-pct">92%</p>
+            <div class="cs-bs-content">
+              <p class="cs-bs-label">Traffic-light Dials</p>
+              <p class="cs-bs-title">Managers instantly diagnosed team health without reading a single sentence.</p>
+              <p class="cs-bs-body">This was the core breakthrough to scale up. 12 of 13</p>
+            </div>
+          </div>
+          <div class="cs-bs-item">
+            <p class="cs-bs-pct">77%</p>
+            <div class="cs-bs-content">
+              <p class="cs-bs-label">Energisers &amp; Warnings</p>
+              <p class="cs-bs-title">Invisible, systemic disengagement risks — like early burnout — surfaced without requiring managers to interpret raw numbers.</p>
+              <p class="cs-bs-body">10 of 13</p>
+            </div>
+          </div>
+          <div class="cs-bs-item">
+            <p class="cs-bs-pct">69%</p>
+            <div class="cs-bs-content">
+              <p class="cs-bs-label">Single-page Layout</p>
+              <p class="cs-bs-title">"It was just one page, so it felt cognitively light."</p>
+              <p class="cs-bs-body">The constraint was a feature, not a limitation. 9 of 13</p>
+            </div>
+          </div>
+          <div class="cs-bs-item">
+            <p class="cs-bs-pct">62%</p>
+            <div class="cs-bs-content">
+              <p class="cs-bs-label">Micro-interventions</p>
+              <p class="cs-bs-title">Specific, low-effort tasks were significantly more useful than generic HR advice.</p>
+              <p class="cs-bs-body">The specificity was the value. 8 of 13</p>
+            </div>
+          </div>
+          <p class="cs-bs-note">*Scores validated in Round 2</p>
+        </div>
+        <div>
+          <img src="../assets/arvo-brightspots.png" alt="ARVO bright spots reference" class="cs-bs-img">
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 03 PIVOT -->
+  <section class="cs-section" id="cs-pivot">
+    <div class="cs-inner">
+      <p class="cs-section-label">03 The Pivot — Co-Creation</p>
+      <h2 class="cs-h2">Before pixels,<br><em>a workshop.</em></h2>
+      <p class="cs-body">After Round 1 synthesis, the easy move was to return with polished mockups. I made a different call: bring the client into the problem before touching any designs.</p>
+      <div class="cs-pivot-grid">
+        <div>
+          <div class="cs-quote-block">
+            <p class="cs-quote-text">"It was just one page, so it felt quite cognitively light."</p>
+            <p class="cs-quote-attr">Manager H — Round 2</p>
+          </div>
+        </div>
+        <div>
+          <p class="cs-workshop-label">Workshop Structure</p>
+          <div class="cs-sprint">
+            <p class="cs-sprint-title">Sprint 01 / Combating Cognitive Overload</p>
+            <p class="cs-sprint-body">Curing cognitive overload by establishing strict visual limits based on team size.</p>
+          </div>
+          <div class="cs-sprint">
+            <p class="cs-sprint-title">Sprint 02 / The Honesty Gap</p>
+            <p class="cs-sprint-body">Securing trust by defining hard rules for when written text must become anonymous data.</p>
+          </div>
+          <div class="cs-sprint">
+            <p class="cs-sprint-title">Sprint 03 / Actionable Clarity</p>
+            <p class="cs-sprint-body">Stripping out academic jargon to deliver specific, low-effort micro-interventions.</p>
+          </div>
+          <div class="cs-sprint">
+            <p class="cs-sprint-title">Goal</p>
+            <p class="cs-sprint-body">Shared ownership before any solution was named.</p>
+          </div>
+        </div>
+      </div>
+      <div class="cs-full-img" style="margin-top:52px;">
+        <img src="../assets/arvo-pivot.png" alt="Co-creation workshop">
+      </div>
+    </div>
+  </section>
+
+  <!-- 04 RESULTS -->
+  <section class="cs-section" id="cs-results" style="background:#f8f7f1;">
+    <div class="cs-inner">
+      <p class="cs-section-label">04 Round 2 — Results</p>
+      <h2 class="cs-h2">Two wins.<br><em>Measured.</em></h2>
+      <p class="cs-body">The two most critical failures from Round 1 were gone. Before running Round 2, I defined success criteria with the team — not just "does it feel better" but specific, observable thresholds tied to each issue.</p>
+      <p class="cs-results-pill">Redesign 1 — Outcome</p>
+      <div class="cs-results-stats">
+        <div class="cs-result-stat">
+          <p class="cs-result-stat-label">Total Participants</p>
+          <p class="cs-result-stat-num">13</p>
+          <p class="cs-result-stat-sub">new pool of managers</p>
+        </div>
+        <div class="cs-result-stat">
+          <p class="cs-result-stat-label">Solved Managers Paradox</p>
+          <p class="cs-result-stat-num">92%</p>
+          <p class="cs-result-stat-sub">12 of 13 managers mentioned instant scannability</p>
+        </div>
+        <div class="cs-result-stat">
+          <p class="cs-result-stat-label">Solved Cognitive Overload</p>
+          <p class="cs-result-stat-num">70%</p>
+          <p class="cs-result-stat-sub">9 of 13 managers praised reduced mental tax</p>
+        </div>
+      </div>
+      <table class="cs-results-table">
+        <thead>
+          <tr>
+            <th>Theme / Where it broke / where it landed</th>
+            <th>Original — Friction (Rate)</th>
+            <th>Redesign — Resolved</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>
+              <p class="cs-td-theme-title">Manager's Paradox</p>
+              <p class="cs-td-theme-sub">Deciphering the dashboard took too much time.</p>
+            </td>
+            <td>
+              <p class="cs-rate-pct">83%</p>
+              <div class="cs-rate-bar cs-rate-bar--old" style="width:83%"></div>
+              <p class="cs-rate-note">10 of 12 — users rejected the platform</p>
+            </td>
+            <td>
+              <p class="cs-rate-pct" style="color:var(--arvo-green)">92%</p>
+              <div class="cs-rate-bar cs-rate-bar--new" style="width:92%"></div>
+              <p class="cs-rate-note">12 of 13 — could understand alerts under 3 mins</p>
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <p class="cs-td-theme-title">Cognitive Overload</p>
+              <p class="cs-td-theme-sub">Dashboard reads like a static magazine.</p>
+            </td>
+            <td>
+              <p class="cs-rate-pct">67%</p>
+              <div class="cs-rate-bar cs-rate-bar--old" style="width:67%"></div>
+              <p class="cs-rate-note">8 of 12 — users missed urgent at-risk signals</p>
+            </td>
+            <td>
+              <p class="cs-rate-pct" style="color:var(--arvo-green)">70%</p>
+              <div class="cs-rate-bar cs-rate-bar--new" style="width:70%"></div>
+              <p class="cs-rate-note">9 of 13 — users had explicit praises for the reduced mental tax</p>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+      <div class="cs-full-img" style="margin-top:48px;">
+        <img src="../assets/arvo-results2.png" alt="Round 2 results detail">
+      </div>
+    </div>
+  </section>
+
+  <!-- 05 DESIGN FIXES -->
+  <section class="cs-section" id="cs-designfixes">
+    <div class="cs-inner">
+      <p class="cs-section-label">05 Design Fixes</p>
+      <h2 class="cs-h2">Three things I<br><em>scoped for this sprint.</em></h2>
+      <p class="cs-body">A combination of some of the design fixes which resulted from both rounds of iteration. I facilitated strict research findings and made sure every decision traced back to something a real user had said.</p>
+      <div class="cs-full-img">
+        <img src="../assets/arvo-designfixes.png" alt="Design fixes — scoped sprint decisions">
+      </div>
+    </div>
+  </section>
+
+  <!-- 06 STRATEGIC DELIVERABLE -->
+  <section class="cs-section" id="cs-strategic" style="background:#fff;">
+    <div class="cs-inner">
+      <p class="cs-section-label">06 Strategic Deliverable</p>
+      <h2 class="cs-h2">We rewrote<br><em>the AI's vocabulary.</em></h2>
+      <p class="cs-body">A formal taxonomy document — my initiative, not in the original brief. I identified early that the language problem was systematic, not cosmetic, and that a redesign without a backend fix would regress. So I scoped and authored the doc, then handed it directly to the client's engineers.</p>
+      <table class="cs-vocab-table">
+        <thead>
+          <tr>
+            <th>AI terms</th>
+            <th>Plain English</th>
+            <th>Why it matters</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>BURNOUT_DRIFT</td>
+            <td>Burnout Warning</td>
+            <td>Immediate, actionable read. No interpretation required.</td>
+          </tr>
+          <tr>
+            <td>"EXECUTION_RISK"</td>
+            <td>"Wrong Task, Wrong Person"</td>
+            <td>Names the problem specifically. No digging required.</td>
+          </tr>
+          <tr>
+            <td>"Strengths-use fit at 2.2"</td>
+            <td>Their task satisfaction is falling — act now</td>
+            <td>Converts a score into a call to action.</td>
+          </tr>
+          <tr>
+            <td>"Run a decision rights check-in"</td>
+            <td>Clarify who decides what on current projects</td>
+            <td>Manager can picture exactly what to do.</td>
+          </tr>
+        </tbody>
+      </table>
+      <p class="cs-vocab-caption">A comparison of raw AI terminology versus our trained LLM output in plain English.</p>
+      <div class="cs-full-img" style="margin-top:40px;">
+        <img src="../assets/arvo-strategic.png" alt="Strategic vocabulary document">
+      </div>
+    </div>
+  </section>
+
+  <!-- 07 FINAL SOLUTION -->
+  <section class="cs-section" id="cs-finalsolution">
+    <div class="cs-inner">
+      <p class="cs-section-label">07 Final Solution</p>
+      <h2 class="cs-h2">The <em>finished</em> dashboard.</h2>
+      <p class="cs-body">Single page. Traffic-light health at a glance. Plain-English alerts. Built for 3 minutes on a Monday morning.</p>
+      <div class="cs-laptop-wrap">
+        <img src="../assets/arvo-finalsolution.png" alt="ARVO finished dashboard">
+      </div>
+    </div>
+  </section>
+
+  <!-- 08 OUTCOME -->
+  <section class="cs-section" id="cs-outcome" style="background:#f8f7f1;">
+    <div class="cs-inner">
+      <p class="cs-section-label">08 The Outcome</p>
+      <h2 class="cs-h2">Four issues survived.<br><em>Three were the<br>client's to solve.</em></h2>
+      <p class="cs-body" style="margin-bottom:16px;">Presenting this to the client was the hardest facilitation moment of the project. The framing had to be precise: this isn't a design failure. It's clarity — you now know exactly where design ends and where product strategy begins.</p>
+      <p class="cs-body">A designer who papers over business-logic failures with prettier interfaces isn't solving problems. They're delaying them. I wrote formal strategic recommendations for each of the three business issues and presented them as the client's next product decisions.</p>
+      <div class="cs-outcome-resolved">
+        <div class="cs-resolved-tag">
+          <span class="cs-resolved-dot"></span>
+          Manager's Paradox
+          <span class="cs-resolved-badge">Resolved</span>
+        </div>
+        <div class="cs-resolved-tag">
+          <span class="cs-resolved-dot"></span>
+          Cognitive Overload
+          <span class="cs-resolved-badge">Resolved</span>
+        </div>
+        <div class="cs-resolved-tag">
+          <span class="cs-resolved-dot"></span>
+          Accessibility — WCAG contrast
+          <span class="cs-resolved-badge">Resolved</span>
+        </div>
+      </div>
+      <p class="cs-beyond-label">Beyond surface design; returned to client as product brief</p>
+      <div class="cs-decisions-grid">
+        <div class="cs-decision-card">
+          <span class="cs-decision-badge cs-decision-badge--partial">Partially Addressed</span>
+          <p class="cs-decision-title">AI Jargon</p>
+          <p class="cs-decision-body">AI output was too academic and jargon-heavy. ARVO team must simplify all prompts to be clear and professional for B2B users.</p>
+        </div>
+        <div class="cs-decision-card">
+          <span class="cs-decision-badge cs-decision-badge--biz">Business Decision</span>
+          <p class="cs-decision-title">Anonymity gap</p>
+          <p class="cs-decision-body">Workers may not answer honestly if they fear being identified, leading to managerial scepticism. ARVO team needs to decide on a min. anonymity threshold to guarantee results cannot be traced back to specific team members.</p>
+        </div>
+        <div class="cs-decision-card">
+          <span class="cs-decision-badge cs-decision-badge--biz">Business Decision</span>
+          <p class="cs-decision-title">Digital Homework — Survey Cadence &amp; Managerial checklist</p>
+          <p class="cs-decision-body">Weekly surveys and checklists cause burnout and feel like "just another task." ARVO should switch to a monthly or fortnightly schedule.</p>
+        </div>
+        <div class="cs-decision-card">
+          <span class="cs-decision-badge cs-decision-badge--biz">Business Decision</span>
+          <p class="cs-decision-title">Structural resignation</p>
+          <p class="cs-decision-body">Managers feel helpless when alerted to systemic issues (e.g., pay, promotion slots) they have no authority to fix.</p>
+        </div>
+      </div>
+      <div class="cs-full-img" style="margin-top:48px;">
+        <img src="../assets/arvo-outcome.png" alt="Outcome summary">
+      </div>
+    </div>
+  </section>
+
+  <!-- 09 CLIENT TESTIMONY -->
+  <section class="cs-section cs-testimony" id="cs-testimony">
+    <div class="cs-testimony-inner">
+      <p class="cs-testimony-section-label">09 Client Testimony</p>
+      <div class="cs-quote-marks">"</div>
+      <p class="cs-testimony-quote">Working with this UX/UI team was a genuinely impressive experience. From the outset, they handled all project concerns with professionalism and responsiveness, and their strong internal coordination meant I always faced a cohesive, well-aligned team. What stood out most was their user research capability — they recruited a surprisingly robust pool of the right user profiles within a very short timeframe, and conducted interviews in a manner that users themselves described as approachable, friendly, and open. Their design recommendations were methodically tested and immediately actionable, directly strengthening the product's user experience. The final mockups reflected a level of craft and polish I wouldn't hesitate to put in front of investors or clients. Any organisation looking to undertake serious UX work would be fortunate to have this team — individually and collectively...</p>
+      <p class="cs-testimony-attr">— Eileen Zhang · Founder, ARVO</p>
+      <div class="cs-full-img" style="margin-top:48px;border-radius:12px;overflow:hidden;box-shadow:0 8px 40px rgba(0,0,0,0.08);">
+        <img src="../assets/arvo-testimony.png" alt="Client testimony visual">
+      </div>
+    </div>
+  </section>
+
+  <!-- 10 RETRO -->
+  <section class="cs-section cs-section--dark cs-retro" id="cs-retro">
+    <div class="cs-inner">
+      <p class="cs-section-label">10 Retrospective</p>
+      <h2 class="cs-h2">What leading this<br>actually <em>taught me.</em></h2>
+      <div class="cs-retro-cards">
+        <div class="cs-retro-card">
+          <span class="cs-retro-dot" style="background:#c8a840;"></span>
+          <div>
+            <p class="cs-retro-card-title">Hold the design boundary — out loud</p>
+            <p class="cs-retro-card-body">Knowing where design ends isn't enough. The skill is explaining that boundary to a client who doesn't want to hear it, in a way that feels like partnership rather than refusal. That takes preparation, not just conviction.</p>
+          </div>
+        </div>
+        <div class="cs-retro-card">
+          <span class="cs-retro-dot" style="background:var(--arvo-green);"></span>
+          <div>
+            <p class="cs-retro-card-title">Workshop design is leadership design</p>
+            <p class="cs-retro-card-body">How you structure a co-creation session shapes what a client is willing to accept afterwards. Opening with user quotes before any findings was a deliberate facilitation choice — it changed the entire tone of what followed.</p>
+          </div>
+        </div>
+        <div class="cs-retro-card">
+          <span class="cs-retro-dot" style="background:#d94a4a;"></span>
+          <div>
+            <p class="cs-retro-card-title">Scope decisions are the hardest decisions</p>
+            <p class="cs-retro-card-body">Fixing three things well beats fixing seven things partially. Defining what we were not doing in the iteration sprint — and holding that boundary with the team — was harder than the design work itself.</p>
+          </div>
+        </div>
+      </div>
+      <div class="cs-full-img" style="margin-top:48px;">
+        <img src="../assets/arvo-retro.png" alt="Retrospective visual">
+      </div>
+      <div class="cs-retro-actions">
+        <a class="cs-retro-btn" href="../index.html#work">← View All Work</a>
+        <a class="cs-retro-btn cs-retro-btn--primary" href="https://www.figma.com/proto/1VklSkodi8LYoZ755bvRfi" target="_blank" rel="noopener">TRY THE MANAGER DASHBOARD →</a>
+      </div>
+    </div>
+    <div class="cs-case-nav">
+      <a class="cs-case-nav-link" href="pethaus.html">← Pet Haus</a>
+      <a class="cs-case-nav-link" href="seletar.html">Seletar Airport →</a>
+    </div>
+  </section>
+
+  <script>
+    gsap.registerPlugin(ScrollTrigger);
+
+    /* ── HERO ENTRANCE ── */
+    const heroTl = gsap.timeline({ delay: 0.1 });
+    heroTl
+      .from('.cs-hero-h1',   { y: 60, opacity: 0, duration: 0.8, ease: 'power2.out' })
+      .from('.cs-hero-sub',  { y: 20, opacity: 0, duration: 0.6, ease: 'power2.out' }, '-=0.4')
+      .from('.cs-hero-meta .cs-meta-row', { y: 20, opacity: 0, stagger: 0.07, duration: 0.5, ease: 'power2.out' }, '-=0.5')
+      .from('.cs-hero-cta',  { opacity: 0, duration: 0.5, ease: 'power2.out' }, '-=0.2');
+
+    /* ── BASE SCROLL REVEAL — every .cs-section ── */
+    gsap.utils.toArray('.cs-section').forEach(section => {
+      gsap.from(section.querySelectorAll('.cs-h2, .cs-body, .cs-section-label'), {
+        y: 40,
+        opacity: 0,
+        duration: 0.7,
+        stagger: 0.08,
+        ease: 'power2.out',
+        scrollTrigger: {
+          trigger: section,
+          start: 'top 82%',
+          toggleActions: 'play none none none'
+        }
+      });
+    });
+
+    /* ── TLDR STATS ── */
+    gsap.from('.cs-stat-item', {
+      y: 30, opacity: 0, stagger: 0.12, duration: 0.6, ease: 'power2.out',
+      scrollTrigger: { trigger: '#cs-tldr', start: 'top 70%', toggleActions: 'play none none none' }
+    });
+    gsap.from('.cs-discovery-item', {
+      y: 30, opacity: 0, stagger: 0.12, duration: 0.6, ease: 'power2.out',
+      scrollTrigger: { trigger: '#cs-tldr', start: 'top 70%', toggleActions: 'play none none none' }
+    });
+
+    /* ── RESEARCH ── */
+    gsap.from('.cs-failure-item', {
+      x: -20, opacity: 0, stagger: 0.1, duration: 0.5, ease: 'power2.out',
+      scrollTrigger: { trigger: '#cs-research', start: 'top 75%', toggleActions: 'play none none none' }
+    });
+
+    /* ── BRIGHT SPOTS — stagger left to right ── */
+    gsap.from('.cs-bs-item', {
+      x: -20, opacity: 0, stagger: 0.15, duration: 0.5, ease: 'power2.out',
+      scrollTrigger: { trigger: '#cs-brightspots', start: 'top 75%', toggleActions: 'play none none none' }
+    });
+
+    /* ── RESULTS STATS ── */
+    gsap.from('.cs-result-stat', {
+      scale: 0.95, opacity: 0, stagger: 0.1, duration: 0.5, ease: 'power2.out',
+      scrollTrigger: { trigger: '#cs-results', start: 'top 75%', toggleActions: 'play none none none' }
+    });
+
+    /* ── FINAL SOLUTION — slow zoom ── */
+    gsap.from('.cs-laptop-wrap img', {
+      scale: 0.92, opacity: 0, duration: 1.0, ease: 'power2.out',
+      scrollTrigger: { trigger: '#cs-finalsolution', start: 'top 75%', toggleActions: 'play none none none' }
+    });
+
+    /* ── OUTCOME DECISIONS ── */
+    gsap.from('.cs-decision-card', {
+      y: 30, opacity: 0, stagger: 0.1, duration: 0.6, ease: 'power2.out',
+      scrollTrigger: { trigger: '#cs-outcome', start: 'top 70%', toggleActions: 'play none none none' }
+    });
+
+    /* ── TESTIMONY ── */
+    const testTl = gsap.timeline({
+      scrollTrigger: { trigger: '#cs-testimony', start: 'top 75%', toggleActions: 'play none none none' }
+    });
+    testTl
+      .from('.cs-quote-marks',     { scale: 0, opacity: 0, duration: 0.4, ease: 'back.out(1.5)' })
+      .from('.cs-testimony-quote', { y: 20, opacity: 0, duration: 0.7, ease: 'power2.out' }, '-=0.1')
+      .from('.cs-testimony-attr',  { opacity: 0, duration: 0.5 }, '-=0.1');
+
+    /* ── RETRO CARDS ── */
+    gsap.from('.cs-retro-card', {
+      y: 30, opacity: 0, stagger: 0.12, duration: 0.6, ease: 'power2.out',
+      scrollTrigger: { trigger: '#cs-retro', start: 'top 75%', toggleActions: 'play none none none' }
+    });
+  </script>
+</body>
+</html>

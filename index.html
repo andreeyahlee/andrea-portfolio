@@ -11,6 +11,7 @@
   <link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,100..1000&display=swap" rel="stylesheet">
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@200..800&display=swap" rel="stylesheet">
   <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@100..800&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@1,9..144,300;1,9..144,400&display=swap" rel="stylesheet">
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
   <script>gsap.registerPlugin(ScrollTrigger);</script>
@@ -142,6 +143,14 @@
     body:has(#about-overlay.is-open) #nav .nav-link:hover { color: var(--bg); }
     body:has(#about-overlay.is-open) #nav .nav-cta { color: var(--bg); border-color: rgba(243,242,236,0.4); }
     body:has(#about-overlay.is-open) #nav .nav-cta:hover { background: rgba(243,242,236,0.08); border-color: rgba(243,242,236,0.7); }
+    body:has(#contact-overlay.is-open) #nav {
+      background: var(--work-bg);
+      border-color: transparent;
+    }
+    body:has(#contact-overlay.is-open) #nav .nav-link { color: rgba(243,242,236,0.75); }
+    body:has(#contact-overlay.is-open) #nav .nav-link:hover { color: var(--bg); }
+    body:has(#contact-overlay.is-open) #nav .nav-cta { color: var(--bg); border-color: rgba(243,242,236,0.4); }
+    body:has(#contact-overlay.is-open) #nav .nav-cta:hover { background: rgba(243,242,236,0.08); border-color: rgba(243,242,236,0.7); }
 
     .nav-hamburger {
       display: none;
@@ -316,14 +325,10 @@
     }
     .arvo-col:hover .work-section-label { opacity: 0; }
 
-    /* ── CTA card — sized to image aspect ratio so contain fills width ── */
+    /* ── CTA card — fills entire column ── */
     .work-col-bottom {
       position: absolute;
-      top: 50%;
-      left: 0;
-      right: 0;
-      transform: translateY(-50%);
-      aspect-ratio: 960 / 1880;
+      inset: 0;
       overflow: hidden;
       z-index: 1;
     }
@@ -350,7 +355,7 @@
       inset: 0;
       width: 100%;
       height: 100%;
-      object-fit: contain;
+      object-fit: cover;
       object-position: center;
       display: block;
       opacity: 0;
@@ -433,7 +438,7 @@
     #about {
       position: relative;
       width: 100%;
-      height: 340vh;
+      height: 460vh;
       background: var(--bg);
     }
     .about-sticky {
@@ -518,19 +523,25 @@
       white-space: nowrap;
       z-index: 2;
     }
-    /* State 3 content — two columns flanking the portrait inside the warm panel */
-    .about-s3-content {
+    /* Clip container — both content states live inside; overflow:hidden masks scroll exit at warm rect top */
+    .about-warm-clip {
       position: absolute;
       bottom: 0;
       left: 0;
       right: 0;
       height: 50%;
+      overflow: hidden;
+      z-index: 1;
+    }
+    /* State 3 content — two columns flanking the portrait inside the warm panel */
+    .about-s3-content {
+      position: absolute;
+      inset: 0;
       display: grid;
       grid-template-columns: 1fr 30vw 1fr;
       align-items: stretch;
       padding: 0 clamp(32px, 5vw, 80px);
       opacity: 0;
-      z-index: 1;
     }
     .about-s3-col {
       display: flex;
@@ -542,15 +553,20 @@
       justify-content: flex-end;
       padding-bottom: clamp(28px, 4.5vh, 56px);
       position: relative;
+      z-index: 0;
     }
-    /* Singapore skyline watermark behind left col — add assets/about-singapore.png to activate */
+    /* Singapore island — right edge anchored to portrait column start, left bleeds off-screen */
     .about-s3-col:first-child::before {
       content: '';
       position: absolute;
-      inset: 0;
-      background: url('assets/about-singapore.png') center bottom / cover no-repeat;
-      opacity: 0.12;
+      top: -10%;
+      right: 0;
+      width: 48vw;
+      height: 120%;
+      background: url('assets/about-singapore.png') right center / contain no-repeat;
+      opacity: 0.5;
       pointer-events: none;
+      z-index: -1;
     }
     /* Right col: top-aligned (Pilates / philosophy text) */
     .about-s3-col:last-child {
@@ -563,14 +579,11 @@
       gap: 8px;
     }
     .about-s3-pin {
-      width: 18px;
-      height: 22px;
+      width: 24px;
+      height: 24px;
       flex-shrink: 0;
-      margin-top: 3px;
-      fill: none;
-      stroke: var(--ink);
-      stroke-width: 1.5;
-      stroke-linecap: round;
+      margin-top: 2px;
+      object-fit: contain;
     }
     .about-s3-col .about-s3-col-title {
       font-family: var(--font-display);
@@ -594,6 +607,44 @@
       font-style: normal;
     }
     .about-s3-col strong { opacity: 1; color: var(--ink); font-weight: 600; }
+
+    /* ── State 4: "Off the record" tag cloud ─────────────────────────── */
+    .about-s4-content {
+      position: absolute;
+      inset: 0;
+      opacity: 0;
+      pointer-events: none;
+    }
+    .about-s4-head {
+      position: absolute;
+      top: 5%;
+      left: 50%;
+      transform: translateX(-50%);
+      font-family: 'Fraunces', serif;
+      font-size: clamp(20px, 1.8vw, 30px);
+      font-style: italic;
+      font-weight: 300;
+      color: var(--ink);
+      white-space: nowrap;
+      margin: 0;
+    }
+    .about-tag {
+      position: absolute;
+      background: var(--work-bg);
+      color: var(--bg);
+      font-family: var(--font-body);
+      font-size: clamp(10px, 0.78vw, 13px);
+      font-weight: 400;
+      padding: 8px 18px;
+      border-radius: 100px;
+      white-space: nowrap;
+      line-height: 1;
+    }
+    /* Portrait h2 must always sit above tag pills */
+    .about-headline {
+      position: relative;
+      z-index: 3;
+    }
     /* "Andrea" text renders above portrait */
     .about-andrea-text {
       position: relative;
@@ -931,14 +982,12 @@
       <div class="about-sticky">
         <div class="about-warm-panel" aria-hidden="true"></div>
         <div class="about-state3-head" aria-hidden="true">Hi! I'm<br>Andrea</div>
+        <div class="about-warm-clip">
         <div class="about-s3-content">
           <!-- Left: location -->
           <div class="about-s3-col">
             <div class="about-s3-loc-head">
-              <svg class="about-s3-pin" viewBox="0 0 20 24" aria-hidden="true">
-                <path d="M10 1C6.13 1 3 4.13 3 8c0 5.5 7 15 7 15s7-9.5 7-15c0-3.87-3.13-7-7-7z"/>
-                <circle cx="10" cy="8" r="2.5" fill="currentColor" stroke="none"/>
-              </svg>
+              <img class="about-s3-pin" src="assets/icon-geopin.png" alt="" aria-hidden="true">
               <p class="about-s3-col-title">Raised in a land of<br>'maximum'</p>
             </div>
             <p>I learned that clutter is just friction. In a city of 5-star noise, less isn't a limitation—it's a decision to prioritise what actually moves the needle.</p>
@@ -954,6 +1003,28 @@
             <p><strong>The invisible adjustments are usually the whole job.</strong></p>
           </div>
         </div>
+        <!-- State 4: Off the record tag cloud -->
+        <div class="about-s4-content">
+          <p class="about-s4-head">Off the record</p>
+          <!-- Row 1: wide top tag + upper right -->
+          <span class="about-tag" style="left:28%;top:19%">I secretly like it that I don't know much about anything to be amazed by everything new I learn</span>
+          <!-- Row 2: inner left + upper right -->
+          <span class="about-tag" style="left:34%;top:32%">Pilates core. UX brain.</span>
+          <span class="about-tag" style="left:56%;top:32%">Too much screentime</span>
+          <!-- Row 3: outer left + outer right -->
+          <span class="about-tag" style="left:13%;top:42%">Allergic to Comic Sans</span>
+          <span class="about-tag" style="left:73%;top:42%">Love British Royal History</span>
+          <!-- Row 4: inner right -->
+          <span class="about-tag" style="left:64%;top:52%">Absolute caffeine addict</span>
+          <!-- Row 5: inner left + outer right -->
+          <span class="about-tag" style="left:22%;top:60%">Recovering event stylist</span>
+          <span class="about-tag" style="left:75%;top:62%">Picking up pickleball</span>
+          <!-- Row 6: outer left + inner right -->
+          <span class="about-tag" style="left:11%;top:74%">Aspiring to side hustle as a pilates instructor</span>
+          <span class="about-tag" style="left:65%;top:76%">Adore fantasy novels, ACOTAR!!!!</span>
+        </div>
+        </div><!-- /about-warm-clip -->
+
         <h2 class="about-headline" id="about-headline">
           <span class="about-hi-text">Hi! I'm</span>
           <span class="about-andrea-wrap">
@@ -1221,7 +1292,11 @@
         // warm panel + portrait
         .to('.about-warm-panel',    { height: s3PanelH, duration: 0.8, ease: 'power2.inOut' }, 1.1)
         .to('.about-portrait-img',  { y: s3PortraitDeltaY, height: s3PortraitH, width: s3PortraitW,
-                                      duration: 0.8, ease: 'power2.inOut' }, 1.1);
+                                      duration: 0.8, ease: 'power2.inOut' }, 1.1)
+        // — State 4: s3 scrolls up out, s4 scrolls up in (positions 2.1 → 2.8) —
+        .set('.about-s4-content',   { yPercent: 100 }, 0)
+        .to('.about-s3-content',    { yPercent: -100, opacity: 0, duration: 0.55, ease: 'power2.inOut' }, 2.1)
+        .to('.about-s4-content',    { yPercent: 0, opacity: 1, duration: 0.55, ease: 'power2.inOut' }, 2.35);
     }
 
     aboutOverlayEl.addEventListener('scroll', () => {
