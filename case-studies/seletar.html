@@ -320,6 +320,30 @@
       border-top: 1px solid rgba(0,0,0,0.07);
     }
 
+    /* ── LAPTOP MOCKUP ── */
+    .st-laptop-mock {
+      width: 100%; max-width: 640px;
+      filter: drop-shadow(0 24px 48px rgba(0,0,0,0.22)) drop-shadow(0 4px 8px rgba(0,0,0,0.12));
+    }
+    .st-laptop-device {
+      position: relative;
+      width: 100%;
+      padding-top: 62.6%; /* 1346/2150 */
+    }
+    .st-laptop-video {
+      position: absolute;
+      left: 5%; top: 7.5%;
+      width: 88.2%; height: 77.5%;
+      object-fit: cover;
+      z-index: 1;
+    }
+    .st-laptop-frame {
+      position: absolute;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      z-index: 2;
+    }
+
     /* ── 04 CTA ── */
     .st-cta-layout {
       flex: 1; display: flex; gap: 48px; align-items: center;
@@ -703,7 +727,12 @@
           </a>
         </div>
         <div style="flex:1;display:flex;align-items:center;justify-content:center;">
-          <img src="../assets/seletar-cta-card.png" alt="Seletar Airport redesigned prototype" style="width:100%;height:auto;max-height:400px;object-fit:contain;border-radius:16px;">
+          <div class="st-laptop-mock">
+            <div class="st-laptop-device">
+              <video class="st-laptop-video" src="../assets/seletar-img-outcome.mp4" autoplay loop muted playsinline></video>
+              <canvas class="st-laptop-frame" id="st-laptop-canvas"></canvas>
+            </div>
+          </div>
         </div>
       </div>
     </div>
@@ -798,7 +827,7 @@
 
         <!-- Round 1 -->
         <div class="st-val-round">
-          <img src="../assets/seletar-img-v1before.png" alt="V1 internal review prototype" style="width:100%;height:100px;object-fit:cover;border-radius:10px;margin-bottom:8px;">
+          <img src="../assets/seletar-img-v1before.png" alt="V1 internal review prototype" style="width:100%;height:auto;border-radius:10px;margin-bottom:8px;">
           <div class="st-round-head">
             <span class="st-round-pill st-round-pill--r1">Round 1</span>
             <span class="st-round-context">9 users · Hybrid remote &amp; on-site</span>
@@ -834,7 +863,7 @@
 
         <!-- Round 2 -->
         <div class="st-val-round">
-          <img src="../assets/seletar-img-v1after.png" alt="V1 final prototype" style="width:100%;height:100px;object-fit:cover;border-radius:10px;margin-bottom:8px;">
+          <img src="../assets/seletar-img-v1after.png" alt="V1 final prototype" style="width:100%;height:auto;border-radius:10px;margin-bottom:8px;">
           <div class="st-round-head">
             <span class="st-round-pill st-round-pill--r2">Round 2</span>
             <span class="st-round-context">6 users · On-site at the airport</span>
@@ -1028,6 +1057,22 @@
     });
 
     ScrollTrigger.refresh();
+
+    /* ── LAPTOP FRAME (canvas cutout) ── */
+    (function() {
+      const canvas = document.getElementById('st-laptop-canvas');
+      if (!canvas) return;
+      const ctx = canvas.getContext('2d');
+      const img = new Image();
+      img.onload = function() {
+        canvas.width = img.naturalWidth;
+        canvas.height = img.naturalHeight;
+        ctx.drawImage(img, 0, 0);
+        /* clear the screen area so video shows through */
+        ctx.clearRect(108, 101, 1896, 1043);
+      };
+      img.src = '../assets/seletar-img-outcome-laptop.png';
+    })();
 
     /* ── READING PROGRESS BAR ── */
     const progressBar = document.getElementById('cs-progress');
