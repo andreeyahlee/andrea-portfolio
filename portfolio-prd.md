@@ -551,92 +551,51 @@ Apply same pattern for Seletar (`seletar-cta.png` → `seletar-hero.png`) and Pe
 
 ---
 
-### 6.1 ARVO — `case-studies/arvo.html`
+### 6.1 ARVO — `case-studies/arvo.html` ✅ COMPLETE
 
 **Accent:** `#2a4a6b` navy | **12 sections**
 
-**Exports needed:**
+**Assets in use:**
 
-| File | Node |
+| File | Role |
 |---|---|
-| `arvo-hero.png` | `869-255` |
-| `arvo-tldr.png` | `737-247` |
-| `arvo-research.png` | `858-1810` |
-| `arvo-brightspots.png` | `898-456` |
-| `arvo-pivot.png` | `894-116` |
-| `arvo-results2.png` | `899-903` |
-| `arvo-designfixes.png` | `755-200` |
-| `arvo-strategic.png` | `763-3884` |
-| `arvo-finalsolution.png` | `908-108` |
-| `arvo-outcome.png` | `755-1121` |
-| `arvo-testimony.png` | `765-7912` |
-| `arvo-retro.png` | `765-7946` |
+| `arvo-hero.png` | Hero background |
+| `arvo-tldr.png` | TL;DR background |
+| `arvo-tldr-bkg.png` | TL;DR section bg texture |
+| `arvo-research-synthesis.png` | Research section synthesis image (replaces `arvo-research.png`) |
+| `arvo-brightspots.png` | Brightspots section |
+| `arvo-brightspots-image.png` | Full-height right-aligned image in brightspots section |
+| `arvo-pivot-1.png` … `arvo-pivot-7.png` | 7-photo strip in pivot section |
+| `arvo-designfixes-1.mp4` | Fix 01 flow video (cognitive overload) |
+| `arvo-designfixes-2.png` | Fix 02 screenshot (manager's paradox) |
+| `arvo-designfixes-3.png` | Fix 03 screenshot (jargon friction) |
+| `arvo-designfixes-4.gif` | Fix 04 transformation gif (digital homework trap) |
+| `arvo-designfixes-5.png` | Fix 05 screenshot (energizers & drainers) |
+| `arvo-finalsolution-laptop.png` | Final solution video poster |
+| `arvo-finalsolution-video.mov` | Final solution screen recording |
+| `arvo-laptop-keyboard.png` | Laptop mockup keyboard base (from Figma node 908-118) |
+| `arvo-cta-card.png` | Section CTA card image |
 
-**Section-by-section animation:**
+**Assets NOT used (present in `/assets/` but removed from page):**
+`arvo-research.png`, `arvo-pivot.png`, `arvo-results2.png`, `arvo-designfixes.png`, `arvo-strategic.png`, `arvo-outcome.png`, `arvo-testimony.png`, `arvo-retro.png`, `arvo-finalsolution.png`
 
-**Hero (`869-255`)** — Full bleed navy, page load entrance:
-```
-- Project title: y: 60 → 0, opacity 0 → 1, 0.8s, delay 0.2s
-- Role + year tag: y: 20 → 0, opacity 0 → 1, delay 0.5s
-- Hero image: scale 1.05 → 1.0, opacity 0 → 1, 1s (subtle zoom-in on load)
-- Prototype CTA button: fades in last, delay 0.8s
-```
+**As-built — key decisions that differ from original spec:**
 
-**TLDR (`737-247`)** — Stat cards stagger in:
-```
-- Section label slides in from left
-- Each TLDR card: stagger 0.12s, y: 30 → 0, opacity 0 → 1
-```
+**Scroll pinning pattern:** Every section (except hero) uses `position: relative`. GSAP `ScrollTrigger` pins each section at `start: 'bottom bottom'` with `pinSpacing: false` so it locks at the viewport bottom while the next section slides over it. Hero remains `position: sticky; top: 0`.
 
-**Initial Research (`858-1810`)** — Base scroll reveal. Match layout and content to `arvo-research.png` exactly.
+**Reading progress bar:** 3px green (`--arvo-green`) bar fixed at `top: 0`, `z-index: 200`. Updates via passive `scroll` event listener.
 
-**Bright Spots (`898-456`)** — Items reveal one by one left to right:
-```
-- Each bright spot item: stagger 0.15s, x: -20 → 0, opacity 0 → 1
-```
+**Research section:** Original two-column layout kept. Synthesis image swapped to `arvo-research-synthesis.png`.
 
-**⭐ SIGNATURE MOMENT — The Pivot / Co-creation (`894-116`):**
+**Brightspots section:** `arvo-brightspots-image.png` positioned `absolute; right: 0; top: 0; height: 100%; width: 42%`. Section has `overflow: hidden`. `.cs-inner` uses `padding-right: 46%` to prevent text overlap.
 
-Pin this section. Build the scoping diagram on scroll. All labels, card titles, and annotation text come from `arvo-pivot.png` — do not invent them.
+**Pivot section:** Overview image (`arvo-pivot.png`) removed. 7-photo strip uses `display: flex; align-items: center; gap: 10px` with each photo at `height: 290px; flex: 1 1 0; min-width: 0; object-fit: cover; border-radius: 10px`.
 
-```
-ScrollTrigger pin: true, end: "+=500", scrub: 1
+**Design Fixes section:** Fully rebuilt from Figma node 755-200. Background `#eae8e0`. 4 alternating fix panels (card ↔ image) + 1 "WE KEPT THIS!" panel. White cards (`border-radius: 30px`, `box-shadow: -12px -7px 5px rgba(0,0,0,0.25)`), red FIX badges (`#d11b1b`, JetBrains Mono), green improvement lines (`#458619`), Cormorant Garamond pull-quotes. Panel gap `72px`, card padding `40px`. Lime `#dce888` "WE KEPT THIS!" pill; kept card uses `background: #f3f2ec` with green `#458619` KEEP badge. Cormorant Garamond added via Google Fonts.
 
-scrub 0: All problem cards fade in together — match layout to arvo-pivot.png
-scrub 0.3 → 0.6: Cards that were scoped OUT dim to 20% opacity
-scrub 0.6 → 0.8: Cards that were scoped IN scale slightly (1.0 → 1.05), border glows --arvo
-scrub 0.8 → 1.0: Annotation text fades in — read text from arvo-pivot.png
-Unpin at scrub 1.0
-```
+**Final Solution section:** CSS laptop mockup (`.cs-laptop-mock`) wrapping the video. Structure: silver lid (`.cs-laptop-lid`, `#d0d0d0`, `border-radius: 13px 13px 0 0`, `width: 80%`) → black bezel (`.cs-laptop-screen-wrap`, `#050505`) → video. 3px hinge strip. Full-width keyboard base using `arvo-laptop-keyboard.png` (941×17px silver texture from Figma node 908-118). `filter: drop-shadow(...)` on container.
 
-**Second Round Results (`899-903`)** — Results cards stagger in with slight scale:
-```
-- Each result: scale 0.95 → 1.0, opacity 0 → 1, stagger 0.1s
-```
-
-**Design Fixes (`755-200`)** — Screen mockups slide in from right:
-```
-- .cs-screen elements: x: 40 → 0, opacity 0 → 1, stagger 0.15s
-```
-
-**Strategic Deliverable (`763-3884`)** — Base scroll reveal. Match layout and content to `arvo-strategic.png` exactly.
-
-**Final Solution (`908-108`)** — Prototype mockup enters with slow zoom:
-```
-- Main screen: scale 0.92 → 1.0, opacity 0 → 1, duration 1.0s
-- Prototype CTA button pulses once after entrance (scale 1.0 → 1.03 → 1.0, 600ms)
-```
-
-**The Outcome (`755-1121`)** — ⭐ Metric numbers count up on scroll enter. Read all metric values, labels, and layout from `arvo-outcome.png` — do not hardcode any numbers.
-
-**Client Testimony (`765-7912`)** — Quote reveal:
-```
-- Quote marks scale in: scale 0 → 1, 0.4s
-- Quote text: opacity 0 → 1, y: 20 → 0, 0.7s, delay 0.3s
-- Attribution: fades in last, delay 0.8s
-```
-
-**Retrospective (`765-7946`)** — Base scroll reveal. Match layout and content to `arvo-retro.png` exactly.
+**Removed images:** `arvo-strategic.png`, `arvo-outcome.png`, `arvo-testimony.png`, `arvo-retro.png` — all deleted from their sections. Text content in those sections was preserved; only the image blocks were removed.
 
 ---
 
@@ -851,8 +810,8 @@ Run these as separate sessions, each with this PRD attached:
 | **5a** | About overlay: States 1, 2, 3 (scroll-driven GSAP, portrait split + anchor, warm rect, two-column layout) | ✅ Done | `about-portrait.png`, `about-portrait-anchored.png`, `about-singapore.png`, `icon-geopin.png` |
 | **5b** | About overlay: State 4 — info swap | 🔲 Next | `about-info-swap.png` |
 | **6** | Contact section | ✅ Done | `sayhello.png` |
-| **7** | `case-studies/arvo.html` | 🔲 Pending | All `arvo-*.png` files |
-| **8** | `case-studies/seletar.html` | 🔲 Pending | All `seletar-*.png` files |
+| **7** | `case-studies/arvo.html` | ✅ Done | — |
+| **8** | `case-studies/seletar.html` | 🔲 Next | All `seletar-*.png` files |
 | **9** | `case-studies/pethaus.html` | 🔲 Pending | All `pethaus-*.png` files |
 | **10** | Custom cursor + final QA: GSAP conflict check, mobile test, Netlify deploy | 🔲 Pending | `cursor-light.png`, `cursor-dark.png` |
 
