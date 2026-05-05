@@ -66,7 +66,7 @@
       top: 16px;
       left: 50%;
       transform: translateX(-50%);
-      z-index: 100;
+      z-index: 300;
       display: flex;
       align-items: center;
       gap: 12px;
@@ -133,6 +133,15 @@
       border-color: rgba(10,10,10,0.28);
     }
     #nav.nav--light .nav-cta:hover { background: rgba(10,10,10,0.05); border-color: rgba(10,10,10,0.5); }
+    /* Force dark nav when About overlay is open */
+    body:has(#about-overlay.is-open) #nav {
+      background: var(--work-bg);
+      border-color: transparent;
+    }
+    body:has(#about-overlay.is-open) #nav .nav-link { color: rgba(243,242,236,0.75); }
+    body:has(#about-overlay.is-open) #nav .nav-link:hover { color: var(--bg); }
+    body:has(#about-overlay.is-open) #nav .nav-cta { color: var(--bg); border-color: rgba(243,242,236,0.4); }
+    body:has(#about-overlay.is-open) #nav .nav-cta:hover { background: rgba(243,242,236,0.08); border-color: rgba(243,242,236,0.7); }
 
     .nav-hamburger {
       display: none;
@@ -367,7 +376,7 @@
     /* "Read the case study →" button — left-aligned, content-hug width */
     .work-read-btn {
       position: absolute;
-      bottom: 44px;
+      bottom: 28px;
       left: 32px;
       z-index: 4;
       display: inline-flex;
@@ -419,18 +428,26 @@
     }
 
     /* ============================================================
-       ABOUT — State 1 static
+       ABOUT — States 1 + 2 (scroll-driven portrait split)
     ============================================================ */
     #about {
       position: relative;
       width: 100%;
-      min-height: 100vh;
+      height: 340vh;
       background: var(--bg);
+    }
+    .about-sticky {
+      position: sticky;
+      top: 0;
+      height: 100vh;
       display: flex;
       flex-direction: column;
       align-items: center;
       justify-content: center;
       overflow: hidden;
+    }
+    .about-hi-text {
+      display: inline-block;
     }
     .about-headline {
       font-family: var(--font-display);
@@ -444,23 +461,143 @@
       gap: 0.18em;
       padding: 0 var(--sp-lg);
     }
-    .about-portrait-slot {
+    /* "Andrea" + warm rect wrapper.
+       clip-path: allows overflow above (portrait peeks up) but clips below the slot's bottom bleed,
+       and extends ±500px left/right so "Hi! I'm" and "Andrea" can slide without getting clipped. */
+    .about-andrea-wrap {
+      position: relative;
       display: inline-flex;
-      width: clamp(110px, 11.5vw, 168px);
-      height: clamp(130px, 13vw, 196px);
-      background: var(--bg-warm);
-      border-radius: 5px;
-      flex-shrink: 0;
-      overflow: hidden;
-      vertical-align: middle;
-      opacity: 0;
-      /* portrait animates in during Session 5 */
+      align-items: center;
+      clip-path: inset(-300% -500px -0.2em -500px);
     }
-    .about-portrait-slot img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
+    /* warm rect — GSAP sets xPercent:-50 on open so it centers around left:50%.
+       Width shrinks during scroll to fit between the split text. */
+    .about-portrait-slot {
+      position: absolute;
+      top: -0.14em;
+      bottom: -0.14em;
+      left: 50%;
+      width: calc(100% + 0.2em); /* natural: spans "Andrea" text + 0.1em each side */
+      background: var(--bg-warm);
+      border-radius: 6px;
+      z-index: 0;
+    }
+    /* portrait photo — same width/centering as slot; GSAP controls xPercent, yPercent, and width */
+    .about-portrait-img {
+      position: absolute;
+      left: 50%;
+      bottom: -0.14em;
+      width: calc(100% + 0.2em);
+      height: 1.8em;
+      object-fit: contain;
       object-position: top center;
+      z-index: 1;
+      display: block;
+    }
+    /* Full-width warm panel that expands to cover bottom half in State 3 */
+    .about-warm-panel {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      height: 0;
+      background: var(--bg-warm);
+    }
+    /* Stacked "Hi! I'm / Andrea" heading in top-left — visible only in State 3 */
+    .about-state3-head {
+      position: absolute;
+      bottom: calc(50% + clamp(20px, 3vh, 40px));
+      left: clamp(32px, 5vw, 80px);
+      font-family: var(--font-display);
+      font-size: clamp(36px, 5vw, 80px);
+      font-weight: 700;
+      color: var(--ink);
+      line-height: 1.05;
+      opacity: 0;
+      pointer-events: none;
+      white-space: nowrap;
+      z-index: 2;
+    }
+    /* State 3 content — two columns flanking the portrait inside the warm panel */
+    .about-s3-content {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      height: 50%;
+      display: grid;
+      grid-template-columns: 1fr 30vw 1fr;
+      align-items: stretch;
+      padding: 0 clamp(32px, 5vw, 80px);
+      opacity: 0;
+      z-index: 1;
+    }
+    .about-s3-col {
+      display: flex;
+      flex-direction: column;
+      gap: clamp(8px, 1.2vh, 16px);
+    }
+    /* Left col: bottom-aligned (Singapore / location text) */
+    .about-s3-col:first-child {
+      justify-content: flex-end;
+      padding-bottom: clamp(28px, 4.5vh, 56px);
+      position: relative;
+    }
+    /* Singapore skyline watermark behind left col — add assets/about-singapore.png to activate */
+    .about-s3-col:first-child::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: url('assets/about-singapore.png') center bottom / cover no-repeat;
+      opacity: 0.12;
+      pointer-events: none;
+    }
+    /* Right col: top-aligned (Pilates / philosophy text) */
+    .about-s3-col:last-child {
+      justify-content: flex-start;
+      padding-top: clamp(28px, 4.5vh, 56px);
+    }
+    .about-s3-loc-head {
+      display: flex;
+      align-items: flex-start;
+      gap: 8px;
+    }
+    .about-s3-pin {
+      width: 18px;
+      height: 22px;
+      flex-shrink: 0;
+      margin-top: 3px;
+      fill: none;
+      stroke: var(--ink);
+      stroke-width: 1.5;
+      stroke-linecap: round;
+    }
+    .about-s3-col .about-s3-col-title {
+      font-family: var(--font-display);
+      font-size: clamp(18px, 2vw, 32px);
+      font-style: italic;
+      font-weight: 400;
+      color: var(--ink);
+      line-height: 1.2;
+      margin: 0;
+      opacity: 1;
+    }
+    .about-s3-col p {
+      font-size: clamp(12px, 1vw, 15px);
+      color: var(--ink);
+      line-height: 1.65;
+      margin: 0;
+      opacity: 0.75;
+    }
+    .about-s3-emoji {
+      font-family: 'Apple Color Emoji', 'Segoe UI Emoji', 'Noto Color Emoji', sans-serif;
+      font-style: normal;
+    }
+    .about-s3-col strong { opacity: 1; color: var(--ink); font-weight: 600; }
+    /* "Andrea" text renders above portrait */
+    .about-andrea-text {
+      position: relative;
+      z-index: 2;
     }
     .about-scroll-hint {
       position: absolute;
@@ -473,6 +610,7 @@
       gap: 6px;
       color: var(--muted);
       font-size: 13px;
+      white-space: nowrap;
     }
     .about-scroll-hint .scroll-line {
       width: 1px;
@@ -483,16 +621,18 @@
     .about-scroll-hint .scroll-text {
       display: flex;
       align-items: center;
-      gap: 4px;
+      gap: 5px;
     }
     .about-scroll-hint .scroll-text em {
-      font-family: var(--font-mono);
+      font-family: 'Fraunces', serif;
       font-style: italic;
-      font-weight: 400;
+      font-weight: 300;
+      font-size: 14px;
     }
     .about-scroll-hint .scroll-text span {
       font-family: var(--font-body);
       font-weight: 500;
+      font-size: 13px;
     }
 
     /* ============================================================
@@ -786,16 +926,49 @@
   ============================ -->
   <div id="about-overlay" class="overlay-panel" role="dialog"
        aria-modal="true" aria-label="About Andrea">
-    <button class="overlay-close" id="about-close" aria-label="Close">&#x2715;</button>
 
-    <section id="about" aria-label="About" style="padding: 0 56px 96px; min-height: 100vh; display: flex; align-items: center;">
-      <h2 class="about-headline" id="about-headline">
-        Hi! I'm
-        <span class="about-portrait-slot" id="about-portrait" aria-hidden="true">
-          <img src="assets/about-portrait.png" alt="">
-        </span>
-        Andrea
-      </h2>
+    <section id="about" aria-label="About">
+      <div class="about-sticky">
+        <div class="about-warm-panel" aria-hidden="true"></div>
+        <div class="about-state3-head" aria-hidden="true">Hi! I'm<br>Andrea</div>
+        <div class="about-s3-content">
+          <!-- Left: location -->
+          <div class="about-s3-col">
+            <div class="about-s3-loc-head">
+              <svg class="about-s3-pin" viewBox="0 0 20 24" aria-hidden="true">
+                <path d="M10 1C6.13 1 3 4.13 3 8c0 5.5 7 15 7 15s7-9.5 7-15c0-3.87-3.13-7-7-7z"/>
+                <circle cx="10" cy="8" r="2.5" fill="currentColor" stroke="none"/>
+              </svg>
+              <p class="about-s3-col-title">Raised in a land of<br>'maximum'</p>
+            </div>
+            <p>I learned that clutter is just friction. In a city of 5-star noise, less isn't a limitation—it's a decision to prioritise what actually moves the needle.</p>
+            <p><em>Majulah Singapura!</em></p>
+          </div>
+          <!-- Center: portrait space -->
+          <div></div>
+          <!-- Right: philosophy -->
+          <div class="about-s3-col">
+            <p class="about-s3-col-title"><em>Designing <span class="about-s3-emoji">🧘‍♀️</span> is like<br>practicing Pilates</em></p>
+            <p>Everyone sees the heavy rowing. Nobody sees the core work holding it together. If your form is off by two inches, you're not building strength. You're just creating a future ache.</p>
+            <p>I design the same way. The sitemap nobody questions. The label that prevents the wrong click. The shortcut that saves thirty seconds, every time.</p>
+            <p><strong>The invisible adjustments are usually the whole job.</strong></p>
+          </div>
+        </div>
+        <h2 class="about-headline" id="about-headline">
+          <span class="about-hi-text">Hi! I'm</span>
+          <span class="about-andrea-wrap">
+            <span class="about-portrait-slot" id="about-portrait" aria-hidden="true"></span>
+            <img class="about-portrait-img" src="assets/about-portrait.png" alt="" aria-hidden="true">
+            <span class="about-andrea-text">Andrea</span>
+          </span>
+        </h2>
+
+        <div class="about-scroll-hint" aria-hidden="true">
+          <span class="scroll-line"></span>
+          <span class="scroll-text"><em>scroll</em> <span>down</span></span>
+          <span class="scroll-line"></span>
+        </div>
+      </div>
     </section>
   </div>
 
@@ -806,8 +979,6 @@
   ============================ -->
   <div id="contact-overlay" class="overlay-panel" role="dialog"
        aria-modal="true" aria-label="Contact Andrea">
-    <button class="overlay-close" id="contact-close" aria-label="Close">&#x2715;</button>
-
     <section id="contact" aria-label="Contact" style="padding: 140px 56px 96px; min-height: 100vh;">
       <h2 class="contact-headline">Say hi!</h2>
       <p class="contact-sub">Open to product design and UX research roles locally and overseas.</p>
@@ -886,22 +1057,37 @@
   <script>
   'use strict';
 
+  let aboutSplitTl = null;
+
   /* ----------------------------------------------------------
      OVERLAY PANELS — About + Contact
   ---------------------------------------------------------- */
   function openOverlay(id) {
+    ['about-overlay', 'contact-overlay'].forEach(otherId => {
+      if (otherId !== id) document.getElementById(otherId).classList.remove('is-open');
+    });
     document.getElementById(id).classList.add('is-open');
     document.body.style.overflow = 'hidden';
+    if (id === 'about-overlay') {
+      navLogoImg.src = 'assets/logo-dark.png';
+      gsap.set('.about-portrait-slot', { xPercent: -50 });
+      gsap.set('.about-portrait-img',  { xPercent: -50, yPercent: 110 });
+    }
   }
   function closeOverlay(id) {
-    document.getElementById(id).classList.remove('is-open');
+    const panel = document.getElementById(id);
+    panel.classList.remove('is-open');
     document.body.style.overflow = '';
+    if (id === 'about-overlay') {
+      panel.scrollTop = 0;
+      if (aboutSplitTl) aboutSplitTl.progress(0);
+      updateNavTheme();
+    }
   }
 
   document.getElementById('nav-about').addEventListener('click', () => openOverlay('about-overlay'));
   document.getElementById('nav-sayhi').addEventListener('click', () => openOverlay('contact-overlay'));
-  document.getElementById('about-close').addEventListener('click', () => closeOverlay('about-overlay'));
-  document.getElementById('contact-close').addEventListener('click', () => closeOverlay('contact-overlay'));
+
   document.getElementById('overlay-about').addEventListener('click', () => { closeMenu(); openOverlay('about-overlay'); });
   document.addEventListener('keydown', e => {
     if (e.key === 'Escape') {
@@ -974,6 +1160,79 @@
   overlay.querySelectorAll('a').forEach(a => a.addEventListener('click', closeMenu));
   document.getElementById('overlay-sayhi').addEventListener('click', () => { closeMenu(); openOverlay('contact-overlay'); });
   document.addEventListener('keydown', e => { if (e.key === 'Escape' && menuOpen) closeMenu(); });
+
+  /* ----------------------------------------------------------
+     ABOUT — State 2: portrait split, scroll-driven
+     Scrubs a paused GSAP timeline against overlay.scrollTop.
+     Desktop only (≥768px).
+  ---------------------------------------------------------- */
+  (function () {
+    const aboutOverlayEl = document.getElementById('about-overlay');
+
+    function buildAboutSplitTl() {
+      const wrapEl   = document.querySelector('.about-andrea-wrap');
+      const hiTextEl = document.querySelector('.about-hi-text');
+      const andreaEl = document.querySelector('.about-andrea-text');
+      const h2El     = document.querySelector('.about-headline');
+
+      const wrapRect   = wrapEl.getBoundingClientRect();
+      const hiRect     = hiTextEl.getBoundingClientRect();
+      const andreaRect = andreaEl.getBoundingClientRect();
+
+      const viewCenter  = window.innerWidth / 2;
+      const targetWidth = Math.max(window.innerWidth * 0.15, 120);
+      const halfSlot    = targetWidth / 2;
+      const P = Math.max(window.innerWidth * 0.04, 32);
+
+      const centerDeltaX = viewCenter - (wrapRect.left + wrapRect.width / 2);
+      const hiX = (viewCenter - halfSlot - P) - hiRect.right;
+      const andreaX = (viewCenter + halfSlot + P) - andreaRect.left - centerDeltaX;
+
+      // State 3: warm panel fills bottom, portrait anchors at bottom, stacked text fades in
+      const fontSize         = parseFloat(getComputedStyle(h2El).fontSize);
+      const slotBleed        = fontSize * 0.14;
+      // wrapRect.bottom stays same vertically at State 2 end (no Y movement in State 2)
+      const s3PortraitDeltaY = window.innerHeight - (wrapRect.bottom + slotBleed);
+      const s3PanelH         = window.innerHeight * 0.5;
+      // Size portrait to natural image ratio so object-fit:contain shows the full photo
+      const naturalRatio     = h2El.querySelector('.about-portrait-img').naturalWidth /
+                               h2El.querySelector('.about-portrait-img').naturalHeight;
+      const s3PortraitW      = window.innerWidth  * 0.28;
+      const s3PortraitH      = s3PortraitW / naturalRatio;
+
+      aboutSplitTl = gsap.timeline({ paused: true });
+      aboutSplitTl
+        // — State 2: text splits, portrait emerges (positions 0 → ~1.05) —
+        .to('.about-scroll-hint',   { opacity: 0, duration: 0.3, ease: 'none' }, 0)
+        .to('.about-portrait-img',  { yPercent: 0, duration: 0.9, ease: 'power1.out' }, 0.1)
+        .to('.about-andrea-wrap',   { x: centerDeltaX, duration: 0.9, ease: 'power1.inOut' }, 0.15)
+        .to('.about-hi-text',       { x: hiX, duration: 0.9, ease: 'power1.inOut' }, 0.15)
+        .to('.about-andrea-text',   { x: andreaX, duration: 0.9, ease: 'power1.inOut' }, 0.15)
+        .to(['.about-portrait-slot', '.about-portrait-img'],
+            { width: targetWidth, duration: 0.9, ease: 'power1.inOut' }, 0.15)
+        // — State 3: warm panel expands, portrait anchors at bottom (positions 1.1 → ~2.0) —
+        .set('.about-andrea-wrap',  { clipPath: 'inset(-5000px -5000px -5000px -5000px)' }, 1.1)
+        .to('.about-portrait-slot', { opacity: 0, duration: 0.2, ease: 'none' }, 1.1)
+        // split text fades out; stacked head fades in
+        .to('.about-hi-text',       { opacity: 0, duration: 0.25, ease: 'none' }, 1.1)
+        .to('.about-andrea-text',   { opacity: 0, duration: 0.25, ease: 'none' }, 1.1)
+        .to('.about-state3-head',   { opacity: 1, duration: 0.4,  ease: 'none' }, 1.25)
+        .to('.about-s3-content',    { opacity: 1, duration: 0.4,  ease: 'none' }, 1.25)
+        // warm panel + portrait
+        .to('.about-warm-panel',    { height: s3PanelH, duration: 0.8, ease: 'power2.inOut' }, 1.1)
+        .to('.about-portrait-img',  { y: s3PortraitDeltaY, height: s3PortraitH, width: s3PortraitW,
+                                      duration: 0.8, ease: 'power2.inOut' }, 1.1);
+    }
+
+    aboutOverlayEl.addEventListener('scroll', () => {
+      if (window.innerWidth < 768) return;
+      if (!aboutSplitTl) buildAboutSplitTl();
+      const aboutEl = document.getElementById('about');
+      const scrollable = aboutEl.offsetHeight - window.innerHeight;
+      if (scrollable <= 0) return;
+      aboutSplitTl.progress(Math.min(1, aboutOverlayEl.scrollTop / scrollable));
+    }, { passive: true });
+  }());
 
   /* ----------------------------------------------------------
      SESSION 3 — Hero GSAP scroll sequence + Work entrance/exit
