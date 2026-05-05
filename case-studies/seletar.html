@@ -328,12 +328,12 @@
     .st-laptop-device {
       position: relative;
       width: 100%;
-      padding-top: 62.6%; /* 1346/2150 */
+      padding-top: 58.23%; /* 2342/4022 */
     }
     .st-laptop-video {
       position: absolute;
-      left: 5%; top: 7.5%;
-      width: 88.2%; height: 77.5%;
+      left: 9.9%; top: 1%;
+      width: 80.18%; height: 89.38%;
       object-fit: cover;
       z-index: 1;
     }
@@ -523,7 +523,7 @@
       </svg>
       Back
     </a>
-    <a class="cs-nav-cta" href="https://www.figma.com/make/VX9LWSLRU1wf0NH2pPaJbv" target="_blank" rel="noopener">
+    <a class="cs-nav-cta" href="https://seletar-airport-sg.figma.site/" target="_blank" rel="noopener">
       Try the prototype →
     </a>
   </nav>
@@ -722,7 +722,7 @@
         <div class="st-cta-text">
           <h2 class="st-cta-h2">The redesign is <em>live</em>.<br>Try the prototype.</h2>
           <p class="st-cta-sub">From a static brochure to a working passenger planning tool. The research-driven redesign is ready to explore.</p>
-          <a class="st-cta-btn" href="https://www.figma.com/make/VX9LWSLRU1wf0NH2pPaJbv" target="_blank" rel="noopener">
+          <a class="st-cta-btn" href="https://seletar-airport-sg.figma.site/" target="_blank" rel="noopener">
             SELETAR AIRPORT REDESIGNED &nbsp;→
           </a>
         </div>
@@ -969,7 +969,7 @@
       </div>
       <div class="st-retro-actions">
         <a class="st-retro-btn" href="../index.html#work">← View All Work</a>
-        <a class="st-retro-btn st-retro-btn--primary" href="https://www.figma.com/make/VX9LWSLRU1wf0NH2pPaJbv" target="_blank" rel="noopener">TRY THE PROTOTYPE →</a>
+        <a class="st-retro-btn st-retro-btn--primary" href="https://seletar-airport-sg.figma.site/" target="_blank" rel="noopener">TRY THE PROTOTYPE →</a>
       </div>
       <div class="st-case-nav">
         <a class="st-case-nav-link" href="arvo.html">← ARVO</a>
@@ -1069,7 +1069,8 @@
         canvas.height = img.naturalHeight;
         ctx.drawImage(img, 0, 0);
         /* clear the screen area so video shows through */
-        ctx.clearRect(108, 101, 1896, 1043);
+        /* clear the screen area so video shows through (screen: x=398,y=23, w=3225, h=2094) */
+        ctx.clearRect(398, 23, 3225, 2094);
       };
       img.src = '../assets/seletar-img-outcome-laptop.png';
     })();
