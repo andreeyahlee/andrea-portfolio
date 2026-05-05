@@ -1,0 +1,1053 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Seletar Airport — Case Study</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,100..1000&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@200..800&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital@1&display=swap" rel="stylesheet">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+  <style>
+    :root {
+      --sel-dark:    #1f2b1f;
+      --sel-lime:    #dce888;
+      --sel-accent:  #a1ad49;
+      --sel-green:   #458619;
+      --bg:          #f3f2ec;
+      --beige2:      #eae8e0;
+      --ink:         #0a0a0a;
+      --ink-muted:   rgba(10,10,10,0.55);
+      --font-display:'DM Sans', sans-serif;
+      --font-body:   'Plus Jakarta Sans', sans-serif;
+      --font-mono:   'JetBrains Mono', monospace;
+      --content-max: 1100px;
+      --pad-x:       clamp(32px, 5vw, 80px);
+    }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body { font-family: var(--font-body); background: var(--bg); color: var(--ink); overflow-x: hidden; }
+    a { color: inherit; text-decoration: none; }
+    img { display: block; max-width: 100%; }
+
+    /* ── PROGRESS BAR ── */
+    #cs-progress {
+      position: fixed; top: 0; left: 0;
+      height: 3px; width: 0%;
+      background: var(--sel-accent);
+      z-index: 200; pointer-events: none;
+    }
+
+    /* ── NAV ── */
+    .cs-nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 18px var(--pad-x);
+      background: var(--sel-dark);
+      border-bottom: 1px solid rgba(255,255,255,0.06);
+    }
+    .cs-nav-back {
+      font-family: var(--font-body); font-size: 13px; font-weight: 500;
+      color: rgba(255,255,255,0.6);
+      display: flex; align-items: center; gap: 6px; transition: color 0.2s;
+    }
+    .cs-nav-back:hover { color: #fff; }
+    .cs-nav-back svg { width: 16px; height: 16px; }
+    .cs-nav-cta {
+      font-family: var(--font-body); font-size: 13px; font-weight: 500; color: #fff;
+      border: 1.5px solid rgba(255,255,255,0.3); border-radius: 100px; padding: 7px 18px;
+      transition: background 0.2s, border-color 0.2s;
+    }
+    .cs-nav-cta:hover { background: rgba(255,255,255,0.08); border-color: rgba(255,255,255,0.6); }
+
+    /* ── SHARED SECTION BASE ── */
+    .cs-section { position: relative; }
+
+    /* Section label */
+    .cs-label {
+      font-family: var(--font-mono); font-size: 11px; font-weight: 700;
+      letter-spacing: 0.08em; text-transform: uppercase;
+      color: var(--ink-muted); margin-bottom: 24px;
+    }
+    .cs-label--light { color: rgba(255,255,255,0.4); }
+
+    /* ── PLACEHOLDERS ── */
+    .st-placeholder {
+      background: rgba(0,0,0,0.05);
+      border: 2px dashed rgba(0,0,0,0.15);
+      border-radius: 16px;
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+      gap: 6px; width: 100%;
+    }
+    .st-placeholder--dark {
+      background: rgba(255,255,255,0.06);
+      border-color: rgba(255,255,255,0.18);
+    }
+    .st-placeholder-tag {
+      font-family: var(--font-mono); font-size: 11px; font-weight: 700;
+      text-transform: uppercase; letter-spacing: 0.1em;
+      color: rgba(0,0,0,0.3); text-align: center;
+    }
+    .st-placeholder--dark .st-placeholder-tag { color: rgba(255,255,255,0.3); }
+    .st-placeholder-hint {
+      font-family: var(--font-body); font-size: 11px;
+      color: rgba(0,0,0,0.2); text-align: center;
+    }
+    .st-placeholder--dark .st-placeholder-hint { color: rgba(255,255,255,0.18); }
+
+    /* ── OVERLAY SCROLL PATTERN ── */
+    .cs-section:not(.cs-hero) {
+      position: relative;
+      height: 100vh;
+      overflow: hidden;
+      border-radius: 20px 20px 0 0;
+      box-shadow: 0 -24px 80px rgba(0,0,0,0.22);
+    }
+    /* Section inner — full height, flex column */
+    .cs-wrap {
+      position: relative; z-index: 1;
+      max-width: var(--content-max);
+      margin: 0 auto;
+      padding: clamp(64px, 7vh, 88px) var(--pad-x) clamp(40px, 5vh, 56px);
+      height: 100%;
+      display: flex; flex-direction: column;
+    }
+    /* Full-width variant (no max-width) */
+    .cs-wrap--full {
+      max-width: none;
+    }
+
+    /* z-index stack */
+    #cs-tldr       { z-index: 2;  background: var(--sel-dark); }
+    #cs-problem    { z-index: 3;  background: var(--bg); }
+    #cs-found      { z-index: 4;  background: #fff; }
+    #cs-cta        { z-index: 5;  background: var(--beige2); }
+    #cs-design-1   { z-index: 6;  background: var(--beige2); }
+    #cs-design-2   { z-index: 7;  background: var(--beige2); }
+    #cs-design-3   { z-index: 8;  background: var(--beige2); }
+    #cs-validation { z-index: 9;  background: #fff; }
+    #cs-outcome    { z-index: 10; background: var(--bg); }
+    #cs-retro      { z-index: 11; background: var(--sel-dark); }
+    #cs-last       { z-index: 12; background: var(--sel-dark); }
+
+    /* ── 00 HERO ── */
+    .cs-hero {
+      position: sticky; top: 0; z-index: 1;
+      background: var(--sel-dark); height: 100vh;
+      display: flex; flex-direction: column; justify-content: flex-end;
+      padding-top: 56px; overflow: hidden;
+    }
+    .cs-hero-bg {
+      position: absolute; inset: 0;
+      background: url('../assets/seletar-hero-bg.jpg') center / cover no-repeat;
+      opacity: 0.72;
+    }
+    .cs-hero::after {
+      content: ''; position: absolute; inset: 0; pointer-events: none; z-index: 1;
+      background:
+        linear-gradient(to right, rgba(31,43,31,0.88) 0%, rgba(31,43,31,0.5) 42%, rgba(31,43,31,0.1) 72%, transparent 100%),
+        linear-gradient(to top, rgba(31,43,31,0.82) 0%, rgba(31,43,31,0.28) 42%, transparent 68%);
+    }
+    .cs-hero-inner {
+      position: relative; z-index: 3;
+      max-width: var(--content-max); margin: 0 auto; width: 100%;
+      padding: 60px var(--pad-x) 52px;
+      display: grid; grid-template-columns: 1fr auto;
+      gap: 48px; align-items: end;
+    }
+    .cs-hero-h1 {
+      font-family: var(--font-display);
+      font-size: clamp(44px, 5.2vw, 74px);
+      font-weight: 900; line-height: 1.06; letter-spacing: -0.03em;
+      color: var(--beige2); margin-bottom: 16px;
+    }
+    .cs-hero-h1 em { font-style: italic; color: var(--sel-lime); }
+    .cs-hero-sub {
+      font-size: clamp(13px, 1vw, 15px); line-height: 1.65;
+      color: rgba(255,255,255,0.6); max-width: 500px; margin-bottom: 28px;
+    }
+    .cs-hero-meta { display: flex; flex-direction: column; }
+    .cs-meta-row {
+      display: grid; grid-template-columns: 120px 1fr;
+      padding: 9px 0; border-bottom: 1px solid rgba(255,255,255,0.08);
+    }
+    .cs-meta-row:last-child { border-bottom: none; }
+    .cs-meta-label {
+      font-family: var(--font-mono); font-size: 9px; font-weight: 700;
+      letter-spacing: 0.1em; text-transform: uppercase;
+      color: rgba(255,255,255,0.32); padding-top: 2px;
+    }
+    .cs-meta-value { font-size: 12px; line-height: 1.45; color: rgba(255,255,255,0.78); }
+    .cs-hero-cta-pill {
+      display: inline-flex; align-items: center; gap: 8px;
+      background: var(--bg); color: var(--sel-dark);
+      border: 1.5px solid var(--sel-dark); border-radius: 100px;
+      padding: 14px 28px;
+      font-family: var(--font-body); font-size: 13px; font-weight: 700;
+      letter-spacing: 0.04em; box-shadow: 0 9px 2.5px rgba(0,0,0,0.22);
+      white-space: nowrap; align-self: flex-end; flex-shrink: 0;
+    }
+
+    /* ── 01 TL;DR ── */
+    .st-tldr-bg {
+      position: absolute; inset: 0;
+      background: url('../assets/seletar-tldr-bg.jpg') center / cover no-repeat;
+      opacity: 0.3; pointer-events: none;
+    }
+    .st-tldr-layout {
+      display: grid; grid-template-columns: 1fr 440px;
+      gap: 60px; flex: 1; align-items: start; overflow: hidden;
+    }
+    .st-tldr-cols {
+      display: grid; grid-template-columns: repeat(3, 1fr);
+      border-top: 1px solid rgba(255,255,255,0.1); margin-bottom: 12px;
+    }
+    .st-tldr-col {
+      padding: 16px 16px 16px 0;
+      border-right: 1px solid rgba(255,255,255,0.08);
+    }
+    .st-tldr-col:last-child { border-right: none; }
+    .st-tldr-col:not(:first-child) { padding-left: 16px; }
+    .st-col-label {
+      font-family: var(--font-mono); font-size: 10px; font-weight: 700;
+      text-transform: uppercase; letter-spacing: 0.1em;
+      color: rgba(255,255,255,0.32); margin-bottom: 10px;
+    }
+    .st-col-text { font-size: 13px; line-height: 1.6; color: rgba(255,255,255,0.72); }
+    .st-col-text strong { color: #fff; }
+    .st-finding-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; flex: 1; }
+    .st-finding-card {
+      background: rgba(31,43,31,0.72); border-radius: 20px;
+      padding: 20px; display: flex; flex-direction: column; gap: 10px;
+    }
+    .st-finding-header { display: flex; gap: 12px; align-items: center; }
+    .st-finding-icon { font-size: 22px; flex-shrink: 0; line-height: 1; }
+    .st-finding-label {
+      font-family: var(--font-mono); font-size: 11px; font-weight: 700;
+      text-transform: uppercase; color: rgba(255,255,255,0.85); letter-spacing: 0.06em;
+    }
+    .st-finding-text { font-size: 13px; line-height: 1.6; color: rgba(255,255,255,0.75); }
+    .st-finding-text strong { color: #fff; }
+    .st-tldr-headline {
+      display: flex; flex-direction: column; gap: 20px; padding-top: 8px;
+    }
+    .st-tldr-h2 {
+      font-family: var(--font-display); font-size: clamp(32px, 3.4vw, 52px);
+      font-weight: 700; line-height: 0.98; color: var(--beige2);
+    }
+    .st-tldr-h2 em { font-style: italic; color: var(--sel-lime); display: block; }
+    .st-tldr-sub {
+      font-size: 15px; line-height: 1.6; font-weight: 500;
+      color: rgba(255,255,255,0.6); max-width: 380px;
+    }
+
+    /* ── 02 PROBLEM ── */
+    .st-problem-layout {
+      display: grid; grid-template-columns: 1fr 1fr;
+      gap: 48px; flex: 1; align-items: center;
+    }
+    .st-section-h2 {
+      font-family: var(--font-display); font-size: clamp(30px, 3.6vw, 52px);
+      font-weight: 700; line-height: 1.0; color: var(--sel-dark);
+      margin-bottom: 16px;
+    }
+    .st-section-h2 em { font-style: normal; color: var(--sel-accent); }
+    .st-section-body {
+      font-size: 15px; line-height: 1.7; color: var(--ink-muted); max-width: 480px;
+    }
+    .st-section-body + .st-section-body { margin-top: 12px; }
+
+    /* ── 03 FOUND ── */
+    .st-found-layout {
+      display: grid; grid-template-columns: 52% 1fr;
+      gap: 48px; flex: 1; align-items: start; overflow: hidden;
+    }
+    .st-found-h2 {
+      font-family: var(--font-display); font-size: clamp(26px, 3vw, 44px);
+      font-weight: 700; line-height: 0.98; color: var(--sel-dark); margin-bottom: 20px;
+    }
+    .st-found-h2 span { display: block; color: var(--sel-accent); }
+    .st-stats-row {
+      display: grid; grid-template-columns: repeat(3, 1fr);
+      border-top: 1px solid rgba(0,0,0,0.09);
+      border-bottom: 1px solid rgba(0,0,0,0.09);
+      margin-bottom: 18px;
+    }
+    .st-stat-cell {
+      padding: 14px 16px; text-align: center;
+      border-right: 1px solid rgba(0,0,0,0.08);
+    }
+    .st-stat-cell:last-child { border-right: none; }
+    .st-stat-num {
+      font-family: var(--font-display); font-size: 32px; font-weight: 500;
+      color: var(--sel-dark); line-height: 1; margin-bottom: 6px;
+    }
+    .st-stat-label { font-size: 12px; line-height: 1.5; color: var(--ink-muted); }
+    .st-main-quote {
+      background: var(--beige2); border-radius: 16px; padding: 20px; margin-bottom: 16px;
+    }
+    .st-pullquote {
+      font-family: 'Cormorant Garamond', serif; font-style: italic;
+      font-size: clamp(17px, 1.8vw, 26px); color: var(--sel-dark);
+      line-height: 1.3; margin-bottom: 10px;
+    }
+    .st-quote-attr { font-size: 12px; color: var(--ink-muted); }
+    .st-found-lead {
+      font-size: 14px; font-weight: 500; line-height: 1.65; color: var(--sel-dark);
+    }
+    /* Right: problem cards */
+    .st-problem-cards { display: flex; flex-direction: column; gap: 10px; height: 100%; }
+    .st-problem-card {
+      background: var(--bg); border-radius: 16px; padding: 18px 22px;
+      display: flex; flex-direction: column; gap: 10px;
+      box-shadow: -4px 6px 4px rgba(0,0,0,0.12); flex: 1;
+    }
+    .st-sev-row { display: flex; align-items: center; justify-content: space-between; }
+    .st-sev-dot { width: 28px; height: 28px; border-radius: 100px; flex-shrink: 0; }
+    .st-sev-label {
+      font-family: var(--font-mono); font-size: 12px; font-weight: 700; text-transform: uppercase;
+    }
+    .st-prob-title { font-size: 14px; font-weight: 600; color: var(--sel-dark); line-height: 1.4; }
+    .st-prob-body { font-size: 12px; line-height: 1.6; color: var(--ink-muted); }
+    .st-found-footer {
+      margin-top: auto; padding-top: 16px;
+      font-size: 13px; font-weight: 500; color: var(--ink-muted);
+      border-top: 1px solid rgba(0,0,0,0.07);
+    }
+
+    /* ── 04 CTA ── */
+    .st-cta-layout {
+      flex: 1; display: flex; gap: 48px; align-items: center;
+    }
+    .st-cta-text { flex: 0 0 400px; display: flex; flex-direction: column; gap: 20px; }
+    .st-cta-h2 {
+      font-family: var(--font-display); font-size: clamp(32px, 3.8vw, 52px);
+      font-weight: 800; line-height: 1.08; letter-spacing: -0.02em; color: var(--sel-dark);
+    }
+    .st-cta-h2 em { font-style: normal; color: var(--sel-green); }
+    .st-cta-sub { font-size: 15px; line-height: 1.65; color: var(--ink-muted); }
+    .st-cta-btn {
+      display: inline-flex; align-items: center; gap: 8px;
+      background: var(--sel-dark); color: var(--sel-lime);
+      font-family: var(--font-body); font-size: 13px; font-weight: 700;
+      letter-spacing: 0.04em; border-radius: 100px; padding: 14px 28px;
+      transition: opacity 0.2s; align-self: flex-start;
+    }
+    .st-cta-btn:hover { opacity: 0.82; }
+
+    /* ── 05 DESIGN (shared) ── */
+    .st-design-layout {
+      display: grid; grid-template-columns: 1fr 1fr;
+      gap: 48px; flex: 1; align-items: center;
+    }
+    .st-design-counter {
+      font-family: var(--font-mono); font-size: 11px; font-weight: 700;
+      text-transform: uppercase; letter-spacing: 0.08em;
+      color: var(--ink-muted); margin-bottom: 20px;
+    }
+    .st-fix-header { display: flex; gap: 14px; align-items: flex-start; margin-bottom: 16px; }
+    .st-fix-meta { flex: 1 0 0; min-width: 0; }
+    .st-fix-title {
+      font-size: 18px; font-weight: 700; color: var(--sel-dark);
+      margin-bottom: 4px; line-height: 1.3;
+    }
+    .st-fix-improvement { font-size: 15px; color: var(--sel-green); font-weight: 500; }
+    .st-fix-badge {
+      flex-shrink: 0; background: #d11b1b; color: #fff;
+      font-family: var(--font-mono); font-size: 11px; font-weight: 700;
+      text-transform: uppercase; letter-spacing: 0.06em;
+      padding: 6px 14px; border-radius: 100px;
+      box-shadow: -6px -2px 3px rgba(0,0,0,0.2);
+    }
+    .st-fix-body {
+      font-size: 14px; line-height: 1.7; color: var(--ink-muted);
+    }
+    .st-fix-body p + p { margin-top: 14px; }
+    .st-design-img-col { display: flex; flex-direction: column; gap: 10px; }
+    .st-design-caption {
+      font-family: var(--font-body); font-size: 12px; font-style: italic;
+      color: var(--sel-dark); text-align: center; line-height: 1.5;
+    }
+
+    /* ── 06 VALIDATION ── */
+    .st-val-header { margin-bottom: 24px; }
+    .st-val-h2 {
+      font-family: var(--font-display); font-size: clamp(28px, 3.2vw, 46px);
+      font-weight: 700; line-height: 0.98; color: var(--sel-dark); margin-bottom: 12px;
+    }
+    .st-val-h2 em { font-style: normal; color: var(--sel-accent); }
+    .st-val-sub { font-size: 13px; line-height: 1.6; color: var(--ink-muted); max-width: 600px; }
+    .st-val-sub em { font-style: italic; }
+    .st-val-tables {
+      display: grid; grid-template-columns: 1fr 1fr;
+      gap: 32px; flex: 1; overflow: hidden;
+    }
+    .st-val-round { display: flex; flex-direction: column; gap: 10px; }
+    .st-round-head { display: flex; gap: 14px; align-items: center; margin-bottom: 4px; }
+    .st-round-pill {
+      font-family: var(--font-mono); font-size: 11px; font-weight: 700;
+      text-transform: uppercase; padding: 6px 18px; border-radius: 100px; letter-spacing: 0.06em;
+    }
+    .st-round-pill--r1 { background: var(--sel-dark); color: #f3f2ec; }
+    .st-round-pill--r2 { background: var(--sel-green); color: #f3f2ec; }
+    .st-round-context { font-family: var(--font-mono); font-size: 10px; text-transform: uppercase; color: var(--sel-dark); }
+    .st-val-table { width: 100%; border-collapse: collapse; }
+    .st-val-table thead tr { background: var(--beige2); border-bottom: 1.5px solid #000; }
+    .st-val-table th {
+      padding: 10px 12px; font-family: var(--font-display);
+      font-size: 13px; font-weight: 600; color: var(--sel-dark); text-align: left;
+    }
+    .st-val-table td {
+      padding: 9px 12px; border-bottom: 1px solid rgba(0,0,0,0.06);
+      font-size: 12px; color: var(--sel-dark); vertical-align: middle; line-height: 1.45;
+    }
+    .st-val-table tr:last-child td { border-bottom: none; }
+    .st-result-pill {
+      display: inline-flex; align-items: center; gap: 6px;
+      padding: 4px 12px; border-radius: 100px;
+      font-family: var(--font-mono); font-size: 10px; font-weight: 700;
+      text-transform: uppercase; white-space: nowrap;
+    }
+    .st-result-pill--pass  { background: #dce888; color: #458619; }
+    .st-result-pill--needs { background: #ffc005; color: #8a5800; }
+    .st-result-pill--na    { background: #e6e8e3; color: #666; }
+    .st-pill-dot { width: 5px; height: 5px; border-radius: 50%; flex-shrink: 0; }
+    .st-score {
+      font-family: var(--font-body); font-size: 14px; font-weight: 600;
+      color: #262626; white-space: nowrap;
+    }
+    .st-val-callout {
+      margin-top: auto; padding-top: 16px;
+      font-size: 13px; font-weight: 500; line-height: 1.6;
+      color: var(--ink-muted); border-top: 1px solid rgba(0,0,0,0.08);
+    }
+
+    /* ── 07 OUTCOME ── */
+    .st-outcome-layout {
+      display: grid; grid-template-columns: 1fr 1fr;
+      gap: 48px; flex: 1; align-items: center;
+    }
+
+    /* ── 08 RETRO ── */
+    .st-retro-cards { display: flex; flex-direction: column; gap: 0; flex: 1; justify-content: center; }
+    .st-retro-card {
+      display: grid; grid-template-columns: 24px 1fr;
+      gap: 16px; align-items: start; padding: 18px 0;
+      border-bottom: 1px solid rgba(255,255,255,0.07);
+    }
+    .st-retro-card:last-child { border-bottom: none; }
+    .st-retro-dot { width: 12px; height: 12px; border-radius: 50%; margin-top: 4px; }
+    .st-retro-card-title { font-size: 14px; font-weight: 700; color: #fff; margin-bottom: 6px; }
+    .st-retro-card-body { font-size: 13px; line-height: 1.65; color: rgba(255,255,255,0.58); }
+    .st-retro-h2 {
+      font-family: var(--font-display); font-size: clamp(32px, 4vw, 52px);
+      font-weight: 800; line-height: 1.1; letter-spacing: -0.02em;
+      color: #fff; margin-bottom: 0;
+    }
+    .st-retro-h2 em { font-style: normal; color: var(--sel-lime); }
+    .st-retro-actions { display: flex; gap: 10px; margin-top: auto; flex-wrap: wrap; }
+    .st-retro-btn {
+      font-family: var(--font-body); font-size: 13px; font-weight: 600;
+      letter-spacing: 0.04em; color: #fff;
+      border: 1.5px solid rgba(255,255,255,0.22); border-radius: 100px;
+      padding: 11px 22px; transition: background 0.2s; display: inline-flex; align-items: center; gap: 8px;
+    }
+    .st-retro-btn--primary { background: var(--sel-lime); border-color: var(--sel-lime); color: var(--sel-dark); }
+    .st-retro-btn:hover { background: rgba(255,255,255,0.08); border-color: rgba(255,255,255,0.5); }
+    .st-retro-btn--primary:hover { opacity: 0.86; }
+    .st-case-nav {
+      display: flex; justify-content: space-between;
+      padding: 22px var(--pad-x);
+      border-top: 1px solid rgba(255,255,255,0.07);
+      max-width: var(--content-max); margin: 0 auto;
+    }
+    .st-case-nav-link {
+      font-size: 11px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase;
+      color: rgba(255,255,255,0.38); transition: color 0.2s;
+    }
+    .st-case-nav-link:hover { color: #fff; }
+
+    /* ── 09 LAST ── */
+    .st-last-layout {
+      flex: 1; display: flex; gap: 48px; align-items: center;
+    }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 900px) {
+      .cs-hero-inner { grid-template-columns: 1fr; }
+      .st-tldr-layout, .st-problem-layout, .st-found-layout,
+      .st-cta-layout, .st-design-layout, .st-outcome-layout,
+      .st-last-layout { grid-template-columns: 1fr; }
+      .st-val-tables { grid-template-columns: 1fr; }
+      .cs-section:not(.cs-hero) { height: auto; min-height: 100vh; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- PROGRESS + NAV -->
+  <div id="cs-progress"></div>
+  <nav class="cs-nav">
+    <a class="cs-nav-back" href="../index.html#work">
+      <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8">
+        <path d="M10 3L5 8l5 5"/>
+      </svg>
+      Back
+    </a>
+    <a class="cs-nav-cta" href="https://www.figma.com/make/VX9LWSLRU1wf0NH2pPaJbv" target="_blank" rel="noopener">
+      Try the prototype →
+    </a>
+  </nav>
+
+  <!-- 00 HERO -->
+  <section class="cs-section cs-hero" id="cs-hero">
+    <div class="cs-hero-bg"></div>
+    <div class="cs-hero-inner">
+      <div>
+        <h1 class="cs-hero-h1">Unlocking the<br><em>Subang Advantage</em></h1>
+        <p class="cs-hero-sub">I led the research that changed the brief. What started as "redesign the website" became something sharper — prove the airport's competitive edge online, or lose passengers who never knew it existed.</p>
+        <div class="cs-hero-meta">
+          <div class="cs-meta-row">
+            <span class="cs-meta-label">Role</span>
+            <span class="cs-meta-value">UX Research Lead</span>
+          </div>
+          <div class="cs-meta-row">
+            <span class="cs-meta-label">Team</span>
+            <span class="cs-meta-value">3 designers</span>
+          </div>
+          <div class="cs-meta-row">
+            <span class="cs-meta-label">Methods</span>
+            <span class="cs-meta-value">15 interviews · 2 test rounds, Iterative Prototype Validation</span>
+          </div>
+          <div class="cs-meta-row">
+            <span class="cs-meta-label">Type</span>
+            <span class="cs-meta-value">Omni-channel service and informational platform</span>
+          </div>
+          <div class="cs-meta-row">
+            <span class="cs-meta-label">Outcome &amp; Output</span>
+            <span class="cs-meta-value">SEQ 4.3 → 4.8 / 5 · Website redesign · IA + UX flows</span>
+          </div>
+          <div class="cs-meta-row">
+            <span class="cs-meta-label">Duration</span>
+            <span class="cs-meta-value">6 weeks · Dec 2025–Jan 2026</span>
+          </div>
+        </div>
+      </div>
+      <a class="cs-hero-cta-pill" href="https://www.figma.com/make/VX9LWSLRU1wf0NH2pPaJbv" target="_blank" rel="noopener">
+        SELETAR AIRPORT REDESIGNED &nbsp;→
+      </a>
+    </div>
+  </section>
+
+  <!-- 01 TL;DR -->
+  <section class="cs-section" id="cs-tldr">
+    <div class="st-tldr-bg"></div>
+    <div class="cs-wrap">
+      <p class="cs-label cs-label--light">01 TL;DR</p>
+      <div class="st-tldr-layout">
+
+        <div style="display:flex;flex-direction:column;gap:12px;overflow:hidden;">
+          <div class="st-tldr-cols">
+            <div class="st-tldr-col">
+              <p class="st-col-label">The airport</p>
+              <p class="st-col-text">Seletar <strong>saves travellers 45–90 min vs KLIA</strong> — but its website was so poor, most passengers didn't know why they should choose it.</p>
+            </div>
+            <div class="st-tldr-col">
+              <p class="st-col-label">My role</p>
+              <p class="st-col-text">UX Research Lead. I oversaw all 9 user interviews and both rounds of usability testing, and turned findings into the brief the design team built from.</p>
+            </div>
+            <div class="st-tldr-col">
+              <p class="st-col-label">The result</p>
+              <p class="st-col-text">Ease-of-use score moved from 4.3 → 4.8 / 5 across two test rounds. The site went from a static brochure to a working passenger planning tool.</p>
+            </div>
+          </div>
+          <div class="st-finding-grid">
+            <div class="st-finding-card">
+              <div class="st-finding-header">
+                <span class="st-finding-icon">⏱</span>
+                <span class="st-finding-label">Finding 1</span>
+              </div>
+              <p class="st-finding-text">100% of users chose Seletar for one reason: <strong>time</strong>. Protect the speed promise, or the airport has no digital story to tell.</p>
+            </div>
+            <div class="st-finding-card">
+              <div class="st-finding-header">
+                <span class="st-finding-icon">✂</span>
+                <span class="st-finding-label">Finding 2</span>
+              </div>
+              <p class="st-finding-text">We recommended cutting a whole designed section. Turboprop education tested at 3.0/5. My call. The team agreed. Gone from V3.</p>
+            </div>
+            <div class="st-finding-card">
+              <div class="st-finding-header">
+                <span class="st-finding-icon">🏷</span>
+                <span class="st-finding-label">Finding 3</span>
+              </div>
+              <p class="st-finding-text"><strong>"Check Status" → "View Flight Schedule."</strong> One label change. SEQ on that task: 4.3 → 4.8. Language is never a detail.</p>
+            </div>
+            <div class="st-finding-card">
+              <div class="st-finding-header">
+                <span class="st-finding-icon">🌐</span>
+                <span class="st-finding-label">Finding 4</span>
+              </div>
+              <p class="st-finding-text"><strong>Tourist confidence gap — Round 2.</strong> "EZ-Link" confused international users. Payment icons alone weren't enough. V3 fix brief.</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="st-tldr-headline">
+          <p class="st-tldr-h2"><em>The Lowdown.</em>The Mission, The Move, and The Metric.</p>
+          <p class="st-tldr-sub">For anyone who wants the full picture before diving in — or just needs the highlights.</p>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- 02 PROBLEM -->
+  <section class="cs-section" id="cs-problem">
+    <div class="cs-wrap">
+      <p class="cs-label">02 The problem</p>
+      <div class="st-problem-layout">
+        <div>
+          <h2 class="st-section-h2">The airport's best feature<br>was <em>invisible online.</em></h2>
+          <p class="st-section-body">Seletar Airport saves passengers 45–90 minutes over KLIA. But the existing website couldn't communicate this. It read like a corporate brochure — no flight info, no practical planning tools, no reason to return.</p>
+          <p class="st-section-body" style="margin-top:12px;">We were briefed to redesign it. Research told us the real brief was bigger: prove the competitive advantage, or passengers would keep going to KLIA by default.</p>
+        </div>
+        <div class="st-design-img-col">
+          <div class="st-placeholder" style="height: 340px;">
+            <span class="st-placeholder-tag">seletar-img-oldsite.png</span>
+            <span class="st-placeholder-hint">Screenshot of the existing Seletar website</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 03 WHAT WE FOUND -->
+  <section class="cs-section" id="cs-found">
+    <div class="cs-wrap">
+      <p class="cs-label">03 What we found</p>
+      <div class="st-found-layout">
+
+        <!-- Left: headline + stats + quote + lead -->
+        <div style="display:flex;flex-direction:column;gap:0;overflow:hidden;">
+          <h2 class="st-found-h2">
+            We talked to 9 passengers.
+            <span>Every single one said the same thing.</span>
+          </h2>
+          <div class="st-stats-row">
+            <div class="st-stat-cell">
+              <p class="st-stat-num">9</p>
+              <p class="st-stat-label">Interviews — 8 Firefly passengers, 1 private jet traveller</p>
+            </div>
+            <div class="st-stat-cell">
+              <p class="st-stat-num">100%</p>
+              <p class="st-stat-label">chose Seletar for one reason: it saves them time</p>
+            </div>
+            <div class="st-stat-cell">
+              <p class="st-stat-num">0</p>
+              <p class="st-stat-label">of 9 had ever used the official website to plan their trip</p>
+            </div>
+          </div>
+          <div class="st-main-quote">
+            <p class="st-pullquote">"Seletar's product is speed and ease. Anything that creates confusion or uncertainty breaks that promise."</p>
+            <p class="st-quote-attr">The insight that shaped every decision that followed</p>
+          </div>
+          <p class="st-found-lead">This reframed the entire project. We weren't solving a design problem — we were solving a communication problem. The airport's biggest advantage was invisible to the people most likely to use it.</p>
+        </div>
+
+        <!-- Right: problem cards -->
+        <div style="display:flex;flex-direction:column;gap:12px;height:100%;">
+          <p style="font-family:var(--font-mono);font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.1em;color:var(--ink-muted);">Ranked problems</p>
+          <div class="st-problem-cards">
+            <div class="st-problem-card">
+              <div class="st-sev-row">
+                <span class="st-sev-dot" style="background:#b30e11;"></span>
+                <span class="st-sev-label" style="color:#b30e11;">Critical</span>
+              </div>
+              <p class="st-prob-title">The website feels irrelevant <strong>(8 of 9)</strong></p>
+              <p class="st-prob-body">It reads like a company brochure, not a travel planning tool. No one trusted it.</p>
+            </div>
+            <div class="st-problem-card">
+              <div class="st-sev-row">
+                <span class="st-sev-dot" style="background:#c08a5c;"></span>
+                <span class="st-sev-label" style="color:#c08a5c;">High</span>
+              </div>
+              <p class="st-prob-title">Getting to accommodation is stressful <strong>(7 of 9)</strong></p>
+              <p class="st-prob-body">30–45 min Grab waits, 1 bus route, no exit guidance. Smooth experience ends at the doors.</p>
+            </div>
+            <div class="st-problem-card">
+              <div class="st-sev-row">
+                <span class="st-sev-dot" style="background:#888;"></span>
+                <span class="st-sev-label" style="color:#888;">Medium</span>
+              </div>
+              <p class="st-prob-title">First-timers feel unprepared <strong>(4 of 9)</strong></p>
+              <p class="st-prob-body">Weather delays and unfamiliar aircraft types created anxiety with no reassurance online.</p>
+            </div>
+          </div>
+          <p class="st-found-footer">Each ranked problem became a direct question for the team to design against.</p>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- 04 CTA / PROTOTYPE -->
+  <section class="cs-section" id="cs-cta">
+    <div class="cs-wrap">
+      <p class="cs-label">04 See the outcome</p>
+      <div class="st-cta-layout">
+        <div class="st-cta-text">
+          <h2 class="st-cta-h2">The redesign is <em>live</em>.<br>Try the prototype.</h2>
+          <p class="st-cta-sub">From a static brochure to a working passenger planning tool. The research-driven redesign is ready to explore.</p>
+          <a class="st-cta-btn" href="https://www.figma.com/make/VX9LWSLRU1wf0NH2pPaJbv" target="_blank" rel="noopener">
+            SELETAR AIRPORT REDESIGNED &nbsp;→
+          </a>
+        </div>
+        <div style="flex:1;display:flex;flex-direction:column;gap:10px;">
+          <div class="st-placeholder" style="flex:1;min-height:340px;">
+            <span class="st-placeholder-tag">seletar-img-ctacard.png</span>
+            <span class="st-placeholder-hint">Prototype card / device mockup</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 05a DESIGN: Task-first navigation -->
+  <section class="cs-section" id="cs-design-1">
+    <div class="cs-wrap">
+      <p class="cs-label">05 Turning research into design &nbsp;—&nbsp; 1 / 3</p>
+      <div class="st-design-layout">
+        <div>
+          <h2 class="st-section-h2" style="font-size:clamp(28px,3.4vw,48px);margin-bottom:20px;">Every screen traces back<br>to something a user said.</h2>
+          <div class="st-fix-header">
+            <div class="st-fix-meta">
+              <p class="st-fix-title">01 Task-first navigation</p>
+              <p class="st-fix-improvement">SEQ SCORE 4.3 → 4.8</p>
+            </div>
+            <span class="st-fix-badge">FIX</span>
+          </div>
+          <div class="st-fix-body">
+            <p>Users arrived with a specific job — check a flight, find transport, know what to bring. The old navigation was organised around the airport's structure, not the passenger's task.</p>
+            <p>Our A/B test revealed "Check Status" confused users, who mistook it for booking confirmation. We pivoted to "View Flight Schedule." Cognitive friction disappeared instantly — SEQ jumped to 4.8/5.</p>
+          </div>
+        </div>
+        <div class="st-design-img-col">
+          <div class="st-placeholder" style="flex:1;min-height:300px;">
+            <span class="st-placeholder-tag">seletar-img-nav.png</span>
+            <span class="st-placeholder-hint">Old nav labels vs new task-based nav</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 05b DESIGN: Getting Home section -->
+  <section class="cs-section" id="cs-design-2">
+    <div class="cs-wrap">
+      <p class="cs-label">05 Turning research into design &nbsp;—&nbsp; 2 / 3</p>
+      <div class="st-design-layout" style="direction:rtl;">
+        <div style="direction:ltr;">
+          <div class="st-design-img-col">
+            <div class="st-placeholder" style="flex:1;min-height:300px;">
+              <span class="st-placeholder-tag">seletar-img-transport.png</span>
+              <span class="st-placeholder-hint">Transport module — before / after (phone screens)</span>
+            </div>
+            <p class="st-design-caption"><em>In V2, the module defaulted to Public Bus — wrong for most users who take taxis.</em></p>
+          </div>
+        </div>
+        <div style="direction:ltr;">
+          <div class="st-fix-header">
+            <div class="st-fix-meta">
+              <p class="st-fix-title">02 A dedicated "Getting Home" section</p>
+              <p class="st-fix-improvement">→ Improvement: Single-page architecture</p>
+            </div>
+            <span class="st-fix-badge">FIX</span>
+          </div>
+          <div class="st-fix-body">
+            <p>My Round 1 finding named it "arrival blindness" — the entire transport section was written for people going to the airport, not people who just landed. The team redesigned it to surface one-tap options for taxis, Grab, Gojek, and buses on arrival.</p>
+            <p>Round 2 surfaced a follow-up: the module defaulted to Public Bus — wrong for the majority. V3 fix: taxi surfaced first.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 05c DESIGN: Cut turboprop -->
+  <section class="cs-section" id="cs-design-3">
+    <div class="cs-wrap">
+      <p class="cs-label">05 Turning research into design &nbsp;—&nbsp; 3 / 3</p>
+      <div class="st-design-layout">
+        <div>
+          <div class="st-fix-header">
+            <div class="st-fix-meta">
+              <p class="st-fix-title">03 Cut turboprop education entirely</p>
+            </div>
+            <span class="st-fix-badge">FIX</span>
+          </div>
+          <div class="st-fix-body">
+            <p>We had designed a whole section explaining the aircraft. My testing showed users didn't want it. One person engaged with it — out of personal aviation curiosity, not travel anxiety. Everyone else skipped it.</p>
+            <p>I recommended cutting the section and redirecting that space to food, facilities, and journey steps. The team did. That's what research influence looks like — and that's how we dealt with the operational anxiety passengers had, especially first-timers at Seletar Airport.</p>
+          </div>
+        </div>
+        <div class="st-design-img-col">
+          <div class="st-placeholder" style="flex:1;min-height:300px;">
+            <span class="st-placeholder-tag">seletar-img-passengerguide.png</span>
+            <span class="st-placeholder-hint">Passenger Guide — journey steps with photos and durations</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 06 VALIDATION -->
+  <section class="cs-section" id="cs-validation">
+    <div class="cs-wrap">
+      <div class="st-val-header">
+        <h2 class="st-val-h2">We ran two rounds of testing.<br><em>Here's what we found.</em></h2>
+        <p class="st-val-sub">After each iteration, I tested with real users on a 1–5 scale <em>(SEQ — Single Ease Question)</em>. Above 4.0 is a success. Below 3.0 means it's broken.</p>
+      </div>
+      <div class="st-val-tables">
+
+        <!-- Round 1 -->
+        <div class="st-val-round">
+          <div class="st-round-head">
+            <span class="st-round-pill st-round-pill--r1">Round 1</span>
+            <span class="st-round-context">9 users · Hybrid remote &amp; on-site</span>
+          </div>
+          <table class="st-val-table">
+            <thead>
+              <tr>
+                <th>Task</th>
+                <th>Result</th>
+                <th>Score</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Can users find info fast?</td>
+                <td><span class="st-result-pill st-result-pill--pass"><span class="st-pill-dot" style="background:#458619;"></span>Passed</span></td>
+                <td><span class="st-score">4.3/5</span></td>
+              </tr>
+              <tr>
+                <td>Can users plan how to get home?</td>
+                <td><span class="st-result-pill st-result-pill--needs"><span class="st-pill-dot" style="background:#b87000;"></span>Needs work</span></td>
+                <td><span class="st-score">3.8/5</span></td>
+              </tr>
+              <tr>
+                <td>Does aircraft info reduce nerves?</td>
+                <td><span class="st-result-pill st-result-pill--na"><span class="st-pill-dot" style="background:#666;"></span>Not relevant</span></td>
+                <td><span class="st-score">3.0/5</span></td>
+              </tr>
+            </tbody>
+          </table>
+          <p style="font-size:12px;color:var(--ink-muted);line-height:1.5;margin-top:8px;">"I named this <em>arrival blindness</em> — the site only helped people get to the airport, not away from it." Nobody wanted turboprop education. Section cut.</p>
+        </div>
+
+        <!-- Round 2 -->
+        <div class="st-val-round">
+          <div class="st-round-head">
+            <span class="st-round-pill st-round-pill--r2">Round 2</span>
+            <span class="st-round-context">6 users · On-site at the airport</span>
+          </div>
+          <table class="st-val-table">
+            <thead>
+              <tr>
+                <th>Task</th>
+                <th>Result</th>
+                <th>Score</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Did the label fix work?</td>
+                <td><span class="st-result-pill st-result-pill--pass"><span class="st-pill-dot" style="background:#458619;"></span>Passed</span></td>
+                <td><span class="st-score">4.8/5</span></td>
+              </tr>
+              <tr>
+                <td>Is the transport section clearer?</td>
+                <td><span class="st-result-pill st-result-pill--needs"><span class="st-pill-dot" style="background:#b87000;"></span>Needs work</span></td>
+                <td><span class="st-score">3.7/5</span></td>
+              </tr>
+              <tr>
+                <td>Do tourists feel confident paying?</td>
+                <td><span class="st-result-pill st-result-pill--na"><span class="st-pill-dot" style="background:#b95038;"></span>New issue</span></td>
+                <td><span class="st-score">3.0/5</span></td>
+              </tr>
+            </tbody>
+          </table>
+          <p style="font-size:12px;color:var(--ink-muted);line-height:1.5;margin-top:8px;">"Brilliant — 5 out of 5." Transport defaults to taxi in V3. "EZ-Link" confusion flagged as a V3 fix brief for international visitors.</p>
+        </div>
+
+      </div>
+      <p class="st-val-callout">V2 confirmed the core direction held. Two outstanding gaps for V3: fix transport default (taxi/PHV first) and rewrite payment methods for international tourists.</p>
+    </div>
+  </section>
+
+  <!-- 07 OUTCOME -->
+  <section class="cs-section" id="cs-outcome">
+    <div class="cs-wrap">
+      <p class="cs-label">07 Outcome</p>
+      <div class="st-outcome-layout">
+        <div>
+          <h2 class="st-section-h2">From static brochure<br>to <em>passenger planning tool.</em></h2>
+          <div style="display:flex;flex-direction:column;gap:20px;margin-top:28px;">
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;">
+              <div style="background:var(--sel-dark);border-radius:16px;padding:24px;">
+                <p style="font-family:var(--font-display);font-size:42px;font-weight:900;color:var(--sel-lime);line-height:1;">4.8<span style="font-size:20px;color:rgba(255,255,255,0.5);">/5</span></p>
+                <p style="font-size:13px;color:rgba(255,255,255,0.65);margin-top:8px;line-height:1.5;">Final ease-of-use score<br><span style="color:rgba(255,255,255,0.35);">Up from 4.3 in Round 1</span></p>
+              </div>
+              <div style="background:var(--beige2);border-radius:16px;padding:24px;">
+                <p style="font-family:var(--font-display);font-size:42px;font-weight:900;color:var(--sel-dark);line-height:1;">+0.5</p>
+                <p style="font-size:13px;color:var(--ink-muted);margin-top:8px;line-height:1.5;">SEQ improvement<br><span style="color:rgba(0,0,0,0.35);">Across two test rounds</span></p>
+              </div>
+            </div>
+            <p style="font-size:14px;line-height:1.7;color:var(--ink-muted);">Delivered: Website redesign · Information architecture · UX flows · Transport module redesign · Payment clarity brief for V3.</p>
+          </div>
+        </div>
+        <div>
+          <div class="st-placeholder" style="height:100%;min-height:320px;">
+            <span class="st-placeholder-tag">seletar-img-outcome.png</span>
+            <span class="st-placeholder-hint">Device mockup — final redesign</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 08 RETROSPECTIVE -->
+  <section class="cs-section" id="cs-retro">
+    <div class="cs-wrap" style="justify-content:space-between;">
+      <div>
+        <p class="cs-label cs-label--light">08 Retrospective</p>
+        <h2 class="st-retro-h2">What leading this<br>actually <em>taught me.</em></h2>
+      </div>
+      <div class="st-retro-cards">
+        <div class="st-retro-card">
+          <span class="st-retro-dot" style="background:#c8a840;"></span>
+          <div>
+            <p class="st-retro-card-title">Research shapes briefs, not just validates them</p>
+            <p class="st-retro-card-body">We started with a design brief and ended with a different one. That's not scope creep — that's the research working. The skill is knowing when findings are strong enough to reframe the question, then making that case without losing momentum.</p>
+          </div>
+        </div>
+        <div class="st-retro-card">
+          <span class="st-retro-dot" style="background:var(--sel-accent);"></span>
+          <div>
+            <p class="st-retro-card-title">The cut decision is a design decision</p>
+            <p class="st-retro-card-body">Recommending we remove a whole designed section was harder than any design choice in the project. It required trusting the data over the sunk cost of work already done. The team agreed, and the product is better for it.</p>
+          </div>
+        </div>
+        <div class="st-retro-card">
+          <span class="st-retro-dot" style="background:#d94a4a;"></span>
+          <div>
+            <p class="st-retro-card-title">Measuring language, not just layout</p>
+            <p class="st-retro-card-body">One label change produced the biggest single score jump in the project. It confirmed that language is as much a design material as visual structure. The SEQ doesn't care which button you moved — it cares whether users understood what to do.</p>
+          </div>
+        </div>
+      </div>
+      <div class="st-retro-actions">
+        <a class="st-retro-btn" href="../index.html#work">← View All Work</a>
+        <a class="st-retro-btn st-retro-btn--primary" href="https://www.figma.com/make/VX9LWSLRU1wf0NH2pPaJbv" target="_blank" rel="noopener">TRY THE PROTOTYPE →</a>
+      </div>
+      <div class="st-case-nav">
+        <a class="st-case-nav-link" href="arvo.html">← ARVO</a>
+        <a class="st-case-nav-link" href="pethaus.html">Pet Haus →</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- 09 LAST / MOBILE SHOWCASE -->
+  <section class="cs-section" id="cs-last">
+    <div class="cs-wrap">
+      <p class="cs-label cs-label--light">09 Mobile &amp; responsive</p>
+      <div class="st-last-layout">
+        <div style="flex:0 0 360px;display:flex;flex-direction:column;gap:20px;">
+          <h2 class="st-retro-h2" style="font-size:clamp(28px,3.2vw,44px);">Designed for the passenger<br>in their pocket.</h2>
+          <p style="font-size:14px;line-height:1.7;color:rgba(255,255,255,0.6);">The redesign is fully responsive. Flight status, transport options, and journey planning — all accessible before they arrive at the gate.</p>
+        </div>
+        <div style="flex:1;">
+          <div class="st-placeholder st-placeholder--dark" style="height:100%;min-height:340px;">
+            <span class="st-placeholder-tag">seletar-img-mobile.png</span>
+            <span class="st-placeholder-hint">Mobile / responsive view showcase</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <script>
+    gsap.registerPlugin(ScrollTrigger);
+
+    /* ── HERO ENTRANCE ── */
+    const heroTl = gsap.timeline({ delay: 0.1 });
+    heroTl
+      .from('.cs-hero-h1',       { y: 60, opacity: 0, duration: 0.8, ease: 'power2.out' })
+      .from('.cs-hero-sub',      { y: 20, opacity: 0, duration: 0.6, ease: 'power2.out' }, '-=0.4')
+      .from('.cs-hero-cta-pill', { y: 20, opacity: 0, duration: 0.5, ease: 'power2.out' }, '-=0.5')
+      .from('.cs-meta-row',      { y: 16, opacity: 0, stagger: 0.06, duration: 0.45, ease: 'power2.out' }, '-=0.5');
+
+    /* ── SECTION OVERLAY ENTRANCE + STICKY BOTTOM ── */
+    gsap.utils.toArray('.cs-section:not(.cs-hero)').forEach(section => {
+      gsap.fromTo(section,
+        { y: 60 },
+        { y: 0, ease: 'none',
+          scrollTrigger: { trigger: section, start: 'top bottom', end: 'top top', scrub: 0.6 }
+        }
+      );
+      ScrollTrigger.create({
+        trigger: section,
+        start: 'bottom bottom',
+        end: '+=' + window.innerHeight,
+        pin: true,
+        pinSpacing: false,
+      });
+    });
+
+    /* ── TL;DR CARDS ── */
+    gsap.from('.st-finding-card', {
+      y: 24, opacity: 0, stagger: 0.1, duration: 0.55, ease: 'power2.out',
+      scrollTrigger: { trigger: '#cs-tldr', start: 'top 70%', toggleActions: 'play none none none' }
+    });
+
+    /* ── FOUND PROBLEM CARDS ── */
+    gsap.from('.st-problem-card', {
+      y: 24, opacity: 0, stagger: 0.1, duration: 0.5, ease: 'power2.out',
+      scrollTrigger: { trigger: '#cs-found', start: 'top 72%', toggleActions: 'play none none none' }
+    });
+
+    /* ── DESIGN SECTIONS ── */
+    ['#cs-design-1', '#cs-design-2', '#cs-design-3'].forEach(id => {
+      gsap.from(id + ' .st-fix-header, ' + id + ' .st-fix-body, ' + id + ' .st-placeholder', {
+        y: 30, opacity: 0, stagger: 0.1, duration: 0.6, ease: 'power2.out',
+        scrollTrigger: { trigger: id, start: 'top 72%', toggleActions: 'play none none none' }
+      });
+    });
+
+    /* ── VALIDATION ROWS ── */
+    gsap.from('.st-val-table tbody tr', {
+      x: -16, opacity: 0, stagger: 0.07, duration: 0.45, ease: 'power2.out',
+      scrollTrigger: { trigger: '#cs-validation', start: 'top 72%', toggleActions: 'play none none none' }
+    });
+
+    /* ── RETRO CARDS ── */
+    gsap.from('.st-retro-card', {
+      y: 24, opacity: 0, stagger: 0.12, duration: 0.55, ease: 'power2.out',
+      scrollTrigger: { trigger: '#cs-retro', start: 'top 72%', toggleActions: 'play none none none' }
+    });
+
+    ScrollTrigger.refresh();
+
+    /* ── READING PROGRESS BAR ── */
+    const progressBar = document.getElementById('cs-progress');
+    window.addEventListener('scroll', () => {
+      const total = document.documentElement.scrollHeight - window.innerHeight;
+      progressBar.style.width = (window.scrollY / total * 100) + '%';
+    }, { passive: true });
+  </script>
+</body>
+</html>
