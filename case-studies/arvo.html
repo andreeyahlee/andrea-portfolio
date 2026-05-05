@@ -39,6 +39,17 @@
     a { color: inherit; text-decoration: none; }
     img { display: block; max-width: 100%; }
 
+    /* ── PROGRESS BAR ── */
+    #cs-progress {
+      position: fixed;
+      top: 0; left: 0;
+      height: 3px;
+      width: 0%;
+      background: var(--arvo-green);
+      z-index: 200;
+      pointer-events: none;
+    }
+
     /* ── NAV ── */
     .cs-nav {
       position: fixed;
@@ -674,14 +685,44 @@
     }
 
     /* ── FINAL SOLUTION ── */
-    .cs-laptop-wrap {
+    /* ── LAPTOP MOCKUP ── */
+    .cs-laptop-mock {
       margin-top: 52px;
-      border-radius: 12px;
-      overflow: hidden;
-      background: #000;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      filter: drop-shadow(0 24px 48px rgba(0,0,0,0.32)) drop-shadow(0 4px 8px rgba(0,0,0,0.16));
     }
-    .cs-laptop-wrap img,
-    .cs-laptop-wrap video { width: 100%; display: block; }
+    .cs-laptop-lid {
+      width: 80%;
+      background: #d0d0d0;
+      border: 1px solid #b6b6b6;
+      border-bottom: none;
+      border-radius: 13px 13px 0 0;
+      padding: 1.8% 1.8% 0;
+      box-shadow: inset 0 0 0 1px rgba(255,255,255,0.55);
+    }
+    .cs-laptop-screen-wrap {
+      background: #050505;
+      border-radius: 5px 5px 0 0;
+      overflow: hidden;
+      box-shadow: inset 0 0 2px 1px rgba(0,0,0,0.12);
+      line-height: 0;
+    }
+    .cs-laptop-screen-wrap video {
+      width: 100%;
+      display: block;
+    }
+    .cs-laptop-hinge {
+      width: 80%;
+      height: 3px;
+      background: linear-gradient(to bottom, #a8a8a8, #c4c4c4);
+    }
+    .cs-laptop-base {
+      width: 100%;
+      line-height: 0;
+    }
+    .cs-laptop-base img { width: 100%; display: block; }
 
     /* ── OUTCOME ── */
     .cs-outcome-resolved {
@@ -902,12 +943,12 @@
     #cs-retro         { z-index: 12; }
 
     /* ── DESIGN FIXES ── */
-    .cs-df-panels { display: flex; flex-direction: column; gap: 30px; margin-top: 48px; }
-    .cs-df-panel { display: grid; grid-template-columns: 1fr 1fr; gap: 30px; align-items: center; }
+    .cs-df-panels { display: flex; flex-direction: column; gap: 72px; margin-top: 64px; }
+    .cs-df-panel { display: grid; grid-template-columns: 1fr 1fr; gap: 40px; align-items: center; }
     .cs-df-card {
-      background: #fff; border-radius: 30px; padding: 32px;
+      background: #fff; border-radius: 30px; padding: 40px;
       box-shadow: -12px -7px 5px rgba(0,0,0,0.25);
-      display: flex; flex-direction: column; gap: 24px;
+      display: flex; flex-direction: column; gap: 28px;
     }
     .cs-df-card--kept { background: #f3f2ec; box-shadow: -16px -5px 10px rgba(0,0,0,0.25); }
     .cs-df-card-header { display: flex; gap: 16px; align-items: flex-start; }
@@ -963,6 +1004,7 @@
 <body>
 
   <!-- NAV -->
+  <div id="cs-progress"></div>
   <nav class="cs-nav">
     <a class="cs-nav-back" href="../index.html#work">
       <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8">
@@ -1337,33 +1379,140 @@
   <section class="cs-section" id="cs-designfixes">
     <div class="cs-inner">
       <p class="cs-section-label">05 Design Fixes</p>
-      <h2 class="cs-h2">Three things I<br><em>scoped for this sprint.</em></h2>
-      <p class="cs-body">A combination of some of the design fixes which resulted from both rounds of iteration. I facilitated strict research findings and made sure every decision traced back to something a real user had said.</p>
-      <div class="cs-full-img">
-        <img src="../assets/arvo-designfixes.png" alt="Design fixes overview">
-      </div>
-      <div class="cs-df-grid">
-        <div class="cs-df-row-2">
-          <div class="cs-df-media">
-            <video autoplay muted loop playsinline>
-              <source src="../assets/arvo-designfixes-1.mp4" type="video/mp4">
-            </video>
+      <h2 class="cs-h2">Four things I<br><em>scoped for this sprint.</em></h2>
+      <p class="cs-body">A compilation of some of the design fixes which resulted from both rounds of interview. I directed which research finding each feature needed to solve, and made sure every decision traced back to something a real manager had told us.</p>
+
+      <div class="cs-df-panels">
+
+        <!-- Fix 01: Cognitive Overload -->
+        <div class="cs-df-panel">
+          <div class="cs-df-card">
+            <div class="cs-df-card-header">
+              <div class="cs-df-card-meta">
+                <p class="cs-df-card-title">01 Cognitive Overload</p>
+                <p class="cs-df-card-improvement">→Improvement: Traffic-light dials</p>
+              </div>
+              <span class="cs-df-badge cs-df-badge--fix">FIX</span>
+            </div>
+            <div class="cs-df-card-body">
+              <strong>67% (8/12) managers skimmed past signals because the dashboard read like a report.</strong><br><br>
+              Dense text forces interpretation before action. One colour, one number, immediate meaning. No decoding required.
+            </div>
           </div>
-          <div class="cs-df-media">
-            <img src="../assets/arvo-designfixes-2.png" alt="Design fix 2">
+          <div class="cs-df-img-col">
+            <div class="cs-df-img-wrap">
+              <video autoplay muted loop playsinline>
+                <source src="../assets/arvo-designfixes-1.mp4" type="video/mp4">
+              </video>
+            </div>
+            <p class="cs-df-caption"><em>Dense text widget (BEFORE) → Traffic-light dial (AFTER)</em><br>Same data. One requires reading. One doesn't</p>
           </div>
         </div>
-        <div class="cs-df-row-3">
-          <div class="cs-df-media">
-            <img src="../assets/arvo-designfixes-3.png" alt="Design fix 3">
+
+        <!-- Fix 02: Manager's Paradox -->
+        <div class="cs-df-panel">
+          <div class="cs-df-img-col">
+            <div class="cs-df-img-wrap">
+              <img src="../assets/arvo-designfixes-2.png" alt="ARVO v3 single page view">
+            </div>
+            <p class="cs-df-caption"><em>Single page view; easy scan with quick visual cues</em></p>
           </div>
-          <div class="cs-df-media">
-            <img src="../assets/arvo-designfixes-4.gif" alt="Design fix 4">
-          </div>
-          <div class="cs-df-media">
-            <img src="../assets/arvo-designfixes-5.png" alt="Design fix 5">
+          <div class="cs-df-card-col">
+            <div class="cs-df-card">
+              <div class="cs-df-card-header">
+                <div class="cs-df-card-meta">
+                  <p class="cs-df-card-title">02 Manager's paradox</p>
+                  <p class="cs-df-card-improvement">→Improvement: Single-page architecture</p>
+                </div>
+                <span class="cs-df-badge cs-df-badge--fix">FIX</span>
+              </div>
+              <div class="cs-df-card-body">
+                <strong>83% (10/12) managers spent 70–90% of their time on execution.</strong><br><br>
+                No capacity for a multi-page tool. Compressed everything to one page — not for simplicity's sake, but for theirs.
+              </div>
+            </div>
+            <div class="cs-df-quote-block">
+              <p class="cs-df-quote">"It was just one page, so it felt quite cognitively light."</p>
+              <p class="cs-df-quote-attr">— Team Manager, Architecture</p>
+            </div>
           </div>
         </div>
+
+        <!-- Fix 03: Jargon Friction -->
+        <div class="cs-df-panel">
+          <div class="cs-df-card">
+            <div class="cs-df-card-header">
+              <div class="cs-df-card-meta">
+                <p class="cs-df-card-title">03 Jargon friction</p>
+                <p class="cs-df-card-improvement">→Improvement: Plain-English taxonomy</p>
+              </div>
+              <span class="cs-df-badge cs-df-badge--fix">FIX</span>
+            </div>
+            <div class="cs-df-card-body">
+              <strong>92% (11/12) confused by terms like "emotional labour."</strong><br><br>
+              We rewrote everything to turn academic HR terminologies into simple plain english. The content didn't change. The trust did.
+            </div>
+          </div>
+          <div class="cs-df-img-col">
+            <div class="cs-df-img-wrap">
+              <img src="../assets/arvo-designfixes-3.png" alt="Jargon friction before and after">
+            </div>
+            <p class="cs-df-caption"><em>Academic-like terminologies (Before) → plain english (After)</em><br>The argument is about language, not layout</p>
+          </div>
+        </div>
+
+        <!-- Fix 04: Digital Homework Trap -->
+        <div class="cs-df-panel">
+          <div class="cs-df-img-col">
+            <div class="cs-df-img-wrap">
+              <img src="../assets/arvo-designfixes-4.gif" alt="Checklist to calendar transformation">
+            </div>
+            <p class="cs-df-caption"><em>Chore structured task list (Before) → Schedule a quick chat (After)</em><br>Acting on an insight takes one tap, not a mental context switch</p>
+          </div>
+          <div class="cs-df-card">
+            <div class="cs-df-card-header">
+              <div class="cs-df-card-meta">
+                <p class="cs-df-card-title">04 Digital homework trap</p>
+                <p class="cs-df-card-improvement">→Improvement: Calendar integration</p>
+              </div>
+              <span class="cs-df-badge cs-df-badge--fix">FIX</span>
+            </div>
+            <div class="cs-df-card-body">
+              <strong>A checklist feels like admin.</strong><br><br>
+              A calendar invite feels like a decision. Same behaviour, different frame — managers could schedule actions directly from the dashboard.
+            </div>
+          </div>
+        </div>
+
+        <!-- Keep: Energizers & Drainers -->
+        <div class="cs-df-kept">
+          <span class="cs-df-kept-pill">WE KEPT THIS!</span>
+          <div class="cs-df-panel">
+            <div class="cs-df-card-col">
+              <div class="cs-df-card cs-df-card--kept">
+                <div class="cs-df-card-header">
+                  <p class="cs-df-card-title" style="flex:1 0 0; min-width:0;">04 Energizers &amp; Drainers</p>
+                  <span class="cs-df-badge cs-df-badge--keep">Keep</span>
+                </div>
+                <div class="cs-df-card-body">
+                  <strong>Highly regarded.</strong><br><br>
+                  9 participants agree that it provides an immediate pulse on what is working and what is hurting without requiring a 45-minute meeting.
+                </div>
+              </div>
+              <div class="cs-df-quote-block">
+                <p class="cs-df-quote">"It helps me know what energises them and what might drain them, so we can work towards their strengths."</p>
+                <p class="cs-df-quote-attr">— Manager RG, Education</p>
+              </div>
+            </div>
+            <div class="cs-df-img-col">
+              <div class="cs-df-img-wrap">
+                <img src="../assets/arvo-designfixes-5.png" alt="Energizers and Drainers module">
+              </div>
+              <p class="cs-df-caption">Energisers &amp; Drainers module — what's working / what's hurting,<br>with a clear visual split.</p>
+            </div>
+          </div>
+        </div>
+
       </div>
     </div>
   </section>
@@ -1406,9 +1555,6 @@
         </tbody>
       </table>
       <p class="cs-vocab-caption">A comparison of raw AI terminology versus our trained LLM output in plain English.</p>
-      <div class="cs-full-img" style="margin-top:48px;">
-        <img src="../assets/arvo-strategic.png" alt="Strategic vocabulary deliverable">
-      </div>
     </div>
   </section>
 
@@ -1418,11 +1564,19 @@
       <p class="cs-section-label">07 Final Solution</p>
       <h2 class="cs-h2">The <em>finished</em> dashboard.</h2>
       <p class="cs-body">Single page. Traffic-light health at a glance. Plain-English alerts. Built for 3 minutes on a Monday morning.</p>
-      <div class="cs-laptop-wrap">
-        <video autoplay muted loop playsinline poster="../assets/arvo-finalsolution-laptop.png">
-          <source src="../assets/arvo-finalsolution-video.mov" type="video/mp4">
-          <source src="../assets/arvo-finalsolution-video.mov" type="video/quicktime">
-        </video>
+      <div class="cs-laptop-mock">
+        <div class="cs-laptop-lid">
+          <div class="cs-laptop-screen-wrap">
+            <video autoplay muted loop playsinline poster="../assets/arvo-finalsolution-laptop.png">
+              <source src="../assets/arvo-finalsolution-video.mov" type="video/mp4">
+              <source src="../assets/arvo-finalsolution-video.mov" type="video/quicktime">
+            </video>
+          </div>
+        </div>
+        <div class="cs-laptop-hinge"></div>
+        <div class="cs-laptop-base">
+          <img src="../assets/arvo-laptop-keyboard.png" alt="">
+        </div>
       </div>
     </div>
   </section>
@@ -1432,9 +1586,6 @@
     <div class="cs-inner">
       <p class="cs-section-label">08 The Outcome</p>
       <h2 class="cs-h2">Four issues survived.<br><em>Three were the<br>client's to solve.</em></h2>
-      <div class="cs-full-img" style="margin-top:48px;margin-bottom:52px;">
-        <img src="../assets/arvo-outcome.png" alt="Outcome summary">
-      </div>
       <p class="cs-body" style="margin-bottom:16px;">Presenting this to the client was the hardest facilitation moment of the project. The framing had to be precise: this isn't a design failure. It's clarity — you now know exactly where design ends and where product strategy begins.</p>
       <p class="cs-body">A designer who papers over business-logic failures with prettier interfaces isn't solving problems. They're delaying them. I wrote formal strategic recommendations for each of the three business issues and presented them as the client's next product decisions.</p>
       <div class="cs-outcome-resolved">
@@ -1487,9 +1638,6 @@
       <div class="cs-quote-marks">"</div>
       <p class="cs-testimony-quote">Working with this UX/UI team was a genuinely impressive experience. From the outset, they handled all project concerns with professionalism and responsiveness, and their strong internal coordination meant I always faced a cohesive, well-aligned team. What stood out most was their user research capability — they recruited a surprisingly robust pool of the right user profiles within a very short timeframe, and conducted interviews in a manner that users themselves described as approachable, friendly, and open. Their design recommendations were methodically tested and immediately actionable, directly strengthening the product's user experience. The final mockups reflected a level of craft and polish I wouldn't hesitate to put in front of investors or clients. Any organisation looking to undertake serious UX work would be fortunate to have this team — individually and collectively...</p>
       <p class="cs-testimony-attr">— Eileen Zhang · Founder, ARVO</p>
-      <div style="margin-top:52px;">
-        <img src="../assets/arvo-testimony.png" alt="Client testimony" style="border-radius:12px;width:100%;max-width:640px;margin:0 auto;display:block;">
-      </div>
     </div>
   </section>
 
@@ -1520,9 +1668,6 @@
             <p class="cs-retro-card-body">Fixing three things well beats fixing seven things partially. Defining what we were not doing in the iteration sprint — and holding that boundary with the team — was harder than the design work itself.</p>
           </div>
         </div>
-      </div>
-      <div class="cs-full-img" style="margin-top:52px;margin-bottom:52px;">
-        <img src="../assets/arvo-retro.png" alt="Retrospective">
       </div>
       <div class="cs-retro-actions">
         <a class="cs-retro-btn" href="../index.html#work">← View All Work</a>
@@ -1630,6 +1775,14 @@
     });
 
     ScrollTrigger.refresh();
+
+    // Reading progress bar
+    const progressBar = document.getElementById('cs-progress');
+    window.addEventListener('scroll', () => {
+      const scrolled = window.scrollY;
+      const total = document.documentElement.scrollHeight - window.innerHeight;
+      progressBar.style.width = (scrolled / total * 100) + '%';
+    }, { passive: true });
   </script>
 </body>
 </html>
