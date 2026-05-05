@@ -144,7 +144,7 @@
     }
     .cs-hero-bg {
       position: absolute; inset: 0;
-      background: url('../assets/seletar-hero-bg.jpg') center / cover no-repeat;
+      background: url('../assets/seletar-hero-bg.png') center / cover no-repeat;
       opacity: 0.72;
     }
     .cs-hero::after {
@@ -196,7 +196,7 @@
     /* ── 01 TL;DR ── */
     .st-tldr-bg {
       position: absolute; inset: 0;
-      background: url('../assets/seletar-tldr-bg.jpg') center / cover no-repeat;
+      background: url('../assets/seletar-tldr-bg.png') center / cover no-repeat;
       opacity: 0.3; pointer-events: none;
     }
     .st-tldr-layout {
@@ -303,9 +303,9 @@
     /* Right: problem cards */
     .st-problem-cards { display: flex; flex-direction: column; gap: 10px; height: 100%; }
     .st-problem-card {
-      background: var(--bg); border-radius: 16px; padding: 18px 22px;
-      display: flex; flex-direction: column; gap: 10px;
-      box-shadow: -4px 6px 4px rgba(0,0,0,0.12); flex: 1;
+      background: var(--bg); border-radius: 16px; padding: 12px 16px;
+      display: flex; flex-direction: column; gap: 6px;
+      box-shadow: -4px 6px 4px rgba(0,0,0,0.12);
     }
     .st-sev-row { display: flex; align-items: center; justify-content: space-between; }
     .st-sev-dot { width: 28px; height: 28px; border-radius: 100px; flex-shrink: 0; }
@@ -436,8 +436,8 @@
     /* ── 08 RETRO ── */
     .st-retro-cards { display: flex; flex-direction: column; gap: 0; flex: 1; justify-content: center; }
     .st-retro-card {
-      display: grid; grid-template-columns: 24px 1fr;
-      gap: 16px; align-items: start; padding: 18px 0;
+      display: grid; grid-template-columns: 24px 1fr auto;
+      gap: 16px; align-items: center; padding: 18px 0;
       border-bottom: 1px solid rgba(255,255,255,0.07);
     }
     .st-retro-card:last-child { border-bottom: none; }
@@ -538,9 +538,6 @@
           </div>
         </div>
       </div>
-      <a class="cs-hero-cta-pill" href="https://www.figma.com/make/VX9LWSLRU1wf0NH2pPaJbv" target="_blank" rel="noopener">
-        SELETAR AIRPORT REDESIGNED &nbsp;→
-      </a>
     </div>
   </section>
 
@@ -569,28 +566,28 @@
           <div class="st-finding-grid">
             <div class="st-finding-card">
               <div class="st-finding-header">
-                <span class="st-finding-icon">⏱</span>
+                <img src="../assets/seletar-tldr-1.png" class="st-finding-icon" alt="" style="width:32px;height:32px;object-fit:contain;">
                 <span class="st-finding-label">Finding 1</span>
               </div>
               <p class="st-finding-text">100% of users chose Seletar for one reason: <strong>time</strong>. Protect the speed promise, or the airport has no digital story to tell.</p>
             </div>
             <div class="st-finding-card">
               <div class="st-finding-header">
-                <span class="st-finding-icon">✂</span>
+                <img src="../assets/seletar-tldr-2.png" class="st-finding-icon" alt="" style="width:32px;height:32px;object-fit:contain;">
                 <span class="st-finding-label">Finding 2</span>
               </div>
               <p class="st-finding-text">We recommended cutting a whole designed section. Turboprop education tested at 3.0/5. My call. The team agreed. Gone from V3.</p>
             </div>
             <div class="st-finding-card">
               <div class="st-finding-header">
-                <span class="st-finding-icon">🏷</span>
+                <img src="../assets/seletar-tldr-3.png" class="st-finding-icon" alt="" style="width:32px;height:32px;object-fit:contain;">
                 <span class="st-finding-label">Finding 3</span>
               </div>
               <p class="st-finding-text"><strong>"Check Status" → "View Flight Schedule."</strong> One label change. SEQ on that task: 4.3 → 4.8. Language is never a detail.</p>
             </div>
             <div class="st-finding-card">
               <div class="st-finding-header">
-                <span class="st-finding-icon">🌐</span>
+                <img src="../assets/seletar-tldr-4.png" class="st-finding-icon" alt="" style="width:32px;height:32px;object-fit:contain;">
                 <span class="st-finding-label">Finding 4</span>
               </div>
               <p class="st-finding-text"><strong>Tourist confidence gap — Round 2.</strong> "EZ-Link" confused international users. Payment icons alone weren't enough. V3 fix brief.</p>
@@ -611,17 +608,14 @@
   <section class="cs-section" id="cs-problem">
     <div class="cs-wrap">
       <p class="cs-label">02 The problem</p>
-      <div class="st-problem-layout">
+      <div class="st-problem-layout" style="align-items:start;">
         <div>
           <h2 class="st-section-h2">The airport's best feature<br>was <em>invisible online.</em></h2>
           <p class="st-section-body">Seletar Airport saves passengers 45–90 minutes over KLIA. But the existing website couldn't communicate this. It read like a corporate brochure — no flight info, no practical planning tools, no reason to return.</p>
           <p class="st-section-body" style="margin-top:12px;">We were briefed to redesign it. Research told us the real brief was bigger: prove the competitive advantage, or passengers would keep going to KLIA by default.</p>
         </div>
-        <div class="st-design-img-col">
-          <div class="st-placeholder" style="height: 340px;">
-            <span class="st-placeholder-tag">seletar-img-oldsite.png</span>
-            <span class="st-placeholder-hint">Screenshot of the existing Seletar website</span>
-          </div>
+        <div class="st-design-img-col" style="overflow:visible;display:flex;align-items:flex-start;">
+          <img src="../assets/seletar-img-oldsite.png" alt="Existing Seletar website" style="display:block;width:auto;height:calc(100vh - 80px);max-width:none;object-fit:cover;object-position:top center;border-radius:16px;filter:drop-shadow(-8px 16px 40px rgba(0,0,0,0.22));margin-top:-40px;">
         </div>
       </div>
     </div>
@@ -708,11 +702,8 @@
             SELETAR AIRPORT REDESIGNED &nbsp;→
           </a>
         </div>
-        <div style="flex:1;display:flex;flex-direction:column;gap:10px;">
-          <div class="st-placeholder" style="flex:1;min-height:340px;">
-            <span class="st-placeholder-tag">seletar-img-ctacard.png</span>
-            <span class="st-placeholder-hint">Prototype card / device mockup</span>
-          </div>
+        <div style="flex:1;display:flex;align-items:center;justify-content:center;">
+          <img src="../assets/seletar-cta-card.png" alt="Seletar Airport redesigned prototype" style="width:100%;height:auto;max-height:400px;object-fit:contain;border-radius:16px;">
         </div>
       </div>
     </div>
@@ -738,10 +729,7 @@
           </div>
         </div>
         <div class="st-design-img-col">
-          <div class="st-placeholder" style="flex:1;min-height:300px;">
-            <span class="st-placeholder-tag">seletar-img-nav.png</span>
-            <span class="st-placeholder-hint">Old nav labels vs new task-based nav</span>
-          </div>
+          <img src="../assets/seletar-img-nav.gif" alt="Task-first navigation — before and after" style="width:100%;height:auto;max-height:360px;object-fit:contain;border-radius:16px;">
         </div>
       </div>
     </div>
@@ -754,10 +742,7 @@
       <div class="st-design-layout" style="direction:rtl;">
         <div style="direction:ltr;">
           <div class="st-design-img-col">
-            <div class="st-placeholder" style="flex:1;min-height:300px;">
-              <span class="st-placeholder-tag">seletar-img-transport.png</span>
-              <span class="st-placeholder-hint">Transport module — before / after (phone screens)</span>
-            </div>
+            <img src="../assets/seletar-img-transport.png" alt="Transport module — before and after" style="width:100%;height:auto;max-height:340px;object-fit:contain;border-radius:16px;">
             <p class="st-design-caption"><em>In V2, the module defaulted to Public Bus — wrong for most users who take taxis.</em></p>
           </div>
         </div>
@@ -796,10 +781,7 @@
           </div>
         </div>
         <div class="st-design-img-col">
-          <div class="st-placeholder" style="flex:1;min-height:300px;">
-            <span class="st-placeholder-tag">seletar-img-passengerguide.png</span>
-            <span class="st-placeholder-hint">Passenger Guide — journey steps with photos and durations</span>
-          </div>
+          <video src="../assets/seletar-img-passengerguide.mp4" autoplay loop muted playsinline style="width:100%;max-height:360px;object-fit:contain;border-radius:16px;display:block;"></video>
         </div>
       </div>
     </div>
@@ -816,6 +798,7 @@
 
         <!-- Round 1 -->
         <div class="st-val-round">
+          <img src="../assets/seletar-img-v1before.png" alt="V1 internal review prototype" style="width:100%;height:100px;object-fit:cover;border-radius:10px;margin-bottom:8px;">
           <div class="st-round-head">
             <span class="st-round-pill st-round-pill--r1">Round 1</span>
             <span class="st-round-context">9 users · Hybrid remote &amp; on-site</span>
@@ -851,6 +834,7 @@
 
         <!-- Round 2 -->
         <div class="st-val-round">
+          <img src="../assets/seletar-img-v1after.png" alt="V1 final prototype" style="width:100%;height:100px;object-fit:cover;border-radius:10px;margin-bottom:8px;">
           <div class="st-round-head">
             <span class="st-round-pill st-round-pill--r2">Round 2</span>
             <span class="st-round-context">6 users · On-site at the airport</span>
@@ -908,13 +892,14 @@
               </div>
             </div>
             <p style="font-size:14px;line-height:1.7;color:var(--ink-muted);">Delivered: Website redesign · Information architecture · UX flows · Transport module redesign · Payment clarity brief for V3.</p>
+            <img src="../assets/seletar-img-profit.png" alt="Business impact" style="width:100%;height:auto;max-height:80px;object-fit:contain;border-radius:10px;margin-top:8px;">
           </div>
         </div>
-        <div>
-          <div class="st-placeholder" style="height:100%;min-height:320px;">
-            <span class="st-placeholder-tag">seletar-img-outcome.png</span>
-            <span class="st-placeholder-hint">Device mockup — final redesign</span>
-          </div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;grid-template-rows:1fr 1fr;gap:8px;min-height:0;">
+          <img src="../assets/seletar-img-outcome1.png" alt="Outcome 1" style="width:100%;height:100%;object-fit:cover;border-radius:12px;min-height:0;">
+          <img src="../assets/seletar-img-outcome2.png" alt="Outcome 2" style="width:100%;height:100%;object-fit:cover;border-radius:12px;min-height:0;">
+          <img src="../assets/seletar-img-outcome3.png" alt="Outcome 3" style="width:100%;height:100%;object-fit:cover;border-radius:12px;min-height:0;">
+          <img src="../assets/seletar-img-outcome4.png" alt="Outcome 4" style="width:100%;height:100%;object-fit:cover;border-radius:12px;min-height:0;">
         </div>
       </div>
     </div>
@@ -930,24 +915,27 @@
       <div class="st-retro-cards">
         <div class="st-retro-card">
           <span class="st-retro-dot" style="background:#c8a840;"></span>
-          <div>
+          <div style="flex:1;min-width:0;">
             <p class="st-retro-card-title">Research shapes briefs, not just validates them</p>
             <p class="st-retro-card-body">We started with a design brief and ended with a different one. That's not scope creep — that's the research working. The skill is knowing when findings are strong enough to reframe the question, then making that case without losing momentum.</p>
           </div>
+          <img src="../assets/seletar-retro-1.png" alt="" style="width:72px;height:72px;object-fit:cover;border-radius:10px;flex-shrink:0;align-self:center;">
         </div>
         <div class="st-retro-card">
           <span class="st-retro-dot" style="background:var(--sel-accent);"></span>
-          <div>
+          <div style="flex:1;min-width:0;">
             <p class="st-retro-card-title">The cut decision is a design decision</p>
             <p class="st-retro-card-body">Recommending we remove a whole designed section was harder than any design choice in the project. It required trusting the data over the sunk cost of work already done. The team agreed, and the product is better for it.</p>
           </div>
+          <img src="../assets/seletar-retro-2.png" alt="" style="width:72px;height:72px;object-fit:cover;border-radius:10px;flex-shrink:0;align-self:center;">
         </div>
         <div class="st-retro-card">
           <span class="st-retro-dot" style="background:#d94a4a;"></span>
-          <div>
+          <div style="flex:1;min-width:0;">
             <p class="st-retro-card-title">Measuring language, not just layout</p>
             <p class="st-retro-card-body">One label change produced the biggest single score jump in the project. It confirmed that language is as much a design material as visual structure. The SEQ doesn't care which button you moved — it cares whether users understood what to do.</p>
           </div>
+          <img src="../assets/seletar-retro-3.png" alt="" style="width:72px;height:72px;object-fit:cover;border-radius:10px;flex-shrink:0;align-self:center;">
         </div>
       </div>
       <div class="st-retro-actions">
@@ -970,11 +958,10 @@
           <h2 class="st-retro-h2" style="font-size:clamp(28px,3.2vw,44px);">Designed for the passenger<br>in their pocket.</h2>
           <p style="font-size:14px;line-height:1.7;color:rgba(255,255,255,0.6);">The redesign is fully responsive. Flight status, transport options, and journey planning — all accessible before they arrive at the gate.</p>
         </div>
-        <div style="flex:1;">
-          <div class="st-placeholder st-placeholder--dark" style="height:100%;min-height:340px;">
-            <span class="st-placeholder-tag">seletar-img-mobile.png</span>
-            <span class="st-placeholder-hint">Mobile / responsive view showcase</span>
-          </div>
+        <div style="flex:1;display:flex;gap:12px;align-items:flex-end;height:100%;">
+          <img src="../assets/seletar-img-mobile-1.png" alt="Mobile view 1" style="flex:1;height:80%;object-fit:cover;border-radius:16px;min-height:0;">
+          <img src="../assets/seletar-img-mobile-2.png" alt="Mobile view 2" style="flex:1;height:100%;object-fit:cover;border-radius:16px;min-height:0;">
+          <img src="../assets/seletar-img-mobile-3.png" alt="Mobile view 3" style="flex:1;height:80%;object-fit:cover;border-radius:16px;min-height:0;">
         </div>
       </div>
     </div>
