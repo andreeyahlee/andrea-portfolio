@@ -111,6 +111,17 @@
     .cs-section--dark .cs-h2 { color: #fff; }
     .cs-section--dark .cs-body { color: rgba(255,255,255,0.65); }
 
+    /* ── HERO FULL IMAGE ── */
+    .cs-hero-img-full {
+      background: var(--arvo-dark);
+      overflow: hidden;
+      line-height: 0;
+    }
+    .cs-hero-img-full img {
+      width: 100%;
+      display: block;
+    }
+
     /* ── 00 HERO ── */
     .cs-hero {
       background: var(--arvo-dark);
@@ -624,8 +635,10 @@
       margin-top: 52px;
       border-radius: 12px;
       overflow: hidden;
+      background: #000;
     }
-    .cs-laptop-wrap img { width: 100%; }
+    .cs-laptop-wrap img,
+    .cs-laptop-wrap video { width: 100%; display: block; }
 
     /* ── OUTCOME ── */
     .cs-outcome-resolved {
@@ -899,8 +912,13 @@
     </div>
   </section>
 
+  <!-- HERO FULL IMAGE -->
+  <div class="cs-hero-img-full">
+    <img src="../assets/arvo-hero-image.png" alt="ARVO dashboard full view">
+  </div>
+
   <!-- 01 TLDR -->
-  <section class="cs-section cs-section--dark cs-tldr" id="cs-tldr">
+  <section class="cs-section cs-section--dark cs-tldr" id="cs-tldr" style="background-image: url('../assets/arvo-tldr-bkg.png'); background-size: cover; background-position: center;">
     <div class="cs-inner">
       <p class="cs-section-label">01 TL;DR</p>
       <h2 class="cs-h2">What we set out to do.<br>What we actually found.</h2>
@@ -1142,6 +1160,14 @@
       <div class="cs-full-img" style="margin-top:52px;">
         <img src="../assets/arvo-pivot.png" alt="Co-creation workshop">
       </div>
+      <div class="cs-pivot-photos">
+        <img src="../assets/arvo-workshop-1.png" alt="Workshop photo 1">
+        <img src="../assets/arvo-workshop-2.png" alt="Workshop photo 2">
+        <img src="../assets/arvo-workshop-3.png" alt="Workshop photo 3">
+        <img src="../assets/arvo-workshop-4.png" alt="Workshop photo 4">
+        <img src="../assets/arvo-workshop-5.png" alt="Workshop photo 5">
+        <img src="../assets/arvo-workshop-6.png" alt="Workshop photo 6">
+      </div>
     </div>
   </section>
 
@@ -1281,7 +1307,11 @@
       <h2 class="cs-h2">The <em>finished</em> dashboard.</h2>
       <p class="cs-body">Single page. Traffic-light health at a glance. Plain-English alerts. Built for 3 minutes on a Monday morning.</p>
       <div class="cs-laptop-wrap">
-        <img src="../assets/arvo-finalsolution.png" alt="ARVO finished dashboard">
+        <video autoplay muted loop playsinline poster="../assets/arvo-finalsolution.png">
+          <source src="../assets/arvo-demo.mp4" type="video/mp4">
+          <source src="../assets/arvo-demo.webm" type="video/webm">
+          <img src="../assets/arvo-finalsolution.png" alt="ARVO finished dashboard">
+        </video>
       </div>
     </div>
   </section>
