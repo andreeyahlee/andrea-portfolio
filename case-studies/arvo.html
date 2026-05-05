@@ -10,6 +10,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@200..800&display=swap" rel="stylesheet">
   <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@1,9..144,300&display=swap" rel="stylesheet">
   <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital@1&display=swap" rel="stylesheet">
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
   <style>
@@ -893,25 +894,57 @@
     #cs-brightspots   { z-index: 4; }
     #cs-pivot         { z-index: 5;  background: var(--bg); }
     #cs-results       { z-index: 6; }
-    #cs-designfixes   { z-index: 7;  background: var(--bg); }
+    #cs-designfixes   { z-index: 7;  background: #eae8e0; }
     #cs-strategic     { z-index: 8; }
     #cs-finalsolution { z-index: 9;  background: var(--bg); }
     #cs-outcome       { z-index: 10; }
     #cs-testimony     { z-index: 11; }
     #cs-retro         { z-index: 12; }
 
-    /* ── DESIGN FIXES GRID ── */
-    .cs-df-grid { margin-top: 48px; display: flex; flex-direction: column; gap: 8px; }
-    .cs-df-row-2 { display: grid; grid-template-columns: 1.3fr 1fr; gap: 8px; }
-    .cs-df-row-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
-    .cs-df-media { border-radius: 10px; overflow: hidden; background: #000; line-height: 0; }
-    .cs-df-media img,
-    .cs-df-media video { width: 100%; display: block; }
+    /* ── DESIGN FIXES ── */
+    .cs-df-panels { display: flex; flex-direction: column; gap: 30px; margin-top: 48px; }
+    .cs-df-panel { display: grid; grid-template-columns: 1fr 1fr; gap: 30px; align-items: center; }
+    .cs-df-card {
+      background: #fff; border-radius: 30px; padding: 32px;
+      box-shadow: -12px -7px 5px rgba(0,0,0,0.25);
+      display: flex; flex-direction: column; gap: 24px;
+    }
+    .cs-df-card--kept { background: #f3f2ec; box-shadow: -16px -5px 10px rgba(0,0,0,0.25); }
+    .cs-df-card-header { display: flex; gap: 16px; align-items: flex-start; }
+    .cs-df-card-meta { flex: 1 0 0; min-width: 0; }
+    .cs-df-card-title { font-family: var(--font-body); font-size: 18px; font-weight: 700; color: #1f2b1f; margin: 0 0 4px; line-height: 1.3; }
+    .cs-df-card-improvement { font-family: var(--font-body); font-size: 17px; font-weight: 500; color: #458619; margin: 0; line-height: 1.3; }
+    .cs-df-badge {
+      flex-shrink: 0;
+      font-family: var(--font-mono); font-size: 12px; font-weight: 700;
+      letter-spacing: 0.06em; text-transform: uppercase; color: #fff;
+      padding: 7px 16px; border-radius: 100px;
+      box-shadow: -7px -2px 3px rgba(0,0,0,0.25);
+    }
+    .cs-df-badge--fix { background: #d11b1b; }
+    .cs-df-badge--keep { background: #458619; }
+    .cs-df-card-body { font-family: var(--font-body); font-size: 16px; font-weight: 500; color: #000; line-height: 1.6; }
+    .cs-df-img-col { display: flex; flex-direction: column; gap: 10px; }
+    .cs-df-card-col { display: flex; flex-direction: column; gap: 10px; }
+    .cs-df-img-wrap { border-radius: 24px; overflow: hidden; line-height: 0; }
+    .cs-df-img-wrap img, .cs-df-img-wrap video { width: 100%; display: block; }
+    .cs-df-caption { font-family: var(--font-body); font-size: 13px; font-style: italic; color: #1f2b1f; text-align: center; line-height: 1.5; }
+    .cs-df-quote-block { padding: 16px; }
+    .cs-df-quote { font-family: 'Cormorant Garamond', serif; font-size: clamp(22px, 2.4vw, 32px); font-style: italic; color: #1f2b1f; line-height: 1.25; margin: 0 0 8px; }
+    .cs-df-quote-attr { font-family: var(--font-body); font-size: 16px; font-style: italic; font-weight: 500; color: #1f2b1f; margin: 0; }
+    .cs-df-kept { display: flex; flex-direction: column; gap: 24px; }
+    .cs-df-kept-pill {
+      display: inline-flex; align-items: center;
+      background: #dce888; color: #1f2b1f;
+      font-family: var(--font-mono); font-size: 12px; font-weight: 700;
+      letter-spacing: 0.08em; text-transform: uppercase;
+      padding: 8px 18px; border-radius: 100px;
+    }
 
     /* ── RESPONSIVE ── */
     @media (max-width: 768px) {
-      .cs-df-row-2 { grid-template-columns: 1fr; }
-      .cs-df-row-3 { grid-template-columns: 1fr 1fr; }
+      .cs-df-panel { grid-template-columns: 1fr; }
+      .cs-df-quote { font-size: 22px; }
     }
     @media (max-width: 768px) {
       .cs-hero-inner { grid-template-columns: 1fr; }
@@ -1297,9 +1330,6 @@
           </tr>
         </tbody>
       </table>
-      <div class="cs-full-img" style="margin-top:48px;">
-        <img src="../assets/arvo-results2.png" alt="Round 2 results">
-      </div>
     </div>
   </section>
 
