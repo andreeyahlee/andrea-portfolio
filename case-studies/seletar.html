@@ -31,7 +31,7 @@
       --nav-h:       72px;
     }
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-    html { scroll-behavior: smooth; }
+    html { scroll-behavior: auto; }
     body { font-family: var(--font-body); background: var(--bg); color: var(--ink); overflow-x: hidden; }
     a { color: inherit; text-decoration: none; }
     img { display: block; max-width: 100%; }
@@ -230,7 +230,7 @@
     }
     .st-tldr-layout {
       display: grid; grid-template-columns: 1fr 440px;
-      gap: 60px; flex: 1; align-items: start; overflow: hidden;
+      gap: 60px; align-items: start; overflow: hidden;
     }
     .st-tldr-cols {
       display: grid; grid-template-columns: repeat(3, 1fr);
@@ -249,8 +249,9 @@
     }
     .st-col-text { font-size: 13px; line-height: 1.6; color: rgba(255,255,255,0.72); }
     .st-col-text strong { color: #fff; }
-    .st-finding-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; flex: 1; }
+    .st-finding-grid { display: flex; flex-direction: row; gap: 8px; width: 100%; margin-top: 16px; }
     .st-finding-card {
+      flex: 1; min-width: 0;
       background: rgba(31,43,31,0.72); border-radius: 20px;
       padding: 20px; display: flex; flex-direction: column; gap: 10px;
     }
@@ -677,7 +678,16 @@
               <p class="st-col-text">Ease-of-use score moved from 4.3 → 4.8 / 5 across two test rounds. The site went from a static brochure to a working passenger planning tool.</p>
             </div>
           </div>
-          <div class="st-finding-grid">
+        </div>
+
+        <div class="st-tldr-headline">
+          <p class="st-tldr-h2"><em>The Lowdown.</em>The Mission, The Move, and The Metric.</p>
+          <p class="st-tldr-sub">For anyone who wants the full picture before diving in — or just needs the highlights.</p>
+        </div>
+
+      </div>
+
+      <div class="st-finding-grid">
             <div class="st-finding-card">
               <div class="st-finding-header">
                 <img src="../assets/seletar-tldr-1.png" class="st-finding-icon" alt="" style="width:32px;height:32px;object-fit:contain;">
@@ -707,14 +717,6 @@
               <p class="st-finding-text"><strong>Tourist confidence gap — Round 2.</strong> "EZ-Link" confused international users. Payment icons alone weren't enough. V3 fix brief.</p>
             </div>
           </div>
-        </div>
-
-        <div class="st-tldr-headline">
-          <p class="st-tldr-h2"><em>The Lowdown.</em>The Mission, The Move, and The Metric.</p>
-          <p class="st-tldr-sub">For anyone who wants the full picture before diving in — or just needs the highlights.</p>
-        </div>
-
-      </div>
     </div>
   </section>
 

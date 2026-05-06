@@ -887,10 +887,9 @@
       .hero-scroll-text { font-size: 13px; letter-spacing: 0.06em; }
       .hero-scroll-text em { font-size: 15px; }
 
-      #work { height: auto; }
+      #work { height: auto; padding-top: 80px; }
       .work-scroll-hint { display: none; }
-      .work-section-label { position: relative; top: auto; left: auto; padding: 24px 16px 10px; }
-      .work-title { font-size: clamp(28px, 8vw, 40px); }
+      .work-section-label { display: none; }
       .work-cols {
         flex-direction: column;
         height: auto;
@@ -899,6 +898,10 @@
       }
       .work-col {
         flex: none;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
         height: clamp(160px, 26vh, 215px);
         border-right: none;
         border-bottom: none;
@@ -911,7 +914,7 @@
       .work-col.arvo-col    { background-color: var(--arvo); }
       .work-col.seletar-col { background-color: var(--seletar); }
       .work-col.pethaus-col { background-color: var(--pethaus); }
-      /* Active card expands; siblings collapse */
+      /* Active card expands; siblings collapse to 79px strip */
       .work-col.is-active { height: clamp(380px, 56vh, 500px); }
       .work-cols.has-active .work-col:not(.is-active) { height: 79px; }
       /* Suppress desktop :hover triggers */
@@ -920,38 +923,19 @@
       .work-col.arvo-col:hover,
       .work-col.seletar-col:hover,
       .work-col.pethaus-col:hover { background-color: inherit; }
-      /* PNG images — always visible on mobile */
+      /* PNG images — full opacity, centered crop */
       .work-card-img {
         display: block !important;
-        opacity: 0.4 !important;
+        opacity: 1 !important;
         object-position: center center;
         transition: opacity 0.3s ease !important;
         -webkit-mask-image: none !important;
         mask-image: none !important;
       }
-      .work-col:hover .work-card-img { opacity: 0.4 !important; }
-      .work-col.is-active .work-card-img {
-        opacity: 0.75 !important;
-        object-position: top center;
-      }
-      /* Project name */
-      .work-name {
-        display: flex !important;
-        align-items: center;
-        justify-content: center;
-        opacity: 1 !important;
-        font-size: 64px;
-        font-weight: 700;
-        padding: 0;
-        inset: 0;
-        bottom: unset;
-        transition: font-size 0.3s ease, font-weight 0.25s ease, opacity 0.2s ease;
-      }
-      .work-cols.has-active .work-col:not(.is-active) .work-name {
-        font-size: 32px;
-        font-weight: 500;
-      }
-      .work-col.is-active .work-name { opacity: 0 !important; }
+      .work-col:hover .work-card-img { opacity: 1 !important; }
+      .work-col.is-active .work-card-img { opacity: 1 !important; }
+      /* Project name hidden — names are baked into mobile images */
+      .work-name { display: none !important; }
       /* Dark overlay — slides up inside active card */
       .work-card-overlay {
         display: flex !important;
