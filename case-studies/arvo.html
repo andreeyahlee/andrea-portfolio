@@ -11,6 +11,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@1,9..144,300&display=swap" rel="stylesheet">
   <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital@1&display=swap" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/@studio-freight/lenis@1.0.42/dist/lenis.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
   <style>
@@ -27,6 +28,7 @@
       --content-max:  1100px;
       --pad-x:        clamp(32px, 5vw, 80px);
       --pad-y:        clamp(60px, 8vw, 100px);
+      --nav-h:        72px;
     }
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
     html { scroll-behavior: smooth; }
@@ -802,7 +804,7 @@
     .cs-testimony-inner {
       max-width: 760px;
       margin: 0 auto;
-      padding: var(--pad-y) var(--pad-x);
+      padding: calc(var(--nav-h) + 36px) var(--pad-x) var(--pad-y);
       text-align: center;
     }
     .cs-testimony-section-label {
@@ -920,6 +922,10 @@
       min-height: 100vh;
       border-radius: 20px 20px 0 0;
       box-shadow: 0 -24px 80px rgba(0,0,0,0.22);
+      clip-path: inset(calc(var(--nav-h) - 8px) 0 0 0 round 20px 20px 0 0);
+    }
+    .cs-section:not(.cs-hero) .cs-inner {
+      padding-top: calc(var(--nav-h) + 36px);
     }
     #cs-tldr           { z-index: 2; }
     #cs-research       { z-index: 3;  background: var(--bg); }
@@ -1020,6 +1026,11 @@
       .cs-results-stats { grid-template-columns: 1fr; gap: 2px; }
       .cs-decisions-grid { grid-template-columns: 1fr 1fr; }
       .cs-pivot-photos { grid-template-columns: repeat(3, 1fr); }
+
+      /* Disable pin/clip system on mobile */
+      .cs-section { clip-path: none !important; }
+      .cs-hero { position: relative !important; top: auto !important; }
+      .cs-inner, .cs-testimony-inner, .cs-wrap { padding-top: var(--pad-y) !important; }
     }
   </style>
 </head>
@@ -1744,79 +1755,84 @@
   <script>
     gsap.registerPlugin(ScrollTrigger);
 
+    /* ── DEVICE + MOTION PREFS ── */
+    const isMobile = window.matchMedia('(max-width: 768px)').matches;
+    const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    /* ── LENIS (desktop only) ── */
+    let lenis;
+    if (!isMobile) {
+      lenis = new Lenis({ lerp: 0.07, smoothWheel: true, wheelMultiplier: 0.85 });
+      lenis.on('scroll', ScrollTrigger.update);
+      gsap.ticker.add((time) => lenis.raf(time * 1000));
+    }
+    gsap.ticker.lagSmoothing(0);
+
     /* ── HERO ENTRANCE ── */
-    const heroTl = gsap.timeline({ delay: 0.1 });
-    heroTl
-      .from('.cs-hero-h1',  { y: 60, opacity: 0, duration: 0.8, ease: 'power2.out' })
-      .from('.cs-hero-sub', { y: 20, opacity: 0, duration: 0.6, ease: 'power2.out' }, '-=0.4')
-      .from('.cs-hero-meta .cs-meta-row', { y: 20, opacity: 0, stagger: 0.07, duration: 0.5, ease: 'power2.out' }, '-=0.5');
+    if (!reducedMotion) gsap.timeline({ delay: 0.15 })
+      .from('.cs-hero-h1',  { y: 60, opacity: 0, duration: 1.0, ease: 'power4.out' })
+      .from('.cs-hero-sub', { y: 20, opacity: 0, duration: 0.7, ease: 'power4.out' }, '-=0.5')
+      .from('.cs-hero-meta .cs-meta-row', { y: 12, opacity: 0, stagger: 0.06, duration: 0.45, ease: 'power3.out' }, '-=0.5');
 
     /* ── BASE SCROLL REVEAL — every .cs-section ── */
     gsap.utils.toArray('.cs-section').forEach(section => {
       gsap.from(section.querySelectorAll('.cs-h2, .cs-body, .cs-section-label'), {
-        y: 40,
-        opacity: 0,
-        duration: 0.7,
-        stagger: 0.08,
-        ease: 'power2.out',
-        scrollTrigger: {
-          trigger: section,
-          start: 'top 82%',
-          toggleActions: 'play none none none'
-        }
+        y: 40, opacity: 0, duration: 0.7, stagger: 0.08, ease: 'power3.out',
+        scrollTrigger: { trigger: section, start: 'top 82%', toggleActions: 'play none none none' }
       });
     });
 
     /* ── TLDR STATS ── */
     gsap.from('.cs-stat-item', {
-      y: 30, opacity: 0, stagger: 0.12, duration: 0.6, ease: 'power2.out',
+      y: 30, opacity: 0, stagger: 0.12, duration: 0.6, ease: 'power3.out',
       scrollTrigger: { trigger: '#cs-tldr', start: 'top 70%', toggleActions: 'play none none none' }
     });
     gsap.from('.cs-discovery-item', {
-      y: 30, opacity: 0, stagger: 0.12, duration: 0.6, ease: 'power2.out',
+      y: 30, opacity: 0, stagger: 0.12, duration: 0.6, ease: 'power3.out',
       scrollTrigger: { trigger: '#cs-tldr', start: 'top 70%', toggleActions: 'play none none none' }
     });
 
     /* ── RESEARCH ── */
     gsap.from('.cs-failure-item', {
-      x: -20, opacity: 0, stagger: 0.1, duration: 0.5, ease: 'power2.out',
+      x: -20, opacity: 0, stagger: 0.1, duration: 0.5, ease: 'power3.out',
       scrollTrigger: { trigger: '#cs-research', start: 'top 75%', toggleActions: 'play none none none' }
     });
 
-    /* ── BRIGHT SPOTS — stagger left to right ── */
+    /* ── BRIGHT SPOTS ── */
     gsap.from('.cs-bs-item', {
-      x: -20, opacity: 0, stagger: 0.15, duration: 0.5, ease: 'power2.out',
+      x: -20, opacity: 0, stagger: 0.15, duration: 0.5, ease: 'power3.out',
       scrollTrigger: { trigger: '#cs-brightspots', start: 'top 75%', toggleActions: 'play none none none' }
     });
 
     /* ── RESULTS STATS ── */
     gsap.from('.cs-result-stat', {
-      scale: 0.95, opacity: 0, stagger: 0.1, duration: 0.5, ease: 'power2.out',
+      scale: 0.95, opacity: 0, stagger: 0.1, duration: 0.5, ease: 'power3.out',
       scrollTrigger: { trigger: '#cs-results', start: 'top 75%', toggleActions: 'play none none none' }
     });
 
-    /* ── SECTION OVERLAY ENTRANCE + STICKY BOTTOM ── */
-    gsap.utils.toArray('.cs-section:not(.cs-hero)').forEach(section => {
-      // slide up from below as it enters viewport
-      gsap.fromTo(section,
-        { y: 60 },
-        { y: 0, ease: 'none',
-          scrollTrigger: { trigger: section, start: 'top bottom', end: 'top top', scrub: 0.6 }
-        }
-      );
-      // pin at viewport bottom once all content is visible; next section slides over
-      ScrollTrigger.create({
-        trigger: section,
-        start: 'bottom bottom',
-        end: '+=' + window.innerHeight,
-        pin: true,
-        pinSpacing: false,
+    /* ── SECTION OVERLAY ENTRANCE + STICKY BOTTOM (desktop only) ── */
+    if (!isMobile) {
+      gsap.utils.toArray('.cs-section:not(.cs-hero)').forEach(section => {
+        const inner = section.querySelector('.cs-inner, .cs-testimony-inner, .cs-wrap') || section;
+        gsap.fromTo(inner,
+          { y: 60 },
+          { y: 0, ease: 'none',
+            scrollTrigger: { trigger: section, start: 'top bottom', end: 'top top', scrub: 1 }
+          }
+        );
+        ScrollTrigger.create({
+          trigger: section,
+          start: 'top top',
+          end: () => '+=' + Math.max(section.offsetHeight, window.innerHeight),
+          pin: true,
+          pinSpacing: false,
+        });
       });
-    });
+    }
 
     /* ── OUTCOME DECISIONS ── */
     gsap.from('.cs-decision-card', {
-      y: 30, opacity: 0, stagger: 0.1, duration: 0.6, ease: 'power2.out',
+      y: 30, opacity: 0, stagger: 0.1, duration: 0.6, ease: 'power3.out',
       scrollTrigger: { trigger: '#cs-outcome-2', start: 'top 70%', toggleActions: 'play none none none' }
     });
 
@@ -1826,7 +1842,7 @@
     });
     testTl
       .from('.cs-quote-marks',     { scale: 0, opacity: 0, duration: 0.4, ease: 'back.out(1.5)' })
-      .from('.cs-testimony-quote', { y: 20, opacity: 0, duration: 0.7, ease: 'power2.out' }, '-=0.1')
+      .from('.cs-testimony-quote', { y: 20, opacity: 0, duration: 0.7, ease: 'power3.out' }, '-=0.1')
       .from('.cs-testimony-attr',  { opacity: 0, duration: 0.5 }, '-=0.1');
 
     /* ── FINAL SOLUTION VIDEO — play on enter, pause on leave ── */
@@ -1843,19 +1859,24 @@
 
     /* ── RETRO CARDS ── */
     gsap.from('.cs-retro-card', {
-      y: 30, opacity: 0, stagger: 0.12, duration: 0.6, ease: 'power2.out',
+      y: 30, opacity: 0, stagger: 0.12, duration: 0.6, ease: 'power3.out',
       scrollTrigger: { trigger: '#cs-retro', start: 'top 75%', toggleActions: 'play none none none' }
     });
 
     ScrollTrigger.refresh();
 
-    // Reading progress bar
+    /* ── PROGRESS BAR ── */
     const progressBar = document.getElementById('cs-progress');
-    window.addEventListener('scroll', () => {
-      const scrolled = window.scrollY;
-      const total = document.documentElement.scrollHeight - window.innerHeight;
-      progressBar.style.width = (scrolled / total * 100) + '%';
-    }, { passive: true });
+    if (lenis) {
+      lenis.on('scroll', ({ scroll, limit }) => {
+        progressBar.style.width = (scroll / limit * 100) + '%';
+      });
+    } else {
+      window.addEventListener('scroll', () => {
+        const max = document.documentElement.scrollHeight - window.innerHeight;
+        progressBar.style.width = (window.scrollY / max * 100) + '%';
+      }, { passive: true });
+    }
   </script>
 </body>
 </html>

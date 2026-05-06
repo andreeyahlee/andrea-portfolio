@@ -45,6 +45,7 @@
        RESET
     ============================================================ */
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    button, input, select, textarea { font-family: inherit; }
     html { scroll-behavior: smooth; }
     body {
       font-family: var(--font-body);
@@ -105,7 +106,7 @@
       margin-right: 4px;
     }
     .nav-link {
-      font-size: 14px;
+      font-size: 13px;
       font-weight: 500;
       color: rgba(243,242,236,0.75);
       transition: color 0.2s;
@@ -117,6 +118,7 @@
     #nav.nav--light .nav-link--active { color: var(--ink); font-weight: 700; }
 
     .nav-cta {
+      font-family: var(--font-body);
       font-size: 13px;
       font-weight: 500;
       color: var(--bg);
@@ -262,6 +264,51 @@
       z-index: 9;
     }
 
+    /* ── HERO SCROLL HINT ── */
+    .hero-scroll-hint {
+      position: absolute;
+      bottom: clamp(24px, 4vh, 48px);
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 7px;
+      pointer-events: none;
+      z-index: 2;
+    }
+    .hero-scroll-line {
+      width: 1px;
+      height: 28px;
+      background: rgba(10,10,10,0.28);
+    }
+    .hero-scroll-line--bottom {
+      animation: hint-drop 1.9s ease-in-out infinite;
+      transform-origin: top center;
+    }
+    @keyframes hint-drop {
+      0%, 100% { transform: scaleY(1) translateY(0); opacity: 0.28; }
+      50%       { transform: scaleY(1.4) translateY(4px); opacity: 0.55; }
+    }
+    .hero-scroll-text {
+      font-family: var(--font-body);
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: rgba(10,10,10,0.4);
+      white-space: nowrap;
+    }
+    .hero-scroll-text em {
+      font-family: 'Fraunces', serif;
+      font-style: italic;
+      font-weight: 300;
+      font-size: 13px;
+      text-transform: none;
+      letter-spacing: 0;
+      color: rgba(10,10,10,0.5);
+    }
+
     /* ============================================================
        WORK
     ============================================================ */
@@ -349,14 +396,14 @@
     }
     .work-col:hover .work-name { opacity: 0; }
 
-    /* hover card image — full column, fully in view */
+    /* hover card image — top portion only so HTML card covers bottom */
     .work-card-img {
       position: absolute;
-      inset: 0;
+      top: 0; left: 0; right: 0;
       width: 100%;
       height: 100%;
       object-fit: cover;
-      object-position: center;
+      object-position: top center;
       display: block;
       opacity: 0;
       pointer-events: none;
@@ -364,8 +411,58 @@
     }
     .work-col:hover .work-card-img {
       opacity: 1;
+    }
+
+    /* HTML overlay card — covers bottom 48% of column, hides baked-in PNG card */
+    .work-card-overlay {
+      position: absolute;
+      left: 0; right: 0; bottom: 0;
+      height: 48%;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      gap: 5px;
+      padding: clamp(14px, 2.5%, 28px) clamp(16px, 4%, 32px) clamp(20px, 3%, 36px);
+      background: rgba(8, 6, 10, 0.93);
+      border-radius: 14px 14px 0 0;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.3s ease 0.05s;
+      z-index: 2;
+    }
+    .work-col:hover .work-card-overlay {
+      opacity: 1;
       pointer-events: auto;
     }
+    .work-card-tags {
+      font-family: var(--font-mono);
+      font-size: clamp(8px, 0.85vw, 10px);
+      font-weight: 400;
+      letter-spacing: 0.06em;
+      color: rgba(243,242,236,0.42);
+      text-transform: uppercase;
+      line-height: 1.5;
+    }
+    .work-card-headline {
+      font-family: var(--font-display);
+      font-size: clamp(17px, 2.2vw, 28px);
+      font-weight: 700;
+      color: var(--bg);
+      line-height: 1.1;
+      margin: 0;
+    }
+    .work-card-desc {
+      font-family: var(--font-body);
+      font-size: clamp(10px, 1.1vw, 13px);
+      line-height: 1.5;
+      color: rgba(243,242,236,0.58);
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+      margin: 1px 0 4px;
+    }
+
     /* full-column link — activates when CTA card is shown */
     .work-col-link {
       position: absolute;
@@ -378,59 +475,45 @@
       pointer-events: auto;
     }
 
-    /* "Read the case study →" button — left-aligned, content-hug width */
+    /* "Read the case study →" button — in-flow inside overlay card */
     .work-read-btn {
-      position: absolute;
-      bottom: 28px;
-      left: 32px;
-      z-index: 4;
       display: inline-flex;
       align-items: center;
-      gap: 8px;
-      padding: 12px 22px;
+      align-self: flex-start;
+      gap: 6px;
+      padding: clamp(8px, 1%, 11px) clamp(14px, 2%, 22px);
       background: var(--bg);
       color: var(--ink);
       font-family: var(--font-body);
-      font-size: 13px;
+      font-size: clamp(10px, 1vw, 13px);
       font-weight: 600;
       letter-spacing: 0.01em;
       white-space: nowrap;
       border-radius: 100px;
       text-decoration: none;
-      opacity: 0;
-      pointer-events: none;
-      transition: opacity 0.3s ease 0.05s,
-                  background 0.15s ease,
+      position: relative;
+      z-index: 4;
+      transition: background 0.15s ease,
                   transform 0.15s ease,
                   box-shadow 0.15s ease;
-    }
-    .work-col:hover .work-read-btn {
-      opacity: 1;
-      pointer-events: auto;
     }
     .work-read-btn .btn-arrow {
       display: inline-block;
       transition: transform 0.15s ease;
     }
-    /* Hover state */
     .work-read-btn:hover {
       background: #fff;
       box-shadow: 0 4px 16px rgba(0,0,0,0.18);
       transform: translateY(-2px);
     }
-    .work-read-btn:hover .btn-arrow {
-      transform: translateX(4px);
-    }
-    /* Pressed state */
+    .work-read-btn:hover .btn-arrow { transform: translateX(4px); }
     .work-read-btn:active {
       background: var(--bg-warm);
       box-shadow: 0 1px 4px rgba(0,0,0,0.12);
       transform: scale(0.96);
       transition-duration: 0.06s;
     }
-    .work-read-btn:active .btn-arrow {
-      transform: translateX(2px);
-    }
+    .work-read-btn:active .btn-arrow { transform: translateX(2px); }
 
     /* ============================================================
        ABOUT — States 1 + 2 (scroll-driven portrait split)
@@ -799,7 +882,12 @@
       .nav-links, .nav-cta { display: none; }
       .nav-hamburger { display: flex; }
 
-      #hero-img { max-width: 94vw; max-height: 80vh; }
+      #hero { align-items: flex-start; padding-top: 20vh; }
+      #hero-img { max-width: 100vw; max-height: 68vh; }
+      .hero-scroll-hint { gap: 10px; }
+      .hero-scroll-line { height: 32px; }
+      .hero-scroll-text { font-size: 13px; letter-spacing: 0.06em; }
+      .hero-scroll-text em { font-size: 15px; }
 
       #work { height: auto; }
       .work-scroll-hint { display: none; }
@@ -811,6 +899,7 @@
       }
       .work-col {
         flex: none;
+        height: clamp(240px, 62vw, 340px);
         border-right: none;
         border-bottom: 1px solid rgba(243,242,236,0.12);
       }
@@ -818,6 +907,18 @@
       /* Mobile — always show CTA card */
       .work-name { display: none; }
       .work-card-img { opacity: 1; pointer-events: auto; }
+      .work-card-overlay {
+        opacity: 1 !important;
+        pointer-events: auto !important;
+        height: 54%;
+        padding: 10px 16px 18px;
+        gap: 3px;
+        border-radius: 12px 12px 0 0;
+      }
+      .work-card-desc { display: none; }
+      .work-card-headline { font-size: clamp(14px, 4.5vw, 22px); }
+      .work-card-tags { font-size: clamp(7px, 1.9vw, 9px); }
+      .work-read-btn { font-size: clamp(9px, 2.2vw, 11px); padding: 6px 12px; gap: 4px; }
       .work-col.arvo-col:hover,
       .work-col.seletar-col:hover,
       .work-col.pethaus-col:hover { background-color: transparent; }
@@ -864,13 +965,13 @@
        NAV
   ============================ -->
   <nav id="nav" role="navigation" aria-label="Main navigation">
-    <a href="#" class="nav-logo" aria-label="Home" onclick="window.scrollTo({top:0,behavior:'smooth'});return false;">
+    <a href="#" class="nav-logo" aria-label="Home" id="nav-logo-link">
       <!-- logo-dark.png = white flower, visible on dark nav background -->
       <img src="assets/logo-dark.png" alt="" id="nav-logo-img">
     </a>
     <ul class="nav-links" role="list">
       <li><a class="nav-link" href="#work">Work</a></li>
-      <li><button class="nav-link" id="nav-about" style="background:none;border:none;cursor:pointer;font:inherit;padding:0;">About</button></li>
+      <li><button class="nav-link" id="nav-about" style="background:none;border:none;cursor:pointer;padding:0;">About</button></li>
     </ul>
     <button class="nav-cta" id="nav-sayhi">Say Hi!</button>
     <button class="nav-hamburger" id="nav-hamburger"
@@ -920,6 +1021,12 @@
 
     <div id="work-reveal" aria-hidden="true"></div>
 
+    <div class="hero-scroll-hint" aria-hidden="true">
+      <span class="hero-scroll-line"></span>
+      <span class="hero-scroll-text"><em>scroll</em> down</span>
+      <span class="hero-scroll-line hero-scroll-line--bottom"></span>
+    </div>
+
   </section>
 
 
@@ -939,9 +1046,14 @@
         </div>
         <div class="work-col-bottom">
           <img class="work-card-img" src="assets/arvo-cta.png" alt="ARVO case study" loading="lazy">
+          <div class="work-card-overlay">
+            <p class="work-card-tags">Project Manager · Usability Research · 6 Designers</p>
+            <h3 class="work-card-headline">We found a broken model.</h3>
+            <p class="work-card-desc">A usability audit that changed the entire brief. Six weeks, uncomfortable honesty, and a client who needed convincing.</p>
+            <a class="work-read-btn" href="case-studies/arvo.html">Read the case study <span class="btn-arrow">→</span></a>
+          </div>
         </div>
         <div class="work-name" aria-hidden="true">ARVO</div>
-        <a class="work-read-btn" href="case-studies/arvo.html">Read the case study <span class="btn-arrow">→</span></a>
         <a class="work-col-link" href="case-studies/arvo.html" aria-label="Read ARVO case study"></a>
       </div>
 
@@ -949,9 +1061,14 @@
       <div class="work-col seletar-col">
         <div class="work-col-bottom">
           <img class="work-card-img" src="assets/seletar-cta.png" alt="Seletar Airport case study" loading="lazy">
+          <div class="work-card-overlay">
+            <p class="work-card-tags">UX Research Lead · Strategic Redesign · 3 Designers</p>
+            <h3 class="work-card-headline">Unlocking the Subang Advantage.</h3>
+            <p class="work-card-desc">What started as "redesign the website" became proving an airport's competitive edge — or lose passengers who never knew it existed.</p>
+            <a class="work-read-btn" href="case-studies/seletar.html">Read the case study <span class="btn-arrow">→</span></a>
+          </div>
         </div>
         <div class="work-name" aria-hidden="true">Seletar Airport</div>
-        <a class="work-read-btn" href="case-studies/seletar.html">Read the case study <span class="btn-arrow">→</span></a>
         <a class="work-col-link" href="case-studies/seletar.html" aria-label="Read Seletar Airport case study"></a>
       </div>
 
@@ -959,9 +1076,14 @@
       <div class="work-col pethaus-col">
         <div class="work-col-bottom">
           <img class="work-card-img" src="assets/pethaus-cta.png" alt="Pet Haus case study" loading="lazy">
+          <div class="work-card-overlay">
+            <p class="work-card-tags">Solo Designer · End-to-End · E-Commerce</p>
+            <h3 class="work-card-headline">Trust, designed in.</h3>
+            <p class="work-card-desc">An e-commerce build for the most anxious pet owners. Every product page earns trust before it asks for a click.</p>
+            <a class="work-read-btn" href="case-studies/pethaus.html">Read the case study <span class="btn-arrow">→</span></a>
+          </div>
         </div>
         <div class="work-name" aria-hidden="true">Pet Haus</div>
-        <a class="work-read-btn" href="case-studies/pethaus.html">Read the case study <span class="btn-arrow">→</span></a>
         <a class="work-col-link" href="case-studies/pethaus.html" aria-label="Read Pet Haus case study"></a>
       </div>
 
@@ -1156,6 +1278,14 @@
     }
   }
 
+  document.getElementById('nav-logo-link').addEventListener('click', e => {
+    e.preventDefault();
+    closeOverlay('about-overlay');
+    closeOverlay('contact-overlay');
+    closeMenu();
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  });
+
   document.getElementById('nav-about').addEventListener('click', () => openOverlay('about-overlay'));
   document.getElementById('nav-sayhi').addEventListener('click', () => openOverlay('contact-overlay'));
 
@@ -1328,8 +1458,11 @@
       }
     });
 
+    // Fade scroll hint immediately as zoom begins
+    heroTl.to(".hero-scroll-hint", { opacity: 0, duration: 0.4, ease: "none" }, 0);
+
     // Phase 1 (0→5): Zoom toward the 'p' in "stupidly" on the monitor
-    heroTl.to("#hero-img", { scale: 6, ease: "none", duration: 5 });
+    heroTl.to("#hero-img", { scale: 6, ease: "none", duration: 5 }, 0);
 
     // Phase 2 (2.5→9.5): Circle emerges from bowl interior once 'p' is large enough to read
     heroTl.to("#work-reveal", {
@@ -1358,6 +1491,31 @@
       }
     });
 
+  });
+
+  // ── Mobile: same scroll animation, adjusted scale + duration ──
+  mm.add("(max-width: 767px)", () => {
+
+    const heroTl = gsap.timeline({
+      scrollTrigger: {
+        trigger: "#hero",
+        start: "top top",
+        end: "+=180%",
+        pin: true,
+        scrub: 1.2,
+        anticipatePin: 1,
+      }
+    });
+
+    heroTl.to(".hero-scroll-hint", { opacity: 0, duration: 0.4, ease: "none" }, 0);
+    heroTl.to("#hero-img", { scale: 5, ease: "none", duration: 5 }, 0);
+    heroTl.to("#work-reveal", {
+      clipPath: "circle(120% at 49% 42%)",
+      ease: "power2.in",
+      duration: 7
+    }, 2.5);
+    heroTl.to("#hero-img", { opacity: 0, ease: "none", duration: 2 }, 7.5);
+    heroTl.to("#work-reveal", { opacity: 0, ease: "power1.out", duration: 0.5 }, 9);
 
   });
   </script>

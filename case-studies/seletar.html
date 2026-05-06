@@ -10,6 +10,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@200..800&display=swap" rel="stylesheet">
   <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital@1&display=swap" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/@studio-freight/lenis@1.0.42/dist/lenis.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
   <style>
@@ -27,6 +28,7 @@
       --font-mono:   'JetBrains Mono', monospace;
       --content-max: 1100px;
       --pad-x:       clamp(32px, 5vw, 80px);
+      --nav-h:       72px;
     }
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
     html { scroll-behavior: smooth; }
@@ -107,6 +109,7 @@
       overflow: hidden;
       border-radius: 20px 20px 0 0;
       box-shadow: 0 -24px 80px rgba(0,0,0,0.22);
+      clip-path: inset(calc(var(--nav-h) - 8px) 0 0 0 round 20px 20px 0 0);
     }
     /* Section inner — full height, flex column */
     .cs-wrap {
@@ -116,6 +119,9 @@
       padding: clamp(64px, 7vh, 88px) var(--pad-x) clamp(40px, 5vh, 56px);
       height: 100%;
       display: flex; flex-direction: column;
+    }
+    .cs-section:not(.cs-hero) .cs-wrap {
+      padding-top: calc(var(--nav-h) + 36px);
     }
     /* Full-width variant (no max-width) */
     .cs-wrap--full {
@@ -568,6 +574,11 @@
       .st-last-layout { grid-template-columns: 1fr; }
       .st-val-tables { grid-template-columns: 1fr; }
       .cs-section:not(.cs-hero) { height: auto; min-height: 100vh; }
+
+      /* Disable pin/clip system on mobile */
+      .cs-section { clip-path: none !important; }
+      .cs-hero { position: relative !important; top: auto !important; }
+      .cs-wrap { padding-top: var(--pad-y) !important; }
     }
   </style>
 </head>
@@ -1154,60 +1165,75 @@
   <script>
     gsap.registerPlugin(ScrollTrigger);
 
-    /* ── HERO ENTRANCE ── */
-    const heroTl = gsap.timeline({ delay: 0.1 });
-    heroTl
-      .from('.cs-hero-h1',       { y: 60, opacity: 0, duration: 0.8, ease: 'power2.out' })
-      .from('.cs-hero-sub',      { y: 20, opacity: 0, duration: 0.6, ease: 'power2.out' }, '-=0.4')
-      .from('.cs-hero-cta-pill', { y: 20, opacity: 0, duration: 0.5, ease: 'power2.out' }, '-=0.5')
-      .from('.cs-meta-row',      { y: 16, opacity: 0, stagger: 0.06, duration: 0.45, ease: 'power2.out' }, '-=0.5');
+    /* ── DEVICE + MOTION PREFS ── */
+    const isMobile = window.matchMedia('(max-width: 768px)').matches;
+    const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-    /* ── SECTION OVERLAY ENTRANCE + STICKY BOTTOM ── */
-    gsap.utils.toArray('.cs-section:not(.cs-hero)').forEach(section => {
-      gsap.fromTo(section,
-        { y: 60 },
-        { y: 0, ease: 'none',
-          scrollTrigger: { trigger: section, start: 'top bottom', end: 'top top', scrub: 0.6 }
-        }
-      );
-      ScrollTrigger.create({
-        trigger: section,
-        start: 'bottom bottom',
-        end: '+=' + window.innerHeight,
-        pin: true,
-        pinSpacing: false,
+    /* ── LENIS (desktop only) ── */
+    let lenis;
+    if (!isMobile) {
+      lenis = new Lenis({ lerp: 0.07, smoothWheel: true, wheelMultiplier: 0.85 });
+      lenis.on('scroll', ScrollTrigger.update);
+      gsap.ticker.add((time) => lenis.raf(time * 1000));
+    }
+    gsap.ticker.lagSmoothing(0);
+
+    /* ── HERO ENTRANCE ── */
+    if (!reducedMotion) gsap.timeline({ delay: 0.15 })
+      .from('.cs-hero-h1',       { y: 60, opacity: 0, duration: 1.0, ease: 'power4.out' })
+      .from('.cs-hero-sub',      { y: 20, opacity: 0, duration: 0.7, ease: 'power4.out' }, '-=0.5')
+      .from('.cs-hero-cta-pill', { y: 14, opacity: 0, duration: 0.5, ease: 'power3.out' }, '-=0.4')
+      .from('.cs-meta-row',      { y: 12, opacity: 0, stagger: 0.06, duration: 0.45, ease: 'power3.out' }, '-=0.5');
+
+    /* ── SECTION OVERLAY ENTRANCE + STICKY BOTTOM (desktop only) ── */
+    if (!isMobile) {
+      gsap.utils.toArray('.cs-section:not(.cs-hero)').forEach(section => {
+        const inner = section.querySelector('.cs-wrap') || section;
+        gsap.fromTo(inner,
+          { y: 60 },
+          { y: 0, ease: 'none',
+            scrollTrigger: { trigger: section, start: 'top bottom', end: 'top top', scrub: 1 }
+          }
+        );
+        ScrollTrigger.create({
+          trigger: section,
+          start: 'top top',
+          end: () => '+=' + Math.max(section.offsetHeight, window.innerHeight),
+          pin: true,
+          pinSpacing: false,
+        });
       });
-    });
+    }
 
     /* ── TL;DR CARDS ── */
     gsap.from('.st-finding-card', {
-      y: 24, opacity: 0, stagger: 0.1, duration: 0.55, ease: 'power2.out',
+      y: 24, opacity: 0, stagger: 0.1, duration: 0.55, ease: 'power3.out',
       scrollTrigger: { trigger: '#cs-tldr', start: 'top 70%', toggleActions: 'play none none none' }
     });
 
     /* ── FOUND PROBLEM CARDS ── */
     gsap.from('.st-problem-card', {
-      y: 24, opacity: 0, stagger: 0.1, duration: 0.5, ease: 'power2.out',
+      y: 24, opacity: 0, stagger: 0.1, duration: 0.5, ease: 'power3.out',
       scrollTrigger: { trigger: '#cs-found', start: 'top 72%', toggleActions: 'play none none none' }
     });
 
     /* ── DESIGN SECTIONS ── */
     ['#cs-design-1', '#cs-design-2', '#cs-design-3'].forEach(id => {
       gsap.from(id + ' .st-fix-header, ' + id + ' .st-fix-body, ' + id + ' .st-placeholder', {
-        y: 30, opacity: 0, stagger: 0.1, duration: 0.6, ease: 'power2.out',
+        y: 30, opacity: 0, stagger: 0.1, duration: 0.6, ease: 'power3.out',
         scrollTrigger: { trigger: id, start: 'top 72%', toggleActions: 'play none none none' }
       });
     });
 
     /* ── VALIDATION ROWS ── */
     gsap.from('.st-val-table tbody tr', {
-      x: -16, opacity: 0, stagger: 0.07, duration: 0.45, ease: 'power2.out',
+      x: -16, opacity: 0, stagger: 0.07, duration: 0.45, ease: 'power3.out',
       scrollTrigger: { trigger: '#cs-validation', start: 'top 72%', toggleActions: 'play none none none' }
     });
 
     /* ── RETRO CARDS ── */
     gsap.from('.st-retro-card', {
-      y: 24, opacity: 0, stagger: 0.12, duration: 0.55, ease: 'power2.out',
+      y: 24, opacity: 0, stagger: 0.12, duration: 0.55, ease: 'power3.out',
       scrollTrigger: { trigger: '#cs-retro', start: 'top 72%', toggleActions: 'play none none none' }
     });
 
@@ -1223,18 +1249,23 @@
         canvas.width = img.naturalWidth;
         canvas.height = img.naturalHeight;
         ctx.drawImage(img, 0, 0);
-        /* clear screen area — inset 50px from edge so frame border remains visible */
         ctx.clearRect(433, 55, 3155, 2055);
       };
       img.src = '../assets/seletar-img-outcome-laptop.png';
     })();
 
-    /* ── READING PROGRESS BAR ── */
+    /* ── PROGRESS BAR ── */
     const progressBar = document.getElementById('cs-progress');
-    window.addEventListener('scroll', () => {
-      const total = document.documentElement.scrollHeight - window.innerHeight;
-      progressBar.style.width = (window.scrollY / total * 100) + '%';
-    }, { passive: true });
+    if (lenis) {
+      lenis.on('scroll', ({ scroll, limit }) => {
+        progressBar.style.width = (scroll / limit * 100) + '%';
+      });
+    } else {
+      window.addEventListener('scroll', () => {
+        const max = document.documentElement.scrollHeight - window.innerHeight;
+        progressBar.style.width = (window.scrollY / max * 100) + '%';
+      }, { passive: true });
+    }
   </script>
 </body>
 </html>
