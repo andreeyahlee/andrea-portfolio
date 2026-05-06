@@ -396,12 +396,11 @@
     }
     .work-col:hover .work-name { opacity: 0; }
 
-    /* hover card image — constrained to top 52% so PNG's baked card never shows */
+    /* image fills full column, fades in on hover */
     .work-card-img {
       position: absolute;
-      top: 0; left: 0; right: 0;
-      width: 100%;
-      height: 52%; /* overlay covers bottom 48%; image stays above it */
+      inset: 0;
+      width: 100%; height: 100%;
       object-fit: cover;
       object-position: top center;
       display: block;
@@ -409,20 +408,19 @@
       pointer-events: none;
       transition: opacity 0.35s ease 0.06s;
     }
-    .work-col:hover .work-card-img {
-      opacity: 1;
-    }
+    .work-col:hover .work-card-img { opacity: 1; }
 
-    /* HTML overlay card — covers bottom 48% of column, hides baked-in PNG card */
+    /* overlay — equal height across all columns, sized to tallest content */
     .work-card-overlay {
       position: absolute;
       left: 0; right: 0; bottom: 0;
-      height: 48%;
+      height: auto;
+      min-height: 248px;
       display: flex;
       flex-direction: column;
       justify-content: flex-end;
-      gap: 5px;
-      padding: clamp(14px, 2.5%, 28px) clamp(16px, 4%, 32px) clamp(20px, 3%, 36px);
+      gap: 8px;
+      padding: clamp(16px, 2.2vw, 28px) clamp(20px, 3vw, 40px) clamp(20px, 2.8vw, 36px);
       background: rgba(8, 6, 10, 0.93);
       border-radius: 14px 14px 0 0;
       opacity: 0;
@@ -908,7 +906,6 @@
       .work-col.arvo-col    { background-color: var(--arvo); }
       .work-col.seletar-col { background-color: var(--seletar); }
       .work-col.pethaus-col { background-color: var(--pethaus); }
-      .work-card-img    { display: none !important; }
       .work-card-overlay { display: none !important; }
       /* Show project name, centered in column */
       .work-name {
