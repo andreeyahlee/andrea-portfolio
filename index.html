@@ -889,40 +889,87 @@
 
       #work { height: auto; }
       .work-scroll-hint { display: none; }
-      .work-section-label { position: relative; top: auto; left: auto; padding: 32px 24px 20px; }
-      .work-title { font-size: clamp(36px, 10vw, 56px); }
+      .work-section-label { position: relative; top: auto; left: auto; padding: 24px 16px 10px; }
+      .work-title { font-size: clamp(28px, 8vw, 40px); }
       .work-cols {
         flex-direction: column;
         height: auto;
+        gap: 10px;
+        padding: 0 8px 8px;
       }
       .work-col {
         flex: none;
-        height: clamp(140px, 38vw, 180px);
+        height: clamp(160px, 26vh, 215px);
         border-right: none;
-        border-bottom: 1px solid rgba(243,242,236,0.12);
+        border-bottom: none;
+        border-radius: 30px;
+        overflow: hidden;
+        cursor: pointer;
+        transition: height 0.4s cubic-bezier(0.4, 0, 0.2, 1);
       }
-      .work-col:last-child { border-bottom: none; }
-      /* Mobile — solid brand colour, NO image, NO overlay card */
+      /* Brand colour as image fallback */
       .work-col.arvo-col    { background-color: var(--arvo); }
       .work-col.seletar-col { background-color: var(--seletar); }
       .work-col.pethaus-col { background-color: var(--pethaus); }
-      .work-card-overlay { display: none !important; }
-      /* Show project name, centered in column */
+      /* Active card expands; siblings collapse */
+      .work-col.is-active { height: clamp(380px, 56vh, 500px); }
+      .work-cols.has-active .work-col:not(.is-active) { height: 79px; }
+      /* Suppress desktop :hover triggers */
+      .work-col:hover .work-card-overlay { opacity: 0 !important; pointer-events: none !important; }
+      .work-col:hover .work-name { opacity: 1 !important; }
+      .work-col.arvo-col:hover,
+      .work-col.seletar-col:hover,
+      .work-col.pethaus-col:hover { background-color: inherit; }
+      /* PNG images — always visible on mobile */
+      .work-card-img {
+        display: block !important;
+        opacity: 0.4 !important;
+        object-position: center center;
+        transition: opacity 0.3s ease !important;
+        -webkit-mask-image: none !important;
+        mask-image: none !important;
+      }
+      .work-col:hover .work-card-img { opacity: 0.4 !important; }
+      .work-col.is-active .work-card-img {
+        opacity: 0.75 !important;
+        object-position: top center;
+      }
+      /* Project name */
       .work-name {
         display: flex !important;
         align-items: center;
         justify-content: center;
         opacity: 1 !important;
-        font-size: clamp(28px, 8vw, 48px);
+        font-size: 64px;
+        font-weight: 700;
         padding: 0;
         inset: 0;
         bottom: unset;
+        transition: font-size 0.3s ease, font-weight 0.25s ease, opacity 0.2s ease;
       }
-      /* Full column is always tappable */
-      .work-col-link { pointer-events: auto !important; }
-      .work-col.arvo-col:hover,
-      .work-col.seletar-col:hover,
-      .work-col.pethaus-col:hover { background-color: inherit; }
+      .work-cols.has-active .work-col:not(.is-active) .work-name {
+        font-size: 32px;
+        font-weight: 500;
+      }
+      .work-col.is-active .work-name { opacity: 0 !important; }
+      /* Dark overlay — slides up inside active card */
+      .work-card-overlay {
+        display: flex !important;
+        opacity: 0 !important;
+        pointer-events: none !important;
+        transform: translateY(12px);
+        transition: opacity 0.28s ease 0.12s, transform 0.32s cubic-bezier(0.4, 0, 0.2, 1) 0.12s !important;
+        min-height: unset !important;
+        border-radius: 14px 14px 0 0 !important;
+      }
+      .work-col.is-active .work-card-overlay {
+        opacity: 1 !important;
+        pointer-events: none !important;
+        transform: translateY(0) !important;
+      }
+      .work-col.is-active .work-read-btn { pointer-events: auto; }
+      /* Full-column link off — button handles navigation */
+      .work-col-link { pointer-events: none !important; }
 
       .about-headline {
         font-size: clamp(40px, 11vw, 72px);
@@ -1046,7 +1093,10 @@
           <h2 class="work-title">Selected<br>Works</h2>
         </div>
         <div class="work-col-bottom">
-          <img class="work-card-img" src="assets/arvo-cta.png" alt="ARVO case study" loading="lazy">
+          <picture>
+            <source media="(max-width: 767px)" srcset="assets/arvo-mobile.png">
+            <img class="work-card-img" src="assets/arvo-cta.png" alt="ARVO case study" loading="lazy">
+          </picture>
           <div class="work-card-overlay">
             <p class="work-card-tags">Project Manager · Usability Research · 6 Designers</p>
             <h3 class="work-card-headline">We found a broken model.</h3>
@@ -1061,7 +1111,10 @@
       <!-- SELETAR AIRPORT -->
       <div class="work-col seletar-col">
         <div class="work-col-bottom">
-          <img class="work-card-img" src="assets/seletar-cta.png" alt="Seletar Airport case study" loading="lazy">
+          <picture>
+            <source media="(max-width: 767px)" srcset="assets/seletar-mobile.png">
+            <img class="work-card-img" src="assets/seletar-cta.png" alt="Seletar Airport case study" loading="lazy">
+          </picture>
           <div class="work-card-overlay">
             <p class="work-card-tags">UX Research Lead · Strategic Redesign · 3 Designers</p>
             <h3 class="work-card-headline">Unlocking the Subang Advantage.</h3>
@@ -1076,7 +1129,10 @@
       <!-- PET HAUS -->
       <div class="work-col pethaus-col">
         <div class="work-col-bottom">
-          <img class="work-card-img" src="assets/pethaus-cta.png" alt="Pet Haus case study" loading="lazy">
+          <picture>
+            <source media="(max-width: 767px)" srcset="assets/pethaus-mobile.png">
+            <img class="work-card-img" src="assets/pethaus-cta.png" alt="Pet Haus case study" loading="lazy">
+          </picture>
           <div class="work-card-overlay">
             <p class="work-card-tags">Solo Designer · End-to-End · E-Commerce</p>
             <h3 class="work-card-headline">Trust, designed in.</h3>
@@ -1519,6 +1575,35 @@
     heroTl.to("#work-reveal", { opacity: 0, ease: "power1.out", duration: 0.5 }, 9);
 
   });
+
+  // Mobile: tap to reveal work card info
+  (function() {
+    const mq = window.matchMedia('(max-width: 767px)');
+    function initMobileTap() {
+      const container = document.querySelector('.work-cols');
+      document.querySelectorAll('.work-col').forEach(function(col) {
+        col.addEventListener('click', function(e) {
+          if (e.target.closest('.work-read-btn')) return;
+          if (!mq.matches) return;
+          const isActive = this.classList.contains('is-active');
+          document.querySelectorAll('.work-col').forEach(function(c) {
+            c.classList.remove('is-active');
+          });
+          if (!isActive) {
+            this.classList.add('is-active');
+            container.classList.add('has-active');
+          } else {
+            container.classList.remove('has-active');
+          }
+        });
+      });
+    }
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', initMobileTap);
+    } else {
+      initMobileTap();
+    }
+  })();
   </script>
 
 </body>
