@@ -127,6 +127,30 @@
     .cs-section--dark .cs-h2 { color: #fff; }
     .cs-section--dark .cs-body { color: rgba(255,255,255,0.65); }
 
+    /* ── SECTION LABEL accent line ── */
+    .cs-section-label, .cs-testimony-section-label {
+      display: flex; align-items: center; gap: 10px;
+    }
+    .cs-section-label::before, .cs-testimony-section-label::before {
+      content: '';
+      display: inline-block;
+      width: 20px; height: 1.5px;
+      background: currentColor;
+      opacity: 0.4;
+      flex-shrink: 0;
+    }
+
+    /* ── GRAIN / DEPTH on dark sections ── */
+    #cs-tldr::after, #cs-retro::after {
+      content: '';
+      position: absolute; inset: 0; pointer-events: none; z-index: 1;
+      background:
+        radial-gradient(ellipse 70% 55% at 12% 18%, rgba(108,190,145,0.09) 0%, transparent 60%),
+        radial-gradient(ellipse 55% 45% at 85% 80%, rgba(40,80,60,0.10) 0%, transparent 58%);
+      mix-blend-mode: screen;
+    }
+    #cs-tldr > *, #cs-retro > * { position: relative; z-index: 2; }
+
     /* ── HERO FULL IMAGE ── */
     .cs-hero-img-full {
       background: var(--arvo-dark);
@@ -1774,41 +1798,82 @@
       .from('.cs-hero-sub', { y: 20, opacity: 0, duration: 0.7, ease: 'power4.out' }, '-=0.5')
       .from('.cs-hero-meta .cs-meta-row', { y: 12, opacity: 0, stagger: 0.06, duration: 0.45, ease: 'power3.out' }, '-=0.5');
 
-    /* ── BASE SCROLL REVEAL — every .cs-section ── */
-    gsap.utils.toArray('.cs-section').forEach(section => {
-      gsap.from(section.querySelectorAll('.cs-h2, .cs-body, .cs-section-label'), {
-        y: 40, opacity: 0, duration: 0.7, stagger: 0.08, ease: 'power3.out',
-        scrollTrigger: { trigger: section, start: 'top 82%', toggleActions: 'play none none none' }
+    /* ── HELPER: counter animation ── */
+    function animateCounter(el, target, suffix, duration) {
+      const proxy = { v: 0 };
+      gsap.to(proxy, {
+        v: target, duration: duration || 1.1, ease: 'power2.out',
+        onUpdate: () => { el.textContent = Math.round(proxy.v) + (suffix || ''); }
       });
-    });
+    }
 
-    /* ── TLDR STATS ── */
-    gsap.from('.cs-stat-item', {
-      y: 30, opacity: 0, stagger: 0.12, duration: 0.6, ease: 'power3.out',
-      scrollTrigger: { trigger: '#cs-tldr', start: 'top 70%', toggleActions: 'play none none none' }
-    });
-    gsap.from('.cs-discovery-item', {
-      y: 30, opacity: 0, stagger: 0.12, duration: 0.6, ease: 'power3.out',
-      scrollTrigger: { trigger: '#cs-tldr', start: 'top 70%', toggleActions: 'play none none none' }
-    });
+    /* ── SECTION LABELS — horizontal slide (not vertical) ── */
+    if (!reducedMotion) {
+      gsap.utils.toArray('.cs-section-label, .cs-testimony-section-label').forEach(label => {
+        gsap.from(label, {
+          x: -24, opacity: 0, duration: 0.52, ease: 'power3.out',
+          scrollTrigger: { trigger: label, start: 'top 88%', toggleActions: 'play none none none' }
+        });
+      });
+      /* headings — differentiated from body copy */
+      gsap.utils.toArray('.cs-section').forEach(section => {
+        gsap.from(section.querySelectorAll('.cs-h2'), {
+          y: 28, opacity: 0, duration: 0.72, ease: 'power3.out',
+          scrollTrigger: { trigger: section, start: 'top 84%', toggleActions: 'play none none none' }
+        });
+        gsap.from(section.querySelectorAll('.cs-body'), {
+          y: 16, opacity: 0, duration: 0.52, ease: 'power3.out', delay: 0.1,
+          scrollTrigger: { trigger: section, start: 'top 84%', toggleActions: 'play none none none' }
+        });
+      });
+    }
 
-    /* ── RESEARCH ── */
-    gsap.from('.cs-failure-item', {
-      x: -20, opacity: 0, stagger: 0.1, duration: 0.5, ease: 'power3.out',
-      scrollTrigger: { trigger: '#cs-research', start: 'top 75%', toggleActions: 'play none none none' }
-    });
+    /* ── TLDR — stagger with x for discovery items ── */
+    if (!reducedMotion) {
+      gsap.from('.cs-stat-item', {
+        x: -20, opacity: 0, stagger: 0.13, duration: 0.58, ease: 'power3.out',
+        scrollTrigger: { trigger: '#cs-tldr', start: 'top 70%', toggleActions: 'play none none none' }
+      });
+      gsap.from('.cs-discovery-item', {
+        x: 20, opacity: 0, stagger: 0.11, duration: 0.56, ease: 'power3.out',
+        scrollTrigger: { trigger: '#cs-tldr', start: 'top 70%', toggleActions: 'play none none none' }
+      });
+    }
+
+    /* ── RESEARCH — failure items ── */
+    if (!reducedMotion) {
+      gsap.from('.cs-failure-item', {
+        x: -22, opacity: 0, stagger: 0.1, duration: 0.52, ease: 'power3.out',
+        scrollTrigger: { trigger: '#cs-research', start: 'top 75%', toggleActions: 'play none none none' }
+      });
+    }
 
     /* ── BRIGHT SPOTS ── */
-    gsap.from('.cs-bs-item', {
-      x: -20, opacity: 0, stagger: 0.15, duration: 0.5, ease: 'power3.out',
-      scrollTrigger: { trigger: '#cs-brightspots', start: 'top 75%', toggleActions: 'play none none none' }
-    });
+    if (!reducedMotion) {
+      gsap.utils.toArray('.cs-bs-item').forEach((el, i) => {
+        gsap.from(el, {
+          x: i % 2 === 0 ? -18 : 18, opacity: 0, duration: 0.52, ease: 'power3.out', delay: i * 0.08,
+          scrollTrigger: { trigger: '#cs-brightspots', start: 'top 75%', toggleActions: 'play none none none' }
+        });
+      });
+    }
 
-    /* ── RESULTS STATS ── */
-    gsap.from('.cs-result-stat', {
-      scale: 0.95, opacity: 0, stagger: 0.1, duration: 0.5, ease: 'power3.out',
-      scrollTrigger: { trigger: '#cs-results', start: 'top 75%', toggleActions: 'play none none none' }
-    });
+    /* ── RESULTS STATS — pop + counter ── */
+    if (!reducedMotion) {
+      ScrollTrigger.create({
+        trigger: '#cs-results', start: 'top 75%', once: true,
+        onEnter: () => {
+          gsap.from('.cs-result-stat', {
+            scale: 0.92, opacity: 0, stagger: 0.1, duration: 0.52, ease: 'back.out(1.4)'
+          });
+          /* counter: 13 (no suffix), 92%, 70% */
+          const statNums = document.querySelectorAll('.cs-result-stat-num');
+          if (statNums[0]) animateCounter(statNums[0], 13, '', 0.85);
+          if (statNums[1]) animateCounter(statNums[1], 92, '%', 1.0);
+          if (statNums[2]) animateCounter(statNums[2], 70, '%', 0.95);
+        }
+      });
+    }
 
     /* ── SECTION OVERLAY ENTRANCE + STICKY BOTTOM (desktop only) ── */
     if (!isMobile) {
@@ -1830,20 +1895,25 @@
       });
     }
 
-    /* ── OUTCOME DECISIONS ── */
-    gsap.from('.cs-decision-card', {
-      y: 30, opacity: 0, stagger: 0.1, duration: 0.6, ease: 'power3.out',
-      scrollTrigger: { trigger: '#cs-outcome-2', start: 'top 70%', toggleActions: 'play none none none' }
-    });
+    /* ── DESIGN FIXES — cascade stagger ── */
+    if (!reducedMotion) {
+      ['#cs-designfixes','#cs-designfixes-2','#cs-designfixes-3','#cs-designfixes-4','#cs-designfixes-5'].forEach(id => {
+        gsap.utils.toArray(`${id} .cs-df-card, ${id} .cs-df-img-col, ${id} .cs-df-panel`).forEach((el, i) => {
+          gsap.from(el, {
+            y: 22 + (i % 3) * 8, opacity: 0, duration: 0.58, ease: 'power3.out', delay: i * 0.08,
+            scrollTrigger: { trigger: id, start: 'top 82%', toggleActions: 'play none none none' }
+          });
+        });
+      });
+    }
 
-    /* ── TESTIMONY ── */
-    const testTl = gsap.timeline({
-      scrollTrigger: { trigger: '#cs-testimony', start: 'top 75%', toggleActions: 'play none none none' }
-    });
-    testTl
-      .from('.cs-quote-marks',     { scale: 0, opacity: 0, duration: 0.4, ease: 'back.out(1.5)' })
-      .from('.cs-testimony-quote', { y: 20, opacity: 0, duration: 0.7, ease: 'power3.out' }, '-=0.1')
-      .from('.cs-testimony-attr',  { opacity: 0, duration: 0.5 }, '-=0.1');
+    /* ── STRATEGIC ── */
+    if (!reducedMotion) {
+      gsap.from('#cs-strategic .cs-inner > *:not(.cs-section-label):not(.cs-h2):not(.cs-body)', {
+        scale: 0.94, opacity: 0, stagger: 0.1, duration: 0.55, ease: 'back.out(1.3)',
+        scrollTrigger: { trigger: '#cs-strategic', start: 'top 78%', toggleActions: 'play none none none' }
+      });
+    }
 
     /* ── FINAL SOLUTION VIDEO — play on enter, pause on leave ── */
     const fsVideo = document.getElementById('cs-finalsolution-video');
@@ -1857,11 +1927,40 @@
       onLeaveBack: () => fsVideo.pause(),
     });
 
-    /* ── RETRO CARDS ── */
-    gsap.from('.cs-retro-card', {
-      y: 30, opacity: 0, stagger: 0.12, duration: 0.6, ease: 'power3.out',
-      scrollTrigger: { trigger: '#cs-retro', start: 'top 75%', toggleActions: 'play none none none' }
-    });
+    /* ── OUTCOME DECISIONS ── */
+    if (!reducedMotion) {
+      gsap.utils.toArray('.cs-decision-card').forEach((el, i) => {
+        gsap.from(el, {
+          y: 26, opacity: 0, rotation: i % 2 === 0 ? -1 : 1,
+          duration: 0.6, ease: 'power3.out', delay: i * 0.09,
+          scrollTrigger: { trigger: '#cs-outcome-2', start: 'top 70%', toggleActions: 'play none none none' }
+        });
+      });
+    }
+
+    /* ── TESTIMONY — clip-path wipe on quote ── */
+    if (!reducedMotion) {
+      const testTl = gsap.timeline({
+        scrollTrigger: { trigger: '#cs-testimony', start: 'top 75%', toggleActions: 'play none none none' }
+      });
+      testTl
+        .from('.cs-quote-marks',     { scale: 0, opacity: 0, duration: 0.4, ease: 'back.out(1.5)' })
+        .fromTo('.cs-testimony-quote',
+          { clipPath: 'inset(0 100% 0 0)', opacity: 1 },
+          { clipPath: 'inset(0 0% 0 0)', duration: 0.9, ease: 'power3.out' }, '-=0.05')
+        .from('.cs-testimony-attr',  { opacity: 0, y: 8, duration: 0.5 }, '-=0.2');
+    }
+
+    /* ── RETRO CARDS — alternating x-slide ── */
+    if (!reducedMotion) {
+      gsap.utils.toArray('.cs-retro-card').forEach((el, i) => {
+        gsap.from(el, {
+          x: i % 2 === 0 ? -16 : 16, y: 14, opacity: 0,
+          duration: 0.6, ease: 'power3.out', delay: i * 0.1,
+          scrollTrigger: { trigger: '#cs-retro', start: 'top 76%', toggleActions: 'play none none none' }
+        });
+      });
+    }
 
     ScrollTrigger.refresh();
 

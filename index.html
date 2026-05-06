@@ -396,12 +396,12 @@
     }
     .work-col:hover .work-name { opacity: 0; }
 
-    /* hover card image — top portion only so HTML card covers bottom */
+    /* hover card image — constrained to top 52% so PNG's baked card never shows */
     .work-card-img {
       position: absolute;
       top: 0; left: 0; right: 0;
       width: 100%;
-      height: 100%;
+      height: 52%; /* overlay covers bottom 48%; image stays above it */
       object-fit: cover;
       object-position: top center;
       display: block;
@@ -899,29 +899,33 @@
       }
       .work-col {
         flex: none;
-        height: clamp(240px, 62vw, 340px);
+        height: clamp(140px, 38vw, 180px);
         border-right: none;
         border-bottom: 1px solid rgba(243,242,236,0.12);
       }
       .work-col:last-child { border-bottom: none; }
-      /* Mobile — always show CTA card */
-      .work-name { display: none; }
-      .work-card-img { opacity: 1; pointer-events: auto; }
-      .work-card-overlay {
+      /* Mobile — solid brand colour, NO image, NO overlay card */
+      .work-col.arvo-col    { background-color: var(--arvo); }
+      .work-col.seletar-col { background-color: var(--seletar); }
+      .work-col.pethaus-col { background-color: var(--pethaus); }
+      .work-card-img    { display: none !important; }
+      .work-card-overlay { display: none !important; }
+      /* Show project name, centered in column */
+      .work-name {
+        display: flex !important;
+        align-items: center;
+        justify-content: center;
         opacity: 1 !important;
-        pointer-events: auto !important;
-        height: 54%;
-        padding: 10px 16px 18px;
-        gap: 3px;
-        border-radius: 12px 12px 0 0;
+        font-size: clamp(28px, 8vw, 48px);
+        padding: 0;
+        inset: 0;
+        bottom: unset;
       }
-      .work-card-desc { display: none; }
-      .work-card-headline { font-size: clamp(14px, 4.5vw, 22px); }
-      .work-card-tags { font-size: clamp(7px, 1.9vw, 9px); }
-      .work-read-btn { font-size: clamp(9px, 2.2vw, 11px); padding: 6px 12px; gap: 4px; }
+      /* Full column is always tappable */
+      .work-col-link { pointer-events: auto !important; }
       .work-col.arvo-col:hover,
       .work-col.seletar-col:hover,
-      .work-col.pethaus-col:hover { background-color: transparent; }
+      .work-col.pethaus-col:hover { background-color: inherit; }
 
       .about-headline {
         font-size: clamp(40px, 11vw, 72px);

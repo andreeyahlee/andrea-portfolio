@@ -74,8 +74,28 @@
       font-family: var(--font-mono); font-size: 11px; font-weight: 700;
       letter-spacing: 0.08em; text-transform: uppercase;
       color: var(--ink-muted); margin-bottom: 24px;
+      display: flex; align-items: center; gap: 10px;
+    }
+    .cs-label::before {
+      content: '';
+      display: inline-block;
+      width: 20px; height: 1.5px;
+      background: currentColor;
+      opacity: 0.4;
+      flex-shrink: 0;
     }
     .cs-label--light { color: rgba(255,255,255,0.4); }
+
+    /* ── GRAIN / DEPTH on dark sections ── */
+    #cs-tldr::after, #cs-retro::after {
+      content: '';
+      position: absolute; inset: 0; pointer-events: none; z-index: 1;
+      background:
+        radial-gradient(ellipse 72% 52% at 10% 20%, rgba(90,130,170,0.10) 0%, transparent 62%),
+        radial-gradient(ellipse 58% 46% at 86% 76%, rgba(30,50,80,0.10) 0%, transparent 58%);
+      mix-blend-mode: screen;
+    }
+    #cs-tldr > *, #cs-retro > * { position: relative; z-index: 2; }
 
     /* ── PLACEHOLDERS ── */
     .st-placeholder {
@@ -1205,37 +1225,111 @@
       });
     }
 
-    /* ── TL;DR CARDS ── */
-    gsap.from('.st-finding-card', {
-      y: 24, opacity: 0, stagger: 0.1, duration: 0.55, ease: 'power3.out',
-      scrollTrigger: { trigger: '#cs-tldr', start: 'top 70%', toggleActions: 'play none none none' }
-    });
-
-    /* ── FOUND PROBLEM CARDS ── */
-    gsap.from('.st-problem-card', {
-      y: 24, opacity: 0, stagger: 0.1, duration: 0.5, ease: 'power3.out',
-      scrollTrigger: { trigger: '#cs-found', start: 'top 72%', toggleActions: 'play none none none' }
-    });
-
-    /* ── DESIGN SECTIONS ── */
-    ['#cs-design-1', '#cs-design-2', '#cs-design-3'].forEach(id => {
-      gsap.from(id + ' .st-fix-header, ' + id + ' .st-fix-body, ' + id + ' .st-placeholder', {
-        y: 30, opacity: 0, stagger: 0.1, duration: 0.6, ease: 'power3.out',
-        scrollTrigger: { trigger: id, start: 'top 72%', toggleActions: 'play none none none' }
+    /* ── HELPER: counter animation ── */
+    function animateCounter(el, target, suffix, duration) {
+      const proxy = { v: 0 };
+      gsap.to(proxy, {
+        v: target, duration: duration || 1.0, ease: 'power2.out',
+        onUpdate: () => { el.textContent = Math.round(proxy.v) + (suffix || ''); }
       });
-    });
+    }
 
-    /* ── VALIDATION ROWS ── */
-    gsap.from('.st-val-table tbody tr', {
-      x: -16, opacity: 0, stagger: 0.07, duration: 0.45, ease: 'power3.out',
-      scrollTrigger: { trigger: '#cs-validation', start: 'top 72%', toggleActions: 'play none none none' }
-    });
+    /* ── SECTION LABELS — horizontal slide ── */
+    if (!reducedMotion) {
+      gsap.utils.toArray('.cs-label').forEach(label => {
+        gsap.from(label, {
+          x: -22, opacity: 0, duration: 0.52, ease: 'power3.out',
+          scrollTrigger: { trigger: label, start: 'top 88%', toggleActions: 'play none none none' }
+        });
+      });
+      gsap.utils.toArray('.cs-section').forEach(section => {
+        gsap.from(section.querySelectorAll('.cs-h2'), {
+          y: 26, opacity: 0, duration: 0.68, ease: 'power3.out',
+          scrollTrigger: { trigger: section, start: 'top 84%', toggleActions: 'play none none none' }
+        });
+        gsap.from(section.querySelectorAll('.cs-body'), {
+          y: 16, opacity: 0, duration: 0.5, ease: 'power3.out', delay: 0.1,
+          scrollTrigger: { trigger: section, start: 'top 84%', toggleActions: 'play none none none' }
+        });
+      });
+    }
 
-    /* ── RETRO CARDS ── */
-    gsap.from('.st-retro-card', {
-      y: 24, opacity: 0, stagger: 0.12, duration: 0.55, ease: 'power3.out',
-      scrollTrigger: { trigger: '#cs-retro', start: 'top 72%', toggleActions: 'play none none none' }
-    });
+    /* ── TL;DR FINDING CARDS — alternating tilt ── */
+    if (!reducedMotion) {
+      gsap.utils.toArray('.st-finding-card').forEach((el, i) => {
+        gsap.from(el, {
+          y: 22, opacity: 0, rotation: i % 2 === 0 ? -1 : 1,
+          duration: 0.58, ease: 'power3.out', delay: i * 0.09,
+          scrollTrigger: { trigger: '#cs-tldr', start: 'top 70%', toggleActions: 'play none none none' }
+        });
+      });
+    }
+
+    /* ── RESEARCH STATS — counter + pop ── */
+    if (!reducedMotion) {
+      ScrollTrigger.create({
+        trigger: '#cs-found', start: 'top 72%', once: true,
+        onEnter: () => {
+          gsap.from('.st-stat-cell', {
+            scale: 0.92, opacity: 0, stagger: 0.1, duration: 0.52, ease: 'back.out(1.4)'
+          });
+          const statNums = document.querySelectorAll('.st-stat-num');
+          if (statNums[0]) animateCounter(statNums[0], 9, '', 0.75);
+          if (statNums[1]) animateCounter(statNums[1], 100, '%', 1.0);
+          if (statNums[2]) animateCounter(statNums[2], 0, '', 0.4);
+        }
+      });
+      gsap.utils.toArray('.st-problem-card').forEach((el, i) => {
+        gsap.from(el, {
+          x: i % 2 === 0 ? -18 : 18, opacity: 0,
+          duration: 0.52, ease: 'power3.out', delay: i * 0.1,
+          scrollTrigger: { trigger: '#cs-found', start: 'top 72%', toggleActions: 'play none none none' }
+        });
+      });
+    }
+
+    /* ── DESIGN SECTIONS — per-element cascade ── */
+    if (!reducedMotion) {
+      ['#cs-design-1', '#cs-design-2', '#cs-design-3'].forEach(id => {
+        gsap.utils.toArray(id + ' .st-fix-header, ' + id + ' .st-fix-body, ' + id + ' .st-placeholder').forEach((el, i) => {
+          gsap.from(el, {
+            y: 20 + (i % 3) * 8, opacity: 0, duration: 0.54, ease: 'power3.out', delay: i * 0.07,
+            scrollTrigger: { trigger: id, start: 'top 74%', toggleActions: 'play none none none' }
+          });
+        });
+      });
+    }
+
+    /* ── VALIDATION ROWS — left slide stagger ── */
+    if (!reducedMotion) {
+      gsap.from('.st-val-table tbody tr', {
+        x: -18, opacity: 0, stagger: 0.07, duration: 0.46, ease: 'power3.out',
+        scrollTrigger: { trigger: '#cs-validation', start: 'top 72%', toggleActions: 'play none none none' }
+      });
+    }
+
+    /* ── OUTCOME ROWS ── */
+    if (!reducedMotion) {
+      ['#cs-outcome', '#cs-outcome-2', '#cs-outcome-3', '#cs-outcome-4'].forEach(id => {
+        gsap.utils.toArray(id + ' .st-outcome-row-text, ' + id + ' .st-outcome-row-img').forEach((el, i) => {
+          gsap.from(el, {
+            y: 20, opacity: 0, duration: 0.58, ease: 'power3.out', delay: i * 0.09,
+            scrollTrigger: { trigger: id, start: 'top 78%', toggleActions: 'play none none none' }
+          });
+        });
+      });
+    }
+
+    /* ── RETRO CARDS — alternating x-drift ── */
+    if (!reducedMotion) {
+      gsap.utils.toArray('.st-retro-card').forEach((el, i) => {
+        gsap.from(el, {
+          x: i % 2 === 0 ? -14 : 14, y: 12, opacity: 0,
+          duration: 0.58, ease: 'power3.out', delay: i * 0.1,
+          scrollTrigger: { trigger: '#cs-retro', start: 'top 72%', toggleActions: 'play none none none' }
+        });
+      });
+    }
 
     ScrollTrigger.refresh();
 

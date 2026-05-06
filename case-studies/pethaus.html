@@ -91,6 +91,30 @@
     .cs-section--dark .cs-h2 { color: #fff; }
     .cs-section--dark .cs-body { color: rgba(255,255,255,0.6); }
 
+    /* ── GRAIN / DEPTH on dark sections ── */
+    #ph-tldr::after, #ph-results::after, #ph-reflection-2::after, #ph-hifi-intro::after {
+      content: '';
+      position: absolute; inset: 0; pointer-events: none; z-index: 1;
+      background:
+        radial-gradient(ellipse 80% 60% at 15% 20%, rgba(123,63,110,0.13) 0%, transparent 65%),
+        radial-gradient(ellipse 60% 50% at 88% 78%, rgba(80,40,90,0.10) 0%, transparent 60%);
+      mix-blend-mode: screen;
+    }
+    #ph-tldr > *, #ph-results > *, #ph-reflection-2 > *, #ph-hifi-intro > * { position: relative; z-index: 2; }
+
+    /* ── SECTION LABEL accent line ── */
+    .cs-section-label {
+      display: flex; align-items: center; gap: 10px;
+    }
+    .cs-section-label::before {
+      content: '';
+      display: inline-block;
+      width: 22px; height: 1.5px;
+      background: currentColor;
+      opacity: 0.45;
+      flex-shrink: 0;
+    }
+
     /* ── PLACEHOLDER ── */
     .ph-placeholder {
       background: rgba(123,63,110,0.06);
@@ -218,9 +242,9 @@
     }
     .ph-stat-card {
       background: rgba(10,10,10,0.04); border-radius: 12px; padding: 20px 16px;
-      transition: transform 0.22s cubic-bezier(0.34,1.56,0.64,1);
+      transition: transform 0.24s cubic-bezier(0.34,1.56,0.64,1), box-shadow 0.24s ease;
     }
-    .ph-stat-card:hover { transform: translateY(-2px); }
+    .ph-stat-card:hover { transform: translateY(-5px) scale(1.018); box-shadow: 0 14px 36px rgba(123,63,110,0.15); }
     .ph-stat-num {
       font-family: var(--font-display); font-size: 38px; font-weight: 900;
       color: var(--ph-mauve); line-height: 1; margin-bottom: 8px;
@@ -892,46 +916,161 @@
       .from('.ph-hero-cta', { y: 14, opacity: 0, duration: 0.5, ease: 'power3.out' }, '-=0.4')
       .from('.ph-meta-row', { y: 12, opacity: 0, stagger: 0.06, duration: 0.45, ease: 'power3.out' }, '-=0.5');
 
-    /* ── SCROLL REVEAL (all sections) ── */
-    gsap.utils.toArray('.cs-section').forEach(s => {
-      gsap.from(s.querySelectorAll('.cs-h2, .cs-body, .cs-section-label'), {
-        y: 32, opacity: 0, duration: 0.62, stagger: 0.07, ease: 'power3.out',
-        scrollTrigger: { trigger: s, start: 'top 84%', toggleActions: 'play none none none' }
+    /* ── HELPER: animate counter ── */
+    function animateCounter(el, target, suffix, duration) {
+      const proxy = { v: 0 };
+      gsap.to(proxy, {
+        v: target, duration: duration || 1.2, ease: 'power2.out',
+        onUpdate: () => { el.textContent = Math.round(proxy.v) + suffix; }
       });
-    });
+    }
 
-    /* ── TLDR ── */
-    gsap.from('.ph-tldr-stat',  { y: 24, opacity: 0, stagger: 0.1, duration: 0.52, ease: 'power3.out', scrollTrigger: { trigger: '#ph-tldr', start: 'top 72%', toggleActions: 'play none none none' } });
-    gsap.from('.ph-disc-item',  { y: 24, opacity: 0, stagger: 0.1, duration: 0.52, ease: 'power3.out', scrollTrigger: { trigger: '#ph-tldr', start: 'top 72%', toggleActions: 'play none none none' } });
-
-    /* ── RESEARCH ── */
-    gsap.from('.ph-stat-card',  { scale: 0.95, opacity: 0, stagger: 0.08, duration: 0.48, ease: 'power3.out', scrollTrigger: { trigger: '#ph-research', start: 'top 76%', toggleActions: 'play none none none' } });
-    gsap.from('.ph-quote-block',{ y: 22, opacity: 0, duration: 0.6, ease: 'power3.out', scrollTrigger: { trigger: '#ph-research', start: 'top 70%', toggleActions: 'play none none none' } });
-    gsap.from('.ph-persona',    { y: 26, opacity: 0, stagger: 0.12, duration: 0.55, ease: 'power3.out', scrollTrigger: { trigger: '#ph-research-2', start: 'top 76%', toggleActions: 'play none none none' } });
-    gsap.from('.ph-synthesis',  { y: 18, opacity: 0, duration: 0.55, ease: 'power3.out', scrollTrigger: { trigger: '#ph-research-2', start: 'top 70%', toggleActions: 'play none none none' } });
-
-    /* ── DESIGN MOVES ── */
-    ['#ph-design-1','#ph-design-2','#ph-design-3','#ph-design-4'].forEach(id => {
-      gsap.from(`${id} .ph-move-card, ${id} .ph-placeholder`, {
-        y: 30, opacity: 0, stagger: 0.12, duration: 0.58, ease: 'power3.out',
-        scrollTrigger: { trigger: id, start: 'top 80%', toggleActions: 'play none none none' }
+    /* ── SECTION LABEL SLIDE (horizontal, not vertical) ── */
+    if (!reducedMotion) {
+      gsap.utils.toArray('.cs-section-label').forEach(label => {
+        gsap.from(label, {
+          x: -28, opacity: 0, duration: 0.55, ease: 'power3.out',
+          scrollTrigger: { trigger: label, start: 'top 88%', toggleActions: 'play none none none' }
+        });
       });
-    });
+      /* headings + body copy per section — differentiated timing */
+      gsap.utils.toArray('.cs-section').forEach(s => {
+        gsap.from(s.querySelectorAll('.cs-h2'), {
+          y: 28, opacity: 0, duration: 0.72, ease: 'power3.out',
+          scrollTrigger: { trigger: s, start: 'top 84%', toggleActions: 'play none none none' }
+        });
+        gsap.from(s.querySelectorAll('.cs-body'), {
+          y: 18, opacity: 0, duration: 0.55, ease: 'power3.out', delay: 0.12,
+          scrollTrigger: { trigger: s, start: 'top 84%', toggleActions: 'play none none none' }
+        });
+      });
+    }
 
-    /* ── HI-FI ── */
-    gsap.utils.toArray('.ph-device').forEach(el => {
-      gsap.from(el, { y: 42, opacity: 0, duration: 0.78, ease: 'power3.out', scrollTrigger: { trigger: el, start: 'top 84%', toggleActions: 'play none none none' } });
-    });
+    /* ── TL;DR — counter numbers + stagger rows ── */
+    if (!reducedMotion) {
+      gsap.from('.ph-disc-item', {
+        x: 20, opacity: 0, stagger: 0.11, duration: 0.58, ease: 'power3.out',
+        scrollTrigger: { trigger: '#ph-tldr', start: 'top 72%', toggleActions: 'play none none none' }
+      });
+      /* counter: 96%, 89% (first stat keeps arrow span — count the "100" portion) */
+      ScrollTrigger.create({
+        trigger: '#ph-tldr', start: 'top 72%', once: true,
+        onEnter: () => {
+          const nums = document.querySelectorAll('#ph-tldr .ph-tldr-num');
+          /* num[0] = "20%→100%" — contains an arrow span; animate wrapper opacity only */
+          if (nums[0]) gsap.from(nums[0], { opacity: 0, x: -12, duration: 0.55, ease: 'power3.out' });
+          if (nums[1]) animateCounter(nums[1], 96, '%', 1.1);
+          if (nums[2]) animateCounter(nums[2], 89, '%', 1.0);
+        }
+      });
+      gsap.from('.ph-tldr-stat', {
+        y: 22, opacity: 0, stagger: 0.13, duration: 0.58, ease: 'power3.out',
+        scrollTrigger: { trigger: '#ph-tldr', start: 'top 72%', toggleActions: 'play none none none' }
+      });
+    }
+
+    /* ── RESEARCH — stat card pop + quote clip-path wipe ── */
+    if (!reducedMotion) {
+      ScrollTrigger.create({
+        trigger: '#ph-research', start: 'top 76%', once: true,
+        onEnter: () => {
+          /* stagger: scale pop */
+          gsap.from('.ph-stat-card', {
+            scale: 0.92, opacity: 0, stagger: { each: 0.09, from: 'start' },
+            duration: 0.52, ease: 'back.out(1.4)'
+          });
+          /* counter: 92, 92, 83, 75 */
+          document.querySelectorAll('.ph-stat-num').forEach((el, i) => {
+            const targets = [92, 92, 83, 75];
+            setTimeout(() => animateCounter(el, targets[i], '%', 0.9), i * 90);
+          });
+        }
+      });
+      /* quote: left-to-right clip-path wipe */
+      gsap.fromTo('.ph-quote-block',
+        { clipPath: 'inset(0 100% 0 0)', opacity: 1 },
+        { clipPath: 'inset(0 0% 0 0)', duration: 0.85, ease: 'power3.out',
+          scrollTrigger: { trigger: '.ph-quote-block', start: 'top 82%', toggleActions: 'play none none none' } }
+      );
+    }
+
+    /* ── PERSONAS — alternating tilt stagger ── */
+    if (!reducedMotion) {
+      gsap.utils.toArray('.ph-persona').forEach((el, i) => {
+        gsap.from(el, {
+          y: 28, opacity: 0, rotation: i % 2 === 0 ? -1.5 : 1.5,
+          duration: 0.62, ease: 'power3.out', delay: i * 0.1,
+          scrollTrigger: { trigger: '#ph-research-2', start: 'top 78%', toggleActions: 'play none none none' }
+        });
+      });
+      gsap.from('.ph-synthesis', {
+        y: 16, opacity: 0, duration: 0.52, ease: 'power3.out',
+        scrollTrigger: { trigger: '#ph-research-2', start: 'top 68%', toggleActions: 'play none none none' }
+      });
+    }
+
+    /* ── DESIGN MOVES — cascade with slight y variation ── */
+    if (!reducedMotion) {
+      ['#ph-design-1','#ph-design-2','#ph-design-3','#ph-design-4'].forEach((id, si) => {
+        gsap.utils.toArray(`${id} .ph-move-card, ${id} .ph-placeholder`).forEach((el, i) => {
+          gsap.from(el, {
+            y: 24 + (i % 3) * 8, opacity: 0, duration: 0.56, ease: 'power3.out', delay: i * 0.08,
+            scrollTrigger: { trigger: id, start: 'top 82%', toggleActions: 'play none none none' }
+          });
+        });
+      });
+    }
+
+    /* ── HI-FI DEVICES — scale + lift ── */
+    if (!reducedMotion) {
+      gsap.utils.toArray('.ph-device').forEach((el, i) => {
+        gsap.from(el, {
+          scale: 0.93, y: 44, opacity: 0, duration: 0.82,
+          ease: 'power3.out', delay: i * 0.06,
+          scrollTrigger: { trigger: el, start: 'top 86%', toggleActions: 'play none none none' }
+        });
+      });
+    }
 
     /* ── TESTING ── */
-    gsap.from('.ph-test-card', { y: 26, opacity: 0, stagger: 0.14, duration: 0.58, ease: 'power3.out', scrollTrigger: { trigger: '#ph-testing', start: 'top 76%', toggleActions: 'play none none none' } });
+    if (!reducedMotion) {
+      gsap.from('.ph-test-card', {
+        y: 24, opacity: 0, stagger: 0.13, duration: 0.56, ease: 'power3.out',
+        scrollTrigger: { trigger: '#ph-testing', start: 'top 76%', toggleActions: 'play none none none' }
+      });
+    }
 
-    /* ── RESULTS ── */
-    gsap.from('.ph-result-card', { y: 26, opacity: 0, stagger: 0.09, duration: 0.52, ease: 'power3.out', scrollTrigger: { trigger: '#ph-results', start: 'top 76%', toggleActions: 'play none none none' } });
+    /* ── RESULTS — counter + card reveal ── */
+    if (!reducedMotion) {
+      ScrollTrigger.create({
+        trigger: '#ph-results', start: 'top 76%', once: true,
+        onEnter: () => {
+          gsap.from('.ph-result-card', {
+            y: 24, opacity: 0, stagger: 0.09, duration: 0.52, ease: 'power3.out'
+          });
+          document.querySelectorAll('.ph-result-num').forEach((el, i) => {
+            const targets = [100, 100, 96, 89, null]; /* null = 4/5 stays */
+            if (targets[i] !== null) {
+              setTimeout(() => animateCounter(el, targets[i], '%', 0.95), i * 80);
+            }
+          });
+        }
+      });
+    }
 
-    /* ── REFLECTION ── */
-    gsap.from('.ph-learn-card', { y: 26, opacity: 0, stagger: 0.09, duration: 0.56, ease: 'power3.out', scrollTrigger: { trigger: '#ph-reflection', start: 'top 76%', toggleActions: 'play none none none' } });
-    gsap.from('.ph-next-card',  { y: 22, opacity: 0, stagger: 0.09, duration: 0.52, ease: 'power3.out', scrollTrigger: { trigger: '#ph-reflection-2', start: 'top 76%', toggleActions: 'play none none none' } });
+    /* ── REFLECTION — ordinal slide, next cards drift ── */
+    if (!reducedMotion) {
+      gsap.utils.toArray('.ph-learn-card').forEach((el, i) => {
+        gsap.from(el, {
+          x: i % 2 === 0 ? -18 : 18, opacity: 0, duration: 0.58, ease: 'power3.out', delay: i * 0.07,
+          scrollTrigger: { trigger: '#ph-reflection', start: 'top 78%', toggleActions: 'play none none none' }
+        });
+      });
+      gsap.from('.ph-next-card', {
+        y: 20, opacity: 0, stagger: 0.1, duration: 0.52, ease: 'power3.out',
+        scrollTrigger: { trigger: '#ph-reflection-2', start: 'top 76%', toggleActions: 'play none none none' }
+      });
+    }
 
     /* ── OVERLAY PIN (desktop only) ── */
     if (!isMobile) {
