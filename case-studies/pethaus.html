@@ -1,0 +1,934 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Pet Haus — Case Study</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,100..1000&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@200..800&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@1,9..144,300&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/@studio-freight/lenis@1.0.42/dist/lenis.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+  <style>
+    :root {
+      --ph-dark:    #2d1a2a;
+      --ph-mauve:   #7b3f6e;
+      --ph-muted:   #c49abd;
+      --ph-lilac:   #f0e6ee;
+      --ph-warm:    #f5f0f4;
+      --bg:         #f3f2ec;
+      --ink:        #0a0a0a;
+      --ink-muted:  rgba(10,10,10,0.55);
+      --font-display: 'DM Sans', sans-serif;
+      --font-body:    'Plus Jakarta Sans', sans-serif;
+      --font-mono:    'JetBrains Mono', monospace;
+      --content-max:  1100px;
+      --pad-x:        clamp(32px, 5vw, 80px);
+      --pad-y:        clamp(60px, 8vw, 100px);
+    }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: auto; }
+    body { font-family: var(--font-body); background: var(--bg); color: var(--ink); overflow-x: hidden; }
+    a { color: inherit; text-decoration: none; }
+    img { display: block; max-width: 100%; }
+
+    /* ── PROGRESS ── */
+    #ph-progress {
+      position: fixed; top: 0; left: 0;
+      height: 3px; width: 0%;
+      background: var(--ph-mauve);
+      z-index: 200; pointer-events: none;
+      transition: width 0.05s linear;
+    }
+
+    /* ── NAV ── */
+    .ph-nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 18px var(--pad-x);
+      background: var(--ph-dark);
+      border-bottom: 1px solid rgba(255,255,255,0.06);
+    }
+    .ph-nav-back {
+      font-size: 13px; font-weight: 500;
+      color: rgba(255,255,255,0.6);
+      display: flex; align-items: center; gap: 6px;
+      transition: color 0.2s;
+    }
+    .ph-nav-back:hover { color: #fff; }
+    .ph-nav-back svg { width: 16px; height: 16px; }
+    .ph-nav-cta {
+      font-size: 13px; font-weight: 600;
+      color: #fff;
+      border: 1.5px solid rgba(255,255,255,0.3);
+      border-radius: 100px; padding: 7px 18px;
+      transition: background 0.2s, border-color 0.2s;
+    }
+    .ph-nav-cta:hover { background: rgba(255,255,255,0.08); border-color: rgba(255,255,255,0.6); }
+
+    /* ── SHARED ── */
+    .cs-section { position: relative; }
+    .cs-inner { max-width: var(--content-max); margin: 0 auto; padding: var(--pad-y) var(--pad-x); }
+    .cs-section-label {
+      font-family: var(--font-mono); font-size: 11px; font-weight: 700;
+      letter-spacing: 0.08em; text-transform: uppercase;
+      color: var(--ink-muted); margin-bottom: 24px;
+    }
+    .cs-h2 {
+      font-family: var(--font-display);
+      font-size: clamp(32px, 4.2vw, 54px);
+      font-weight: 800; line-height: 1.08;
+      letter-spacing: -0.02em; margin-bottom: 18px;
+    }
+    .cs-h2 em { font-style: normal; color: var(--ph-mauve); }
+    .cs-body { font-size: clamp(14px, 1.1vw, 15px); line-height: 1.7; color: var(--ink-muted); max-width: 600px; }
+    .cs-section--dark .cs-section-label { color: rgba(255,255,255,0.4); }
+    .cs-section--dark .cs-h2 { color: #fff; }
+    .cs-section--dark .cs-body { color: rgba(255,255,255,0.6); }
+
+    /* ── PLACEHOLDER ── */
+    .ph-placeholder {
+      background: rgba(123,63,110,0.06);
+      border: 1.5px dashed rgba(123,63,110,0.28);
+      border-radius: 14px;
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center; gap: 10px;
+      min-height: 220px;
+    }
+    .ph-ph-icon {
+      width: 32px; height: 32px; border-radius: 50%;
+      background: rgba(123,63,110,0.1);
+      display: flex; align-items: center; justify-content: center;
+    }
+    .ph-ph-label {
+      font-family: var(--font-mono); font-size: 10px; font-weight: 700;
+      letter-spacing: 0.08em; text-transform: uppercase;
+      color: var(--ph-mauve); opacity: 0.65;
+    }
+
+    /* ── HERO ── */
+    .ph-hero {
+      position: sticky; top: 0; z-index: 1;
+      background: var(--ph-dark);
+      min-height: 100vh;
+      display: flex; flex-direction: column; justify-content: flex-end;
+      padding-top: 60px; overflow: hidden;
+    }
+    .ph-hero-bg {
+      position: absolute; inset: 0;
+    }
+    .ph-hero-bg img { width: 100%; height: 100%; object-fit: cover; opacity: 0.42; }
+    .ph-hero-bg-fill {
+      width: 100%; height: 100%;
+      background: linear-gradient(135deg, #4a1f42 0%, #2d1a2a 55%, #1a0d18 100%);
+    }
+    .ph-hero::after {
+      content: ''; position: absolute; inset: 0; z-index: 1; pointer-events: none;
+      background:
+        linear-gradient(to right, rgba(45,26,42,0.9) 0%, rgba(45,26,42,0.55) 45%, rgba(45,26,42,0.18) 70%, transparent 100%),
+        linear-gradient(to top, rgba(45,26,42,0.85) 0%, rgba(45,26,42,0.3) 42%, transparent 68%);
+    }
+    .ph-hero-inner {
+      position: relative; z-index: 3;
+      max-width: var(--content-max); margin: 0 auto; width: 100%;
+      padding: 80px var(--pad-x) 80px;
+      display: grid; grid-template-columns: 1fr 270px; gap: 60px; align-items: end;
+    }
+    .ph-hero-h1 {
+      font-family: var(--font-display);
+      font-size: clamp(44px, 5.8vw, 76px);
+      font-weight: 900; line-height: 1.06; letter-spacing: -0.03em;
+      color: #fff; margin-bottom: 22px;
+    }
+    .ph-hero-h1 em { font-style: normal; color: var(--ph-muted); }
+    .ph-hero-sub {
+      font-size: clamp(13px, 1.05vw, 15px); line-height: 1.65;
+      color: rgba(255,255,255,0.58); max-width: 440px; margin-bottom: 30px;
+    }
+    .ph-hero-cta {
+      display: inline-flex; align-items: center; gap: 8px;
+      font-size: 12px; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase;
+      color: var(--ph-dark); background: var(--ph-muted);
+      border-radius: 100px; padding: 12px 26px;
+      transition: background 0.22s, transform 0.18s cubic-bezier(0.34,1.56,0.64,1);
+    }
+    .ph-hero-cta:hover { background: #fff; transform: translateY(-2px); }
+    .ph-hero-meta { display: flex; flex-direction: column; }
+    .ph-meta-row {
+      display: grid; grid-template-columns: 110px 1fr; gap: 10px;
+      padding: 10px 0; border-bottom: 1px solid rgba(255,255,255,0.07);
+    }
+    .ph-meta-row:last-child { border-bottom: none; }
+    .ph-meta-label { font-size: 10px; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; color: rgba(255,255,255,0.32); padding-top: 1px; }
+    .ph-meta-value { font-size: 12px; line-height: 1.5; color: rgba(255,255,255,0.78); }
+
+    /* ── 01 TLDR ── */
+    .ph-tldr-grid {
+      display: grid; grid-template-columns: 1fr 1px 1fr; gap: 0 44px; margin-top: 36px;
+    }
+    .ph-tldr-divider { background: rgba(255,255,255,0.1); align-self: stretch; }
+    .ph-col-label {
+      font-family: var(--font-mono); font-size: 10px; font-weight: 700;
+      letter-spacing: 0.1em; text-transform: uppercase;
+      color: rgba(255,255,255,0.3); margin-bottom: 22px;
+    }
+    .ph-tldr-stat {
+      display: flex; gap: 16px; margin-bottom: 24px;
+    }
+    .ph-tldr-stat:last-child { margin-bottom: 0; }
+    .ph-tldr-num {
+      font-family: var(--font-display); font-size: clamp(22px, 2.6vw, 36px);
+      font-weight: 800; color: #fff; line-height: 1;
+      white-space: nowrap; min-width: 100px;
+    }
+    .ph-tldr-num .arr { color: var(--ph-muted); margin: 0 2px; }
+    .ph-tldr-stat-body { flex: 1; }
+    .ph-tldr-stat-title { font-size: 12px; font-weight: 700; color: #fff; margin-bottom: 4px; }
+    .ph-tldr-stat-desc { font-size: 11.5px; line-height: 1.6; color: rgba(255,255,255,0.48); }
+    .ph-disc-item { margin-bottom: 20px; }
+    .ph-disc-item:last-child { margin-bottom: 0; }
+    .ph-disc-title { font-size: 12px; font-weight: 700; color: var(--ph-muted); margin-bottom: 5px; }
+    .ph-disc-body { font-size: 11.5px; line-height: 1.6; color: rgba(255,255,255,0.48); }
+
+    /* ── 02 SITCH ── */
+    .ph-sitch-body { margin-bottom: 28px; }
+    .ph-sitch-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-top: 0; }
+    .ph-sitch-card {
+      background: var(--ph-lilac); border-radius: 16px; padding: 24px 26px;
+      transition: transform 0.25s cubic-bezier(0.34,1.56,0.64,1);
+    }
+    .ph-sitch-card:hover { transform: translateY(-3px); }
+    .ph-sitch-tag {
+      font-family: var(--font-mono); font-size: 10px; font-weight: 700;
+      letter-spacing: 0.1em; text-transform: uppercase;
+      color: var(--ph-mauve); margin-bottom: 12px;
+    }
+    .ph-sitch-title { font-size: 14px; font-weight: 700; color: var(--ink); margin-bottom: 8px; line-height: 1.35; }
+    .ph-sitch-body-card { font-size: 12.5px; line-height: 1.65; color: var(--ink-muted); }
+
+    /* ── 03 RESEARCH A ── */
+    .ph-stats4 {
+      display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px;
+      margin-top: 30px; margin-bottom: 22px;
+    }
+    .ph-stat-card {
+      background: rgba(10,10,10,0.04); border-radius: 12px; padding: 20px 16px;
+      transition: transform 0.22s cubic-bezier(0.34,1.56,0.64,1);
+    }
+    .ph-stat-card:hover { transform: translateY(-2px); }
+    .ph-stat-num {
+      font-family: var(--font-display); font-size: 38px; font-weight: 900;
+      color: var(--ph-mauve); line-height: 1; margin-bottom: 8px;
+    }
+    .ph-stat-card-body { font-size: 11.5px; line-height: 1.55; color: var(--ink-muted); }
+    .ph-quote-block {
+      background: var(--ph-dark); border-radius: 14px; padding: 26px 28px 26px 44px;
+      position: relative;
+    }
+    .ph-quote-block::before {
+      content: '\201C';
+      font-family: 'Fraunces', serif; font-size: 72px; line-height: 0.5;
+      color: var(--ph-mauve); opacity: 0.45;
+      position: absolute; top: 22px; left: 18px;
+    }
+    .ph-quote-text {
+      font-family: 'Fraunces', serif; font-style: italic; font-weight: 300;
+      font-size: clamp(12px, 1vw, 14px); line-height: 1.7;
+      color: rgba(255,255,255,0.82); margin-bottom: 10px;
+    }
+    .ph-quote-attr {
+      font-size: 10px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase;
+      color: rgba(255,255,255,0.32);
+    }
+
+    /* ── 03 RESEARCH B — personas ── */
+    .ph-personas { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-top: 30px; }
+    .ph-persona {
+      border: 1.5px solid rgba(10,10,10,0.09); border-radius: 16px; padding: 24px 26px;
+      transition: border-color 0.2s, transform 0.25s cubic-bezier(0.34,1.56,0.64,1);
+    }
+    .ph-persona:hover { border-color: var(--ph-mauve); transform: translateY(-2px); }
+    .ph-persona-tag {
+      font-family: var(--font-mono); font-size: 10px; font-weight: 700;
+      letter-spacing: 0.1em; text-transform: uppercase; color: var(--ph-mauve); margin-bottom: 10px;
+    }
+    .ph-persona-title { font-size: 14px; font-weight: 700; color: var(--ink); margin-bottom: 8px; line-height: 1.35; font-style: italic; }
+    .ph-persona-body { font-size: 12.5px; line-height: 1.65; color: var(--ink-muted); }
+    .ph-synthesis {
+      background: var(--ph-mauve); border-radius: 14px; padding: 24px 30px; margin-top: 18px;
+    }
+    .ph-synthesis p { font-size: clamp(13px, 1.05vw, 14.5px); line-height: 1.68; color: rgba(255,255,255,0.9); font-weight: 500; }
+
+    /* ── 04 DESIGN MOVES ── */
+    .ph-move-grid {
+      display: grid; grid-template-columns: 1fr 1fr; gap: 36px;
+      align-items: center; margin-top: 30px;
+    }
+    .ph-move-card {
+      background: #fff; border-radius: 20px; padding: 30px 28px;
+      display: flex; flex-direction: column; gap: 14px;
+      box-shadow: 0 6px 36px rgba(45,26,42,0.1);
+      transition: transform 0.25s cubic-bezier(0.34,1.56,0.64,1), box-shadow 0.25s ease;
+    }
+    .ph-move-card:hover { transform: translateY(-3px); box-shadow: 0 12px 48px rgba(45,26,42,0.16); }
+    .ph-move-header { display: flex; align-items: center; justify-content: space-between; }
+    .ph-move-tag {
+      font-family: var(--font-mono); font-size: 10px; font-weight: 700;
+      letter-spacing: 0.08em; text-transform: uppercase; color: var(--ph-mauve);
+      display: flex; align-items: center; gap: 7px;
+    }
+    .ph-move-tag::before { content: ''; width: 5px; height: 5px; border-radius: 50%; background: var(--ph-mauve); }
+    .ph-move-count { font-family: var(--font-mono); font-size: 11px; color: rgba(10,10,10,0.2); }
+    .ph-move-title { font-size: 19px; font-weight: 800; color: var(--ink); line-height: 1.2; letter-spacing: -0.01em; }
+    .ph-move-body { font-size: 13px; line-height: 1.65; color: var(--ink-muted); }
+
+    /* ── 05 HI-FI ── */
+    .ph-hifi-grid {
+      display: grid; grid-template-columns: 1fr 1.4fr; gap: 48px;
+      align-items: center; margin-top: 30px;
+    }
+    .ph-hifi-screen-tag {
+      font-family: var(--font-mono); font-size: 10px; font-weight: 700;
+      letter-spacing: 0.1em; text-transform: uppercase; color: var(--ph-mauve); margin-bottom: 14px;
+    }
+    .ph-hifi-title { font-size: 17px; font-weight: 700; color: var(--ink); margin-bottom: 10px; line-height: 1.3; }
+    .ph-hifi-desc { font-size: 12.5px; line-height: 1.65; color: var(--ink-muted); }
+    .ph-device {
+      background: #1a1a1a; border-radius: 22px; padding: 10px;
+      box-shadow: 0 28px 72px rgba(45,26,42,0.28), 0 4px 12px rgba(0,0,0,0.2);
+    }
+    .ph-device-screen { border-radius: 14px; overflow: hidden; background: #f8f8f8; }
+    .ph-device-screen img { width: 100%; display: block; }
+    .ph-device-screen .ph-placeholder { border-radius: 14px; border: none; min-height: 340px; }
+
+    /* ── 06 TESTING ── */
+    .ph-test-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-top: 30px; }
+    .ph-test-card { border-radius: 14px; overflow: hidden; border: 1.5px solid rgba(10,10,10,0.08); }
+    .ph-test-label {
+      padding: 12px 18px;
+      font-family: var(--font-mono); font-size: 10px; font-weight: 700;
+      letter-spacing: 0.1em; text-transform: uppercase;
+    }
+    .ph-test-label--before { background: rgba(217,74,74,0.1); color: #c94040; }
+    .ph-test-label--after  { background: rgba(123,63,110,0.1); color: var(--ph-mauve); }
+    .ph-test-img-area .ph-placeholder {
+      border-radius: 0; border: none; min-height: 180px;
+      border-top: 1.5px dashed rgba(10,10,10,0.08);
+      border-bottom: 1.5px dashed rgba(10,10,10,0.08);
+    }
+    .ph-test-foot { padding: 14px 18px; }
+    .ph-test-metric {
+      font-family: var(--font-display); font-size: 28px; font-weight: 900; line-height: 1; margin-bottom: 4px;
+    }
+    .ph-test-metric--bad { color: #c94040; }
+    .ph-test-metric--good { color: var(--ph-mauve); }
+    .ph-test-note { font-size: 11.5px; line-height: 1.5; color: var(--ink-muted); }
+
+    /* ── 07 RESULTS ── */
+    .ph-results-grid {
+      display: grid; grid-template-columns: repeat(4,1fr); gap: 10px; margin-top: 36px;
+    }
+    .ph-result-card {
+      background: rgba(255,255,255,0.07); border-radius: 14px; padding: 26px 18px;
+      transition: background 0.2s;
+    }
+    .ph-result-card:hover { background: rgba(255,255,255,0.11); }
+    .ph-result-num { font-family: var(--font-display); font-size: 44px; font-weight: 900; color: #fff; line-height: 1; margin-bottom: 6px; }
+    .ph-result-lbl {
+      font-family: var(--font-mono); font-size: 9px; font-weight: 700;
+      letter-spacing: 0.08em; text-transform: uppercase; color: var(--ph-muted); margin-bottom: 10px;
+    }
+    .ph-result-body { font-size: 11.5px; line-height: 1.55; color: rgba(255,255,255,0.45); }
+
+    /* ── 08 REFLECTION A ── */
+    .ph-learn-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-top: 30px; }
+    .ph-learn-card {
+      background: rgba(10,10,10,0.04); border-radius: 14px; padding: 22px 22px;
+      transition: transform 0.22s cubic-bezier(0.34,1.56,0.64,1);
+    }
+    .ph-learn-card:hover { transform: translateY(-2px); }
+    .ph-learn-num {
+      font-family: var(--font-display); font-size: 28px; font-weight: 900;
+      color: var(--ph-mauve); opacity: 0.22; line-height: 1; margin-bottom: 10px;
+    }
+    .ph-learn-title { font-size: 13px; font-weight: 700; color: var(--ink); margin-bottom: 7px; line-height: 1.3; }
+    .ph-learn-body { font-size: 12px; line-height: 1.65; color: var(--ink-muted); }
+
+    /* ── 08 REFLECTION B ── */
+    .ph-next-label {
+      font-family: var(--font-mono); font-size: 10px; font-weight: 700;
+      letter-spacing: 0.1em; text-transform: uppercase;
+      color: rgba(255,255,255,0.3); margin-bottom: 28px;
+    }
+    .ph-next-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 14px; }
+    .ph-next-card {
+      background: rgba(255,255,255,0.07); border-radius: 14px; padding: 22px 20px;
+      transition: background 0.2s, transform 0.22s cubic-bezier(0.34,1.56,0.64,1);
+    }
+    .ph-next-card:hover { background: rgba(255,255,255,0.11); transform: translateY(-2px); }
+    .ph-next-title { font-size: 13px; font-weight: 700; color: #fff; margin-bottom: 8px; line-height: 1.3; }
+    .ph-next-body { font-size: 12px; line-height: 1.65; color: rgba(255,255,255,0.5); }
+    .ph-case-nav {
+      display: flex; justify-content: space-between;
+      padding: 20px 0 0; border-top: 1px solid rgba(255,255,255,0.08); margin-top: 28px;
+    }
+    .ph-case-nav a {
+      font-size: 11px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase;
+      color: rgba(255,255,255,0.38); transition: color 0.2s;
+    }
+    .ph-case-nav a:hover { color: #fff; }
+
+    /* ── OVERLAY SCROLL ── */
+    .cs-section:not(.ph-hero) {
+      position: relative; min-height: 100vh;
+      border-radius: 20px 20px 0 0;
+      box-shadow: 0 -24px 80px rgba(0,0,0,0.18);
+    }
+    #ph-tldr         { z-index: 2;  background: #211419; }
+    #ph-sitch        { z-index: 3;  background: var(--ph-warm); }
+    #ph-research     { z-index: 4;  background: var(--bg); }
+    #ph-research-2   { z-index: 5;  background: var(--ph-lilac); }
+    #ph-design-1     { z-index: 6;  background: var(--bg); }
+    #ph-design-2     { z-index: 7;  background: var(--ph-warm); }
+    #ph-design-3     { z-index: 8;  background: var(--bg); }
+    #ph-design-4     { z-index: 9;  background: var(--ph-warm); }
+    #ph-hifi-1       { z-index: 10; background: #fff; }
+    #ph-hifi-2       { z-index: 11; background: #fff; }
+    #ph-hifi-3       { z-index: 12; background: #fff; }
+    #ph-testing      { z-index: 13; background: var(--bg); }
+    #ph-results      { z-index: 14; background: var(--ph-dark); }
+    #ph-reflection   { z-index: 15; background: var(--ph-warm); }
+    #ph-reflection-2 { z-index: 16; background: var(--ph-dark); }
+
+    /* ── H2 OVERRIDES ── */
+    #ph-sitch .cs-h2,
+    #ph-testing .cs-h2    { font-size: clamp(26px, 3vw, 40px); }
+    #ph-reflection .cs-h2 { font-size: clamp(24px, 2.8vw, 38px); }
+    #ph-results .cs-h2    { font-size: clamp(32px, 3.8vw, 50px); }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 768px) {
+      .ph-hero-inner { grid-template-columns: 1fr; }
+      .ph-tldr-grid  { grid-template-columns: 1fr; }
+      .ph-sitch-grid { grid-template-columns: 1fr; }
+      .ph-stats4     { grid-template-columns: 1fr 1fr; }
+      .ph-personas   { grid-template-columns: 1fr; }
+      .ph-move-grid  { grid-template-columns: 1fr; }
+      .ph-hifi-grid  { grid-template-columns: 1fr; }
+      .ph-test-grid  { grid-template-columns: 1fr; }
+      .ph-results-grid { grid-template-columns: 1fr 1fr; }
+      .ph-learn-grid { grid-template-columns: 1fr; }
+      .ph-next-grid  { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+  <div id="ph-progress"></div>
+  <nav class="ph-nav">
+    <a class="ph-nav-back" href="../index.html#work">
+      <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M10 3L5 8l5 5"/></svg>
+      Back
+    </a>
+    <a class="ph-nav-cta" href="#" target="_blank" rel="noopener">Try the Pet-First Flow →</a>
+  </nav>
+
+  <!-- 00 HERO -->
+  <section class="cs-section ph-hero" id="ph-hero">
+    <div class="ph-hero-bg">
+      <!-- tag: pethaus-hero-bg.png -->
+      <div class="ph-hero-bg-fill"></div>
+    </div>
+    <div class="ph-hero-inner">
+      <div>
+        <h1 class="ph-hero-h1">Pet owners<br>don't shop.<br>They <em>check.</em></h1>
+        <p class="ph-hero-sub">So I designed Pet Haus — where every product page earns trust before it asks for a click. End-to-end UX, solo.</p>
+        <a class="ph-hero-cta" href="#" target="_blank" rel="noopener">Try the Pet-First Flow →</a>
+      </div>
+      <div class="ph-hero-meta">
+        <div class="ph-meta-row"><span class="ph-meta-label">Role</span><span class="ph-meta-value">Solo Designer — End to End Lead UX</span></div>
+        <div class="ph-meta-row"><span class="ph-meta-label">Methods</span><span class="ph-meta-value">Research · IA · Visual Design · Testing</span></div>
+        <div class="ph-meta-row"><span class="ph-meta-label">Type</span><span class="ph-meta-value">E-commerce Platform</span></div>
+        <div class="ph-meta-row"><span class="ph-meta-label">Participants</span><span class="ph-meta-value">12 Research · 5 Usability Testers</span></div>
+        <div class="ph-meta-row"><span class="ph-meta-label">Deliverable</span><span class="ph-meta-value">Full E-commerce UX · Web + Mobile</span></div>
+        <div class="ph-meta-row"><span class="ph-meta-label">Duration</span><span class="ph-meta-value">6-Week Sprint · Oct – Dec 2025</span></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 01 TL;DR -->
+  <section class="cs-section cs-section--dark" id="ph-tldr">
+    <div class="cs-inner">
+      <p class="cs-section-label">01 TL;DR</p>
+      <h2 class="cs-h2">Built to <em>answer</em><br>before it asks.</h2>
+      <div class="ph-tldr-grid">
+        <div>
+          <p class="ph-col-label">What Shifted</p>
+          <div class="ph-tldr-stat">
+            <div class="ph-tldr-num">20%<span class="arr">→</span>100%</div>
+            <div class="ph-tldr-stat-body">
+              <p class="ph-tldr-stat-title">Task success — finding safe food</p>
+              <p class="ph-tldr-stat-desc">Pet-first profile meant every participant found an appropriate product. Zero failed the core task.</p>
+            </div>
+          </div>
+          <div class="ph-tldr-stat">
+            <div class="ph-tldr-num">96%</div>
+            <div class="ph-tldr-stat-body">
+              <p class="ph-tldr-stat-title">Profile creation usability</p>
+              <p class="ph-tldr-stat-desc">Onboarding felt clear, helping anxious owners make confident selections.</p>
+            </div>
+          </div>
+          <div class="ph-tldr-stat">
+            <div class="ph-tldr-num">89%</div>
+            <div class="ph-tldr-stat-body">
+              <p class="ph-tldr-stat-title">Trust in recommendations</p>
+              <p class="ph-tldr-stat-desc">High confidence in products surfaced via the pet profile system.</p>
+            </div>
+          </div>
+        </div>
+        <div class="ph-tldr-divider"></div>
+        <div>
+          <p class="ph-col-label">What We Discovered</p>
+          <div class="ph-disc-item">
+            <p class="ph-disc-title">Verification anxiety was the real brief</p>
+            <p class="ph-disc-body">The e-commerce surface was hiding a trust problem. Pet owners couldn't act without feeling certain first — and the platform wasn't built for that.</p>
+          </div>
+          <div class="ph-disc-item">
+            <p class="ph-disc-title">Pet owners don't browse. They check.</p>
+            <p class="ph-disc-body">83% came with a specific product in mind. They needed answers before options. Every screen had to answer before it could ask.</p>
+          </div>
+          <div class="ph-disc-item">
+            <p class="ph-disc-title">Trust disappears at the worst moment</p>
+            <p class="ph-disc-body">Ingredient details and safety signals vanished at checkout — exactly when confidence mattered most. That's why users abandoned.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 02 THE SITCH -->
+  <section class="cs-section" id="ph-sitch">
+    <div class="cs-inner">
+      <p class="cs-section-label">02 The Sitch</p>
+      <h2 class="cs-h2">The brief was <em>e-commerce.</em><br>The problem was <em>anxiety.</em></h2>
+      <p class="cs-body ph-sitch-body">Competing platforms were built for browsing. But 83% of participants came with a specific product already in mind. They needed to check — not shop. The gap between how the industry was designed and how owners actually needed to feel was the entire opportunity.</p>
+      <div class="ph-sitch-grid">
+        <div class="ph-sitch-card">
+          <p class="ph-sitch-tag">Anxiety Type A</p>
+          <p class="ph-sitch-title">Medical stakes on every label</p>
+          <p class="ph-sitch-body-card">Dog with a diagnosed beef allergy. Every ingredient checked before considering any purchase. One unreadable label ends the session entirely.</p>
+        </div>
+        <div class="ph-sitch-card">
+          <p class="ph-sitch-tag">Anxiety Type B</p>
+          <p class="ph-sitch-title">No reference point, high stakes</p>
+          <p class="ph-sitch-body-card">First-time kitten owner. No way to know what's good or safe. Every vague recommendation is a reason to close the tab. Proof needed before any commitment.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 03 RESEARCH — Stats + Quote -->
+  <section class="cs-section" id="ph-research">
+    <div class="cs-inner">
+      <p class="cs-section-label">03 Research</p>
+      <h2 class="cs-h2">Same store. Same product.<br><em>Four reasons to leave.</em></h2>
+      <p class="cs-body">12 in-person interviews — 11 Gen Z/Millennials, 1 Boomer. Competitor analysis across 5 platforms. Synthesised through affinity mapping into four measurable behavioural patterns.</p>
+      <div class="ph-stats4">
+        <div class="ph-stat-card"><p class="ph-stat-num">92%</p><p class="ph-stat-card-body">had pets with specialised dietary needs — health was the primary purchase driver</p></div>
+        <div class="ph-stat-card"><p class="ph-stat-num">92%</p><p class="ph-stat-card-body">treated pet health as non-negotiable — above price, brand, or convenience</p></div>
+        <div class="ph-stat-card"><p class="ph-stat-num">83%</p><p class="ph-stat-card-body">shopped with a specific product in mind — rarely browsed without a goal</p></div>
+        <div class="ph-stat-card"><p class="ph-stat-num">75%</p><p class="ph-stat-card-body">relied on vet or community validation before committing to any new product</p></div>
+      </div>
+      <div class="ph-quote-block">
+        <p class="ph-quote-text">I actually check the ingredients to make sure there's not any random stuff I don't understand. So, a lot of Teddy's treats, you'll see, is quite clean. It won't have all that random stuff because he'll have diarrhoea. So for food, I 100% always check.</p>
+        <p class="ph-quote-attr">— Research participant, pet owner of 5 years</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- 03 RESEARCH — Personas + Synthesis -->
+  <section class="cs-section" id="ph-research-2">
+    <div class="cs-inner">
+      <p class="cs-section-label">03 Research — Patterns</p>
+      <h2 class="cs-h2">Two anxieties.<br><em>One structural problem.</em></h2>
+      <div class="ph-personas">
+        <div class="ph-persona">
+          <p class="ph-persona-tag">The Anxious Health Advocate</p>
+          <p class="ph-persona-title">"I check every ingredient before I'll even consider buying."</p>
+          <p class="ph-persona-body">Dog with a newly diagnosed beef allergy. Anxiety isn't about price — it's about accidentally causing a flare-up. One unreadable label ends the session.</p>
+        </div>
+        <div class="ph-persona">
+          <p class="ph-persona-tag">The Overwhelmed First-Timer</p>
+          <p class="ph-persona-title">"I don't know what's good — every recommendation feels like a guess."</p>
+          <p class="ph-persona-body">First-time kitten owner, no reference point. Anxiety is about wasting money on the wrong things. Every vague recommendation is a reason to close the tab.</p>
+        </div>
+      </div>
+      <div class="ph-synthesis">
+        <p>Two completely different anxieties — one rooted in medical history, one in inexperience — converging on the same behaviour. Neither could act without feeling certain first. That's not a content problem or a filter problem. It's a structural one.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- 04 DESIGN — Move 01 -->
+  <section class="cs-section" id="ph-design-1">
+    <div class="cs-inner">
+      <p class="cs-section-label">04 The Design — Move 01</p>
+      <h2 class="cs-h2">Pet first.<br><em>Always.</em></h2>
+      <div class="ph-move-grid">
+        <div class="ph-move-card">
+          <div class="ph-move-header">
+            <span class="ph-move-tag">Core IA Shift</span>
+            <span class="ph-move-count">01 / 04</span>
+          </div>
+          <p class="ph-move-title">Before any browsing, Pet Haus asks: who are you shopping for?</p>
+          <p class="ph-move-body">Enter your pet's name, species, age, and health conditions. Every product page then checks itself against that profile — surfacing what's safe, flagging what to watch. Shopping becomes checking.</p>
+        </div>
+        <div class="ph-placeholder" style="min-height:300px;">
+          <div class="ph-ph-icon"><svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="rgba(123,63,110,0.5)" stroke-width="1.6"><rect x="2" y="2" width="12" height="12" rx="2"/><path d="M5 8h6M8 5v6"/></svg></div>
+          <span class="ph-ph-label">pethaus-move-01.png</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 04 DESIGN — Move 02 -->
+  <section class="cs-section" id="ph-design-2">
+    <div class="cs-inner">
+      <p class="cs-section-label">04 The Design — Move 02</p>
+      <h2 class="cs-h2">Trust signals<br><em>above the fold.</em></h2>
+      <div class="ph-move-grid">
+        <div class="ph-placeholder" style="min-height:300px;">
+          <div class="ph-ph-icon"><svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="rgba(123,63,110,0.5)" stroke-width="1.6"><rect x="2" y="2" width="12" height="12" rx="2"/><path d="M5 8h6M8 5v6"/></svg></div>
+          <span class="ph-ph-label">pethaus-move-02.png</span>
+        </div>
+        <div class="ph-move-card">
+          <div class="ph-move-header">
+            <span class="ph-move-tag">Placement Strategy</span>
+            <span class="ph-move-count">02 / 04</span>
+          </div>
+          <p class="ph-move-title">Trust labels moved to the top of every product card.</p>
+          <p class="ph-move-body">Not buried in footers. Labelled based on measured assurance and tailored dietary considerations. Trust has to be earned before the click — not asked for after it.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 04 DESIGN — Move 03 -->
+  <section class="cs-section" id="ph-design-3">
+    <div class="cs-inner">
+      <p class="cs-section-label">04 The Design — Move 03</p>
+      <h2 class="cs-h2">At a glance<br><em>ingredients.</em></h2>
+      <div class="ph-move-grid">
+        <div class="ph-move-card">
+          <div class="ph-move-header">
+            <span class="ph-move-tag">PDP Module</span>
+            <span class="ph-move-count">03 / 04</span>
+          </div>
+          <p class="ph-move-title">An ingredient breakdown on every product detail page.</p>
+          <p class="ph-move-body">Top ingredients shown as chips — colour-coded green, amber, or red against your pet's specific health profile. No hunting. No collapsed accordions. Instant legibility at the point of decision.</p>
+        </div>
+        <div class="ph-placeholder" style="min-height:300px;">
+          <div class="ph-ph-icon"><svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="rgba(123,63,110,0.5)" stroke-width="1.6"><rect x="2" y="2" width="12" height="12" rx="2"/><path d="M5 8h6M8 5v6"/></svg></div>
+          <span class="ph-ph-label">pethaus-move-03.png</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 04 DESIGN — Move 04 -->
+  <section class="cs-section" id="ph-design-4">
+    <div class="cs-inner">
+      <p class="cs-section-label">04 The Design — Move 04</p>
+      <h2 class="cs-h2">Quality assurance,<br><em>visible.</em></h2>
+      <div class="ph-move-grid">
+        <div class="ph-placeholder" style="min-height:300px;">
+          <div class="ph-ph-icon"><svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="rgba(123,63,110,0.5)" stroke-width="1.6"><rect x="2" y="2" width="12" height="12" rx="2"/><path d="M5 8h6M8 5v6"/></svg></div>
+          <span class="ph-ph-label">pethaus-move-04.png</span>
+        </div>
+        <div class="ph-move-card">
+          <div class="ph-move-header">
+            <span class="ph-move-tag">Badge System + Checkout</span>
+            <span class="ph-move-count">04 / 04</span>
+          </div>
+          <p class="ph-move-title">Badges only appear when a product actually qualifies.</p>
+          <p class="ph-move-body">At checkout, the ingredient snapshot and sourcing badge travel with the order summary. Trust doesn't vanish at the final step — that's exactly when users abandoned before.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 05 HI-FI — Screen 01 -->
+  <section class="cs-section" id="ph-hifi-1">
+    <div class="cs-inner">
+      <p class="cs-section-label">05 Hi-Fidelity — 01 / 03</p>
+      <div class="ph-hifi-grid">
+        <div>
+          <p class="ph-hifi-screen-tag">Homepage — Pet-First Onboarding</p>
+          <p class="ph-hifi-title">"What do you want?" was the wrong first question.</p>
+          <p class="ph-hifi-desc">Pet Haus opens with "who are you shopping for?" Products surface based on what's safe for your specific pet — not generic browsing categories.</p>
+        </div>
+        <div class="ph-device">
+          <div class="ph-device-screen">
+            <div class="ph-placeholder" style="min-height:340px; border-radius:14px; border:none;">
+              <div class="ph-ph-icon"><svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="rgba(123,63,110,0.5)" stroke-width="1.6"><rect x="2" y="2" width="12" height="12" rx="2"/><path d="M5 8h6M8 5v6"/></svg></div>
+              <span class="ph-ph-label">pethaus-hifi-01.png</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 05 HI-FI — Screen 02 -->
+  <section class="cs-section" id="ph-hifi-2">
+    <div class="cs-inner">
+      <p class="cs-section-label">05 Hi-Fidelity — 02 / 03</p>
+      <div class="ph-hifi-grid" style="direction:rtl;">
+        <div class="ph-device" style="direction:ltr;">
+          <div class="ph-device-screen">
+            <div class="ph-placeholder" style="min-height:340px; border-radius:14px; border:none;">
+              <div class="ph-ph-icon"><svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="rgba(123,63,110,0.5)" stroke-width="1.6"><rect x="2" y="2" width="12" height="12" rx="2"/><path d="M5 8h6M8 5v6"/></svg></div>
+              <span class="ph-ph-label">pethaus-hifi-02.png</span>
+            </div>
+          </div>
+        </div>
+        <div style="direction:ltr;">
+          <p class="ph-hifi-screen-tag">Product Detail Page</p>
+          <p class="ph-hifi-title">Information before the ask.</p>
+          <p class="ph-hifi-desc">'At a Glance' ingredients personalised to your pet's profile. Colour-coded safety indicators. Trust badges above the CTA — every answer arrives before the question forms.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 05 HI-FI — Screen 03 -->
+  <section class="cs-section" id="ph-hifi-3">
+    <div class="cs-inner">
+      <p class="cs-section-label">05 Hi-Fidelity — 03 / 03</p>
+      <div class="ph-hifi-grid">
+        <div>
+          <p class="ph-hifi-screen-tag">Checkout — Trust Persists</p>
+          <p class="ph-hifi-title">Confidence maintained through the final step.</p>
+          <p class="ph-hifi-desc">Ingredient snapshot and sourcing badge in the order summary. Trust doesn't vanish at checkout — that's exactly where users were abandoning before.</p>
+        </div>
+        <div class="ph-device">
+          <div class="ph-device-screen">
+            <div class="ph-placeholder" style="min-height:340px; border-radius:14px; border:none;">
+              <div class="ph-ph-icon"><svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="rgba(123,63,110,0.5)" stroke-width="1.6"><rect x="2" y="2" width="12" height="12" rx="2"/><path d="M5 8h6M8 5v6"/></svg></div>
+              <span class="ph-ph-label">pethaus-hifi-03.png</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 06 TESTING -->
+  <section class="cs-section" id="ph-testing">
+    <div class="cs-inner">
+      <p class="cs-section-label">06 Usability Testing &amp; Iteration</p>
+      <h2 class="cs-h2">A 20% success rate is<br><em>useful information.</em></h2>
+      <p class="cs-body">5 participants. 3 tasks. Two went exactly as designed. One didn't — and that failure pointed directly at the most important structural fix in the project.</p>
+      <div class="ph-test-grid">
+        <div class="ph-test-card">
+          <div class="ph-test-label ph-test-label--before">Before — Re-order buried below fold</div>
+          <div class="ph-test-img-area">
+            <div class="ph-placeholder" style="min-height:180px; border-radius:0; border:none; background:rgba(217,74,74,0.04); border-top:1.5px dashed rgba(217,74,74,0.2); border-bottom:1.5px dashed rgba(217,74,74,0.2);">
+              <div class="ph-ph-icon"><svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="rgba(201,64,64,0.5)" stroke-width="1.6"><rect x="2" y="2" width="12" height="12" rx="2"/><path d="M5 8h6M8 5v6"/></svg></div>
+              <span class="ph-ph-label" style="color:#c94040;">pethaus-test-before.png</span>
+            </div>
+          </div>
+          <div class="ph-test-foot">
+            <p class="ph-test-metric ph-test-metric--bad">20%</p>
+            <p class="ph-test-note">Task 2 success — 4 of 5 missed the re-order feature entirely, navigating to Order History instead</p>
+          </div>
+        </div>
+        <div class="ph-test-card">
+          <div class="ph-test-label ph-test-label--after">After — Re-order above fold</div>
+          <div class="ph-test-img-area">
+            <div class="ph-placeholder" style="min-height:180px; border-radius:0; border:none; border-top:1.5px dashed rgba(123,63,110,0.2); border-bottom:1.5px dashed rgba(123,63,110,0.2);">
+              <div class="ph-ph-icon"><svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="rgba(123,63,110,0.5)" stroke-width="1.6"><rect x="2" y="2" width="12" height="12" rx="2"/><path d="M5 8h6M8 5v6"/></svg></div>
+              <span class="ph-ph-label">pethaus-test-after.png</span>
+            </div>
+          </div>
+          <div class="ph-test-foot">
+            <p class="ph-test-metric ph-test-metric--good">Visible</p>
+            <p class="ph-test-note">Banner reduced, restock section promoted above fold — the single highest-priority finding addressed</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 07 RESULTS -->
+  <section class="cs-section cs-section--dark" id="ph-results">
+    <div class="cs-inner">
+      <p class="cs-section-label">07 Results</p>
+      <h2 class="cs-h2"><em>Impact.</em></h2>
+      <p class="cs-body">5 usability test participants. 3 tasks. The core mechanic worked exactly as intended. One structural iteration sharpened the homepage hierarchy.</p>
+      <div class="ph-results-grid">
+        <div class="ph-result-card">
+          <p class="ph-result-num">100%</p>
+          <p class="ph-result-lbl">Task success</p>
+          <p class="ph-result-body">Every participant found food safe for their pet — the core design mechanic worked as intended</p>
+        </div>
+        <div class="ph-result-card">
+          <p class="ph-result-num">96%</p>
+          <p class="ph-result-lbl">Profile usability</p>
+          <p class="ph-result-body">Onboarding felt clear, helping anxious owners make confident selections without friction</p>
+        </div>
+        <div class="ph-result-card">
+          <p class="ph-result-num">89%</p>
+          <p class="ph-result-lbl">Trust score</p>
+          <p class="ph-result-body">High confidence in products recommended via the pet profile — across all five participants</p>
+        </div>
+        <div class="ph-result-card">
+          <p class="ph-result-num">4/5</p>
+          <p class="ph-result-lbl">Iteration trigger</p>
+          <p class="ph-result-body">Users missed re-order — homepage hierarchy became the primary fix and shipped in iteration</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 08 REFLECTION A -->
+  <section class="cs-section" id="ph-reflection">
+    <div class="cs-inner">
+      <p class="cs-section-label">08 Reflection</p>
+      <h2 class="cs-h2">What working alone<br>taught me a <em>team couldn't.</em></h2>
+      <div class="ph-learn-grid">
+        <div class="ph-learn-card">
+          <p class="ph-learn-num">01</p>
+          <p class="ph-learn-title">You Design Bolder When You Own the Risk</p>
+          <p class="ph-learn-body">Without a team to water down decisions, I had to commit fully. The pet-first onboarding departed from every e-commerce convention. Owning that bet solo meant it either landed or didn't. It landed.</p>
+        </div>
+        <div class="ph-learn-card">
+          <p class="ph-learn-num">02</p>
+          <p class="ph-learn-title">Research Is Strategy, Not Just Input</p>
+          <p class="ph-learn-body">Running the full research myself meant insights were alive in my head when I designed. The 'At a Glance' module didn't come from a brief — it came from watching someone squint at a collapsed accordion for 40 seconds and give up.</p>
+        </div>
+        <div class="ph-learn-card">
+          <p class="ph-learn-num">03</p>
+          <p class="ph-learn-title">One Strong Metric Beats Five Weak Ones</p>
+          <p class="ph-learn-body">I could have chased task completion, click-throughs, time-on-page. Instead I designed for one thing: "Do you feel confident right now?" That focus made every decision clearer and every test more honest.</p>
+        </div>
+        <div class="ph-learn-card">
+          <p class="ph-learn-num">04</p>
+          <p class="ph-learn-title">Trust Is a Design Ingredient, Not a Feature</p>
+          <p class="ph-learn-body">Trust isn't a badge you add at the end. It's baked into where information appears, when it appears, and what it looks like. That's a systems problem, not a visual one.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 08 REFLECTION B — What's Next -->
+  <section class="cs-section cs-section--dark" id="ph-reflection-2">
+    <div class="cs-inner">
+      <p class="cs-section-label">08 Reflection</p>
+      <p class="ph-next-label">If I Had 3 More Months</p>
+      <div class="ph-next-grid">
+        <div class="ph-next-card">
+          <p class="ph-next-title">Subscription &amp; Auto-Replenishment</p>
+          <p class="ph-next-body">Pet owners reorder the same food. A subscription model with dosage reminders would reduce decision fatigue and build habit-based loyalty.</p>
+        </div>
+        <div class="ph-next-card">
+          <p class="ph-next-title">Vet Integration Layer</p>
+          <p class="ph-next-body">75% relied on vet validation before any new product. A direct vet-recommendation integration would close the loop between clinical advice and purchase decisions.</p>
+        </div>
+        <div class="ph-next-card">
+          <p class="ph-next-title">Ingredient Transparency API</p>
+          <p class="ph-next-body">Partner with sourcing databases to auto-populate ingredient origin data — not just "locally sourced" as a badge, but traceable to the farm or facility.</p>
+        </div>
+      </div>
+      <div class="ph-case-nav">
+        <a href="seletar.html">← Seletar Airport</a>
+        <a href="arvo.html">ARVO →</a>
+      </div>
+    </div>
+  </section>
+
+  <script>
+    gsap.registerPlugin(ScrollTrigger);
+
+    /* ── LENIS ── */
+    const lenis = new Lenis({ lerp: 0.1, smoothWheel: true });
+    lenis.on('scroll', ScrollTrigger.update);
+    gsap.ticker.add((time) => lenis.raf(time * 1000));
+    gsap.ticker.lagSmoothing(0);
+
+    /* ── HERO ── */
+    gsap.timeline({ delay: 0.1 })
+      .from('.ph-hero-h1',  { y: 64, opacity: 0, duration: 0.9, ease: 'power3.out' })
+      .from('.ph-hero-sub', { y: 22, opacity: 0, duration: 0.6, ease: 'power2.out' }, '-=0.5')
+      .from('.ph-hero-cta', { y: 14, opacity: 0, duration: 0.5, ease: 'power2.out' }, '-=0.35')
+      .from('.ph-meta-row', { y: 14, opacity: 0, stagger: 0.055, duration: 0.42, ease: 'power2.out' }, '-=0.5');
+
+    /* ── SCROLL REVEAL (all sections) ── */
+    gsap.utils.toArray('.cs-section').forEach(s => {
+      gsap.from(s.querySelectorAll('.cs-h2, .cs-body, .cs-section-label'), {
+        y: 32, opacity: 0, duration: 0.62, stagger: 0.07, ease: 'power2.out',
+        scrollTrigger: { trigger: s, start: 'top 84%', toggleActions: 'play none none none' }
+      });
+    });
+
+    /* ── TLDR ── */
+    gsap.from('.ph-tldr-stat',  { y: 24, opacity: 0, stagger: 0.1, duration: 0.52, ease: 'power2.out', scrollTrigger: { trigger: '#ph-tldr', start: 'top 72%', toggleActions: 'play none none none' } });
+    gsap.from('.ph-disc-item',  { y: 24, opacity: 0, stagger: 0.1, duration: 0.52, ease: 'power2.out', scrollTrigger: { trigger: '#ph-tldr', start: 'top 72%', toggleActions: 'play none none none' } });
+
+    /* ── RESEARCH ── */
+    gsap.from('.ph-stat-card',  { scale: 0.95, opacity: 0, stagger: 0.08, duration: 0.48, ease: 'power2.out', scrollTrigger: { trigger: '#ph-research', start: 'top 76%', toggleActions: 'play none none none' } });
+    gsap.from('.ph-quote-block',{ y: 22, opacity: 0, duration: 0.6, ease: 'power2.out', scrollTrigger: { trigger: '#ph-research', start: 'top 70%', toggleActions: 'play none none none' } });
+    gsap.from('.ph-persona',    { y: 26, opacity: 0, stagger: 0.12, duration: 0.55, ease: 'power2.out', scrollTrigger: { trigger: '#ph-research-2', start: 'top 76%', toggleActions: 'play none none none' } });
+    gsap.from('.ph-synthesis',  { y: 18, opacity: 0, duration: 0.55, ease: 'power2.out', scrollTrigger: { trigger: '#ph-research-2', start: 'top 70%', toggleActions: 'play none none none' } });
+
+    /* ── DESIGN MOVES ── */
+    ['#ph-design-1','#ph-design-2','#ph-design-3','#ph-design-4'].forEach(id => {
+      gsap.from(`${id} .ph-move-card, ${id} .ph-placeholder`, {
+        y: 30, opacity: 0, stagger: 0.12, duration: 0.58, ease: 'power2.out',
+        scrollTrigger: { trigger: id, start: 'top 80%', toggleActions: 'play none none none' }
+      });
+    });
+
+    /* ── HI-FI ── */
+    gsap.utils.toArray('.ph-device').forEach(el => {
+      gsap.from(el, { y: 42, opacity: 0, duration: 0.78, ease: 'power2.out', scrollTrigger: { trigger: el, start: 'top 84%', toggleActions: 'play none none none' } });
+    });
+
+    /* ── TESTING ── */
+    gsap.from('.ph-test-card', { y: 26, opacity: 0, stagger: 0.14, duration: 0.58, ease: 'power2.out', scrollTrigger: { trigger: '#ph-testing', start: 'top 76%', toggleActions: 'play none none none' } });
+
+    /* ── RESULTS ── */
+    gsap.from('.ph-result-card', { y: 26, opacity: 0, stagger: 0.09, duration: 0.52, ease: 'power2.out', scrollTrigger: { trigger: '#ph-results', start: 'top 76%', toggleActions: 'play none none none' } });
+
+    /* ── REFLECTION ── */
+    gsap.from('.ph-learn-card', { y: 26, opacity: 0, stagger: 0.09, duration: 0.56, ease: 'power2.out', scrollTrigger: { trigger: '#ph-reflection', start: 'top 76%', toggleActions: 'play none none none' } });
+    gsap.from('.ph-next-card',  { y: 22, opacity: 0, stagger: 0.09, duration: 0.52, ease: 'power2.out', scrollTrigger: { trigger: '#ph-reflection-2', start: 'top 76%', toggleActions: 'play none none none' } });
+
+    /* ── OVERLAY PIN ── */
+    gsap.utils.toArray('.cs-section:not(.ph-hero)').forEach(section => {
+      gsap.fromTo(section,
+        { y: 60 },
+        { y: 0, ease: 'none', scrollTrigger: { trigger: section, start: 'top bottom', end: 'top top', scrub: 0.6 } }
+      );
+      ScrollTrigger.create({
+        trigger: section,
+        start: 'bottom bottom',
+        end: '+=' + window.innerHeight,
+        pin: true, pinSpacing: false,
+      });
+    });
+
+    ScrollTrigger.refresh();
+
+    /* ── PROGRESS BAR ── */
+    const bar = document.getElementById('ph-progress');
+    lenis.on('scroll', ({ scroll, limit }) => {
+      bar.style.width = (scroll / limit * 100) + '%';
+    });
+  </script>
+</body>
+</html>
