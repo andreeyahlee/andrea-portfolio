@@ -88,8 +88,9 @@ Export every asset as **PNG at 2×**, named exactly as listed. Drop into `/asset
 | `nav-dark.png` | — | Nav bar on dark/ink backgrounds |
 | `logo-light.png` | — | Flower logo for light backgrounds |
 | `logo-dark.png` | — | Flower logo for dark backgrounds |
-| `cursor-light.png` | — | Custom flower cursor for light backgrounds |
-| `cursor-dark.png` | — | Custom flower cursor for dark backgrounds |
+| `cursor-light.png` | — | Custom cursor — white flower on transparent RGBA bg. Only this file is used (mix-blend-mode handles dark/light automatically) |
+| `about-pilates-illus.png` | — | Pilates illustration shown alongside "Designing is like practicing Pilates" title |
+| `about-side-project.png` | — | Hands icon for "Side project right now" card |
 
 **Figma export steps:**
 1. Select node → right panel → Export → `2×` → Format: `PNG`
@@ -334,109 +335,115 @@ The CTA card images (`arvo-cta.png`, `seletar-cta.png`, `pethaus-cta.png`) fill 
 
 ---
 
-### 5.3 Section: ABOUT (Overlay Panel)
+### 5.3 Section: ABOUT (Overlay Panel) ✅ IMPLEMENTED
 
 > ⚠️ **About is NOT a scroll section. It is an overlay panel (`#about-overlay`) opened by the "About" nav button. Do not add it to the scroll flow.**
 
-**Architecture:** `#about-overlay` is `position: fixed; inset: 0; overflow-y: auto`. Inside it, `#about` is `height: 340vh` with a `position: sticky; top: 0; height: 100vh` child (`.about-sticky`). A GSAP paused timeline (`aboutSplitTl`) is scrubbed by the overlay's `scrollTop`. `progress = scrollTop / (aboutEl.offsetHeight - innerHeight)`.
+**As-built architecture — differs significantly from original scroll-driven spec:**
 
-**4-state animation sequence (scroll-driven inside the overlay):**
-
-| State | Figma node | Status | Scroll range |
-|---|---|---|---|
-| 1 — Overlay opens | `707-16514` | ✅ Built | Static (scrollTop = 0) |
-| 2 — Portrait pop + text split | `713-16765` | ✅ Built | 0% → 50% of scroll |
-| 3 — Portrait anchors, rectangle expands | `953-14453` | ✅ Built | 50% → 100% of scroll |
-| 4 — Info swap | `953-14527` | 🔲 Pending | — |
+`#about-overlay` is `position: fixed; inset: 0`. Inside it, `#about` fills the full viewport. The animation is **click-triggered GSAP** (not scroll-scrubbed). Two global state variables track progress: `abState` (`'idle' | 's1' | 's2'`) and `abMode` (`'serious' | 'unserious'`).
 
 ---
 
-**State 1 — Overlay opens (static):**
-- `#about-overlay` fades in (opacity transition on `.is-open`)
-- Headline `"Hi! I'm Andrea"` centred in viewport — `"Hi! I'm"` on one line, `"Andrea"` with portrait slot inline
-- Portrait slot (`.about-portrait-slot`) is a warm-tinted placeholder matching the `a` descender width
-- Portrait photo (`.about-portrait-img`) hidden below viewport at `yPercent: 110`
-- Scroll hint visible at bottom
-- Nav switches to dark mode: `body:has(#about-overlay.is-open) #nav { background: var(--work-bg) }`
-- Logo swaps to `logo-dark.png` on open; restores via `updateNavTheme()` on close
+**State 1 — Overlay opens (`.ab-s1`):**
+- `"Hi! I'm Andrea"` centred in viewport — `"Hi! I'm"` on the left, `"Andrea"` to the right with warm rect (`ab-warm-rect`) behind it
+- Clicking anywhere triggers `animateS1toS2()`
+- Nav switches to dark pill on overlay open
 
 ---
 
-**State 2 — Portrait pop + text split (scrub 0 → ~0.53):**
+**State 2 — Content layout (`.ab-s2`):**
 
-GSAP timeline positions (built in `buildAboutSplitTl()`, called on first overlay scroll):
+GSAP `animateS1toS2()` timeline:
 ```
-0.0  scroll hint fades out
-0.1  portrait rises: yPercent 110 → 0
-0.15 "Andrea" wrap centres: x += centerDeltaX
-0.15 "Hi! I'm" slides left: x = (viewCenter - halfSlot - P) - hiRect.right
-0.15 "Andrea" text slides right: x = (viewCenter + halfSlot + P) - andreaRect.left
-0.15 portrait slot + img widen: width → max(15vw, 120px)
-1.1  clip-path removed from .about-andrea-wrap (allows portrait to escape bounds)
-1.1  portrait slot fades out
-1.1  "Hi! I'm" fades out
-1.1  "Andrea" text fades out
+Phase 1 (0 → 0.85s): "Hi! I'm" flies left, "Andrea" flies right, portrait rises from warm rect x-center
+Phase 2 (0.88s → 1.75s): text fades out, portrait + warm-fill move to bottom-left, s2 content fades in
+```
+
+Portrait final position:
+```js
+const portEndW = Math.min(vw * 0.341, 491);   // max 491px
+const portEndH = portEndW * (440 / 491);
+const portEndL = vw * 0.033;
+const portEndT = vh - portEndH;               // bottom of viewport
+```
+
+Warm fill accent — offset 16px right of portrait so it peeks from the portrait's right edge:
+```js
+tl.to(abWarmFill, {
+  left: portEndL + 16, top: portEndT,
+  width: portEndW, height: portEndH,
+  borderRadius: '10px', duration: 0.78, ease: 'power2.inOut',
+}, 0.90);
 ```
 
 ---
 
-**State 3 — Portrait anchors, warm rect expands (scrub ~0.53 → 1.0):**
+**S2 layout — 3-column absolute canvas (Serious mode):**
 
-```
-1.1  warm panel expands: height 0 → 50vh (bottom half of viewport)
-1.1  portrait moves down: y += s3PortraitDeltaY, sized to 28vw × (28vw / naturalRatio)
-     naturalRatio = naturalWidth / naturalHeight of about-portrait.png (986×884 = 1.115)
-     Result: portrait ~403×361px, bottom edge = viewport bottom
-1.25 stacked "Hi! I'm / Andrea" head fades in (top-left, above warm rect)
-1.25 two-column content grid fades in (inside warm rect)
-```
+| Column | Element | CSS position |
+|---|---|---|
+| Left (bio) | `.ab-bio` | `left: 3.26vw; top: 28.2vh; width: 30vw; max-width: 432px` |
+| Middle | `.ab-pilates` | `left: 36%; top: 36vh; width: 25%` |
+| Right top | `.ab-sg` (Singapore card) | `left: 64%; top: 36vh; width: 29%` |
+| Right bottom | `.ab-side-project` | `left: 64%; top: 68vh; width: 29%` |
+| Far right | `.ab-toggle-row` | `right: 1.74vw; top: 28.2vh` |
 
-**State 3 content grid layout:**
+Singapore map watermark:
 ```css
-.about-s3-content {
-  position: absolute; bottom: 0; left: 0; right: 0; height: 50%;
-  display: grid;
-  grid-template-columns: 1fr 30vw 1fr;  /* left col | portrait space | right col */
-  align-items: stretch;
-  padding: 0 clamp(32px, 5vw, 80px);
+.ab-sg-map {
+  left: 63%; top: 17.9%; width: 49.7%; height: 75.3%;
+  opacity: 0.45;  /* visible against cream bg, bleeds off right edge intentionally */
 }
-/* Left col: bottom-aligned */
-.about-s3-col:first-child { justify-content: flex-end; padding-bottom: clamp(28px, 4.5vh, 56px); }
-/* Right col: top-aligned */
-.about-s3-col:last-child  { justify-content: flex-start; padding-top: clamp(28px, 4.5vh, 56px); }
 ```
 
-**Left column (Location — Singapore):**
-- Geo pin icon: `<img src="assets/icon-geopin.png">` 24×24px, black line-art
-- Title: `"Raised in a land of 'maximum'"` — DM Sans italic, `clamp(18px, 2vw, 32px)`
-- Body: copy about Singapore minimalism, `Plus Jakarta Sans`, `clamp(12px, 1vw, 15px)`, opacity 0.75
-- Background: Singapore island silhouette (`assets/about-singapore.png`) as `::before` pseudo-element
-  - `position: absolute; right: 0; width: 48vw; height: 120%` — right edge anchors at portrait column start, left bleeds off-screen
-  - `background: url(...) right center / contain no-repeat; opacity: 0.5; z-index: -1`
+---
 
-**Right column (Philosophy — Pilates):**
-- Title: `"Designing 🧘‍♀️ is like practicing Pilates"` — DM Sans italic, same size as left title
-- Emoji wrapped in `.about-s3-emoji` with `font-family: 'Apple Color Emoji', 'Segoe UI Emoji', 'Noto Color Emoji'`
-- Body: copy about invisible design decisions, same body style as left col
-- `"The invisible adjustments are usually the whole job."` — `font-weight: 600`
+**S2 content — Serious mode:**
+
+**Bio (`.ab-bio`):**
+- Role: `UX Product Designer | For Hire` — JetBrains Mono, uppercase, 11–16px
+- Name: `Hi! I'm / Andrea` — DM Sans 700, 40–64px, line-height 0.98
+- Tagline: `"I identify which problems are actually design problems and which are business assumptions in disguise. Then I design for what's real."` — Plus Jakarta Sans 500, 14–20px
+
+**Singapore card (`.ab-sg`):**
+- Icon: `icon-geopin.png` (28–43px)
+- Title: `"Raised in a land of 'maximum'"` — Cormorant Garamond italic 700, 22–36px
+- Body: Two paragraphs about Singapore minimalism + `"Majulah Singapura!"` — 13–16px, opacity 0.78 (WCAG AA compliant)
+
+**Pilates card (`.ab-pilates`) — trimmed:**
+- Title + illustration only. Body paragraphs removed to reduce cognitive load.
+- Title: `"Designing is like practicing Pilates"` — Cormorant Garamond italic 700, 22–36px
+- Illustration: `about-pilates-illus.png` — 60–100px
+- Punchline: `"The invisible adjustments are usually the whole job."` — bold, 13–16px
+
+**Side project (`.ab-side-project`):**
+- Icon: `about-side-project.png` — 52–75px
+- Title: `"Side project right now"` — Cormorant Garamond italic 700, 22–36px
+- Body: voice AI / caregiving tools / low-digital-literacy access copy — 13–16px, opacity 0.85
 
 ---
 
-**State 4 — Info swap (🔲 PENDING):**
+**Serious ↔ Unserious toggle:**
 
-Reference: `about-info-swap.png` (node `953-14527`). Portrait stays anchored. Content inside warm rect swaps. Read all copy and layout from the image — do not invent.
+Toggle button (`.ab-switch`) at top-right triggers `abMode` swap:
+- **Serious → Unserious:** `.ab-serious` fades out, `ab-warm-fill` expands to fullscreen, `.ab-unserious` pill cloud fades in, pills start jiggling
+- **Unserious → Serious:** reverse; warm fill contracts back to `portEndL + 16, portEndT` (portrait position + 16px right offset)
+
+Unserious mode: JS builds a random scatter of pill elements (images/GIFs) using `.ab-pill-wrap` and `.ab-pill-media`. Pills animate with random rotation + scale on a staggered timer.
+
+Toggle jiggle: 5s after S2 appears, the toggle button plays a CSS jiggle animation (`ab-tgl-jiggle`), then repeats every 10s to nudge the user.
 
 ---
 
-**Exports needed:**
-- `about-initial.png` — node `707-16514`
-- `about-portrait-split.png` — node `713-16765`
-- `about-portrait-anchored.png` — node `953-14453` ← primary State 3 reference
-- `about-info-swap.png` — node `953-14527`
-- `about-singapore.png` — Singapore island silhouette, warm beige on transparent bg
-- `icon-geopin.png` — location pin icon, black line-art
-
-All text copy comes from the exported PNGs. Do not invent copy.
+**Assets in use:**
+| File | Role |
+|---|---|
+| `about-portrait.png` | Profile photo, animated bottom-left |
+| `about-singapore.png` | Singapore island watermark (RGBA transparent bg) |
+| `icon-geopin.png` | Geo pin icon |
+| `about-pilates-illus.png` | Pilates illustration |
+| `about-side-project.png` | Hands icon for side project card |
 
 ---
 
@@ -709,36 +716,57 @@ Unpin at scrub 1.0
 - The flower logo is embedded in the nav bar — match position to nav PNGs
 - Use `logo-light.png` when nav is in light mode, `logo-dark.png` when nav is in dark mode
 
-### Custom cursor
-- Replace default browser cursor site-wide with custom flower cursor
-- **Light backgrounds**: use `cursor-light.png`
-- **Dark backgrounds**: use `cursor-dark.png`
-- Switch cursor image when background changes (same trigger as nav colour switch)
-- Implementation:
+### Custom cursor ✅ IMPLEMENTED
+
+**As-built — differs from original spec:**
+
+- Single cursor image: `cursor-light.png` (white flower on transparent RGBA background)
+- No light/dark swapping — `mix-blend-mode: difference` on the cursor container handles colour adaptation automatically across every pixel of every page
+- Slow continuous rotation: 12s per revolution, CSS keyframe on the inner `<img>`
+- Applied to all pages: `index.html` + all three case studies
+
 ```css
-body { cursor: none; }
+*, *::before, *::after { cursor: none !important; }
 #custom-cursor {
-  position: fixed;
-  pointer-events: none;
-  z-index: 9999;
-  width: 32px;
-  height: 32px;
-  transform: translate(-50%, -50%);
+  position: fixed; top: 0; left: 0; width: 48px;
+  pointer-events: none; z-index: 99999;
+  will-change: transform; opacity: 0; transition: opacity 0.2s;
+  mix-blend-mode: difference;
 }
+#custom-cursor img {
+  width: 100%; height: auto; display: block;
+  will-change: transform; animation: cursor-spin 12s linear infinite;
+}
+@keyframes cursor-spin { to { transform: rotate(360deg); } }
 ```
+
+```html
+<div id="custom-cursor" aria-hidden="true">
+  <img src="assets/cursor-light.png" alt="">
+</div>
+```
+
 ```js
-const cursor = document.getElementById('custom-cursor');
-document.addEventListener('mousemove', e => {
-  cursor.style.left = e.clientX + 'px';
-  cursor.style.top = e.clientY + 'px';
-});
-// Swap cursor src when dark/light mode switches — match same trigger as nav
+(function () {
+  const cursor = document.getElementById('custom-cursor');
+  if (!cursor || window.matchMedia('(pointer: coarse)').matches) return;
+  let visible = false;
+  document.addEventListener('mousemove', e => {
+    cursor.style.transform = `translate(${e.clientX - 24}px, ${e.clientY - 24}px)`;
+    if (!visible) { cursor.style.opacity = '1'; visible = true; }
+  });
+  document.addEventListener('mouseleave', () => { cursor.style.opacity = '0'; visible = false; });
+  document.addEventListener('mouseenter', () => { cursor.style.opacity = '1'; visible = true; });
+})();
 ```
+
+> **Why `mix-blend-mode: difference`:** A white cursor on transparent bg mathematically inverts against whatever is underneath — near-black on cream, near-cream on dark green, and continuously across every colour zone. No JS colour detection needed.
+> **Case study asset path:** `../assets/cursor-light.png`
 
 ### Typography
 **⚠️ Do not set any font sizes, weights, letter-spacing or line-height from this PRD. Read all typography from the PNG exports for each section. The only locked values are:**
 - Display font family: `Fraunces` — weight 300, italic
-- Body font family: `Inter`
+- Body font family: `Plus Jakarta Sans`
 - All sizing: match from PNGs
 
 ---
@@ -781,13 +809,14 @@ Run these as separate sessions, each with this PRD attached:
 | **2** | Hero section: static layout only, no animations | ✅ Done | `hero-initial.png` |
 | **3** | Hero GSAP: desktop zoom + complex zoom + letter-p + bg transition | ✅ Done | `hero-initial.png`, `hero-desktop-zoom.png`, `hero-letter-p.png` |
 | **4** | Work section: 3-column layout + hover reveal + CTA cards | ✅ Done | `work-initial.png`, `work-hover-reveal.png`, `arvo-cta.png`, `seletar-cta.png`, `pethaus-cta.png` |
-| **5a** | About overlay: States 1, 2, 3 (scroll-driven GSAP, portrait split + anchor, warm rect, two-column layout) | ✅ Done | `about-portrait.png`, `about-portrait-anchored.png`, `about-singapore.png`, `icon-geopin.png` |
-| **5b** | About overlay: State 4 — info swap | 🔲 Next | `about-info-swap.png` |
+| **5a** | About overlay: click-driven GSAP, portrait animation, Serious/Unserious toggle, 3-column content layout | ✅ Done | `about-portrait.png`, `about-singapore.png`, `icon-geopin.png`, `about-pilates-illus.png`, `about-side-project.png` |
+| **5b** | About overlay: UI/UX audit — layout alignment, WCAG contrast, Gestalt proximity, heading hierarchy, content editing | ✅ Done | — |
 | **6** | Contact section | ✅ Done | `sayhello.png` |
 | **7** | `case-studies/arvo.html` | ✅ Done | — |
 | **8** | `case-studies/seletar.html` | ✅ Done | All `seletar-*.png` files |
-| **9** | `case-studies/pethaus.html` | 🔲 Next | All `pethaus-*.png` files |
-| **10** | Custom cursor + final QA: GSAP conflict check, mobile test, Netlify deploy | 🔲 Pending | `cursor-light.png`, `cursor-dark.png` |
+| **9** | `case-studies/pethaus.html` | ✅ Done | All `pethaus-*.png` files |
+| **10** | Custom cursor: `mix-blend-mode: difference`, rotation animation, all pages | ✅ Done | `cursor-light.png` |
+| **11** | Final QA: GSAP conflict check, mobile test, Netlify deploy | 🔲 Next | — |
 
 ---
 
