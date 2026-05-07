@@ -1517,6 +1517,11 @@
     window.scrollTo({ top: 0, behavior: 'smooth' });
   });
 
+  if (window.location.hash === '#contact') {
+    openOverlay('contact-overlay');
+    history.replaceState(null, '', window.location.pathname);
+  }
+
   document.getElementById('nav-about').addEventListener('click', () => openOverlay('about-overlay'));
   document.getElementById('nav-sayhi').addEventListener('click', () => openOverlay('contact-overlay'));
 
