@@ -883,14 +883,14 @@
       opacity: 0.7;
       margin: 0;
     }
-    /* ── Chaos SVG: circular text near portrait ── */
+    /* ── Chaos SVG: GSAP positions this dynamically on toggle (left/bottom set at runtime) ── */
     .ab-chaos-svg {
       position: absolute;
-      left: 4vw;
-      bottom: 32vh;
+      left: 0;
+      bottom: 0;
       width: clamp(140px, 14vw, 196px);
       height: clamp(140px, 14vw, 196px);
-      z-index: 15;
+      z-index: 10;
       opacity: 0;
       pointer-events: none;
       color: var(--ink);
@@ -1336,7 +1336,7 @@
         <defs>
           <path id="chaos-circle-path" d="M 100,100 m -75,0 a 75,75 0 1,1 150,0 a 75,75 0 1,1 -150,0"/>
         </defs>
-        <text font-family="'DM Sans', sans-serif" font-size="12" font-weight="600" fill="currentColor" letter-spacing="1.5">
+        <text font-family="'Plus Jakarta Sans', sans-serif" font-size="12" font-weight="300" fill="currentColor" letter-spacing="5">
           <textPath href="#chaos-circle-path">welcome to my chaos! • welcome to my chaos! • </textPath>
         </text>
       </svg>
@@ -1400,7 +1400,7 @@
         <div class="ab-unserious" aria-hidden="true">
           <div class="ab-uns-header">
             <h2 class="ab-uns-heading">Off the<br>record</h2>
-            <p class="ab-uns-sub">I can't turn off the brain ever.</p>
+            <p class="ab-uns-sub">Things I get up to when I turn my brain off.</p>
           </div>
         </div>
 
@@ -1872,13 +1872,24 @@
     const abChaosSvg  = document.querySelector('.ab-chaos-svg');
     const abBio       = document.querySelector('.ab-bio');
 
+    const vwT = window.innerWidth, vhT = window.innerHeight;
+
     if (isUns) {
       abPortrait.src = 'assets/about-portrait-uns.png';
+      // Position chaos behind head: centered on portrait, top arc peeks above portrait top
+      const portW     = Math.min(vwT * 0.341, 491);
+      const portH     = portW * (440 / 491);
+      const portL     = vwT * 0.033;
+      const chaosSize = Math.min(Math.max(140, vwT * 0.14), 196);
+      gsap.set(abChaosSvg, {
+        left:   portL + portW * 0.5 - chaosSize * 0.5,  // centered on portrait width
+        bottom: portH - chaosSize * 0.65,                // ~35% top arc visible above portrait top
+      });
       gsap.timeline()
         .to('.ab-serious', { opacity: 0, duration: 0.22, ease: 'power1.out' }, 0)
         .to(abBio,        { opacity: 0, duration: 0.22, ease: 'power1.out' }, 0)
         .to(abWarmFill, {
-          left: 0, top: 0, width: '100%', height: '100%', borderRadius: 0,
+          left: 0, top: 0, width: vwT, height: vhT, borderRadius: 0,
           duration: 0.55, ease: 'power2.inOut',
         }, 0)
         .to(abUnserious, { opacity: 1, pointerEvents: 'auto', duration: 0.35, ease: 'power1.out' }, 0.38)
