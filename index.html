@@ -905,7 +905,7 @@
       display: flex;
       flex-direction: column;
       align-items: center;
-      gap: 5px;
+      gap: 10px;
     }
     .ab-pill-media {
       max-width: clamp(110px, 13vw, 190px);
@@ -928,9 +928,9 @@
       background: var(--work-bg);
       color: var(--bg);
       font-family: var(--font-body);
-      font-size: clamp(9px, 0.72vw, 12px);
+      font-size: clamp(13px, 1.05vw, 16px);
       font-weight: 400;
-      padding: 7px 15px;
+      padding: 9px 22px;
       border-radius: 100px;
       white-space: nowrap;
       display: inline-block;
@@ -1608,17 +1608,21 @@
      S2: portrait bottom-left + bio + Serious/Unserious toggle
   ---------------------------------------------------------- */
   // fx/fy = position as fraction of Figma frame (1440×950), image top-left = wrap top-left
+  // fx/fy = wrap top-left as fraction of viewport (1440×950 reference)
+  // visible pill label appears ~205px below fy (media height + gap)
+  // three-row layout: upper (label ≈400–420), middle (label ≈620–685), lower (label ≈840–895)
+  // columns are spaced >300px apart so hovering media never reaches adjacent-column labels
   const ABOUT_PILLS = [
-    { label: 'Adore reading fantasy books',                      src: 'assets/about-pill-books.png',        type: 'img',   fx: 811/1440,  fy: 271/950  },
-    { label: 'Absolute caffeine addict',                         src: 'assets/about-pill-caffeine.png',     type: 'img',   fx: 540/1440,  fy: 320/950  },
-    { label: 'travelling abroad',                                src: 'assets/about-pill-travel.png',       type: 'img',   fx: 938/1440,  fy: 482/950  },
-    { label: 'Allergic to Comic Sans',                           src: 'assets/about-pill-comicsans.png',    type: 'img',   fx: 662/1440,  fy: 488/950  },
-    { label: 'Picking up pickleball',                            src: 'assets/about-pill-pickleball.png',   type: 'img',   fx: 403/1440,  fy: 510/950  },
-    { label: 'Pilates core. UX brain.',                          src: 'assets/about-pill-pilates.png',      type: 'img',   fx: 1210/1440, fy: 374/950  },
-    { label: 'Recovering event stylist',                         src: 'assets/about-pill-stylist.mp4',      type: 'video', fx: 1181/1440, fy: 578/950  },
-    { label: 'Too much screentime',                              src: 'assets/about-pill-screentime.png',   type: 'img',   fx: 921/1440,  fy: 622/950  },
-    { label: 'Aspiring to side hustle as a pilates instructor',  src: 'assets/about-pill-reformer.png',    type: 'img',   fx: 685/1440,  fy: 722/950  },
-    { label: 'Love British Royal History',                       src: 'assets/about-pill-royalhistory.png', type: 'img',   fx: 1206/1440, fy: 722/950  },
+    { label: 'Adore reading fantasy books',                      src: 'assets/about-pill-books.png',        type: 'img',   fx: 800/1440,  fy: 205/950  },  // label ≈400, col C
+    { label: 'Absolute caffeine addict',                         src: 'assets/about-pill-caffeine.png',     type: 'img',   fx: 440/1440,  fy: 225/950  },  // label ≈420, col L
+    { label: 'Pilates core. UX brain.',                          src: 'assets/about-pill-pilates.png',      type: 'img',   fx: 1230/1440, fy: 215/950  },  // label ≈410, col R
+    { label: 'Allergic to Comic Sans',                           src: 'assets/about-pill-comicsans.png',    type: 'img',   fx: 660/1440,  fy: 415/950  },  // label ≈620, col C-L
+    { label: 'travelling abroad',                                src: 'assets/about-pill-travel.png',       type: 'img',   fx: 990/1440,  fy: 430/950  },  // label ≈635, col C-R
+    { label: 'Picking up pickleball',                            src: 'assets/about-pill-pickleball.png',   type: 'img',   fx: 340/1440,  fy: 475/950  },  // label ≈680, col L
+    { label: 'Recovering event stylist',                         src: 'assets/about-pill-stylist.mp4',      type: 'video', fx: 1160/1440, fy: 480/950  },  // label ≈685, col R
+    { label: 'Too much screentime',                              src: 'assets/about-pill-screentime.png',   type: 'img',   fx: 850/1440,  fy: 640/950  },  // label ≈845, col C
+    { label: 'Aspiring to side hustle as a pilates instructor',  src: 'assets/about-pill-reformer.png',    type: 'img',   fx: 420/1440,  fy: 675/950  },  // label ≈880, col L
+    { label: 'Love British Royal History',                       src: 'assets/about-pill-royalhistory.png', type: 'img',   fx: 1240/1440, fy: 695/950  },  // label ≈900, col R
   ];
 
   let abAutoTimer      = null;
