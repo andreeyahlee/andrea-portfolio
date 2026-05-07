@@ -563,10 +563,70 @@
       will-change: transform; animation: cursor-spin 12s linear infinite;
     }
     @keyframes cursor-spin { to { transform: rotate(360deg); } }
+
+    /* ── STICKY SECTION NAV ── */
+    .cs-sticky-nav {
+      position: fixed;
+      left: clamp(14px, 1.8vw, 24px);
+      top: 50%;
+      transform: translateY(-50%);
+      z-index: 80;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+      pointer-events: none;
+    }
+    @media (max-width: 1024px) { .cs-sticky-nav { display: none; } }
+    .cs-sticky-nav-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      pointer-events: auto;
+      cursor: pointer;
+      text-decoration: none;
+    }
+    .cs-sticky-nav-dot {
+      width: 5px; height: 5px;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.2);
+      mix-blend-mode: difference;
+      transition: background 0.25s, transform 0.25s;
+      flex-shrink: 0;
+    }
+    .cs-sticky-nav-item.is-active .cs-sticky-nav-dot {
+      background: rgba(255,255,255,0.9);
+      transform: scale(1.5);
+    }
+    .cs-sticky-nav-label {
+      font-family: var(--font-body, sans-serif);
+      font-size: 9px;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0);
+      mix-blend-mode: difference;
+      transition: color 0.2s;
+      white-space: nowrap;
+    }
+    .cs-sticky-nav-item:hover .cs-sticky-nav-label,
+    .cs-sticky-nav-item.is-active .cs-sticky-nav-label {
+      color: rgba(255,255,255,0.65);
+    }
   </style>
 </head>
 <body>
   <div id="custom-cursor" aria-hidden="true"><img src="../assets/cursor-light.png" alt=""></div>
+
+  <!-- STICKY SECTION NAV -->
+  <nav class="cs-sticky-nav" aria-label="Section navigation">
+    <a class="cs-sticky-nav-item" href="#ph-tldr">        <span class="cs-sticky-nav-dot"></span><span class="cs-sticky-nav-label">Overview</span></a>
+    <a class="cs-sticky-nav-item" href="#ph-research">    <span class="cs-sticky-nav-dot"></span><span class="cs-sticky-nav-label">Research</span></a>
+    <a class="cs-sticky-nav-item" href="#ph-design-1">    <span class="cs-sticky-nav-dot"></span><span class="cs-sticky-nav-label">Design</span></a>
+    <a class="cs-sticky-nav-item" href="#ph-hifi-intro">  <span class="cs-sticky-nav-dot"></span><span class="cs-sticky-nav-label">Hi-Fi</span></a>
+    <a class="cs-sticky-nav-item" href="#ph-testing">     <span class="cs-sticky-nav-dot"></span><span class="cs-sticky-nav-label">Testing</span></a>
+    <a class="cs-sticky-nav-item" href="#ph-results">     <span class="cs-sticky-nav-dot"></span><span class="cs-sticky-nav-label">Results</span></a>
+    <a class="cs-sticky-nav-item" href="#ph-reflection">  <span class="cs-sticky-nav-dot"></span><span class="cs-sticky-nav-label">Reflection</span></a>
+  </nav>
 
   <div id="ph-progress"></div>
   <nav class="ph-nav">
@@ -595,6 +655,7 @@
         <div class="ph-meta-row"><span class="ph-meta-label">Participants</span><span class="ph-meta-value">12 Research Interviewees · 5 Usability Testers</span></div>
         <div class="ph-meta-row"><span class="ph-meta-label">Deliverable</span><span class="ph-meta-value">Full E-commerce UX · Web + Mobile</span></div>
         <div class="ph-meta-row"><span class="ph-meta-label">Duration</span><span class="ph-meta-value">6-Week Sprint · Oct – Dec 2025</span></div>
+        <div class="ph-meta-row"><span class="ph-meta-label">Read</span><span class="ph-meta-value">~8 min</span></div>
       </div>
     </div>
   </section>
@@ -649,10 +710,10 @@
     </div>
   </section>
 
-  <!-- 03 RESEARCH — Stats + Quote -->
+  <!-- 02 RESEARCH — Stats + Quote -->
   <section class="cs-section" id="ph-research">
     <div class="cs-inner">
-      <p class="cs-section-label">03 Research</p>
+      <p class="cs-section-label">02 Research</p>
       <h2 class="cs-h2">Same store. Same product.<br><em>Four reasons to leave.</em></h2>
       <p class="cs-body">12 in-person interviews — 11 Gen Z/Millennials, 1 Boomer. Competitor analysis across Shopee, Lazada, Kohepets, Pet Lovers Centre, and Perromart. Synthesised into four behavioural patterns.</p>
       <div class="ph-stats4">
@@ -668,10 +729,10 @@
     </div>
   </section>
 
-  <!-- 02 THE SITCH + RESEARCH PATTERNS — merged -->
+  <!-- 03 THE SITCH + RESEARCH PATTERNS — merged -->
   <section class="cs-section" id="ph-research-2">
     <div class="cs-inner">
-      <p class="cs-section-label">02 The Sitch</p>
+      <p class="cs-section-label">03 The Sitch</p>
       <h2 class="cs-h2">The brief was <em>e-commerce.</em><br>The problem was <em>anxiety.</em></h2>
       <p class="cs-body">Competing platforms were built for browsing. But 83% of participants came with a specific product already in mind. They needed to check — not shop. That gap was the entire opportunity.</p>
       <div class="ph-personas">
@@ -921,10 +982,10 @@
     </div>
   </section>
 
-  <!-- 08 REFLECTION B — What's Next -->
+  <!-- 09 REFLECTION B — What's Next -->
   <section class="cs-section cs-section--dark" id="ph-reflection-2">
     <div class="cs-inner">
-      <p class="cs-section-label">08 Reflection</p>
+      <p class="cs-section-label">09 What's Next</p>
       <p class="ph-next-label">If I Had 3 More Months</p>
       <h2 class="cs-h2">What I'd <em>Build Next.</em></h2>
       <div class="ph-next-grid">
@@ -1175,6 +1236,28 @@
     });
     document.addEventListener('mouseleave', () => { cursor.style.opacity = '0'; visible = false; });
     document.addEventListener('mouseenter', () => { cursor.style.opacity = '1'; visible = true; });
+  })();
+
+  /* ── STICKY NAV ACTIVE STATE ── */
+  (function() {
+    const navItems = document.querySelectorAll('.cs-sticky-nav-item');
+    const sectionIds = ['ph-tldr','ph-research','ph-design-1','ph-hifi-intro','ph-testing','ph-results','ph-reflection'];
+    function setActive(id) {
+      navItems.forEach(item => {
+        item.classList.toggle('is-active', item.getAttribute('href') === '#' + id);
+      });
+    }
+    sectionIds.forEach(id => {
+      const el = document.getElementById(id);
+      if (!el) return;
+      ScrollTrigger.create({
+        trigger: el,
+        start: 'top center',
+        end: 'bottom center',
+        onEnter: () => setActive(id),
+        onEnterBack: () => setActive(id),
+      });
+    });
   })();
   </script>
 </body>

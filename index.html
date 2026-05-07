@@ -465,6 +465,18 @@
       text-transform: uppercase;
       line-height: 1.5;
     }
+    .work-read-time {
+      font-family: var(--font-mono);
+      font-size: clamp(8px, 0.75vw, 9px);
+      font-weight: 600;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: rgba(243,242,236,0.35);
+      border: 1px solid rgba(243,242,236,0.15);
+      padding: 3px 9px;
+      border-radius: 100px;
+      align-self: flex-start;
+    }
     .work-card-headline {
       font-family: var(--font-display);
       font-size: clamp(17px, 2.2vw, 28px);
@@ -837,6 +849,21 @@
       opacity: 0.85;
       margin: 0;
     }
+    .ab-side-project-ask {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: clamp(11px, 0.9vw, 13px);
+      font-weight: 600;
+      letter-spacing: 0.06em;
+      color: var(--ink);
+      opacity: 0.55;
+      text-decoration: none;
+      border-bottom: 1px solid currentColor;
+      padding-bottom: 1px;
+      transition: opacity 0.2s;
+    }
+    .ab-side-project-ask:hover { opacity: 1; }
 
     /* ── Unserious: pill cloud ── */
     .ab-unserious {
@@ -1267,6 +1294,7 @@
             <p class="work-card-tags">Project Manager · Usability Research · 6 Designers</p>
             <h3 class="work-card-headline">We found a broken model.</h3>
             <p class="work-card-desc">A usability audit that changed the entire brief. Six weeks, uncomfortable honesty, and a client who needed convincing.</p>
+            <span class="work-read-time">12 min read</span>
             <a class="work-read-btn" href="case-studies/arvo.html">Read the case study <span class="btn-arrow">→</span></a>
           </div>
         </div>
@@ -1285,6 +1313,7 @@
             <p class="work-card-tags">UX Research Lead · Strategic Redesign · 3 Designers</p>
             <h3 class="work-card-headline">Unlocking the Subang Advantage.</h3>
             <p class="work-card-desc">What started as "redesign the website" became proving an airport's competitive edge — or lose passengers who never knew it existed.</p>
+            <span class="work-read-time">10 min read</span>
             <a class="work-read-btn" href="case-studies/seletar.html">Read the case study <span class="btn-arrow">→</span></a>
           </div>
         </div>
@@ -1303,6 +1332,7 @@
             <p class="work-card-tags">Solo Designer · End-to-End · E-Commerce</p>
             <h3 class="work-card-headline">Trust, designed in.</h3>
             <p class="work-card-desc">An e-commerce build for the most anxious pet owners. Every product page earns trust before it asks for a click.</p>
+            <span class="work-read-time">8 min read</span>
             <a class="work-read-btn" href="case-studies/pethaus.html">Read the case study <span class="btn-arrow">→</span></a>
           </div>
         </div>
@@ -1392,6 +1422,7 @@
             <div class="ab-side-project-content">
               <h3 class="ab-side-project-title">Side project right now</h3>
               <p class="ab-side-project-body">I'm drawn to problems at the edge of access: voice AI for dialect-speaking elderly users, caregiving tools built for low-digital-literacy contexts, and products that work for people the mainstream often forgets to design for.</p>
+              <a class="ab-side-project-ask" href="mailto:andreeyahlee@gmail.com?subject=Ask me about it">Ask me about it →</a>
             </div>
           </div>
         </div>
