@@ -134,18 +134,12 @@
     /* Section inner — full height, flex column */
     .cs-wrap {
       position: relative; z-index: 1;
-      max-width: var(--content-max);
-      margin: 0 auto;
       padding: clamp(64px, 7vh, 88px) var(--pad-x) clamp(40px, 5vh, 56px);
       height: 100%;
       display: flex; flex-direction: column;
     }
     .cs-section:not(.cs-hero) .cs-wrap {
       padding-top: calc(var(--nav-h) + 36px);
-    }
-    /* Full-width variant (no max-width) */
-    .cs-wrap--full {
-      max-width: none;
     }
 
     /* z-index stack */
@@ -184,7 +178,7 @@
     }
     .cs-hero-inner {
       position: relative; z-index: 3;
-      max-width: var(--content-max); margin: 0 auto; width: 100%;
+      width: 100%;
       padding: 60px var(--pad-x) 52px;
       display: grid; grid-template-columns: 1fr auto;
       gap: 48px; align-items: end;
