@@ -1443,7 +1443,7 @@
         <!-- right: unserious pills (built by JS) + left header -->
         <div class="ab-unserious" aria-hidden="true">
           <div class="ab-uns-header">
-            <h2 class="ab-uns-heading">Off the<br>record</h2>
+            <h2 class="ab-uns-heading">Outside my<br>9 – 5</h2>
             <p class="ab-uns-sub">Things I get up to when I turn my brain off.</p>
           </div>
         </div>
@@ -1522,7 +1522,7 @@
       </div>
 
       <div class="contact-footer">
-        © 2025 Andrea Lee. All rights reserved. Built from scratch by Andrea L.
+        © 2026 Andrea Lee. All rights reserved. Built from scratch by Andrea L.
       </div>
     </section>
   </div>
@@ -1598,22 +1598,23 @@
     }
   }
 
-  // On every scroll, find which section contains the viewport midpoint and apply its theme.
-  const navSections = Array.from(document.querySelectorAll('[data-nav-theme]'));
-
   function updateNavTheme() {
-    // When the about panel is more than halfway visible, use dark (cream bg) nav
+    // About panel more than halfway visible → dark (cream bg)
     const hst = ScrollTrigger.getById('hpanels');
     if (hst && hst.progress > 0.5) {
       applyNavTheme('dark');
       return;
     }
-    // Find the last section whose top edge has scrolled into (or above) the viewport.
-    let active = navSections[0];
-    for (const s of navSections) {
-      if (window.scrollY + 1 >= s.offsetTop) active = s;
+    // Use hero ScrollTrigger's end position as the hero/work boundary.
+    // offsetTop is unreliable here because #panels-wrap has will-change:transform
+    // which makes it an offsetParent, collapsing #work.offsetTop to 0.
+    const heroST = ScrollTrigger.getAll().find(st => st.trigger?.id === 'hero');
+    if (heroST && heroST.end > 100) {
+      applyNavTheme(window.scrollY >= heroST.end ? 'light' : 'dark');
+      return;
     }
-    applyNavTheme(active.dataset.navTheme);
+    // Fallback before GSAP has calculated positions: hero is at top → dark
+    applyNavTheme('dark');
   }
 
   window.addEventListener('scroll', updateNavTheme, { passive: true });
