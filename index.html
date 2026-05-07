@@ -12,6 +12,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@200..800&display=swap" rel="stylesheet">
   <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@100..800&display=swap" rel="stylesheet">
   <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@1,9..144,300;1,9..144,400&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@1,700&display=swap" rel="stylesheet">
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
   <script>gsap.registerPlugin(ScrollTrigger);</script>
@@ -54,6 +55,20 @@
       overflow-x: hidden;
       -webkit-font-smoothing: antialiased;
     }
+    *, *::before, *::after { cursor: none !important; }
+    /* ── Custom flower cursor ── */
+    #custom-cursor {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 48px;
+      pointer-events: none;
+      z-index: 99999;
+      will-change: transform;
+      opacity: 0;
+      transition: opacity 0.2s;
+    }
+    #custom-cursor img { width: 100%; height: auto; display: block; }
     a { text-decoration: none; color: inherit; }
     img { display: block; max-width: 100%; }
 
@@ -109,12 +124,13 @@
       font-size: 13px;
       font-weight: 500;
       color: rgba(243,242,236,0.75);
-      transition: color 0.2s;
+      transition: color 0.2s, transform 0.2s;
+      display: inline-block;
     }
-    .nav-link:hover { color: var(--bg); }
+    .nav-link:hover { color: var(--bg); transform: scale(1.1); }
     .nav-link--active { font-weight: 700; color: var(--bg); }
     #nav.nav--light .nav-link { color: rgba(10,10,10,0.5); }
-    #nav.nav--light .nav-link:hover { color: var(--ink); }
+    #nav.nav--light .nav-link:hover { color: var(--ink); transform: scale(1.1); }
     #nav.nav--light .nav-link--active { color: var(--ink); font-weight: 700; }
 
     .nav-cta {
@@ -127,15 +143,15 @@
       border-radius: 100px;
       padding: 8px 20px;
       cursor: pointer;
-      transition: background 0.2s, border-color 0.2s, color 0.2s;
+      transition: background 0.2s, border-color 0.2s, color 0.2s, transform 0.2s;
       flex-shrink: 0;
     }
-    .nav-cta:hover { background: rgba(243,242,236,0.08); border-color: rgba(243,242,236,0.7); }
+    .nav-cta:hover { background: rgba(243,242,236,0.08); border-color: rgba(243,242,236,0.7); transform: scale(1.05); }
     #nav.nav--light .nav-cta {
       color: var(--ink);
       border-color: rgba(10,10,10,0.28);
     }
-    #nav.nav--light .nav-cta:hover { background: rgba(10,10,10,0.05); border-color: rgba(10,10,10,0.5); }
+    #nav.nav--light .nav-cta:hover { background: rgba(10,10,10,0.05); border-color: rgba(10,10,10,0.5); transform: scale(1.05); }
     /* Nav stays dark when About overlay is open — remove nav--light override */
     body:has(#about-overlay.is-open) #nav {
       background: var(--work-bg);
@@ -524,13 +540,13 @@
       background: var(--bg);
     }
 
-    /* ── Warm fill: expands to full screen in Unserious mode ── */
+    /* ── Warm fill: starts as Andrea rect, moves with portrait, expands on Unserious ── */
     .ab-warm-fill {
       position: absolute;
-      inset: 0;
       background: var(--bg-warm);
-      transform: scale(0);
-      z-index: 1;
+      border-radius: 5px;
+      opacity: 0;
+      z-index: 2;
       pointer-events: none;
     }
 
@@ -544,7 +560,6 @@
       pointer-events: none;
       display: block;
     }
-
     /* ── State 1: centered intro ── */
     .ab-s1 {
       position: absolute;
@@ -594,8 +609,8 @@
     /* ── Toggle ── */
     .ab-toggle-row {
       position: absolute;
-      top: clamp(80px, 11vh, 110px);
-      right: clamp(28px, 4vw, 64px);
+      top: 25.3vh;
+      right: 1.74vw;
       display: flex;
       align-items: center;
       gap: 10px;
@@ -613,7 +628,7 @@
     }
     .ab-tgl-lbl {
       font-family: var(--font-body);
-      font-size: 12px;
+      font-size: clamp(12px, 1.1vw, 16px);
       font-weight: 500;
       color: var(--ink);
       opacity: 0.4;
@@ -622,8 +637,8 @@
     .ab-tgl-lbl.is-active { opacity: 1; }
     .ab-switch {
       position: relative;
-      width: 44px;
-      height: 24px;
+      width: clamp(52px, 6.1vw, 88px);
+      height: clamp(28px, 3.1vh, 44px);
       border-radius: 100px;
       background: rgba(10,10,10,0.18);
       border: none;
@@ -636,131 +651,145 @@
       position: absolute;
       top: 3px;
       left: 3px;
-      width: 18px;
-      height: 18px;
+      width: clamp(22px, 2.8vh, 38px);
+      height: clamp(22px, 2.8vh, 38px);
       border-radius: 50%;
       background: var(--ink);
       transition: transform 0.28s cubic-bezier(0.4, 0, 0.2, 1);
     }
-    .ab-switch.is-unserious::after { transform: translateX(20px); }
+    .ab-switch.is-unserious::after { transform: translateX(calc(clamp(52px, 6.1vw, 88px) - clamp(22px, 2.8vh, 38px) - 6px)); }
 
     /* ── Left bio ── */
     .ab-bio {
       position: absolute;
-      top: clamp(130px, 18vh, 176px);
-      left: clamp(28px, 4vw, 64px);
-      max-width: clamp(220px, 26vw, 360px);
+      top: 28.2vh;
+      left: 3.26vw;
+      width: 27.9vw;
+      max-width: 402px;
     }
     .ab-role {
       font-family: var(--font-mono);
-      font-size: clamp(8px, 0.62vw, 10px);
-      font-weight: 500;
-      letter-spacing: 0.13em;
+      font-size: clamp(11px, 1.1vw, 16px);
+      font-weight: 400;
+      letter-spacing: 0.04em;
       text-transform: uppercase;
-      color: var(--muted);
+      color: var(--ink);
       margin-bottom: 10px;
     }
     .ab-name {
       font-family: var(--font-display);
-      font-size: clamp(38px, 5.2vw, 76px);
+      font-size: clamp(40px, 5vw, 64px);
       font-weight: 700;
-      line-height: 1.0;
+      line-height: 0.98;
       color: var(--ink);
       margin-bottom: 14px;
     }
     .ab-sub {
       font-family: var(--font-body);
-      font-size: clamp(13px, 1vw, 17px);
-      line-height: 1.6;
+      font-size: clamp(14px, 1.4vw, 20px);
+      font-weight: 500;
+      line-height: 1.5;
       color: var(--ink);
-      opacity: 0.72;
     }
 
-    /* ── Serious: right content area ── */
+    /* ── Serious: absolute canvas matching Figma ── */
     .ab-serious {
       position: absolute;
-      top: 0;
-      right: 0;
-      bottom: 0;
-      left: 40%;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      gap: clamp(20px, 3.5vh, 44px);
-      padding: clamp(48px, 7vh, 88px) clamp(28px, 5vw, 80px) clamp(48px, 7vh, 88px) 0;
+      inset: 0;
+      pointer-events: none;
     }
     /* Singapore map watermark */
-    .ab-sg {
-      position: relative;
-    }
-    .ab-sg::before {
-      content: '';
+    .ab-sg-map {
       position: absolute;
-      top: -80%;
-      right: -6%;
-      width: 58vw;
-      height: 280%;
-      background: url('assets/about-singapore.png') right center / contain no-repeat;
+      left: 60.9%;
+      top: 17.9%;
+      width: 49.7%;
+      height: 75.3%;
+      background: url('assets/about-singapore.png') center / contain no-repeat;
       opacity: 0.28;
       pointer-events: none;
     }
-    .ab-sg-card {
-      position: relative;
-      z-index: 1;
+    /* Singapore card */
+    .ab-sg {
+      position: absolute;
+      left: 73.1%;
+      top: 41.8%;
+      width: 26.8%;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 18px 10px;
+      align-items: flex-start;
+      pointer-events: auto;
+    }
+    .ab-sg-content {
+      flex: 1;
+      min-width: 0;
       display: flex;
       flex-direction: column;
-      gap: 8px;
-    }
-    .ab-sg-head {
-      display: flex;
-      align-items: flex-start;
-      gap: 8px;
-      margin-bottom: 2px;
+      gap: 10px;
     }
     .ab-sg-pin {
-      width: 20px;
-      height: 20px;
+      width: clamp(28px, 3.4vw, 43px);
+      height: clamp(36px, 4.5vw, 57px);
       flex-shrink: 0;
-      margin-top: 3px;
+      margin-top: 2px;
       object-fit: contain;
     }
     .ab-sg-title {
-      font-family: var(--font-display);
-      font-size: clamp(17px, 1.7vw, 27px);
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(22px, 2.5vw, 36px);
       font-style: italic;
-      font-weight: 400;
-      line-height: 1.2;
+      font-weight: 700;
+      line-height: 1.1;
       color: var(--ink);
       margin: 0;
     }
     .ab-sg-body {
-      font-size: clamp(11px, 0.82vw, 14px);
-      line-height: 1.7;
+      font-size: clamp(12px, 1.1vw, 16px);
+      line-height: 1.6;
       color: var(--ink);
       opacity: 0.7;
-      max-width: 46ch;
       margin: 0;
     }
     /* Pilates philosophy */
-    .ab-pilates-title {
-      font-family: 'Fraunces', serif;
-      font-size: clamp(17px, 1.7vw, 27px);
-      font-style: italic;
-      font-weight: 300;
-      line-height: 1.3;
-      color: var(--ink);
-      margin-bottom: 10px;
+    .ab-pilates {
+      position: absolute;
+      left: 36.9%;
+      top: 59.5%;
+      width: 26.1%;
+      pointer-events: auto;
     }
-    .ab-pilates p {
-      font-size: clamp(11px, 0.82vw, 14px);
-      line-height: 1.7;
+    .ab-pilates-header {
+      display: flex;
+      gap: 10px;
+      align-items: flex-start;
+      margin-bottom: clamp(8px, 1vh, 14px);
+    }
+    .ab-pilates-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(22px, 2.5vw, 36px);
+      font-style: italic;
+      font-weight: 700;
+      line-height: 1.1;
       color: var(--ink);
-      opacity: 0.7;
-      margin-bottom: 5px;
-      max-width: 50ch;
+      flex: 1;
+      margin: 0;
+    }
+    .ab-pilates-illus {
+      width: clamp(60px, 7.8vw, 100px);
+      height: clamp(60px, 7.8vw, 100px);
+      flex-shrink: 0;
+      object-fit: cover;
+    }
+    .ab-pilates p:not(.ab-pilates-title) {
+      font-size: clamp(12px, 1.1vw, 16px);
+      line-height: 1.6;
+      color: var(--ink);
+      opacity: 0.85;
+      margin-bottom: clamp(8px, 1.2vh, 18px);
     }
     .ab-pilates p:last-child { margin-bottom: 0; }
-    .ab-pilates strong { opacity: 1; color: var(--ink); font-weight: 600; }
+    .ab-pilates strong { opacity: 1; color: var(--ink); font-weight: 700; }
 
     /* ── Unserious: pill cloud ── */
     .ab-unserious {
@@ -906,12 +935,15 @@
       background: var(--bg);
       overflow-y: auto;
       opacity: 0;
+      visibility: hidden;       /* hides from elementFromPoint so cursor logic isn't fooled */
       pointer-events: none;
-      transition: opacity 0.35s ease;
+      transition: opacity 0.35s ease, visibility 0s linear 0.35s;
     }
     .overlay-panel.is-open {
       opacity: 1;
+      visibility: visible;
       pointer-events: auto;
+      transition: opacity 0.35s ease, visibility 0s linear 0s;
     }
     .overlay-close {
       position: fixed;
@@ -1053,6 +1085,11 @@
   </style>
 </head>
 <body>
+
+  <!-- Custom flower cursor -->
+  <div id="custom-cursor" aria-hidden="true">
+    <img src="assets/cursor-dark.png" alt="">
+  </div>
 
   <!-- ============================
        NAV
@@ -1227,32 +1264,35 @@
 
         <!-- left bio -->
         <div class="ab-bio">
-          <p class="ab-role">Product Designer</p>
-          <h2 class="ab-name">Andrea<br>Lee</h2>
-          <p class="ab-sub">I design the kind of UX that people don't notice — until it's gone. Based in Singapore, currently open to product design and research roles.</p>
+          <p class="ab-role">UX Product Designer | For Hire</p>
+          <h2 class="ab-name">Hi! I'm<br>Andrea</h2>
+          <p class="ab-sub">I'm invested in simplifying complicated user experiences.</p>
         </div>
 
         <!-- right: serious content -->
         <div class="ab-serious">
+          <div class="ab-sg-map" aria-hidden="true"></div>
           <div class="ab-sg">
-            <div class="ab-sg-card">
-              <div class="ab-sg-head">
-                <img class="ab-sg-pin" src="assets/icon-geopin.png" alt="" aria-hidden="true">
-                <h3 class="ab-sg-title">Raised in a land<br>of 'maximum'</h3>
-              </div>
-              <p class="ab-sg-body">I learned that clutter is just friction. In a city of 5-star noise, less isn't a limitation — it's a decision to prioritise what actually moves the needle. <em>Majulah Singapura!</em></p>
+            <img class="ab-sg-pin" src="assets/icon-geopin.png" alt="" aria-hidden="true">
+            <div class="ab-sg-content">
+              <h3 class="ab-sg-title">Raised in a land of 'maximum'</h3>
+              <p class="ab-sg-body">I learned that clutter is just friction. In a city of 5-star noise, less isn't a limitation—it's a decision to prioritise what actually moves the needle.</p>
+              <p class="ab-sg-body">Majulah Singapura!</p>
             </div>
           </div>
           <div class="ab-pilates">
-            <p class="ab-pilates-title">Designing is like<br>practicing Pilates</p>
-            <p>Everyone sees the heavy rowing. Nobody sees the core work holding it together. If your form is off by two inches, you're not building strength — you're creating a future ache.</p>
-            <p>I design the same way. The sitemap nobody questions. The label that prevents the wrong click. <strong>The invisible adjustments are usually the whole job.</strong></p>
+            <div class="ab-pilates-header">
+              <p class="ab-pilates-title">Designing is like practicing Pilates</p>
+              <img class="ab-pilates-illus" src="assets/about-pilates-illus.png" alt="" aria-hidden="true">
+            </div>
+            <p>Everyone sees the heavy rowing. Nobody sees the core work holding it together. If your form is off by two inches, you're not building strength. You're just creating a future ache.</p>
+            <p>I design the same way. The sitemap nobody questions. The label that prevents the wrong click. The shortcut that saves thirty seconds, every time.</p>
+            <p><strong>The invisible adjustments are usually the whole job.</strong></p>
           </div>
         </div>
 
         <!-- right: unserious pills (built by JS) -->
         <div class="ab-unserious" aria-hidden="true">
-          <p class="ab-uns-title">Off the record</p>
         </div>
 
       </div><!-- /ab-s2 -->
@@ -1458,24 +1498,26 @@
      S1: full-viewport "Hi! I'm Andrea" (auto-triggers after 1.2s)
      S2: portrait bottom-left + bio + Serious/Unserious toggle
   ---------------------------------------------------------- */
+  // fx/fy = position as fraction of Figma frame (1440×950), image top-left = wrap top-left
   const ABOUT_PILLS = [
-    { label: "Amazed by everything I don't yet know",       src: 'assets/about-pill-travel.gif',       type: 'img'   },
-    { label: 'Pilates core. UX brain.',                     src: 'assets/about-pill-pilates.gif',      type: 'img'   },
-    { label: 'Too much screentime',                         src: 'assets/about-pill-screentime.png',   type: 'img'   },
-    { label: 'Allergic to Comic Sans',                      src: 'assets/about-pill-comicsans.gif',    type: 'img'   },
-    { label: 'Love British Royal History',                  src: 'assets/about-pill-royalhistory.png', type: 'img'   },
-    { label: 'Absolute caffeine addict',                    src: 'assets/about-pill-caffeine.gif',     type: 'img'   },
-    { label: 'Recovering event stylist',                    src: 'assets/about-pill-stylist.mp4',      type: 'video' },
-    { label: 'Picking up pickleball',                       src: 'assets/about-pill-pickleball.gif',   type: 'img'   },
-    { label: 'Aspiring pilates instructor',                 src: 'assets/about-pill-reformer.png',     type: 'img'   },
-    { label: 'Adore fantasy novels, ACOTAR!!!!',            src: 'assets/about-pill-books.gif',        type: 'img'   },
+    { label: 'Adore reading fantasy books',                      src: 'assets/about-pill-books.gif',        type: 'img',   fx: 811/1440,  fy: 271/950  },
+    { label: 'Absolute caffeine addict',                         src: 'assets/about-pill-caffeine.gif',     type: 'img',   fx: 540/1440,  fy: 320/950  },
+    { label: 'travelling abroad',                                src: 'assets/about-pill-travel.gif',       type: 'img',   fx: 938/1440,  fy: 482/950  },
+    { label: 'Allergic to Comic Sans',                           src: 'assets/about-pill-comicsans.gif',    type: 'img',   fx: 662/1440,  fy: 488/950  },
+    { label: 'Picking up pickleball',                            src: 'assets/about-pill-pickleball.gif',   type: 'img',   fx: 403/1440,  fy: 510/950  },
+    { label: 'Pilates core. UX brain.',                          src: 'assets/about-pill-pilates.gif',      type: 'img',   fx: 1210/1440, fy: 374/950  },
+    { label: 'Recovering event stylist',                         src: 'assets/about-pill-stylist.mp4',      type: 'video', fx: 1181/1440, fy: 578/950  },
+    { label: 'Too much screentime',                              src: 'assets/about-pill-screentime.png',   type: 'img',   fx: 921/1440,  fy: 622/950  },
+    { label: 'Aspiring to side hustle as a pilates instructor',  src: 'assets/about-pill-reformer.png',    type: 'img',   fx: 685/1440,  fy: 722/950  },
+    { label: 'Love British Royal History',                       src: 'assets/about-pill-royalhistory.png', type: 'img',   fx: 1206/1440, fy: 722/950  },
   ];
 
-  let abAutoTimer     = null;
-  let abJiggleTimer   = null;
+  let abAutoTimer      = null;
+  let abJiggleTimer    = null;
   let abJiggleInterval = null;
-  let abState     = 'idle';   // 'idle' | 's1' | 's2'
-  let abMode      = 'serious'; // 'serious' | 'unserious'
+  let abPillJiggleTimer = null;
+  let abState      = 'idle';    // 'idle' | 's1' | 's2'
+  let abMode       = 'serious'; // 'serious' | 'unserious'
   let abPillsBuilt = false;
 
   function triggerToggleJiggle() {
@@ -1509,7 +1551,7 @@
     gsap.set(abS1,        { opacity: 1, pointerEvents: 'auto' });
     gsap.set(abS2,        { opacity: 0, pointerEvents: 'none' });
     gsap.set(abUnserious, { opacity: 0, pointerEvents: 'none' });
-    gsap.set(abWarmFill,  { scale: 0 });
+    gsap.set(abWarmFill,  { opacity: 0, left: 0, top: 0, width: 0, height: 0, borderRadius: '5px', clearProps: 'transform' });
     gsap.set(abSerious,   { opacity: 1 });
     gsap.set(abPortrait,  { opacity: 0, width: 0, height: 0, left: 0, top: 0 });
     // Reset headline text split positions + opacity (direct DOM for warm-rect reliability)
@@ -1535,7 +1577,15 @@
     clearTimeout(abJiggleTimer);
     clearInterval(abJiggleInterval);
     abAutoTimer = abJiggleTimer = abJiggleInterval = null;
+    stopPillJiggle();
     abState = 'idle';
+
+    // Kill in-progress tweens and remove GSAP inline pointer-events so
+    // the about overlay's children don't block hover on the work section.
+    gsap.killTweensOf(['.ab-s2', '.ab-s1', '.ab-portrait', '.ab-warm-fill', '.ab-unserious', '.ab-serious', '.ab-headline > span:first-child', '.ab-andrea-wrap']);
+    gsap.set('.ab-s2',        { clearProps: 'pointerEvents,opacity' });
+    gsap.set('.ab-unserious', { clearProps: 'pointerEvents,opacity' });
+    gsap.set('.ab-warm-fill', { clearProps: 'opacity' });
   }
 
   function buildAboutPills() {
@@ -1545,42 +1595,11 @@
     const vw   = window.innerWidth;
     const vh   = window.innerHeight;
 
-    // Scatter in the right portion using a loose grid; clamp x so pills don't overflow
-    const cols   = 3, rows = 4;
-    const startX = vw * 0.36;
-    const startY = vh * 0.08;
-    const maxPillW = 220; // rough max pill label width px
-    const cellW  = (vw * 0.54) / cols;
-    const cellH  = (vh * 0.80) / rows;
-    const maxX   = vw - maxPillW - 16;
-
-    // Build cell pool, shuffle, take first PILLS.length
-    const cells = [];
-    for (let r = 0; r < rows; r++)
-      for (let c = 0; c < cols; c++)
-        cells.push({ r, c });
-    for (let i = cells.length - 1; i > 0; i--) {
-      const j = Math.floor(Math.random() * (i + 1));
-      [cells[i], cells[j]] = [cells[j], cells[i]];
-    }
-
-    // Shuffle pills order each open
-    const pillOrder = ABOUT_PILLS.map((_, i) => i);
-    for (let i = pillOrder.length - 1; i > 0; i--) {
-      const j = Math.floor(Math.random() * (i + 1));
-      [pillOrder[i], pillOrder[j]] = [pillOrder[j], pillOrder[i]];
-    }
-
-    pillOrder.forEach((pi, i) => {
-      const pill = ABOUT_PILLS[pi];
-      const cell = cells[i];
-      const x = Math.min(startX + cell.c * cellW + Math.random() * (cellW * 0.35), maxX);
-      const y = startY + cell.r * cellH + Math.random() * (cellH * 0.35);
-
+    ABOUT_PILLS.forEach(pill => {
       const pillWrap = document.createElement('div');
       pillWrap.className = 'ab-pill-wrap';
-      pillWrap.style.left = x + 'px';
-      pillWrap.style.top  = y + 'px';
+      pillWrap.style.left = (pill.fx * vw) + 'px';
+      pillWrap.style.top  = (pill.fy * vh) + 'px';
 
       let mediaEl;
       if (pill.type === 'video') {
@@ -1607,6 +1626,35 @@
     });
   }
 
+  function startPillJiggle() {
+    clearTimeout(abPillJiggleTimer);
+    const tick = () => {
+      if (abMode !== 'unserious') return;
+      const pills = document.querySelectorAll('.ab-pill-wrap');
+      if (!pills.length) return;
+      const p = pills[Math.floor(Math.random() * pills.length)];
+      const dir = Math.random() > 0.5 ? 1 : -1;
+      gsap.to(p, {
+        rotation: dir * (5 + Math.random() * 9),
+        scale: 0.93 + Math.random() * 0.12,
+        duration: 0.14,
+        ease: 'power2.out',
+        yoyo: true,
+        repeat: 1,
+        onComplete: () => gsap.set(p, { rotation: 0, scale: 1 }),
+      });
+      abPillJiggleTimer = setTimeout(tick, 400 + Math.random() * 900);
+    };
+    abPillJiggleTimer = setTimeout(tick, 300 + Math.random() * 500);
+  }
+
+  function stopPillJiggle() {
+    clearTimeout(abPillJiggleTimer);
+    abPillJiggleTimer = null;
+    gsap.killTweensOf('.ab-pill-wrap');
+    document.querySelectorAll('.ab-pill-wrap').forEach(p => gsap.set(p, { rotation: 0, scale: 1 }));
+  }
+
   function animateS1toS2() {
     const portrait   = document.querySelector('.ab-portrait');
     const s1         = document.querySelector('.ab-s1');
@@ -1620,6 +1668,14 @@
     const rr  = warmRect.getBoundingClientRect();   // original warm rect bounds
     const hiR = hiText.getBoundingClientRect();
     const anR = andreaWrap.getBoundingClientRect();
+
+    // Snap warm-fill to warm-rect position before animation starts
+    const abWarmFill = document.querySelector('.ab-warm-fill');
+    gsap.set(abWarmFill, {
+      left: rr.left, top: rr.top,
+      width: rr.width, height: rr.height,
+      borderRadius: '5px', opacity: 1,
+    });
 
     // ── Portrait during SPLIT phase (centered on viewport) ───
     // Use viewport center so both text halves split symmetrically
@@ -1637,9 +1693,9 @@
     const andreaDeltaX = (splitL + splitW + gap) - anR.left;   // "Andrea"  → right
 
     // ── Portrait final position (S2 bottom-left) ─────────────
-    const portEndW = Math.min(vw * 0.22, 260);
-    const portEndH = portEndW * 1.55;
-    const portEndL = Math.max(vw * 0.04, 28);
+    const portEndW = Math.min(vw * 0.341, 491);
+    const portEndH = portEndW * (440 / 491);
+    const portEndL = vw * 0.033;
     const portEndT = vh - portEndH;
 
     // Portrait starts at warm rect x-center, hidden below rect
@@ -1652,8 +1708,6 @@
     const tl = gsap.timeline();
 
     // ── Phase 1 (0 → 0.85s): text splits, portrait pops up ───
-    // Warm rect fades as portrait rises through it
-    tl.to(warmRect, { opacity: 0, duration: 0.35, ease: 'power1.in' }, 0.05);
     // "Hi! I'm" flies left
     tl.to(hiText,     { x: hiDeltaX,     duration: 0.78, ease: 'power2.inOut' }, 0);
     // "Andrea" flies right
@@ -1666,10 +1720,16 @@
     // Headline text halves fade out
     tl.to([hiText, andreaWrap], { opacity: 0, duration: 0.28, ease: 'power1.out' }, 0.88);
     tl.set(s1, { opacity: 0, pointerEvents: 'none' }, 0.92);
-    // Portrait moves bottom-left and grows to final size
+    // Portrait AND warm-fill move to bottom-left together
     tl.to(portrait, {
       width: portEndW, height: portEndH,
       left: portEndL,  top: portEndT,
+      duration: 0.78, ease: 'power2.inOut',
+    }, 0.90);
+    tl.to(abWarmFill, {
+      left: portEndL, top: portEndT,
+      width: portEndW, height: portEndH,
+      borderRadius: '10px',
       duration: 0.78, ease: 'power2.inOut',
     }, 0.90);
     // S2 content fades in
@@ -1699,20 +1759,25 @@
     const abPortrait  = document.querySelector('.ab-portrait');
 
     if (isUns) {
-      // Set warm-fill transform-origin to portrait center
-      const pr = abPortrait.getBoundingClientRect();
-      const ox = ((pr.left + pr.width  / 2) / window.innerWidth)  * 100;
-      const oy = ((pr.top  + pr.height / 2) / window.innerHeight) * 100;
-      abWarmFill.style.transformOrigin = ox + '% ' + oy + '%';
-
       gsap.timeline()
         .to('.ab-serious', { opacity: 0, duration: 0.22, ease: 'power1.out' }, 0)
-        .to(abWarmFill,    { scale: 1, duration: 0.55, ease: 'power2.inOut' }, 0)
-        .to(abUnserious,   { opacity: 1, pointerEvents: 'auto', duration: 0.35, ease: 'power1.out' }, 0.38);
+        .to(abWarmFill, {
+          left: 0, top: 0, width: '100%', height: '100%', borderRadius: 0,
+          duration: 0.55, ease: 'power2.inOut',
+        }, 0)
+        .to(abUnserious, { opacity: 1, pointerEvents: 'auto', duration: 0.35, ease: 'power1.out' }, 0.38)
+        .call(startPillJiggle);
     } else {
+      stopPillJiggle();
+      const vw2 = window.innerWidth, vh2 = window.innerHeight;
+      const pw = Math.min(vw2 * 0.341, 491);
+      const ph = pw * (440 / 491);
       gsap.timeline()
-        .to(abUnserious,   { opacity: 0, pointerEvents: 'none', duration: 0.22, ease: 'power1.out' }, 0)
-        .to(abWarmFill,    { scale: 0, duration: 0.5, ease: 'power2.inOut' }, 0.1)
+        .to(abUnserious, { opacity: 0, pointerEvents: 'none', duration: 0.22, ease: 'power1.out' }, 0)
+        .to(abWarmFill, {
+          left: vw2 * 0.033, top: vh2 - ph, width: pw, height: ph, borderRadius: '10px',
+          duration: 0.5, ease: 'power2.inOut',
+        }, 0.1)
         .to('.ab-serious', { opacity: 1, duration: 0.35, ease: 'power1.out' }, 0.35);
     }
   });
@@ -1820,6 +1885,94 @@
     } else {
       initMobileTap();
     }
+  })();
+
+  /* ── Custom flower cursor ── */
+  (function () {
+    const cursor = document.getElementById('custom-cursor');
+    const img = cursor?.querySelector('img');
+    if (!cursor || !img || window.matchMedia('(pointer: coarse)').matches) return;
+
+    // 1×1 canvas for sampling actual pixel color from img/video elements
+    const sampleCanvas = document.createElement('canvas');
+    sampleCanvas.width = sampleCanvas.height = 1;
+    const sampleCtx = sampleCanvas.getContext('2d', { willReadFrequently: true });
+
+    function toLinear(c) {
+      c /= 255;
+      return c <= 0.03928 ? c / 12.92 : Math.pow((c + 0.055) / 1.055, 2.4);
+    }
+    function luminance(r, g, b) {
+      return 0.2126 * toLinear(r) + 0.7152 * toLinear(g) + 0.0722 * toLinear(b);
+    }
+
+    // Try to sample a single pixel from an img or video at viewport coords.
+    // Returns {r,g,b} or null if transparent / CORS blocked.
+    function sampleMedia(el, x, y) {
+      const rect = el.getBoundingClientRect();
+      const nw = el.naturalWidth  || el.videoWidth  || 0;
+      const nh = el.naturalHeight || el.videoHeight || 0;
+      if (!nw || !nh) return null;
+      const px = ((x - rect.left) / rect.width)  * nw;
+      const py = ((y - rect.top)  / rect.height) * nh;
+      try {
+        sampleCtx.clearRect(0, 0, 1, 1);
+        sampleCtx.drawImage(el, -px, -py);
+        const d = sampleCtx.getImageData(0, 0, 1, 1).data;
+        return d[3] > 64 ? { r: d[0], g: d[1], b: d[2] } : null;
+      } catch (_) { return null; }
+    }
+
+    // Walk the DOM at (x,y) to find the effective rendered color.
+    // img/video → sample actual pixel; anything else → first solid background-color.
+    function effectiveColor(x, y) {
+      let el = document.elementFromPoint(x, y);
+      while (el && el !== document.documentElement) {
+        if (el.id === 'custom-cursor') { el = el.parentElement; continue; }
+
+        // Real pixel from image or video
+        if (el.tagName === 'IMG' || el.tagName === 'VIDEO') {
+          const px = sampleMedia(el, x, y);
+          if (px) return px;
+        }
+
+        // Solid background-color (skip fully-transparent)
+        const bg = getComputedStyle(el).backgroundColor;
+        const m  = bg && bg.match(/rgba?\((\d+),\s*(\d+),\s*(\d+)(?:,\s*([\d.]+))?\)/);
+        if (m) {
+          const alpha = m[4] !== undefined ? parseFloat(m[4]) : 1;
+          if (alpha > 0.15) return { r: +m[1], g: +m[2], b: +m[3] };
+        }
+
+        el = el.parentElement;
+      }
+      return { r: 243, g: 242, b: 236 }; // cream fallback → dark cursor
+    }
+
+    let visible    = false;
+    let lastIsDark = null;
+    let rafPending = false;
+    let cx = 0, cy = 0;
+
+    function updateVariant() {
+      rafPending = false;
+      const { r, g, b } = effectiveColor(cx, cy);
+      const isDark = luminance(r, g, b) < 0.35;
+      if (isDark !== lastIsDark) {
+        lastIsDark = isDark;
+        img.src = isDark ? 'assets/cursor-light.png' : 'assets/cursor-dark.png';
+      }
+    }
+
+    document.addEventListener('mousemove', e => {
+      cx = e.clientX; cy = e.clientY;
+      cursor.style.transform = `translate(${cx}px, ${cy}px)`;
+      if (!visible) { cursor.style.opacity = '1'; visible = true; }
+      // Batch color detection to one check per animation frame
+      if (!rafPending) { rafPending = true; requestAnimationFrame(updateVariant); }
+    });
+    document.addEventListener('mouseleave', () => { cursor.style.opacity = '0'; visible = false; });
+    document.addEventListener('mouseenter', () => { cursor.style.opacity = '1'; visible = true; });
   })();
   </script>
 
