@@ -160,15 +160,6 @@
       border-color: rgba(10,10,10,0.28);
     }
     #nav.nav--light .nav-cta:hover { background: rgba(10,10,10,0.05); border-color: rgba(10,10,10,0.5); transform: scale(1.05); }
-    /* Nav stays dark when About overlay is open — remove nav--light override */
-    body:has(#about-overlay.is-open) #nav {
-      background: var(--work-bg);
-      border-color: transparent;
-    }
-    body:has(#about-overlay.is-open) #nav .nav-link { color: rgba(243,242,236,0.75); }
-    body:has(#about-overlay.is-open) #nav .nav-link:hover { color: var(--bg); }
-    body:has(#about-overlay.is-open) #nav .nav-cta { color: var(--bg); border-color: rgba(243,242,236,0.4); }
-    body:has(#about-overlay.is-open) #nav .nav-cta:hover { background: rgba(243,242,236,0.08); border-color: rgba(243,242,236,0.7); }
     body:has(#contact-overlay.is-open) #nav {
       background: var(--work-bg);
       border-color: transparent;
@@ -552,10 +543,29 @@
     /* ============================================================
        ABOUT — Three-state interactive section
     ============================================================ */
-    #about-overlay { overflow: hidden; }
+    #about-section { overflow: hidden; }
     #about {
       position: absolute;
       inset: 0;
+      overflow: hidden;
+      background: var(--bg);
+    }
+
+    /* ── Horizontal panels: Work → About ── */
+    #panels-wrap {
+      display: flex;
+      width: 200vw;
+      will-change: transform;
+    }
+    #panels-wrap > #work {
+      flex-shrink: 0;
+      width: 100vw;
+    }
+    #about-section {
+      flex-shrink: 0;
+      width: 100vw;
+      height: 100vh;
+      position: relative;
       overflow: hidden;
       background: var(--bg);
     }
@@ -579,6 +589,7 @@
       z-index: 12;
       pointer-events: none;
       display: block;
+      opacity: 0;
     }
     /* ── State 1: centered intro ── */
     .ab-s1 {
@@ -1097,6 +1108,8 @@
       .hero-scroll-text { font-size: 13px; letter-spacing: 0.06em; }
       .hero-scroll-text em { font-size: 15px; }
 
+      #panels-wrap { display: block; width: 100%; }
+      #about-section { width: 100%; height: auto; min-height: 100vh; }
       #work { height: auto; padding-top: 80px; }
       .work-scroll-hint { display: none; }
       .work-section-label { display: none; }
@@ -1272,8 +1285,10 @@
 
 
   <!-- ============================
-       WORK
+       WORK + ABOUT — horizontal panels
   ============================ -->
+  <div id="panels-wrap">
+
   <section id="work" aria-label="Selected work" data-nav-theme="light">
 
     <span class="work-scroll-hint" aria-hidden="true">scroll <em>up</em> to return ↑</span>
@@ -1347,11 +1362,9 @@
 
 
   <!-- ============================
-       ABOUT — overlay panel
-       Opened via "About" nav link
+       ABOUT — inline panel (horizontal scroll)
   ============================ -->
-  <div id="about-overlay" class="overlay-panel" role="dialog"
-       aria-modal="true" aria-label="About Andrea">
+  <section id="about-section" aria-label="About Andrea">
 
     <div id="about">
 
@@ -1438,7 +1451,9 @@
       </div><!-- /ab-s2 -->
 
     </div><!-- /about -->
-  </div>
+  </section><!-- /about-section -->
+
+  </div><!-- /panels-wrap -->
 
 
   <!-- ============================
@@ -1520,29 +1535,28 @@
      OVERLAY PANELS — About + Contact
   ---------------------------------------------------------- */
   function openOverlay(id) {
-    ['about-overlay', 'contact-overlay'].forEach(otherId => {
-      if (otherId !== id) document.getElementById(otherId).classList.remove('is-open');
-    });
     document.getElementById(id).classList.add('is-open');
     document.body.style.overflow = 'hidden';
-    if (id === 'about-overlay') {
-      navLogoImg.src = 'assets/logo-dark.png';
-      if (typeof onAboutOpen === 'function') onAboutOpen();
-    }
   }
   function closeOverlay(id) {
-    const panel = document.getElementById(id);
-    panel.classList.remove('is-open');
+    document.getElementById(id).classList.remove('is-open');
     document.body.style.overflow = '';
-    if (id === 'about-overlay') {
-      if (typeof onAboutClose === 'function') onAboutClose();
-      updateNavTheme();
+  }
+
+  function scrollToAbout() {
+    const st = ScrollTrigger.getById('hpanels');
+    if (st) {
+      // Defer past the click event so GSAP's ticker picks up the scroll naturally
+      requestAnimationFrame(() => {
+        document.scrollingElement.scrollTop = st.end;
+      });
+    } else {
+      document.getElementById('about-section').scrollIntoView({ behavior: 'smooth' });
     }
   }
 
   document.getElementById('nav-logo-link').addEventListener('click', e => {
     e.preventDefault();
-    closeOverlay('about-overlay');
     closeOverlay('contact-overlay');
     closeMenu();
     window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -1553,15 +1567,12 @@
     history.replaceState(null, '', window.location.pathname);
   }
 
-  document.getElementById('nav-about').addEventListener('click', () => openOverlay('about-overlay'));
+  document.getElementById('nav-about').addEventListener('click', scrollToAbout);
   document.getElementById('nav-sayhi').addEventListener('click', () => openOverlay('contact-overlay'));
 
-  document.getElementById('overlay-about').addEventListener('click', () => { closeMenu(); openOverlay('about-overlay'); });
+  document.getElementById('overlay-about').addEventListener('click', () => { closeMenu(); scrollToAbout(); });
   document.addEventListener('keydown', e => {
-    if (e.key === 'Escape') {
-      closeOverlay('about-overlay');
-      closeOverlay('contact-overlay');
-    }
+    if (e.key === 'Escape') closeOverlay('contact-overlay');
   });
 
   /* ----------------------------------------------------------
@@ -1591,6 +1602,12 @@
   const navSections = Array.from(document.querySelectorAll('[data-nav-theme]'));
 
   function updateNavTheme() {
+    // When the about panel is more than halfway visible, use dark (cream bg) nav
+    const hst = ScrollTrigger.getById('hpanels');
+    if (hst && hst.progress > 0.5) {
+      applyNavTheme('dark');
+      return;
+    }
     // Find the last section whose top edge has scrolled into (or above) the viewport.
     let active = navSections[0];
     for (const s of navSections) {
@@ -1990,6 +2007,36 @@
         trigger: "#work",
         start: "top 90%",
         toggleActions: "play none none none"
+      }
+    });
+
+    // ── Horizontal panels: Work → About (right-to-left slide) ──
+    gsap.to("#panels-wrap", {
+      xPercent: -50,
+      ease: "none",
+      scrollTrigger: {
+        trigger: "#panels-wrap",
+        start: "top top",
+        end: () => "+=" + window.innerWidth,
+        pin: true,
+        scrub: 1,
+        anticipatePin: 1,
+        id: "hpanels",
+        onUpdate: (self) => {
+          if (self.progress > 0.85) {
+            if (typeof abState !== 'undefined' && abState === 'idle') {
+              if (typeof onAboutOpen === 'function') onAboutOpen();
+            }
+            nav.classList.remove('nav--light');
+            navLogoImg.src = 'assets/logo-dark.png';
+            if (workNavLink) workNavLink.classList.remove('nav-link--active');
+          } else if (self.progress < 0.15) {
+            if (typeof abState !== 'undefined' && abState !== 'idle') {
+              if (typeof onAboutClose === 'function') onAboutClose();
+            }
+            updateNavTheme();
+          }
+        },
       }
     });
 
