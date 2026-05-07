@@ -857,6 +857,49 @@
       color: var(--ink);
       margin: 0;
     }
+    /* ── Unserious: left header (replaces bio) ── */
+    .ab-uns-header {
+      position: absolute;
+      top: 28.2vh;
+      left: 3.26vw;
+      width: 30vw;
+      max-width: 432px;
+      pointer-events: none;
+    }
+    .ab-uns-heading {
+      font-family: 'DM Sans', var(--font-body), sans-serif;
+      font-size: clamp(38px, 4.8vw, 64px);
+      font-weight: 700;
+      line-height: 1.0;
+      color: var(--ink);
+      margin: 0 0 14px 0;
+    }
+    .ab-uns-sub {
+      font-family: var(--font-body);
+      font-size: clamp(14px, 1.4vw, 20px);
+      font-weight: 500;
+      line-height: 1.6;
+      color: var(--ink);
+      opacity: 0.7;
+      margin: 0;
+    }
+    /* ── Chaos SVG: circular text near portrait ── */
+    .ab-chaos-svg {
+      position: absolute;
+      left: 4vw;
+      bottom: 32vh;
+      width: clamp(140px, 14vw, 196px);
+      height: clamp(140px, 14vw, 196px);
+      z-index: 15;
+      opacity: 0;
+      pointer-events: none;
+      color: var(--ink);
+      animation: chaos-spin 10s linear infinite;
+    }
+    @keyframes chaos-spin {
+      from { transform: rotate(0deg); }
+      to   { transform: rotate(360deg); }
+    }
     .ab-pill-wrap {
       position: absolute;
       display: flex;
@@ -1288,6 +1331,16 @@
       <!-- portrait: floats across all states, animated by GSAP -->
       <img class="ab-portrait" src="assets/about-portrait.png" alt="" aria-hidden="true">
 
+      <!-- chaos SVG: circular rotating text, visible only in unserious mode (z-index > portrait) -->
+      <svg class="ab-chaos-svg" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+        <defs>
+          <path id="chaos-circle-path" d="M 100,100 m -75,0 a 75,75 0 1,1 150,0 a 75,75 0 1,1 -150,0"/>
+        </defs>
+        <text font-family="'DM Sans', sans-serif" font-size="12" font-weight="600" fill="currentColor" letter-spacing="1.5">
+          <textPath href="#chaos-circle-path">welcome to my chaos! • welcome to my chaos! • </textPath>
+        </text>
+      </svg>
+
       <!-- STATE 1: full-viewport "Hi! I'm Andrea" -->
       <div class="ab-s1">
         <h2 class="ab-headline">
@@ -1343,8 +1396,12 @@
           </div>
         </div>
 
-        <!-- right: unserious pills (built by JS) -->
+        <!-- right: unserious pills (built by JS) + left header -->
         <div class="ab-unserious" aria-hidden="true">
+          <div class="ab-uns-header">
+            <h2 class="ab-uns-heading">Off the<br>record</h2>
+            <p class="ab-uns-sub">I can't turn off the brain ever.</p>
+          </div>
         </div>
 
       </div><!-- /ab-s2 -->
@@ -1552,12 +1609,12 @@
   ---------------------------------------------------------- */
   // fx/fy = position as fraction of Figma frame (1440×950), image top-left = wrap top-left
   const ABOUT_PILLS = [
-    { label: 'Adore reading fantasy books',                      src: 'assets/about-pill-books.gif',        type: 'img',   fx: 811/1440,  fy: 271/950  },
-    { label: 'Absolute caffeine addict',                         src: 'assets/about-pill-caffeine.gif',     type: 'img',   fx: 540/1440,  fy: 320/950  },
-    { label: 'travelling abroad',                                src: 'assets/about-pill-travel.gif',       type: 'img',   fx: 938/1440,  fy: 482/950  },
-    { label: 'Allergic to Comic Sans',                           src: 'assets/about-pill-comicsans.gif',    type: 'img',   fx: 662/1440,  fy: 488/950  },
-    { label: 'Picking up pickleball',                            src: 'assets/about-pill-pickleball.gif',   type: 'img',   fx: 403/1440,  fy: 510/950  },
-    { label: 'Pilates core. UX brain.',                          src: 'assets/about-pill-pilates.gif',      type: 'img',   fx: 1210/1440, fy: 374/950  },
+    { label: 'Adore reading fantasy books',                      src: 'assets/about-pill-books.png',        type: 'img',   fx: 811/1440,  fy: 271/950  },
+    { label: 'Absolute caffeine addict',                         src: 'assets/about-pill-caffeine.png',     type: 'img',   fx: 540/1440,  fy: 320/950  },
+    { label: 'travelling abroad',                                src: 'assets/about-pill-travel.png',       type: 'img',   fx: 938/1440,  fy: 482/950  },
+    { label: 'Allergic to Comic Sans',                           src: 'assets/about-pill-comicsans.png',    type: 'img',   fx: 662/1440,  fy: 488/950  },
+    { label: 'Picking up pickleball',                            src: 'assets/about-pill-pickleball.png',   type: 'img',   fx: 403/1440,  fy: 510/950  },
+    { label: 'Pilates core. UX brain.',                          src: 'assets/about-pill-pilates.png',      type: 'img',   fx: 1210/1440, fy: 374/950  },
     { label: 'Recovering event stylist',                         src: 'assets/about-pill-stylist.mp4',      type: 'video', fx: 1181/1440, fy: 578/950  },
     { label: 'Too much screentime',                              src: 'assets/about-pill-screentime.png',   type: 'img',   fx: 921/1440,  fy: 622/950  },
     { label: 'Aspiring to side hustle as a pilates instructor',  src: 'assets/about-pill-reformer.png',    type: 'img',   fx: 685/1440,  fy: 722/950  },
@@ -1606,6 +1663,9 @@
     gsap.set(abWarmFill,  { opacity: 0, left: 0, top: 0, width: 0, height: 0, borderRadius: '5px', clearProps: 'transform' });
     gsap.set(abSerious,   { opacity: 1 });
     gsap.set(abPortrait,  { opacity: 0, width: 0, height: 0, left: 0, top: 0 });
+    gsap.set('.ab-bio',       { opacity: 1 });
+    gsap.set('.ab-chaos-svg', { opacity: 0 });
+    abPortrait.src = 'assets/about-portrait.png';
     // Reset headline text split positions + opacity (direct DOM for warm-rect reliability)
     gsap.set('.ab-headline > span:first-child', { x: 0, opacity: 1 });
     gsap.set('.ab-andrea-wrap',                 { x: 0, opacity: 1 });
@@ -1634,7 +1694,7 @@
 
     // Kill in-progress tweens and remove GSAP inline pointer-events so
     // the about overlay's children don't block hover on the work section.
-    gsap.killTweensOf(['.ab-s2', '.ab-s1', '.ab-portrait', '.ab-warm-fill', '.ab-unserious', '.ab-serious', '.ab-headline > span:first-child', '.ab-andrea-wrap']);
+    gsap.killTweensOf(['.ab-s2', '.ab-s1', '.ab-portrait', '.ab-warm-fill', '.ab-unserious', '.ab-serious', '.ab-bio', '.ab-chaos-svg', '.ab-headline > span:first-child', '.ab-andrea-wrap']);
     gsap.set('.ab-s2',        { clearProps: 'pointerEvents,opacity' });
     gsap.set('.ab-unserious', { clearProps: 'pointerEvents,opacity' });
     gsap.set('.ab-warm-fill', { clearProps: 'opacity' });
@@ -1809,28 +1869,36 @@
     const abWarmFill  = document.querySelector('.ab-warm-fill');
     const abUnserious = document.querySelector('.ab-unserious');
     const abPortrait  = document.querySelector('.ab-portrait');
+    const abChaosSvg  = document.querySelector('.ab-chaos-svg');
+    const abBio       = document.querySelector('.ab-bio');
 
     if (isUns) {
+      abPortrait.src = 'assets/about-portrait-uns.png';
       gsap.timeline()
         .to('.ab-serious', { opacity: 0, duration: 0.22, ease: 'power1.out' }, 0)
+        .to(abBio,        { opacity: 0, duration: 0.22, ease: 'power1.out' }, 0)
         .to(abWarmFill, {
           left: 0, top: 0, width: '100%', height: '100%', borderRadius: 0,
           duration: 0.55, ease: 'power2.inOut',
         }, 0)
         .to(abUnserious, { opacity: 1, pointerEvents: 'auto', duration: 0.35, ease: 'power1.out' }, 0.38)
+        .to(abChaosSvg,  { opacity: 1, duration: 0.35, ease: 'power1.out' }, 0.50)
         .call(startPillJiggle);
     } else {
       stopPillJiggle();
+      abPortrait.src = 'assets/about-portrait.png';
       const vw2 = window.innerWidth, vh2 = window.innerHeight;
       const pw = Math.min(vw2 * 0.341, 491);
       const ph = pw * (440 / 491);
       gsap.timeline()
         .to(abUnserious, { opacity: 0, pointerEvents: 'none', duration: 0.22, ease: 'power1.out' }, 0)
+        .to(abChaosSvg,  { opacity: 0, duration: 0.22, ease: 'power1.out' }, 0)
         .to(abWarmFill, {
           left: vw2 * 0.033 + 16, top: vh2 - ph, width: pw, height: ph, borderRadius: '10px',
           duration: 0.5, ease: 'power2.inOut',
         }, 0.1)
-        .to('.ab-serious', { opacity: 1, duration: 0.35, ease: 'power1.out' }, 0.35);
+        .to('.ab-serious', { opacity: 1, duration: 0.35, ease: 'power1.out' }, 0.35)
+        .to(abBio,         { opacity: 1, duration: 0.35, ease: 'power1.out' }, 0.35);
     }
   });
 
