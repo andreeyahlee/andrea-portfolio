@@ -298,8 +298,10 @@
       margin-bottom: 28px;
     }
     .cs-stat-item {
-      display: flex;
-      gap: 20px;
+      display: grid;
+      grid-template-columns: 190px 1fr;
+      gap: 24px;
+      align-items: start;
       margin-bottom: 36px;
     }
     .cs-stat-item:last-child { margin-bottom: 0; }
@@ -310,7 +312,6 @@
       color: #fff;
       line-height: 1;
       white-space: nowrap;
-      min-width: 120px;
     }
     .cs-stat-number .arrow { color: var(--arvo-green); margin: 0 4px; }
     .cs-stat-body { flex: 1; }
