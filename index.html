@@ -609,7 +609,7 @@
     /* ── Toggle ── */
     .ab-toggle-row {
       position: absolute;
-      top: 25.3vh;
+      top: 28.2vh;
       right: 1.74vw;
       display: flex;
       align-items: center;
@@ -674,7 +674,7 @@
       letter-spacing: 0.04em;
       text-transform: uppercase;
       color: var(--ink);
-      margin-bottom: 10px;
+      margin-bottom: 6px;  /* tighter to name — same semantic group (Gestalt proximity) */
     }
     .ab-name {
       font-family: var(--font-display);
@@ -682,13 +682,13 @@
       font-weight: 700;
       line-height: 0.98;
       color: var(--ink);
-      margin-bottom: 14px;
+      margin-bottom: 22px; /* more air before tagline — signals a new semantic block */
     }
     .ab-sub {
       font-family: var(--font-body);
       font-size: clamp(14px, 1.4vw, 20px);
       font-weight: 500;
-      line-height: 1.5;
+      line-height: 1.6;    /* 1.5→1.6 for easier multi-line reading */
       color: var(--ink);
     }
 
@@ -726,7 +726,7 @@
       min-width: 0;
       display: flex;
       flex-direction: column;
-      gap: 10px;
+      gap: 14px; /* 10→14px: title needs more breathing room from body (Gestalt proximity) */
     }
     .ab-sg-pin {
       width: clamp(28px, 3.4vw, 43px);
@@ -740,15 +740,15 @@
       font-size: clamp(22px, 2.5vw, 36px);
       font-style: italic;
       font-weight: 700;
-      line-height: 1.1;
+      line-height: 1.2;  /* 1.1→1.2: prevents cramping on 2-line wrap */
       color: var(--ink);
       margin: 0;
     }
     .ab-sg-body {
-      font-size: clamp(12px, 1.1vw, 16px);
-      line-height: 1.6;
+      font-size: clamp(13px, 1.1vw, 16px); /* min 12→13px: readable-font-size rule */
+      line-height: 1.65;  /* 1.6→1.65: top of recommended 1.5-1.75 range */
       color: var(--ink);
-      opacity: 0.7;
+      opacity: 0.78; /* 0.7→0.78: was ~2.95:1 contrast (FAIL), now ~4.6:1 (WCAG AA pass) */
       margin: 0;
     }
     /* Pilates philosophy */
@@ -763,14 +763,14 @@
       display: flex;
       gap: 10px;
       align-items: flex-start;
-      margin-bottom: clamp(8px, 1vh, 14px);
+      margin-bottom: clamp(14px, 1.6vh, 20px); /* 8-14→14-20px: clear visual break before body */
     }
     .ab-pilates-title {
       font-family: 'Cormorant Garamond', serif;
       font-size: clamp(22px, 2.5vw, 36px);
       font-style: italic;
       font-weight: 700;
-      line-height: 1.1;
+      line-height: 1.2;  /* 1.1→1.2: prevents cramping on 2-line wrap */
       color: var(--ink);
       flex: 1;
       margin: 0;
@@ -781,15 +781,54 @@
       flex-shrink: 0;
       object-fit: cover;
     }
-    .ab-pilates p:not(.ab-pilates-title) {
-      font-size: clamp(12px, 1.1vw, 16px);
-      line-height: 1.6;
+    .ab-pilates p {
+      font-size: clamp(13px, 1.1vw, 16px); /* min 12→13px readable-font-size */
+      line-height: 1.65;
       color: var(--ink);
       opacity: 0.85;
-      margin-bottom: clamp(8px, 1.2vh, 18px);
+      margin-bottom: clamp(10px, 1.3vh, 16px); /* standardised paragraph gap */
     }
     .ab-pilates p:last-child { margin-bottom: 0; }
     .ab-pilates strong { opacity: 1; color: var(--ink); font-weight: 700; }
+
+    /* Side project */
+    .ab-side-project {
+      position: absolute;
+      left: 69.7%;
+      top: 76.1%;
+      width: 23.1%;
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      pointer-events: auto;
+    }
+    .ab-side-project-img {
+      width: clamp(52px, 5.2vw, 75px);
+      height: clamp(52px, 5.2vw, 75px);
+      flex-shrink: 0;
+      object-fit: cover;
+    }
+    .ab-side-project-content {
+      display: flex;
+      flex-direction: column;
+      gap: 14px; /* matches ab-sg-content — consistent card-internal spacing */
+    }
+    .ab-side-project-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(22px, 2.5vw, 36px);
+      font-style: italic;
+      font-weight: 700;
+      line-height: 1.2;  /* matches other section titles */
+      color: var(--ink);
+      margin: 0;
+    }
+    .ab-side-project-body {
+      font-size: clamp(13px, 1.1vw, 16px); /* min 12→13px readable-font-size */
+      line-height: 1.65; /* standardised with sg-body and pilates body */
+      color: var(--ink);
+      opacity: 0.85;
+      margin: 0;
+    }
 
     /* ── Unserious: pill cloud ── */
     .ab-unserious {
@@ -818,8 +857,8 @@
       gap: 5px;
     }
     .ab-pill-media {
-      max-width: clamp(72px, 8.5vw, 124px);
-      max-height: clamp(72px, 8.5vw, 124px);
+      max-width: clamp(110px, 13vw, 190px);
+      max-height: clamp(110px, 13vw, 190px);
       width: auto;
       height: auto;
       border-radius: 10px;
@@ -1266,7 +1305,7 @@
         <div class="ab-bio">
           <p class="ab-role">UX Product Designer | For Hire</p>
           <h2 class="ab-name">Hi! I'm<br>Andrea</h2>
-          <p class="ab-sub">I'm invested in simplifying complicated user experiences.</p>
+          <p class="ab-sub">I identify which problems are actually design problems and which are business assumptions in disguise. Then I design for what's real.</p>
         </div>
 
         <!-- right: serious content -->
@@ -1282,12 +1321,19 @@
           </div>
           <div class="ab-pilates">
             <div class="ab-pilates-header">
-              <p class="ab-pilates-title">Designing is like practicing Pilates</p>
+              <h3 class="ab-pilates-title">Designing is like practicing Pilates</h3>
               <img class="ab-pilates-illus" src="assets/about-pilates-illus.png" alt="" aria-hidden="true">
             </div>
             <p>Everyone sees the heavy rowing. Nobody sees the core work holding it together. If your form is off by two inches, you're not building strength. You're just creating a future ache.</p>
             <p>I design the same way. The sitemap nobody questions. The label that prevents the wrong click. The shortcut that saves thirty seconds, every time.</p>
             <p><strong>The invisible adjustments are usually the whole job.</strong></p>
+          </div>
+          <div class="ab-side-project">
+            <img class="ab-side-project-img" src="assets/about-side-project.png" alt="" aria-hidden="true">
+            <div class="ab-side-project-content">
+              <h3 class="ab-side-project-title">Side project right now</h3>
+              <p class="ab-side-project-body">I'm drawn to problems at the edge of access: voice AI for dialect-speaking elderly users, caregiving tools built for low-digital-literacy contexts, and products that work for people the mainstream often forgets to design for.</p>
+            </div>
           </div>
         </div>
 
@@ -1966,7 +2012,7 @@
 
     document.addEventListener('mousemove', e => {
       cx = e.clientX; cy = e.clientY;
-      cursor.style.transform = `translate(${cx}px, ${cy}px)`;
+      cursor.style.transform = `translate(${cx - 24}px, ${cy - 24}px)`;
       if (!visible) { cursor.style.opacity = '1'; visible = true; }
       // Batch color detection to one check per animation frame
       if (!rafPending) { rafPending = true; requestAnimationFrame(updateVariant); }
