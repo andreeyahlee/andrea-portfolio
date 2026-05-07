@@ -136,7 +136,7 @@
       border-color: rgba(10,10,10,0.28);
     }
     #nav.nav--light .nav-cta:hover { background: rgba(10,10,10,0.05); border-color: rgba(10,10,10,0.5); }
-    /* Force dark nav when About overlay is open */
+    /* Nav stays dark when About overlay is open — remove nav--light override */
     body:has(#about-overlay.is-open) #nav {
       background: var(--work-bg);
       border-color: transparent;
@@ -514,257 +514,318 @@
     .work-read-btn:active .btn-arrow { transform: translateX(2px); }
 
     /* ============================================================
-       ABOUT — States 1 + 2 (scroll-driven portrait split)
+       ABOUT — Three-state interactive section
     ============================================================ */
+    #about-overlay { overflow: hidden; }
     #about {
-      position: relative;
-      width: 100%;
-      height: 460vh;
+      position: absolute;
+      inset: 0;
+      overflow: hidden;
       background: var(--bg);
     }
-    .about-sticky {
-      position: sticky;
-      top: 0;
-      height: 100vh;
+
+    /* ── Warm fill: expands to full screen in Unserious mode ── */
+    .ab-warm-fill {
+      position: absolute;
+      inset: 0;
+      background: var(--bg-warm);
+      transform: scale(0);
+      z-index: 1;
+      pointer-events: none;
+    }
+
+    /* ── Floating portrait ── */
+    .ab-portrait {
+      position: absolute;
+      object-fit: cover;
+      object-position: top center;
+      border-radius: 10px;
+      z-index: 12;
+      pointer-events: none;
+      display: block;
+    }
+
+    /* ── State 1: centered intro ── */
+    .ab-s1 {
+      position: absolute;
+      inset: 0;
       display: flex;
-      flex-direction: column;
       align-items: center;
       justify-content: center;
-      overflow: hidden;
+      z-index: 5;
     }
-    .about-hi-text {
-      display: inline-block;
-    }
-    .about-headline {
+    .ab-headline {
       font-family: var(--font-display);
-      font-size: clamp(60px, 9vw, 132px);
+      font-size: clamp(56px, 8.5vw, 118px);
       font-weight: 700;
       color: var(--ink);
-      line-height: 1.0;
+      line-height: 1;
       display: flex;
       align-items: center;
       flex-wrap: nowrap;
       gap: 0.18em;
-      padding: 0 var(--sp-lg);
     }
-    /* "Andrea" + warm rect wrapper.
-       clip-path: allows overflow above (portrait peeks up) but clips below the slot's bottom bleed,
-       and extends ±500px left/right so "Hi! I'm" and "Andrea" can slide without getting clipped. */
-    .about-andrea-wrap {
+    .ab-andrea-wrap {
       position: relative;
       display: inline-flex;
       align-items: center;
-      clip-path: inset(-300% -500px -0.2em -500px);
     }
-    /* warm rect — GSAP sets xPercent:-50 on open so it centers around left:50%.
-       Width shrinks during scroll to fit between the split text. */
-    .about-portrait-slot {
+    .ab-warm-rect {
       position: absolute;
-      top: -0.14em;
-      bottom: -0.14em;
-      left: 50%;
-      width: calc(100% + 0.2em); /* natural: spans "Andrea" text + 0.1em each side */
+      inset: -0.13em -0.07em;
       background: var(--bg-warm);
-      border-radius: 6px;
+      border-radius: 5px;
       z-index: 0;
     }
-    /* portrait photo — same width/centering as slot; GSAP controls xPercent, yPercent, and width */
-    .about-portrait-img {
-      position: absolute;
-      left: 50%;
-      bottom: -0.14em;
-      width: calc(100% + 0.2em);
-      height: 1.8em;
-      object-fit: contain;
-      object-position: top center;
-      z-index: 1;
-      display: block;
-    }
-    /* Full-width warm panel that expands to cover bottom half in State 3 */
-    .about-warm-panel {
-      position: absolute;
-      bottom: 0;
-      left: 0;
-      width: 100%;
-      height: 0;
-      background: var(--bg-warm);
-    }
-    /* Stacked "Hi! I'm / Andrea" heading in top-left — visible only in State 3 */
-    .about-state3-head {
-      position: absolute;
-      bottom: calc(50% + clamp(20px, 3vh, 40px));
-      left: clamp(32px, 5vw, 80px);
-      font-family: var(--font-display);
-      font-size: clamp(36px, 5vw, 80px);
-      font-weight: 700;
-      color: var(--ink);
-      line-height: 1.05;
-      opacity: 0;
-      pointer-events: none;
-      white-space: nowrap;
-      z-index: 2;
-    }
-    /* Clip container — both content states live inside; overflow:hidden masks scroll exit at warm rect top */
-    .about-warm-clip {
-      position: absolute;
-      bottom: 0;
-      left: 0;
-      right: 0;
-      height: 50%;
-      overflow: hidden;
+    .ab-andrea-text {
+      position: relative;
       z-index: 1;
     }
-    /* State 3 content — two columns flanking the portrait inside the warm panel */
-    .about-s3-content {
+
+    /* ── State 2 wrapper ── */
+    .ab-s2 {
       position: absolute;
       inset: 0;
-      display: grid;
-      grid-template-columns: 1fr 30vw 1fr;
-      align-items: stretch;
-      padding: 0 clamp(32px, 5vw, 80px);
       opacity: 0;
+      pointer-events: none;
+      z-index: 5;
     }
-    .about-s3-col {
+
+    /* ── Toggle ── */
+    .ab-toggle-row {
+      position: absolute;
+      top: clamp(80px, 11vh, 110px);
+      right: clamp(28px, 4vw, 64px);
       display: flex;
-      flex-direction: column;
-      gap: clamp(8px, 1.2vh, 16px);
+      align-items: center;
+      gap: 10px;
+      z-index: 20;
     }
-    /* Left col: bottom-aligned (Singapore / location text) */
-    .about-s3-col:first-child {
-      justify-content: flex-end;
-      padding-bottom: clamp(28px, 4.5vh, 56px);
+    @keyframes ab-tgl-jiggle {
+      0%, 100% { transform: rotate(0deg) scale(1); }
+      20%      { transform: rotate(-14deg) scale(1.12); }
+      40%      { transform: rotate(14deg)  scale(1.12); }
+      60%      { transform: rotate(-7deg)  scale(1.06); }
+      80%      { transform: rotate(7deg)   scale(1.06); }
+    }
+    .ab-switch.is-jiggling {
+      animation: ab-tgl-jiggle 0.48s cubic-bezier(0.36, 0.07, 0.19, 0.97);
+    }
+    .ab-tgl-lbl {
+      font-family: var(--font-body);
+      font-size: 12px;
+      font-weight: 500;
+      color: var(--ink);
+      opacity: 0.4;
+      transition: opacity 0.2s;
+    }
+    .ab-tgl-lbl.is-active { opacity: 1; }
+    .ab-switch {
       position: relative;
-      z-index: 0;
+      width: 44px;
+      height: 24px;
+      border-radius: 100px;
+      background: rgba(10,10,10,0.18);
+      border: none;
+      cursor: pointer;
+      flex-shrink: 0;
+      transition: background 0.25s;
     }
-    /* Singapore island — right edge anchored to portrait column start, left bleeds off-screen */
-    .about-s3-col:first-child::before {
+    .ab-switch::after {
       content: '';
       position: absolute;
-      top: -10%;
+      top: 3px;
+      left: 3px;
+      width: 18px;
+      height: 18px;
+      border-radius: 50%;
+      background: var(--ink);
+      transition: transform 0.28s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    .ab-switch.is-unserious::after { transform: translateX(20px); }
+
+    /* ── Left bio ── */
+    .ab-bio {
+      position: absolute;
+      top: clamp(130px, 18vh, 176px);
+      left: clamp(28px, 4vw, 64px);
+      max-width: clamp(220px, 26vw, 360px);
+    }
+    .ab-role {
+      font-family: var(--font-mono);
+      font-size: clamp(8px, 0.62vw, 10px);
+      font-weight: 500;
+      letter-spacing: 0.13em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 10px;
+    }
+    .ab-name {
+      font-family: var(--font-display);
+      font-size: clamp(38px, 5.2vw, 76px);
+      font-weight: 700;
+      line-height: 1.0;
+      color: var(--ink);
+      margin-bottom: 14px;
+    }
+    .ab-sub {
+      font-family: var(--font-body);
+      font-size: clamp(13px, 1vw, 17px);
+      line-height: 1.6;
+      color: var(--ink);
+      opacity: 0.72;
+    }
+
+    /* ── Serious: right content area ── */
+    .ab-serious {
+      position: absolute;
+      top: 0;
       right: 0;
-      width: 48vw;
-      height: 120%;
+      bottom: 0;
+      left: 40%;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      gap: clamp(20px, 3.5vh, 44px);
+      padding: clamp(48px, 7vh, 88px) clamp(28px, 5vw, 80px) clamp(48px, 7vh, 88px) 0;
+    }
+    /* Singapore map watermark */
+    .ab-sg {
+      position: relative;
+    }
+    .ab-sg::before {
+      content: '';
+      position: absolute;
+      top: -80%;
+      right: -6%;
+      width: 58vw;
+      height: 280%;
       background: url('assets/about-singapore.png') right center / contain no-repeat;
-      opacity: 0.5;
+      opacity: 0.28;
       pointer-events: none;
-      z-index: -1;
     }
-    /* Right col: top-aligned (Pilates / philosophy text) */
-    .about-s3-col:last-child {
-      justify-content: flex-start;
-      padding-top: clamp(28px, 4.5vh, 56px);
+    .ab-sg-card {
+      position: relative;
+      z-index: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
     }
-    .about-s3-loc-head {
+    .ab-sg-head {
       display: flex;
       align-items: flex-start;
       gap: 8px;
+      margin-bottom: 2px;
     }
-    .about-s3-pin {
-      width: 24px;
-      height: 24px;
+    .ab-sg-pin {
+      width: 20px;
+      height: 20px;
       flex-shrink: 0;
-      margin-top: 2px;
+      margin-top: 3px;
       object-fit: contain;
     }
-    .about-s3-col .about-s3-col-title {
+    .ab-sg-title {
       font-family: var(--font-display);
-      font-size: clamp(18px, 2vw, 32px);
+      font-size: clamp(17px, 1.7vw, 27px);
       font-style: italic;
       font-weight: 400;
-      color: var(--ink);
       line-height: 1.2;
-      margin: 0;
-      opacity: 1;
-    }
-    .about-s3-col p {
-      font-size: clamp(12px, 1vw, 15px);
       color: var(--ink);
-      line-height: 1.65;
       margin: 0;
-      opacity: 0.75;
     }
-    .about-s3-emoji {
-      font-family: 'Apple Color Emoji', 'Segoe UI Emoji', 'Noto Color Emoji', sans-serif;
-      font-style: normal;
+    .ab-sg-body {
+      font-size: clamp(11px, 0.82vw, 14px);
+      line-height: 1.7;
+      color: var(--ink);
+      opacity: 0.7;
+      max-width: 46ch;
+      margin: 0;
     }
-    .about-s3-col strong { opacity: 1; color: var(--ink); font-weight: 600; }
+    /* Pilates philosophy */
+    .ab-pilates-title {
+      font-family: 'Fraunces', serif;
+      font-size: clamp(17px, 1.7vw, 27px);
+      font-style: italic;
+      font-weight: 300;
+      line-height: 1.3;
+      color: var(--ink);
+      margin-bottom: 10px;
+    }
+    .ab-pilates p {
+      font-size: clamp(11px, 0.82vw, 14px);
+      line-height: 1.7;
+      color: var(--ink);
+      opacity: 0.7;
+      margin-bottom: 5px;
+      max-width: 50ch;
+    }
+    .ab-pilates p:last-child { margin-bottom: 0; }
+    .ab-pilates strong { opacity: 1; color: var(--ink); font-weight: 600; }
 
-    /* ── State 4: "Off the record" tag cloud ─────────────────────────── */
-    .about-s4-content {
+    /* ── Unserious: pill cloud ── */
+    .ab-unserious {
       position: absolute;
       inset: 0;
       opacity: 0;
       pointer-events: none;
+      z-index: 3;
     }
-    .about-s4-head {
+    .ab-uns-title {
       position: absolute;
-      top: 5%;
-      left: 50%;
-      transform: translateX(-50%);
+      top: clamp(80px, 11vh, 110px);
+      right: clamp(28px, 5vw, 80px);
       font-family: 'Fraunces', serif;
-      font-size: clamp(20px, 1.8vw, 30px);
+      font-size: clamp(18px, 1.7vw, 28px);
       font-style: italic;
       font-weight: 300;
       color: var(--ink);
-      white-space: nowrap;
       margin: 0;
     }
-    .about-tag {
+    .ab-pill-wrap {
       position: absolute;
-      background: var(--work-bg);
-      color: var(--bg);
-      font-family: var(--font-body);
-      font-size: clamp(10px, 0.78vw, 13px);
-      font-weight: 400;
-      padding: 8px 18px;
-      border-radius: 100px;
-      white-space: nowrap;
-      line-height: 1;
-    }
-    /* Portrait h2 must always sit above tag pills */
-    .about-headline {
-      position: relative;
-      z-index: 3;
-    }
-    /* "Andrea" text renders above portrait */
-    .about-andrea-text {
-      position: relative;
-      z-index: 2;
-    }
-    .about-scroll-hint {
-      position: absolute;
-      bottom: 72px;
-      left: 50%;
-      transform: translateX(-50%);
       display: flex;
       flex-direction: column;
       align-items: center;
-      gap: 6px;
-      color: var(--muted);
-      font-size: 13px;
-      white-space: nowrap;
-    }
-    .about-scroll-hint .scroll-line {
-      width: 1px;
-      height: 28px;
-      background: currentColor;
-      opacity: 0.45;
-    }
-    .about-scroll-hint .scroll-text {
-      display: flex;
-      align-items: center;
       gap: 5px;
     }
-    .about-scroll-hint .scroll-text em {
-      font-family: 'Fraunces', serif;
-      font-style: italic;
-      font-weight: 300;
-      font-size: 14px;
+    .ab-pill-media {
+      max-width: clamp(72px, 8.5vw, 124px);
+      max-height: clamp(72px, 8.5vw, 124px);
+      width: auto;
+      height: auto;
+      border-radius: 10px;
+      object-fit: cover;
+      opacity: 0;
+      transform: translateY(12px);
+      transition: opacity 0.25s ease, transform 0.28s cubic-bezier(0.34, 1.4, 0.64, 1);
+      pointer-events: none;
+      display: block;
     }
-    .about-scroll-hint .scroll-text span {
+    .ab-pill-wrap:hover .ab-pill-media {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    .ab-pill {
+      background: var(--work-bg);
+      color: var(--bg);
       font-family: var(--font-body);
-      font-weight: 500;
-      font-size: 13px;
+      font-size: clamp(9px, 0.72vw, 12px);
+      font-weight: 400;
+      padding: 7px 15px;
+      border-radius: 100px;
+      white-space: nowrap;
+      display: inline-block;
+      cursor: default;
+    }
+    .ab-pill-wrap:hover .ab-pill {
+      animation: ab-shake 0.42s ease;
+    }
+    @keyframes ab-shake {
+      0%, 100% { transform: rotate(0deg); }
+      20%  { transform: rotate(-2.5deg); }
+      40%  { transform: rotate(2.5deg); }
+      60%  { transform: rotate(-1.5deg); }
+      80%  { transform: rotate(1.5deg); }
     }
 
     /* ============================================================
@@ -1053,12 +1114,6 @@
 
     <div id="work-reveal" aria-hidden="true"></div>
 
-    <div class="hero-scroll-hint" aria-hidden="true">
-      <span class="hero-scroll-line"></span>
-      <span class="hero-scroll-text"><em>scroll</em> down</span>
-      <span class="hero-scroll-line hero-scroll-line--bottom"></span>
-    </div>
-
   </section>
 
 
@@ -1115,7 +1170,7 @@
         <div class="work-col-bottom">
           <picture>
             <source media="(max-width: 767px)" srcset="assets/pethaus-mobile.png">
-            <img class="work-card-img" src="assets/pethaus-cta.png" alt="Pet Haus case study" loading="lazy">
+            <img class="work-card-img" src="assets/pethaus-cta.png" alt="Paw Haus case study" loading="lazy">
           </picture>
           <div class="work-card-overlay">
             <p class="work-card-tags">Solo Designer · End-to-End · E-Commerce</p>
@@ -1124,8 +1179,8 @@
             <a class="work-read-btn" href="case-studies/pethaus.html">Read the case study <span class="btn-arrow">→</span></a>
           </div>
         </div>
-        <div class="work-name" aria-hidden="true">Pet Haus</div>
-        <a class="work-col-link" href="case-studies/pethaus.html" aria-label="Read Pet Haus case study"></a>
+        <div class="work-name" aria-hidden="true">Paw Haus</div>
+        <a class="work-col-link" href="case-studies/pethaus.html" aria-label="Read Paw Haus case study"></a>
       </div>
 
     </div>
@@ -1141,69 +1196,68 @@
   <div id="about-overlay" class="overlay-panel" role="dialog"
        aria-modal="true" aria-label="About Andrea">
 
-    <section id="about" aria-label="About">
-      <div class="about-sticky">
-        <div class="about-warm-panel" aria-hidden="true"></div>
-        <div class="about-state3-head" aria-hidden="true">Hi! I'm<br>Andrea</div>
-        <div class="about-warm-clip">
-        <div class="about-s3-content">
-          <!-- Left: location -->
-          <div class="about-s3-col">
-            <div class="about-s3-loc-head">
-              <img class="about-s3-pin" src="assets/icon-geopin.png" alt="" aria-hidden="true">
-              <p class="about-s3-col-title">Raised in a land of<br>'maximum'</p>
-            </div>
-            <p>I learned that clutter is just friction. In a city of 5-star noise, less isn't a limitation—it's a decision to prioritise what actually moves the needle.</p>
-            <p><em>Majulah Singapura!</em></p>
-          </div>
-          <!-- Center: portrait space -->
-          <div></div>
-          <!-- Right: philosophy -->
-          <div class="about-s3-col">
-            <p class="about-s3-col-title"><em>Designing <span class="about-s3-emoji">🧘‍♀️</span> is like<br>practicing Pilates</em></p>
-            <p>Everyone sees the heavy rowing. Nobody sees the core work holding it together. If your form is off by two inches, you're not building strength. You're just creating a future ache.</p>
-            <p>I design the same way. The sitemap nobody questions. The label that prevents the wrong click. The shortcut that saves thirty seconds, every time.</p>
-            <p><strong>The invisible adjustments are usually the whole job.</strong></p>
-          </div>
-        </div>
-        <!-- State 4: Off the record tag cloud -->
-        <div class="about-s4-content">
-          <p class="about-s4-head">Off the record</p>
-          <!-- Row 1: wide top tag + upper right -->
-          <span class="about-tag" style="left:28%;top:19%">I secretly like it that I don't know much about anything to be amazed by everything new I learn</span>
-          <!-- Row 2: inner left + upper right -->
-          <span class="about-tag" style="left:34%;top:32%">Pilates core. UX brain.</span>
-          <span class="about-tag" style="left:56%;top:32%">Too much screentime</span>
-          <!-- Row 3: outer left + outer right -->
-          <span class="about-tag" style="left:13%;top:42%">Allergic to Comic Sans</span>
-          <span class="about-tag" style="left:73%;top:42%">Love British Royal History</span>
-          <!-- Row 4: inner right -->
-          <span class="about-tag" style="left:64%;top:52%">Absolute caffeine addict</span>
-          <!-- Row 5: inner left + outer right -->
-          <span class="about-tag" style="left:22%;top:60%">Recovering event stylist</span>
-          <span class="about-tag" style="left:75%;top:62%">Picking up pickleball</span>
-          <!-- Row 6: outer left + inner right -->
-          <span class="about-tag" style="left:11%;top:74%">Aspiring to side hustle as a pilates instructor</span>
-          <span class="about-tag" style="left:65%;top:76%">Adore fantasy novels, ACOTAR!!!!</span>
-        </div>
-        </div><!-- /about-warm-clip -->
+    <div id="about">
 
-        <h2 class="about-headline" id="about-headline">
-          <span class="about-hi-text">Hi! I'm</span>
-          <span class="about-andrea-wrap">
-            <span class="about-portrait-slot" id="about-portrait" aria-hidden="true"></span>
-            <img class="about-portrait-img" src="assets/about-portrait.png" alt="" aria-hidden="true">
-            <span class="about-andrea-text">Andrea</span>
+      <!-- warm fill: scales from portrait origin on Unserious mode -->
+      <div class="ab-warm-fill" aria-hidden="true"></div>
+
+      <!-- portrait: floats across all states, animated by GSAP -->
+      <img class="ab-portrait" src="assets/about-portrait.png" alt="" aria-hidden="true">
+
+      <!-- STATE 1: full-viewport "Hi! I'm Andrea" -->
+      <div class="ab-s1">
+        <h2 class="ab-headline">
+          <span>Hi! I'm</span>
+          <span class="ab-andrea-wrap">
+            <span class="ab-warm-rect" aria-hidden="true"></span>
+            <span class="ab-andrea-text">Andrea</span>
           </span>
         </h2>
-
-        <div class="about-scroll-hint" aria-hidden="true">
-          <span class="scroll-line"></span>
-          <span class="scroll-text"><em>scroll</em> <span>down</span></span>
-          <span class="scroll-line"></span>
-        </div>
       </div>
-    </section>
+
+      <!-- STATE 2: toggle layout (Serious / Unserious) -->
+      <div class="ab-s2">
+
+        <!-- top-left toggle -->
+        <div class="ab-toggle-row" role="group" aria-label="Mood toggle">
+          <span class="ab-tgl-lbl is-active" id="ab-lbl-serious">Serious</span>
+          <button class="ab-switch" id="ab-switch" aria-checked="false" role="switch" aria-label="Toggle mood"></button>
+          <span class="ab-tgl-lbl" id="ab-lbl-unserious">Unserious</span>
+        </div>
+
+        <!-- left bio -->
+        <div class="ab-bio">
+          <p class="ab-role">Product Designer</p>
+          <h2 class="ab-name">Andrea<br>Lee</h2>
+          <p class="ab-sub">I design the kind of UX that people don't notice — until it's gone. Based in Singapore, currently open to product design and research roles.</p>
+        </div>
+
+        <!-- right: serious content -->
+        <div class="ab-serious">
+          <div class="ab-sg">
+            <div class="ab-sg-card">
+              <div class="ab-sg-head">
+                <img class="ab-sg-pin" src="assets/icon-geopin.png" alt="" aria-hidden="true">
+                <h3 class="ab-sg-title">Raised in a land<br>of 'maximum'</h3>
+              </div>
+              <p class="ab-sg-body">I learned that clutter is just friction. In a city of 5-star noise, less isn't a limitation — it's a decision to prioritise what actually moves the needle. <em>Majulah Singapura!</em></p>
+            </div>
+          </div>
+          <div class="ab-pilates">
+            <p class="ab-pilates-title">Designing is like<br>practicing Pilates</p>
+            <p>Everyone sees the heavy rowing. Nobody sees the core work holding it together. If your form is off by two inches, you're not building strength — you're creating a future ache.</p>
+            <p>I design the same way. The sitemap nobody questions. The label that prevents the wrong click. <strong>The invisible adjustments are usually the whole job.</strong></p>
+          </div>
+        </div>
+
+        <!-- right: unserious pills (built by JS) -->
+        <div class="ab-unserious" aria-hidden="true">
+          <p class="ab-uns-title">Off the record</p>
+        </div>
+
+      </div><!-- /ab-s2 -->
+
+    </div><!-- /about -->
   </div>
 
 
@@ -1291,8 +1345,6 @@
   <script>
   'use strict';
 
-  let aboutSplitTl = null;
-
   /* ----------------------------------------------------------
      OVERLAY PANELS — About + Contact
   ---------------------------------------------------------- */
@@ -1304,8 +1356,7 @@
     document.body.style.overflow = 'hidden';
     if (id === 'about-overlay') {
       navLogoImg.src = 'assets/logo-dark.png';
-      gsap.set('.about-portrait-slot', { xPercent: -50 });
-      gsap.set('.about-portrait-img',  { xPercent: -50, yPercent: 110 });
+      if (typeof onAboutOpen === 'function') onAboutOpen();
     }
   }
   function closeOverlay(id) {
@@ -1313,8 +1364,7 @@
     panel.classList.remove('is-open');
     document.body.style.overflow = '';
     if (id === 'about-overlay') {
-      panel.scrollTop = 0;
-      if (aboutSplitTl) aboutSplitTl.progress(0);
+      if (typeof onAboutClose === 'function') onAboutClose();
       updateNavTheme();
     }
   }
@@ -1404,81 +1454,268 @@
   document.addEventListener('keydown', e => { if (e.key === 'Escape' && menuOpen) closeMenu(); });
 
   /* ----------------------------------------------------------
-     ABOUT — State 2: portrait split, scroll-driven
-     Scrubs a paused GSAP timeline against overlay.scrollTop.
-     Desktop only (≥768px).
+     ABOUT — 3-state interactive machine
+     S1: full-viewport "Hi! I'm Andrea" (auto-triggers after 1.2s)
+     S2: portrait bottom-left + bio + Serious/Unserious toggle
   ---------------------------------------------------------- */
-  (function () {
-    const aboutOverlayEl = document.getElementById('about-overlay');
+  const ABOUT_PILLS = [
+    { label: "Amazed by everything I don't yet know",       src: 'assets/about-pill-travel.gif',       type: 'img'   },
+    { label: 'Pilates core. UX brain.',                     src: 'assets/about-pill-pilates.gif',      type: 'img'   },
+    { label: 'Too much screentime',                         src: 'assets/about-pill-screentime.png',   type: 'img'   },
+    { label: 'Allergic to Comic Sans',                      src: 'assets/about-pill-comicsans.gif',    type: 'img'   },
+    { label: 'Love British Royal History',                  src: 'assets/about-pill-royalhistory.png', type: 'img'   },
+    { label: 'Absolute caffeine addict',                    src: 'assets/about-pill-caffeine.gif',     type: 'img'   },
+    { label: 'Recovering event stylist',                    src: 'assets/about-pill-stylist.mp4',      type: 'video' },
+    { label: 'Picking up pickleball',                       src: 'assets/about-pill-pickleball.gif',   type: 'img'   },
+    { label: 'Aspiring pilates instructor',                 src: 'assets/about-pill-reformer.png',     type: 'img'   },
+    { label: 'Adore fantasy novels, ACOTAR!!!!',            src: 'assets/about-pill-books.gif',        type: 'img'   },
+  ];
 
-    function buildAboutSplitTl() {
-      const wrapEl   = document.querySelector('.about-andrea-wrap');
-      const hiTextEl = document.querySelector('.about-hi-text');
-      const andreaEl = document.querySelector('.about-andrea-text');
-      const h2El     = document.querySelector('.about-headline');
+  let abAutoTimer     = null;
+  let abJiggleTimer   = null;
+  let abJiggleInterval = null;
+  let abState     = 'idle';   // 'idle' | 's1' | 's2'
+  let abMode      = 'serious'; // 'serious' | 'unserious'
+  let abPillsBuilt = false;
 
-      const wrapRect   = wrapEl.getBoundingClientRect();
-      const hiRect     = hiTextEl.getBoundingClientRect();
-      const andreaRect = andreaEl.getBoundingClientRect();
+  function triggerToggleJiggle() {
+    const sw = document.getElementById('ab-switch');
+    if (!sw) return;
+    sw.classList.remove('is-jiggling');
+    void sw.offsetWidth; // force reflow so animation restarts
+    sw.classList.add('is-jiggling');
+    sw.addEventListener('animationend', () => sw.classList.remove('is-jiggling'), { once: true });
+  }
 
-      const viewCenter  = window.innerWidth / 2;
-      const targetWidth = Math.max(window.innerWidth * 0.15, 120);
-      const halfSlot    = targetWidth / 2;
-      const P = Math.max(window.innerWidth * 0.04, 32);
+  function onAboutOpen() {
+    abState = 's1';
+    abMode  = 'serious';
+    abPillsBuilt = false;
 
-      const centerDeltaX = viewCenter - (wrapRect.left + wrapRect.width / 2);
-      const hiX = (viewCenter - halfSlot - P) - hiRect.right;
-      const andreaX = (viewCenter + halfSlot + P) - andreaRect.left - centerDeltaX;
+    const abPortrait  = document.querySelector('.ab-portrait');
+    const abS1        = document.querySelector('.ab-s1');
+    const abS2        = document.querySelector('.ab-s2');
+    const abWarmFill  = document.querySelector('.ab-warm-fill');
+    const abUnserious = document.querySelector('.ab-unserious');
+    const abSwitch    = document.getElementById('ab-switch');
+    const abLblSer    = document.getElementById('ab-lbl-serious');
+    const abLblUns    = document.getElementById('ab-lbl-unserious');
+    const abSerious   = document.querySelector('.ab-serious');
 
-      // State 3: warm panel fills bottom, portrait anchors at bottom, stacked text fades in
-      const fontSize         = parseFloat(getComputedStyle(h2El).fontSize);
-      const slotBleed        = fontSize * 0.14;
-      // wrapRect.bottom stays same vertically at State 2 end (no Y movement in State 2)
-      const s3PortraitDeltaY = window.innerHeight - (wrapRect.bottom + slotBleed);
-      const s3PanelH         = window.innerHeight * 0.5;
-      // Size portrait to natural image ratio so object-fit:contain shows the full photo
-      const naturalRatio     = h2El.querySelector('.about-portrait-img').naturalWidth /
-                               h2El.querySelector('.about-portrait-img').naturalHeight;
-      const s3PortraitW      = window.innerWidth  * 0.28;
-      const s3PortraitH      = s3PortraitW / naturalRatio;
+    // Clear old pills
+    abUnserious.querySelectorAll('.ab-pill-wrap').forEach(el => el.remove());
 
-      aboutSplitTl = gsap.timeline({ paused: true });
-      aboutSplitTl
-        // — State 2: text splits, portrait emerges (positions 0 → ~1.05) —
-        .to('.about-scroll-hint',   { opacity: 0, duration: 0.3, ease: 'none' }, 0)
-        .to('.about-portrait-img',  { yPercent: 0, duration: 0.9, ease: 'power1.out' }, 0.1)
-        .to('.about-andrea-wrap',   { x: centerDeltaX, duration: 0.9, ease: 'power1.inOut' }, 0.15)
-        .to('.about-hi-text',       { x: hiX, duration: 0.9, ease: 'power1.inOut' }, 0.15)
-        .to('.about-andrea-text',   { x: andreaX, duration: 0.9, ease: 'power1.inOut' }, 0.15)
-        .to(['.about-portrait-slot', '.about-portrait-img'],
-            { width: targetWidth, duration: 0.9, ease: 'power1.inOut' }, 0.15)
-        // — State 3: warm panel expands, portrait anchors at bottom (positions 1.1 → ~2.0) —
-        .set('.about-andrea-wrap',  { clipPath: 'inset(-5000px -5000px -5000px -5000px)' }, 1.1)
-        .to('.about-portrait-slot', { opacity: 0, duration: 0.2, ease: 'none' }, 1.1)
-        // split text fades out; stacked head fades in
-        .to('.about-hi-text',       { opacity: 0, duration: 0.25, ease: 'none' }, 1.1)
-        .to('.about-andrea-text',   { opacity: 0, duration: 0.25, ease: 'none' }, 1.1)
-        .to('.about-state3-head',   { opacity: 1, duration: 0.4,  ease: 'none' }, 1.25)
-        .to('.about-s3-content',    { opacity: 1, duration: 0.4,  ease: 'none' }, 1.25)
-        // warm panel + portrait
-        .to('.about-warm-panel',    { height: s3PanelH, duration: 0.8, ease: 'power2.inOut' }, 1.1)
-        .to('.about-portrait-img',  { y: s3PortraitDeltaY, height: s3PortraitH, width: s3PortraitW,
-                                      duration: 0.8, ease: 'power2.inOut' }, 1.1)
-        // — State 4: s3 scrolls up out, s4 scrolls up in (positions 2.1 → 2.8) —
-        .set('.about-s4-content',   { yPercent: 100 }, 0)
-        .to('.about-s3-content',    { yPercent: -100, opacity: 0, duration: 0.55, ease: 'power2.inOut' }, 2.1)
-        .to('.about-s4-content',    { yPercent: 0, opacity: 1, duration: 0.55, ease: 'power2.inOut' }, 2.35);
+    // Reset all elements
+    gsap.set(abS1,        { opacity: 1, pointerEvents: 'auto' });
+    gsap.set(abS2,        { opacity: 0, pointerEvents: 'none' });
+    gsap.set(abUnserious, { opacity: 0, pointerEvents: 'none' });
+    gsap.set(abWarmFill,  { scale: 0 });
+    gsap.set(abSerious,   { opacity: 1 });
+    gsap.set(abPortrait,  { opacity: 0, width: 0, height: 0, left: 0, top: 0 });
+    // Reset headline text split positions + opacity (direct DOM for warm-rect reliability)
+    gsap.set('.ab-headline > span:first-child', { x: 0, opacity: 1 });
+    gsap.set('.ab-andrea-wrap',                 { x: 0, opacity: 1 });
+    document.querySelectorAll('.ab-warm-rect').forEach(el => el.style.removeProperty('opacity'));
+    abSwitch.classList.remove('is-unserious');
+    abSwitch.setAttribute('aria-checked', 'false');
+    abLblSer.classList.add('is-active');
+    abLblUns.classList.remove('is-active');
+
+    clearTimeout(abAutoTimer);
+    abAutoTimer = setTimeout(() => {
+      if (abState !== 's1') return;
+      abState = 's2';
+      buildAboutPills();
+      animateS1toS2();
+    }, 1200);
+  }
+
+  function onAboutClose() {
+    clearTimeout(abAutoTimer);
+    clearTimeout(abJiggleTimer);
+    clearInterval(abJiggleInterval);
+    abAutoTimer = abJiggleTimer = abJiggleInterval = null;
+    abState = 'idle';
+  }
+
+  function buildAboutPills() {
+    if (abPillsBuilt) return;
+    abPillsBuilt = true;
+    const wrap = document.querySelector('.ab-unserious');
+    const vw   = window.innerWidth;
+    const vh   = window.innerHeight;
+
+    // Scatter in the right portion using a loose grid; clamp x so pills don't overflow
+    const cols   = 3, rows = 4;
+    const startX = vw * 0.36;
+    const startY = vh * 0.08;
+    const maxPillW = 220; // rough max pill label width px
+    const cellW  = (vw * 0.54) / cols;
+    const cellH  = (vh * 0.80) / rows;
+    const maxX   = vw - maxPillW - 16;
+
+    // Build cell pool, shuffle, take first PILLS.length
+    const cells = [];
+    for (let r = 0; r < rows; r++)
+      for (let c = 0; c < cols; c++)
+        cells.push({ r, c });
+    for (let i = cells.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [cells[i], cells[j]] = [cells[j], cells[i]];
     }
 
-    aboutOverlayEl.addEventListener('scroll', () => {
-      if (window.innerWidth < 768) return;
-      if (!aboutSplitTl) buildAboutSplitTl();
-      const aboutEl = document.getElementById('about');
-      const scrollable = aboutEl.offsetHeight - window.innerHeight;
-      if (scrollable <= 0) return;
-      aboutSplitTl.progress(Math.min(1, aboutOverlayEl.scrollTop / scrollable));
-    }, { passive: true });
-  }());
+    // Shuffle pills order each open
+    const pillOrder = ABOUT_PILLS.map((_, i) => i);
+    for (let i = pillOrder.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [pillOrder[i], pillOrder[j]] = [pillOrder[j], pillOrder[i]];
+    }
+
+    pillOrder.forEach((pi, i) => {
+      const pill = ABOUT_PILLS[pi];
+      const cell = cells[i];
+      const x = Math.min(startX + cell.c * cellW + Math.random() * (cellW * 0.35), maxX);
+      const y = startY + cell.r * cellH + Math.random() * (cellH * 0.35);
+
+      const pillWrap = document.createElement('div');
+      pillWrap.className = 'ab-pill-wrap';
+      pillWrap.style.left = x + 'px';
+      pillWrap.style.top  = y + 'px';
+
+      let mediaEl;
+      if (pill.type === 'video') {
+        mediaEl = document.createElement('video');
+        mediaEl.src = pill.src;
+        mediaEl.autoplay = true;
+        mediaEl.loop     = true;
+        mediaEl.muted    = true;
+        mediaEl.playsInline = true;
+      } else {
+        mediaEl = document.createElement('img');
+        mediaEl.src = pill.src;
+        mediaEl.alt = '';
+      }
+      mediaEl.className = 'ab-pill-media';
+
+      const pillEl = document.createElement('span');
+      pillEl.className   = 'ab-pill';
+      pillEl.textContent = pill.label;
+
+      pillWrap.appendChild(mediaEl);
+      pillWrap.appendChild(pillEl);
+      wrap.appendChild(pillWrap);
+    });
+  }
+
+  function animateS1toS2() {
+    const portrait   = document.querySelector('.ab-portrait');
+    const s1         = document.querySelector('.ab-s1');
+    const s2         = document.querySelector('.ab-s2');
+    const headline   = document.querySelector('.ab-headline');
+    const hiText     = headline.children[0];                    // "Hi! I'm" span
+    const andreaWrap = document.querySelector('.ab-andrea-wrap'); // warm rect + "Andrea"
+    const warmRect   = document.querySelector('.ab-warm-rect');
+
+    const vw = window.innerWidth, vh = window.innerHeight;
+    const rr  = warmRect.getBoundingClientRect();   // original warm rect bounds
+    const hiR = hiText.getBoundingClientRect();
+    const anR = andreaWrap.getBoundingClientRect();
+
+    // ── Portrait during SPLIT phase (centered on viewport) ───
+    // Use viewport center so both text halves split symmetrically
+    const splitW       = Math.max(rr.width, 240);
+    const splitH       = rr.height * 2.6;
+    const splitL       = vw / 2 - splitW / 2;                  // dead center
+    // Start: portrait at warm rect x but bottom-hidden; rise to center
+    const splitL_start = rr.left + rr.width / 2 - splitW / 2; // warm rect x-center
+    const splitT_start = rr.bottom - splitH * 0.06;            // mostly hidden below rect
+    const splitT_end   = rr.top + rr.height / 2 - splitH * 0.62; // head crosses above rect top
+
+    // ── Symmetric text split from viewport center ─────────────
+    const gap          = 28;
+    const hiDeltaX     = (splitL - gap) - hiR.right;           // "Hi! I'm" → left
+    const andreaDeltaX = (splitL + splitW + gap) - anR.left;   // "Andrea"  → right
+
+    // ── Portrait final position (S2 bottom-left) ─────────────
+    const portEndW = Math.min(vw * 0.22, 260);
+    const portEndH = portEndW * 1.55;
+    const portEndL = Math.max(vw * 0.04, 28);
+    const portEndT = vh - portEndH;
+
+    // Portrait starts at warm rect x-center, hidden below rect
+    gsap.set(portrait, {
+      width: splitW, height: splitH,
+      left: splitL_start, top: splitT_start,
+      opacity: 0,
+    });
+
+    const tl = gsap.timeline();
+
+    // ── Phase 1 (0 → 0.85s): text splits, portrait pops up ───
+    // Warm rect fades as portrait rises through it
+    tl.to(warmRect, { opacity: 0, duration: 0.35, ease: 'power1.in' }, 0.05);
+    // "Hi! I'm" flies left
+    tl.to(hiText,     { x: hiDeltaX,     duration: 0.78, ease: 'power2.inOut' }, 0);
+    // "Andrea" flies right
+    tl.to(andreaWrap, { x: andreaDeltaX, duration: 0.78, ease: 'power2.inOut' }, 0);
+    // Portrait fades in, rises AND shifts to viewport center simultaneously
+    tl.to(portrait, { opacity: 1, duration: 0.28, ease: 'power1.out' }, 0.08);
+    tl.to(portrait, { left: splitL, top: splitT_end, duration: 0.72, ease: 'power2.out' }, 0.12);
+
+    // ── Phase 2 (0.88s → 1.75s): collapse to S2 layout ──────
+    // Headline text halves fade out
+    tl.to([hiText, andreaWrap], { opacity: 0, duration: 0.28, ease: 'power1.out' }, 0.88);
+    tl.set(s1, { opacity: 0, pointerEvents: 'none' }, 0.92);
+    // Portrait moves bottom-left and grows to final size
+    tl.to(portrait, {
+      width: portEndW, height: portEndH,
+      left: portEndL,  top: portEndT,
+      duration: 0.78, ease: 'power2.inOut',
+    }, 0.90);
+    // S2 content fades in
+    tl.to(s2, { opacity: 1, pointerEvents: 'auto', duration: 0.45, ease: 'power1.out' }, 1.40);
+    // Jiggle toggle 5s after S2 appears, then every 10s — nudges user to interact
+    tl.call(() => {
+      abJiggleTimer = setTimeout(() => {
+        triggerToggleJiggle();
+        abJiggleInterval = setInterval(triggerToggleJiggle, 10000);
+      }, 5000);
+    }, [], '+=0');
+  }
+
+  // Toggle: Serious ↔ Unserious
+  document.getElementById('ab-switch').addEventListener('click', function () {
+    if (abState !== 's2') return;
+    abMode = abMode === 'serious' ? 'unserious' : 'serious';
+    const isUns = abMode === 'unserious';
+
+    this.classList.toggle('is-unserious', isUns);
+    this.setAttribute('aria-checked', String(isUns));
+    document.getElementById('ab-lbl-serious').classList.toggle('is-active', !isUns);
+    document.getElementById('ab-lbl-unserious').classList.toggle('is-active', isUns);
+
+    const abWarmFill  = document.querySelector('.ab-warm-fill');
+    const abUnserious = document.querySelector('.ab-unserious');
+    const abPortrait  = document.querySelector('.ab-portrait');
+
+    if (isUns) {
+      // Set warm-fill transform-origin to portrait center
+      const pr = abPortrait.getBoundingClientRect();
+      const ox = ((pr.left + pr.width  / 2) / window.innerWidth)  * 100;
+      const oy = ((pr.top  + pr.height / 2) / window.innerHeight) * 100;
+      abWarmFill.style.transformOrigin = ox + '% ' + oy + '%';
+
+      gsap.timeline()
+        .to('.ab-serious', { opacity: 0, duration: 0.22, ease: 'power1.out' }, 0)
+        .to(abWarmFill,    { scale: 1, duration: 0.55, ease: 'power2.inOut' }, 0)
+        .to(abUnserious,   { opacity: 1, pointerEvents: 'auto', duration: 0.35, ease: 'power1.out' }, 0.38);
+    } else {
+      gsap.timeline()
+        .to(abUnserious,   { opacity: 0, pointerEvents: 'none', duration: 0.22, ease: 'power1.out' }, 0)
+        .to(abWarmFill,    { scale: 0, duration: 0.5, ease: 'power2.inOut' }, 0.1)
+        .to('.ab-serious', { opacity: 1, duration: 0.35, ease: 'power1.out' }, 0.35);
+    }
+  });
 
   /* ----------------------------------------------------------
      SESSION 3 — Hero GSAP scroll sequence + Work entrance/exit
@@ -1498,9 +1735,6 @@
         anticipatePin: 1,
       }
     });
-
-    // Fade scroll hint immediately as zoom begins
-    heroTl.to(".hero-scroll-hint", { opacity: 0, duration: 0.4, ease: "none" }, 0);
 
     // Phase 1 (0→5): Zoom toward the 'p' in "stupidly" on the monitor
     heroTl.to("#hero-img", { scale: 6, ease: "none", duration: 5 }, 0);
@@ -1548,7 +1782,6 @@
       }
     });
 
-    heroTl.to(".hero-scroll-hint", { opacity: 0, duration: 0.4, ease: "none" }, 0);
     heroTl.to("#hero-img", { scale: 5, ease: "none", duration: 5 }, 0);
     heroTl.to("#work-reveal", {
       clipPath: "circle(120% at 49% 42%)",
