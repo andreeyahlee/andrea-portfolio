@@ -2,14 +2,14 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
   <title>Paw Haus — Case Study</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,100..1000&display=swap" rel="stylesheet">
-  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@200..800&display=swap" rel="stylesheet">
-  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@1,9..144,300&display=swap" rel="stylesheet">
   <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
   <script src="https://cdn.jsdelivr.net/npm/@studio-freight/lenis@1.0.42/dist/lenis.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
@@ -23,8 +23,8 @@
       --bg:         #f3f2ec;
       --ink:        #0a0a0a;
       --ink-muted:  rgba(10,10,10,0.55);
-      --font-display: 'DM Sans', sans-serif;
-      --font-body:    'Plus Jakarta Sans', sans-serif;
+      --font-display: 'DM Serif Display', serif;
+      --font-body:    'DM Sans', sans-serif;
       --font-mono:    'JetBrains Mono', monospace;
       --content-max:  1100px;
       --pad-x:        clamp(32px, 5vw, 80px);
@@ -32,7 +32,9 @@
       --nav-h:        72px;
     }
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-    html { scroll-behavior: auto; }
+    html { scroll-behavior: auto; -webkit-text-size-adjust: 100%; overflow-x: hidden; }
+    picture { display: contents; }
+    a, button, [role="button"] { touch-action: manipulation; }
     body { font-family: var(--font-body); background: var(--bg); color: var(--ink); overflow-x: hidden; }
     a { color: inherit; text-decoration: none; }
     img { display: block; max-width: 100%; }
@@ -76,7 +78,7 @@
     .cs-inner { padding: var(--pad-y) var(--pad-x); }
     .cs-section-label {
       font-family: var(--font-mono); font-size: 11px; font-weight: 700;
-      letter-spacing: 0.08em; text-transform: uppercase;
+      letter-spacing: 0.12em; text-transform: uppercase;
       color: var(--ink-muted); margin-bottom: 24px;
     }
     .cs-h2 {
@@ -131,7 +133,7 @@
     }
     .ph-ph-label {
       font-family: var(--font-mono); font-size: 10px; font-weight: 700;
-      letter-spacing: 0.08em; text-transform: uppercase;
+      letter-spacing: 0.12em; text-transform: uppercase;
       color: var(--ph-mauve); opacity: 0.65;
     }
 
@@ -140,6 +142,7 @@
       position: sticky; top: 0; z-index: 1;
       background: var(--ph-dark);
       min-height: 100vh;
+      min-height: 100svh;
       display: flex; flex-direction: column; justify-content: flex-end;
       padding-top: 60px; overflow: hidden;
     }
@@ -176,7 +179,7 @@
     }
     .ph-hero-cta {
       display: inline-flex; align-items: center; gap: 8px;
-      font-size: 12px; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase;
+      font-size: 12px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase;
       color: var(--ph-dark); background: var(--ph-muted);
       border-radius: 100px; padding: 12px 26px;
       transition: background 0.22s, transform 0.18s cubic-bezier(0.34,1.56,0.64,1);
@@ -188,7 +191,7 @@
       padding: 10px 0; border-bottom: 1px solid rgba(255,255,255,0.07);
     }
     .ph-meta-row:last-child { border-bottom: none; }
-    .ph-meta-label { font-size: 10px; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; color: rgba(255,255,255,0.32); padding-top: 1px; }
+    .ph-meta-label { font-size: 10px; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; color: rgba(255,255,255,0.32); padding-top: 1px; }
     .ph-meta-value { font-size: 12px; line-height: 1.5; color: rgba(255,255,255,0.78); }
 
     /* ── 01 TLDR ── */
@@ -198,7 +201,7 @@
     .ph-tldr-divider { background: rgba(255,255,255,0.1); align-self: stretch; }
     .ph-col-label {
       font-family: var(--font-mono); font-size: 10px; font-weight: 700;
-      letter-spacing: 0.1em; text-transform: uppercase;
+      letter-spacing: 0.12em; text-transform: uppercase;
       color: rgba(255,255,255,0.3); margin-bottom: 22px;
     }
     .ph-tldr-stat {
@@ -229,7 +232,7 @@
     .ph-sitch-card:hover { transform: translateY(-3px); }
     .ph-sitch-tag {
       font-family: var(--font-mono); font-size: 10px; font-weight: 700;
-      letter-spacing: 0.1em; text-transform: uppercase;
+      letter-spacing: 0.12em; text-transform: uppercase;
       color: var(--ph-mauve); margin-bottom: 12px;
     }
     .ph-sitch-title { font-size: 14px; font-weight: 700; color: var(--ink); margin-bottom: 8px; line-height: 1.35; }
@@ -256,17 +259,17 @@
     }
     .ph-quote-block::before {
       content: '\201C';
-      font-family: 'Fraunces', serif; font-size: 72px; line-height: 0.5;
+      font-family: 'DM Serif Display', serif; font-size: 72px; line-height: 0.5;
       color: var(--ph-mauve); opacity: 0.45;
       position: absolute; top: 22px; left: 18px;
     }
     .ph-quote-text {
-      font-family: 'Fraunces', serif; font-style: italic; font-weight: 300;
-      font-size: clamp(12px, 1vw, 14px); line-height: 1.7;
+      font-family: 'DM Serif Display', serif; font-style: italic; font-weight: 400;
+      font-size: clamp(15px, 1.3vw, 17px); line-height: 1.72;
       color: rgba(255,255,255,0.82); margin-bottom: 10px;
     }
     .ph-quote-attr {
-      font-size: 10px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase;
+      font-size: 10px; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase;
       color: rgba(255,255,255,0.32);
     }
 
@@ -279,7 +282,7 @@
     .ph-persona:hover { border-color: var(--ph-mauve); transform: translateY(-2px); }
     .ph-persona-tag {
       font-family: var(--font-mono); font-size: 10px; font-weight: 700;
-      letter-spacing: 0.1em; text-transform: uppercase; color: var(--ph-mauve); margin-bottom: 10px;
+      letter-spacing: 0.12em; text-transform: uppercase; color: var(--ph-mauve); margin-bottom: 10px;
     }
     .ph-persona-title { font-size: 14px; font-weight: 700; color: var(--ink); margin-bottom: 8px; line-height: 1.35; font-style: italic; }
     .ph-persona-body { font-size: 12.5px; line-height: 1.65; color: var(--ink-muted); }
@@ -303,7 +306,7 @@
     .ph-move-header { display: flex; align-items: center; justify-content: space-between; }
     .ph-move-tag {
       font-family: var(--font-mono); font-size: 10px; font-weight: 700;
-      letter-spacing: 0.08em; text-transform: uppercase; color: var(--ph-mauve);
+      letter-spacing: 0.12em; text-transform: uppercase; color: var(--ph-mauve);
       display: flex; align-items: center; gap: 7px;
     }
     .ph-move-tag::before { content: ''; width: 5px; height: 5px; border-radius: 50%; background: var(--ph-mauve); }
@@ -318,7 +321,7 @@
     }
     .ph-hifi-screen-tag {
       font-family: var(--font-mono); font-size: 10px; font-weight: 700;
-      letter-spacing: 0.1em; text-transform: uppercase; color: var(--ph-mauve); margin-bottom: 14px;
+      letter-spacing: 0.12em; text-transform: uppercase; color: var(--ph-mauve); margin-bottom: 14px;
     }
     .ph-hifi-title { font-size: 17px; font-weight: 700; color: var(--ink); margin-bottom: 10px; line-height: 1.3; }
     .ph-hifi-desc { font-size: 12.5px; line-height: 1.65; color: var(--ink-muted); }
@@ -341,7 +344,7 @@
     .ph-test-label {
       padding: 12px 18px;
       font-family: var(--font-mono); font-size: 10px; font-weight: 700;
-      letter-spacing: 0.1em; text-transform: uppercase;
+      letter-spacing: 0.12em; text-transform: uppercase;
     }
     .ph-test-label--before { background: rgba(217,74,74,0.1); color: #c94040; }
     .ph-test-label--after  { background: rgba(123,63,110,0.1); color: var(--ph-mauve); }
@@ -370,7 +373,7 @@
     .ph-result-num { font-family: var(--font-display); font-size: 44px; font-weight: 900; color: #fff; line-height: 1; margin-bottom: 6px; }
     .ph-result-lbl {
       font-family: var(--font-mono); font-size: 9px; font-weight: 700;
-      letter-spacing: 0.08em; text-transform: uppercase; color: var(--ph-muted); margin-bottom: 10px;
+      letter-spacing: 0.12em; text-transform: uppercase; color: var(--ph-muted); margin-bottom: 10px;
     }
     .ph-result-body { font-size: 11.5px; line-height: 1.55; color: rgba(255,255,255,0.45); }
 
@@ -391,7 +394,7 @@
     /* ── 08 REFLECTION B ── */
     .ph-next-label {
       font-family: var(--font-mono); font-size: 10px; font-weight: 700;
-      letter-spacing: 0.1em; text-transform: uppercase;
+      letter-spacing: 0.12em; text-transform: uppercase;
       color: rgba(255,255,255,0.3); margin-bottom: 28px;
     }
     .ph-next-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 14px; }
@@ -417,10 +420,10 @@
       color: rgba(255,255,255,0.35);
     }
     .cs-cta-strip-heading {
-      font-family: 'Fraunces', serif;
+      font-family: 'DM Serif Display', serif;
       font-style: italic;
-      font-size: clamp(36px, 4.5vw, 64px);
-      font-weight: 300;
+      font-size: clamp(26px, 4vw, 42px);
+      font-weight: 400;
       color: #fff;
       line-height: 1.1;
       max-width: 680px;
@@ -431,7 +434,7 @@
       gap: 8px;
       font-size: 12px;
       font-weight: 600;
-      letter-spacing: 0.08em;
+      letter-spacing: 0.12em;
       text-transform: uppercase;
       color: #fff;
       border: 1px solid rgba(255,255,255,0.25);
@@ -449,14 +452,14 @@
       padding: 20px 0 0; border-top: 1px solid rgba(255,255,255,0.08); margin-top: 28px;
     }
     .ph-case-nav a {
-      font-size: 11px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase;
+      font-size: 11px; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase;
       color: rgba(255,255,255,0.38); transition: color 0.2s;
     }
     .ph-case-nav a:hover { color: #fff; }
 
     /* ── OVERLAY SCROLL ── */
     .cs-section:not(.ph-hero) {
-      position: relative; min-height: 100vh;
+      position: relative; min-height: 100vh; min-height: 100svh;
       border-radius: 20px 20px 0 0;
       box-shadow: 0 -24px 80px rgba(0,0,0,0.18);
       clip-path: inset(calc(var(--nav-h) - 8px) 0 0 0 round 20px 20px 0 0);
@@ -533,7 +536,11 @@
     #ph-research-2 .ph-synthesis { margin-top: 8px; }
 
     /* ── RESPONSIVE ── */
-    @media (max-width: 768px) {
+    @media (max-width: 767px) {
+      .ph-move-grid  { grid-template-columns: 1fr 1fr; }
+      .ph-hifi-grid  { grid-template-columns: 1fr 1fr; }
+    }
+    @media (max-width: 639px) {
       .ph-hero-inner { grid-template-columns: 1fr; }
       .ph-tldr-grid  { grid-template-columns: 1fr; }
       .ph-sitch-grid { grid-template-columns: 1fr; }
@@ -547,8 +554,8 @@
       .ph-next-grid  { grid-template-columns: 1fr; }
 
       /* Disable pin/clip system on mobile */
-      .cs-section { clip-path: none !important; }
-      .ph-hero { position: relative !important; top: auto !important; }
+      .cs-section { clip-path: none !important; min-height: auto !important; }
+      .ph-hero { position: relative !important; top: auto !important; min-height: 100svh; min-height: 100vh; }
       .cs-inner { padding-top: var(--pad-y) !important; }
     }
     *, *::before, *::after { cursor: none !important; }
@@ -601,7 +608,7 @@
       font-family: var(--font-body, sans-serif);
       font-size: 9px;
       font-weight: 700;
-      letter-spacing: 0.1em;
+      letter-spacing: 0.12em;
       text-transform: uppercase;
       color: rgba(255,255,255,0);
       mix-blend-mode: difference;
@@ -615,7 +622,7 @@
   </style>
 </head>
 <body>
-  <div id="custom-cursor" aria-hidden="true"><img src="../assets/cursor-light.png" alt=""></div>
+  <div id="custom-cursor" aria-hidden="true"><img src="../assets/cursor-light.png" alt="" width="1003" height="830"></div>
 
   <!-- STICKY SECTION NAV -->
   <nav class="cs-sticky-nav" aria-label="Section navigation">
@@ -640,17 +647,20 @@
   <!-- 00 HERO -->
   <section class="cs-section ph-hero" id="ph-hero">
     <div class="ph-hero-bg">
-      <img src="../assets/pethaus-hero-bg.png" alt="" loading="eager">
+      <picture>
+        <source type="image/webp" srcset="../assets/pethaus-hero-bg.webp">
+        <img src="../assets/pethaus-hero-bg.png" alt="" loading="eager" width="2880" height="1900">
+      </picture>
     </div>
     <div class="ph-hero-inner">
       <div>
         <h1 class="ph-hero-h1">Pet owners<br>don't shop.<br>They <em>check.</em></h1>
-        <p class="ph-hero-sub">So I designed Paw Haus — where every product page earns trust before it asks for a click. End-to-end UX, solo.</p>
+        <p class="ph-hero-sub">So I designed Paw Haus — where every product page earns trust before it asks for a click. Every touchpoint from research to final screens, solo.</p>
         <a class="ph-hero-cta" href="https://pawhaus.figma.site/" target="_blank" rel="noopener">Try the Pet-First Flow →</a>
       </div>
       <div class="ph-hero-meta">
-        <div class="ph-meta-row"><span class="ph-meta-label">Role</span><span class="ph-meta-value">Solo Designer — End to End Lead UX</span></div>
-        <div class="ph-meta-row"><span class="ph-meta-label">Methods</span><span class="ph-meta-value">Research · IA · Visual Design · Testing</span></div>
+        <div class="ph-meta-row"><span class="ph-meta-label">Role</span><span class="ph-meta-value">Solo Designer — End to End Product Design</span></div>
+        <div class="ph-meta-row"><span class="ph-meta-label">Methods</span><span class="ph-meta-value">Research · Structure &amp; Flows · Visual Design · Testing</span></div>
         <div class="ph-meta-row"><span class="ph-meta-label">Type</span><span class="ph-meta-value">E-commerce Platform</span></div>
         <div class="ph-meta-row"><span class="ph-meta-label">Participants</span><span class="ph-meta-value">12 Research Interviewees · 5 Usability Testers</span></div>
         <div class="ph-meta-row"><span class="ph-meta-label">Deliverable</span><span class="ph-meta-value">Full E-commerce UX · Web + Mobile</span></div>
@@ -715,7 +725,7 @@
     <div class="cs-inner">
       <p class="cs-section-label">02 Research</p>
       <h2 class="cs-h2">Same store. Same product.<br><em>Four reasons to leave.</em></h2>
-      <p class="cs-body">12 in-person interviews — 11 Gen Z/Millennials, 1 Boomer. Competitor analysis across Shopee, Lazada, Kohepets, Pet Lovers Centre, and Perromart. Synthesised into four behavioural patterns.</p>
+      <p class="cs-body">12 in-person interviews — 11 Gen Z/Millennials, 1 Boomer. Competitor analysis across Shopee, Lazada, Kohepets, Pet Lovers Centre, and Perromart. Grouped into four behavioural patterns.</p>
       <div class="ph-stats4">
         <div class="ph-stat-card"><p class="ph-stat-num">92%</p><p class="ph-stat-card-body">had pets with specialised dietary needs — health was the primary purchase driver</p></div>
         <div class="ph-stat-card"><p class="ph-stat-num">92%</p><p class="ph-stat-card-body">11 of 12 treated pet health as non-negotiable — above price, brand, or convenience</p></div>
@@ -734,16 +744,16 @@
     <div class="cs-inner">
       <p class="cs-section-label">03 The Sitch</p>
       <h2 class="cs-h2">The brief was <em>e-commerce.</em><br>The problem was <em>anxiety.</em></h2>
-      <p class="cs-body">Competing platforms were built for browsing. But 83% of participants came with a specific product already in mind. They needed to check — not shop. That gap was the entire opportunity.</p>
+      <p class="cs-body">Competing platforms were built for browsing. But 83% of participants arrived with a specific product already in mind — they needed to check, not shop, and that gap was the entire opportunity.</p>
       <div class="ph-personas">
         <div class="ph-persona">
-          <img src="../assets/pethaus-research-hearticon.png" alt="" class="ph-persona-icon">
+          <img src="../assets/pethaus-research-hearticon.png" alt="" class="ph-persona-icon" loading="lazy" width="200" height="200">
           <p class="ph-persona-tag">The Anxious Health Advocate</p>
           <p class="ph-persona-title">"I check every ingredient before I'll even consider buying."</p>
           <p class="ph-persona-body">Dog with a newly diagnosed beef allergy. Anxiety isn't about price — it's about accidentally causing a flare-up. One unreadable label ends the session.</p>
         </div>
         <div class="ph-persona">
-          <img src="../assets/pethaus-research-icon.png" alt="" class="ph-persona-icon">
+          <img src="../assets/pethaus-research-icon.png" alt="" class="ph-persona-icon" loading="lazy" width="200" height="200">
           <p class="ph-persona-tag">The Overwhelmed First-Timer</p>
           <p class="ph-persona-title">"I don't know what's good — every recommendation feels like a guess."</p>
           <p class="ph-persona-body">First-time kitten owner. No way to know what's good or safe. Every vague recommendation is a reason to close the tab. Needs proof and guidance before committing financially. Anxiety is about wasting money on things a young pet won't need.</p>
@@ -769,7 +779,10 @@
           <p class="ph-move-title">Before any browsing, Paw Haus asks: who are you shopping for?</p>
           <p class="ph-move-body">Enter your pet's name, species, age, and health conditions. Every product page then checks itself against that profile — surfacing what's safe, flagging what to watch. Shopping becomes checking.</p>
         </div>
-        <img src="../assets/pethaus-move-01.png" alt="Pet profile onboarding UI" loading="lazy" style="border-radius:16px; width:100%; box-shadow:0 12px 40px rgba(45,26,42,0.14);">
+        <picture>
+          <source type="image/webp" srcset="../assets/pethaus-move-01.webp">
+          <img src="../assets/pethaus-move-01.png" alt="Pet profile onboarding UI" loading="lazy" width="1123" height="726" style="border-radius:16px; width:100%; box-shadow:0 12px 40px rgba(45,26,42,0.14);">
+        </picture>
       </div>
     </div>
   </section>
@@ -780,7 +793,10 @@
       <p class="cs-section-label">04 The Design — Move 02</p>
       <h2 class="cs-h2">Trust signals<br><em>above the fold.</em></h2>
       <div class="ph-move-grid">
-        <img src="../assets/pethaus-move-02.png" alt="Product card with trust labels" loading="lazy" style="border-radius:16px; width:100%; box-shadow:0 12px 40px rgba(45,26,42,0.14);">
+        <picture>
+          <source type="image/webp" srcset="../assets/pethaus-move-02.webp">
+          <img src="../assets/pethaus-move-02.png" alt="Product card with trust labels" loading="lazy" width="1123" height="766" style="border-radius:16px; width:100%; box-shadow:0 12px 40px rgba(45,26,42,0.14);">
+        </picture>
         <div class="ph-move-card">
           <div class="ph-move-header">
             <span class="ph-move-tag">Placement Strategy</span>
@@ -807,7 +823,10 @@
           <p class="ph-move-title">At a Glance Ingredients</p>
           <p class="ph-move-body">Top ingredients shown as chips — colour-coded green, amber, or red against your pet's specific health profile. No hunting. No collapsed accordions. Instant legibility at the point of decision.</p>
         </div>
-        <img src="../assets/pethaus-move-03.png" alt="PDP ingredient chips" loading="lazy" style="border-radius:16px; width:100%; box-shadow:0 12px 40px rgba(45,26,42,0.14);">
+        <picture>
+          <source type="image/webp" srcset="../assets/pethaus-move-03.webp">
+          <img src="../assets/pethaus-move-03.png" alt="PDP ingredient chips" loading="lazy" width="1123" height="686" style="border-radius:16px; width:100%; box-shadow:0 12px 40px rgba(45,26,42,0.14);">
+        </picture>
       </div>
     </div>
   </section>
@@ -818,7 +837,10 @@
       <p class="cs-section-label">04 The Design — Move 04</p>
       <h2 class="cs-h2">Quality assurance,<br><em>visible.</em></h2>
       <div class="ph-move-grid">
-        <img src="../assets/pethaus-move-04.png" alt="Badge system and checkout summary" loading="lazy" style="border-radius:16px; width:100%; box-shadow:0 12px 40px rgba(45,26,42,0.14);">
+        <picture>
+          <source type="image/webp" srcset="../assets/pethaus-move-04.webp">
+          <img src="../assets/pethaus-move-04.png" alt="Badge system and checkout summary" loading="lazy" width="1173" height="726" style="border-radius:16px; width:100%; box-shadow:0 12px 40px rgba(45,26,42,0.14);">
+        </picture>
         <div class="ph-move-card">
           <div class="ph-move-header">
             <span class="ph-move-tag">Badge System + Checkout</span>
@@ -850,7 +872,10 @@
           <p class="ph-hifi-title">"What do you want?" was the wrong first question.</p>
           <p class="ph-hifi-desc">Paw Haus opens with "who are you shopping for?" Products surface based on what's safe for your specific pet — not generic browsing categories.</p>
         </div>
-        <img src="../assets/pethaus-hifi-01.png" alt="Homepage pet-first onboarding" loading="lazy" style="width:100%; display:block;">
+        <picture>
+          <source type="image/webp" srcset="../assets/pethaus-hifi-01.webp">
+          <img src="../assets/pethaus-hifi-01.png" alt="Homepage pet-first onboarding" loading="lazy" width="1240" height="887" style="width:100%; display:block;">
+        </picture>
       </div>
     </div>
   </section>
@@ -860,7 +885,10 @@
     <div class="cs-inner">
       <p class="cs-section-label">05 Hi-Fidelity — 02 / 03</p>
       <div class="ph-hifi-grid" style="direction:rtl;">
-        <img src="../assets/pethaus-hifi-02.png" alt="Product detail page" loading="lazy" style="width:100%; display:block;">
+        <picture>
+          <source type="image/webp" srcset="../assets/pethaus-hifi-02.webp">
+          <img src="../assets/pethaus-hifi-02.png" alt="Product detail page" loading="lazy" width="1240" height="887" style="width:100%; display:block;">
+        </picture>
         <div style="direction:ltr;">
           <p class="ph-hifi-screen-tag">Product Detail Page</p>
           <p class="ph-hifi-title">Information before the ask.</p>
@@ -880,7 +908,10 @@
           <p class="ph-hifi-title">Confidence maintained through the final step.</p>
           <p class="ph-hifi-desc">Ingredient snapshot and sourcing badge in the order summary. Trust doesn't vanish at checkout — that's exactly where users were abandoning before.</p>
         </div>
-        <img src="../assets/pethaus-hifi-03.png" alt="Checkout trust persists" loading="lazy" style="width:100%; display:block;">
+        <picture>
+          <source type="image/webp" srcset="../assets/pethaus-hifi-03.webp">
+          <img src="../assets/pethaus-hifi-03.png" alt="Checkout trust persists" loading="lazy" width="1240" height="887" style="width:100%; display:block;">
+        </picture>
       </div>
     </div>
   </section>
@@ -895,7 +926,10 @@
         <div class="ph-test-card">
           <div class="ph-test-label ph-test-label--before">Before — Re-order buried below fold</div>
           <div class="ph-test-img-area">
-            <img src="../assets/pethaus-test-before.png" alt="Before — re-order buried below fold" loading="lazy" style="width:100%; display:block;">
+            <picture>
+              <source type="image/webp" srcset="../assets/pethaus-test-before.webp">
+              <img src="../assets/pethaus-test-before.png" alt="Before — re-order buried below fold" loading="lazy" width="1240" height="887" style="width:100%; display:block;">
+            </picture>
           </div>
           <div class="ph-test-foot">
             <p class="ph-test-metric ph-test-metric--bad">20%</p>
@@ -905,7 +939,10 @@
         <div class="ph-test-card">
           <div class="ph-test-label ph-test-label--after">After — Re-order above fold</div>
           <div class="ph-test-img-area">
-            <img src="../assets/pethaus-test-after.png" alt="After — re-order above fold" loading="lazy" style="width:100%; display:block;">
+            <picture>
+              <source type="image/webp" srcset="../assets/pethaus-test-after.webp">
+              <img src="../assets/pethaus-test-after.png" alt="After — re-order above fold" loading="lazy" width="1240" height="887" style="width:100%; display:block;">
+            </picture>
           </div>
           <div class="ph-test-foot">
             <p class="ph-test-metric ph-test-metric--good">Visible</p>
@@ -921,7 +958,7 @@
     <div class="cs-inner">
       <p class="cs-section-label">07 Results</p>
       <h2 class="cs-h2"><em>Impact.</em></h2>
-      <p class="cs-body">5 usability test participants. 3 tasks. The core mechanic worked exactly as intended. One structural iteration sharpened the homepage hierarchy.</p>
+      <p class="cs-body">5 participants in structured task-based testing. 3 tasks. The core mechanic worked exactly as intended. One structural iteration sharpened the homepage hierarchy.</p>
       <div class="ph-results-grid">
         <div class="ph-result-card">
           <p class="ph-result-num">100%</p>
@@ -1018,7 +1055,7 @@
     gsap.registerPlugin(ScrollTrigger);
 
     /* ── DEVICE + MOTION PREFS ── */
-    const isMobile = window.matchMedia('(max-width: 768px)').matches;
+    const isMobile = window.matchMedia('(max-width: 639px)').matches;
     const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
     /* ── LENIS (desktop only) ── */
@@ -1260,5 +1297,16 @@
     });
   })();
   </script>
+
+  <footer style="background:#1f2b1f;padding:clamp(80px,10vw,140px) clamp(32px,7vw,112px) clamp(48px,6vw,80px);" aria-label="Contact">
+    <h2 style="font-family:'DM Serif Display',serif;font-size:clamp(28px,4vw,42px);font-weight:400;line-height:1.15;letter-spacing:-0.02em;color:#F4F4EB;margin-bottom:clamp(16px,2vw,24px);">Let's work together.</h2>
+    <p style="font-family:'DM Sans',sans-serif;font-size:clamp(15px,1.4vw,18px);line-height:1.72;color:rgba(244,244,235,0.68);max-width:56ch;margin-bottom:clamp(36px,4vw,56px);">Open to UX research, product strategy, customer success, and partnerships roles in Singapore. If you're building something complex that needs to feel simple — let's talk.</p>
+    <div style="display:flex;flex-wrap:wrap;gap:clamp(12px,1.5vw,16px);margin-bottom:clamp(56px,8vw,112px);">
+      <a href="mailto:andreeyahlee@gmail.com" style="display:inline-flex;align-items:center;gap:8px;min-height:44px;padding:10px 22px;border:1px solid rgba(244,244,235,0.35);border-radius:100px;font-family:'DM Sans',sans-serif;font-size:14px;font-weight:500;color:#F4F4EB;text-decoration:none;transition:background 0.2s,border-color 0.2s;" onmouseover="this.style.background='rgba(244,244,235,0.08)';this.style.borderColor='rgba(244,244,235,0.6)'" onmouseout="this.style.background='transparent';this.style.borderColor='rgba(244,244,235,0.35)'">andreeyahlee@gmail.com</a>
+      <a href="https://www.linkedin.com/in/andrealee-/" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;gap:8px;min-height:44px;padding:10px 22px;border:1px solid rgba(244,244,235,0.35);border-radius:100px;font-family:'DM Sans',sans-serif;font-size:14px;font-weight:500;color:#F4F4EB;text-decoration:none;transition:background 0.2s,border-color 0.2s;" onmouseover="this.style.background='rgba(244,244,235,0.08)';this.style.borderColor='rgba(244,244,235,0.6)'" onmouseout="this.style.background='transparent';this.style.borderColor='rgba(244,244,235,0.35)'">LinkedIn →</a>
+      <a href="https://drive.google.com/file/d/1bMgT6sMRa9Tbtc2sUFGb11WrcM488deY/view?usp=drive_link" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;gap:8px;min-height:44px;padding:10px 22px;border:1px solid rgba(244,244,235,0.35);border-radius:100px;font-family:'DM Sans',sans-serif;font-size:14px;font-weight:500;color:#F4F4EB;text-decoration:none;transition:background 0.2s,border-color 0.2s;" onmouseover="this.style.background='rgba(244,244,235,0.08)';this.style.borderColor='rgba(244,244,235,0.6)'" onmouseout="this.style.background='transparent';this.style.borderColor='rgba(244,244,235,0.35)'">Resume →</a>
+    </div>
+    <p style="font-family:'DM Mono',monospace;font-size:11px;letter-spacing:0.12em;color:rgba(244,244,235,0.3);border-top:1px solid rgba(244,244,235,0.1);padding-top:clamp(20px,2.5vw,28px);">Andrea Lee · Singapore · 2026 · Built from scratch.</p>
+  </footer>
 </body>
 </html>

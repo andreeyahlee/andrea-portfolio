@@ -2,17 +2,18 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
   <title>Andrea Lee — UX Designer</title>
   <meta name="description" content="Andrea Lee, UX Designer. Making complex things stupidly simple.">
 
+  <!-- Inline theme restore — must run before paint to avoid flash -->
+  <script>(function(){try{var t=localStorage.getItem('andrea-theme')||((window.matchMedia('(prefers-color-scheme: dark)').matches)?'dark':'light');document.documentElement.setAttribute('data-theme',t);}catch(e){}})();</script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,100..1000&display=swap" rel="stylesheet">
-  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@200..800&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@300;400;500&display=swap" rel="stylesheet">
   <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@100..800&display=swap" rel="stylesheet">
-  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@1,9..144,300;1,9..144,400&display=swap" rel="stylesheet">
-  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@1,700&display=swap" rel="stylesheet">
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
   <script>gsap.registerPlugin(ScrollTrigger);</script>
@@ -22,18 +23,19 @@
        DESIGN TOKENS
     ============================================================ */
     :root {
-      --bg:        #f3f2ec;
-      --bg-warm:   #eae8e0;
-      --ink:       #0A0A0A;
-      --muted:     #8A8A86;
+      --bg:        #F4F4EB;
+      --bg-warm:   #EBEAE0;
+      --ink:       #21281A;
+      --muted:     #6B7060;
       --accent:    #a1ad49;
-      --lime:      #dce888;
+      --lime:      #DEE895;
+      --border:    rgba(33,40,26,0.08);
       --arvo:      #2a4a6b;
       --seletar:   #2b5e3a;
       --pethaus:   #7b3f6e;
       --work-bg:   #1f2b1f;
-      --font-display: 'DM Sans', sans-serif;
-      --font-body:    'Plus Jakarta Sans', sans-serif;
+      --font-display: 'DM Serif Display', serif;
+      --font-body:    'DM Sans', sans-serif;
       --font-mono:    'JetBrains Mono', monospace;
       --sp-xs: 8px;
       --sp-sm: 16px;
@@ -42,12 +44,39 @@
       --sp-xl: 128px;
     }
 
+    /* ── Dark mode tokens ── */
+    [data-theme="dark"] {
+      --bg:     #1A1C16;
+      --bg-warm: #252820;
+      --ink:    #F4F4EB;
+      --muted:  #8A9080;
+      --border: rgba(244,244,235,0.08);
+    }
+
+    /* ── Theme transition — applied only during switch, avoids fighting GSAP ── */
+    html.theme-transitioning,
+    html.theme-transitioning * {
+      transition: background-color 0.3s cubic-bezier(0.22,1,0.36,1),
+                  color 0.3s cubic-bezier(0.22,1,0.36,1),
+                  border-color 0.3s cubic-bezier(0.22,1,0.36,1),
+                  box-shadow 0.3s cubic-bezier(0.22,1,0.36,1) !important;
+    }
+
     /* ============================================================
        RESET
     ============================================================ */
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
     button, input, select, textarea { font-family: inherit; }
-    html { scroll-behavior: smooth; }
+    a, button, [role="button"] { touch-action: manipulation; }
+    html { scroll-behavior: smooth; -webkit-text-size-adjust: 100%; overflow-x: hidden; }
+
+    /* ── Focus-visible ring ── */
+    :focus-visible {
+      outline: 2px solid var(--lime);
+      outline-offset: 2px;
+      border-radius: 2px;
+    }
+    :focus:not(:focus-visible) { outline: none; }
     body {
       font-family: var(--font-body);
       background: var(--bg);
@@ -88,7 +117,7 @@
     ============================================================ */
     #nav {
       position: fixed;
-      top: 16px;
+      top: max(16px, env(safe-area-inset-top, 0px));
       left: 50%;
       transform: translateX(-50%);
       z-index: 300;
@@ -101,7 +130,7 @@
       width: calc(100% - 80px);
       max-width: 960px;
       white-space: nowrap;
-      transition: background 0.3s ease, border-color 0.3s ease;
+      transition: background 0.3s cubic-bezier(0.22,1,0.36,1), border-color 0.3s cubic-bezier(0.22,1,0.36,1);
     }
     /* Light state — used when over the dark Work section */
     #nav.nav--light {
@@ -114,7 +143,7 @@
       align-items: center;
       flex-shrink: 0;
       opacity: 1;
-      transition: opacity 0.2s;
+      transition: opacity 0.25s cubic-bezier(0.22,1,0.36,1);
     }
     .nav-logo:hover { opacity: 0.7; }
     .nav-logo img { width: 42px; height: 42px; object-fit: contain; display: block; }
@@ -132,8 +161,14 @@
       font-size: 13px;
       font-weight: 500;
       color: rgba(243,242,236,0.75);
-      transition: color 0.2s, transform 0.2s;
-      display: inline-block;
+      transition: color 0.25s cubic-bezier(0.22,1,0.36,1), transform 0.25s cubic-bezier(0.22,1,0.36,1);
+      display: inline-flex;
+      align-items: center;
+      min-height: 44px;
+      padding: 0 6px;
+      background: none;
+      border: none;
+      cursor: pointer;
     }
     .nav-link:hover { color: var(--bg); transform: scale(1.1); }
     .nav-link--active { font-weight: 700; color: var(--bg); }
@@ -150,8 +185,9 @@
       border: 1.5px solid rgba(243,242,236,0.4);
       border-radius: 100px;
       padding: 8px 20px;
+      min-height: 44px;
       cursor: pointer;
-      transition: background 0.2s, border-color 0.2s, color 0.2s, transform 0.2s;
+      transition: background 0.25s cubic-bezier(0.22,1,0.36,1), border-color 0.25s cubic-bezier(0.22,1,0.36,1), color 0.25s cubic-bezier(0.22,1,0.36,1), transform 0.25s cubic-bezier(0.22,1,0.36,1);
       flex-shrink: 0;
     }
     .nav-cta:hover { background: rgba(243,242,236,0.08); border-color: rgba(243,242,236,0.7); transform: scale(1.05); }
@@ -172,12 +208,16 @@
     .nav-hamburger {
       display: none;
       flex-direction: column;
+      align-items: center;
+      justify-content: center;
       gap: 5px;
       background: none;
       border: none;
       cursor: pointer;
-      padding: 6px 8px;
+      padding: 0;
       margin-left: auto;
+      min-width: 44px;
+      min-height: 44px;
     }
     .nav-hamburger span {
       display: block;
@@ -203,11 +243,14 @@
       align-items: center;
       justify-content: center;
       gap: 48px;
+      padding-top: env(safe-area-inset-top, 0px);
+      padding-bottom: env(safe-area-inset-bottom, 0px);
+      -webkit-overflow-scrolling: touch;
     }
     .nav-overlay.open { display: flex; }
     .nav-overlay a,
     .nav-overlay button {
-      font-family: var(--font-display);
+      font-family: 'DM Serif Display', serif;
       font-size: 52px;
       font-weight: 700;
       color: var(--bg);
@@ -217,58 +260,75 @@
     }
 
     /* ============================================================
-       HERO
+       HERO — full typographic, dark bg, no image
     ============================================================ */
     #hero {
       position: relative;
       width: 100vw;
       height: 100vh;
-      background: var(--bg);
+      height: 100svh;
+      background: var(--work-bg);
       display: flex;
       align-items: center;
-      justify-content: center;
+      justify-content: flex-start;
       overflow: hidden;
     }
-    /* GSAP conflict rule: GSAP is sole owner of transforms on this element */
-    /* transform-origin: bowl interior of 'p' in "stupidly" (upper-right of letter, above descender)
-       ≈ 49% × 41% of image element → viewport 49% × 42% — matches #work-reveal origin */
-    #hero-img {
-      width: auto;
-      max-width: 80vw;
-      max-height: 88vh;
-      height: auto;
-      object-fit: contain;
-      will-change: transform;
-      transform-origin: 49% 41%;
+    .hero-content {
+      position: relative;
+      z-index: 2;
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      gap: clamp(20px, 2.8vh, 32px);
+      padding: 0 clamp(32px, 7vw, 112px);
+      max-width: 900px;
     }
-    /* Hidden in State 1 — headline lives inside hero-initial.png.
-       GSAP crossfades this in during State 3 transition. */
+    .hero-meta {
+      font-family: 'DM Mono', monospace;
+      font-size: 10px;
+      font-weight: 400;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: rgba(244,244,235,0.5);
+    }
     .hero-headline {
-      position: absolute;
-      font-family: var(--font-display);
-      font-size: clamp(36px, 5.5vw, 84px);
+      font-family: 'DM Serif Display', serif;
+      font-size: clamp(52px, 7vw, 80px);
       font-weight: 700;
       line-height: 1.1;
-      color: var(--ink);
-      text-align: left;
-      opacity: 0;
-      pointer-events: none;
-      will-change: opacity, transform;
-      display: flex;
-      flex-wrap: wrap;
-      align-items: baseline;
-      gap: 0.18em;
-      max-width: 55vw;
+      letter-spacing: -1.5px;
+      color: #F4F4EB;
+      max-width: 45ch;
+      margin: 0;
     }
-    .hero-headline .word { display: inline-block; }
-    .hero-headline .word-complex {
-      display: inline-block;
-      will-change: transform;
+    .hero-sub {
+      font-family: 'DM Sans', sans-serif;
+      font-size: clamp(16px, 2vw, 22px);
+      font-weight: 300;
+      line-height: 1.72;
+      color: rgba(244,244,235,0.68);
+      max-width: 52ch;
+      margin: 0;
     }
-    .hero-headline .word-stupidly {
-      font-family: var(--font-mono);
-      font-weight: 400;
-      font-style: italic;
+    .hero-cta-btn {
+      display: inline-flex;
+      align-items: center;
+      background: transparent;
+      color: var(--lime);
+      border: 1.5px solid var(--lime);
+      font-family: var(--font-body);
+      font-size: 14px;
+      font-weight: 600;
+      letter-spacing: 0.02em;
+      padding: 13px 28px;
+      border-radius: 100px;
+      text-decoration: none;
+      transition: background 0.25s cubic-bezier(0.22,1,0.36,1),
+                  transform 0.25s cubic-bezier(0.22,1,0.36,1);
+    }
+    .hero-cta-btn:hover {
+      background: rgba(222,232,149,0.1);
+      transform: translateY(-2px);
     }
     #work-reveal {
       position: fixed;
@@ -277,6 +337,40 @@
       clip-path: circle(0% at 49% 42%);
       pointer-events: none;
       z-index: 9;
+    }
+
+    /* ── TESTIMONIAL STRIP ── */
+    .testimonial-strip {
+      background: #21281A;
+      padding: clamp(80px, 10vw, 140px) clamp(32px, 7vw, 112px);
+      display: flex;
+      justify-content: center;
+      width: 100%;
+    }
+    .testimonial-quote {
+      max-width: 760px;
+      width: 100%;
+      border-left: 3px solid var(--lime);
+      padding-left: clamp(24px, 3vw, 48px);
+    }
+    .testimonial-text {
+      font-family: 'DM Serif Display', serif;
+      font-style: italic;
+      font-weight: 400;
+      font-size: clamp(18px, 2.2vw, 26px);
+      line-height: 1.72;
+      color: #F4F4EB;
+    }
+    .testimonial-attr {
+      margin-top: 20px;
+      font-family: 'DM Mono', monospace;
+      font-size: 10px;
+      font-weight: 400;
+      letter-spacing: 0.12em;
+      color: rgba(244,244,235,0.5);
+    }
+    .testimonial-name {
+      color: rgba(244,244,235,0.75);
     }
 
     /* ── HERO SCROLL HINT ── */
@@ -306,18 +400,18 @@
       50%       { transform: scaleY(1.4) translateY(4px); opacity: 0.55; }
     }
     .hero-scroll-text {
-      font-family: var(--font-body);
-      font-size: 11px;
-      font-weight: 600;
-      letter-spacing: 0.08em;
+      font-family: 'DM Mono', monospace;
+      font-size: 10px;
+      font-weight: 400;
+      letter-spacing: 0.12em;
       text-transform: uppercase;
       color: rgba(10,10,10,0.4);
       white-space: nowrap;
     }
     .hero-scroll-text em {
-      font-family: 'Fraunces', serif;
+      font-family: 'DM Serif Display', serif;
       font-style: italic;
-      font-weight: 300;
+      font-weight: 400;
       font-size: 13px;
       text-transform: none;
       letter-spacing: 0;
@@ -328,661 +422,518 @@
        WORK
     ============================================================ */
     #work {
-      position: relative;
-      z-index: 0;
       width: 100%;
-      height: 100vh;
-      background: var(--work-bg);
-      overflow: hidden;
+      background: var(--bg);
+      padding: clamp(80px, 10vw, 140px) clamp(32px, 7vw, 112px);
     }
-    .work-scroll-hint {
-      position: absolute;
-      top: 28px;
-      right: 56px;
-      font-family: var(--font-mono);
-      font-size: 13px;
+    .work-header {
+      margin-bottom: clamp(40px, 5vw, 64px);
+    }
+    .work-label {
+      font-family: 'DM Mono', monospace;
+      font-size: 11px;
       font-weight: 400;
-      font-style: italic;
-      color: rgba(243,242,236,0.45);
-      white-space: nowrap;
-      z-index: 2;
-      pointer-events: none;
-    }
-    .work-cols {
-      display: flex;
-      height: 100%;
-      overflow: hidden;
-      border-top: 1px solid rgba(243,242,236,0.12);
-    }
-    .work-col {
-      flex: 1;
-      border-right: 1px solid rgba(243,242,236,0.12);
-      overflow: hidden;
-      position: relative;
-      text-decoration: none;
-      color: inherit;
-      transition: background-color 0.35s ease;
-    }
-    .work-col:last-child { border-right: none; }
-    /* Full case-study hero color on hover — ties column to the case study */
-    .work-col.arvo-col:hover    { background-color: var(--arvo); }
-    .work-col.seletar-col:hover { background-color: var(--seletar); }
-    .work-col.pethaus-col:hover { background-color: var(--pethaus); }
-
-    /* "Selected Works" label sits inside the first column, fades on hover */
-    .work-section-label {
-      position: absolute;
-      top: 100px;
-      left: 40px;
-      z-index: 2;
-      pointer-events: none;
-      transition: opacity 0.25s ease;
-    }
-    .work-title {
-      font-family: var(--font-display);
-      font-size: clamp(36px, 4.5vw, 68px);
-      font-weight: 700;
-      color: var(--bg);
-      line-height: 1.0;
-    }
-    .arvo-col:hover .work-section-label { opacity: 0; }
-
-    /* ── CTA card — fills entire column ── */
-    .work-col-bottom {
-      position: absolute;
-      inset: 0;
-      overflow: hidden;
-      z-index: 1;
-    }
-    /* default: project name anchored at bottom of full column, centered */
-    .work-name {
-      position: absolute;
-      bottom: 0; left: 0; right: 0;
-      padding: 24px 32px 48px;
-      font-family: var(--font-display);
-      font-size: clamp(24px, 3.2vw, 52px);
-      font-weight: 600;
-      color: var(--bg);
-      line-height: 1.1;
-      text-align: center;
-      transition: opacity 0.25s ease;
-      z-index: 2;
-      pointer-events: none;
-    }
-    .work-col:hover .work-name { opacity: 0; }
-
-    /* image fills full column, fades in on hover */
-    .work-card-img {
-      position: absolute;
-      inset: 0;
-      width: 100%; height: 100%;
-      object-fit: cover;
-      object-position: top center;
-      display: block;
-      opacity: 0;
-      pointer-events: none;
-      transition: opacity 0.35s ease 0.06s;
-    }
-    .work-col:hover .work-card-img { opacity: 1; }
-
-    /* overlay — equal height across all columns, sized to tallest content */
-    .work-card-overlay {
-      position: absolute;
-      left: 0; right: 0; bottom: 0;
-      height: auto;
-      min-height: 248px;
-      display: flex;
-      flex-direction: column;
-      justify-content: flex-end;
-      gap: 8px;
-      padding: clamp(16px, 2.2vw, 28px) clamp(20px, 3vw, 40px) clamp(20px, 2.8vw, 36px);
-      background: rgba(8, 6, 10, 0.93);
-      border-radius: 14px 14px 0 0;
-      opacity: 0;
-      pointer-events: none;
-      transition: opacity 0.3s ease 0.05s;
-      z-index: 2;
-    }
-    .work-col:hover .work-card-overlay {
-      opacity: 1;
-      pointer-events: auto;
-    }
-    .work-card-tags {
-      font-family: var(--font-mono);
-      font-size: clamp(8px, 0.85vw, 10px);
-      font-weight: 400;
-      letter-spacing: 0.06em;
-      color: rgba(243,242,236,0.42);
-      text-transform: uppercase;
-      line-height: 1.5;
-    }
-    .work-read-time {
-      font-family: var(--font-mono);
-      font-size: clamp(8px, 0.75vw, 9px);
-      font-weight: 600;
       letter-spacing: 0.1em;
       text-transform: uppercase;
-      color: rgba(243,242,236,0.35);
-      border: 1px solid rgba(243,242,236,0.15);
-      padding: 3px 9px;
-      border-radius: 100px;
-      align-self: flex-start;
+      color: var(--muted);
+    }
+    .work-stack {
+      display: flex;
+      flex-direction: column;
+      gap: clamp(20px, 2.5vw, 28px);
+    }
+    .work-card {
+      display: block;
+      border-radius: 16px;
+      border: 1px solid var(--border);
+      overflow: hidden;
+      text-decoration: none;
+      cursor: pointer;
+      transition: all 0.25s cubic-bezier(0.22, 1, 0.36, 1);
+    }
+    .work-card:hover {
+      transform: translateY(-6px);
+      border-color: rgba(33, 40, 26, 0.16);
+      box-shadow: 0 12px 40px rgba(33, 40, 26, 0.12);
+    }
+    .work-card-accent {
+      height: 4px;
+      width: 100%;
+    }
+    .work-card-body {
+      padding: clamp(32px, 4.5vw, 56px) clamp(32px, 4.5vw, 56px) clamp(28px, 4vw, 48px);
+    }
+    .work-card-meta {
+      font-family: 'DM Mono', monospace;
+      font-size: 10px;
+      font-weight: 400;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      margin-bottom: 16px;
     }
     .work-card-headline {
-      font-family: var(--font-display);
-      font-size: clamp(17px, 2.2vw, 28px);
-      font-weight: 700;
-      color: var(--bg);
-      line-height: 1.1;
-      margin: 0;
+      font-family: 'DM Serif Display', serif;
+      font-style: italic;
+      font-weight: 400;
+      font-size: clamp(26px, 3.4vw, 42px);
+      line-height: 1.15;
+      letter-spacing: -0.01em;
+      margin-bottom: 14px;
     }
-    .work-card-desc {
+    .work-card-sub {
       font-family: var(--font-body);
-      font-size: clamp(10px, 1.1vw, 13px);
-      line-height: 1.5;
-      color: rgba(243,242,236,0.58);
-      display: -webkit-box;
-      -webkit-line-clamp: 2;
-      -webkit-box-orient: vertical;
-      overflow: hidden;
-      margin: 1px 0 4px;
+      font-size: clamp(15px, 1.5vw, 18px);
+      font-weight: 400;
+      line-height: 1.72;
+      max-width: 52ch;
+      margin-bottom: clamp(24px, 3vw, 36px);
     }
-
-    /* full-column link — activates when CTA card is shown */
-    .work-col-link {
-      position: absolute;
-      inset: 0;
-      z-index: 3;
-      pointer-events: none;
-      cursor: pointer;
-    }
-    .work-col:hover .work-col-link {
-      pointer-events: auto;
-    }
-
-    /* "Read the case study →" button — in-flow inside overlay card */
-    .work-read-btn {
+    .work-card-cta {
       display: inline-flex;
       align-items: center;
-      align-self: flex-start;
       gap: 6px;
-      padding: clamp(8px, 1%, 11px) clamp(14px, 2%, 22px);
-      background: var(--bg);
-      color: var(--ink);
       font-family: var(--font-body);
-      font-size: clamp(10px, 1vw, 13px);
+      font-size: 13px;
       font-weight: 600;
       letter-spacing: 0.01em;
-      white-space: nowrap;
-      border-radius: 100px;
       text-decoration: none;
-      position: relative;
-      z-index: 4;
-      transition: background 0.15s ease,
-                  transform 0.15s ease,
-                  box-shadow 0.15s ease;
+      border-bottom: 1.5px solid currentColor;
+      padding-bottom: 2px;
+      transition: gap 0.2s cubic-bezier(0.22, 1, 0.36, 1);
     }
-    .work-read-btn .btn-arrow {
-      display: inline-block;
-      transition: transform 0.15s ease;
+    .work-card:hover .work-card-cta { gap: 10px; }
+    /* ── ARVO ── */
+    .work-card-arvo { background: #F4EFE6; }
+    .work-card-arvo .work-card-accent    { background: #31332A; }
+    .work-card-arvo .work-card-meta      { color: rgba(49, 51, 42, 0.6); }
+    .work-card-arvo .work-card-headline  { color: #21281A; }
+    .work-card-arvo .work-card-sub       { color: rgba(49, 51, 42, 0.7); }
+    .work-card-arvo .work-card-cta       { color: #31332A; }
+    /* ── Seletar ── */
+    .work-card-seletar { background: #F5F1E5; }
+    .work-card-seletar .work-card-accent   { background: #304C95; }
+    .work-card-seletar .work-card-meta     { color: rgba(48, 76, 149, 0.6); }
+    .work-card-seletar .work-card-headline { color: #1a2a5e; }
+    .work-card-seletar .work-card-sub      { color: rgba(30, 45, 80, 0.7); }
+    .work-card-seletar .work-card-cta      { color: #304C95; }
+    /* ── Paw Haus ── */
+    .work-card-pethaus { background: #F7F6F4; }
+    .work-card-pethaus .work-card-accent   { background: #D09A94; }
+    .work-card-pethaus .work-card-meta     { color: rgba(176, 100, 94, 0.7); }
+    .work-card-pethaus .work-card-headline { color: #5c2c28; }
+    .work-card-pethaus .work-card-sub      { color: rgba(92, 44, 40, 0.65); }
+    .work-card-pethaus .work-card-cta      { color: #b06464; }
+    /* ── 2-col grid ── */
+    .work-cards-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: clamp(20px, 2.5vw, 28px);
     }
-    .work-read-btn:hover {
-      background: #fff;
-      box-shadow: 0 4px 16px rgba(0,0,0,0.18);
-      transform: translateY(-2px);
-    }
-    .work-read-btn:hover .btn-arrow { transform: translateX(4px); }
-    .work-read-btn:active {
-      background: var(--bg-warm);
-      box-shadow: 0 1px 4px rgba(0,0,0,0.12);
-      transform: scale(0.96);
-      transition-duration: 0.06s;
-    }
-    .work-read-btn:active .btn-arrow { transform: translateX(2px); }
 
     /* ============================================================
-       ABOUT — Three-state interactive section
+       HACKATHON
     ============================================================ */
-    #about-section { overflow: hidden; }
-    #about {
-      position: absolute;
-      inset: 0;
-      overflow: hidden;
-      background: var(--bg);
+    #hackathon {
+      background: #EBEAE0;
+      padding: clamp(64px, 8vw, 112px) clamp(32px, 7vw, 112px);
     }
-
-    /* ── Horizontal panels: Work → About ── */
-    #panels-wrap {
+    [data-theme="dark"] #hackathon { background: var(--bg-warm); }
+    .hack-label {
+      font-family: 'DM Mono', monospace;
+      font-size: 10px;
+      font-weight: 400;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: clamp(16px, 2vw, 24px);
+    }
+    .hack-headline {
+      font-family: 'DM Serif Display', serif;
+      font-size: clamp(26px, 4vw, 42px);
+      font-weight: 400;
+      line-height: 1.15;
+      letter-spacing: -0.02em;
+      color: var(--ink);
+      margin-bottom: clamp(16px, 2vw, 24px);
+      max-width: 18ch;
+    }
+    .hack-body {
+      font-family: var(--font-body);
+      font-size: clamp(15px, 1.5vw, 18px);
+      font-weight: 400;
+      line-height: 1.72;
+      color: var(--muted);
+      max-width: 56ch;
+      margin-bottom: clamp(28px, 3vw, 40px);
+    }
+    .hack-tags {
       display: flex;
-      width: 200vw;
-      will-change: transform;
+      flex-wrap: wrap;
+      gap: 8px;
     }
-    #panels-wrap > #work {
-      flex-shrink: 0;
-      width: 100vw;
+    .hack-tag {
+      font-family: 'DM Mono', monospace;
+      font-size: 10px;
+      font-weight: 400;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--ink);
+      border: 1px solid var(--border);
+      border-radius: 100px;
+      padding: 6px 14px;
     }
+
+    /* ============================================================
+       CAREER CONTEXT STRIP
+    ============================================================ */
+    #career {
+      background: var(--work-bg);
+      padding: clamp(64px, 8vw, 112px) clamp(32px, 7vw, 112px);
+    }
+    .career-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: clamp(32px, 4vw, 56px);
+    }
+    .career-col {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      padding-top: clamp(24px, 3vw, 36px);
+      border-top: 1px solid rgba(244, 244, 235, 0.12);
+    }
+    .career-eyebrow {
+      font-family: 'DM Mono', monospace;
+      font-size: 10px;
+      font-weight: 400;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: rgba(244, 244, 235, 0.45);
+    }
+    .career-value {
+      font-family: 'DM Serif Display', serif;
+      font-size: clamp(16px, 1.8vw, 22px);
+      font-weight: 400;
+      line-height: 1.4;
+      letter-spacing: -0.01em;
+      color: #F4F4EB;
+    }
+
+    /* ============================================================
+       ABOUT TEASER
+    ============================================================ */
     #about-section {
-      flex-shrink: 0;
-      width: 100vw;
-      height: 100vh;
-      position: relative;
-      overflow: hidden;
       background: var(--bg);
+      padding: clamp(80px, 10vw, 140px) 0;
     }
-
-    /* ── Warm fill: starts as Andrea rect, moves with portrait, expands on Unserious ── */
-    .ab-warm-fill {
-      position: absolute;
-      background: var(--bg-warm);
-      border-radius: 5px;
-      opacity: 0;
-      z-index: 2;
-      pointer-events: none;
+    .about-marquee-band {
+      overflow: hidden;
+      background: var(--work-bg);
+      padding: clamp(14px, 1.8vw, 22px) 0;
+      margin-bottom: clamp(56px, 7vw, 96px);
     }
+    .about-marquee-track {
+      display: flex;
+      width: max-content;
+      animation: marquee-scroll 20s linear infinite;
+    }
+    @keyframes marquee-scroll {
+      from { transform: translateX(0); }
+      to   { transform: translateX(-50%); }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .about-marquee-track { animation: none; }
+    }
+    .about-marquee-text {
+      font-family: 'DM Mono', monospace;
+      font-size: clamp(10px, 1.1vw, 13px);
+      font-weight: 400;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: rgba(244, 244, 235, 0.65);
+      white-space: nowrap;
+      padding-right: 6vw;
+    }
+    .about-teaser-body {
+      padding: 0 clamp(32px, 7vw, 112px);
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      gap: clamp(24px, 3vw, 36px);
+    }
+    .about-pilates-quote {
+      font-family: 'DM Serif Display', serif;
+      font-style: italic;
+      font-weight: 400;
+      font-size: clamp(26px, 4vw, 42px);
+      line-height: 1.6;
+      color: var(--ink);
+      max-width: 580px;
+      margin: 0;
+      padding: 0;
+      border: none;
+    }
+    .about-teaser-cta {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      min-height: 44px;
+      font-family: var(--font-body);
+      font-size: 14px;
+      font-weight: 600;
+      letter-spacing: 0.01em;
+      color: var(--ink);
+      text-decoration: none;
+      border-bottom: 1.5px solid currentColor;
+      padding-bottom: 2px;
+      transition: gap 0.2s cubic-bezier(0.22, 1, 0.36, 1);
+    }
+    .about-teaser-cta:hover { gap: 10px; }
 
-    /* ── Floating portrait ── */
-    .ab-portrait {
-      position: absolute;
-      object-fit: cover;
-      object-position: top center;
-      border-radius: 10px;
-      z-index: 12;
-      pointer-events: none;
+    /* ── Panels layout ── */
+    #panels-wrap {
       display: block;
-      opacity: 0;
+      width: 100%;
     }
-    /* ── State 1: centered intro ── */
-    .ab-s1 {
+
+
+    /* ============================================================
+       OUTSIDE MY 9-5
+    ============================================================ */
+    #outside {
+      background: var(--bg-warm);
+      padding: clamp(80px, 10vw, 140px) clamp(32px, 7vw, 112px);
+    }
+    .outside-header {
+      margin-bottom: clamp(40px, 5vw, 64px);
+    }
+    .outside-label {
+      font-family: 'DM Mono', monospace;
+      font-size: 10px;
+      font-weight: 400;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+    .outside-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: clamp(16px, 2vw, 24px);
+    }
+    .outside-card {
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: clamp(28px, 3.5vw, 44px) clamp(24px, 3vw, 40px);
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      transition: all 0.25s cubic-bezier(0.22, 1, 0.36, 1);
+    }
+    .outside-card:hover {
+      transform: translateY(-6px);
+      border-color: rgba(33, 40, 26, 0.16);
+      box-shadow: 0 12px 40px rgba(33, 40, 26, 0.12);
+    }
+    [data-theme="dark"] .outside-card:hover {
+      border-color: rgba(244, 244, 235, 0.16);
+      box-shadow: 0 12px 40px rgba(0, 0, 0, 0.3);
+    }
+    .outside-card-title {
+      font-family: 'DM Serif Display', serif;
+      font-size: clamp(18px, 1.8vw, 24px);
+      font-weight: 400;
+      line-height: 1.2;
+      letter-spacing: -0.01em;
+      color: var(--ink);
+      margin: 0;
+    }
+    .outside-card-body {
+      font-family: var(--font-body);
+      font-size: clamp(15px, 1.4vw, 17px);
+      font-weight: 400;
+      line-height: 1.72;
+      color: var(--muted);
+      margin: 0;
+      flex: 1;
+    }
+    .outside-card-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      min-height: 44px;
+      font-family: var(--font-body);
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--ink);
+      text-decoration: none;
+      border-bottom: 1.5px solid currentColor;
+      padding-bottom: 2px;
+      align-self: flex-start;
+      transition: gap 0.2s cubic-bezier(0.22, 1, 0.36, 1);
+    }
+    .outside-card-link:hover { gap: 9px; }
+
+    /* ============================================================
+       LINKEDIN CAROUSEL
+    ============================================================ */
+    #linkedin {
+      background: var(--bg);
+      padding: clamp(80px, 10vw, 140px) clamp(32px, 7vw, 112px);
+      overflow: hidden;
+    }
+    .linkedin-headline {
+      font-family: 'DM Serif Display', serif;
+      font-size: clamp(26px, 4vw, 42px);
+      font-weight: 400;
+      line-height: 1.15;
+      letter-spacing: -0.02em;
+      color: var(--ink);
+      max-width: 18ch;
+      margin-bottom: clamp(32px, 4vw, 56px);
+    }
+    .linkedin-carousel {
+      overflow: hidden;
+      touch-action: pan-y;
+    }
+    .linkedin-track {
+      display: flex;
+      gap: clamp(16px, 2vw, 24px);
+      transition: transform 0.45s cubic-bezier(0.22, 1, 0.36, 1);
+      will-change: transform;
+      user-select: none;
+      -webkit-user-select: none;
+    }
+    .linkedin-slide {
+      flex-shrink: 0;
+      width: clamp(280px, 42vw, 504px);
+    }
+    .linkedin-embed {
+      width: 100%;
+      height: clamp(420px, 52vw, 570px);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      background: var(--bg-warm);
+      display: block;
+    }
+    .linkedin-controls {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-top: clamp(20px, 2.5vw, 32px);
+    }
+    .linkedin-dots {
+      display: flex;
+      gap: 8px;
+      align-items: center;
+    }
+    .linkedin-dot {
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      background: transparent;
+      border: none;
+      cursor: pointer;
+      padding: 0;
+      position: relative;
+      flex-shrink: 0;
+    }
+    .linkedin-dot::after {
+      content: '';
       position: absolute;
-      inset: 0;
+      top: 50%; left: 50%;
+      transform: translate(-50%, -50%);
+      width: 8px; height: 8px;
+      border-radius: 50%;
+      background: var(--border);
+      border: 1px solid var(--muted);
+      transition: background 0.25s cubic-bezier(0.22,1,0.36,1), transform 0.25s cubic-bezier(0.22,1,0.36,1), border-color 0.25s cubic-bezier(0.22,1,0.36,1);
+    }
+    .linkedin-dot.is-active::after {
+      background: var(--ink);
+      border-color: var(--ink);
+      transform: translate(-50%, -50%) scale(1.35);
+    }
+    .linkedin-arrows {
+      display: flex;
+      gap: 8px;
+    }
+    .linkedin-arrow {
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      border: 1px solid var(--border);
+      background: var(--bg);
+      color: var(--ink);
+      cursor: pointer;
       display: flex;
       align-items: center;
       justify-content: center;
-      z-index: 5;
-    }
-    .ab-headline {
-      font-family: var(--font-display);
-      font-size: clamp(56px, 8.5vw, 118px);
-      font-weight: 700;
-      color: var(--ink);
-      line-height: 1;
-      display: flex;
-      align-items: center;
-      flex-wrap: nowrap;
-      gap: 0.18em;
-    }
-    .ab-andrea-wrap {
-      position: relative;
-      display: inline-flex;
-      align-items: center;
-    }
-    .ab-warm-rect {
-      position: absolute;
-      inset: -0.13em -0.07em;
-      background: var(--bg-warm);
-      border-radius: 5px;
-      z-index: 0;
-    }
-    .ab-andrea-text {
-      position: relative;
-      z-index: 1;
-    }
-
-    /* ── State 2 wrapper ── */
-    .ab-s2 {
-      position: absolute;
-      inset: 0;
-      opacity: 0;
-      pointer-events: none;
-      z-index: 5;
-    }
-
-    /* ── Toggle ── */
-    .ab-toggle-row {
-      position: absolute;
-      top: 28.2vh;
-      right: 3.26vw;
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      z-index: 20;
-    }
-    @keyframes ab-tgl-jiggle {
-      0%, 100% { transform: rotate(0deg) scale(1); }
-      20%      { transform: rotate(-14deg) scale(1.12); }
-      40%      { transform: rotate(14deg)  scale(1.12); }
-      60%      { transform: rotate(-7deg)  scale(1.06); }
-      80%      { transform: rotate(7deg)   scale(1.06); }
-    }
-    .ab-switch.is-jiggling {
-      animation: ab-tgl-jiggle 0.48s cubic-bezier(0.36, 0.07, 0.19, 0.97);
-    }
-    .ab-tgl-lbl {
-      font-family: var(--font-body);
-      font-size: clamp(12px, 1.1vw, 16px);
-      font-weight: 500;
-      color: var(--ink);
-      opacity: 0.4;
-      transition: opacity 0.2s;
-    }
-    .ab-tgl-lbl.is-active { opacity: 1; }
-    .ab-switch {
-      position: relative;
-      width: clamp(52px, 6.1vw, 88px);
-      height: 34px;
-      border-radius: 100px;
-      background: rgba(10,10,10,0.18);
-      border: none;
-      cursor: pointer;
       flex-shrink: 0;
-      transition: background 0.25s;
+      transition: background 0.25s cubic-bezier(0.22,1,0.36,1), border-color 0.25s cubic-bezier(0.22,1,0.36,1), color 0.25s cubic-bezier(0.22,1,0.36,1);
     }
-    .ab-switch::after {
-      content: '';
-      position: absolute;
-      top: 4px;
-      left: 4px;
-      width: 26px;
-      height: 26px;
-      border-radius: 50%;
-      background: var(--ink);
-      transition: transform 0.28s cubic-bezier(0.4, 0, 0.2, 1);
-    }
-    .ab-switch.is-unserious::after { transform: translateX(calc(clamp(52px, 6.1vw, 88px) - 26px - 8px)); }
+    .linkedin-arrow svg { width: 16px; height: 16px; stroke: currentColor; fill: none; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+    .linkedin-arrow:hover:not(:disabled) { background: var(--ink); color: var(--bg); border-color: var(--ink); }
+    .linkedin-arrow:disabled { opacity: 0.28; cursor: default; }
 
-    /* ── Left bio ── */
-    .ab-bio {
-      position: absolute;
-      top: 28.2vh;
-      left: 3.26vw;
-      width: 30vw;
-      max-width: 432px;
+    /* ============================================================
+       CONTACT FOOTER — persistent on all pages
+    ============================================================ */
+    #contact-footer {
+      background: #1f2b1f;
+      padding: clamp(80px,10vw,140px) clamp(32px,7vw,112px) max(clamp(48px,6vw,80px), calc(env(safe-area-inset-bottom, 0px) + 32px));
     }
-    .ab-role {
-      font-family: var(--font-mono);
-      font-size: clamp(11px, 1.1vw, 16px);
+    .cf-headline {
+      font-family: 'DM Serif Display', serif;
+      font-size: clamp(26px,4vw,42px);
       font-weight: 400;
-      letter-spacing: 0.04em;
-      text-transform: uppercase;
-      color: var(--ink);
-      margin-bottom: 6px;  /* tighter to name — same semantic group (Gestalt proximity) */
+      line-height: 1.15;
+      letter-spacing: -0.02em;
+      color: #F4F4EB;
+      margin-bottom: clamp(16px,2vw,24px);
     }
-    .ab-name {
-      font-family: var(--font-display);
-      font-size: clamp(40px, 5vw, 64px);
-      font-weight: 700;
-      line-height: 0.98;
-      color: var(--ink);
-      margin-bottom: 22px; /* more air before tagline — signals a new semantic block */
-    }
-    .ab-sub {
+    .cf-body {
       font-family: var(--font-body);
-      font-size: clamp(14px, 1.4vw, 20px);
-      font-weight: 500;
-      line-height: 1.6;    /* 1.5→1.6 for easier multi-line reading */
-      color: var(--ink);
+      font-size: clamp(15px,1.4vw,18px);
+      line-height: 1.72;
+      color: rgba(244,244,235,0.68);
+      max-width: 56ch;
+      margin-bottom: clamp(36px,4vw,56px);
     }
-
-    /* ── Serious: absolute canvas matching Figma ── */
-    .ab-serious {
-      position: absolute;
-      inset: 0;
-      pointer-events: none;
-    }
-    /* Singapore map watermark */
-    .ab-sg-map {
-      position: absolute;
-      left: 63%;
-      top: 17.9%;
-      width: 49.7%;
-      height: 75.3%;
-      background: url('assets/about-singapore.png') center / contain no-repeat;
-      opacity: 0.45;
-      pointer-events: none;
-    }
-    /* Singapore card */
-    .ab-sg {
-      position: absolute;
-      left: 64%;
-      top: 36vh;
-      width: 29%;
+    .cf-buttons {
       display: flex;
       flex-wrap: wrap;
-      gap: 18px 10px;
-      align-items: flex-start;
-      pointer-events: auto;
+      gap: clamp(12px,1.5vw,16px);
+      margin-bottom: clamp(56px,8vw,112px);
     }
-    .ab-sg-content {
-      flex: 1;
-      min-width: 0;
-      display: flex;
-      flex-direction: column;
-      gap: 14px; /* 10→14px: title needs more breathing room from body (Gestalt proximity) */
-    }
-    .ab-sg-pin {
-      width: clamp(28px, 3.4vw, 43px);
-      height: clamp(36px, 4.5vw, 57px);
-      flex-shrink: 0;
-      margin-top: 2px;
-      object-fit: contain;
-    }
-    .ab-sg-title {
-      font-family: 'Cormorant Garamond', serif;
-      font-size: clamp(22px, 2.5vw, 36px);
-      font-style: italic;
-      font-weight: 700;
-      line-height: 1.2;  /* 1.1→1.2: prevents cramping on 2-line wrap */
-      color: var(--ink);
-      margin: 0;
-    }
-    .ab-sg-body {
-      font-size: clamp(13px, 1.1vw, 16px); /* min 12→13px: readable-font-size rule */
-      line-height: 1.65;  /* 1.6→1.65: top of recommended 1.5-1.75 range */
-      color: var(--ink);
-      opacity: 0.78; /* 0.7→0.78: was ~2.95:1 contrast (FAIL), now ~4.6:1 (WCAG AA pass) */
-      margin: 0;
-    }
-    /* Pilates philosophy */
-    .ab-pilates {
-      position: absolute;
-      left: 36%;
-      top: 36vh;
-      width: 25%;
-      pointer-events: auto;
-    }
-    .ab-pilates-header {
-      display: flex;
-      gap: 10px;
-      align-items: flex-start;
-      margin-bottom: clamp(14px, 1.6vh, 20px); /* 8-14→14-20px: clear visual break before body */
-    }
-    .ab-pilates-title {
-      font-family: 'Cormorant Garamond', serif;
-      font-size: clamp(22px, 2.5vw, 36px);
-      font-style: italic;
-      font-weight: 700;
-      line-height: 1.2;  /* 1.1→1.2: prevents cramping on 2-line wrap */
-      color: var(--ink);
-      flex: 1;
-      margin: 0;
-    }
-    .ab-pilates-illus {
-      width: clamp(60px, 7.8vw, 100px);
-      height: clamp(60px, 7.8vw, 100px);
-      flex-shrink: 0;
-      object-fit: cover;
-    }
-    .ab-pilates p {
-      font-size: clamp(13px, 1.1vw, 16px); /* min 12→13px readable-font-size */
-      line-height: 1.65;
-      color: var(--ink);
-      opacity: 0.85;
-      margin-bottom: clamp(10px, 1.3vh, 16px); /* standardised paragraph gap */
-    }
-    .ab-pilates p:last-child { margin-bottom: 0; }
-    .ab-pilates strong { opacity: 1; color: var(--ink); font-weight: 700; }
-
-    /* Side project */
-    .ab-side-project {
-      position: absolute;
-      left: 64%;
-      top: 68vh;
-      width: 29%;
-      display: flex;
-      align-items: flex-start;
-      gap: 10px;
-      pointer-events: auto;
-    }
-    .ab-side-project-img {
-      width: clamp(52px, 5.2vw, 75px);
-      height: clamp(52px, 5.2vw, 75px);
-      flex-shrink: 0;
-      object-fit: cover;
-    }
-    .ab-side-project-content {
-      display: flex;
-      flex-direction: column;
-      gap: 14px; /* matches ab-sg-content — consistent card-internal spacing */
-    }
-    .ab-side-project-title {
-      font-family: 'Cormorant Garamond', serif;
-      font-size: clamp(22px, 2.5vw, 36px);
-      font-style: italic;
-      font-weight: 700;
-      line-height: 1.2;  /* matches other section titles */
-      color: var(--ink);
-      margin: 0;
-    }
-    .ab-side-project-body {
-      font-size: clamp(13px, 1.1vw, 16px); /* min 12→13px readable-font-size */
-      line-height: 1.65; /* standardised with sg-body and pilates body */
-      color: var(--ink);
-      opacity: 0.85;
-      margin: 0;
-    }
-    .ab-side-project-ask {
+    .cf-btn {
       display: inline-flex;
       align-items: center;
-      gap: 6px;
-      font-size: clamp(11px, 0.9vw, 13px);
-      font-weight: 600;
-      letter-spacing: 0.06em;
-      color: var(--ink);
-      opacity: 0.55;
-      text-decoration: none;
-      border-bottom: 1px solid currentColor;
-      padding-bottom: 1px;
-      transition: opacity 0.2s;
-    }
-    .ab-side-project-ask:hover { opacity: 1; }
-
-    /* ── Unserious: pill cloud ── */
-    .ab-unserious {
-      position: absolute;
-      inset: 0;
-      opacity: 0;
-      pointer-events: none;
-      z-index: 3;
-    }
-    .ab-uns-title {
-      position: absolute;
-      top: clamp(80px, 11vh, 110px);
-      right: clamp(28px, 5vw, 80px);
-      font-family: 'Fraunces', serif;
-      font-size: clamp(18px, 1.7vw, 28px);
-      font-style: italic;
-      font-weight: 300;
-      color: var(--ink);
-      margin: 0;
-    }
-    /* ── Unserious: left header (replaces bio) ── */
-    .ab-uns-header {
-      position: absolute;
-      top: 28.2vh;
-      left: 3.26vw;
-      width: 30vw;
-      max-width: 432px;
-      pointer-events: none;
-    }
-    .ab-uns-heading {
-      font-family: 'DM Sans', var(--font-body), sans-serif;
-      font-size: clamp(38px, 4.8vw, 64px);
-      font-weight: 700;
-      line-height: 1.0;
-      color: var(--ink);
-      margin: 0 0 14px 0;
-    }
-    .ab-uns-sub {
-      font-family: var(--font-body);
-      font-size: clamp(14px, 1.4vw, 20px);
-      font-weight: 500;
-      line-height: 1.6;
-      color: var(--ink);
-      opacity: 0.7;
-      margin: 0;
-    }
-    /* ── Chaos SVG: GSAP positions this dynamically on toggle (left/bottom set at runtime) ── */
-    .ab-chaos-svg {
-      position: absolute;
-      left: 0;
-      bottom: 0;
-      width: clamp(140px, 14vw, 196px);
-      height: clamp(140px, 14vw, 196px);
-      z-index: 10;
-      opacity: 0;
-      pointer-events: none;
-      color: var(--ink);
-      animation: chaos-spin 10s linear infinite;
-    }
-    @keyframes chaos-spin {
-      from { transform: rotate(0deg); }
-      to   { transform: rotate(360deg); }
-    }
-    .ab-pill-wrap {
-      position: absolute;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 10px;
-    }
-    .ab-pill-media {
-      max-width: clamp(110px, 13vw, 190px);
-      max-height: clamp(110px, 13vw, 190px);
-      width: auto;
-      height: auto;
-      border-radius: 10px;
-      object-fit: cover;
-      opacity: 0;
-      transform: translateY(12px);
-      transition: opacity 0.25s ease, transform 0.28s cubic-bezier(0.34, 1.4, 0.64, 1);
-      pointer-events: none;
-      display: block;
-    }
-    .ab-pill-wrap:hover .ab-pill-media {
-      opacity: 1;
-      transform: translateY(0);
-    }
-    .ab-pill {
-      background: var(--work-bg);
-      color: var(--bg);
-      font-family: var(--font-body);
-      font-size: clamp(13px, 1.05vw, 16px);
-      font-weight: 400;
-      padding: 9px 22px;
+      gap: 8px;
+      min-height: 44px;
+      padding: 10px 22px;
+      border: 1px solid rgba(244,244,235,0.35);
       border-radius: 100px;
-      white-space: nowrap;
-      display: inline-block;
-      cursor: default;
+      font-family: var(--font-body);
+      font-size: 14px;
+      font-weight: 500;
+      color: #F4F4EB;
+      text-decoration: none;
+      transition: background 0.25s cubic-bezier(0.22,1,0.36,1), border-color 0.25s cubic-bezier(0.22,1,0.36,1), color 0.25s cubic-bezier(0.22,1,0.36,1);
+      cursor: pointer;
+      background: transparent;
     }
-    .ab-pill-wrap:hover .ab-pill {
-      animation: ab-shake 0.42s ease;
+    .cf-btn:hover {
+      background: rgba(244,244,235,0.08);
+      border-color: rgba(244,244,235,0.6);
     }
-    @keyframes ab-shake {
-      0%, 100% { transform: rotate(0deg); }
-      20%  { transform: rotate(-2.5deg); }
-      40%  { transform: rotate(2.5deg); }
-      60%  { transform: rotate(-1.5deg); }
-      80%  { transform: rotate(1.5deg); }
+    .cf-footer-line {
+      font-family: 'DM Mono', monospace;
+      font-size: 10px;
+      letter-spacing: 0.12em;
+      color: rgba(244,244,235,0.3);
+      border-top: 1px solid rgba(244,244,235,0.1);
+      padding-top: clamp(20px,2.5vw,28px);
     }
 
     /* ============================================================
@@ -999,7 +950,8 @@
       font-size: clamp(80px, 12.5vw, 172px);
       font-weight: 800;
       color: var(--ink);
-      line-height: 0.95;
+      line-height: 1.1;
+      letter-spacing: -0.02em;
       margin-bottom: 28px;
     }
     .contact-sub {
@@ -1007,7 +959,7 @@
       font-weight: 400;
       color: var(--ink);
       max-width: 520px;
-      line-height: 1.6;
+      line-height: 1.72;
       margin-bottom: 72px;
     }
     .contact-grid {
@@ -1025,9 +977,17 @@
       font-size: 16px;
       font-weight: 400;
       color: var(--ink);
-      transition: color 0.2s;
+      padding: 16px 20px;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      transition: all 0.25s cubic-bezier(0.22,1,0.36,1);
     }
-    a.contact-item:hover { color: var(--accent); }
+    a.contact-item:hover {
+      color: var(--ink);
+      transform: translateY(-6px);
+      border-color: rgba(33,40,26,0.16);
+      box-shadow: 0 12px 40px rgba(33,40,26,0.12);
+    }
     .contact-icon {
       width: 34px;
       height: 34px;
@@ -1048,7 +1008,7 @@
     .contact-footer {
       font-size: 13px;
       color: var(--muted);
-      border-top: 1px solid rgba(10,10,10,0.1);
+      border-top: 2px solid var(--lime);
       padding-top: 24px;
     }
 
@@ -1075,25 +1035,30 @@
     }
     .overlay-close {
       position: fixed;
-      top: 20px;
-      right: 28px;
+      top: 16px;
+      right: 20px;
       background: none;
       border: none;
       cursor: pointer;
-      padding: 8px;
       color: var(--ink);
-      font-size: 28px;
+      font-size: 24px;
       line-height: 1;
       opacity: 0.5;
-      transition: opacity 0.2s;
+      transition: opacity 0.25s cubic-bezier(0.22,1,0.36,1);
       z-index: 201;
+      min-width: 44px;
+      min-height: 44px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 50%;
     }
     .overlay-close:hover { opacity: 1; }
 
     /* ============================================================
        RESPONSIVE  ≤ 767px
     ============================================================ */
-    @media (max-width: 767px) {
+    @media (max-width: 639px) {
       #nav {
         width: calc(100% - 32px);
         padding: 10px 10px 10px 16px;
@@ -1101,89 +1066,28 @@
       .nav-links, .nav-cta { display: none; }
       .nav-hamburger { display: flex; }
 
-      #hero { align-items: flex-start; padding-top: 20vh; }
-      #hero-img { max-width: 100vw; max-height: 68vh; }
+      #hero { align-items: flex-start; padding-top: 20vh; padding-top: 20svh; }
+      .hero-content { padding: 0 20px; }
+      .hero-headline { max-width: 90vw; letter-spacing: -0.5px; }
       .hero-scroll-hint { gap: 10px; }
       .hero-scroll-line { height: 32px; }
       .hero-scroll-text { font-size: 13px; letter-spacing: 0.06em; }
       .hero-scroll-text em { font-size: 15px; }
 
-      #panels-wrap { display: block; width: 100%; }
-      #about-section { width: 100%; height: auto; min-height: 100vh; }
-      #work { height: auto; padding-top: 80px; }
-      .work-scroll-hint { display: none; }
-      .work-section-label { display: none; }
-      .work-cols {
-        flex-direction: column;
-        height: auto;
-        gap: 10px;
-        padding: 0 8px 8px;
-      }
-      .work-col {
-        flex: none;
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        align-items: center;
-        height: clamp(160px, 26vh, 215px);
-        border-right: none;
-        border-bottom: none;
-        border-radius: 30px;
-        overflow: hidden;
-        cursor: pointer;
-        transition: height 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-      }
-      /* Brand colour as image fallback */
-      .work-col.arvo-col    { background-color: var(--arvo); }
-      .work-col.seletar-col { background-color: var(--seletar); }
-      .work-col.pethaus-col { background-color: var(--pethaus); }
-      /* Active card expands; siblings collapse to 79px strip */
-      .work-col.is-active { height: clamp(380px, 56vh, 500px); }
-      .work-cols.has-active .work-col:not(.is-active) { height: 79px; }
-      /* Suppress desktop :hover triggers */
-      .work-col:hover .work-card-overlay { opacity: 0 !important; pointer-events: none !important; }
-      .work-col:hover .work-name { opacity: 1 !important; }
-      .work-col.arvo-col:hover,
-      .work-col.seletar-col:hover,
-      .work-col.pethaus-col:hover { background-color: inherit; }
-      /* PNG images — full opacity, centered crop */
-      .work-card-img {
-        display: block !important;
-        opacity: 1 !important;
-        object-position: center center;
-        transition: opacity 0.3s ease !important;
-        -webkit-mask-image: none !important;
-        mask-image: none !important;
-      }
-      .work-col:hover .work-card-img { opacity: 1 !important; }
-      .work-col.is-active .work-card-img { opacity: 1 !important; }
-      /* Project name hidden — names are baked into mobile images */
-      .work-name { display: none !important; }
-      /* Dark overlay — slides up inside active card */
-      .work-card-overlay {
-        display: flex !important;
-        opacity: 0 !important;
-        pointer-events: none !important;
-        transform: translateY(12px);
-        transition: opacity 0.28s ease 0.12s, transform 0.32s cubic-bezier(0.4, 0, 0.2, 1) 0.12s !important;
-        min-height: unset !important;
-        border-radius: 14px 14px 0 0 !important;
-      }
-      .work-col.is-active .work-card-overlay {
-        opacity: 1 !important;
-        pointer-events: none !important;
-        transform: translateY(0) !important;
-      }
-      .work-col.is-active .work-read-btn { pointer-events: auto; }
-      /* Full-column link off — button handles navigation */
-      .work-col-link { pointer-events: none !important; }
+      #work { padding: 64px 20px 56px; }
+      .work-cards-grid { grid-template-columns: 1fr; }
+      .work-card-body { padding: 28px 24px 24px; }
+      .outside-grid { grid-template-columns: 1fr; }
+      #career { padding: 56px 20px; }
+      .career-grid { grid-template-columns: 1fr; gap: 0; }
+      .career-col { padding-top: 20px; padding-bottom: 20px; border-top: 1px solid rgba(244,244,235,0.12); border-bottom: none; }
 
       .about-headline {
         font-size: clamp(40px, 11vw, 72px);
         flex-wrap: wrap;
         justify-content: center;
         gap: 0.1em;
-        padding: 0 24px;
+        padding: 0 20px;
         text-align: center;
       }
       .about-portrait-slot {
@@ -1191,34 +1095,125 @@
         height: clamp(96px, 24vw, 140px);
       }
 
-      #contact { padding: 80px 24px 60px; }
-      .contact-headline { font-size: clamp(60px, 16vw, 100px); }
+      .contact-headline { font-size: clamp(52px, 14vw, 100px); }
       .contact-grid {
         grid-template-columns: 1fr;
         gap: 24px;
         max-width: 100%;
       }
+      .testimonial-strip { padding: 64px 20px; }
+      #about-section { padding: clamp(56px,8vw,96px) 0; }
+      .about-teaser-body { padding: 0 20px; }
+      #outside { padding: 56px 20px; }
+      #linkedin { padding: 56px 20px 64px; }
+      .linkedin-slide { width: calc(100vw - 40px); }
+      #hackathon { padding: 56px 20px; }
+    }
+
+    @media (max-width: 375px) {
+      .hero-headline { font-size: clamp(44px, 13vw, 52px); }
+      .hero-sub { font-size: 15px; }
+      .nav-overlay { gap: 32px; }
+      .nav-overlay a, .nav-overlay button { font-size: clamp(36px, 12vw, 52px); }
     }
 
     /* ============================================================
        RESPONSIVE  768–1023px  (tablet)
     ============================================================ */
-    @media (min-width: 768px) and (max-width: 1023px) {
-      #nav { width: calc(100% - 64px); }
-      .work-section-label { top: 32px; left: 32px; }
-      .work-scroll-hint { right: 44px; }
-      .work-name { padding: 20px 28px 40px; }
-      .work-card { padding: 20px 28px 40px; }
-      .work-name-over { left: 24px; }
-      #contact { padding: 100px 44px 80px; }
+    @media (max-width: 767px) {
+      .career-grid { grid-template-columns: 1fr; gap: 0; }
+      .career-col { padding-top: 20px; padding-bottom: 20px; border-top: 1px solid rgba(244,244,235,0.12); }
+      .work-cards-grid { grid-template-columns: 1fr; }
+      .outside-grid { grid-template-columns: 1fr; }
     }
+    @media (min-width: 640px) and (max-width: 1023px) {
+      #nav { width: calc(100% - 64px); }
+    }
+    @media (min-width: 1280px) {
+      #nav { max-width: 1100px; }
+      #work, #outside, #linkedin, #career, #hackathon { padding-left: clamp(80px, 8vw, 128px); padding-right: clamp(80px, 8vw, 128px); }
+    }
+    /* ============================================================
+       DARK MODE OVERRIDES
+    ============================================================ */
+
+    /* Nav — dark mode: card-bg pill, light text throughout */
+    [data-theme="dark"] #nav {
+      background: #252820;
+      border: 1px solid rgba(244,244,235,0.1);
+    }
+    [data-theme="dark"] #nav.nav--light {
+      background: #252820;
+      border-color: rgba(244,244,235,0.1);
+    }
+    [data-theme="dark"] .nav-link,
+    [data-theme="dark"] #nav.nav--light .nav-link { color: rgba(244,244,235,0.7); }
+    [data-theme="dark"] .nav-link:hover,
+    [data-theme="dark"] #nav.nav--light .nav-link:hover { color: #F4F4EB; transform: scale(1.1); }
+    [data-theme="dark"] #nav.nav--light .nav-link--active { color: #F4F4EB; }
+    [data-theme="dark"] .nav-cta,
+    [data-theme="dark"] #nav.nav--light .nav-cta { color: #F4F4EB; border-color: rgba(244,244,235,0.3); }
+    [data-theme="dark"] .nav-cta:hover,
+    [data-theme="dark"] #nav.nav--light .nav-cta:hover { background: rgba(244,244,235,0.08); border-color: rgba(244,244,235,0.6); }
+    [data-theme="dark"] .nav-hamburger span { background: #F4F4EB; }
+    [data-theme="dark"] body:has(#contact-overlay.is-open) #nav { background: #252820; border-color: rgba(244,244,235,0.1); }
+    [data-theme="dark"] body:has(#contact-overlay.is-open) #nav .nav-link { color: rgba(244,244,235,0.7); }
+    [data-theme="dark"] body:has(#contact-overlay.is-open) #nav .nav-cta { color: #F4F4EB; border-color: rgba(244,244,235,0.3); }
+
+    /* Mobile overlay — always dark bg (#work-bg), always needs light text regardless of mode */
+    [data-theme="dark"] .nav-overlay a,
+    [data-theme="dark"] .nav-overlay button { color: #F4F4EB; }
+
+    /* Theme toggle button */
+    .nav-theme-toggle {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-width: 44px;
+      min-height: 44px;
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      background: none;
+      border: none;
+      cursor: pointer;
+      font-size: 18px;
+      line-height: 1;
+      color: rgba(243,242,236,0.75);
+      flex-shrink: 0;
+      transition: color 0.25s cubic-bezier(0.22,1,0.36,1), transform 0.25s cubic-bezier(0.22,1,0.36,1), background 0.25s cubic-bezier(0.22,1,0.36,1);
+    }
+    .nav-theme-toggle:hover { color: var(--bg); background: rgba(243,242,236,0.08); transform: scale(1.1); }
+    #nav.nav--light .nav-theme-toggle { color: rgba(10,10,10,0.5); }
+    #nav.nav--light .nav-theme-toggle:hover { color: var(--ink); background: rgba(10,10,10,0.05); }
+    [data-theme="dark"] .nav-theme-toggle { color: rgba(244,244,235,0.7); }
+    [data-theme="dark"] .nav-theme-toggle:hover { color: #F4F4EB; background: rgba(244,244,235,0.08); }
+    @media (max-width: 639px) {
+      .nav-theme-toggle { min-width: 44px; min-height: 44px; width: 44px; height: 44px; }
+    }
+
+    /* About cards — dark mode shadows */
+    [data-theme="dark"] .ab-sg:hover,
+    [data-theme="dark"] .ab-pilates:hover,
+    [data-theme="dark"] .ab-side-project:hover {
+      box-shadow: 0 12px 40px rgba(0,0,0,0.4);
+    }
+
+    /* Contact items — dark mode borders + shadow */
+    [data-theme="dark"] a.contact-item:hover {
+      box-shadow: 0 12px 40px rgba(0,0,0,0.4);
+    }
+
+    /* Testimonial border — stays accent color */
+    /* Contact footer lime rule — stays same in both modes */
+
   </style>
 </head>
 <body>
 
   <!-- Custom flower cursor -->
   <div id="custom-cursor" aria-hidden="true">
-    <img src="assets/cursor-light.png" alt="">
+    <img src="assets/cursor-light.png" alt="" width="1003" height="830">
   </div>
 
   <!-- ============================
@@ -1227,12 +1222,13 @@
   <nav id="nav" role="navigation" aria-label="Main navigation">
     <a href="#" class="nav-logo" aria-label="Home" id="nav-logo-link">
       <!-- logo-dark.png = white flower, visible on dark nav background -->
-      <img src="assets/logo-dark.png" alt="" id="nav-logo-img">
+      <img src="assets/logo-dark.png" alt="" id="nav-logo-img" width="102" height="74">
     </a>
     <ul class="nav-links" role="list">
       <li><a class="nav-link" href="#work">Work</a></li>
-      <li><button class="nav-link" id="nav-about" style="background:none;border:none;cursor:pointer;padding:0;">About</button></li>
+      <li><button class="nav-link" id="nav-about">About</button></li>
     </ul>
+    <button class="nav-theme-toggle" id="theme-toggle" aria-label="Toggle dark mode">☀</button>
     <button class="nav-cta" id="nav-sayhi">Let's talk</button>
     <button class="nav-hamburger" id="nav-hamburger"
             aria-label="Open navigation menu" aria-expanded="false">
@@ -1251,33 +1247,19 @@
   <!-- ============================
        HERO
   ============================ -->
-  <section id="hero" aria-label="Hero" data-nav-theme="dark">
+  <section id="hero" aria-label="Hero" data-nav-theme="light" data-gsap="reveal">
 
-    <!--
-      State 1: full desk scene, cream bg.
-      GSAP conflict rule: GSAP is sole owner of all transforms on #hero-img.
-      No CSS transform here.
-    -->
-    <img
-      id="hero-img"
-      src="assets/hero-initial.png"
-      alt="A mid-century desk with a monitor displaying the portfolio headline"
-      fetchpriority="high"
-      width="2880"
-      height="1900"
-    >
+    <div class="hero-content">
 
-    <!--
-      HTML overlay for GSAP animation in Session 3.
-      Hidden (opacity 0) in State 1 — headline lives inside hero-initial.png.
-    -->
-    <p class="hero-headline" aria-hidden="true">
-      <span class="word">I make</span>
-      <span class="word-complex">complex</span>
-      <span class="word">things</span>
-      <em class="word word-stupidly">stupidly</em>
-      <span class="word">simple</span>
-    </p>
+      <p class="hero-meta">Product Designer · UX Researcher · Singapore · Open to opportunities</p>
+
+      <h1 class="hero-headline" data-gsap="headline">I make complex things stupidly simple.</h1>
+
+      <p class="hero-sub">Ten years navigating institutional complexity. Now building the same clarity into digital products.</p>
+
+      <a class="hero-cta-btn" href="#work">See the work ↓</a>
+
+    </div>
 
     <div id="work-reveal" aria-hidden="true"></div>
 
@@ -1285,184 +1267,230 @@
 
 
   <!-- ============================
-       WORK + ABOUT — horizontal panels
+       TESTIMONIAL STRIP
+  ============================ -->
+  <section class="testimonial-strip" aria-label="Client testimonial" data-gsap="reveal">
+    <blockquote class="testimonial-quote">
+      <p class="testimonial-text" data-gsap="headline">"Their design recommendations were methodically tested and immediately actionable, directly strengthening the product's user experience."</p>
+      <footer class="testimonial-attr">
+        <span class="testimonial-name">Eileen Zhang</span>
+        <span aria-hidden="true"> · </span>
+        <span class="testimonial-role">Founder, ARVO · 2026</span>
+      </footer>
+    </blockquote>
+  </section>
+
+  <!-- ============================
+       WORK + ABOUT
   ============================ -->
   <div id="panels-wrap">
 
-  <section id="work" aria-label="Selected work" data-nav-theme="light">
+  <section id="work" aria-label="Selected work" data-nav-theme="dark" data-gsap="reveal">
 
-    <span class="work-scroll-hint" aria-hidden="true">scroll <em>up</em> to return ↑</span>
+    <div class="work-header">
+      <p class="work-label">Selected Work</p>
+    </div>
 
-    <div class="work-cols">
+    <div class="work-stack" data-gsap="stagger">
 
-      <!-- ARVO — "Selected Works" label lives here -->
-      <div class="work-col arvo-col">
-        <div class="work-section-label" aria-hidden="true">
-          <h2 class="work-title">Selected<br>Works</h2>
+      <!-- ARVO — full width -->
+      <a class="work-card work-card-arvo" href="case-studies/arvo.html" data-gsap="card" aria-label="Read ARVO case study">
+        <div class="work-card-accent" aria-hidden="true"></div>
+        <div class="work-card-body">
+          <p class="work-card-meta">ARVO · Client-approved · B2B SaaS · Project Lead · 2026</p>
+          <h2 class="work-card-headline" data-gsap="headline">Five of seven problems weren't ours to solve.</h2>
+          <p class="work-card-sub">The client brought seven problems. We solved two. Here's why that was exactly right.</p>
+          <span class="work-card-cta">Read the case study →</span>
         </div>
-        <div class="work-col-bottom">
-          <picture>
-            <source media="(max-width: 767px)" srcset="assets/arvo-mobile.png">
-            <img class="work-card-img" src="assets/arvo-cta.png" alt="ARVO case study" loading="lazy">
-          </picture>
-          <div class="work-card-overlay">
-            <p class="work-card-tags">Project Manager · Usability Research · 6 Designers</p>
-            <h3 class="work-card-headline">We found a broken model.</h3>
-            <p class="work-card-desc">A usability audit that changed the entire brief. Six weeks, uncomfortable honesty, and a client who needed convincing.</p>
-            <span class="work-read-time">12 min read</span>
-            <a class="work-read-btn" href="case-studies/arvo.html">Read the case study <span class="btn-arrow">→</span></a>
+      </a>
+
+      <!-- Seletar + Paw Haus — 2-col grid -->
+      <div class="work-cards-grid" data-gsap="stagger">
+
+        <a class="work-card work-card-seletar" href="case-studies/seletar.html" data-gsap="card" aria-label="Read Seletar Airport case study">
+          <div class="work-card-accent" aria-hidden="true"></div>
+          <div class="work-card-body">
+            <p class="work-card-meta">Seletar Airport · Self-initiated · Lead UX Researcher · 2025–26</p>
+            <h2 class="work-card-headline" data-gsap="headline">Research told us we were wrong. So we started over.</h2>
+            <p class="work-card-sub">Nobody was using the airport's website. They were using Reddit instead.</p>
+            <span class="work-card-cta">Read the case study →</span>
           </div>
-        </div>
-        <div class="work-name" aria-hidden="true">ARVO</div>
-        <a class="work-col-link" href="case-studies/arvo.html" aria-label="Read ARVO case study"></a>
-      </div>
+        </a>
 
-      <!-- SELETAR AIRPORT -->
-      <div class="work-col seletar-col">
-        <div class="work-col-bottom">
-          <picture>
-            <source media="(max-width: 767px)" srcset="assets/seletar-mobile.png">
-            <img class="work-card-img" src="assets/seletar-cta.png" alt="Seletar Airport case study" loading="lazy">
-          </picture>
-          <div class="work-card-overlay">
-            <p class="work-card-tags">UX Research Lead · Strategic Redesign · 3 Designers</p>
-            <h3 class="work-card-headline">Unlocking the Subang Advantage.</h3>
-            <p class="work-card-desc">What started as "redesign the website" became proving an airport's competitive edge — or lose passengers who never knew it existed.</p>
-            <span class="work-read-time">10 min read</span>
-            <a class="work-read-btn" href="case-studies/seletar.html">Read the case study <span class="btn-arrow">→</span></a>
+        <a class="work-card work-card-pethaus" href="case-studies/pethaus.html" data-gsap="card" aria-label="Read Paw Haus case study">
+          <div class="work-card-accent" aria-hidden="true"></div>
+          <div class="work-card-body">
+            <p class="work-card-meta">Paw Haus · Self-initiated · Solo Product Designer · 2025</p>
+            <h2 class="work-card-headline" data-gsap="headline">Pet owners don't shop. They check.</h2>
+            <p class="work-card-sub">Every competitor organised by brand. We organised by the pet.</p>
+            <span class="work-card-cta">Read the case study →</span>
           </div>
-        </div>
-        <div class="work-name" aria-hidden="true">Seletar Airport</div>
-        <a class="work-col-link" href="case-studies/seletar.html" aria-label="Read Seletar Airport case study"></a>
-      </div>
+        </a>
 
-      <!-- PET HAUS -->
-      <div class="work-col pethaus-col">
-        <div class="work-col-bottom">
-          <picture>
-            <source media="(max-width: 767px)" srcset="assets/pethaus-mobile.png">
-            <img class="work-card-img" src="assets/pethaus-cta.png" alt="Paw Haus case study" loading="lazy">
-          </picture>
-          <div class="work-card-overlay">
-            <p class="work-card-tags">Solo Designer · End-to-End · E-Commerce</p>
-            <h3 class="work-card-headline">Trust, designed in.</h3>
-            <p class="work-card-desc">An e-commerce build for the most anxious pet owners. Every product page earns trust before it asks for a click.</p>
-            <span class="work-read-time">8 min read</span>
-            <a class="work-read-btn" href="case-studies/pethaus.html">Read the case study <span class="btn-arrow">→</span></a>
-          </div>
-        </div>
-        <div class="work-name" aria-hidden="true">Paw Haus</div>
-        <a class="work-col-link" href="case-studies/pethaus.html" aria-label="Read Paw Haus case study"></a>
       </div>
 
     </div>
+
   </section>
 
-
-
-
   <!-- ============================
-       ABOUT — inline panel (horizontal scroll)
+       CAREER CONTEXT STRIP
   ============================ -->
-  <section id="about-section" aria-label="About Andrea">
+  <section id="career" aria-label="Career context" data-gsap="reveal">
 
-    <div id="about">
+    <div class="career-grid" data-gsap="stagger">
 
-      <!-- warm fill: scales from portrait origin on Unserious mode -->
-      <div class="ab-warm-fill" aria-hidden="true"></div>
-
-      <!-- portrait: floats across all states, animated by GSAP -->
-      <img class="ab-portrait" src="assets/about-portrait.png" alt="" aria-hidden="true">
-
-      <!-- chaos SVG: circular rotating text, visible only in unserious mode (z-index > portrait) -->
-      <svg class="ab-chaos-svg" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-        <defs>
-          <path id="chaos-circle-path" d="M 100,100 m -75,0 a 75,75 0 1,1 150,0 a 75,75 0 1,1 -150,0"/>
-        </defs>
-        <text font-family="'Plus Jakarta Sans', sans-serif" font-size="12" font-weight="300" fill="currentColor" letter-spacing="5">
-          <textPath href="#chaos-circle-path">welcome to my chaos! • welcome to my chaos! • </textPath>
-        </text>
-      </svg>
-
-      <!-- STATE 1: full-viewport "Hi! I'm Andrea" -->
-      <div class="ab-s1">
-        <h2 class="ab-headline">
-          <span>Hi! I'm</span>
-          <span class="ab-andrea-wrap">
-            <span class="ab-warm-rect" aria-hidden="true"></span>
-            <span class="ab-andrea-text">Andrea</span>
-          </span>
-        </h2>
+      <div class="career-col" data-gsap="card">
+        <p class="career-eyebrow">LASALLE College of the Arts</p>
+        <p class="career-value">10 years · 139 agreements · 919% mobility growth.</p>
       </div>
 
-      <!-- STATE 2: toggle layout (Serious / Unserious) -->
-      <div class="ab-s2">
+      <div class="career-col" data-gsap="card">
+        <p class="career-eyebrow">Magnolia &amp; Pine</p>
+        <p class="career-value">Luxury event design · Guerlain · CPF · 2020–2024.</p>
+      </div>
 
-        <!-- top-left toggle -->
-        <div class="ab-toggle-row" role="group" aria-label="Mood toggle">
-          <span class="ab-tgl-lbl is-active" id="ab-lbl-serious">Serious</span>
-          <button class="ab-switch" id="ab-switch" aria-checked="false" role="switch" aria-label="Toggle mood"></button>
-          <span class="ab-tgl-lbl" id="ab-lbl-unserious">Unserious</span>
-        </div>
+      <div class="career-col" data-gsap="card">
+        <p class="career-eyebrow">General Assembly Singapore</p>
+        <p class="career-value">UX Design Immersive · 2026.</p>
+      </div>
 
-        <!-- left bio -->
-        <div class="ab-bio">
-          <p class="ab-role">UX Product Designer | For Hire</p>
-          <h2 class="ab-name">Hi! I'm<br>Andrea</h2>
-          <p class="ab-sub">I identify which problems are actually design problems and which are business assumptions in disguise. Then I design for what's real.</p>
-        </div>
+    </div>
 
-        <!-- right: serious content -->
-        <div class="ab-serious">
-          <div class="ab-sg-map" aria-hidden="true"></div>
-          <div class="ab-sg">
-            <img class="ab-sg-pin" src="assets/icon-geopin.png" alt="" aria-hidden="true">
-            <div class="ab-sg-content">
-              <h3 class="ab-sg-title">Raised in a land of 'maximum'</h3>
-              <p class="ab-sg-body">I learned that clutter is just friction. In a city of 5-star noise, less isn't a limitation—it's a decision to prioritise what actually moves the needle.</p>
-              <p class="ab-sg-body">Majulah Singapura!</p>
-            </div>
-          </div>
-          <div class="ab-pilates">
-            <div class="ab-pilates-header">
-              <h3 class="ab-pilates-title">Designing is like practicing Pilates</h3>
-              <img class="ab-pilates-illus" src="assets/about-pilates-illus.png" alt="" aria-hidden="true">
-            </div>
-            <p><strong>The invisible adjustments are usually the whole job.</strong></p>
-          </div>
-          <div class="ab-side-project">
-            <img class="ab-side-project-img" src="assets/about-side-project.png" alt="" aria-hidden="true">
-            <div class="ab-side-project-content">
-              <h3 class="ab-side-project-title">Side project right now</h3>
-              <p class="ab-side-project-body">I'm drawn to problems at the edge of access: voice AI for dialect-speaking elderly users, caregiving tools built for low-digital-literacy contexts, and products that work for people the mainstream often forgets to design for.</p>
-              <a class="ab-side-project-ask" href="mailto:andreeyahlee@gmail.com?subject=Ask me about it">Ask me about it →</a>
-            </div>
-          </div>
-        </div>
+  </section>
 
-        <!-- right: unserious pills (built by JS) + left header -->
-        <div class="ab-unserious" aria-hidden="true">
-          <div class="ab-uns-header">
-            <h2 class="ab-uns-heading">Outside my<br>9 – 5</h2>
-            <p class="ab-uns-sub">Things I get up to when I turn my brain off.</p>
-          </div>
-        </div>
+  <!-- ============================
+       HACKATHON
+  ============================ -->
+  <section id="hackathon" aria-label="Hackathon highlight" data-gsap="reveal">
+    <p class="hack-label">Recent highlight.</p>
+    <h2 class="hack-headline" data-gsap="headline">The Good Hack — Civic Tech.</h2>
+    <p class="hack-body">Participated in The Good Hack, organised by GoodHub SEA and Open Government Products (OGP) Singapore — designing for systems that actually affect people.</p>
+    <div class="hack-tags" aria-label="Tags">
+      <span class="hack-tag">Civic Tech</span>
+      <span class="hack-tag">GoodHub SEA</span>
+      <span class="hack-tag">OGP</span>
+      <span class="hack-tag">2026</span>
+    </div>
+  </section>
 
-      </div><!-- /ab-s2 -->
+  <!-- ============================
+       ABOUT TEASER
+  ============================ -->
+  <section id="about-section" aria-label="About" data-gsap="reveal">
 
-    </div><!-- /about -->
-  </section><!-- /about-section -->
+    <div class="about-marquee-band" aria-hidden="true">
+      <div class="about-marquee-track">
+        <span class="about-marquee-text">Research-led · Scope-decisive · Systems-minded · Outcome-obsessed · </span>
+        <span class="about-marquee-text">Research-led · Scope-decisive · Systems-minded · Outcome-obsessed · </span>
+      </div>
+    </div>
+
+    <div class="about-teaser-body">
+      <blockquote class="about-pilates-quote" data-gsap="headline">"The invisible adjustments are usually the whole job."</blockquote>
+      <a class="about-teaser-cta" href="about.html">More about me →</a>
+    </div>
+
+  </section>
 
   </div><!-- /panels-wrap -->
 
+  <!-- ============================
+       OUTSIDE MY 9-5
+  ============================ -->
+  <section id="outside" aria-label="Outside my 9-5" data-gsap="reveal">
+
+    <div class="outside-header">
+      <h2 class="outside-label">Outside my 9-5</h2>
+    </div>
+
+    <div class="outside-grid" data-gsap="stagger">
+
+      <div class="outside-card" data-gsap="card">
+        <h3 class="outside-card-title" data-gsap="headline">Strong Pilates</h3>
+        <p class="outside-card-body">HIIT hybrid pilates. The invisible adjustments are usually the whole job.</p>
+      </div>
+
+      <div class="outside-card" data-gsap="card">
+        <h3 class="outside-card-title" data-gsap="headline">Designing for elders</h3>
+        <p class="outside-card-body">Voice AI for Hokkien, Cantonese, Teochew speakers in Singapore — an underserved population in the age of AI assistants.</p>
+        <a class="outside-card-link" href="mailto:andreeyahlee@gmail.com?subject=Designing for elders">Ask me →</a>
+      </div>
+
+      <div class="outside-card" data-gsap="card">
+        <h3 class="outside-card-title" data-gsap="headline">Books, paint, .movs</h3>
+        <p class="outside-card-body">Fantasy novels, painting, and chasing interesting frames.</p>
+      </div>
+
+    </div>
+
+  </section>
+
+  <!-- ============================
+       LINKEDIN CAROUSEL
+  ============================ -->
+  <section id="linkedin" aria-label="LinkedIn posts" data-gsap="reveal">
+
+    <h2 class="linkedin-headline" data-gsap="headline">What I've been thinking about.</h2>
+
+    <div class="linkedin-carousel" id="linkedin-carousel" aria-label="LinkedIn posts">
+      <div class="linkedin-track" id="linkedin-track">
+
+        <div class="linkedin-slide">
+          <iframe class="linkedin-embed" title="LinkedIn post 1" frameborder="0" allowfullscreen loading="lazy"></iframe>
+        </div>
+
+        <div class="linkedin-slide">
+          <iframe class="linkedin-embed" title="LinkedIn post 2" frameborder="0" allowfullscreen loading="lazy"></iframe>
+        </div>
+
+        <div class="linkedin-slide">
+          <iframe class="linkedin-embed" title="LinkedIn post 3" frameborder="0" allowfullscreen loading="lazy"></iframe>
+        </div>
+
+      </div>
+    </div>
+
+    <div class="linkedin-controls">
+      <div class="linkedin-dots" role="list" aria-label="Slide indicators">
+        <button class="linkedin-dot is-active" role="listitem" aria-label="Go to slide 1" data-index="0"></button>
+        <button class="linkedin-dot" role="listitem" aria-label="Go to slide 2" data-index="1"></button>
+        <button class="linkedin-dot" role="listitem" aria-label="Go to slide 3" data-index="2"></button>
+      </div>
+      <div class="linkedin-arrows">
+        <button class="linkedin-arrow" id="linkedin-prev" aria-label="Previous post" disabled>
+          <svg viewBox="0 0 16 16" aria-hidden="true"><polyline points="10 13 5 8 10 3"/></svg>
+        </button>
+        <button class="linkedin-arrow" id="linkedin-next" aria-label="Next post">
+          <svg viewBox="0 0 16 16" aria-hidden="true"><polyline points="6 3 11 8 6 13"/></svg>
+        </button>
+      </div>
+    </div>
+
+  </section>
+
+  <!-- ============================
+       CONTACT FOOTER
+  ============================ -->
+  <footer id="contact-footer" aria-label="Contact" data-gsap="reveal">
+    <h2 class="cf-headline" data-gsap="headline">Let's work together.</h2>
+    <p class="cf-body">Open to UX research, product strategy, customer success, and partnerships roles in Singapore. If you're building something complex that needs to feel simple — let's talk.</p>
+    <div class="cf-buttons">
+      <a class="cf-btn" href="mailto:andreeyahlee@gmail.com">andreeyahlee@gmail.com</a>
+      <a class="cf-btn" href="https://www.linkedin.com/in/andrealee-/" target="_blank" rel="noopener">LinkedIn →</a>
+      <a class="cf-btn" href="https://drive.google.com/file/d/1bMgT6sMRa9Tbtc2sUFGb11WrcM488deY/view?usp=drive_link" target="_blank" rel="noopener">Resume →</a>
+    </div>
+    <p class="cf-footer-line">Andrea Lee · Singapore · 2026 · Built from scratch.</p>
+  </footer>
 
   <!-- ============================
        CONTACT — overlay panel
        Opened via "Let's talk" nav button
   ============================ -->
   <div id="contact-overlay" class="overlay-panel" role="dialog"
-       aria-modal="true" aria-label="Contact Andrea">
-    <section id="contact" aria-label="Contact" style="padding: 140px 56px 96px; min-height: 100vh;">
+       aria-modal="true" aria-label="Contact Andrea" inert>
+    <button class="overlay-close" id="contact-close" aria-label="Close contact panel">&#x2715;</button>
+    <section id="contact" aria-label="Contact" style="padding: clamp(80px,10vw,140px) clamp(32px,7vw,112px) clamp(64px,8vw,96px); min-height: 100vh; min-height: 100svh;">
       <h2 class="contact-headline">Let's talk</h2>
       <p class="contact-sub">Open to product design and UX research roles locally and overseas.</p>
 
@@ -1535,24 +1563,22 @@
      OVERLAY PANELS — About + Contact
   ---------------------------------------------------------- */
   function openOverlay(id) {
-    document.getElementById(id).classList.add('is-open');
+    const el = document.getElementById(id);
+    el.removeAttribute('inert');
+    el.classList.add('is-open');
     document.body.style.overflow = 'hidden';
+    const closeBtn = el.querySelector('.overlay-close');
+    if (closeBtn) requestAnimationFrame(() => closeBtn.focus());
   }
   function closeOverlay(id) {
-    document.getElementById(id).classList.remove('is-open');
+    const el = document.getElementById(id);
+    el.classList.remove('is-open');
+    el.setAttribute('inert', '');
     document.body.style.overflow = '';
   }
 
   function scrollToAbout() {
-    const st = ScrollTrigger.getById('hpanels');
-    if (st) {
-      // Defer past the click event so GSAP's ticker picks up the scroll naturally
-      requestAnimationFrame(() => {
-        document.scrollingElement.scrollTop = st.end;
-      });
-    } else {
-      document.getElementById('about-section').scrollIntoView({ behavior: 'smooth' });
-    }
+    document.getElementById('about-section').scrollIntoView({ behavior: 'smooth' });
   }
 
   document.getElementById('nav-logo-link').addEventListener('click', e => {
@@ -1569,6 +1595,7 @@
 
   document.getElementById('nav-about').addEventListener('click', scrollToAbout);
   document.getElementById('nav-sayhi').addEventListener('click', () => openOverlay('contact-overlay'));
+  document.getElementById('contact-close').addEventListener('click', () => closeOverlay('contact-overlay'));
 
   document.getElementById('overlay-about').addEventListener('click', () => { closeMenu(); scrollToAbout(); });
   document.addEventListener('keydown', e => {
@@ -1599,21 +1626,6 @@
   }
 
   function updateNavTheme() {
-    // About panel more than halfway visible → dark (cream bg)
-    const hst = ScrollTrigger.getById('hpanels');
-    if (hst && hst.progress > 0.5) {
-      applyNavTheme('dark');
-      return;
-    }
-    // Use hero ScrollTrigger's end position as the hero/work boundary.
-    // offsetTop is unreliable here because #panels-wrap has will-change:transform
-    // which makes it an offsetParent, collapsing #work.offsetTop to 0.
-    const heroST = ScrollTrigger.getAll().find(st => st.trigger?.id === 'hero');
-    if (heroST && heroST.end > 100) {
-      applyNavTheme(window.scrollY >= heroST.end ? 'light' : 'dark');
-      return;
-    }
-    // Fallback before GSAP has calculated positions: hero is at top → dark
     applyNavTheme('dark');
   }
 
@@ -1631,6 +1643,7 @@
     menuOpen = true;
     hamburger.classList.add('open');
     hamburger.setAttribute('aria-expanded', 'true');
+    hamburger.setAttribute('aria-label', 'Close navigation menu');
     overlay.classList.add('open');
     document.body.style.overflow = 'hidden';
   }
@@ -1638,6 +1651,7 @@
     menuOpen = false;
     hamburger.classList.remove('open');
     hamburger.setAttribute('aria-expanded', 'false');
+    hamburger.setAttribute('aria-label', 'Open navigation menu');
     overlay.classList.remove('open');
     document.body.style.overflow = '';
   }
@@ -1648,326 +1662,12 @@
   document.addEventListener('keydown', e => { if (e.key === 'Escape' && menuOpen) closeMenu(); });
 
   /* ----------------------------------------------------------
-     ABOUT — 3-state interactive machine
-     S1: full-viewport "Hi! I'm Andrea" (auto-triggers after 1.2s)
-     S2: portrait bottom-left + bio + Serious/Unserious toggle
-  ---------------------------------------------------------- */
-  // fx/fy = position as fraction of Figma frame (1440×950), image top-left = wrap top-left
-  // fx/fy = wrap top-left as fraction of viewport (1440×950 reference)
-  // visible pill label appears ~205px below fy (media height + gap)
-  // three-row layout: upper (label ≈400–420), middle (label ≈620–685), lower (label ≈840–895)
-  // columns are spaced >300px apart so hovering media never reaches adjacent-column labels
-  const ABOUT_PILLS = [
-    { label: 'Adore reading fantasy books',                      src: 'assets/about-pill-books.png',        type: 'img',   fx: 800/1440,  fy: 205/950  },  // label ≈400, col C
-    { label: 'Absolute caffeine addict',                         src: 'assets/about-pill-caffeine.png',     type: 'img',   fx: 440/1440,  fy: 225/950  },  // label ≈420, col L
-    { label: 'Pilates core. UX brain.',                          src: 'assets/about-pill-pilates.png',      type: 'img',   fx: 1155/1440, fy: 215/950  },  // label ≈410, col R
-    { label: 'Allergic to Comic Sans',                           src: 'assets/about-pill-comicsans.png',    type: 'img',   fx: 660/1440,  fy: 415/950  },  // label ≈620, col C-L
-    { label: 'travelling abroad',                                src: 'assets/about-pill-travel.png',       type: 'img',   fx: 990/1440,  fy: 430/950  },  // label ≈635, col C-R
-    { label: 'Picking up pickleball',                            src: 'assets/about-pill-pickleball.png',   type: 'img',   fx: 340/1440,  fy: 475/950  },  // label ≈680, col L
-    { label: 'Recovering event stylist',                         src: 'assets/about-pill-stylist.mp4',      type: 'video', fx: 1145/1440, fy: 480/950  },  // label ≈685, col R
-    { label: 'Too much screentime',                              src: 'assets/about-pill-screentime.png',   type: 'img',   fx: 850/1440,  fy: 640/950  },  // label ≈845, col C
-    { label: 'Aspiring to side hustle as a pilates instructor',  src: 'assets/about-pill-reformer.png',    type: 'img',   fx: 420/1440,  fy: 675/950  },  // label ≈880, col L
-    { label: 'Love British Royal History',                       src: 'assets/about-pill-royalhistory.png', type: 'img',   fx: 1145/1440, fy: 695/950  },  // label ≈900, col R
-  ];
-
-  let abAutoTimer      = null;
-  let abJiggleTimer    = null;
-  let abJiggleInterval = null;
-  let abPillJiggleTimer = null;
-  let abState      = 'idle';    // 'idle' | 's1' | 's2'
-  let abMode       = 'serious'; // 'serious' | 'unserious'
-  let abPillsBuilt = false;
-
-  function triggerToggleJiggle() {
-    const sw = document.getElementById('ab-switch');
-    if (!sw) return;
-    sw.classList.remove('is-jiggling');
-    void sw.offsetWidth; // force reflow so animation restarts
-    sw.classList.add('is-jiggling');
-    sw.addEventListener('animationend', () => sw.classList.remove('is-jiggling'), { once: true });
-  }
-
-  function onAboutOpen() {
-    abState = 's1';
-    abMode  = 'serious';
-    abPillsBuilt = false;
-
-    const abPortrait  = document.querySelector('.ab-portrait');
-    const abS1        = document.querySelector('.ab-s1');
-    const abS2        = document.querySelector('.ab-s2');
-    const abWarmFill  = document.querySelector('.ab-warm-fill');
-    const abUnserious = document.querySelector('.ab-unserious');
-    const abSwitch    = document.getElementById('ab-switch');
-    const abLblSer    = document.getElementById('ab-lbl-serious');
-    const abLblUns    = document.getElementById('ab-lbl-unserious');
-    const abSerious   = document.querySelector('.ab-serious');
-
-    // Clear old pills
-    abUnserious.querySelectorAll('.ab-pill-wrap').forEach(el => el.remove());
-
-    // Reset all elements
-    gsap.set(abS1,        { opacity: 1, pointerEvents: 'auto' });
-    gsap.set(abS2,        { opacity: 0, pointerEvents: 'none' });
-    gsap.set(abUnserious, { opacity: 0, pointerEvents: 'none' });
-    gsap.set(abWarmFill,  { opacity: 0, left: 0, top: 0, width: 0, height: 0, borderRadius: '5px', clearProps: 'transform' });
-    gsap.set(abSerious,   { opacity: 1 });
-    gsap.set(abPortrait,  { opacity: 0, width: 0, height: 0, left: 0, top: 0 });
-    gsap.set('.ab-bio',       { opacity: 1 });
-    gsap.set('.ab-chaos-svg', { opacity: 0 });
-    abPortrait.src = 'assets/about-portrait.png';
-    // Reset headline text split positions + opacity (direct DOM for warm-rect reliability)
-    gsap.set('.ab-headline > span:first-child', { x: 0, opacity: 1 });
-    gsap.set('.ab-andrea-wrap',                 { x: 0, opacity: 1 });
-    document.querySelectorAll('.ab-warm-rect').forEach(el => el.style.removeProperty('opacity'));
-    abSwitch.classList.remove('is-unserious');
-    abSwitch.setAttribute('aria-checked', 'false');
-    abLblSer.classList.add('is-active');
-    abLblUns.classList.remove('is-active');
-
-    clearTimeout(abAutoTimer);
-    abAutoTimer = setTimeout(() => {
-      if (abState !== 's1') return;
-      abState = 's2';
-      buildAboutPills();
-      animateS1toS2();
-    }, 1200);
-  }
-
-  function onAboutClose() {
-    clearTimeout(abAutoTimer);
-    clearTimeout(abJiggleTimer);
-    clearInterval(abJiggleInterval);
-    abAutoTimer = abJiggleTimer = abJiggleInterval = null;
-    stopPillJiggle();
-    abState = 'idle';
-
-    // Kill in-progress tweens and remove GSAP inline pointer-events so
-    // the about overlay's children don't block hover on the work section.
-    gsap.killTweensOf(['.ab-s2', '.ab-s1', '.ab-portrait', '.ab-warm-fill', '.ab-unserious', '.ab-serious', '.ab-bio', '.ab-chaos-svg', '.ab-headline > span:first-child', '.ab-andrea-wrap']);
-    gsap.set('.ab-s2',        { clearProps: 'pointerEvents,opacity' });
-    gsap.set('.ab-unserious', { clearProps: 'pointerEvents,opacity' });
-    gsap.set('.ab-warm-fill', { clearProps: 'opacity' });
-  }
-
-  function buildAboutPills() {
-    if (abPillsBuilt) return;
-    abPillsBuilt = true;
-    const wrap = document.querySelector('.ab-unserious');
-    const vw   = window.innerWidth;
-    const vh   = window.innerHeight;
-
-    ABOUT_PILLS.forEach(pill => {
-      const pillWrap = document.createElement('div');
-      pillWrap.className = 'ab-pill-wrap';
-      pillWrap.style.left = (pill.fx * vw) + 'px';
-      pillWrap.style.top  = (pill.fy * vh) + 'px';
-
-      let mediaEl;
-      if (pill.type === 'video') {
-        mediaEl = document.createElement('video');
-        mediaEl.src = pill.src;
-        mediaEl.autoplay = true;
-        mediaEl.loop     = true;
-        mediaEl.muted    = true;
-        mediaEl.playsInline = true;
-      } else {
-        mediaEl = document.createElement('img');
-        mediaEl.src = pill.src;
-        mediaEl.alt = '';
-      }
-      mediaEl.className = 'ab-pill-media';
-
-      const pillEl = document.createElement('span');
-      pillEl.className   = 'ab-pill';
-      pillEl.textContent = pill.label;
-
-      pillWrap.appendChild(mediaEl);
-      pillWrap.appendChild(pillEl);
-      wrap.appendChild(pillWrap);
-    });
-  }
-
-  function startPillJiggle() {
-    clearTimeout(abPillJiggleTimer);
-    const tick = () => {
-      if (abMode !== 'unserious') return;
-      const pills = document.querySelectorAll('.ab-pill-wrap');
-      if (!pills.length) return;
-      const p = pills[Math.floor(Math.random() * pills.length)];
-      const dir = Math.random() > 0.5 ? 1 : -1;
-      gsap.to(p, {
-        rotation: dir * (5 + Math.random() * 9),
-        scale: 0.93 + Math.random() * 0.12,
-        duration: 0.14,
-        ease: 'power2.out',
-        yoyo: true,
-        repeat: 1,
-        onComplete: () => gsap.set(p, { rotation: 0, scale: 1 }),
-      });
-      abPillJiggleTimer = setTimeout(tick, 400 + Math.random() * 900);
-    };
-    abPillJiggleTimer = setTimeout(tick, 300 + Math.random() * 500);
-  }
-
-  function stopPillJiggle() {
-    clearTimeout(abPillJiggleTimer);
-    abPillJiggleTimer = null;
-    gsap.killTweensOf('.ab-pill-wrap');
-    document.querySelectorAll('.ab-pill-wrap').forEach(p => gsap.set(p, { rotation: 0, scale: 1 }));
-  }
-
-  function animateS1toS2() {
-    const portrait   = document.querySelector('.ab-portrait');
-    const s1         = document.querySelector('.ab-s1');
-    const s2         = document.querySelector('.ab-s2');
-    const headline   = document.querySelector('.ab-headline');
-    const hiText     = headline.children[0];                    // "Hi! I'm" span
-    const andreaWrap = document.querySelector('.ab-andrea-wrap'); // warm rect + "Andrea"
-    const warmRect   = document.querySelector('.ab-warm-rect');
-
-    const vw = window.innerWidth, vh = window.innerHeight;
-    const rr  = warmRect.getBoundingClientRect();   // original warm rect bounds
-    const hiR = hiText.getBoundingClientRect();
-    const anR = andreaWrap.getBoundingClientRect();
-
-    // Snap warm-fill to warm-rect position before animation starts
-    const abWarmFill = document.querySelector('.ab-warm-fill');
-    gsap.set(abWarmFill, {
-      left: rr.left, top: rr.top,
-      width: rr.width, height: rr.height,
-      borderRadius: '5px', opacity: 1,
-    });
-
-    // ── Portrait during SPLIT phase (centered on viewport) ───
-    // Use viewport center so both text halves split symmetrically
-    const splitW       = Math.max(rr.width, 240);
-    const splitH       = rr.height * 2.6;
-    const splitL       = vw / 2 - splitW / 2;                  // dead center
-    // Start: portrait at warm rect x but bottom-hidden; rise to center
-    const splitL_start = rr.left + rr.width / 2 - splitW / 2; // warm rect x-center
-    const splitT_start = rr.bottom - splitH * 0.06;            // mostly hidden below rect
-    const splitT_end   = rr.top + rr.height / 2 - splitH * 0.62; // head crosses above rect top
-
-    // ── Symmetric text split from viewport center ─────────────
-    const gap          = 28;
-    const hiDeltaX     = (splitL - gap) - hiR.right;           // "Hi! I'm" → left
-    const andreaDeltaX = (splitL + splitW + gap) - anR.left;   // "Andrea"  → right
-
-    // ── Portrait final position (S2 bottom-left) ─────────────
-    const portEndW = Math.min(vw * 0.341, 491);
-    const portEndH = portEndW * (440 / 491);
-    const portEndL = vw * 0.033;
-    const portEndT = vh - portEndH;
-
-    // Portrait starts at warm rect x-center, hidden below rect
-    gsap.set(portrait, {
-      width: splitW, height: splitH,
-      left: splitL_start, top: splitT_start,
-      opacity: 0,
-    });
-
-    const tl = gsap.timeline();
-
-    // ── Phase 1 (0 → 0.85s): text splits, portrait pops up ───
-    // "Hi! I'm" flies left
-    tl.to(hiText,     { x: hiDeltaX,     duration: 0.78, ease: 'power2.inOut' }, 0);
-    // "Andrea" flies right
-    tl.to(andreaWrap, { x: andreaDeltaX, duration: 0.78, ease: 'power2.inOut' }, 0);
-    // Portrait fades in, rises AND shifts to viewport center simultaneously
-    tl.to(portrait, { opacity: 1, duration: 0.28, ease: 'power1.out' }, 0.08);
-    tl.to(portrait, { left: splitL, top: splitT_end, duration: 0.72, ease: 'power2.out' }, 0.12);
-
-    // ── Phase 2 (0.88s → 1.75s): collapse to S2 layout ──────
-    // Headline text halves fade out
-    tl.to([hiText, andreaWrap], { opacity: 0, duration: 0.28, ease: 'power1.out' }, 0.88);
-    tl.set(s1, { opacity: 0, pointerEvents: 'none' }, 0.92);
-    // Portrait AND warm-fill move to bottom-left together
-    tl.to(portrait, {
-      width: portEndW, height: portEndH,
-      left: portEndL,  top: portEndT,
-      duration: 0.78, ease: 'power2.inOut',
-    }, 0.90);
-    tl.to(abWarmFill, {
-      left: portEndL + 16, top: portEndT,
-      width: portEndW, height: portEndH,
-      borderRadius: '10px',
-      duration: 0.78, ease: 'power2.inOut',
-    }, 0.90);
-    // S2 content fades in
-    tl.to(s2, { opacity: 1, pointerEvents: 'auto', duration: 0.45, ease: 'power1.out' }, 1.40);
-    // Jiggle toggle 5s after S2 appears, then every 10s — nudges user to interact
-    tl.call(() => {
-      abJiggleTimer = setTimeout(() => {
-        triggerToggleJiggle();
-        abJiggleInterval = setInterval(triggerToggleJiggle, 10000);
-      }, 5000);
-    }, [], '+=0');
-  }
-
-  // Toggle: Serious ↔ Unserious
-  document.getElementById('ab-switch').addEventListener('click', function () {
-    if (abState !== 's2') return;
-    abMode = abMode === 'serious' ? 'unserious' : 'serious';
-    const isUns = abMode === 'unserious';
-
-    this.classList.toggle('is-unserious', isUns);
-    this.setAttribute('aria-checked', String(isUns));
-    document.getElementById('ab-lbl-serious').classList.toggle('is-active', !isUns);
-    document.getElementById('ab-lbl-unserious').classList.toggle('is-active', isUns);
-
-    const abWarmFill  = document.querySelector('.ab-warm-fill');
-    const abUnserious = document.querySelector('.ab-unserious');
-    const abPortrait  = document.querySelector('.ab-portrait');
-    const abChaosSvg  = document.querySelector('.ab-chaos-svg');
-    const abBio       = document.querySelector('.ab-bio');
-
-    const vwT = window.innerWidth, vhT = window.innerHeight;
-
-    if (isUns) {
-      abPortrait.src = 'assets/about-portrait-uns.png';
-      // Position chaos behind head: centered on portrait, top arc peeks above portrait top
-      const portW     = Math.min(vwT * 0.341, 491);
-      const portH     = portW * (440 / 491);
-      const portL     = vwT * 0.033;
-      const chaosSize = Math.min(Math.max(140, vwT * 0.14), 196);
-      gsap.set(abChaosSvg, {
-        left:   portL + portW * 0.5 - chaosSize * 0.5,  // centered on portrait width
-        bottom: portH - chaosSize * 0.65,                // ~35% top arc visible above portrait top
-      });
-      gsap.timeline()
-        .to('.ab-serious', { opacity: 0, duration: 0.22, ease: 'power1.out' }, 0)
-        .to(abBio,        { opacity: 0, duration: 0.22, ease: 'power1.out' }, 0)
-        .to(abWarmFill, {
-          left: 0, top: 0, width: vwT, height: vhT, borderRadius: 0,
-          duration: 0.55, ease: 'power2.inOut',
-        }, 0)
-        .to(abUnserious, { opacity: 1, pointerEvents: 'auto', duration: 0.35, ease: 'power1.out' }, 0.38)
-        .to(abChaosSvg,  { opacity: 1, duration: 0.35, ease: 'power1.out' }, 0.50)
-        .call(startPillJiggle);
-    } else {
-      stopPillJiggle();
-      abPortrait.src = 'assets/about-portrait.png';
-      const vw2 = window.innerWidth, vh2 = window.innerHeight;
-      const pw = Math.min(vw2 * 0.341, 491);
-      const ph = pw * (440 / 491);
-      gsap.timeline()
-        .to(abUnserious, { opacity: 0, pointerEvents: 'none', duration: 0.22, ease: 'power1.out' }, 0)
-        .to(abChaosSvg,  { opacity: 0, duration: 0.22, ease: 'power1.out' }, 0)
-        .to(abWarmFill, {
-          left: vw2 * 0.033 + 16, top: vh2 - ph, width: pw, height: ph, borderRadius: '10px',
-          duration: 0.5, ease: 'power2.inOut',
-        }, 0.1)
-        .to('.ab-serious', { opacity: 1, duration: 0.35, ease: 'power1.out' }, 0.35)
-        .to(abBio,         { opacity: 1, duration: 0.35, ease: 'power1.out' }, 0.35);
-    }
-  });
-
-  /* ----------------------------------------------------------
-     SESSION 3 — Hero GSAP scroll sequence + Work entrance/exit
+     SESSION 3 — Hero GSAP scroll sequence (work-reveal)
+     Phase 2 owns all other scroll animations via data-gsap hooks.
   ---------------------------------------------------------- */
   const mm = gsap.matchMedia();
 
-  mm.add("(min-width: 768px)", () => {
+  mm.add("(min-width: 640px)", () => {
 
     // ── Hero: pin + 2-phase scroll timeline ────────────────
     const heroTl = gsap.timeline({
@@ -1981,70 +1681,20 @@
       }
     });
 
-    // Phase 1 (0→5): Zoom toward the 'p' in "stupidly" on the monitor
-    heroTl.to("#hero-img", { scale: 6, ease: "none", duration: 5 }, 0);
-
-    // Phase 2 (2.5→9.5): Circle emerges from bowl interior once 'p' is large enough to read
+    // Phase 1 (0→8): Dark circle expands to fill screen, revealing work section
     heroTl.to("#work-reveal", {
       clipPath: "circle(90% at 49% 42%)",
       ease: "power2.in",
-      duration: 7
-    }, 2.5);
+      duration: 8
+    }, 0);
 
-    // Phase 3 (7.5→9.5): Image fades as circle fills screen
-    heroTl.to("#hero-img", { opacity: 0, ease: "none", duration: 2 }, 7.5);
-
-    // Phase 4 (9→9.5): Fade out the fixed overlay so work section hover states are visible
-    heroTl.to("#work-reveal", { opacity: 0, ease: "power1.out", duration: 0.5 }, 9);
-
-    // ── Work columns: entrance after pin releases ───────────
-    gsap.from(".work-col", {
-      yPercent: 30,
-      opacity: 0,
-      stagger: 0.1,
-      duration: 0.6,
-      ease: "power2.out",
-      scrollTrigger: {
-        trigger: "#work",
-        start: "top 90%",
-        toggleActions: "play none none none"
-      }
-    });
-
-    // ── Horizontal panels: Work → About (right-to-left slide) ──
-    gsap.to("#panels-wrap", {
-      xPercent: -50,
-      ease: "none",
-      scrollTrigger: {
-        trigger: "#panels-wrap",
-        start: "top top",
-        end: () => "+=" + window.innerWidth,
-        pin: true,
-        scrub: 1,
-        anticipatePin: 1,
-        id: "hpanels",
-        onUpdate: (self) => {
-          if (self.progress > 0.85) {
-            if (typeof abState !== 'undefined' && abState === 'idle') {
-              if (typeof onAboutOpen === 'function') onAboutOpen();
-            }
-            nav.classList.remove('nav--light');
-            navLogoImg.src = 'assets/logo-dark.png';
-            if (workNavLink) workNavLink.classList.remove('nav-link--active');
-          } else if (self.progress < 0.15) {
-            if (typeof abState !== 'undefined' && abState !== 'idle') {
-              if (typeof onAboutClose === 'function') onAboutClose();
-            }
-            updateNavTheme();
-          }
-        },
-      }
-    });
+    // Phase 2 (8→8.5): Fade out overlay so work section hover states are visible
+    heroTl.to("#work-reveal", { opacity: 0, ease: "power1.out", duration: 0.5 }, 8);
 
   });
 
-  // ── Mobile: same scroll animation, adjusted scale + duration ──
-  mm.add("(max-width: 767px)", () => {
+  // ── Mobile: same work-reveal, adjusted scale + duration ──
+  mm.add("(max-width: 639px)", () => {
 
     const heroTl = gsap.timeline({
       scrollTrigger: {
@@ -2057,44 +1707,60 @@
       }
     });
 
-    heroTl.to("#hero-img", { scale: 5, ease: "none", duration: 5 }, 0);
     heroTl.to("#work-reveal", {
       clipPath: "circle(120% at 49% 42%)",
       ease: "power2.in",
-      duration: 7
-    }, 2.5);
-    heroTl.to("#hero-img", { opacity: 0, ease: "none", duration: 2 }, 7.5);
-    heroTl.to("#work-reveal", { opacity: 0, ease: "power1.out", duration: 0.5 }, 9);
+      duration: 8
+    }, 0);
+    heroTl.to("#work-reveal", { opacity: 0, ease: "power1.out", duration: 0.5 }, 8);
 
   });
 
-  // Mobile: tap to reveal work card info
-  (function() {
-    const mq = window.matchMedia('(max-width: 767px)');
-    function initMobileTap() {
-      const container = document.querySelector('.work-cols');
-      document.querySelectorAll('.work-col').forEach(function(col) {
-        col.addEventListener('click', function(e) {
-          if (e.target.closest('.work-read-btn')) return;
-          if (!mq.matches) return;
-          const isActive = this.classList.contains('is-active');
-          document.querySelectorAll('.work-col').forEach(function(c) {
-            c.classList.remove('is-active');
-          });
-          if (!isActive) {
-            this.classList.add('is-active');
-            container.classList.add('has-active');
-          } else {
-            container.classList.remove('has-active');
-          }
-        });
-      });
+  /* ── LinkedIn carousel ── */
+  (function () {
+    const track   = document.getElementById('linkedin-track');
+    const prevBtn = document.getElementById('linkedin-prev');
+    const nextBtn = document.getElementById('linkedin-next');
+    if (!track) return;
+
+    const slides = track.querySelectorAll('.linkedin-slide');
+    const dots   = document.querySelectorAll('.linkedin-dot');
+    const total  = slides.length;
+    let current  = 0;
+
+    function slideWidth() {
+      const gap = parseFloat(getComputedStyle(track).gap) || 24;
+      return slides[0].offsetWidth + gap;
     }
-    if (document.readyState === 'loading') {
-      document.addEventListener('DOMContentLoaded', initMobileTap);
-    } else {
-      initMobileTap();
+
+    function goTo(idx) {
+      current = Math.max(0, Math.min(idx, total - 1));
+      track.style.transform = 'translateX(-' + current * slideWidth() + 'px)';
+      dots.forEach((d, i) => d.classList.toggle('is-active', i === current));
+      prevBtn.disabled = current === 0;
+      nextBtn.disabled = current === total - 1;
     }
+
+    prevBtn.addEventListener('click', () => goTo(current - 1));
+    nextBtn.addEventListener('click', () => goTo(current + 1));
+    dots.forEach((dot, i) => dot.addEventListener('click', () => goTo(i)));
+
+    // Pointer swipe (works for touch + mouse)
+    let startX = 0;
+    track.addEventListener('pointerdown', e => { startX = e.clientX; track.setPointerCapture(e.pointerId); });
+    track.addEventListener('pointerup',   e => {
+      const dx = startX - e.clientX;
+      if (Math.abs(dx) > 50) goTo(dx > 0 ? current + 1 : current - 1);
+    });
+
+    // Recalculate on resize
+    let resizeTimer;
+    window.addEventListener('resize', () => {
+      clearTimeout(resizeTimer);
+      resizeTimer = setTimeout(() => goTo(current), 120);
+    });
+
+    goTo(0);
   })();
 
   /* ── Custom flower cursor ── */
@@ -2110,6 +1776,37 @@
     });
     document.addEventListener('mouseleave', () => { cursor.style.opacity = '0'; visible = false; });
     document.addEventListener('mouseenter', () => { cursor.style.opacity = '1'; visible = true; });
+  })();
+
+  /* ----------------------------------------------------------
+     THEME TOGGLE — dark / light mode
+     Persists to localStorage. Transition class prevents GSAP conflicts.
+  ---------------------------------------------------------- */
+  (function () {
+    const STORAGE_KEY = 'andrea-theme';
+    const btn = document.getElementById('theme-toggle');
+    const html = document.documentElement;
+
+    function isDark() { return html.getAttribute('data-theme') === 'dark'; }
+
+    function setTheme(dark, animate) {
+      if (animate) {
+        html.classList.add('theme-transitioning');
+        setTimeout(() => html.classList.remove('theme-transitioning'), 380);
+      }
+      html.setAttribute('data-theme', dark ? 'dark' : 'light');
+      btn.textContent = dark ? '☾' : '☀';
+      btn.setAttribute('aria-label', dark ? 'Switch to light mode' : 'Switch to dark mode');
+      try { localStorage.setItem(STORAGE_KEY, dark ? 'dark' : 'light'); } catch (e) {}
+    }
+
+    // Restore preference on load (no animation — instant)
+    const saved = (() => { try { return localStorage.getItem(STORAGE_KEY); } catch (e) { return null; } })();
+    const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+    const startDark = saved ? saved === 'dark' : prefersDark;
+    setTheme(startDark, false);
+
+    btn.addEventListener('click', () => setTheme(!isDark(), true));
   })();
   </script>
 
