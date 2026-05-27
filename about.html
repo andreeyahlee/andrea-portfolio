@@ -1,0 +1,869 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>About — Andrea Lee</title>
+  <meta name="description" content="Andrea Lee — Product Designer &amp; UX Researcher based in Singapore.">
+
+  <script>(function(){try{var t=localStorage.getItem('andrea-theme')||((window.matchMedia('(prefers-color-scheme: dark)').matches)?'dark':'light');document.documentElement.setAttribute('data-theme',t);}catch(e){}})();</script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,100..1000&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@300;400;500&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@100..800&display=swap" rel="stylesheet">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/CustomEase.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/split-type@0.3.4/umd/index.min.js"></script>
+  <script>
+    gsap.registerPlugin(ScrollTrigger, CustomEase);
+    CustomEase.create("spring", "0.22, 1, 0.36, 1");
+    gsap.defaults({ ease: "spring" });
+  </script>
+
+  <style>
+    /* ============================================================
+       DESIGN TOKENS
+    ============================================================ */
+    :root {
+      --bg:        #F4F4EB;
+      --bg-warm:   #EBEAE0;
+      --ink:       #21281A;
+      --muted:     #6B7060;
+      --accent:    #a1ad49;
+      --lime:      #DEE895;
+      --border:    rgba(33,40,26,0.08);
+      --work-bg:   #1f2b1f;
+      --font-display: 'DM Serif Display', serif;
+      --font-body:    'DM Sans', sans-serif;
+      --font-mono:    'JetBrains Mono', monospace;
+    }
+    [data-theme="dark"] {
+      --bg:      #1A1C16;
+      --bg-warm: #252820;
+      --ink:     #F4F4EB;
+      --muted:   #8A9080;
+      --border:  rgba(244,244,235,0.08);
+    }
+    html.theme-transitioning,
+    html.theme-transitioning * {
+      transition: background-color 0.3s cubic-bezier(0.22,1,0.36,1),
+                  color 0.3s cubic-bezier(0.22,1,0.36,1),
+                  border-color 0.3s cubic-bezier(0.22,1,0.36,1),
+                  box-shadow 0.3s cubic-bezier(0.22,1,0.36,1) !important;
+    }
+
+    /* ============================================================
+       RESET
+    ============================================================ */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    button, input { font-family: inherit; }
+    a, button, [role="button"] { touch-action: manipulation; }
+    html { scroll-behavior: smooth; -webkit-text-size-adjust: 100%; overflow-x: hidden; }
+    :focus-visible { outline: 2px solid var(--lime); outline-offset: 2px; border-radius: 2px; }
+    :focus:not(:focus-visible) { outline: none; }
+    body {
+      font-family: var(--font-body);
+      background: var(--bg);
+      color: var(--ink);
+      overflow-x: hidden;
+      -webkit-font-smoothing: antialiased;
+    }
+    *, *::before, *::after { cursor: none !important; }
+    #custom-cursor {
+      position: fixed; top: 0; left: 0; width: 48px;
+      pointer-events: none; z-index: 99999;
+      will-change: transform; opacity: 0; transition: opacity 0.2s;
+      mix-blend-mode: difference;
+    }
+    #custom-cursor img {
+      width: 100%; height: auto; display: block;
+      will-change: transform; animation: cursor-spin 12s linear infinite;
+    }
+    @keyframes cursor-spin { to { transform: rotate(360deg); } }
+    a { text-decoration: none; color: inherit; }
+    img { display: block; max-width: 100%; }
+
+    /* ============================================================
+       NAV
+    ============================================================ */
+    #nav {
+      position: fixed;
+      top: max(16px, env(safe-area-inset-top, 0px));
+      left: 50%; transform: translateX(-50%);
+      z-index: 300;
+      display: flex; align-items: center; gap: 12px;
+      background: var(--work-bg);
+      border-radius: 100px;
+      padding: 10px 10px 10px 18px;
+      width: calc(100% - 80px); max-width: 960px;
+      white-space: nowrap;
+      transition: background 0.3s cubic-bezier(0.22,1,0.36,1), border-color 0.3s cubic-bezier(0.22,1,0.36,1);
+    }
+    #nav.nav--light { background: var(--bg); border: 1px solid rgba(10,10,10,0.1); }
+    .nav-logo { display: flex; align-items: center; flex-shrink: 0; opacity: 1; transition: opacity 0.25s cubic-bezier(0.22,1,0.36,1); }
+    .nav-logo:hover { opacity: 0.7; }
+    .nav-logo img { width: 42px; height: 42px; object-fit: contain; display: block; }
+    .nav-links { flex: 1; display: flex; align-items: center; justify-content: flex-end; gap: 28px; list-style: none; margin-right: 4px; }
+    .nav-link {
+      font-size: 13px; font-weight: 500;
+      color: rgba(243,242,236,0.75);
+      transition: color 0.25s cubic-bezier(0.22,1,0.36,1), transform 0.25s cubic-bezier(0.22,1,0.36,1);
+      display: inline-flex; align-items: center; min-height: 44px;
+      padding: 0 6px; background: none; border: none; cursor: pointer;
+    }
+    .nav-link:hover { color: var(--bg); transform: scale(1.1); }
+    .nav-link--active { font-weight: 700; color: var(--bg); }
+    #nav.nav--light .nav-link { color: rgba(10,10,10,0.5); }
+    #nav.nav--light .nav-link:hover { color: var(--ink); transform: scale(1.1); }
+    #nav.nav--light .nav-link--active { color: var(--ink); font-weight: 700; }
+    .nav-cta {
+      font-family: var(--font-body); font-size: 13px; font-weight: 500;
+      color: var(--bg); background: transparent;
+      border: 1.5px solid rgba(243,242,236,0.4); border-radius: 100px;
+      padding: 8px 20px; min-height: 44px; cursor: pointer; flex-shrink: 0;
+      transition: background 0.25s cubic-bezier(0.22,1,0.36,1), border-color 0.25s cubic-bezier(0.22,1,0.36,1), color 0.25s cubic-bezier(0.22,1,0.36,1), transform 0.25s cubic-bezier(0.22,1,0.36,1);
+    }
+    .nav-cta:hover { background: rgba(243,242,236,0.08); border-color: rgba(243,242,236,0.7); transform: scale(1.05); }
+    #nav.nav--light .nav-cta { color: var(--ink); border-color: rgba(10,10,10,0.28); }
+    #nav.nav--light .nav-cta:hover { background: rgba(10,10,10,0.05); border-color: rgba(10,10,10,0.5); transform: scale(1.05); }
+    body:has(#contact-overlay.is-open) #nav { background: var(--work-bg); border-color: transparent; }
+    body:has(#contact-overlay.is-open) #nav .nav-link { color: rgba(243,242,236,0.75); }
+    body:has(#contact-overlay.is-open) #nav .nav-link:hover { color: var(--bg); }
+    body:has(#contact-overlay.is-open) #nav .nav-cta { color: var(--bg); border-color: rgba(243,242,236,0.4); }
+    body:has(#contact-overlay.is-open) #nav .nav-cta:hover { background: rgba(243,242,236,0.08); border-color: rgba(243,242,236,0.7); }
+    .nav-hamburger {
+      display: none; flex-direction: column; align-items: center; justify-content: center; gap: 5px;
+      background: none; border: none; cursor: pointer; padding: 0; margin-left: auto; min-width: 44px; min-height: 44px;
+    }
+    .nav-hamburger span { display: block; width: 20px; height: 1.5px; background: var(--bg); border-radius: 2px; transition: transform 0.3s ease, opacity 0.2s ease; }
+    #nav.nav--light .nav-hamburger span { background: var(--ink); }
+    .nav-hamburger.open span:nth-child(1) { transform: translateY(6.5px) rotate(45deg); }
+    .nav-hamburger.open span:nth-child(2) { opacity: 0; }
+    .nav-hamburger.open span:nth-child(3) { transform: translateY(-6.5px) rotate(-45deg); }
+    .nav-overlay {
+      display: none; position: fixed; inset: 0; background: var(--work-bg); z-index: 99;
+      flex-direction: column; align-items: center; justify-content: center; gap: 48px;
+      padding-top: env(safe-area-inset-top, 0px); padding-bottom: env(safe-area-inset-bottom, 0px);
+    }
+    .nav-overlay.open { display: flex; }
+    .nav-overlay a, .nav-overlay button {
+      font-family: 'DM Serif Display', serif; font-size: 52px; font-weight: 700;
+      color: var(--bg); background: none; border: none; cursor: pointer;
+    }
+    .nav-theme-toggle {
+      display: flex; align-items: center; justify-content: center;
+      min-width: 44px; min-height: 44px; width: 44px; height: 44px;
+      border-radius: 50%; background: none; border: none; cursor: pointer;
+      font-size: 18px; line-height: 1; color: rgba(243,242,236,0.75); flex-shrink: 0;
+      transition: color 0.25s cubic-bezier(0.22,1,0.36,1), transform 0.25s cubic-bezier(0.22,1,0.36,1), background 0.25s cubic-bezier(0.22,1,0.36,1);
+    }
+    .nav-theme-toggle:hover { color: var(--bg); background: rgba(243,242,236,0.08); transform: scale(1.1); }
+    #nav.nav--light .nav-theme-toggle { color: rgba(10,10,10,0.5); }
+    #nav.nav--light .nav-theme-toggle:hover { color: var(--ink); background: rgba(10,10,10,0.05); }
+
+    /* ============================================================
+       OVERLAY PANEL
+    ============================================================ */
+    .overlay-panel {
+      position: fixed; inset: 0; z-index: 200; background: var(--bg);
+      overflow-y: auto; opacity: 0; visibility: hidden; pointer-events: none;
+      transition: opacity 0.35s ease, visibility 0s linear 0.35s;
+    }
+    .overlay-panel.is-open { opacity: 1; visibility: visible; pointer-events: auto; transition: opacity 0.35s ease, visibility 0s linear 0s; }
+    .overlay-close {
+      position: fixed; top: 16px; right: 20px; background: none; border: none; cursor: pointer;
+      color: var(--ink); font-size: 24px; line-height: 1; opacity: 0.5;
+      transition: opacity 0.25s cubic-bezier(0.22,1,0.36,1); z-index: 201;
+      min-width: 44px; min-height: 44px; display: flex; align-items: center; justify-content: center; border-radius: 50%;
+    }
+    .overlay-close:hover { opacity: 1; }
+
+    /* ============================================================
+       HERO
+    ============================================================ */
+    #ab-hero {
+      position: relative; width: 100vw;
+      height: 100vh; height: 100svh;
+      background: var(--work-bg);
+      display: flex; align-items: center; justify-content: flex-start;
+      overflow: hidden;
+    }
+    .ab-hero-content {
+      position: relative; z-index: 2;
+      display: flex; flex-direction: column; align-items: flex-start;
+      gap: clamp(14px, 2vh, 22px);
+      padding: 0 clamp(32px, 7vw, 112px);
+      max-width: 860px;
+    }
+    .ab-hero-meta {
+      font-family: 'DM Mono', monospace; font-size: 10px; font-weight: 400;
+      letter-spacing: 0.12em; text-transform: uppercase; color: rgba(244,244,235,0.45);
+    }
+    .ab-hero-headline {
+      font-family: 'DM Serif Display', serif;
+      font-size: clamp(40px, 5.8vw, 70px);
+      font-weight: 400; line-height: 1.1;
+      letter-spacing: -1px; color: #F4F4EB;
+      max-width: 22ch; margin: 0;
+    }
+    .ab-hero-sub {
+      font-family: 'DM Mono', monospace; font-size: 10px; font-weight: 400;
+      letter-spacing: 0.12em; text-transform: uppercase; color: rgba(244,244,235,0.4);
+    }
+
+    /* ============================================================
+       SECTION SHARED
+    ============================================================ */
+    .ab-section-label {
+      font-family: 'DM Mono', monospace; font-size: 10px; font-weight: 400;
+      letter-spacing: 0.12em; text-transform: uppercase; color: var(--muted);
+      margin-bottom: clamp(24px, 3vw, 40px);
+    }
+    .ab-body {
+      font-family: var(--font-body); font-size: clamp(16px, 1.6vw, 18px);
+      font-weight: 400; line-height: 1.78; color: var(--ink);
+      max-width: 58ch; margin-bottom: clamp(20px, 2.5vw, 28px);
+    }
+    .ab-body:last-child { margin-bottom: 0; }
+
+    /* ============================================================
+       INTRO
+    ============================================================ */
+    #ab-intro {
+      background: var(--bg);
+      padding: clamp(80px, 10vw, 140px) clamp(32px, 7vw, 112px);
+    }
+    .ab-intro-inner { max-width: 700px; }
+    .ab-insight {
+      font-family: 'DM Serif Display', serif; font-style: italic;
+      font-size: clamp(20px, 2.6vw, 32px); font-weight: 400;
+      line-height: 1.45; color: var(--ink);
+      border-left: 3px solid var(--lime);
+      padding-left: clamp(20px, 2.5vw, 32px);
+      margin: clamp(28px, 3.5vw, 48px) 0;
+      max-width: 50ch;
+    }
+
+    /* ============================================================
+       PHILOSOPHY — dark
+    ============================================================ */
+    #ab-philosophy {
+      background: #1f2b1f;
+      padding: clamp(80px, 10vw, 140px) clamp(32px, 7vw, 112px);
+    }
+    .ab-phil-label {
+      font-family: 'DM Mono', monospace; font-size: 10px; font-weight: 400;
+      letter-spacing: 0.12em; text-transform: uppercase;
+      color: rgba(244,244,235,0.38); margin-bottom: clamp(24px, 3vw, 40px);
+    }
+    .ab-phil-headline {
+      font-family: 'DM Serif Display', serif; font-weight: 400;
+      font-size: clamp(30px, 4.8vw, 58px); line-height: 1.1;
+      letter-spacing: -0.02em; color: #F4F4EB;
+      max-width: 18ch; margin-bottom: clamp(32px, 4vw, 52px);
+    }
+    .ab-phil-intro {
+      font-family: var(--font-body); font-size: clamp(15px, 1.5vw, 17px);
+      font-weight: 400; line-height: 1.72; color: rgba(244,244,235,0.5);
+      margin-bottom: clamp(20px, 2.5vw, 32px);
+    }
+    .transform-list {
+      list-style: none; display: flex; flex-direction: column;
+      gap: clamp(18px, 2.2vw, 28px);
+      margin-bottom: clamp(28px, 3.5vw, 44px);
+    }
+    .transform-item {
+      display: flex; align-items: baseline; flex-wrap: wrap;
+      gap: 6px clamp(12px, 1.5vw, 20px);
+    }
+    .transform-from {
+      font-family: var(--font-body); font-size: clamp(14px, 1.4vw, 17px);
+      font-weight: 400; color: rgba(244,244,235,0.5);
+    }
+    .transform-arrow {
+      font-family: 'DM Mono', monospace; font-size: 11px;
+      color: var(--lime); flex-shrink: 0;
+    }
+    .transform-to {
+      font-family: 'DM Serif Display', serif; font-style: italic;
+      font-size: clamp(16px, 1.7vw, 20px); color: #F4F4EB;
+    }
+    .ab-phil-coda {
+      font-family: 'DM Mono', monospace; font-size: 11px; font-weight: 400;
+      letter-spacing: 0.08em; color: rgba(244,244,235,0.38);
+    }
+
+    /* ============================================================
+       SIDE PROJECT — warm bg
+    ============================================================ */
+    #ab-project {
+      background: var(--bg-warm);
+      padding: clamp(80px, 10vw, 140px) clamp(32px, 7vw, 112px);
+    }
+    .ab-project-inner { max-width: 680px; }
+    .ab-project-headline {
+      font-family: 'DM Serif Display', serif; font-weight: 400;
+      font-size: clamp(26px, 3.4vw, 46px); line-height: 1.12;
+      letter-spacing: -0.02em; color: var(--ink);
+      margin-bottom: clamp(18px, 2.2vw, 28px);
+    }
+    .ab-project-body {
+      font-family: var(--font-body); font-size: clamp(16px, 1.6vw, 18px);
+      font-weight: 400; line-height: 1.78; color: var(--muted);
+      max-width: 58ch; margin-bottom: clamp(24px, 3vw, 40px);
+    }
+    .ab-project-cta {
+      display: inline-flex; align-items: center; gap: 6px;
+      min-height: 44px; font-family: var(--font-body); font-size: 14px;
+      font-weight: 600; color: var(--ink); text-decoration: none;
+      border-bottom: 1.5px solid currentColor; padding-bottom: 2px;
+      transition: gap 0.2s cubic-bezier(0.22,1,0.36,1);
+    }
+    .ab-project-cta:hover { gap: 10px; }
+
+    /* ============================================================
+       TESTIMONIAL — dark strip
+    ============================================================ */
+    #ab-testimonial {
+      background: #21281A;
+      padding: clamp(80px, 10vw, 140px) clamp(32px, 7vw, 112px);
+      display: flex; justify-content: center; width: 100%;
+    }
+    .ab-testimonial-inner {
+      max-width: 760px; width: 100%;
+      border-left: 3px solid var(--lime);
+      padding-left: clamp(24px, 3vw, 48px);
+    }
+    .ab-testimonial-text {
+      font-family: 'DM Serif Display', serif; font-style: italic;
+      font-weight: 400; font-size: clamp(17px, 2vw, 24px);
+      line-height: 1.72; color: #F4F4EB;
+    }
+    .ab-testimonial-attr {
+      margin-top: 20px; font-family: 'DM Mono', monospace;
+      font-size: 10px; font-weight: 400; letter-spacing: 0.12em;
+      color: rgba(244,244,235,0.45);
+    }
+    .ab-testimonial-name { color: rgba(244,244,235,0.75); }
+
+    /* ============================================================
+       CREDENTIALS
+    ============================================================ */
+    #ab-credentials {
+      background: var(--bg);
+      padding: clamp(80px, 10vw, 140px) clamp(32px, 7vw, 112px);
+    }
+    .cred-layout {
+      display: grid; grid-template-columns: 1fr 1fr;
+      gap: clamp(40px, 5vw, 72px) clamp(48px, 6vw, 96px);
+      margin-bottom: clamp(48px, 6vw, 80px);
+    }
+    .cred-group-label {
+      font-family: 'DM Mono', monospace; font-size: 10px; font-weight: 400;
+      letter-spacing: 0.12em; text-transform: uppercase; color: var(--muted);
+      margin-bottom: clamp(12px, 1.5vw, 20px);
+      padding-bottom: 12px; border-bottom: 1px solid var(--border);
+    }
+    .cred-item {
+      display: grid; grid-template-columns: 140px 1fr;
+      gap: 6px 20px; padding: clamp(14px, 1.8vw, 20px) 0;
+      border-bottom: 1px solid var(--border); align-items: start;
+    }
+    .cred-date {
+      font-family: 'DM Mono', monospace; font-size: 10px; font-weight: 400;
+      letter-spacing: 0.06em; color: var(--muted); line-height: 1.5; padding-top: 2px;
+    }
+    .cred-right { display: flex; flex-direction: column; gap: 3px; }
+    .cred-title {
+      font-family: 'DM Serif Display', serif; font-size: clamp(15px, 1.5vw, 18px);
+      font-weight: 400; line-height: 1.3; color: var(--ink);
+    }
+    .cred-org {
+      font-family: var(--font-body); font-size: 13px; font-weight: 400; color: var(--muted);
+    }
+
+    /* Skills */
+    .skills-wrap {
+      padding-top: clamp(36px, 4.5vw, 60px);
+      border-top: 1px solid var(--border);
+    }
+    .skills-label {
+      font-family: 'DM Mono', monospace; font-size: 10px; font-weight: 400;
+      letter-spacing: 0.12em; text-transform: uppercase; color: var(--muted);
+      margin-bottom: clamp(14px, 1.8vw, 22px);
+    }
+    .skills-pills { display: flex; flex-wrap: wrap; gap: 8px; }
+    .skill-pill {
+      font-family: 'DM Mono', monospace; font-size: 10px; font-weight: 400;
+      letter-spacing: 0.1em; text-transform: uppercase;
+      color: var(--ink); border: 1px solid var(--border);
+      border-radius: 100px; padding: 7px 16px;
+      transition: border-color 0.2s cubic-bezier(0.22,1,0.36,1), background 0.2s cubic-bezier(0.22,1,0.36,1);
+    }
+    .skill-pill:hover { border-color: var(--accent); background: rgba(161,173,73,0.06); }
+
+    /* ============================================================
+       CONTACT FOOTER
+    ============================================================ */
+    #contact-footer {
+      background: #1f2b1f;
+      padding: clamp(80px,10vw,140px) clamp(32px,7vw,112px) max(clamp(48px,6vw,80px), calc(env(safe-area-inset-bottom, 0px) + 32px));
+    }
+    .cf-headline {
+      font-family: 'DM Serif Display', serif; font-size: clamp(26px,4vw,42px);
+      font-weight: 400; line-height: 1.15; letter-spacing: -0.02em;
+      color: #F4F4EB; margin-bottom: clamp(16px,2vw,24px);
+    }
+    .cf-body {
+      font-family: var(--font-body); font-size: clamp(15px,1.4vw,18px);
+      line-height: 1.72; color: rgba(244,244,235,0.68);
+      max-width: 56ch; margin-bottom: clamp(36px,4vw,56px);
+    }
+    .cf-buttons { display: flex; flex-wrap: wrap; gap: clamp(12px,1.5vw,16px); margin-bottom: clamp(56px,8vw,112px); }
+    .cf-btn {
+      display: inline-flex; align-items: center; gap: 8px;
+      min-height: 44px; padding: 10px 22px;
+      border: 1px solid rgba(244,244,235,0.35); border-radius: 100px;
+      font-family: var(--font-body); font-size: 14px; font-weight: 500;
+      color: #F4F4EB; text-decoration: none; background: transparent;
+      transition: background 0.25s cubic-bezier(0.22,1,0.36,1), border-color 0.25s cubic-bezier(0.22,1,0.36,1);
+      cursor: pointer;
+    }
+    .cf-btn:hover { background: rgba(244,244,235,0.08); border-color: rgba(244,244,235,0.6); }
+    .cf-footer-line {
+      font-family: 'DM Mono', monospace; font-size: 10px; letter-spacing: 0.12em;
+      color: rgba(244,244,235,0.3); border-top: 1px solid rgba(244,244,235,0.1);
+      padding-top: clamp(20px,2.5vw,28px);
+    }
+
+    /* Contact overlay */
+    .contact-headline {
+      font-family: var(--font-display); font-size: clamp(80px, 12.5vw, 172px);
+      font-weight: 800; color: var(--ink); line-height: 1.1;
+      letter-spacing: -0.02em; margin-bottom: 28px;
+    }
+    .contact-sub {
+      font-size: 17px; font-weight: 400; color: var(--ink);
+      max-width: 520px; line-height: 1.72; margin-bottom: 72px;
+    }
+    .contact-grid {
+      display: grid; grid-template-columns: 1fr 1fr;
+      row-gap: 28px; column-gap: 64px;
+      max-width: 680px; margin-bottom: 72px;
+    }
+    .contact-item {
+      display: flex; align-items: center; gap: 16px;
+      font-size: 16px; font-weight: 400; color: var(--ink);
+      padding: 16px 20px; border: 1px solid var(--border); border-radius: 12px;
+      transition: all 0.25s cubic-bezier(0.22,1,0.36,1);
+    }
+    a.contact-item:hover { color: var(--ink); transform: translateY(-6px); border-color: rgba(33,40,26,0.16); box-shadow: 0 12px 40px rgba(33,40,26,0.12); }
+    .contact-icon { width: 34px; height: 34px; flex-shrink: 0; display: flex; align-items: center; justify-content: center; }
+    .contact-icon svg { width: 30px; height: 30px; stroke: currentColor; fill: none; stroke-width: 1.6; stroke-linecap: round; stroke-linejoin: round; }
+    .contact-footer-line { font-size: 13px; color: var(--muted); border-top: 2px solid var(--lime); padding-top: 24px; }
+
+    /* ============================================================
+       DARK MODE OVERRIDES
+    ============================================================ */
+    [data-theme="dark"] #nav { background: #252820; border: 1px solid rgba(244,244,235,0.1); }
+    [data-theme="dark"] #nav.nav--light { background: #252820; border-color: rgba(244,244,235,0.1); }
+    [data-theme="dark"] .nav-link,
+    [data-theme="dark"] #nav.nav--light .nav-link { color: rgba(244,244,235,0.7); }
+    [data-theme="dark"] .nav-link:hover,
+    [data-theme="dark"] #nav.nav--light .nav-link:hover { color: #F4F4EB; transform: scale(1.1); }
+    [data-theme="dark"] #nav.nav--light .nav-link--active { color: #F4F4EB; }
+    [data-theme="dark"] .nav-cta,
+    [data-theme="dark"] #nav.nav--light .nav-cta { color: #F4F4EB; border-color: rgba(244,244,235,0.3); }
+    [data-theme="dark"] .nav-cta:hover,
+    [data-theme="dark"] #nav.nav--light .nav-cta:hover { background: rgba(244,244,235,0.08); border-color: rgba(244,244,235,0.6); }
+    [data-theme="dark"] .nav-hamburger span { background: #F4F4EB; }
+    [data-theme="dark"] .nav-overlay a,
+    [data-theme="dark"] .nav-overlay button { color: #F4F4EB; }
+    [data-theme="dark"] .nav-theme-toggle { color: rgba(244,244,235,0.7); }
+    [data-theme="dark"] .nav-theme-toggle:hover { color: #F4F4EB; background: rgba(244,244,235,0.08); }
+    [data-theme="dark"] body:has(#contact-overlay.is-open) #nav { background: #252820; border-color: rgba(244,244,235,0.1); }
+    [data-theme="dark"] a.contact-item:hover { box-shadow: 0 12px 40px rgba(0,0,0,0.4); }
+
+    /* SplitType clip */
+    [data-gsap="headline"] .line { overflow: hidden; padding-bottom: 0.12em; }
+
+    /* ============================================================
+       RESPONSIVE
+    ============================================================ */
+    @media (max-width: 767px) {
+      .cred-layout { grid-template-columns: 1fr; gap: 48px; }
+      .cred-item { grid-template-columns: 1fr; gap: 4px; }
+      .cred-date { padding-top: 0; }
+    }
+    @media (max-width: 639px) {
+      #nav { width: calc(100% - 32px); padding: 10px 10px 10px 16px; }
+      .nav-links, .nav-cta { display: none; }
+      .nav-hamburger { display: flex; }
+      #ab-hero { align-items: flex-start; padding-top: 20vh; padding-top: 20svh; }
+      .ab-hero-content { padding: 0 20px; }
+      .ab-hero-headline { font-size: clamp(36px, 10vw, 50px); letter-spacing: -0.5px; }
+      #ab-intro, #ab-philosophy, #ab-project { padding: 64px 20px; }
+      #ab-testimonial { padding: 64px 20px; }
+      #ab-credentials { padding: 64px 20px; }
+      .contact-headline { font-size: clamp(52px, 14vw, 100px); }
+      .contact-grid { grid-template-columns: 1fr; gap: 24px; max-width: 100%; }
+      .transform-item { flex-direction: column; gap: 4px; align-items: flex-start; }
+    }
+    @media (max-width: 375px) {
+      .ab-hero-headline { font-size: clamp(32px, 11vw, 40px); }
+      .nav-overlay a, .nav-overlay button { font-size: clamp(36px, 12vw, 52px); }
+    }
+    @media (min-width: 640px) and (max-width: 1023px) { #nav { width: calc(100% - 64px); } }
+    @media (min-width: 1280px) { #nav { max-width: 1100px; } }
+  </style>
+</head>
+<body>
+
+  <div id="custom-cursor" aria-hidden="true">
+    <img src="assets/cursor-light.png" alt="" width="1003" height="830">
+  </div>
+
+  <!-- NAV -->
+  <nav id="nav" role="navigation" aria-label="Main navigation">
+    <a href="index.html" class="nav-logo" aria-label="Home">
+      <img src="assets/logo-dark.png" alt="" id="nav-logo-img" width="102" height="74">
+    </a>
+    <ul class="nav-links" role="list">
+      <li><a class="nav-link" href="index.html">Work</a></li>
+      <li><a class="nav-link nav-link--active" href="about.html" aria-current="page">About</a></li>
+    </ul>
+    <button class="nav-theme-toggle" id="theme-toggle" aria-label="Toggle dark mode">☀</button>
+    <button class="nav-cta" id="nav-sayhi">Let's talk</button>
+    <button class="nav-hamburger" id="nav-hamburger" aria-label="Open navigation menu" aria-expanded="false">
+      <span></span><span></span><span></span>
+    </button>
+  </nav>
+
+  <div class="nav-overlay" id="nav-overlay" role="dialog" aria-modal="true" aria-label="Navigation menu">
+    <a href="index.html">Work</a>
+    <a href="about.html" aria-current="page">About</a>
+    <button id="overlay-sayhi">Let's talk</button>
+  </div>
+
+  <!-- HERO -->
+  <section id="ab-hero" aria-label="About Andrea Lee" data-gsap="reveal">
+    <div class="ab-hero-content">
+      <p class="ab-hero-meta">About · Andrea Lee</p>
+      <h1 class="ab-hero-headline" data-gsap="headline">I turn complex systems into experiences people can actually use.</h1>
+      <p class="ab-hero-sub">Product Designer &amp; UX Researcher · Singapore</p>
+    </div>
+  </section>
+
+  <!-- INTRO -->
+  <section id="ab-intro" aria-label="Background" data-gsap="reveal">
+    <div class="ab-intro-inner">
+      <p class="ab-section-label">Background</p>
+
+      <p class="ab-body">I spent a decade at LASALLE College of the Arts managing international university partnerships. MOUs, stakeholder delegations, negotiations across Singapore, Europe, and Asia. Alongside that, I ran Magnolia &amp; Pine — a luxury event design studio. Clients like Guerlain and CPF.</p>
+
+      <blockquote class="ab-insight" data-gsap="headline">Complexity doesn't disappear. You either move it onto the user, or you absorb it into the design.</blockquote>
+
+      <p class="ab-body">In 2026 I completed the UX Design Immersive at General Assembly Singapore. Not a career change. A language upgrade.</p>
+    </div>
+  </section>
+
+  <!-- PHILOSOPHY -->
+  <section id="ab-philosophy" aria-label="Philosophy" data-gsap="reveal">
+    <p class="ab-phil-label">What I believe</p>
+    <h2 class="ab-phil-headline" data-gsap="headline">Making complex things stupidly simple.</h2>
+    <p class="ab-phil-intro">The complexity moves.</p>
+    <ul class="transform-list" data-gsap="stagger" aria-label="Design transformations">
+      <li class="transform-item" data-gsap="card">
+        <span class="transform-from">From the manager's overwhelming dashboard</span>
+        <span class="transform-arrow" aria-hidden="true">→</span>
+        <span class="transform-to">a traffic-light dial.</span>
+      </li>
+      <li class="transform-item" data-gsap="card">
+        <span class="transform-from">From the pet owner's ingredient checklist</span>
+        <span class="transform-arrow" aria-hidden="true">→</span>
+        <span class="transform-to">a personalised feed.</span>
+      </li>
+      <li class="transform-item" data-gsap="card">
+        <span class="transform-from">From the airport's brochure site</span>
+        <span class="transform-arrow" aria-hidden="true">→</span>
+        <span class="transform-to">a two-click commuter tool.</span>
+      </li>
+    </ul>
+    <p class="ab-phil-coda">That's the work.</p>
+  </section>
+
+  <!-- SIDE PROJECT -->
+  <section id="ab-project" aria-label="Side project" data-gsap="reveal">
+    <div class="ab-project-inner">
+      <p class="ab-section-label">What I'm building when no one's asked me to</p>
+      <h2 class="ab-project-headline" data-gsap="headline">Designing voice AI for elderly dialect speakers in Singapore.</h2>
+      <p class="ab-project-body">Hokkien, Cantonese, Teochew. Voice assistants only understand Mandarin and English. That leaves out an entire generation. This isn't a side project. It's where the most important design problems are.</p>
+      <a class="ab-project-cta" href="mailto:andreeyahlee@gmail.com?subject=Voice AI - Dialect speakers">Ask me about it → andreeyahlee@gmail.com</a>
+    </div>
+  </section>
+
+  <!-- TESTIMONIAL -->
+  <section id="ab-testimonial" aria-label="Testimonial" data-gsap="reveal">
+    <div class="ab-testimonial-inner">
+      <blockquote class="ab-testimonial-text" data-gsap="headline">"Working with this UX/UI student team was a genuinely impressive experience. Their design recommendations were methodically tested and immediately actionable, directly strengthening the product's user experience."</blockquote>
+      <footer class="ab-testimonial-attr">
+        <span class="ab-testimonial-name">Eileen Zhang</span>
+        <span aria-hidden="true"> · </span>
+        <span>Founder, ARVO · 2026</span>
+      </footer>
+    </div>
+  </section>
+
+  <!-- CREDENTIALS -->
+  <section id="ab-credentials" aria-label="Credentials" data-gsap="reveal">
+    <p class="ab-section-label">Credentials</p>
+
+    <div class="cred-layout" data-gsap="stagger">
+
+      <div>
+        <p class="cred-group-label">Education</p>
+
+        <div class="cred-item" data-gsap="card">
+          <span class="cred-date">2026</span>
+          <div class="cred-right">
+            <p class="cred-title">UX Design Immersive</p>
+            <p class="cred-org">General Assembly Singapore</p>
+          </div>
+        </div>
+
+        <div class="cred-item" data-gsap="card">
+          <span class="cred-date">2008–2011</span>
+          <div class="cred-right">
+            <p class="cred-title">BSc (Hons) Management</p>
+            <p class="cred-org">University of London / LSE</p>
+          </div>
+        </div>
+      </div>
+
+      <div>
+        <p class="cred-group-label">Experience</p>
+
+        <div class="cred-item" data-gsap="card">
+          <span class="cred-date">Nov 2017–present</span>
+          <div class="cred-right">
+            <p class="cred-title">Asst Manager, Global Engagement</p>
+            <p class="cred-org">LASALLE College of the Arts</p>
+          </div>
+        </div>
+
+        <div class="cred-item" data-gsap="card">
+          <span class="cred-date">Dec 2020–Dec 2024</span>
+          <div class="cred-right">
+            <p class="cred-title">Founder</p>
+            <p class="cred-org">Magnolia &amp; Pine</p>
+          </div>
+        </div>
+
+        <div class="cred-item" data-gsap="card">
+          <span class="cred-date">Apr 2014–Oct 2017</span>
+          <div class="cred-right">
+            <p class="cred-title">Senior Executive</p>
+            <p class="cred-org">PSB Academy</p>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="skills-wrap" data-gsap="reveal">
+      <p class="skills-label">Skills</p>
+      <div class="skills-pills" data-gsap="stagger">
+        <span class="skill-pill" data-gsap="card">Problem Scoping</span>
+        <span class="skill-pill" data-gsap="card">Stakeholder Management</span>
+        <span class="skill-pill" data-gsap="card">User Research</span>
+        <span class="skill-pill" data-gsap="card">Usability Testing</span>
+        <span class="skill-pill" data-gsap="card">Information Architecture</span>
+        <span class="skill-pill" data-gsap="card">Wireframing</span>
+        <span class="skill-pill" data-gsap="card">Prototyping</span>
+        <span class="skill-pill" data-gsap="card">Design Systems</span>
+        <span class="skill-pill" data-gsap="card">Figma Suite</span>
+        <span class="skill-pill" data-gsap="card">Agile</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- CONTACT FOOTER -->
+  <footer id="contact-footer" aria-label="Contact" data-gsap="reveal">
+    <h2 class="cf-headline" data-gsap="headline">Let's work together.</h2>
+    <p class="cf-body">Open to UX research, product strategy, customer success, and partnerships roles in Singapore. If you're building something complex that needs to feel simple — let's talk.</p>
+    <div class="cf-buttons">
+      <a class="cf-btn" href="mailto:andreeyahlee@gmail.com">andreeyahlee@gmail.com</a>
+      <a class="cf-btn" href="https://www.linkedin.com/in/andrealee-/" target="_blank" rel="noopener">LinkedIn →</a>
+      <a class="cf-btn" href="https://drive.google.com/file/d/1bMgT6sMRa9Tbtc2sUFGb11WrcM488deY/view?usp=drive_link" target="_blank" rel="noopener">Resume →</a>
+    </div>
+    <p class="cf-footer-line">Andrea Lee · Singapore · 2026 · Built from scratch.</p>
+  </footer>
+
+  <!-- CONTACT OVERLAY -->
+  <div id="contact-overlay" class="overlay-panel" role="dialog"
+       aria-modal="true" aria-label="Contact Andrea" inert>
+    <button class="overlay-close" id="contact-close" aria-label="Close contact panel">&#x2715;</button>
+    <section aria-label="Contact" style="padding: clamp(80px,10vw,140px) clamp(32px,7vw,112px) clamp(64px,8vw,96px); min-height: 100vh; min-height: 100svh;">
+      <h2 class="contact-headline">Let's talk</h2>
+      <p class="contact-sub">Open to product design and UX research roles locally and overseas.</p>
+      <div class="contact-grid">
+        <a href="mailto:andreeyahlee@gmail.com" class="contact-item">
+          <span class="contact-icon"><svg viewBox="0 0 30 30" aria-hidden="true"><rect x="2" y="6" width="26" height="18" rx="3"/><path d="m2 9 13 8.5L28 9"/></svg></span>
+          andreeyahlee@gmail.com
+        </a>
+        <a href="https://drive.google.com/file/d/1bMgT6sMRa9Tbtc2sUFGb11WrcM488deY/view?usp=drive_link" target="_blank" rel="noopener" class="contact-item">
+          <span class="contact-icon"><svg viewBox="0 0 30 30" aria-hidden="true"><rect x="5" y="2" width="20" height="26" rx="2"/><path d="M10 10h10M10 15h10M10 20h6"/></svg></span>
+          Resume
+        </a>
+        <a href="https://www.linkedin.com/in/andrealee-/" target="_blank" rel="noopener" class="contact-item">
+          <span class="contact-icon"><svg viewBox="0 0 30 30" aria-hidden="true"><rect x="2" y="2" width="26" height="26" rx="5"/><path d="M9 13v8M9 9v.01M14 21v-5a3.5 3.5 0 0 1 7 0v5M14 13v8"/></svg></span>
+          LinkedIn
+        </a>
+        <a href="https://www.instagram.com/lee.andrea" target="_blank" rel="noopener" class="contact-item">
+          <span class="contact-icon"><svg viewBox="0 0 30 30" aria-hidden="true"><rect x="2" y="2" width="26" height="26" rx="7"/><circle cx="15" cy="15" r="5"/><circle cx="22" cy="8" r="1.2" fill="currentColor" stroke="none"/></svg></span>
+          @lee.andrea
+        </a>
+        <span class="contact-item">
+          <span class="contact-icon"><svg viewBox="0 0 30 30" aria-hidden="true"><path d="M15 2a10 10 0 0 1 10 10c0 7-10 17-10 17S5 19 5 12A10 10 0 0 1 15 2z"/><circle cx="15" cy="12" r="3.5"/></svg></span>
+          Singapore-based
+        </span>
+      </div>
+      <div class="contact-footer-line">© 2026 Andrea Lee. All rights reserved. Built from scratch by Andrea L.</div>
+    </section>
+  </div>
+
+  <script>
+  'use strict';
+
+  /* OVERLAY */
+  function openOverlay(id) {
+    const el = document.getElementById(id);
+    el.removeAttribute('inert');
+    el.classList.add('is-open');
+    document.body.style.overflow = 'hidden';
+    const closeBtn = el.querySelector('.overlay-close');
+    if (closeBtn) requestAnimationFrame(() => closeBtn.focus());
+  }
+  function closeOverlay(id) {
+    const el = document.getElementById(id);
+    el.classList.remove('is-open');
+    el.setAttribute('inert', '');
+    document.body.style.overflow = '';
+  }
+
+  if (window.location.hash === '#contact') {
+    openOverlay('contact-overlay');
+    history.replaceState(null, '', window.location.pathname);
+  }
+
+  document.getElementById('nav-sayhi').addEventListener('click', () => openOverlay('contact-overlay'));
+  document.getElementById('contact-close').addEventListener('click', () => closeOverlay('contact-overlay'));
+  document.getElementById('overlay-sayhi').addEventListener('click', () => { closeMenu(); openOverlay('contact-overlay'); });
+  document.addEventListener('keydown', e => { if (e.key === 'Escape') closeOverlay('contact-overlay'); });
+
+  /* HAMBURGER */
+  const hamburger = document.getElementById('nav-hamburger');
+  const mobileOverlay = document.getElementById('nav-overlay');
+  let menuOpen = false;
+
+  function openMenu() {
+    menuOpen = true;
+    hamburger.classList.add('open');
+    hamburger.setAttribute('aria-expanded', 'true');
+    hamburger.setAttribute('aria-label', 'Close navigation menu');
+    mobileOverlay.classList.add('open');
+    document.body.style.overflow = 'hidden';
+  }
+  function closeMenu() {
+    menuOpen = false;
+    hamburger.classList.remove('open');
+    hamburger.setAttribute('aria-expanded', 'false');
+    hamburger.setAttribute('aria-label', 'Open navigation menu');
+    mobileOverlay.classList.remove('open');
+    document.body.style.overflow = '';
+  }
+
+  hamburger.addEventListener('click', () => menuOpen ? closeMenu() : openMenu());
+  mobileOverlay.querySelectorAll('a').forEach(a => a.addEventListener('click', closeMenu));
+  document.addEventListener('keydown', e => { if (e.key === 'Escape' && menuOpen) closeMenu(); });
+
+  /* FLOWER CURSOR */
+  (function () {
+    const cursor = document.getElementById('custom-cursor');
+    if (!cursor || window.matchMedia('(pointer: coarse)').matches) return;
+    let visible = false;
+    document.addEventListener('mousemove', e => {
+      cursor.style.transform = `translate(${e.clientX - 24}px, ${e.clientY - 24}px)`;
+      if (!visible) { cursor.style.opacity = '1'; visible = true; }
+    });
+    document.addEventListener('mouseleave', () => { cursor.style.opacity = '0'; visible = false; });
+    document.addEventListener('mouseenter', () => { cursor.style.opacity = '1'; visible = true; });
+  })();
+
+  /* GSAP — headline reveal */
+  (function () {
+    if (typeof SplitType === 'undefined') return;
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+    document.querySelectorAll('[data-gsap="headline"]').forEach(el => {
+      const st = new SplitType(el, { types: 'words, lines' });
+      gsap.from(st.words, {
+        opacity: 0, y: 44, rotateX: -20, transformPerspective: 800,
+        stagger: 0.04, duration: 0.9, ease: 'spring',
+        scrollTrigger: { trigger: el, start: 'top 88%', once: true },
+      });
+    });
+  })();
+
+  /* GSAP — section reveal */
+  (function () {
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+    document.querySelectorAll('[data-gsap="reveal"]').forEach(el => {
+      gsap.from(el, {
+        opacity: 0, y: 32, duration: 0.75, ease: 'spring',
+        scrollTrigger: { trigger: el, start: 'top 82%', once: true },
+      });
+    });
+  })();
+
+  /* GSAP — stagger cards */
+  (function () {
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+    document.querySelectorAll('[data-gsap="stagger"]').forEach(container => {
+      const cards = container.querySelectorAll('[data-gsap="card"]');
+      if (!cards.length) return;
+      gsap.from(cards, {
+        opacity: 0, y: 28, scale: 0.96,
+        stagger: 0.1, duration: 0.65, ease: 'spring',
+        scrollTrigger: { trigger: container, start: 'top 78%', once: true },
+      });
+    });
+  })();
+
+  /* THEME TOGGLE */
+  (function () {
+    const STORAGE_KEY = 'andrea-theme';
+    const btn = document.getElementById('theme-toggle');
+    const html = document.documentElement;
+    function isDark() { return html.getAttribute('data-theme') === 'dark'; }
+    function setTheme(dark, animate) {
+      if (animate) {
+        html.classList.add('theme-transitioning');
+        setTimeout(() => html.classList.remove('theme-transitioning'), 380);
+      }
+      html.setAttribute('data-theme', dark ? 'dark' : 'light');
+      btn.textContent = dark ? '☾' : '☀';
+      btn.setAttribute('aria-label', dark ? 'Switch to light mode' : 'Switch to dark mode');
+      try { localStorage.setItem(STORAGE_KEY, dark ? 'dark' : 'light'); } catch (e) {}
+    }
+    const saved = (() => { try { return localStorage.getItem(STORAGE_KEY); } catch (e) { return null; } })();
+    const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+    setTheme(saved ? saved === 'dark' : prefersDark, false);
+    btn.addEventListener('click', () => setTheme(!isDark(), true));
+  })();
+  </script>
+
+</body>
+</html>

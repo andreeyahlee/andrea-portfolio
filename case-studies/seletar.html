@@ -3,41 +3,51 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-  <title>Seletar Airport — Case Study</title>
+  <title>Seletar Airport — Andrea Lee</title>
+  <meta name="description" content="Nobody was using the airport's website. They were using Reddit instead.">
+  <script>(function(){try{var t=localStorage.getItem('seletar-theme')||'light';document.documentElement.setAttribute('data-theme',t);}catch(e){}})();</script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,100..1000&display=swap" rel="stylesheet">
-  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
-  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital@1&display=swap" rel="stylesheet">
-  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&display=swap" rel="stylesheet">
   <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
-  <script src="https://cdn.jsdelivr.net/npm/@studio-freight/lenis@1.0.42/dist/lenis.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/CustomEase.min.js"></script>
   <style>
+    /* ── TOKENS ── */
     :root {
-      --sel-dark:    #1f2b1f;
-      --sel-lime:    #dce888;
-      --sel-accent:  #a1ad49;
-      --sel-green:   #458619;
-      --bg:          #f3f2ec;
-      --beige2:      #eae8e0;
-      --ink:         #0a0a0a;
-      --ink-muted:   rgba(10,10,10,0.55);
-      --font-display:'DM Serif Display', serif;
-      --font-body:   'DM Sans', sans-serif;
-      --font-mono:   'JetBrains Mono', monospace;
-      --content-max: 1100px;
-      --pad-x:       clamp(32px, 5vw, 80px);
-      --nav-h:       72px;
+      --sel-dark:     #1f2b1f;
+      --sel-lime:     #dce888;
+      --sel-accent:   #a1ad49;
+      --sel-green:    #458619;
+      --bg:           #f3f2ec;
+      --bg-mid:       #eae8e0;
+      --ink:          #0a0a0a;
+      --ink-muted:    rgba(10,10,10,0.55);
+      --font-display: 'DM Serif Display', serif;
+      --font-body:    'DM Sans', sans-serif;
+      --font-mono:    'DM Mono', monospace;
+      --pad-x:        clamp(32px, 5vw, 80px);
+      --pad-y:        clamp(60px, 8vw, 100px);
+      --nav-h:        72px;
     }
+    [data-theme="dark"] {
+      --bg:        #1a1e18;
+      --bg-mid:    #1c2118;
+      --ink:       #f4f4eb;
+      --ink-muted: rgba(244,244,235,0.5);
+    }
+
+    /* ── RESET ── */
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
     html { scroll-behavior: auto; -webkit-text-size-adjust: 100%; overflow-x: hidden; }
-    picture { display: contents; }
     a, button, [role="button"] { touch-action: manipulation; }
+    picture { display: contents; }
     body { font-family: var(--font-body); background: var(--bg); color: var(--ink); overflow-x: hidden; }
     a { color: inherit; text-decoration: none; }
     img { display: block; max-width: 100%; }
+    *, *::before, *::after { cursor: none !important; }
 
     /* ── PROGRESS BAR ── */
     #cs-progress {
@@ -45,1440 +55,917 @@
       height: 3px; width: 0%;
       background: var(--sel-accent);
       z-index: 200; pointer-events: none;
+      transition: width 0.1s linear;
     }
 
-    /* ── NAV ── */
-    .cs-nav {
-      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
-      display: flex; align-items: center; justify-content: space-between;
-      padding: 18px var(--pad-x);
-      background: var(--sel-dark);
-      border-bottom: 1px solid rgba(255,255,255,0.06);
-    }
-    .cs-nav-back {
-      font-family: var(--font-body); font-size: 13px; font-weight: 500;
-      color: rgba(255,255,255,0.6);
-      display: flex; align-items: center; gap: 6px; transition: color 0.2s;
-    }
-    .cs-nav-back:hover { color: #fff; }
-    .cs-nav-back svg { width: 16px; height: 16px; }
-    .cs-nav-cta {
-      font-family: var(--font-body); font-size: 13px; font-weight: 500; color: #fff;
-      border: 1.5px solid rgba(255,255,255,0.3); border-radius: 100px; padding: 7px 18px;
-      transition: background 0.2s, border-color 0.2s;
-    }
-    .cs-nav-cta:hover { background: rgba(255,255,255,0.08); border-color: rgba(255,255,255,0.6); }
-
-    /* ── SHARED SECTION BASE ── */
-    .cs-section { position: relative; }
-
-    /* Section label */
-    .cs-label {
-      font-family: var(--font-mono); font-size: 11px; font-weight: 700;
-      letter-spacing: 0.12em; text-transform: uppercase;
-      color: var(--ink-muted); margin-bottom: 24px;
-      display: flex; align-items: center; gap: 10px;
-    }
-    .cs-label::before {
-      content: '';
-      display: inline-block;
-      width: 20px; height: 1.5px;
-      background: currentColor;
-      opacity: 0.4;
-      flex-shrink: 0;
-    }
-    .cs-label--light { color: rgba(255,255,255,0.4); }
-
-    /* ── GRAIN / DEPTH on dark sections ── */
-    #cs-tldr::after, #cs-retro::after {
-      content: '';
-      position: absolute; inset: 0; pointer-events: none; z-index: 1;
-      background:
-        radial-gradient(ellipse 72% 52% at 10% 20%, rgba(90,130,170,0.10) 0%, transparent 62%),
-        radial-gradient(ellipse 58% 46% at 86% 76%, rgba(30,50,80,0.10) 0%, transparent 58%);
-      mix-blend-mode: screen;
-    }
-    #cs-tldr > *, #cs-retro > * { position: relative; z-index: 2; }
-
-    /* ── PLACEHOLDERS ── */
-    .st-placeholder {
-      background: rgba(0,0,0,0.05);
-      border: 2px dashed rgba(0,0,0,0.15);
-      border-radius: 16px;
-      display: flex; flex-direction: column;
-      align-items: center; justify-content: center;
-      gap: 6px; width: 100%;
-    }
-    .st-placeholder--dark {
-      background: rgba(255,255,255,0.06);
-      border-color: rgba(255,255,255,0.18);
-    }
-    .st-placeholder-tag {
-      font-family: var(--font-mono); font-size: 11px; font-weight: 700;
-      text-transform: uppercase; letter-spacing: 0.12em;
-      color: rgba(0,0,0,0.3); text-align: center;
-    }
-    .st-placeholder--dark .st-placeholder-tag { color: rgba(255,255,255,0.3); }
-    .st-placeholder-hint {
-      font-family: var(--font-body); font-size: 11px;
-      color: rgba(0,0,0,0.2); text-align: center;
-    }
-    .st-placeholder--dark .st-placeholder-hint { color: rgba(255,255,255,0.18); }
-
-    /* ── OVERLAY SCROLL PATTERN ── */
-    .cs-section:not(.cs-hero) {
-      position: relative;
-      height: 100vh;
-      height: 100svh;
-      overflow: hidden;
-      border-radius: 20px 20px 0 0;
-      box-shadow: 0 -24px 80px rgba(0,0,0,0.22);
-      clip-path: inset(calc(var(--nav-h) - 8px) 0 0 0 round 20px 20px 0 0);
-    }
-    /* Section inner — full height, flex column */
-    .cs-wrap {
-      position: relative; z-index: 1;
-      padding: clamp(64px, 7vh, 88px) var(--pad-x) clamp(40px, 5vh, 56px);
-      height: 100%;
-      display: flex; flex-direction: column;
-    }
-    .cs-section:not(.cs-hero) .cs-wrap {
-      padding-top: calc(var(--nav-h) + 36px);
-    }
-
-    /* z-index stack */
-    #cs-tldr       { z-index: 2;  background: var(--sel-dark); }
-    #cs-problem    { z-index: 3;  background: var(--bg); }
-    #cs-found      { z-index: 4;  background: #fff; }
-    #cs-cta        { z-index: 5;  background: var(--beige2); }
-    #cs-design-1   { z-index: 6;  background: var(--beige2); }
-    #cs-design-2   { z-index: 7;  background: var(--beige2); }
-    #cs-design-3   { z-index: 8;  background: var(--beige2); }
-    #cs-validation { z-index: 9;  background: #fff; }
-    #cs-outcome    { z-index: 10; background: var(--bg); }
-    #cs-outcome-2  { z-index: 11; background: var(--bg); }
-    #cs-outcome-3  { z-index: 12; background: var(--beige2); }
-    #cs-outcome-4  { z-index: 13; background: var(--bg); }
-    #cs-retro      { z-index: 14; background: var(--sel-dark); }
-    #cs-last       { z-index: 15; background: var(--sel-dark); }
-
-    /* ── 00 HERO ── */
-    .cs-hero {
-      position: sticky; top: 0; z-index: 1;
-      background: var(--sel-dark); height: 100vh; height: 100svh;
-      display: flex; flex-direction: column; justify-content: flex-end;
-      padding-top: 56px; overflow: hidden;
-    }
-    .cs-hero-bg {
-      position: absolute; inset: 0;
-      background: url('../assets/seletar-hero-bg.png') center / cover no-repeat;
-      opacity: 0.72;
-    }
-    .cs-hero::after {
-      content: ''; position: absolute; inset: 0; pointer-events: none; z-index: 1;
-      background:
-        linear-gradient(to right, rgba(31,43,31,0.88) 0%, rgba(31,43,31,0.5) 42%, rgba(31,43,31,0.1) 72%, transparent 100%),
-        linear-gradient(to top, rgba(31,43,31,0.82) 0%, rgba(31,43,31,0.28) 42%, transparent 68%);
-    }
-    .cs-hero-inner {
-      position: relative; z-index: 3;
-      width: 100%;
-      padding: 60px var(--pad-x) 52px;
-      display: grid; grid-template-columns: 1fr auto;
-      gap: 48px; align-items: end;
-    }
-    .cs-hero-h1 {
-      font-family: var(--font-display);
-      font-size: clamp(44px, 5.2vw, 74px);
-      font-weight: 900; line-height: 1.06; letter-spacing: -0.03em;
-      color: var(--beige2); margin-bottom: 16px;
-    }
-    .cs-hero-h1 em { font-style: italic; color: var(--sel-lime); }
-    .cs-hero-sub {
-      font-size: clamp(13px, 1vw, 15px); line-height: 1.65;
-      color: rgba(255,255,255,0.6); max-width: 500px; margin-bottom: 28px;
-    }
-    .cs-hero-meta { display: flex; flex-direction: column; }
-    .cs-meta-row {
-      display: grid; grid-template-columns: 120px 1fr;
-      padding: 9px 0; border-bottom: 1px solid rgba(255,255,255,0.08);
-    }
-    .cs-meta-row:last-child { border-bottom: none; }
-    .cs-meta-label {
-      font-family: var(--font-mono); font-size: 9px; font-weight: 700;
-      letter-spacing: 0.12em; text-transform: uppercase;
-      color: rgba(255,255,255,0.32); padding-top: 2px;
-    }
-    .cs-meta-value { font-size: 12px; line-height: 1.45; color: rgba(255,255,255,0.78); }
-    .cs-hero-cta-pill {
-      display: inline-flex; align-items: center; gap: 8px;
-      background: var(--bg); color: var(--sel-dark);
-      border: 1.5px solid var(--sel-dark); border-radius: 100px;
-      padding: 14px 28px;
-      font-family: var(--font-body); font-size: 13px; font-weight: 700;
-      letter-spacing: 0.04em; box-shadow: 0 9px 2.5px rgba(0,0,0,0.22);
-      white-space: nowrap; align-self: flex-end; flex-shrink: 0;
-    }
-
-    /* ── 01 TL;DR ── */
-    .st-tldr-bg {
-      position: absolute; inset: 0;
-      background: url('../assets/seletar-tldr-bg.png') center / cover no-repeat;
-      opacity: 0.3; pointer-events: none;
-    }
-    .st-tldr-layout {
-      display: grid; grid-template-columns: 1fr 440px;
-      gap: 60px; align-items: start; overflow: hidden;
-    }
-    .st-tldr-cols {
-      display: grid; grid-template-columns: repeat(3, 1fr);
-      border-top: 1px solid rgba(255,255,255,0.1); margin-bottom: 12px;
-    }
-    .st-tldr-col {
-      padding: 16px 16px 16px 0;
-      border-right: 1px solid rgba(255,255,255,0.08);
-    }
-    .st-tldr-col:last-child { border-right: none; }
-    .st-tldr-col:not(:first-child) { padding-left: 16px; }
-    .st-col-label {
-      font-family: var(--font-mono); font-size: 10px; font-weight: 700;
-      text-transform: uppercase; letter-spacing: 0.12em;
-      color: rgba(255,255,255,0.32); margin-bottom: 10px;
-    }
-    .st-col-text { font-size: 13px; line-height: 1.6; color: rgba(255,255,255,0.72); }
-    .st-col-text strong { color: #fff; }
-    .st-finding-grid { display: flex; flex-direction: row; gap: 8px; width: 100%; margin-top: 16px; }
-    .st-finding-card {
-      flex: 1; min-width: 0;
-      background: rgba(31,43,31,0.72); border-radius: 20px;
-      padding: 20px; display: flex; flex-direction: column; gap: 10px;
-    }
-    .st-finding-header { display: flex; gap: 12px; align-items: center; }
-    .st-finding-icon { font-size: 22px; flex-shrink: 0; line-height: 1; }
-    .st-finding-label {
-      font-family: var(--font-mono); font-size: 11px; font-weight: 700;
-      text-transform: uppercase; color: rgba(255,255,255,0.85); letter-spacing: 0.12em;
-    }
-    .st-finding-text { font-size: 13px; line-height: 1.6; color: rgba(255,255,255,0.75); }
-    .st-finding-text strong { color: #fff; }
-    .st-tldr-headline {
-      display: flex; flex-direction: column; gap: 20px; padding-top: 8px;
-    }
-    .st-tldr-h2 {
-      font-family: var(--font-display); font-size: clamp(32px, 3.4vw, 52px);
-      font-weight: 700; line-height: 0.98; color: var(--beige2);
-    }
-    .st-tldr-h2 em { font-style: italic; color: var(--sel-lime); display: block; }
-    .st-tldr-sub {
-      font-size: 15px; line-height: 1.6; font-weight: 500;
-      color: rgba(255,255,255,0.6); max-width: 380px;
-    }
-
-    /* ── 02 PROBLEM ── */
-    .st-problem-layout {
-      display: grid; grid-template-columns: 1fr 1fr;
-      gap: 48px; flex: 1; align-items: center;
-    }
-    .st-section-h2 {
-      font-family: var(--font-display); font-size: clamp(30px, 3.6vw, 52px);
-      font-weight: 700; line-height: 1.0; color: var(--sel-dark);
-      margin-bottom: 16px;
-    }
-    .st-section-h2 em { font-style: normal; color: var(--sel-accent); }
-    .st-section-body {
-      font-size: 15px; line-height: 1.7; color: var(--ink-muted); max-width: 480px;
-    }
-    .st-section-body + .st-section-body { margin-top: 12px; }
-
-    /* ── 03 FOUND ── */
-    .st-found-layout {
-      display: grid; grid-template-columns: 52% 1fr;
-      gap: 48px; flex: 1; align-items: start; overflow: hidden;
-    }
-    .st-found-h2 {
-      font-family: var(--font-display); font-size: clamp(26px, 3vw, 44px);
-      font-weight: 700; line-height: 0.98; color: var(--sel-dark); margin-bottom: 20px;
-    }
-    .st-found-h2 span { display: block; color: var(--sel-accent); }
-    .st-stats-row {
-      display: grid; grid-template-columns: repeat(3, 1fr);
-      border-top: 1px solid rgba(0,0,0,0.09);
-      border-bottom: 1px solid rgba(0,0,0,0.09);
-      margin-bottom: 18px;
-    }
-    .st-stat-cell {
-      padding: 14px 16px; text-align: center;
-      border-right: 1px solid rgba(0,0,0,0.08);
-    }
-    .st-stat-cell:last-child { border-right: none; }
-    .st-stat-num {
-      font-family: var(--font-display); font-size: 32px; font-weight: 500;
-      color: var(--sel-dark); line-height: 1; margin-bottom: 6px;
-    }
-    .st-stat-label { font-size: 12px; line-height: 1.5; color: var(--ink-muted); }
-    .st-main-quote {
-      background: var(--beige2); border-radius: 16px; padding: 20px; margin-bottom: 16px;
-    }
-    .st-pullquote {
-      font-family: 'Cormorant Garamond', serif; font-style: italic;
-      font-size: clamp(17px, 1.8vw, 26px); color: var(--sel-dark);
-      line-height: 1.3; margin-bottom: 10px;
-    }
-    .st-quote-attr { font-size: 12px; color: var(--ink-muted); }
-    .st-found-lead {
-      font-size: 14px; font-weight: 500; line-height: 1.65; color: var(--sel-dark);
-    }
-    /* Right: problem cards */
-    .st-problem-cards { display: flex; flex-direction: column; gap: 10px; height: 100%; }
-    .st-problem-card {
-      background: var(--bg); border-radius: 16px; padding: 12px 16px;
-      display: flex; flex-direction: column; gap: 6px;
-      box-shadow: -4px 6px 4px rgba(0,0,0,0.12);
-    }
-    .st-sev-row { display: flex; align-items: center; justify-content: space-between; }
-    .st-sev-dot { width: 28px; height: 28px; border-radius: 100px; flex-shrink: 0; }
-    .st-sev-label {
-      font-family: var(--font-mono); font-size: 12px; font-weight: 700; text-transform: uppercase;
-    }
-    .st-prob-title { font-size: 14px; font-weight: 600; color: var(--sel-dark); line-height: 1.4; }
-    .st-prob-body { font-size: 12px; line-height: 1.6; color: var(--ink-muted); }
-    .st-found-footer {
-      margin-top: auto; padding-top: 16px;
-      font-size: 13px; font-weight: 500; color: var(--ink-muted);
-      border-top: 1px solid rgba(0,0,0,0.07);
-    }
-
-    /* ── LAPTOP MOCKUP ── */
-    .st-laptop-mock {
-      width: 100%; max-width: 640px;
-      filter: drop-shadow(0 24px 48px rgba(0,0,0,0.22)) drop-shadow(0 4px 8px rgba(0,0,0,0.12));
-    }
-    .st-laptop-device {
-      position: relative;
-      width: 100%;
-      padding-top: 58.23%; /* 2342/4022 */
-    }
-    .st-laptop-video {
-      position: absolute;
-      left: 10.77%; top: 2.35%;
-      width: 78.44%; height: 87.75%;
-      aspect-ratio: 171/110;
-      object-fit: cover;
-      z-index: 1;
-    }
-    .st-laptop-frame {
-      position: absolute;
-      top: 0; left: 0;
-      width: 100%; height: 100%;
-      z-index: 2;
-    }
-
-    /* ── 04 CTA ── */
-    .st-cta-layout {
-      flex: 1; display: flex; gap: 48px; align-items: center;
-    }
-    .st-cta-text { flex: 0 0 400px; display: flex; flex-direction: column; gap: 20px; }
-    .st-cta-h2 {
-      font-family: var(--font-display); font-size: clamp(32px, 3.8vw, 52px);
-      font-weight: 800; line-height: 1.08; letter-spacing: -0.02em; color: var(--sel-dark);
-    }
-    .st-cta-h2 em { font-style: normal; color: var(--sel-green); }
-    .st-cta-sub { font-size: 15px; line-height: 1.65; color: var(--ink-muted); }
-    .st-cta-btn {
-      display: inline-flex; align-items: center; gap: 8px;
-      background: var(--sel-dark); color: var(--sel-lime);
-      font-family: var(--font-body); font-size: 13px; font-weight: 700;
-      letter-spacing: 0.04em; border-radius: 100px; padding: 14px 28px;
-      transition: opacity 0.2s; align-self: flex-start;
-    }
-    .st-cta-btn:hover { opacity: 0.82; }
-
-    /* ── 05 DESIGN (shared) ── */
-    .st-design-layout {
-      display: grid; grid-template-columns: 1fr 1fr;
-      gap: 48px; flex: 1; align-items: center;
-    }
-    .st-design-counter {
-      font-family: var(--font-mono); font-size: 11px; font-weight: 700;
-      text-transform: uppercase; letter-spacing: 0.12em;
-      color: var(--ink-muted); margin-bottom: 20px;
-    }
-    .st-fix-header { display: flex; gap: 14px; align-items: flex-start; margin-bottom: 16px; }
-    .st-fix-meta { flex: 1 0 0; min-width: 0; }
-    .st-fix-title {
-      font-size: 18px; font-weight: 700; color: var(--sel-dark);
-      margin-bottom: 4px; line-height: 1.3;
-    }
-    .st-fix-improvement { font-size: 15px; color: var(--sel-green); font-weight: 500; }
-    .st-fix-badge {
-      flex-shrink: 0; background: #d11b1b; color: #fff;
-      font-family: var(--font-mono); font-size: 11px; font-weight: 700;
-      text-transform: uppercase; letter-spacing: 0.12em;
-      padding: 6px 14px; border-radius: 100px;
-      box-shadow: -6px -2px 3px rgba(0,0,0,0.2);
-    }
-    .st-fix-body {
-      font-size: 14px; line-height: 1.7; color: var(--ink-muted);
-    }
-    .st-fix-body p + p { margin-top: 14px; }
-    .st-design-img-col { display: flex; flex-direction: column; gap: 10px; }
-    .st-design-caption {
-      font-family: var(--font-body); font-size: 12px; font-style: italic;
-      color: var(--sel-dark); text-align: center; line-height: 1.5;
-    }
-
-    /* ── 06 VALIDATION ── */
-    .st-val-header { margin-bottom: 24px; }
-    .st-val-h2 {
-      font-family: var(--font-display); font-size: clamp(28px, 3.2vw, 46px);
-      font-weight: 700; line-height: 0.98; color: var(--sel-dark); margin-bottom: 12px;
-    }
-    .st-val-h2 em { font-style: normal; color: var(--sel-accent); }
-    .st-val-sub { font-size: 13px; line-height: 1.6; color: var(--ink-muted); max-width: 600px; }
-    .st-val-sub em { font-style: italic; }
-    .st-val-tables {
-      display: grid; grid-template-columns: 1fr 1fr;
-      gap: 32px; flex: 1; overflow: hidden;
-    }
-    .st-val-round { display: flex; flex-direction: column; gap: 10px; }
-    .st-round-head { display: flex; gap: 14px; align-items: center; margin-bottom: 4px; }
-    .st-round-pill {
-      font-family: var(--font-mono); font-size: 11px; font-weight: 700;
-      text-transform: uppercase; padding: 6px 18px; border-radius: 100px; letter-spacing: 0.12em;
-    }
-    .st-round-pill--r1 { background: var(--sel-dark); color: #f3f2ec; }
-    .st-round-pill--r2 { background: var(--sel-green); color: #f3f2ec; }
-    .st-round-context { font-family: var(--font-mono); font-size: 10px; text-transform: uppercase; color: var(--sel-dark); }
-    .st-val-table { width: 100%; border-collapse: collapse; }
-    .st-val-table thead tr { background: var(--beige2); border-bottom: 1.5px solid #000; }
-    .st-val-table th {
-      padding: 10px 12px; font-family: var(--font-display);
-      font-size: 13px; font-weight: 600; color: var(--sel-dark); text-align: left;
-    }
-    .st-val-table td {
-      padding: 9px 12px; border-bottom: 1px solid rgba(0,0,0,0.06);
-      font-size: 12px; color: var(--sel-dark); vertical-align: middle; line-height: 1.45;
-    }
-    .st-val-table tr:last-child td { border-bottom: none; }
-    .st-result-pill {
-      display: inline-flex; align-items: center; gap: 6px;
-      padding: 4px 12px; border-radius: 100px;
-      font-family: var(--font-mono); font-size: 10px; font-weight: 700;
-      text-transform: uppercase; white-space: nowrap;
-    }
-    .st-result-pill--pass  { background: #dce888; color: #458619; }
-    .st-result-pill--needs { background: #ffc005; color: #8a5800; }
-    .st-result-pill--na    { background: #e6e8e3; color: #666; }
-    .st-pill-dot { width: 5px; height: 5px; border-radius: 50%; flex-shrink: 0; }
-    .st-score {
-      font-family: var(--font-body); font-size: 14px; font-weight: 600;
-      color: #262626; white-space: nowrap;
-    }
-    .st-val-callout {
-      margin-top: auto; padding-top: 16px;
-      font-size: 13px; font-weight: 500; line-height: 1.6;
-      color: var(--ink-muted); border-top: 1px solid rgba(0,0,0,0.08);
-    }
-
-    /* ── 07 OUTCOME ── */
-    .st-outcome-layout {
-      display: grid; grid-template-columns: 1fr 1fr;
-      gap: 48px; flex: 1; align-items: center;
-    }
-    .st-outcome-screens {
-      display: flex; flex-direction: column;
-      gap: 56px; margin-top: 56px;
-    }
-    .st-outcome-row {
-      display: flex; gap: 40px; align-items: center;
-    }
-    .st-outcome-row-img {
-      flex: 0 0 62%; display: flex;
-      flex-direction: column; gap: 10px; margin: 0;
-    }
-    .st-outcome-row-img img {
-      width: 100%; height: auto; border-radius: 24px; display: block;
-    }
-    .st-outcome-row-img figcaption {
-      font-size: 13px; color: var(--ink-muted);
-      text-align: center; font-style: italic; line-height: 1.5;
-    }
-    .st-outcome-row-text { flex: 1; display: flex; flex-direction: column; justify-content: center; }
-    .st-outcome-row-text strong {
-      display: block; font-size: 16px; font-weight: 700;
-      color: var(--sel-dark); margin-bottom: 10px; line-height: 1.4;
-    }
-    .st-outcome-row-text p {
-      font-size: 15px; line-height: 1.65; color: var(--ink-muted);
-    }
-    @media (max-width: 767px) {
-      .st-outcome-row { flex-direction: column; }
-      .st-outcome-row-img { flex: 0 0 auto; width: 100%; }
-    }
-
-    /* ── 08 RETRO ── */
-    /* learnings column */
-    .st-retro-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 48px; flex: 1; align-items: start; }
-    .st-retro-learnings { display: flex; flex-direction: column; }
-    .st-retro-item {
-      display: flex; gap: 18px; padding: 16px 0;
-      border-bottom: 1px solid rgba(255,255,255,0.07);
-    }
-    .st-retro-item:first-child { padding-top: 0; }
-    .st-retro-item:last-child { border-bottom: none; padding-bottom: 0; }
-    .st-retro-num {
-      font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.12em;
-      color: rgba(255,255,255,0.28); flex-shrink: 0; padding-top: 3px;
-    }
-    .st-retro-card-title { font-size: 14px; font-weight: 700; color: #fff; margin-bottom: 6px; }
-    .st-retro-card-body { font-size: 13px; line-height: 1.65; color: rgba(255,255,255,0.55); }
-    /* next tests column */
-    .st-retro-next { display: flex; flex-direction: column; gap: 0; height: 100%; }
-    .st-retro-next-label {
-      font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.12em;
-      text-transform: uppercase; color: var(--sel-lime); margin-bottom: 16px;
-    }
-    .st-retro-next-items { display: flex; flex-direction: column; gap: 0; }
-    .st-retro-next-item {
-      display: flex; gap: 16px; align-items: flex-start;
-      padding: 14px 0; border-bottom: 1px solid rgba(255,255,255,0.07);
-    }
-    .st-retro-next-item:last-child { border-bottom: none; }
-    .st-retro-next-icon {
-      width: 52px; height: 52px; object-fit: cover;
-      border-radius: 10px; flex-shrink: 0;
-    }
-    .st-retro-next-text strong {
-      display: block; font-size: 13px; font-weight: 700;
-      color: var(--sel-lime); margin-bottom: 4px;
-    }
-    .st-retro-next-text p { font-size: 12px; line-height: 1.6; color: rgba(255,255,255,0.45); }
-    .st-retro-h2 {
-      font-family: var(--font-display); font-size: clamp(32px, 4vw, 52px);
-      font-weight: 800; line-height: 1.1; letter-spacing: -0.02em;
-      color: #fff; margin-bottom: 0;
-    }
-    .st-retro-h2 em { font-style: normal; color: var(--sel-lime); }
-    .st-retro-actions { display: flex; gap: 10px; margin-top: auto; flex-wrap: wrap; }
-    .st-retro-btn {
-      font-family: var(--font-body); font-size: 13px; font-weight: 600;
-      letter-spacing: 0.04em; color: #fff;
-      border: 1.5px solid rgba(255,255,255,0.22); border-radius: 100px;
-      padding: 11px 22px; transition: background 0.2s; display: inline-flex; align-items: center; gap: 8px;
-    }
-    .st-retro-btn--primary { background: var(--sel-lime); border-color: var(--sel-lime); color: var(--sel-dark); }
-    .st-retro-btn:hover { background: rgba(255,255,255,0.08); border-color: rgba(255,255,255,0.5); }
-    .st-retro-btn--primary:hover { opacity: 0.86; }
-    .st-case-nav {
-      display: flex; justify-content: space-between;
-      padding: 20px 0 0;
-      border-top: 1px solid rgba(255,255,255,0.07);
-    }
-    .st-case-nav-link {
-      font-size: 11px; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase;
-      color: rgba(255,255,255,0.38); transition: color 0.2s;
-    }
-    .st-case-nav-link:hover { color: #fff; }
-
-    /* ── 09 LAST ── */
-    .st-last-layout {
-      flex: 1; display: flex; gap: 48px; align-items: center;
-    }
-
-    /* ── RESPONSIVE ── */
-    @media (max-width: 767px) {
-      .st-tldr-layout { grid-template-columns: 1fr; }
-    }
-    @media (max-width: 639px) {
-      .cs-hero-inner { grid-template-columns: 1fr; }
-      .st-problem-layout, .st-found-layout,
-      .st-cta-layout, .st-design-layout, .st-outcome-layout,
-      .st-last-layout { grid-template-columns: 1fr; }
-      .st-val-tables { grid-template-columns: 1fr; }
-      .st-retro-grid { grid-template-columns: 1fr; }
-      .cs-section:not(.cs-hero) { height: auto; min-height: auto; }
-
-      /* Disable pin/clip system on mobile */
-      .cs-section { clip-path: none !important; }
-      .cs-hero { position: relative !important; top: auto !important; height: auto !important; min-height: 100svh; min-height: 100vh; }
-      .cs-wrap { padding-top: var(--pad-y) !important; }
-    }
-    *, *::before, *::after { cursor: none !important; }
+    /* ── CURSOR ── */
     #custom-cursor {
       position: fixed; top: 0; left: 0; width: 48px;
       pointer-events: none; z-index: 99999;
       will-change: transform; opacity: 0; transition: opacity 0.2s;
       mix-blend-mode: difference;
     }
-    #custom-cursor img {
-      width: 100%; height: auto; display: block;
-      will-change: transform; animation: cursor-spin 12s linear infinite;
-    }
+    #custom-cursor img { width: 100%; height: auto; display: block; will-change: transform; animation: cursor-spin 12s linear infinite; }
     @keyframes cursor-spin { to { transform: rotate(360deg); } }
+
+    /* ── NAV ── */
+    .cs-nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      height: var(--nav-h);
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 0 var(--pad-x);
+      background: var(--sel-dark);
+      border-bottom: 1px solid rgba(255,255,255,0.06);
+    }
+    .cs-nav-back {
+      font-family: var(--font-body); font-size: 13px; font-weight: 500;
+      color: rgba(255,255,255,0.6);
+      display: flex; align-items: center; gap: 6px;
+      transition: color 0.2s; cursor: pointer;
+    }
+    .cs-nav-back:hover { color: #fff; }
+    .cs-nav-back svg { width: 16px; height: 16px; flex-shrink: 0; }
+    .cs-nav-right { display: flex; align-items: center; gap: 12px; }
+    .cs-nav-cta {
+      font-family: var(--font-body); font-size: 13px; font-weight: 500;
+      color: #fff; border: 1.5px solid rgba(255,255,255,0.3);
+      border-radius: 100px; padding: 7px 18px; cursor: pointer;
+      transition: background 0.2s, border-color 0.2s;
+    }
+    .cs-nav-cta:hover { background: rgba(255,255,255,0.08); border-color: rgba(255,255,255,0.6); }
+    .cs-nav-theme {
+      background: transparent; border: 1.5px solid rgba(255,255,255,0.25);
+      border-radius: 100px; color: rgba(255,255,255,0.7);
+      font-size: 14px; padding: 6px 12px; cursor: pointer;
+      min-width: 40px; min-height: 40px;
+      display: flex; align-items: center; justify-content: center;
+      transition: background 0.2s, border-color 0.2s;
+    }
+    .cs-nav-theme:hover { background: rgba(255,255,255,0.08); border-color: rgba(255,255,255,0.5); }
 
     /* ── STICKY SECTION NAV ── */
     .cs-sticky-nav {
-      position: fixed;
-      left: clamp(14px, 1.8vw, 24px);
-      top: 50%;
-      transform: translateY(-50%);
-      z-index: 80;
-      display: flex;
-      flex-direction: column;
-      gap: 14px;
+      position: fixed; left: clamp(14px,1.8vw,24px); top: 50%;
+      transform: translateY(-50%); z-index: 80;
+      display: flex; flex-direction: column; gap: 14px;
       pointer-events: none;
     }
     @media (max-width: 1024px) { .cs-sticky-nav { display: none; } }
-    .cs-sticky-nav-item {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      pointer-events: auto;
-      cursor: pointer;
-      text-decoration: none;
+    .cs-snav-item {
+      display: flex; align-items: center; gap: 10px;
+      pointer-events: auto; cursor: pointer; text-decoration: none;
     }
-    .cs-sticky-nav-dot {
-      width: 5px; height: 5px;
-      border-radius: 50%;
-      background: rgba(255,255,255,0.2);
-      mix-blend-mode: difference;
-      transition: background 0.25s, transform 0.25s;
-      flex-shrink: 0;
+    .cs-snav-dot {
+      width: 5px; height: 5px; border-radius: 50%;
+      background: rgba(255,255,255,0.2); mix-blend-mode: difference;
+      transition: background 0.25s, transform 0.25s; flex-shrink: 0;
     }
-    .cs-sticky-nav-item.is-active .cs-sticky-nav-dot {
-      background: rgba(255,255,255,0.9);
-      transform: scale(1.5);
+    .cs-snav-item.is-active .cs-snav-dot { background: rgba(255,255,255,0.9); transform: scale(1.5); }
+    .cs-snav-label {
+      font-family: var(--font-body); font-size: 9px; font-weight: 700;
+      letter-spacing: 0.12em; text-transform: uppercase;
+      color: rgba(255,255,255,0); mix-blend-mode: difference;
+      transition: color 0.2s; white-space: nowrap;
     }
-    .cs-sticky-nav-label {
-      font-family: var(--font-body, sans-serif);
-      font-size: 9px;
+    .cs-snav-item:hover .cs-snav-label,
+    .cs-snav-item.is-active .cs-snav-label { color: rgba(255,255,255,0.65); }
+
+    /* ── SHARED SECTION ── */
+    .cs-section { position: relative; background: var(--bg); }
+    .cs-section-label {
+      font-family: var(--font-mono); font-size: 11px; font-weight: 700;
+      letter-spacing: 0.12em; text-transform: uppercase;
+      color: var(--ink-muted); margin-bottom: clamp(60px,8vw,100px);
+      display: flex; align-items: center; gap: 10px;
+    }
+    .cs-section-label::before {
+      content: ''; display: inline-block; width: 20px; height: 1.5px;
+      background: currentColor; opacity: 0.4; flex-shrink: 0;
+    }
+    .cs-section-label--light { color: rgba(255,255,255,0.4); }
+    .cs-h2 {
+      font-family: var(--font-display);
+      font-size: clamp(32px, 4vw, 58px);
+      font-weight: 400; line-height: 1.05; letter-spacing: -0.02em;
+      color: var(--ink); margin-bottom: 20px;
+    }
+    .cs-h2 em { font-style: italic; color: var(--sel-accent); }
+    .cs-body {
+      font-size: clamp(15px, 1.2vw, 17px);
+      line-height: 1.72; color: var(--ink-muted); max-width: 600px;
+      margin-bottom: clamp(28px,3vw,40px);
+    }
+
+    /* ── DARK SECTION OVERRIDES ── */
+    .cs-section--dark { background: var(--sel-dark) !important; }
+    .cs-section--dark .cs-section-label { color: rgba(255,255,255,0.35); }
+    .cs-section--dark .cs-h2  { color: #fff; }
+    .cs-section--dark .cs-h2 em { color: var(--sel-lime); }
+    .cs-section--dark .cs-body { color: rgba(255,255,255,0.62); }
+
+    /* ── HERO ── */
+    .cs-hero {
+      position: relative;
+      background: var(--sel-dark);
+      min-height: 100svh;
+      display: flex; flex-direction: column; justify-content: flex-end;
+      overflow: hidden;
+    }
+    .cs-hero-bg {
+      position: absolute; inset: 0;
+      background: url('../assets/seletar-hero-bg.png') center/cover no-repeat;
+      opacity: 0.55;
+    }
+    .cs-hero::after {
+      content: ''; position: absolute; inset: 0; z-index: 1; pointer-events: none;
+      background:
+        linear-gradient(to right, rgba(31,43,31,0.92) 0%, rgba(31,43,31,0.55) 48%, rgba(31,43,31,0.12) 78%, transparent 100%),
+        linear-gradient(to top, rgba(31,43,31,0.90) 0%, rgba(31,43,31,0.30) 50%, transparent 72%);
+    }
+    .cs-hero-inner {
+      position: relative; z-index: 3;
+      padding: 80px var(--pad-x) 72px;
+      display: grid; grid-template-columns: 1fr 280px;
+      gap: 60px; align-items: end; width: 100%;
+    }
+    .cs-hero-h1 {
+      font-family: var(--font-display);
+      font-size: clamp(36px, 4.6vw, 64px);
+      font-weight: 400; line-height: 1.06; letter-spacing: -0.03em;
+      color: var(--bg-mid); margin-bottom: 16px;
+    }
+    .cs-hero-h1 em { font-style: italic; color: var(--sel-lime); }
+    .cs-hero-sub {
+      font-size: clamp(13px, 1vw, 15px); line-height: 1.65;
+      color: rgba(255,255,255,0.6); max-width: 500px; margin-bottom: 28px;
+    }
+    .cs-hero-cta {
+      display: inline-flex; align-items: center; gap: 8px;
+      background: var(--bg); color: var(--sel-dark);
+      border: 1.5px solid var(--sel-dark); border-radius: 100px;
+      padding: 14px 28px;
+      font-family: var(--font-body); font-size: 13px; font-weight: 700;
+      letter-spacing: 0.04em; box-shadow: 0 9px 24px rgba(0,0,0,0.22);
+      white-space: nowrap; align-self: flex-end; flex-shrink: 0;
+      transition: opacity 0.2s;
+    }
+    .cs-hero-cta:hover { opacity: 0.82; }
+    .cs-hero-meta { display: flex; flex-direction: column; }
+    .cs-meta-row {
+      display: grid; grid-template-columns: 100px 1fr;
+      gap: 12px; padding: 11px 0;
+      border-bottom: 1px solid rgba(255,255,255,0.07);
+    }
+    .cs-meta-row:last-child { border-bottom: none; }
+    .cs-meta-label {
+      font-size: 10px; font-weight: 600; letter-spacing: 0.12em;
+      text-transform: uppercase; color: rgba(255,255,255,0.3); padding-top: 2px;
+    }
+    .cs-meta-value { font-size: 13px; line-height: 1.5; color: rgba(255,255,255,0.8); }
+
+    /* ── STAT BLOCKS ── */
+    .stat-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 2px; margin: 40px 0;
+    }
+    .stat-cell { background: rgba(10,10,10,0.04); padding: 32px 28px; }
+    .stat-cell:first-child { border-radius: 12px 0 0 12px; }
+    .stat-cell:last-child  { border-radius: 0 12px 12px 0; }
+    .stat-cell:only-child  { border-radius: 12px; }
+    [data-theme="dark"] .stat-cell { background: rgba(255,255,255,0.06); }
+    .stat-num {
+      font-family: var(--font-display);
+      font-size: clamp(44px, 5.5vw, 72px);
+      font-weight: 900; line-height: 1;
+      color: var(--sel-green); margin-bottom: 10px;
+    }
+    .stat-label {
+      font-family: var(--font-mono); font-size: 10px; font-weight: 700;
+      letter-spacing: 0.12em; text-transform: uppercase;
+      color: var(--ink-muted); margin-bottom: 6px;
+    }
+    .stat-desc { font-size: 13px; line-height: 1.5; color: var(--ink-muted); }
+
+    /* ── PROBLEM SECTION LAYOUT ── */
+    .problem-layout {
+      display: grid; grid-template-columns: 1fr 1fr;
+      gap: 48px; align-items: start;
+    }
+    .problem-img-col { overflow: hidden; }
+    .problem-img-col img {
+      width: 100%; height: auto; object-fit: unset;
+      border-radius: 16px;
+      filter: drop-shadow(-8px 16px 40px rgba(0,0,0,0.22));
+      margin-top: -20px;
+    }
+
+    /* ── RESEARCH SECTION ── */
+    .research-layout {
+      display: grid; grid-template-columns: 1fr 1fr;
+      gap: 56px; align-items: center;
+    }
+    .research-insight {
+      background: var(--bg-mid); border-radius: 16px;
+      padding: 24px 28px; margin-top: 24px;
+      border-left: 3px solid var(--sel-accent);
+    }
+    [data-theme="dark"] .research-insight { background: rgba(255,255,255,0.07); }
+    .research-insight p {
+      font-family: var(--font-display); font-style: italic;
+      font-size: clamp(16px, 1.5vw, 21px); line-height: 1.38;
+      color: var(--ink);
+    }
+
+    /* ── FAILURE SECTION ── */
+    .failure-img-wrap {
+      margin: 28px 0 0;
+      border-radius: 16px; overflow: hidden;
+      border: 1px solid rgba(255,255,255,0.1);
+    }
+    .failure-img-wrap img { width: 100%; height: auto; display: block; }
+    .failure-caption {
+      display: flex; align-items: center; gap: 16px;
+      margin: 14px 0 28px;
+      padding: 14px 20px;
+      background: rgba(255,255,255,0.05);
+      border-radius: 10px;
+    }
+    .failure-caption-score {
+      font-family: var(--font-display);
+      font-size: clamp(32px, 3.5vw, 48px);
+      font-weight: 400; line-height: 1;
+      color: #e05252; flex-shrink: 0;
+    }
+    .failure-caption-text { display: flex; flex-direction: column; gap: 4px; }
+    .failure-caption-text strong {
+      font-family: var(--font-mono); font-size: 11px; font-weight: 700;
+      text-transform: uppercase; letter-spacing: 0.12em;
+      color: rgba(255,255,255,0.55);
+    }
+    .failure-caption-text span {
+      font-size: 13px; line-height: 1.5; color: rgba(255,255,255,0.38);
+    }
+
+    /* ── DECISION SECTION ── */
+    .decision-layout {
+      display: grid; grid-template-columns: 1fr 1fr;
+      gap: 56px; align-items: center;
+    }
+    .decision-img-col { display: flex; flex-direction: column; gap: 10px; }
+    .decision-img-col img {
+      width: 100%; border-radius: 16px;
+      filter: drop-shadow(0 8px 28px rgba(0,0,0,0.14));
+    }
+    .cs-img-caption {
+      font-family: var(--font-body); font-size: 12px; font-style: italic;
+      color: var(--ink-muted); text-align: center; line-height: 1.5;
+    }
+    .decision-before-after {
+      background: var(--bg-mid); border-radius: 16px;
+      padding: 22px 24px; margin-top: 8px;
+      display: flex; flex-direction: column; gap: 8px;
+    }
+    [data-theme="dark"] .decision-before-after { background: rgba(255,255,255,0.07); }
+    .ba-old {
+      font-family: var(--font-mono); font-size: 13px; font-weight: 500;
+      color: var(--ink-muted); text-decoration: line-through;
+    }
+    .ba-arrow {
+      font-family: var(--font-mono); font-size: 10px; font-weight: 700;
+      letter-spacing: 0.12em; text-transform: uppercase;
+      color: var(--sel-accent);
+    }
+    .ba-new {
+      font-family: var(--font-display); font-style: italic;
+      font-size: clamp(17px, 1.6vw, 22px); color: var(--sel-green);
+    }
+    .ba-result {
+      font-family: var(--font-mono); font-size: 10px; font-weight: 700;
+      letter-spacing: 0.12em; text-transform: uppercase;
+      color: var(--sel-green); padding-top: 4px;
+      border-top: 1px solid rgba(0,0,0,0.07);
+    }
+    [data-theme="dark"] .ba-result { border-top-color: rgba(255,255,255,0.08); }
+
+    /* ── OUTCOME SECTION ── */
+    .outcome-lead-img {
+      width: 100%; border-radius: 20px;
+      overflow: hidden; margin-bottom: 10px;
+    }
+    .outcome-lead-img img {
+      width: 100%; height: auto; display: block;
+    }
+    .outcome-stat-grid {
+      display: grid; grid-template-columns: repeat(3, 1fr);
+      gap: 16px; margin: 28px 0 36px;
+    }
+    .outcome-stat-card { border-radius: 16px; padding: 24px 22px; }
+    .outcome-stat-card--dark { background: var(--sel-dark); }
+    .outcome-stat-card--mid  { background: var(--bg-mid); }
+    [data-theme="dark"] .outcome-stat-card--mid { background: rgba(255,255,255,0.07); }
+    .osc-num {
+      font-family: var(--font-display);
+      font-size: clamp(36px, 4vw, 52px);
+      font-weight: 400; line-height: 1; margin-bottom: 10px;
+    }
+    .outcome-stat-card--dark .osc-num { color: var(--sel-lime); }
+    .outcome-stat-card--mid  .osc-num { color: var(--sel-dark); }
+    [data-theme="dark"] .outcome-stat-card--mid .osc-num { color: var(--ink); }
+    .osc-sub { font-size: 12px; line-height: 1.55; }
+    .outcome-stat-card--dark .osc-sub { color: rgba(255,255,255,0.55); }
+    .outcome-stat-card--mid  .osc-sub { color: var(--ink-muted); }
+    .osc-sub span { display: block; margin-top: 2px; }
+    .outcome-stat-card--dark .osc-sub span { color: rgba(255,255,255,0.28); }
+    .outcome-stat-card--mid  .osc-sub span { color: rgba(0,0,0,0.3); }
+    [data-theme="dark"] .outcome-stat-card--mid .osc-sub span { color: rgba(244,244,235,0.28); }
+
+    /* ── PULL QUOTE ("Brilliant") ── */
+    .pull-quote-wrap {
+      text-align: center; max-width: 640px;
+      padding: 36px 40px; margin: 0 auto;
+    }
+    .pull-quote-marks {
+      font-family: var(--font-display); font-size: 80px; line-height: 0.6;
+      color: var(--sel-accent); display: block; margin-bottom: 20px;
+    }
+    .pull-quote-text {
+      font-family: var(--font-display); font-style: italic;
+      font-size: clamp(22px, 2.8vw, 38px);
+      line-height: 1.25; color: var(--ink); margin-bottom: 16px;
+    }
+    .pull-quote-attr {
+      font-family: var(--font-mono); font-size: 10px; font-weight: 700;
+      letter-spacing: 0.12em; text-transform: uppercase; color: var(--ink-muted);
+    }
+
+    /* ── RETRO CARDS ── */
+    .retro-grid {
+      display: grid; grid-template-columns: 1fr 1fr 1fr;
+      gap: 16px; margin-top: 40px;
+    }
+    .retro-card {
+      background: rgba(255,255,255,0.08); border-radius: 12px; padding: 24px;
+      display: grid; grid-template-columns: 12px 1fr;
+      gap: 16px; align-items: start;
+    }
+    .retro-dot { width: 10px; height: 10px; border-radius: 50%; margin-top: 4px; }
+    .retro-title { font-size: 14px; font-weight: 700; color: #fff; margin-bottom: 10px; line-height: 1.35; }
+    .retro-body { font-size: 13px; line-height: 1.65; color: rgba(255,255,255,0.6); }
+
+    /* ── CASE NAV ── */
+    .cs-case-nav {
+      display: flex; justify-content: space-between;
+      padding: 20px 0 0;
+      border-top: 1px solid rgba(255,255,255,0.08); margin-top: 32px;
+    }
+    .cs-case-nav-link {
+      font-size: 12px; font-weight: 600; letter-spacing: 0.12em;
+      text-transform: uppercase; color: rgba(255,255,255,0.4);
+      display: flex; align-items: center; gap: 8px;
+      transition: color 0.2s; cursor: pointer;
+    }
+    .cs-case-nav-link:hover { color: #fff; }
+
+    /* ── SECTION LAYOUT ── */
+    .cs-section:not(.cs-hero) .cs-inner {
+      padding-top: var(--pad-y);
+    }
+    /* PHASE 2 — GSAP ScrollTrigger will restore pinned overlay scroll. Do not re-add clip-path or sticky positioning manually. */
+    .cs-inner { padding: var(--pad-y) var(--pad-x); }
+
+    /* ── Z-INDEX STACK ── */
+    #cs-research { background: #fff; }
+    #cs-decision { background: var(--bg-mid); }
+
+    /* ── DARK MODE LIGHT SECTION OVERRIDES ── */
+    [data-theme="dark"] #cs-research { background: #1a1e18; }
+    [data-theme="dark"] #cs-decision { background: #1c2118; }
+    [data-theme="dark"] #cs-outcome  { background: #1a1e18; }
+
+    /* ── GRAIN OVERLAY (dark sections) ── */
+    #cs-failure::after, #cs-coda::after {
+      content: ''; position: absolute; inset: 0; pointer-events: none; z-index: 1;
+      background:
+        radial-gradient(ellipse 68% 52% at 10% 20%, rgba(70,150,80,0.08) 0%, transparent 62%),
+        radial-gradient(ellipse 55% 44% at 88% 78%, rgba(30,60,40,0.09) 0%, transparent 58%);
+      mix-blend-mode: screen;
+    }
+    #cs-failure > *, #cs-coda > * { position: relative; z-index: 2; }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 767px) {
+      .retro-grid { grid-template-columns: 1fr; }
+    }
+    @media (max-width: 639px) {
+      .cs-hero-inner { grid-template-columns: 1fr; }
+      .cs-hero-meta  { display: none; }
+      .stat-grid     { grid-template-columns: 1fr 1fr; }
+      .problem-layout, .research-layout, .decision-layout { grid-template-columns: 1fr; }
+      .problem-img-col { display: none; }
+      .outcome-stat-grid { grid-template-columns: 1fr 1fr; }
+      .cs-hero { position: relative !important; top: auto !important; min-height: 100svh; }
+      .cs-section:not(.cs-hero) .cs-inner { padding-top: var(--pad-y); }
+    }
+
+    /* ── LAYOUT SYSTEM ── */
+    .cs-bleed {
+      margin-left: calc(-1 * var(--pad-x));
+      margin-right: calc(-1 * var(--pad-x));
+      width: calc(100% + (var(--pad-x) * 2));
+    }
+    .cs-stat-hero {
+      font-family: var(--font-display);
+      font-size: clamp(72px, 12vw, 120px);
+      line-height: 0.9;
+      letter-spacing: -0.04em;
       font-weight: 700;
-      letter-spacing: 0.12em;
+    }
+    .cs-stat-hero em { font-style: normal; }
+    .cs-stat-hero-label {
+      font-family: var(--font-mono);
+      font-size: 11px;
       text-transform: uppercase;
-      color: rgba(255,255,255,0);
-      mix-blend-mode: difference;
-      transition: color 0.2s;
-      white-space: nowrap;
+      letter-spacing: 0.12em;
+      margin-top: 12px;
+      opacity: 0.5;
+      display: block;
     }
-    .cs-sticky-nav-item:hover .cs-sticky-nav-label,
-    .cs-sticky-nav-item.is-active .cs-sticky-nav-label {
-      color: rgba(255,255,255,0.65);
+    .cs-split {
+      display: grid;
+      grid-template-columns: 55% 1fr;
+      gap: clamp(40px, 5vw, 80px);
+      align-items: start;
     }
+    .cs-split--reversed { grid-template-columns: 1fr 55%; }
+    .cs-dramatic-moment {
+      background: var(--ink, #21281A);
+      color: white;
+      padding: clamp(60px,8vw,100px) var(--pad-x);
+      margin-left: calc(-1 * var(--pad-x));
+      margin-right: calc(-1 * var(--pad-x));
+      width: calc(100% + (var(--pad-x) * 2));
+      margin-top: clamp(60px,6vw,80px);
+      margin-bottom: clamp(60px,6vw,80px);
+    }
+    .cs-dramatic-moment .cs-stat-hero { color: var(--lime, #DEE895); }
+    .cs-img-cap {
+      font-family: var(--font-mono);
+      font-size: 10px;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: var(--ink-muted, #6B7060);
+      margin-top: 14px;
+      padding-left: 2px;
+    }
+    .cs-bleed figcaption, .cs-bleed .cs-img-cap { padding-left: var(--pad-x); padding-right: var(--pad-x); }
+    @media (max-width: 768px) {
+      .cs-split, .cs-split--reversed { grid-template-columns: 1fr; }
+      .cs-bleed {
+        margin-left: calc(-1 * clamp(20px,4vw,32px));
+        margin-right: calc(-1 * clamp(20px,4vw,32px));
+        width: calc(100% + (clamp(20px,4vw,32px)*2));
+      }
+    }
+
+    /* ── BEFORE / AFTER COMPARISON ── */
+    .cs-before-after { border-radius: 12px; overflow: hidden; box-shadow: 0 8px 32px rgba(0,0,0,0.1); }
+    .cs-ba-labels { display: grid; grid-template-columns: 1fr 1fr; background: var(--bg); border-bottom: 1px solid var(--rule); }
+    .cs-ba-label { font-family: var(--font-mono); font-size: 10px; text-transform: uppercase; letter-spacing: 0.1em; padding: 10px 16px; }
+    .cs-ba-before { color: var(--red, #9b4a4a); border-right: 1px solid var(--rule); }
+    .cs-ba-after  { color: var(--green, #2b7a3a); }
+
+    /* ── BROWSER CHROME MOCKUP ── */
+    .browser-mock { border-radius: 12px; overflow: hidden; box-shadow: 0 24px 64px rgba(0,0,0,0.16); border: 1px solid rgba(0,0,0,0.06); }
+    .browser-mock__bar { background: #E4E4E4; padding: 10px 16px; display: flex; align-items: center; gap: 6px; }
+    .browser-mock__dot { width: 11px; height: 11px; border-radius: 50%; flex-shrink: 0; }
+    .browser-mock__dot:nth-child(1) { background: #FF5F57; }
+    .browser-mock__dot:nth-child(2) { background: #FEBC2E; }
+    .browser-mock__dot:nth-child(3) { background: #28C840; }
+    .browser-mock__url { flex: 1; background: white; border-radius: 6px; font-size: 11px; padding: 4px 12px; color: #888; font-family: var(--font-mono); margin-left: 8px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .browser-mock__screen { max-height: 540px; overflow-y: auto; overflow-x: hidden; }
+    .browser-mock__screen img, .browser-mock__screen video { width: 100%; height: auto; display: block; }
+    [data-theme="dark"] .browser-mock__bar { background: #2A2A2A; }
+    [data-theme="dark"] .browser-mock__url { background: #3A3A3A; color: #888; }
   </style>
 </head>
 <body>
-  <div id="custom-cursor" aria-hidden="true"><img src="../assets/cursor-light.png" alt="" width="1003" height="830"></div>
+  <div id="custom-cursor" aria-hidden="true">
+    <img src="../assets/cursor-light.png" alt="" width="1003" height="830">
+  </div>
 
   <!-- STICKY SECTION NAV -->
   <nav class="cs-sticky-nav" aria-label="Section navigation">
-    <a class="cs-sticky-nav-item" href="#cs-tldr">       <span class="cs-sticky-nav-dot"></span><span class="cs-sticky-nav-label">Overview</span></a>
-    <a class="cs-sticky-nav-item" href="#cs-problem">    <span class="cs-sticky-nav-dot"></span><span class="cs-sticky-nav-label">The Problem</span></a>
-    <a class="cs-sticky-nav-item" href="#cs-found">      <span class="cs-sticky-nav-dot"></span><span class="cs-sticky-nav-label">Research</span></a>
-    <a class="cs-sticky-nav-item" href="#cs-design-1">   <span class="cs-sticky-nav-dot"></span><span class="cs-sticky-nav-label">Design</span></a>
-    <a class="cs-sticky-nav-item" href="#cs-validation"> <span class="cs-sticky-nav-dot"></span><span class="cs-sticky-nav-label">Testing</span></a>
-    <a class="cs-sticky-nav-item" href="#cs-outcome">    <span class="cs-sticky-nav-dot"></span><span class="cs-sticky-nav-label">Outcome</span></a>
-    <a class="cs-sticky-nav-item" href="#cs-retro">      <span class="cs-sticky-nav-dot"></span><span class="cs-sticky-nav-label">Retro</span></a>
+    <a class="cs-snav-item" href="#cs-problem"> <span class="cs-snav-dot"></span><span class="cs-snav-label">The Problem</span></a>
+    <a class="cs-snav-item" href="#cs-research"><span class="cs-snav-dot"></span><span class="cs-snav-label">Research</span></a>
+    <a class="cs-snav-item" href="#cs-failure"> <span class="cs-snav-dot"></span><span class="cs-snav-label">The Failure</span></a>
+    <a class="cs-snav-item" href="#cs-decision"><span class="cs-snav-dot"></span><span class="cs-snav-label">The Decision</span></a>
+    <a class="cs-snav-item" href="#cs-outcome"> <span class="cs-snav-dot"></span><span class="cs-snav-label">Outcome</span></a>
+    <a class="cs-snav-item" href="#cs-coda">    <span class="cs-snav-dot"></span><span class="cs-snav-label">Reflection</span></a>
   </nav>
 
   <!-- PROGRESS + NAV -->
   <div id="cs-progress"></div>
   <nav class="cs-nav">
     <a class="cs-nav-back" href="../index.html#work">
-      <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8">
+      <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true">
         <path d="M10 3L5 8l5 5"/>
       </svg>
       Back
     </a>
-    <a class="cs-nav-cta" href="https://seletar-airport-sg.figma.site/" target="_blank" rel="noopener">
-      Try the prototype →
-    </a>
+    <div class="cs-nav-right">
+      <a class="cs-nav-cta" href="https://seletar-airport-sg.figma.site/" target="_blank" rel="noopener">Try the prototype →</a>
+      <button class="cs-nav-theme" id="theme-toggle" aria-label="Toggle dark mode">☀</button>
+    </div>
   </nav>
 
-  <!-- 00 HERO -->
+  <!-- ── 00 HERO ── -->
   <section class="cs-section cs-hero" id="cs-hero">
-    <div class="cs-hero-bg"></div>
+    <div class="cs-hero-bg" aria-hidden="true"></div>
     <div class="cs-hero-inner">
       <div>
-        <h1 class="cs-hero-h1">Unlocking the<br><em>Subang Advantage</em></h1>
-        <p class="cs-hero-sub">I led the research that changed the brief. What started as "redesign the website" became something sharper — prove the airport's competitive edge online, or lose passengers who never knew it existed.</p>
+        <h1 class="cs-hero-h1">Nobody was using<br>the airport's website.<br><em>They were using Reddit instead.</em></h1>
+        <p class="cs-hero-sub">I led research. Every user interview, the testing framework, the call to kill V1.</p>
         <div class="cs-hero-meta">
           <div class="cs-meta-row">
             <span class="cs-meta-label">Role</span>
-            <span class="cs-meta-value">UX Research Lead</span>
+            <span class="cs-meta-value">Lead UX Researcher</span>
           </div>
           <div class="cs-meta-row">
             <span class="cs-meta-label">Team</span>
-            <span class="cs-meta-value">3 designers</span>
+            <span class="cs-meta-value">MAD Design — Melody (PM) · Andrea Lee (Research) · Danna (Visual Design)</span>
           </div>
           <div class="cs-meta-row">
             <span class="cs-meta-label">Methods</span>
-            <span class="cs-meta-value">15 interviews · 2 test rounds, Iterative Prototype Validation</span>
+            <span class="cs-meta-value">15 interviews · 2 test rounds · Iterative Prototype Validation</span>
           </div>
           <div class="cs-meta-row">
-            <span class="cs-meta-label">Type</span>
-            <span class="cs-meta-value">Omni-channel service and informational platform</span>
-          </div>
-          <div class="cs-meta-row">
-            <span class="cs-meta-label">Outcome &amp; Output</span>
-            <span class="cs-meta-value">SEQ score 4.3 → 4.8 / 5 · Website redesign · Information architecture + user journey flows</span>
+            <span class="cs-meta-label">Outcome</span>
+            <span class="cs-meta-value">SEQ 4.3 → 4.8 / 5 · Website redesign · IA + user journey flows</span>
           </div>
           <div class="cs-meta-row">
             <span class="cs-meta-label">Duration</span>
             <span class="cs-meta-value">6 weeks · Dec 2025–Jan 2026</span>
           </div>
-          <div class="cs-meta-row">
-            <span class="cs-meta-label">Read</span>
-            <span class="cs-meta-value">~10 min</span>
-          </div>
         </div>
       </div>
+      <a class="cs-hero-cta" href="https://seletar-airport-sg.figma.site/" target="_blank" rel="noopener">Try the prototype →</a>
     </div>
   </section>
 
-  <!-- 01 TL;DR -->
-  <section class="cs-section" id="cs-tldr">
-    <div class="st-tldr-bg"></div>
-    <div class="cs-wrap">
-      <p class="cs-label cs-label--light">01 TL;DR</p>
-      <div class="st-tldr-layout">
-
-        <div style="display:flex;flex-direction:column;gap:12px;overflow:hidden;">
-          <div class="st-tldr-cols">
-            <div class="st-tldr-col">
-              <p class="st-col-label">The airport</p>
-              <p class="st-col-text">Seletar <strong>saves travellers 45–90 min vs KLIA</strong> — but its website was so poor, most passengers didn't know why they should choose it.</p>
-            </div>
-            <div class="st-tldr-col">
-              <p class="st-col-label">My role</p>
-              <p class="st-col-text">UX Research Lead. I oversaw all 9 user interviews and both rounds of usability testing (structured sessions watching participants attempt real tasks on the prototype), and turned findings into the brief the design team built from.</p>
-            </div>
-            <div class="st-tldr-col">
-              <p class="st-col-label">The result</p>
-              <p class="st-col-text">Ease-of-use score moved from 4.3 → 4.8 / 5 across two test rounds. The site went from a static brochure to a working passenger planning tool.</p>
-            </div>
-          </div>
+  <!-- ── 01 THE PROBLEM ── -->
+  <section class="cs-section" id="cs-problem" aria-label="The Problem">
+    <div class="cs-inner">
+      <p class="cs-section-label">01 The Problem</p>
+      <h2 class="cs-h2" data-gsap="headline">9 of 9 chose<br><em>Seletar for speed.</em></h2>
+      <p class="cs-body">Nobody was using the airport's website. They were going to Reddit instead — searching for departure tips, transport options, and what Firefly actually flies.</p>
+      <p class="cs-body">I interviewed 9 passengers. Every single one had chosen Seletar for the same reason: it saves them 45 to 90 minutes compared to KLIA.</p>
+      <div class="stat-grid">
+        <div class="stat-cell">
+          <p class="stat-num">9</p>
+          <p class="stat-label">User interviews</p>
+          <p class="stat-desc">8 Firefly passengers, 1 private jet traveller. Recruited in two weeks.</p>
         </div>
-
-        <div class="st-tldr-headline">
-          <p class="st-tldr-h2"><em>The Lowdown.</em>The Mission, The Move, and The Metric.</p>
-          <p class="st-tldr-sub">For anyone who wants the full picture before diving in — or just needs the highlights.</p>
+        <div class="stat-cell">
+          <p class="stat-num">100%</p>
+          <p class="stat-label">Chose Seletar for time</p>
+          <p class="stat-desc">Not loyalty. Not price. Speed — every single time.</p>
         </div>
-
+        <div class="stat-cell">
+          <p class="stat-num">0</p>
+          <p class="stat-label">Used the official site</p>
+          <p class="stat-desc">Not one. Reddit was doing the airport's job for it.</p>
+        </div>
       </div>
-
-      <div class="st-finding-grid">
-            <div class="st-finding-card">
-              <div class="st-finding-header">
-                <img src="../assets/seletar-tldr-1.png" class="st-finding-icon" alt="" loading="lazy" width="100" height="100" style="width:32px;height:32px;object-fit:contain;">
-                <span class="st-finding-label">Finding 1</span>
-              </div>
-              <p class="st-finding-text">100% of users chose Seletar for one reason: <strong>time</strong>. Protect the speed promise, or the airport has no digital story to tell.</p>
-            </div>
-            <div class="st-finding-card">
-              <div class="st-finding-header">
-                <img src="../assets/seletar-tldr-2.png" class="st-finding-icon" alt="" loading="lazy" width="100" height="100" style="width:32px;height:32px;object-fit:contain;">
-                <span class="st-finding-label">Finding 2</span>
-              </div>
-              <p class="st-finding-text">We recommended cutting a whole designed section. Turboprop education tested at 3.0/5. My call. The team agreed. Gone from V3.</p>
-            </div>
-            <div class="st-finding-card">
-              <div class="st-finding-header">
-                <img src="../assets/seletar-tldr-3.png" class="st-finding-icon" alt="" loading="lazy" width="100" height="100" style="width:32px;height:32px;object-fit:contain;">
-                <span class="st-finding-label">Finding 3</span>
-              </div>
-              <p class="st-finding-text"><strong>"Check Status" → "View Flight Schedule."</strong> One label change. SEQ on that task: 4.3 → 4.8. Language is never a detail.</p>
-            </div>
-            <div class="st-finding-card">
-              <div class="st-finding-header">
-                <img src="../assets/seletar-tldr-4.png" class="st-finding-icon" alt="" loading="lazy" width="100" height="100" style="width:32px;height:32px;object-fit:contain;">
-                <span class="st-finding-label">Finding 4</span>
-              </div>
-              <p class="st-finding-text"><strong>Tourist confidence gap — Round 2.</strong> "EZ-Link" confused international users. Payment icons alone weren't enough. V3 fix brief.</p>
-            </div>
+      <!-- S1: original site — full bleed -->
+      <figure class="cs-bleed" style="margin-top:44px;">
+        <div class="browser-mock">
+          <div class="browser-mock__bar">
+            <span class="browser-mock__dot"></span>
+            <span class="browser-mock__dot"></span>
+            <span class="browser-mock__dot"></span>
+            <div class="browser-mock__url">seletarairport.com.sg</div>
           </div>
+          <div class="browser-mock__screen">
+            <img src="../assets/images/seletar-original-site.png" alt="Seletar Airport website before the redesign — no useful travel information, no schedule, no wayfinding" loading="lazy" width="968" height="1760" style="width:100%;height:auto;display:block;">
+          </div>
+        </div>
+        <p class="cs-img-cap">The official website. Not one of 9 passengers had ever opened it.</p>
+      </figure>
     </div>
   </section>
 
-  <!-- 02 PROBLEM -->
-  <section class="cs-section" id="cs-problem">
-    <div class="cs-wrap">
-      <p class="cs-label">02 The problem</p>
-      <div class="st-problem-layout" style="align-items:start;">
+  <!-- ── 02 RESEARCH ── -->
+  <section class="cs-section" id="cs-research" aria-label="Research">
+    <div class="cs-inner">
+      <p class="cs-section-label">02 Research</p>
+      <div class="research-layout">
         <div>
-          <h2 class="st-section-h2">The airport's best feature<br>was <em>invisible online.</em></h2>
-          <p class="st-section-body">Seletar Airport saves passengers 45–90 minutes over KLIA. But the existing website couldn't communicate this. It read like a corporate brochure — no flight info, no practical planning tools, no reason to return.</p>
-          <p class="st-section-body" style="margin-top:12px;">We were briefed to redesign it. Research told us the real brief was bigger: prove the competitive advantage, or passengers would keep going to KLIA by default.</p>
-        </div>
-        <div class="st-design-img-col" style="overflow:visible;display:flex;align-items:flex-start;">
-          <picture>
-            <source type="image/webp" srcset="../assets/seletar-img-oldsite.webp">
-            <img src="../assets/seletar-img-oldsite.png" alt="Existing Seletar website" loading="lazy" width="968" height="1760" style="display:block;width:auto;height:calc(100vh - 80px);max-width:none;object-fit:cover;object-position:top center;border-radius:16px;filter:drop-shadow(-8px 16px 40px rgba(0,0,0,0.22));margin-top:-40px;">
-          </picture>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- 03 WHAT WE FOUND -->
-  <section class="cs-section" id="cs-found">
-    <div class="cs-wrap">
-      <p class="cs-label">03 What we found</p>
-      <div class="st-found-layout">
-
-        <!-- Left: headline + stats + quote + lead -->
-        <div style="display:flex;flex-direction:column;gap:0;overflow:hidden;">
-          <h2 class="st-found-h2">
-            We talked to 9 passengers.
-            <span>Every single one said the same thing.</span>
-          </h2>
-          <div class="st-stats-row">
-            <div class="st-stat-cell">
-              <p class="st-stat-num">9</p>
-              <p class="st-stat-label">Interviews — 8 Firefly passengers, 1 private jet traveller</p>
-            </div>
-            <div class="st-stat-cell">
-              <p class="st-stat-num">100%</p>
-              <p class="st-stat-label">chose Seletar for one reason: it saves them time</p>
-            </div>
-            <div class="st-stat-cell">
-              <p class="st-stat-num">0</p>
-              <p class="st-stat-label">of 9 had ever used the official website to plan their trip</p>
-            </div>
-          </div>
-          <div class="st-main-quote">
-            <p class="st-pullquote">"Seletar's product is speed and ease. Anything that creates confusion or uncertainty breaks that promise."</p>
-            <p class="st-quote-attr">The insight that shaped every decision that followed</p>
-          </div>
-          <p class="st-found-lead">This reframed the entire project. We weren't solving a design problem — we were solving a communication problem. The airport's biggest advantage was invisible to the people most likely to use it.</p>
-        </div>
-
-        <!-- Right: problem cards -->
-        <div style="display:flex;flex-direction:column;gap:12px;height:100%;">
-          <p style="font-family:var(--font-mono);font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.12em;color:var(--ink-muted);">Ranked problems</p>
-          <div class="st-problem-cards">
-            <div class="st-problem-card">
-              <div class="st-sev-row">
-                <span class="st-sev-dot" style="background:#b30e11;"></span>
-                <span class="st-sev-label" style="color:#b30e11;">Critical</span>
-              </div>
-              <p class="st-prob-title">The website feels irrelevant <strong>(8 of 9)</strong></p>
-              <p class="st-prob-body">It reads like a company brochure, not a travel planning tool. No one trusted it.</p>
-            </div>
-            <div class="st-problem-card">
-              <div class="st-sev-row">
-                <span class="st-sev-dot" style="background:#c08a5c;"></span>
-                <span class="st-sev-label" style="color:#c08a5c;">High</span>
-              </div>
-              <p class="st-prob-title">Getting to accommodation is stressful <strong>(7 of 9)</strong></p>
-              <p class="st-prob-body">30–45 min Grab waits, 1 bus route, no exit guidance. Smooth experience ends at the doors.</p>
-            </div>
-            <div class="st-problem-card">
-              <div class="st-sev-row">
-                <span class="st-sev-dot" style="background:#888;"></span>
-                <span class="st-sev-label" style="color:#888;">Medium</span>
-              </div>
-              <p class="st-prob-title">First-timers feel unprepared <strong>(4 of 9)</strong></p>
-              <p class="st-prob-body">Weather delays and unfamiliar aircraft types created anxiety with no reassurance online.</p>
-            </div>
-          </div>
-          <p class="st-found-footer">Each ranked problem became a direct question for the team to design against.</p>
-        </div>
-
-      </div>
-    </div>
-  </section>
-
-  <!-- 04 CTA / PROTOTYPE -->
-  <section class="cs-section" id="cs-cta">
-    <div class="cs-wrap">
-      <p class="cs-label">04 See the outcome</p>
-      <div class="st-cta-layout">
-        <div class="st-cta-text">
-          <h2 class="st-cta-h2">The redesign is <em>live</em>.<br>Try the prototype.</h2>
-          <p class="st-cta-sub">From a static brochure to a working passenger planning tool. The research-driven redesign is ready to explore.</p>
-          <a class="st-cta-btn" href="https://seletar-airport-sg.figma.site/" target="_blank" rel="noopener">
-            SELETAR AIRPORT REDESIGNED &nbsp;→
-          </a>
-        </div>
-        <div style="flex:1;display:flex;align-items:center;justify-content:center;">
-          <div class="st-laptop-mock">
-            <div class="st-laptop-device">
-              <video class="st-laptop-video" src="../assets/seletar-img-outcome.mp4" autoplay loop muted playsinline></video>
-              <canvas class="st-laptop-frame" id="st-laptop-canvas"></canvas>
-            </div>
+          <h2 class="cs-h2" data-gsap="headline">Not one had ever<br><em>opened the website.</em></h2>
+          <p class="cs-body" style="margin-bottom:20px;">The speed advantage — Seletar's entire competitive edge — was invisible online. Not one of the 9 had ever opened the official website to plan their trip.</p>
+          <p class="cs-body">This reframed the project. We weren't solving a design problem. We were solving a communication problem.</p>
+          <div class="research-insight">
+            <p>"Seletar's product is speed and ease. Anything that creates confusion or uncertainty breaks that promise."</p>
           </div>
         </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- 05a DESIGN: Task-first navigation -->
-  <section class="cs-section" id="cs-design-1">
-    <div class="cs-wrap">
-      <p class="cs-label">05 Turning research into design &nbsp;—&nbsp; 1 / 3</p>
-      <div class="st-design-layout">
+        <!-- S2: research context -->
         <div>
-          <h2 class="st-section-h2" style="font-size:clamp(28px,3.4vw,48px);margin-bottom:20px;">Every screen traces back<br>to something a user said.</h2>
-          <div class="st-fix-header">
-            <div class="st-fix-meta">
-              <p class="st-fix-title">01 Task-first navigation</p>
-              <p class="st-fix-improvement">SEQ SCORE 4.3 → 4.8</p>
-            </div>
-            <span class="st-fix-badge">FIX</span>
-          </div>
-          <div class="st-fix-body">
-            <p>Users arrived with a specific job — check a flight, find transport, know what to bring. The old navigation was organised around the airport's structure, not the passenger's task.</p>
-            <p>Our A/B test revealed "Check Status" confused users, who mistook it for booking confirmation. We pivoted to "View Flight Schedule." Cognitive friction disappeared instantly — SEQ jumped to 4.8/5.</p>
-          </div>
+          <img src="../assets/images/seletar-research-photo.png" alt="Research findings synthesised from 9 user interviews" loading="lazy" width="960" height="640" style="width:100%;border-radius:20px;filter:drop-shadow(0 12px 32px rgba(0,0,0,0.12));">
+          <p class="cs-img-caption" style="margin-top:12px;">Interview synthesis — the brief Andrea Lee handed to the design team</p>
         </div>
-        <div class="st-design-img-col">
-          <img src="../assets/seletar-img-nav.gif" alt="Task-first navigation — before and after" loading="lazy" width="480" height="270" style="width:100%;height:auto;max-height:360px;object-fit:contain;border-radius:16px;">
-        </div>
+      </div>
+
+      <!-- ── NAMED INSIGHT: ARRIVAL BLINDNESS ── -->
+      <div style="margin-top:52px;border-left:3px solid var(--sel-green);background:rgba(69,134,25,0.06);border-radius:0 12px 12px 0;padding:28px 36px;" data-gsap="reveal">
+        <span style="font-family:var(--font-mono);font-size:10px;text-transform:uppercase;letter-spacing:0.14em;color:var(--sel-accent);display:block;margin-bottom:10px;">Named Insight</span>
+        <h3 style="font-family:var(--font-display);font-size:clamp(22px,2.8vw,30px);font-weight:400;color:var(--ink);margin-bottom:14px;line-height:1.15;" data-gsap="headline">Arrival Blindness.</h3>
+        <p style="font-family:var(--font-body);font-size:clamp(15px,1.3vw,17px);line-height:1.72;color:var(--ink-muted);max-width:60ch;margin:0;">Every transport option on the site assumed the user was going <em>to</em> the airport. Nobody had designed for someone arriving and trying to get home. The moment we named it, the fix was obvious.</p>
       </div>
     </div>
   </section>
 
-  <!-- 05b DESIGN: Getting Home section -->
-  <section class="cs-section" id="cs-design-2">
-    <div class="cs-wrap">
-      <p class="cs-label">05 Turning research into design &nbsp;—&nbsp; 2 / 3</p>
-      <div class="st-design-layout" style="direction:rtl;">
-        <div style="direction:ltr;">
-          <div class="st-design-img-col">
-            <picture>
-              <source type="image/webp" srcset="../assets/seletar-img-transport.webp">
-              <img src="../assets/seletar-img-transport.png" alt="Transport module — before and after" loading="lazy" width="1544" height="797" style="width:100%;height:auto;max-height:340px;object-fit:contain;border-radius:16px;">
-            </picture>
-            <p class="st-design-caption"><em>In V2, the module defaulted to Public Bus — wrong for most users who take taxis.</em></p>
-          </div>
-        </div>
-        <div style="direction:ltr;">
-          <div class="st-fix-header">
-            <div class="st-fix-meta">
-              <p class="st-fix-title">02 A dedicated "Getting Home" section</p>
-              <p class="st-fix-improvement">→ Improvement: Single-page architecture</p>
-            </div>
-            <span class="st-fix-badge">FIX</span>
-          </div>
-          <div class="st-fix-body">
-            <p>My Round 1 finding named it "arrival blindness" — the entire transport section was written for people going to the airport, not people who just landed. The team redesigned it to surface one-tap options for taxis, Grab, Gojek, and buses on arrival.</p>
-            <p>Round 2 surfaced a follow-up: the module defaulted to Public Bus — wrong for the majority. V3 fix: taxi surfaced first.</p>
-          </div>
-        </div>
+  <!-- ── 03 THE 3.0 FAILURE ── -->
+  <section class="cs-section cs-section--dark" id="cs-failure" aria-label="The Failure">
+    <div class="cs-inner">
+      <p class="cs-section-label cs-section-label--light">03 The 3.0 Failure</p>
+      <div class="cs-dramatic-moment" style="background:#0d1a0d;margin-top:0;">
+        <p class="cs-stat-hero" style="color:var(--sel-lime);">3.0</p>
+        <span class="cs-stat-hero-label" style="color:rgba(255,255,255,0.5);">/5 · SEQ score · V1 Passenger Guide</span>
+        <p style="font-family:var(--font-display);font-size:clamp(22px,2.5vw,32px);font-style:italic;color:#fff;margin-top:clamp(24px,3vw,36px);line-height:1.2;">"We cut the section we'd spent two weeks building."</p>
       </div>
+      <h2 class="cs-h2" data-gsap="headline">I killed a section<br><em>the team had already built.</em></h2>
+      <p class="cs-body">The team designed a whole section explaining turboprop aircraft — what they are, how they fly. My Round 1 testing showed nobody wanted it.</p>
+      <!-- S3: V1 prototype — full bleed -->
+      <figure class="cs-bleed" style="margin-top:32px;">
+        <video autoplay muted loop playsinline aria-label="V1 Passenger Guide — turboprop education section that scored 3.0 out of 5" style="width:100%;height:auto;display:block;">
+          <source src="../assets/seletar-img-passengerguide.mp4" type="video/mp4">
+          <img src="../assets/images/seletar-v1-passenger-guide.png" alt="V1 prototype — turboprop education section that scored 3.0 out of 5" loading="lazy" width="1325" height="954" style="width:100%;height:auto;display:block;">
+        </video>
+        <p class="cs-img-cap" style="color:rgba(255,255,255,0.35);">V1 Passenger Guide · SEQ 3.0/5 · One participant opened it. Out of aviation curiosity, not travel anxiety. We cut it.</p>
+      </figure>
     </div>
   </section>
 
-  <!-- 05c DESIGN: Cut turboprop -->
-  <section class="cs-section" id="cs-design-3">
-    <div class="cs-wrap">
-      <p class="cs-label">05 Turning research into design &nbsp;—&nbsp; 3 / 3</p>
-      <div class="st-design-layout">
+  <!-- ── 04 THE DECISION ── -->
+  <section class="cs-section" id="cs-decision" aria-label="The Decision">
+    <div class="cs-inner">
+      <p class="cs-section-label">04 The Decision</p>
+      <!-- S4 immediately -->
+      <div class="decision-layout">
+        <div class="decision-img-col">
+          <div class="cs-before-after">
+            <div class="cs-ba-labels">
+              <span class="cs-ba-label cs-ba-before">Check Status</span>
+              <span class="cs-ba-label cs-ba-after">View Flight Schedule</span>
+            </div>
+            <img src="../assets/images/seletar-label-comparison.png" alt="Navigation label change — from Check Status to View Flight Schedule" loading="lazy" width="480" height="270" style="width:100%;height:auto;display:block;">
+          </div>
+          <p class="cs-img-caption">Visual design by Danna, informed by my research direction.</p>
+          <div class="decision-before-after">
+            <p class="ba-old">"Check Status"</p>
+            <p class="ba-arrow">→ renamed to</p>
+            <p class="ba-new">"View Flight Schedule"</p>
+            <p class="ba-result">SEQ: 4.3 → 4.8 · Confirmed in two days</p>
+          </div>
+        </div>
         <div>
-          <div class="st-fix-header">
-            <div class="st-fix-meta">
-              <p class="st-fix-title">03 Cut turboprop education entirely</p>
-            </div>
-            <span class="st-fix-badge">FIX</span>
-          </div>
-          <div class="st-fix-body">
-            <p>We had designed a whole section explaining the aircraft. My testing showed users didn't want it. One person engaged with it — out of personal aviation curiosity, not travel anxiety. Everyone else skipped it.</p>
-            <p>I recommended cutting the section and redirecting that space to food, facilities, and journey steps. The team did. That's what research influence looks like — and that's how we dealt with the operational anxiety passengers had, especially first-timers at Seletar Airport.</p>
-          </div>
-        </div>
-        <div class="st-design-img-col">
-          <video src="../assets/seletar-img-passengerguide.mp4" autoplay loop muted playsinline style="width:100%;max-height:360px;object-fit:contain;border-radius:16px;display:block;"></video>
+          <h2 class="cs-h2" data-gsap="headline">One label change.<br><em>One point on the score.</em></h2>
+          <p class="cs-body" style="margin-bottom:20px;">"Check Status" made users hesitate every time. Watching structured sessions, I saw the same pause — they thought it meant booking confirmation, not a live schedule.</p>
+          <p class="cs-body">I renamed it "View Flight Schedule." Single Ease Question score: 4.3 to 4.8. Language is never a detail. The label was the design.</p>
         </div>
       </div>
     </div>
   </section>
 
-  <!-- 06 VALIDATION -->
-  <section class="cs-section" id="cs-validation">
-    <div class="cs-wrap">
-      <div class="st-val-header">
-        <h2 class="st-val-h2">We ran two rounds of testing.<br><em>Here's what we found.</em></h2>
-        <p class="st-val-sub">After each iteration, I tested with real users on a 1–5 scale <em>(SEQ — Single Ease Question)</em>. Above 4.0 is a success. Below 3.0 means it's broken.</p>
-      </div>
-      <div class="st-val-tables">
-
-        <!-- Round 1 -->
-        <div class="st-val-round">
-          <picture>
-            <source type="image/webp" srcset="../assets/seletar-img-v1before.webp">
-            <img src="../assets/seletar-img-v1before.png" alt="V1 internal review prototype" loading="lazy" width="1325" height="954" style="width:100%;height:auto;border-radius:10px;margin-bottom:8px;">
-          </picture>
-          <div class="st-round-head">
-            <span class="st-round-pill st-round-pill--r1">Round 1</span>
-            <span class="st-round-context">9 users · Hybrid remote &amp; on-site</span>
+  <!-- ── 05 OUTCOME ── -->
+  <section class="cs-section" id="cs-outcome" aria-label="Outcome">
+    <div class="cs-inner">
+      <p class="cs-section-label">05 Outcome</p>
+      <!-- S5 at top — full bleed -->
+      <figure class="outcome-lead-img cs-bleed" style="margin-bottom:clamp(36px,4vw,52px);">
+        <div class="browser-mock">
+          <div class="browser-mock__bar">
+            <span class="browser-mock__dot"></span>
+            <span class="browser-mock__dot"></span>
+            <span class="browser-mock__dot"></span>
+            <div class="browser-mock__url">seletarairport.com.sg · v2</div>
           </div>
-          <table class="st-val-table">
-            <thead>
-              <tr>
-                <th>Task</th>
-                <th>Result</th>
-                <th>Score</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td>Can users find info fast?</td>
-                <td><span class="st-result-pill st-result-pill--pass"><span class="st-pill-dot" style="background:#458619;"></span>Passed</span></td>
-                <td><span class="st-score">4.3/5</span></td>
-              </tr>
-              <tr>
-                <td>Can users plan how to get home?</td>
-                <td><span class="st-result-pill st-result-pill--needs"><span class="st-pill-dot" style="background:#b87000;"></span>Needs work</span></td>
-                <td><span class="st-score">3.8/5</span></td>
-              </tr>
-              <tr>
-                <td>Does aircraft info reduce nerves?</td>
-                <td><span class="st-result-pill st-result-pill--na"><span class="st-pill-dot" style="background:#666;"></span>Not relevant</span></td>
-                <td><span class="st-score">3.0/5</span></td>
-              </tr>
-            </tbody>
-          </table>
-          <p style="font-size:12px;color:var(--ink-muted);line-height:1.5;margin-top:8px;">"I named this <em>arrival blindness</em> — the site only helped people get to the airport, not away from it." Nobody wanted turboprop education. Section cut.</p>
+          <div class="browser-mock__screen">
+            <img src="../assets/images/seletar-v2-dashboard.png" alt="Seletar Airport redesign — Version 2, final" loading="lazy" width="2550" height="1828" style="width:100%;height:auto;display:block;">
+          </div>
         </div>
-
-        <!-- Round 2 -->
-        <div class="st-val-round">
-          <picture>
-            <source type="image/webp" srcset="../assets/seletar-img-v1after.webp">
-            <img src="../assets/seletar-img-v1after.png" alt="V1 final prototype" loading="lazy" width="1325" height="954" style="width:100%;height:auto;border-radius:10px;margin-bottom:8px;">
-          </picture>
-          <div class="st-round-head">
-            <span class="st-round-pill st-round-pill--r2">Round 2</span>
-            <span class="st-round-context">6 users · On-site at the airport</span>
-          </div>
-          <table class="st-val-table">
-            <thead>
-              <tr>
-                <th>Task</th>
-                <th>Result</th>
-                <th>Score</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td>Did the label fix work?</td>
-                <td><span class="st-result-pill st-result-pill--pass"><span class="st-pill-dot" style="background:#458619;"></span>Passed</span></td>
-                <td><span class="st-score">4.8/5</span></td>
-              </tr>
-              <tr>
-                <td>Is the transport section clearer?</td>
-                <td><span class="st-result-pill st-result-pill--needs"><span class="st-pill-dot" style="background:#b87000;"></span>Needs work</span></td>
-                <td><span class="st-score">3.7/5</span></td>
-              </tr>
-              <tr>
-                <td>Do tourists feel confident paying?</td>
-                <td><span class="st-result-pill st-result-pill--na"><span class="st-pill-dot" style="background:#b95038;"></span>New issue</span></td>
-                <td><span class="st-score">3.0/5</span></td>
-              </tr>
-            </tbody>
-          </table>
-          <p style="font-size:12px;color:var(--ink-muted);line-height:1.5;margin-top:8px;">"Brilliant — 5 out of 5." Transport defaults to taxi in V3. "EZ-Link" confusion flagged as a V3 fix brief for international visitors.</p>
+        <p class="cs-img-cap">Visual design by Danna, informed by my research direction.</p>
+      </figure>
+      <div class="outcome-stat-grid">
+        <div class="outcome-stat-card outcome-stat-card--dark">
+          <p class="osc-num">4.8<span style="font-size:0.42em;color:rgba(255,255,255,0.3);">/5</span></p>
+          <p class="osc-sub">Final ease-of-use score<span>Up from 4.3 in Round 1</span></p>
         </div>
-
-      </div>
-      <p class="st-val-callout">V2 confirmed the core direction held. Two outstanding gaps for V3: fix transport default (taxi/PHV first) and rewrite payment methods for international tourists.</p>
-    </div>
-  </section>
-
-  <!-- 07 OUTCOME -->
-  <section class="cs-section" id="cs-outcome">
-    <div class="cs-wrap">
-      <p class="cs-label">07 Outcome</p>
-      <div style="max-width:560px;">
-        <h2 class="st-section-h2">From static brochure<br>to <em>passenger planning tool.</em></h2>
-        <div style="display:flex;flex-direction:column;gap:20px;margin-top:28px;">
-          <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;">
-            <div style="background:var(--sel-dark);border-radius:16px;padding:24px;">
-              <p style="font-family:var(--font-display);font-size:42px;font-weight:900;color:var(--sel-lime);line-height:1;">4.8<span style="font-size:20px;color:rgba(255,255,255,0.5);">/5</span></p>
-              <p style="font-size:13px;color:rgba(255,255,255,0.65);margin-top:8px;line-height:1.5;">Final ease-of-use score<br><span style="color:rgba(255,255,255,0.35);">Up from 4.3 in Round 1</span></p>
-            </div>
-            <div style="background:var(--beige2);border-radius:16px;padding:24px;">
-              <p style="font-family:var(--font-display);font-size:42px;font-weight:900;color:var(--sel-dark);line-height:1;">+0.5</p>
-              <p style="font-size:13px;color:var(--ink-muted);margin-top:8px;line-height:1.5;">SEQ improvement<br><span style="color:rgba(0,0,0,0.35);">Across two test rounds</span></p>
-            </div>
-          </div>
-          <p style="font-size:14px;line-height:1.7;color:var(--ink-muted);">Delivered: Website redesign · Information architecture · UX flows · Transport module redesign · Payment clarity brief for V3.</p>
+        <div class="outcome-stat-card outcome-stat-card--mid">
+          <p class="osc-num">+0.5</p>
+          <p class="osc-sub">SEQ improvement<span>Across two test rounds</span></p>
+        </div>
+        <div class="outcome-stat-card outcome-stat-card--mid" style="background:var(--bg);">
+          <p class="osc-num" style="color:var(--sel-green);">9</p>
+          <p class="osc-sub" style="color:var(--ink-muted);">Interviews I ran<span style="color:rgba(0,0,0,0.3);">Plus 6 on-site in Round 2</span></p>
         </div>
       </div>
-
-      <!-- Row 1: text LEFT, image RIGHT -->
-      <div class="st-outcome-row" style="margin-top:16px;">
-        <div class="st-outcome-row-text">
-          <strong>Straightforward, task first</strong>
-          <p>Participants described the site as uncluttered and immediately useful</p>
-        </div>
-        <figure class="st-outcome-row-img" style="flex:0 0 62%;display:flex;flex-direction:column;gap:10px;margin:0;">
-          <picture>
-            <source type="image/webp" srcset="../assets/seletar-img-outcome1.webp">
-            <img src="../assets/seletar-img-outcome1.png" alt="Homepage V3" loading="lazy" width="2550" height="1828" style="max-height:clamp(220px,34vh,320px);object-fit:cover;">
-          </picture>
-          <figcaption style="font-size:13px;color:var(--ink-muted);text-align:center;font-style:italic;line-height:1.5;">Homepage (Version 3, Desktop) — one action, immediately clear</figcaption>
-        </figure>
+      <!-- "Brilliant" pull quote -->
+      <div class="pull-quote-wrap">
+        <span class="pull-quote-marks" aria-hidden="true">"</span>
+        <blockquote>
+          <p class="pull-quote-text">"Brilliant — 5 out of 5."</p>
+          <footer class="pull-quote-attr">Round 2 participant · On-site at Seletar Airport</footer>
+        </blockquote>
       </div>
     </div>
   </section>
 
-  <!-- 07 OUTCOME / 2 of 4 -->
-  <section class="cs-section" id="cs-outcome-2">
-    <div class="cs-wrap">
-      <div class="st-outcome-row" style="flex:1;">
-        <figure class="st-outcome-row-img" style="flex:0 0 62%;display:flex;flex-direction:column;gap:10px;margin:0;">
-          <picture>
-            <source type="image/webp" srcset="../assets/seletar-img-outcome2.webp">
-            <img src="../assets/seletar-img-outcome2.png" alt="Flight Status" loading="lazy" width="2990" height="1914">
-          </picture>
-          <figcaption style="font-size:13px;color:var(--ink-muted);text-align:center;font-style:italic;line-height:1.5;">Flight Status: In real time — what users came to find</figcaption>
-        </figure>
-        <div class="st-outcome-row-text">
-          <strong>Labels must match user intent.</strong>
-          <p>Renaming "Check Status" to "View Flight Schedule" reduces hesitation and clarifies this is not ticket purchase.</p>
+  <!-- ── 06 CODA: REFLECTION ── -->
+  <section class="cs-section cs-section--dark" id="cs-coda" aria-label="Reflection">
+    <div class="cs-inner">
+      <p class="cs-section-label cs-section-label--light">06 Reflection</p>
+      <h2 class="cs-h2" data-gsap="headline">Good research doesn't validate<br>what you built. <em>It tells you what<br>you should have been building.</em></h2>
+
+      <div class="retro-grid">
+        <div class="retro-card">
+          <span class="retro-dot" style="background:var(--sel-lime);"></span>
+          <div>
+            <p class="retro-title">The bravest output is a cut</p>
+            <p class="retro-body">I recommended removing a section the team had already designed and built. Turboprop education scored 3.0/5. I said so, out loud, in the synthesis session. Research influence means being willing to say "this didn't work."</p>
+          </div>
         </div>
+        <div class="retro-card">
+          <span class="retro-dot" style="background:var(--sel-accent);"></span>
+          <div>
+            <p class="retro-title">A single word is a research finding</p>
+            <p class="retro-body">"Check Status" versus "View Flight Schedule" — the difference between a hesitating user and a confident one. I found it by watching people pause in structured sessions. One rename. SEQ: 4.3 to 4.8. Language is design.</p>
+          </div>
+        </div>
+        <div class="retro-card">
+          <span class="retro-dot" style="background:#e08050;"></span>
+          <div>
+            <p class="retro-title">Research earns its seat by sharpening the brief</p>
+            <p class="retro-body">My most important output wasn't a report. It was the reframe: Seletar's product is speed. Design to protect it. Every cut, fix, and rename that followed was easier because of that one clear principle.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="cs-case-nav">
+        <a class="cs-case-nav-link" href="arvo.html">← ARVO</a>
+        <a class="cs-case-nav-link" href="pethaus.html">Paw Haus →</a>
       </div>
     </div>
   </section>
 
-  <!-- 07 OUTCOME / 3 of 4 -->
-  <section class="cs-section" id="cs-outcome-3">
-    <div class="cs-wrap">
-      <div class="st-outcome-row" style="flex:1;">
-        <div class="st-outcome-row-text">
-          <strong>Elevate intuitive navigation</strong>
-          <p>Transport module previously defaulted to Public Bus, which created immediate friction for taxi-first users. We switched it around to improve experience relevance.</p>
-        </div>
-        <figure class="st-outcome-row-img" style="flex:0 0 62%;display:flex;flex-direction:column;gap:10px;margin:0;">
-          <picture>
-            <source type="image/webp" srcset="../assets/seletar-img-outcome3.webp">
-            <img src="../assets/seletar-img-outcome3.png" alt="Transport" loading="lazy" width="1255" height="743">
-          </picture>
-          <figcaption style="font-size:13px;color:var(--ink-muted);text-align:center;font-style:italic;line-height:1.5;">Transport: Getting Home — born from "arrival blindness"</figcaption>
-        </figure>
-      </div>
+  <!-- CONTACT FOOTER -->
+  <footer style="background:#1f2b1f;padding:clamp(80px,10vw,140px) clamp(32px,7vw,112px) clamp(48px,6vw,80px);" aria-label="Contact">
+    <h2 style="font-family:'DM Serif Display',serif;font-size:clamp(28px,4vw,42px);font-weight:400;line-height:1.15;letter-spacing:-0.02em;color:#F4F4EB;margin-bottom:clamp(16px,2vw,24px);">Let's work together.</h2>
+    <p style="font-family:'DM Sans',sans-serif;font-size:clamp(15px,1.4vw,18px);line-height:1.72;color:rgba(244,244,235,0.68);max-width:56ch;margin-bottom:clamp(36px,4vw,56px);">Open to UX research, product strategy, customer success, and partnerships roles in Singapore. If you're building something complex that needs to feel simple — let's talk.</p>
+    <div style="display:flex;flex-wrap:wrap;gap:clamp(12px,1.5vw,16px);margin-bottom:clamp(56px,8vw,112px);">
+      <a href="mailto:andreeyahlee@gmail.com" style="display:inline-flex;align-items:center;gap:8px;min-height:44px;padding:10px 22px;border:1px solid rgba(244,244,235,0.35);border-radius:100px;font-family:'DM Sans',sans-serif;font-size:14px;font-weight:500;color:#F4F4EB;text-decoration:none;transition:background 0.2s,border-color 0.2s;" onmouseover="this.style.background='rgba(244,244,235,0.08)';this.style.borderColor='rgba(244,244,235,0.6)'" onmouseout="this.style.background='transparent';this.style.borderColor='rgba(244,244,235,0.35)'">andreeyahlee@gmail.com</a>
+      <a href="https://www.linkedin.com/in/andrealee-/" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;gap:8px;min-height:44px;padding:10px 22px;border:1px solid rgba(244,244,235,0.35);border-radius:100px;font-family:'DM Sans',sans-serif;font-size:14px;font-weight:500;color:#F4F4EB;text-decoration:none;transition:background 0.2s,border-color 0.2s;" onmouseover="this.style.background='rgba(244,244,235,0.08)';this.style.borderColor='rgba(244,244,235,0.6)'" onmouseout="this.style.background='transparent';this.style.borderColor='rgba(244,244,235,0.35)'">LinkedIn →</a>
+      <a href="https://drive.google.com/file/d/1bMgT6sMRa9Tbtc2sUFGb11WrcM488deY/view?usp=drive_link" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;gap:8px;min-height:44px;padding:10px 22px;border:1px solid rgba(244,244,235,0.35);border-radius:100px;font-family:'DM Sans',sans-serif;font-size:14px;font-weight:500;color:#F4F4EB;text-decoration:none;transition:background 0.2s,border-color 0.2s;" onmouseover="this.style.background='rgba(244,244,235,0.08)';this.style.borderColor='rgba(244,244,235,0.6)'" onmouseout="this.style.background='transparent';this.style.borderColor='rgba(244,244,235,0.35)'">Resume →</a>
     </div>
-  </section>
-
-  <!-- 07 OUTCOME / 4 of 4 -->
-  <section class="cs-section" id="cs-outcome-4">
-    <div class="cs-wrap">
-      <div class="st-outcome-row" style="flex:1;">
-        <figure class="st-outcome-row-img" style="flex:0 0 62%;display:flex;flex-direction:column;gap:10px;margin:0;">
-          <picture>
-            <source type="image/webp" srcset="../assets/seletar-img-outcome4.webp">
-            <img src="../assets/seletar-img-outcome4.png" alt="Passenger Guide" loading="lazy" width="2880" height="1900">
-          </picture>
-          <figcaption style="font-size:13px;color:var(--ink-muted);text-align:center;font-style:italic;line-height:1.5;">Passenger Guide: Journey steps — replaced turboprop content</figcaption>
-        </figure>
-        <div class="st-outcome-row-text">
-          <strong>Consolidate first-timer essentials into one continuous flow.</strong>
-          <p>Passenger Guide helps, but users lose confidence when info is scattered across multiple sections (timeline + facilities + map).</p>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- 08 RETROSPECTIVE -->
-  <section class="cs-section" id="cs-retro">
-    <div class="cs-wrap" style="justify-content:space-between;">
-      <div>
-        <p class="cs-label cs-label--light">08 Retrospective</p>
-        <h2 class="st-retro-h2">Research is only useful<br><em>if it changes something.</em></h2>
-      </div>
-      <div class="st-retro-grid" style="margin-top:28px;">
-
-        <!-- LEFT: 4 numbered learnings -->
-        <div class="st-retro-learnings">
-          <div class="st-retro-item">
-            <span class="st-retro-num">01</span>
-            <div>
-              <p class="st-retro-card-title">The bravest research output is a cut</p>
-              <p class="st-retro-card-body">I recommended removing a whole designed section — turboprop education — because the data was clear. That recommendation was accepted. Research influence means being willing to say "this didn't work" out loud.</p>
-            </div>
-          </div>
-          <div class="st-retro-item">
-            <span class="st-retro-num">02</span>
-            <div>
-              <p class="st-retro-card-title">A single word can be a research finding</p>
-              <p class="st-retro-card-body">"Check Status" vs "View Flight Schedule" — the difference between a confused user and a confident one. I found this by watching people hesitate. SEQ went from 4.3 to 4.8 on that single change.</p>
-            </div>
-          </div>
-          <div class="st-retro-item">
-            <span class="st-retro-num">03</span>
-            <div>
-              <p class="st-retro-card-title">Research earns its value when it sharpens the brief</p>
-              <p class="st-retro-card-body">My most important output wasn't a report — it was the reframe: Seletar's product is speed. Design to protect it. Every decision that followed was easier because of that one clear principle.</p>
-            </div>
-          </div>
-          <div class="st-retro-item">
-            <span class="st-retro-num">04</span>
-            <div>
-              <p class="st-retro-card-title">Round 2 always finds what Round 1 couldn't</p>
-              <p class="st-retro-card-body">Tourist payment confusion was invisible until we tested our second design iteration. You can't anticipate every edge case from a brief — but you can catch it before it ships.</p>
-            </div>
-          </div>
-        </div>
-
-        <!-- RIGHT: what I'd test next + CTAs -->
-        <div class="st-retro-next">
-          <p class="st-retro-next-label">What I'd test next</p>
-          <div class="st-retro-next-items">
-            <div class="st-retro-next-item">
-              <img class="st-retro-next-icon" src="../assets/seletar-retro-1.png" alt="Transport" loading="lazy" width="100" height="100">
-              <div class="st-retro-next-text">
-                <strong>Transport default state</strong>
-                <p>Does surfacing Grab/Taxi first actually reduce friction for arriving passengers? I'd run a preference test to confirm the right ordering.</p>
-              </div>
-            </div>
-            <div class="st-retro-next-item">
-              <img class="st-retro-next-icon" src="../assets/seletar-retro-2.png" alt="Payment" loading="lazy" width="100" height="100">
-              <div class="st-retro-next-text">
-                <strong>Tourist payment copy</strong>
-                <p>I identified the EZ-Link confusion. I'd test rewritten copy — global payment methods first, local second — with international users specifically.</p>
-              </div>
-            </div>
-            <div class="st-retro-next-item">
-              <img class="st-retro-next-icon" src="../assets/seletar-retro-3.png" alt="Food" loading="lazy" width="100" height="100">
-              <div class="st-retro-next-text">
-                <strong>Food findability</strong>
-                <p>Users looked for dining and couldn't find it under Passenger Guide. A tree test would confirm where it belongs in the navigation.</p>
-              </div>
-            </div>
-          </div>
-        </div>
-
-      </div>
-      <div class="st-case-nav">
-        <a class="st-case-nav-link" href="arvo.html">← ARVO</a>
-        <a class="st-case-nav-link" href="pethaus.html">Paw Haus →</a>
-      </div>
-    </div>
-  </section>
-
-  <!-- 09 LAST / MOBILE SHOWCASE -->
-  <section class="cs-section" id="cs-last">
-    <div class="cs-wrap">
-      <p class="cs-label cs-label--light">09 Mobile &amp; responsive</p>
-      <div class="st-last-layout">
-        <div style="flex:0 0 360px;display:flex;flex-direction:column;gap:20px;">
-          <h2 class="st-retro-h2" style="font-size:clamp(28px,3.2vw,44px);">Designed for the passenger<br>in their pocket.</h2>
-          <p style="font-size:14px;line-height:1.7;color:rgba(255,255,255,0.6);">The redesign is fully responsive. Flight status, transport options, and journey planning — all accessible before they arrive at the gate.</p>
-          <div style="border-left:2px solid rgba(255,255,255,0.15);padding:12px 16px;margin-top:8px;">
-            <p style="font-size:11px;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;color:rgba(255,255,255,0.35);margin-bottom:6px;">A note on testing</p>
-            <p style="font-size:13px;line-height:1.65;color:rgba(255,255,255,0.5);">We didn't get to test the mobile prototype during our interview rounds — sprint constraints meant we prioritised validating the desktop flow first. I built it anyway. Here's what the next sprint would have looked like.</p>
-          </div>
-        </div>
-        <div style="flex:1;position:relative;height:100%;min-height:0;">
-          <!-- Left: behind, rotated -->
-          <picture>
-            <source type="image/webp" srcset="../assets/seletar-img-mobile-2.webp">
-            <img src="../assets/seletar-img-mobile-2.png" alt="Mobile view" loading="lazy" width="650" height="1310"
-              style="position:absolute;height:68%;width:auto;bottom:0;left:2%;
-              transform:rotate(-6deg) translateY(6%);z-index:1;opacity:0.65;
-              filter:drop-shadow(-8px 16px 24px rgba(0,0,0,0.45));">
-          </picture>
-          <!-- Centre: mobile-1, tallest, front -->
-          <picture>
-            <source type="image/webp" srcset="../assets/seletar-img-mobile-1.webp">
-            <img src="../assets/seletar-img-mobile-1.png" alt="Mobile view" loading="lazy" width="650" height="1310"
-              style="position:absolute;height:90%;width:auto;bottom:0;left:50%;
-              transform:translateX(-50%);z-index:3;
-              filter:drop-shadow(0 20px 40px rgba(0,0,0,0.55));">
-          </picture>
-          <!-- Right: behind, rotated -->
-          <picture>
-            <source type="image/webp" srcset="../assets/seletar-img-mobile-3.webp">
-            <img src="../assets/seletar-img-mobile-3.png" alt="Mobile view" loading="lazy" width="650" height="1310"
-              style="position:absolute;height:74%;width:auto;bottom:0;right:2%;
-              transform:rotate(5deg) translateY(4%);z-index:2;opacity:0.8;
-              filter:drop-shadow(8px 16px 24px rgba(0,0,0,0.45));">
-          </picture>
-        </div>
-      </div>
-    </div>
-  </section>
+    <p style="font-family:'DM Mono',monospace;font-size:11px;letter-spacing:0.12em;color:rgba(244,244,235,0.3);border-top:1px solid rgba(244,244,235,0.1);padding-top:clamp(20px,2.5vw,28px);">Andrea Lee · Singapore · 2026 · Built from scratch.</p>
+  </footer>
 
   <script>
-    gsap.registerPlugin(ScrollTrigger);
+  'use strict';
+  gsap.registerPlugin(ScrollTrigger, CustomEase);
+  CustomEase.create('spring', '0.22, 1, 0.36, 1');
+  gsap.defaults({ ease: 'spring' });
 
-    /* ── DEVICE + MOTION PREFS ── */
-    const isMobile = window.matchMedia('(max-width: 639px)').matches;
-    const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const isMobile      = window.matchMedia('(max-width: 639px)').matches;
+  const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-    /* ── LENIS (desktop only) ── */
-    let lenis;
-    if (!isMobile) {
-      lenis = new Lenis({ lerp: 0.07, smoothWheel: true, wheelMultiplier: 0.85 });
-      lenis.on('scroll', ScrollTrigger.update);
-      gsap.ticker.add((time) => lenis.raf(time * 1000));
+  /* ── THEME TOGGLE ── */
+  (function () {
+    const btn  = document.getElementById('theme-toggle');
+    const html = document.documentElement;
+    const KEY  = 'seletar-theme';
+    function isDark() { return html.getAttribute('data-theme') === 'dark'; }
+    function setTheme(dark) {
+      html.setAttribute('data-theme', dark ? 'dark' : 'light');
+      btn.textContent = dark ? '☾' : '☀';
+      btn.setAttribute('aria-label', dark ? 'Switch to light mode' : 'Switch to dark mode');
+      try { localStorage.setItem(KEY, dark ? 'dark' : 'light'); } catch (e) {}
     }
-    gsap.ticker.lagSmoothing(0);
+    const saved = (() => { try { return localStorage.getItem(KEY); } catch (e) { return null; } })();
+    setTheme(saved === 'dark');
+    btn.addEventListener('click', () => setTheme(!isDark()));
+  })();
 
+  if (!reducedMotion) {
     /* ── HERO ENTRANCE ── */
-    if (!reducedMotion) gsap.timeline({ delay: 0.15 })
-      .from('.cs-hero-h1',       { y: 60, opacity: 0, duration: 1.0, ease: 'power4.out' })
-      .from('.cs-hero-sub',      { y: 20, opacity: 0, duration: 0.7, ease: 'power4.out' }, '-=0.5')
-      .from('.cs-hero-cta-pill', { y: 14, opacity: 0, duration: 0.5, ease: 'power3.out' }, '-=0.4')
-      .from('.cs-meta-row',      { y: 12, opacity: 0, stagger: 0.06, duration: 0.45, ease: 'power3.out' }, '-=0.5');
+    gsap.from('.cs-hero-h1',  { y: 48, opacity: 0, duration: 1.0, delay: 0.1 });
+    gsap.from('.cs-hero-sub', { y: 24, opacity: 0, duration: 0.8, delay: 0.35 });
+    gsap.from('.cs-hero-cta', { y: 16, opacity: 0, duration: 0.6, delay: 0.55 });
+    gsap.from('.cs-meta-row', { y: 12, opacity: 0, stagger: 0.05, duration: 0.5, delay: 0.4 });
 
-    /* ── SECTION OVERLAY ENTRANCE + STICKY BOTTOM (desktop only) ── */
-    if (!isMobile) {
-      gsap.utils.toArray('.cs-section:not(.cs-hero)').forEach(section => {
-        const inner = section.querySelector('.cs-wrap') || section;
-        gsap.fromTo(inner,
-          { y: 60 },
-          { y: 0, ease: 'none',
-            scrollTrigger: { trigger: section, start: 'top bottom', end: 'top top', scrub: 1 }
-          }
-        );
-        ScrollTrigger.create({
-          trigger: section,
-          start: 'top top',
-          end: () => '+=' + Math.max(section.offsetHeight, window.innerHeight),
-          pin: true,
-          pinSpacing: false,
-        });
+    /* ── SECTION LABELS ── */
+    gsap.utils.toArray('.cs-section-label').forEach(el => {
+      gsap.from(el, { x: -20, opacity: 0, duration: 0.5,
+        scrollTrigger: { trigger: el, start: 'top 88%', once: true } });
+    });
+
+    /* ── HEADLINES ── */
+    gsap.utils.toArray('[data-gsap="headline"]').forEach(el => {
+      gsap.from(el, { y: 36, opacity: 0, duration: 0.8,
+        scrollTrigger: { trigger: el, start: 'top 85%', once: true } });
+    });
+
+    /* ── BODY COPY ── */
+    gsap.utils.toArray('.cs-body').forEach(el => {
+      gsap.from(el, { y: 16, opacity: 0, duration: 0.6,
+        scrollTrigger: { trigger: el, start: 'top 88%', once: true } });
+    });
+
+    /* ── STAT CELLS ── */
+    document.querySelectorAll('.stat-grid').forEach(grid => {
+      gsap.from(grid.querySelectorAll('.stat-cell'), {
+        y: 24, opacity: 0, stagger: 0.1, duration: 0.65,
+        scrollTrigger: { trigger: grid, start: 'top 82%', once: true }
       });
+    });
+
+    /* ── FAILURE IMAGE ── */
+    gsap.from('.failure-img-wrap', {
+      y: 32, opacity: 0, duration: 0.8,
+      scrollTrigger: { trigger: '.failure-img-wrap', start: 'top 82%', once: true }
+    });
+
+    /* ── FAILURE CAPTION ── */
+    gsap.from('.failure-caption', {
+      x: -20, opacity: 0, duration: 0.6,
+      scrollTrigger: { trigger: '.failure-caption', start: 'top 88%', once: true }
+    });
+
+    /* ── DECISION LAYOUT ── */
+    gsap.from('.decision-img-col', {
+      x: -24, opacity: 0, duration: 0.8,
+      scrollTrigger: { trigger: '.decision-layout', start: 'top 80%', once: true }
+    });
+
+    /* ── OUTCOME LEAD IMAGE ── */
+    gsap.from('.outcome-lead-img', {
+      clipPath: 'inset(100% 0 0 0)', duration: 1.1,
+      scrollTrigger: { trigger: '.outcome-lead-img', start: 'top 85%', once: true }
+    });
+
+    /* ── OUTCOME STAT CARDS ── */
+    gsap.from('.outcome-stat-card', {
+      y: 24, opacity: 0, stagger: 0.1, duration: 0.65,
+      scrollTrigger: { trigger: '.outcome-stat-grid', start: 'top 82%', once: true }
+    });
+
+    /* ── PULL QUOTE ("Brilliant") ── */
+    gsap.timeline({ scrollTrigger: { trigger: '.pull-quote-wrap', start: 'top 78%', once: true } })
+      .from('.pull-quote-marks', { scale: 0, opacity: 0, duration: 0.4, ease: 'back.out(1.5)' })
+      .fromTo('.pull-quote-text',
+        { clipPath: 'inset(0 100% 0 0)', opacity: 1 },
+        { clipPath: 'inset(0 0% 0 0)', duration: 1.0 }, '-=0.05')
+      .from('.pull-quote-attr', { opacity: 0, y: 8, duration: 0.5 }, '-=0.2');
+
+    /* ── RESEARCH INSIGHT ── */
+    gsap.from('.research-insight', {
+      y: 16, opacity: 0, duration: 0.65,
+      scrollTrigger: { trigger: '.research-insight', start: 'top 86%', once: true }
+    });
+
+    /* ── RETRO CARDS ── */
+    gsap.utils.toArray('.retro-card').forEach((el, i) => {
+      gsap.from(el, { y: 24, opacity: 0, duration: 0.6, delay: i * 0.1,
+        scrollTrigger: { trigger: '#cs-coda', start: 'top 76%', once: true } });
+    });
+  }
+
+  ScrollTrigger.refresh();
+
+  /* ── PROGRESS BAR ── */
+  window.addEventListener('scroll', () => {
+    const max = document.documentElement.scrollHeight - window.innerHeight;
+    document.getElementById('cs-progress').style.width = (window.scrollY / max * 100) + '%';
+  }, { passive: true });
+
+  /* ── STICKY NAV ACTIVE STATE ── */
+  (function () {
+    const items = document.querySelectorAll('.cs-snav-item');
+    function setActive(id) {
+      items.forEach(item => item.classList.toggle('is-active', item.getAttribute('href') === '#' + id));
     }
-
-    /* ── HELPER: counter animation ── */
-    function animateCounter(el, target, suffix, duration) {
-      const proxy = { v: 0 };
-      gsap.to(proxy, {
-        v: target, duration: duration || 1.0, ease: 'power2.out',
-        onUpdate: () => { el.textContent = Math.round(proxy.v) + (suffix || ''); }
-      });
-    }
-
-    /* ── SECTION LABELS — horizontal slide ── */
-    if (!reducedMotion) {
-      gsap.utils.toArray('.cs-label').forEach(label => {
-        gsap.from(label, {
-          x: -22, opacity: 0, duration: 0.52, ease: 'power3.out',
-          scrollTrigger: { trigger: label, start: 'top 88%', toggleActions: 'play none none none' }
-        });
-      });
-      gsap.utils.toArray('.cs-section').forEach(section => {
-        gsap.from(section.querySelectorAll('.cs-h2'), {
-          y: 26, opacity: 0, duration: 0.68, ease: 'power3.out',
-          scrollTrigger: { trigger: section, start: 'top 84%', toggleActions: 'play none none none' }
-        });
-        gsap.from(section.querySelectorAll('.cs-body'), {
-          y: 16, opacity: 0, duration: 0.5, ease: 'power3.out', delay: 0.1,
-          scrollTrigger: { trigger: section, start: 'top 84%', toggleActions: 'play none none none' }
-        });
-      });
-    }
-
-    /* ── TL;DR FINDING CARDS — alternating tilt ── */
-    if (!reducedMotion) {
-      gsap.utils.toArray('.st-finding-card').forEach((el, i) => {
-        gsap.from(el, {
-          y: 22, opacity: 0, rotation: i % 2 === 0 ? -1 : 1,
-          duration: 0.58, ease: 'power3.out', delay: i * 0.09,
-          scrollTrigger: { trigger: '#cs-tldr', start: 'top 70%', toggleActions: 'play none none none' }
-        });
-      });
-    }
-
-    /* ── RESEARCH STATS — counter + pop ── */
-    if (!reducedMotion) {
+    ['cs-problem','cs-research','cs-failure','cs-decision','cs-outcome','cs-coda'].forEach(id => {
+      const el = document.getElementById(id);
+      if (!el) return;
       ScrollTrigger.create({
-        trigger: '#cs-found', start: 'top 72%', once: true,
-        onEnter: () => {
-          gsap.from('.st-stat-cell', {
-            scale: 0.92, opacity: 0, stagger: 0.1, duration: 0.52, ease: 'back.out(1.4)'
-          });
-          const statNums = document.querySelectorAll('.st-stat-num');
-          if (statNums[0]) animateCounter(statNums[0], 9, '', 0.75);
-          if (statNums[1]) animateCounter(statNums[1], 100, '%', 1.0);
-          if (statNums[2]) animateCounter(statNums[2], 0, '', 0.4);
-        }
+        trigger: el, start: 'top center', end: 'bottom center',
+        onEnter:     () => setActive(id),
+        onEnterBack: () => setActive(id),
       });
-      gsap.utils.toArray('.st-problem-card').forEach((el, i) => {
-        gsap.from(el, {
-          x: i % 2 === 0 ? -18 : 18, opacity: 0,
-          duration: 0.52, ease: 'power3.out', delay: i * 0.1,
-          scrollTrigger: { trigger: '#cs-found', start: 'top 72%', toggleActions: 'play none none none' }
-        });
-      });
-    }
-
-    /* ── DESIGN SECTIONS — per-element cascade ── */
-    if (!reducedMotion) {
-      ['#cs-design-1', '#cs-design-2', '#cs-design-3'].forEach(id => {
-        gsap.utils.toArray(id + ' .st-fix-header, ' + id + ' .st-fix-body, ' + id + ' .st-placeholder').forEach((el, i) => {
-          gsap.from(el, {
-            y: 20 + (i % 3) * 8, opacity: 0, duration: 0.54, ease: 'power3.out', delay: i * 0.07,
-            scrollTrigger: { trigger: id, start: 'top 74%', toggleActions: 'play none none none' }
-          });
-        });
-      });
-    }
-
-    /* ── VALIDATION ROWS — left slide stagger ── */
-    if (!reducedMotion) {
-      gsap.from('.st-val-table tbody tr', {
-        x: -18, opacity: 0, stagger: 0.07, duration: 0.46, ease: 'power3.out',
-        scrollTrigger: { trigger: '#cs-validation', start: 'top 72%', toggleActions: 'play none none none' }
-      });
-    }
-
-    /* ── OUTCOME ROWS ── */
-    if (!reducedMotion) {
-      ['#cs-outcome', '#cs-outcome-2', '#cs-outcome-3', '#cs-outcome-4'].forEach(id => {
-        gsap.utils.toArray(id + ' .st-outcome-row-text, ' + id + ' .st-outcome-row-img').forEach((el, i) => {
-          gsap.from(el, {
-            y: 20, opacity: 0, duration: 0.58, ease: 'power3.out', delay: i * 0.09,
-            scrollTrigger: { trigger: id, start: 'top 78%', toggleActions: 'play none none none' }
-          });
-        });
-      });
-    }
-
-    /* ── RETRO CARDS — alternating x-drift ── */
-    if (!reducedMotion) {
-      gsap.utils.toArray('.st-retro-card').forEach((el, i) => {
-        gsap.from(el, {
-          x: i % 2 === 0 ? -14 : 14, y: 12, opacity: 0,
-          duration: 0.58, ease: 'power3.out', delay: i * 0.1,
-          scrollTrigger: { trigger: '#cs-retro', start: 'top 72%', toggleActions: 'play none none none' }
-        });
-      });
-    }
-
-    ScrollTrigger.refresh();
-
-    /* ── LAPTOP FRAME (canvas cutout) ── */
-    (function() {
-      const canvas = document.getElementById('st-laptop-canvas');
-      if (!canvas) return;
-      const ctx = canvas.getContext('2d');
-      const img = new Image();
-      img.onload = function() {
-        canvas.width = img.naturalWidth;
-        canvas.height = img.naturalHeight;
-        ctx.drawImage(img, 0, 0);
-        ctx.clearRect(433, 55, 3155, 2055);
-      };
-      img.src = '../assets/seletar-img-outcome-laptop.png';
-    })();
-
-    /* ── PROGRESS BAR ── */
-    const progressBar = document.getElementById('cs-progress');
-    if (lenis) {
-      lenis.on('scroll', ({ scroll, limit }) => {
-        progressBar.style.width = (scroll / limit * 100) + '%';
-      });
-    } else {
-      window.addEventListener('scroll', () => {
-        const max = document.documentElement.scrollHeight - window.innerHeight;
-        progressBar.style.width = (window.scrollY / max * 100) + '%';
-      }, { passive: true });
-    }
+    });
+  })();
   </script>
+
   <script>
   (function () {
     const cursor = document.getElementById('custom-cursor');
@@ -1491,39 +978,7 @@
     document.addEventListener('mouseleave', () => { cursor.style.opacity = '0'; visible = false; });
     document.addEventListener('mouseenter', () => { cursor.style.opacity = '1'; visible = true; });
   })();
-
-  /* ── STICKY NAV ACTIVE STATE ── */
-  (function() {
-    const navItems = document.querySelectorAll('.cs-sticky-nav-item');
-    const sectionIds = ['cs-tldr','cs-problem','cs-found','cs-design-1','cs-validation','cs-outcome','cs-retro'];
-    function setActive(id) {
-      navItems.forEach(item => {
-        item.classList.toggle('is-active', item.getAttribute('href') === '#' + id);
-      });
-    }
-    sectionIds.forEach(id => {
-      const el = document.getElementById(id);
-      if (!el) return;
-      ScrollTrigger.create({
-        trigger: el,
-        start: 'top center',
-        end: 'bottom center',
-        onEnter: () => setActive(id),
-        onEnterBack: () => setActive(id),
-      });
-    });
-  })();
   </script>
 
-  <footer style="background:#1f2b1f;padding:clamp(80px,10vw,140px) clamp(32px,7vw,112px) clamp(48px,6vw,80px);" aria-label="Contact">
-    <h2 style="font-family:'DM Serif Display',serif;font-size:clamp(28px,4vw,42px);font-weight:400;line-height:1.15;letter-spacing:-0.02em;color:#F4F4EB;margin-bottom:clamp(16px,2vw,24px);">Let's work together.</h2>
-    <p style="font-family:'DM Sans',sans-serif;font-size:clamp(15px,1.4vw,18px);line-height:1.72;color:rgba(244,244,235,0.68);max-width:56ch;margin-bottom:clamp(36px,4vw,56px);">Open to UX research, product strategy, customer success, and partnerships roles in Singapore. If you're building something complex that needs to feel simple — let's talk.</p>
-    <div style="display:flex;flex-wrap:wrap;gap:clamp(12px,1.5vw,16px);margin-bottom:clamp(56px,8vw,112px);">
-      <a href="mailto:andreeyahlee@gmail.com" style="display:inline-flex;align-items:center;gap:8px;min-height:44px;padding:10px 22px;border:1px solid rgba(244,244,235,0.35);border-radius:100px;font-family:'DM Sans',sans-serif;font-size:14px;font-weight:500;color:#F4F4EB;text-decoration:none;transition:background 0.2s,border-color 0.2s;" onmouseover="this.style.background='rgba(244,244,235,0.08)';this.style.borderColor='rgba(244,244,235,0.6)'" onmouseout="this.style.background='transparent';this.style.borderColor='rgba(244,244,235,0.35)'">andreeyahlee@gmail.com</a>
-      <a href="https://www.linkedin.com/in/andrealee-/" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;gap:8px;min-height:44px;padding:10px 22px;border:1px solid rgba(244,244,235,0.35);border-radius:100px;font-family:'DM Sans',sans-serif;font-size:14px;font-weight:500;color:#F4F4EB;text-decoration:none;transition:background 0.2s,border-color 0.2s;" onmouseover="this.style.background='rgba(244,244,235,0.08)';this.style.borderColor='rgba(244,244,235,0.6)'" onmouseout="this.style.background='transparent';this.style.borderColor='rgba(244,244,235,0.35)'">LinkedIn →</a>
-      <a href="https://drive.google.com/file/d/1bMgT6sMRa9Tbtc2sUFGb11WrcM488deY/view?usp=drive_link" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;gap:8px;min-height:44px;padding:10px 22px;border:1px solid rgba(244,244,235,0.35);border-radius:100px;font-family:'DM Sans',sans-serif;font-size:14px;font-weight:500;color:#F4F4EB;text-decoration:none;transition:background 0.2s,border-color 0.2s;" onmouseover="this.style.background='rgba(244,244,235,0.08)';this.style.borderColor='rgba(244,244,235,0.6)'" onmouseout="this.style.background='transparent';this.style.borderColor='rgba(244,244,235,0.35)'">Resume →</a>
-    </div>
-    <p style="font-family:'DM Mono',monospace;font-size:11px;letter-spacing:0.12em;color:rgba(244,244,235,0.3);border-top:1px solid rgba(244,244,235,0.1);padding-top:clamp(20px,2.5vw,28px);">Andrea Lee · Singapore · 2026 · Built from scratch.</p>
-  </footer>
 </body>
 </html>
