@@ -1237,7 +1237,7 @@
       </div><!-- end .works__grid -->
 
       <span class="t-label">Product Designer · UX Researcher · Singapore · Open to opportunities</span>
-      <a class="btn" href="#testimonials">View All Works →</a>
+      <a class="btn" href="works.html">View All Works →</a>
     </div>
   </section>
 
@@ -1483,6 +1483,64 @@
         mainNav.classList.remove('is-open');
         hamburger.setAttribute('aria-expanded', 'false');
       });
+    });
+  </script>
+
+  <!-- GSAP + ScrollTrigger -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+  <script>
+    gsap.registerPlugin(ScrollTrigger);
+
+    /* ── Hero: image scale on load ── */
+    gsap.from('.hero__image', {
+      scale: 1.04, duration: 1.6, ease: 'power2.out', delay: 0.2
+    });
+
+    /* ── Tagline: text reveal on scroll ── */
+    gsap.from('.tagline__text', {
+      y: 60, opacity: 0, duration: 1, ease: 'power3.out',
+      scrollTrigger: { trigger: '#tagline', start: 'top 80%' }
+    });
+    gsap.from('#tagline .t-label', {
+      y: 20, opacity: 0, duration: 0.6, ease: 'power3.out',
+      scrollTrigger: { trigger: '#tagline', start: 'top 75%' }
+    });
+
+    /* ── Works cards: stagger up ── */
+    gsap.from('.works__grid .card', {
+      y: 70, opacity: 0, duration: 0.9, stagger: 0.15, ease: 'power3.out',
+      scrollTrigger: { trigger: '.works__grid', start: 'top 82%' }
+    });
+    gsap.from('#tagline .btn', {
+      y: 20, opacity: 0, duration: 0.6, ease: 'power3.out', delay: 0.1,
+      scrollTrigger: { trigger: '.works__grid', start: 'bottom 85%' }
+    });
+
+    /* ── Testimonials: marquee + cards ── */
+    gsap.from('.clients-marquee', {
+      opacity: 0, duration: 0.8, ease: 'power2.out',
+      scrollTrigger: { trigger: '.clients-marquee', start: 'top 88%' }
+    });
+    gsap.from('.t-card', {
+      y: 50, opacity: 0, duration: 0.8, stagger: 0.14, ease: 'power3.out',
+      scrollTrigger: { trigger: '.t-carousel', start: 'top 82%' }
+    });
+
+    /* ── After Hours blocks: stagger in ── */
+    gsap.from('.ah-block, .ah-copy', {
+      opacity: 0, y: 30, duration: 0.8, stagger: 0.1, ease: 'power3.out',
+      scrollTrigger: { trigger: '#afterhours', start: 'top 80%' }
+    });
+
+    /* ── Contact ── */
+    gsap.from('.contact__heading', {
+      y: 60, opacity: 0, duration: 1, ease: 'power3.out',
+      scrollTrigger: { trigger: '#contact', start: 'top 78%' }
+    });
+    gsap.from(['.contact__desc', '.contact__socials', '#contact .t-label'], {
+      y: 25, opacity: 0, duration: 0.7, stagger: 0.12, ease: 'power3.out',
+      scrollTrigger: { trigger: '#contact', start: 'top 72%' }
     });
   </script>
 </body>
