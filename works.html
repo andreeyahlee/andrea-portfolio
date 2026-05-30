@@ -106,13 +106,17 @@
     /* ── Cursor follower ── */
     #cursor-follower {
       position: fixed; top: 0; left: 0;
-      width: 52px; pointer-events: none;
+      width: 52px; height: 52px; overflow: hidden; pointer-events: none;
       z-index: 9999; display: none; will-change: transform;
     }
     #cursor-follower img {
       width: 100%;
       height: auto;
       display: block;
+    }
+    @media (hover: none) {
+      #cursor-follower { display: none !important; }
+      body { cursor: auto; }
     }
 
     /* ── Works header ── */
