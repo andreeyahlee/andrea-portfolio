@@ -127,6 +127,7 @@
     body.light-mode .t-card__name     { color: var(--ink-dark); }
     body.light-mode .t-card__role     { color: rgba(33,40,26,0.55); }
     body.light-mode .t-card__category { color: #6b7a00; }
+    body.light-mode .ah-copy          { background: var(--bg-light); }
     body.light-mode .ah-copy__heading { color: var(--ink-dark); }
     body.light-mode .ah-copy__body    { color: rgba(33,40,26,0.7); }
     body.light-mode .client-logo      { filter: brightness(0); }
@@ -319,9 +320,9 @@
 
     .hero__image-wrap {
       width: 100%;
-      max-width: 100%;
-      flex: 1;
+      flex: 1 1 0%;     /* 0% base prevents GIF natural-height leaking into flex sizing */
       min-height: 0;
+      max-height: 100%; /* hard ceiling: never taller than the section */
       position: relative;
       overflow: hidden;
     }
@@ -757,6 +758,7 @@
       padding: 2rem;
       gap: 40px;
       background: var(--bg-dark);
+      z-index: 2; /* sit above all photo blocks — incl. sketch that GSAP shifts down */
     }
 
     /* ── Column 3 (left: 71.296vw) ── */
@@ -986,9 +988,12 @@
        RESPONSIVE — DESKTOP / TABLET / MOBILE
     ================================================================ */
 
-    /* Stable viewport height */
+    /* Stable/dynamic viewport height — excludes mobile browser chrome */
     @supports (height: 100svh) {
       .section { height: 100svh; }
+    }
+    @supports (height: 100dvh) {
+      .section { height: 100dvh; }
     }
 
     /* ============================================================
@@ -1111,6 +1116,7 @@
       .contact__desc    { font-size: 0.875rem; }
     }
   </style>
+  <link rel="stylesheet" href="Asset/skiper40.css">
 </head>
 <body>
 
@@ -1524,7 +1530,8 @@
     });
     gsap.from('.t-card', {
       y: 50, opacity: 0, duration: 0.8, stagger: 0.14, ease: 'power3.out',
-      scrollTrigger: { trigger: '.t-carousel', start: 'top 82%' }
+      clearProps: 'all',
+      scrollTrigger: { trigger: '#testimonials', start: 'top 82%' }
     });
 
     /* ── After Hours blocks: stagger in ── */

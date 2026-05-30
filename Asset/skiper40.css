@@ -1,0 +1,156 @@
+/* ================================================================
+   SKIPER40 — CSS Link Animations
+   Ported from skiper-ui.com/v1/skiper40
+   Five hover variants: underline reveals + bg fills
+================================================================ */
+
+/* ── Utility classes ─────────────────────────────────────────
+   Add .sk-link plus one variant class to any element:
+     <a class="sk-link sk-link-01">…</a>
+──────────────────────────────────────────────────────────── */
+
+.sk-link {
+  position: relative;
+  display: inline-block;
+  text-decoration: none;
+}
+
+/* Link001 — underline grows left → right */
+.sk-link-01::after {
+  content: '';
+  position: absolute;
+  bottom: -1px; left: 0;
+  width: 0; height: 1px;
+  background: currentColor;
+  transition: width 0.35s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+.sk-link-01:hover::after,
+.sk-link-01:focus-visible::after { width: 100%; }
+
+/* Link002 — underline grows right → left */
+.sk-link-02::after {
+  content: '';
+  position: absolute;
+  bottom: -1px; right: 0;
+  width: 0; height: 1px;
+  background: currentColor;
+  transition: width 0.35s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+.sk-link-02:hover::after,
+.sk-link-02:focus-visible::after { width: 100%; }
+
+/* Link003 — underline grows from centre outward */
+.sk-link-03::after {
+  content: '';
+  position: absolute;
+  bottom: -1px; left: 50%;
+  transform: translateX(-50%);
+  width: 0; height: 1px;
+  background: currentColor;
+  transition: width 0.35s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+.sk-link-03:hover::after,
+.sk-link-03:focus-visible::after { width: 100%; }
+
+/* Link004 — background fills bottom → top */
+.sk-link-04 { overflow: hidden; }
+.sk-link-04::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  transform: translateY(101%);
+  background: var(--lime, currentColor);
+  transition: transform 0.35s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  z-index: -1;
+}
+.sk-link-04:hover::before,
+.sk-link-04:focus-visible::before { transform: translateY(0); }
+
+/* Link005 — background fills left → right */
+.sk-link-05 { overflow: hidden; }
+.sk-link-05::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  transform: scaleX(0);
+  transform-origin: left center;
+  background: var(--lime, currentColor);
+  transition: transform 0.35s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  z-index: -1;
+}
+.sk-link-05:hover::before,
+.sk-link-05:focus-visible::before { transform: scaleX(1); }
+
+
+/* ── Nav links — Link001 (left → right underline) ────────────
+   Applied automatically to all .nav__links anchors
+──────────────────────────────────────────────────────────── */
+.nav__links a {
+  position: relative;
+}
+.nav__links a::after {
+  content: '';
+  position: absolute;
+  bottom: -1px; left: 0;
+  width: 0; height: 1px;
+  background: currentColor;
+  transition: width 0.35s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+.nav__links a:hover::after { width: 100%; }
+.nav__links a.active::after { width: 100%; }
+
+
+/* ── Homepage work-card titles — Link003 (centre underline) ──
+   Triggers on parent .card hover
+──────────────────────────────────────────────────────────── */
+.card__title {
+  position: relative;
+  display: inline-block;
+}
+.card__title::after {
+  content: '';
+  position: absolute;
+  bottom: -3px; left: 50%;
+  transform: translateX(-50%);
+  width: 0; height: 1px;
+  background: currentColor;
+  transition: width 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+.card:hover .card__title::after { width: 100%; }
+
+
+/* ── Works-page card names — Link001 (left → right) ─────────
+   Triggers on parent .wcard hover
+──────────────────────────────────────────────────────────── */
+.wcard__name {
+  position: relative;
+  display: inline-block;
+}
+.wcard__name::after {
+  content: '';
+  position: absolute;
+  bottom: -2px; left: 0;
+  width: 0; height: 1px;
+  background: currentColor;
+  transition: width 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+.wcard:hover .wcard__name::after { width: 100%; }
+
+
+/* ── Scroll cue — Link003 (centre underline) ─────────────────
+   Subtle underline pulse on the [ Scroll ] hint
+──────────────────────────────────────────────────────────── */
+.hero__scroll-cue {
+  position: relative;
+  display: inline-block;
+}
+.hero__scroll-cue::after {
+  content: '';
+  position: absolute;
+  bottom: -2px; left: 50%;
+  transform: translateX(-50%);
+  width: 0; height: 1px;
+  background: currentColor;
+  transition: width 0.35s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+.hero__scroll-cue:hover::after { width: 100%; }
