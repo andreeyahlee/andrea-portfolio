@@ -1100,11 +1100,11 @@
       .contact__socials { flex-wrap: wrap; gap: 1rem; }
     }
 
-    /* Touch devices: always show card hover content */
+    /* Touch devices: tap-to-reveal hover state */
     @media (hover: none) {
-      .card__default-info { opacity: 0; pointer-events: none; }
-      .card__hover-info   { opacity: 1; }
-      .card__overlay      { background: rgba(0,0,0,0.55); }
+      .card--tapped .card__default-info { opacity: 0; pointer-events: none; }
+      .card--tapped .card__hover-info   { opacity: 1; }
+      .card--tapped .card__overlay      { background: rgba(0,0,0,0.75); }
     }
 
     /* ============================================================
@@ -1478,6 +1478,21 @@
       testPrev.addEventListener('click', () => { if (currentIdx > 0) showTestimonial(--currentIdx); });
       testNext.addEventListener('click', () => { if (currentIdx < testCards.length - 1) showTestimonial(++currentIdx); });
       showTestimonial(0);
+    }
+
+    /* ── Works cards: tap-to-reveal on touch devices ── */
+    if (window.matchMedia('(hover: none)').matches) {
+      const workCards = document.querySelectorAll('.works__grid .card');
+      const REVERT_MS = 3200;
+      workCards.forEach(card => {
+        let timer = null;
+        card.addEventListener('click', e => {
+          if (card.classList.contains('card--tapped')) return;
+          workCards.forEach(c => { c.classList.remove('card--tapped'); clearTimeout(c._tapTimer); });
+          card.classList.add('card--tapped');
+          card._tapTimer = setTimeout(() => card.classList.remove('card--tapped'), REVERT_MS);
+        });
+      });
     }
 
     /* ── Hamburger menu ── */
