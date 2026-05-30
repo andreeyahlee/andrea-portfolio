@@ -1033,6 +1033,12 @@
       /* Hero: reduce top breathing room on mobile */
       #hero { padding-top: 4rem; }
 
+      /* Hero GIF: contain on mobile so it never overflows viewport edge */
+      .hero__image {
+        object-fit: contain;
+        object-position: center center;
+      }
+
       /* Tagline */
       .tagline__text { font-size: clamp(1.75rem, 8vw, 3.5rem); line-height: 0.975em; }
 
