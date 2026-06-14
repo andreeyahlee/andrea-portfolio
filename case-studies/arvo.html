@@ -4,1004 +4,2337 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
   <title>ARVO — Andrea Lee</title>
-  <meta name="description" content="A startup hired us to fix seven problems. We fixed two. Here's why that was exactly right.">
-  <script>(function(){try{var t=localStorage.getItem('andrea-theme')||'light';document.documentElement.setAttribute('data-theme',t);}catch(e){}})();</script>
+  <meta name="description" content="Designing an AI manager copilot so managers can lead, not administrate.">
+
+  <!-- Theme flash prevention -->
+  <script>(function(){try{var t=localStorage.getItem('andrea-theme')||'dark';document.documentElement.setAttribute('data-theme',t);}catch(e){}})();</script>
+
+  <!-- Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,100..1000&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,300..700&display=swap" rel="stylesheet">
   <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&display=swap" rel="stylesheet">
-  <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="../Asset/skiper40.css">
+  <link href="https://fonts.googleapis.com/css2?family=DM+Mono:ital,wght@0,400;0,500;1,400&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Lora:wght@400;500&display=swap" rel="stylesheet">
+
+  <!-- GSAP -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/CustomEase.min.js"></script>
+
   <style>
-    /* ── TOKENS ── */
+    /* ================================================================
+       TOKENS
+    ================================================================ */
     :root {
-      --bg:           #f3f2ec;
-      --bg-mid:       #eae8e0;
-      --ink:          #0a0a0a;
-      --ink-muted:    rgba(10,10,10,0.55);
-      --arvo-dark:    #141c16;
+      --bg:           #141c16;
+      --bg-section:   #f3f2ec;
+      --bg-light:     #F4F4EB;
+      --bg-dark:      #1A1C16;
+      --ink:          #f4f4eb;
+      --ink-dark:     #1a1c16;
+      --ink-muted:    rgba(244,244,235,0.5);
       --arvo-green:   #96ab1e;
+      --arvo-amber:   #c98a2e;
       --font-display: 'DM Serif Display', serif;
       --font-body:    'DM Sans', sans-serif;
       --font-mono:    'DM Mono', monospace;
-      --pad-x:        clamp(32px, 5vw, 80px);
-      --pad-y:        clamp(60px, 8vw, 100px);
-      --nav-h:        72px;
-    }
-    [data-theme="dark"] {
-      --bg:        #1a1e18;
-      --bg-mid:    #1c2118;
-      --ink:       #f4f4eb;
-      --ink-muted: rgba(244,244,235,0.5);
+      --pad-x:        clamp(24px, 5vw, 80px);
+      --pad-y:        clamp(64px, 8vw, 120px);
+      --radius:       16px;
+      --radius-sm:    10px;
     }
 
-    /* ── RESET ── */
+    /* ================================================================
+       RESET
+    ================================================================ */
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
     html { scroll-behavior: auto; -webkit-text-size-adjust: 100%; overflow-x: hidden; }
-    a, button, [role="button"] { touch-action: manipulation; }
-    picture { display: contents; }
     body { font-family: var(--font-body); background: var(--bg); color: var(--ink); overflow-x: hidden; }
     a { color: inherit; text-decoration: none; }
-    img { display: block; max-width: 100%; }
+    img, video { display: block; max-width: 100%; }
     *, *::before, *::after { cursor: none !important; }
 
-    /* ── PROGRESS BAR ── */
+    /* ================================================================
+       PROGRESS BAR
+    ================================================================ */
     #cs-progress {
       position: fixed; top: 0; left: 0;
       height: 3px; width: 0%;
       background: var(--arvo-green);
-      z-index: 200; pointer-events: none;
+      z-index: 300; pointer-events: none;
       transition: width 0.1s linear;
     }
 
-    /* ── CURSOR ── */
+    /* ================================================================
+       CURSOR
+    ================================================================ */
     #custom-cursor {
-      position: fixed; top: 0; left: 0; width: 48px;
-      pointer-events: none; z-index: 99999;
-      will-change: transform; opacity: 0; transition: opacity 0.2s;
-      mix-blend-mode: difference;
-    }
-    #custom-cursor img {
-      width: 100%; height: auto; display: block;
-      will-change: transform; animation: cursor-spin 12s linear infinite;
-    }
-    @keyframes cursor-spin { to { transform: rotate(360deg); } }
-
-    /* ── NAV ── */
-    .cs-nav {
-      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
-      height: var(--nav-h);
-      display: flex; align-items: center; justify-content: space-between;
-      padding: 0 var(--pad-x);
-      background: var(--arvo-dark);
-      border-bottom: 1px solid rgba(255,255,255,0.06);
-    }
-    .cs-nav-back {
-      font-family: var(--font-body); font-size: 13px; font-weight: 500;
-      color: rgba(255,255,255,0.6);
-      display: flex; align-items: center; gap: 6px;
-      transition: color 0.2s; cursor: pointer;
-    }
-    .cs-nav-back:hover { color: #fff; }
-    .cs-nav-back svg { width: 16px; height: 16px; flex-shrink: 0; }
-    .cs-nav-right { display: flex; align-items: center; gap: 12px; }
-    .cs-nav-cta {
-      font-family: var(--font-body); font-size: 13px; font-weight: 500;
-      color: #fff; border: 1.5px solid rgba(255,255,255,0.3);
-      border-radius: 100px; padding: 7px 18px; cursor: pointer;
-      transition: background 0.2s, border-color 0.2s;
-    }
-    .cs-nav-cta:hover { background: rgba(255,255,255,0.08); border-color: rgba(255,255,255,0.6); }
-    .cs-nav-theme {
-      background: transparent;
-      border: 1.5px solid rgba(255,255,255,0.25);
-      border-radius: 100px; color: rgba(255,255,255,0.7);
-      font-size: 14px; padding: 6px 12px; cursor: pointer;
-      min-width: 40px; min-height: 40px;
-      display: flex; align-items: center; justify-content: center;
-      transition: background 0.2s, border-color 0.2s;
-    }
-    .cs-nav-theme:hover { background: rgba(255,255,255,0.08); border-color: rgba(255,255,255,0.5); }
-
-    /* ── STICKY SECTION NAV ── */
-    .cs-sticky-nav {
-      position: fixed; left: clamp(14px,1.8vw,24px); top: 50%;
-      transform: translateY(-50%); z-index: 80;
-      display: flex; flex-direction: column; gap: 14px;
-      pointer-events: none;
-    }
-    @media (max-width: 1024px) { .cs-sticky-nav { display: none; } }
-    .cs-snav-item {
-      display: flex; align-items: center; gap: 10px;
-      pointer-events: auto; cursor: pointer; text-decoration: none;
-    }
-    .cs-snav-dot {
-      width: 5px; height: 5px; border-radius: 50%;
-      background: rgba(255,255,255,0.2); mix-blend-mode: difference;
-      transition: background 0.25s, transform 0.25s; flex-shrink: 0;
-    }
-    .cs-snav-item.is-active .cs-snav-dot { background: rgba(255,255,255,0.9); transform: scale(1.5); }
-    .cs-snav-label {
-      font-family: var(--font-body); font-size: 9px; font-weight: 700;
-      letter-spacing: 0.12em; text-transform: uppercase;
-      color: rgba(255,255,255,0); mix-blend-mode: difference;
-      transition: color 0.2s; white-space: nowrap;
-    }
-    .cs-snav-item:hover .cs-snav-label,
-    .cs-snav-item.is-active .cs-snav-label { color: rgba(255,255,255,0.65); }
-
-    /* ── SHARED SECTION ── */
-    .cs-section { position: relative; background: var(--bg); }
-    .cs-inner { padding: var(--pad-y) var(--pad-x); }
-    .cs-section-label {
-      font-family: var(--font-mono); font-size: 11px; font-weight: 700;
-      letter-spacing: 0.12em; text-transform: uppercase;
-      color: var(--ink-muted); margin-bottom: clamp(60px,8vw,100px);
-      display: flex; align-items: center; gap: 10px;
-    }
-    .cs-section-label::before {
-      content: ''; display: inline-block; width: 20px; height: 1.5px;
-      background: currentColor; opacity: 0.4; flex-shrink: 0;
-    }
-    .cs-h2 {
-      font-family: var(--font-display);
-      font-size: clamp(32px, 4.5vw, 58px);
-      line-height: 1.05; letter-spacing: -0.02em;
-      color: var(--ink); margin-bottom: 24px;
-    }
-    .cs-h2 em { font-style: normal; color: var(--arvo-green); }
-    .cs-body {
-      font-size: clamp(15px, 1.2vw, 17px);
-      line-height: 1.72; color: var(--ink-muted); max-width: 600px;
-      margin-bottom: clamp(28px,3vw,40px);
-    }
-    .cs-bleed figcaption, .cs-bleed .cs-img-cap { padding-left: var(--pad-x); padding-right: var(--pad-x); }
-
-    /* Dark section overrides */
-    .cs-section--dark { background: var(--arvo-dark) !important; }
-    .cs-section--dark .cs-section-label { color: rgba(255,255,255,0.35); }
-    .cs-section--dark .cs-h2 { color: #fff; }
-    .cs-section--dark .cs-body { color: rgba(255,255,255,0.6); }
-
-    /* ── HERO ── */
-    .cs-hero {
-      position: relative;
-      background: var(--arvo-dark);
-      min-height: 100svh;
-      display: flex; flex-direction: column; justify-content: flex-end;
+      position: fixed; top: 0; left: 0;
+      width: 52px; height: 52px;
+      pointer-events: none; z-index: 9999;
+      opacity: 0; will-change: transform;
       overflow: hidden;
     }
-    .cs-hero-bg {
-      position: absolute; inset: 0;
-      background: url('../assets/arvo-hero-image.png') right top / cover no-repeat;
-      opacity: 0.6;
-    }
-    .cs-hero::after {
-      content: ''; position: absolute; inset: 0;
-      background:
-        linear-gradient(to right, rgba(20,28,22,0.88) 0%, rgba(20,28,22,0.4) 48%, transparent 100%),
-        linear-gradient(to top, rgba(20,28,22,0.82) 0%, rgba(20,28,22,0.2) 42%, transparent 68%);
-      pointer-events: none; z-index: 1;
-    }
-    .cs-hero-inner {
-      position: relative; z-index: 3;
-      padding: 80px var(--pad-x) 80px;
-      display: grid; grid-template-columns: 1fr 280px;
-      gap: 60px; align-items: end; width: 100%;
-    }
-    .cs-hero-h1 {
-      font-family: var(--font-display);
-      font-size: clamp(40px, 5vw, 72px);
-      line-height: 1.08; letter-spacing: -0.03em;
-      color: #fff; margin-bottom: 24px;
-    }
-    .cs-hero-h1 em { font-style: normal; color: var(--arvo-green); }
-    .cs-hero-sub {
-      font-size: clamp(14px, 1.1vw, 16px);
-      line-height: 1.7; color: rgba(255,255,255,0.6);
-      max-width: 480px; margin-bottom: 32px;
-    }
-    .cs-hero-cta {
-      display: inline-flex; align-items: center; gap: 8px;
-      font-family: var(--font-body); font-size: 13px; font-weight: 600;
-      color: #fff; border: 1.5px solid rgba(255,255,255,0.35);
-      border-radius: 100px; padding: 12px 24px; cursor: pointer;
-      transition: background 0.2s, border-color 0.2s;
-    }
-    .cs-hero-cta:hover { background: rgba(255,255,255,0.08); border-color: rgba(255,255,255,0.7); }
-    .cs-hero-meta { display: flex; flex-direction: column; }
-    .cs-meta-row {
-      display: grid; grid-template-columns: 100px 1fr;
-      gap: 12px; padding: 11px 0;
-      border-bottom: 1px solid rgba(255,255,255,0.07);
-    }
-    .cs-meta-row:last-child { border-bottom: none; }
-    .cs-meta-label {
-      font-size: 10px; font-weight: 600; letter-spacing: 0.12em;
-      text-transform: uppercase; color: rgba(255,255,255,0.3); padding-top: 2px;
-    }
-    .cs-meta-value { font-size: 13px; line-height: 1.5; color: rgba(255,255,255,0.8); }
+    #custom-cursor img { width: 100%; height: auto; display: block; }
+    @media (hover: none) { #custom-cursor { display: none !important; } }
 
-    /* ── STAT BLOCKS ── */
-    .stat-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-      gap: 2px; margin: 48px 0;
-    }
-    .stat-cell {
-      background: rgba(10,10,10,0.04);
-      padding: 32px 28px;
-    }
-    .stat-cell:first-child { border-radius: 12px 0 0 12px; }
-    .stat-cell:last-child { border-radius: 0 12px 12px 0; }
-    .stat-cell:only-child { border-radius: 12px; }
-    [data-theme="dark"] .stat-cell { background: rgba(255,255,255,0.06); }
-    .cs-section--dark .stat-cell { background: rgba(255,255,255,0.08); }
-    .stat-num {
-      font-family: var(--font-display);
-      font-size: clamp(44px, 5.5vw, 72px);
-      font-weight: 900; line-height: 1;
-      color: var(--arvo-green); margin-bottom: 10px;
-    }
-    .stat-label {
-      font-family: var(--font-mono); font-size: 10px; font-weight: 700;
-      letter-spacing: 0.12em; text-transform: uppercase;
-      color: var(--ink-muted); margin-bottom: 6px;
-    }
-    .cs-section--dark .stat-label { color: rgba(255,255,255,0.4); }
-    .stat-desc { font-size: 13px; line-height: 1.5; color: var(--ink-muted); }
-    .cs-section--dark .stat-desc { color: rgba(255,255,255,0.5); }
-
-    /* ── PROBLEM MAP ── */
-    .problem-list { display: grid; gap: 2px; margin: 40px 0; }
-    .problem-row {
-      display: grid; grid-template-columns: 12px 1fr auto;
-      gap: 20px; align-items: center;
-      padding: 16px 20px;
-      background: rgba(10,10,10,0.04);
-    }
-    .problem-row:first-child { border-radius: 12px 12px 0 0; }
-    .problem-row:last-child { border-radius: 0 0 12px 12px; }
-    [data-theme="dark"] .problem-row { background: rgba(255,255,255,0.05); }
-    .problem-dot { width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0; }
-    .problem-dot--fix   { background: var(--arvo-green); }
-    .problem-dot--biz   { background: #c8a840; }
-    .problem-dot--scope { background: rgba(10,10,10,0.2); }
-    [data-theme="dark"] .problem-dot--scope { background: rgba(255,255,255,0.2); }
-    .problem-name { font-size: 14px; font-weight: 600; color: var(--ink); }
-    .problem-sub  { font-size: 12px; color: var(--ink-muted); margin-top: 2px; }
-    .problem-badge {
-      font-family: var(--font-mono); font-size: 9px; font-weight: 700;
-      letter-spacing: 0.1em; text-transform: uppercase;
-      padding: 4px 10px; border-radius: 100px; white-space: nowrap;
-    }
-    .problem-badge--fix   { background: rgba(150,171,30,0.15); color: #566010; }
-    .problem-badge--biz   { background: rgba(200,168,64,0.15); color: #8a6010; }
-    .problem-badge--scope { background: rgba(10,10,10,0.08); color: var(--ink-muted); }
-    [data-theme="dark"] .problem-badge--fix   { background: rgba(150,171,30,0.2); color: var(--arvo-green); }
-    [data-theme="dark"] .problem-badge--biz   { background: rgba(200,168,64,0.15); color: #c8a840; }
-    [data-theme="dark"] .problem-badge--scope { background: rgba(255,255,255,0.06); }
-
-    /* ── DECISION CARDS ── */
-    .decision-pair {
-      display: grid; grid-template-columns: 1fr 1fr;
-      gap: 40px; align-items: start; margin-bottom: 64px;
-    }
-    .decision-pair:last-child { margin-bottom: 0; }
-    .decision-box {
-      background: var(--arvo-dark);
-      border-radius: 20px; padding: 36px;
-    }
-    [data-theme="dark"] .decision-box { background: rgba(255,255,255,0.07); border: 1px solid rgba(255,255,255,0.08); }
-    .decision-badge {
-      font-family: var(--font-mono); font-size: 9px; font-weight: 700;
-      letter-spacing: 0.12em; text-transform: uppercase;
-      color: var(--arvo-green); margin-bottom: 18px; display: block;
-    }
-    .decision-problem {
-      font-family: var(--font-display);
-      font-size: clamp(20px, 2.2vw, 28px);
-      line-height: 1.2; color: #fff; margin-bottom: 16px;
-    }
-    .decision-body { font-size: 15px; line-height: 1.7; color: rgba(255,255,255,0.6); }
-    .decision-arrow {
-      font-family: var(--font-mono); font-size: 10px; font-weight: 700;
-      letter-spacing: 0.12em; text-transform: uppercase;
-      color: var(--arvo-green); margin-top: 24px; display: block;
-    }
-    .decision-img { border-radius: 14px; overflow: hidden; line-height: 0; box-shadow: 0 12px 40px rgba(0,0,0,0.12); }
-    .decision-img img, .decision-img video { width: 100%; height: auto; display: block; }
-    .decision-caption {
-      font-size: 12px; font-style: italic; color: var(--ink-muted);
-      margin-top: 12px; text-align: center; line-height: 1.5;
-    }
-
-    /* ── OUTCOME ── */
-    .outcome-lead-img {
-      border-radius: 14px; overflow: hidden;
-      margin-bottom: 52px;
-      box-shadow: 0 20px 60px rgba(0,0,0,0.1);
-      line-height: 0;
-    }
-    .outcome-lead-img img { width: 100%; height: auto; display: block; }
-
-    /* ── EILEEN PULL QUOTE ── */
-    .pull-quote-wrap {
-      max-width: 780px; margin: 72px auto 0;
-      text-align: center;
-    }
-    .pull-quote-marks {
-      font-family: var(--font-display);
-      font-size: 80px; line-height: 0.6;
-      color: rgba(10,10,10,0.06); margin-bottom: 28px;
-    }
-    [data-theme="dark"] .pull-quote-marks { color: rgba(255,255,255,0.06); }
-    .pull-quote-text {
-      font-family: var(--font-display);
-      font-style: italic; font-weight: 400;
-      font-size: clamp(17px, 1.6vw, 22px);
-      line-height: 1.75; color: var(--ink); margin-bottom: 28px;
-    }
-    .pull-quote-attr {
-      font-family: var(--font-mono); font-size: 11px; font-weight: 700;
-      letter-spacing: 0.12em; text-transform: uppercase; color: var(--ink-muted);
-    }
-
-    /* ── RETRO CARDS ── */
-    .retro-grid {
-      display: grid; grid-template-columns: 1fr 1fr 1fr;
-      gap: 16px; margin-top: 40px;
-    }
-    .retro-card {
-      background: rgba(255,255,255,0.08); border-radius: 12px; padding: 24px;
-      display: grid; grid-template-columns: 12px 1fr;
-      gap: 16px; align-items: start;
-    }
-    .retro-dot { width: 10px; height: 10px; border-radius: 50%; margin-top: 4px; }
-    .retro-title { font-size: 14px; font-weight: 700; color: #fff; margin-bottom: 10px; line-height: 1.35; }
-    .retro-body { font-size: 13px; line-height: 1.65; color: rgba(255,255,255,0.6); }
-
-    /* ── GRAIN OVERLAY (dark sections) ── */
-    #cs-problem::after, #cs-coda::after {
-      content: ''; position: absolute; inset: 0; pointer-events: none; z-index: 1;
-      background:
-        radial-gradient(ellipse 70% 55% at 12% 18%, rgba(108,190,145,0.07) 0%, transparent 60%),
-        radial-gradient(ellipse 55% 45% at 85% 80%, rgba(40,80,60,0.08) 0%, transparent 58%);
-      mix-blend-mode: screen;
-    }
-    #cs-problem > *, #cs-coda > * { position: relative; z-index: 2; }
-
-    /* ── CASE NAV ── */
-    .cs-case-nav {
-      display: flex; justify-content: space-between;
-      padding: 20px 0 0;
-      border-top: 1px solid rgba(255,255,255,0.08); margin-top: 32px;
-    }
-    .cs-case-nav-link {
-      font-size: 12px; font-weight: 600; letter-spacing: 0.12em;
-      text-transform: uppercase; color: rgba(255,255,255,0.4);
-      display: flex; align-items: center; gap: 8px;
-      transition: color 0.2s; cursor: pointer;
-    }
-    .cs-case-nav-link:hover { color: #fff; }
-
-    /* ── SECTION LAYOUT ── */
-    .cs-section:not(.cs-hero) .cs-inner {
-      padding-top: var(--pad-y);
-    }
-    /* PHASE 2 — GSAP ScrollTrigger will restore pinned overlay scroll. Do not re-add clip-path or sticky positioning manually. */
-    #cs-fixes    { background: var(--bg-mid); }
-
-    [data-theme="dark"] #cs-decision { background: #1c2118; }
-    [data-theme="dark"] #cs-fixes    { background: #1a1e16; }
-    [data-theme="dark"] #cs-outcome  { background: #1c2118; }
-
-    /* ── RESPONSIVE ── */
-    @media (max-width: 767px) {
-      .decision-pair { grid-template-columns: 1fr; }
-      .retro-grid    { grid-template-columns: 1fr; }
-    }
-    @media (max-width: 639px) {
-      .cs-hero-inner { grid-template-columns: 1fr; }
-      .cs-hero-meta  { display: none; }
-      .stat-grid     { grid-template-columns: 1fr 1fr; }
-      .problem-row   { grid-template-columns: 12px 1fr; }
-      .problem-badge { display: none; }
-      .cs-hero    { position: relative !important; top: auto !important; }
-      .cs-section:not(.cs-hero) .cs-inner { padding-top: var(--pad-y) !important; }
-    }
-
-    /* ── FOCUS ── */
-    :focus-visible { outline: 2px solid var(--arvo-green); outline-offset: 3px; }
-
-    /* ── LAYOUT SYSTEM ── */
-    .cs-bleed {
-      margin-left: calc(-1 * var(--pad-x));
-      margin-right: calc(-1 * var(--pad-x));
-      width: calc(100% + (var(--pad-x) * 2));
-    }
-    .cs-stat-hero {
-      font-family: var(--font-display);
-      font-size: clamp(72px, 12vw, 120px);
-      line-height: 0.9;
-      letter-spacing: -0.04em;
-      font-weight: 700;
-    }
-    .cs-stat-hero em { font-style: normal; }
-    .cs-stat-hero-label {
+    /* ================================================================
+       NAV
+    ================================================================ */
+    .cs-nav {
+      position: fixed; top: 20px; left: 50%;
+      transform: translateX(-50%);
+      z-index: 100;
+      display: flex; align-items: center; gap: 28px;
+      background: rgba(20,28,22,0.8);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 100px;
+      padding: 10px 22px;
       font-family: var(--font-mono);
       font-size: 11px;
+      letter-spacing: 0.08em;
       text-transform: uppercase;
-      letter-spacing: 0.12em;
-      margin-top: 12px;
-      opacity: 0.5;
+      color: var(--ink-muted);
+      white-space: nowrap;
+    }
+    .cs-nav a { transition: color 0.2s ease; }
+    .cs-nav a:hover { color: var(--ink); }
+    .cs-nav-back { display: flex; align-items: center; gap: 6px; }
+    .cs-nav-back::before { content: '←'; font-size: 13px; }
+    .cs-nav-logo { color: var(--arvo-green); font-weight: 500; }
+    .cs-nav-divider {
+      width: 1px; height: 14px;
+      background: rgba(255,255,255,0.15);
+      flex-shrink: 0;
+    }
+
+    /* ================================================================
+       01 — HERO
+    ================================================================ */
+    #cs-hero {
+      /* Figma: Hero */
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-start;
+      align-items: center;
+      padding: 64px 0 0;
+      gap: 40px;
+      width: 100%;
+      height: 900px;
+      background: linear-gradient(0deg, rgba(0,0,0,0.2), rgba(0,0,0,0.2)), #1A1C16;
+      overflow: hidden;
+      flex: none;
+      align-self: stretch;
+    }
+
+    /* Frame 55 — text wrapper */
+    .hero-text {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      padding: 0;
+      gap: 40px;
+      width: 100%;
+      flex: none;
+      align-self: stretch;
+    }
+
+    /* Frame 471 — title + subtitle stack */
+    .hero-title-group {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      padding: 0;
+      gap: 10px;
+      width: 100%;
+      flex: none;
+      align-self: stretch;
+    }
+
+    .hero-title {
+      /* Figma: ARVO. */
+      width: 100%;
+      font-family: 'Lora', serif;
+      font-style: normal;
+      font-weight: 400;
+      font-size: 52px;
+      line-height: 56px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      letter-spacing: -0.03em;
+      color: #F4F4EB;
+      flex: none;
+      align-self: stretch;
+    }
+
+    .hero-sub {
+      /* Figma: subtitle */
+      width: 100%;
+      font-family: 'Lora', serif;
+      font-style: normal;
+      font-weight: 400;
+      font-size: 22px;
+      line-height: 28px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      letter-spacing: -0.01em;
+      color: #DEE895;
+      flex: none;
+      align-self: stretch;
+    }
+
+    /* ARVO_Hero_Vid — video container */
+    .hero-media {
+      flex: none;
+      align-self: stretch;
+      width: 100%;
+      height: 598px;
+      overflow: hidden;
+      pointer-events: none;
+    }
+
+    .hero-media video {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: center 67%;
       display: block;
     }
-    .cs-split {
-      display: grid;
-      grid-template-columns: 55% 1fr;
-      gap: clamp(40px, 5vw, 80px);
-      align-items: start;
-    }
-    .cs-split--reversed { grid-template-columns: 1fr 55%; }
-    .cs-dramatic-moment {
-      background: var(--ink, #21281A);
-      color: white;
-      padding: clamp(60px,8vw,100px) var(--pad-x);
-      margin-left: calc(-1 * var(--pad-x));
-      margin-right: calc(-1 * var(--pad-x));
-      width: calc(100% + (var(--pad-x) * 2));
-      margin-top: clamp(60px,6vw,80px);
-      margin-bottom: clamp(60px,6vw,80px);
-    }
-    .cs-dramatic-moment .cs-stat-hero { color: var(--lime, #DEE895); }
-    .cs-img-cap {
-      font-family: var(--font-mono);
-      font-size: 10px;
-      text-transform: uppercase;
-      letter-spacing: 0.1em;
-      color: var(--ink-muted, #6B7060);
-      margin-top: 14px;
-      padding-left: 2px;
-    }
+
     @media (max-width: 768px) {
-      .cs-split, .cs-split--reversed { grid-template-columns: 1fr; }
-      .cs-bleed {
-        margin-left: calc(-1 * clamp(20px,4vw,32px));
-        margin-right: calc(-1 * clamp(20px,4vw,32px));
-        width: calc(100% + (clamp(20px,4vw,32px)*2));
+      #cs-hero { height: auto; min-height: 560px; gap: 24px; }
+      .hero-title { font-size: 36px; line-height: 40px; }
+      .hero-sub   { font-size: 16px; line-height: 22px; }
+      .hero-media { height: auto; }
+      .hero-media video { height: auto; object-fit: unset; }
+    }
+
+    /* ================================================================
+       02 — ABOUT
+    ================================================================ */
+    #cs-about {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      padding: 64px;
+      gap: 40px;
+      width: 100%;
+      height: 900px;
+      background: #1A1C16;
+      flex: none;
+      align-self: stretch;
+      overflow: hidden;
+    }
+
+    /* Frame 470 — main row */
+    .about-row {
+      display: flex;
+      flex-direction: row;
+      justify-content: center;
+      align-items: flex-start;
+      padding: 0;
+      gap: 40px;
+      width: 100%;
+      flex-grow: 1;
+      align-self: stretch;
+    }
+
+    /* Frame 469 — left column */
+    .about-left {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      padding: 0;
+      gap: 40px;
+      flex-grow: 1;
+      align-self: stretch;
+    }
+
+    /* About_intro — heading fills flex-grow */
+    .about-heading {
+      font-family: 'Lora', serif;
+      font-style: normal;
+      font-weight: 400;
+      font-size: 40px;
+      line-height: 44px;
+      letter-spacing: -0.025em;
+      color: #F4F4EB;
+      flex-grow: 1;
+      align-self: stretch;
+      display: flex;
+      align-items: center;
+    }
+
+    /* About_statsbar */
+    .about-stats {
+      display: flex;
+      flex-direction: row;
+      justify-content: center;
+      align-items: center;
+      padding: 0;
+      gap: 40px;
+      width: 100%;
+      flex: none;
+      align-self: stretch;
+    }
+
+    .about-stat {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      padding: 0;
+      gap: 10px;
+      flex-grow: 1;
+      align-self: stretch;
+    }
+
+    .about-stat-num {
+      font-family: 'Lora', serif;
+      font-style: normal;
+      font-weight: 400;
+      font-size: 56px;
+      line-height: 56px;
+      letter-spacing: -0.04em;
+      color: #F4F4EB;
+      flex: none;
+      align-self: stretch;
+    }
+
+    .about-stat-label {
+      font-family: 'DM Sans', sans-serif;
+      font-style: normal;
+      font-weight: 400;
+      font-size: 15px;
+      line-height: 27px;
+      color: #F4F4EB;
+      flex: none;
+      align-self: stretch;
+    }
+
+    /* About_Role — right sidebar */
+    .about-right {
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      align-items: flex-start;
+      padding: 16px;
+      gap: 40px;
+      width: 392px;
+      flex-shrink: 0;
+      align-self: stretch;
+    }
+
+    .about-meta-item {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: flex-start;
+      padding: 0;
+      gap: 10px;
+      width: 100%;
+      flex: none;
+      align-self: stretch;
+    }
+
+    .about-meta-tag {
+      font-family: 'DM Sans', sans-serif;
+      font-style: normal;
+      font-weight: 600;
+      font-size: 13px;
+      line-height: 17px;
+      color: #F4F4EB;
+      align-self: stretch;
+    }
+
+    .about-meta-val {
+      font-family: 'DM Sans', sans-serif;
+      font-style: normal;
+      font-weight: 400;
+      font-size: 15px;
+      line-height: 27px;
+      color: #F4F4EB;
+      align-self: stretch;
+    }
+
+    .about-cta {
+      box-sizing: border-box;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      padding: 17px 33px;
+      gap: 10px;
+      width: 150px;
+      height: 51px;
+      border: 3px solid #DEE895;
+      border-radius: 100px;
+      text-decoration: none;
+      flex: none;
+    }
+
+    .about-cta span {
+      font-family: 'DM Sans', sans-serif;
+      font-style: normal;
+      font-weight: 600;
+      font-size: 13px;
+      line-height: 17px;
+      color: #F4F4EB;
+      text-decoration: none;
+      white-space: nowrap;
+    }
+    .about-cta:hover {
+      background: #DEE895;
+    }
+    .about-cta:hover span {
+      color: #1A1C16;
+    }
+
+    @media (max-width: 1024px) {
+      #cs-about { height: auto; padding: 48px 32px; }
+      .about-row { flex-direction: column; }
+      .about-right { width: 100%; }
+      .about-heading { font-size: 28px; line-height: 34px; }
+      .about-stat-num { font-size: 40px; line-height: 40px; }
+    }
+
+    /* ================================================================
+       03 — FINAL PROTOTYPE
+    ================================================================ */
+    #cs-proto {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 64px;
+      gap: 40px;
+      width: 100%;
+      height: 900px;
+      background: #1A1C16;
+      flex: none;
+      align-self: stretch;
+      overflow: hidden;
+    }
+
+    /* Frame 118 */
+    .proto-inner {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      padding: 0;
+      gap: 40px;
+      width: 100%;
+      flex-grow: 1;
+      align-self: stretch;
+    }
+
+    /* Image row */
+    .proto-row {
+      display: flex;
+      flex-direction: row;
+      justify-content: center;
+      align-items: flex-start;
+      padding: 0;
+      gap: 20px;
+      width: 100%;
+      flex-grow: 1;
+      align-self: stretch;
+    }
+
+    /* Left: feature image */
+    .proto-feature {
+      width: 784px;
+      height: 100%;
+      flex-shrink: 0;
+      overflow: hidden;
+    }
+
+    .proto-feature img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: center center;
+      display: block;
+    }
+
+    /* Right: two sub-image containers */
+    .proto-subs {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 0;
+      gap: 20px;
+      flex-grow: 1;
+      align-self: stretch;
+    }
+
+    .proto-sub {
+      position: relative;
+      width: 100%;
+      background: var(--bg-light, #F4F4EB);
+      flex-grow: 1;
+      overflow: hidden;
+    }
+
+    .proto-sub img {
+      position: absolute;
+      left: 29px;
+      top: 23px;
+      width: calc(100% + 116px); /* 626/510 ratio overflow */
+      height: auto;
+      filter: drop-shadow(0px 4px 4px rgba(0,0,0,0.5));
+      border-radius: 10px;
+    }
+
+    .proto-sub--2 img {
+      left: 29px;
+      top: 23px;
+      width: 120%;
+    }
+
+    .proto-sub--1 img {
+      left: 34px;
+      top: 33px;
+      width: 105%;
+    }
+
+    @media (max-width: 1024px) {
+      #cs-proto { height: auto; padding: 48px 24px; }
+      .proto-row { flex-direction: column; }
+      .proto-feature { width: 100%; height: 400px; }
+      .proto-sub img { position: relative; left: auto; top: auto; width: 100%; filter: none; }
+    }
+
+    /* ================================================================
+       04 — CONTEXT
+    ================================================================ */
+    #cs-context {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 64px;
+      gap: 40px;
+      width: 100%;
+      height: 900px;
+      background: #1A1C16;
+      flex: none;
+      align-self: stretch;
+      overflow: hidden;
+    }
+
+    /* Section tag */
+    .ctx-section-tag {
+      font-family: 'DM Sans', sans-serif;
+      font-weight: 700;
+      font-size: 11px;
+      line-height: 14px;
+      letter-spacing: 0.6em;
+      text-transform: uppercase;
+      color: #DEE895;
+      align-self: stretch;
+      flex: none;
+    }
+
+    /* Frame 167 */
+    .ctx-content {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      padding: 0;
+      gap: 40px;
+      align-self: stretch;
+      flex-grow: 1;
+    }
+
+    /* Frame 137 */
+    .ctx-heading {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 10px;
+      width: 805px;
+      flex: none;
+    }
+
+    .ctx-h2 {
+      font-family: 'Lora', serif;
+      font-style: normal;
+      font-weight: 400;
+      font-size: 40px;
+      line-height: 44px;
+      letter-spacing: -0.025em;
+      color: #F4F4EB;
+      align-self: stretch;
+    }
+
+    .ctx-lead {
+      font-family: 'DM Sans', sans-serif;
+      font-weight: 400;
+      font-size: 17px;
+      line-height: 31px;
+      color: #F4F4EB;
+      align-self: stretch;
+    }
+
+    /* Frame 139 — cards row */
+    .ctx-cards {
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      padding: 0;
+      gap: 20px;
+      width: 100%;
+      height: 428px;
+      flex: none;
+      align-self: stretch;
+      flex-grow: 0;
+    }
+
+    /* Each card — Context_Block */
+    .ctx-card {
+      position: relative;
+      flex: 1 0 0;
+      align-self: stretch;
+      background: var(--bg-light, #F4F4EB);
+      overflow: hidden;
+    }
+
+    /* Frame 130 — text section, absolute top */
+    .ctx-card-text {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      padding: 32px;
+      position: absolute;
+      left: 0; right: 0; top: 0;
+      z-index: 2;
+    }
+
+    /* Frame 126 inner gap */
+    .ctx-card-text-inner {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 20px;
+      width: 100%;
+    }
+
+    /* Frame 135 / Frame 141 — title + body */
+    .ctx-card-text-body {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 10px;
+      width: 100%;
+    }
+
+    /* Card title — Lora 22px */
+    .ctx-card-title {
+      font-family: 'Lora', serif;
+      font-style: normal;
+      font-weight: 400;
+      font-size: 22px;
+      line-height: 28px;
+      letter-spacing: -0.01em;
+      color: #21281A;
+      align-self: stretch;
+    }
+
+    /* Card body — DM Sans 15px */
+    .ctx-card-body {
+      font-family: 'DM Sans', sans-serif;
+      font-weight: 400;
+      font-size: 15px;
+      line-height: 27px;
+      color: #21281A;
+      align-self: stretch;
+    }
+
+    /* Frame 127 — badge */
+    .ctx-card-badge {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 4px 16px;
+      gap: 10px;
+      background: #FED5D1;
+      border-radius: 10px;
+      font-family: 'DM Sans', sans-serif;
+      font-weight: 600;
+      font-size: 11px;
+      line-height: 14px;
+      color: #FF1900;
+      white-space: nowrap;
+      flex: none;
+    }
+
+    /* Card images — absolute, hover animates */
+    .ctx-card-img {
+      position: absolute;
+      transition: transform 0.45s cubic-bezier(0.4, 0, 0.2, 1),
+                  filter 0.45s cubic-bezier(0.4, 0, 0.2, 1);
+      will-change: transform;
+    }
+
+    /* Card 1 — image anchored to right edge */
+    .ctx-card--1 .ctx-card-img {
+      right: 0;
+      left: auto;
+      top: 162px;
+      width: 487px;
+      filter: drop-shadow(-8px 5px 5.8px rgba(0,0,0,0.25));
+    }
+    .ctx-card--1:hover .ctx-card-img {
+      transform: translateY(-10px) scale(1.02);
+      filter: drop-shadow(-10px 12px 10px rgba(0,0,0,0.3));
+    }
+
+    /* Card 2 — bottom-right placement per reference */
+    .ctx-card--2 .ctx-card-img {
+      left: 90px;
+      top: 134px;
+      width: calc(100% - 50px);
+      height: auto;
+      transform-origin: top left;
+      filter: drop-shadow(-7px 4px 3px rgba(0,0,0,0.25));
+      transform: matrix(0.99, 0.12, -0.13, 0.99, 0, 0);
+    }
+    .ctx-card--2:hover .ctx-card-img {
+      transform: matrix(0.99, 0.12, -0.13, 0.99, 0, -10px) scale(1.02);
+      filter: drop-shadow(-9px 10px 10px rgba(0,0,0,0.35));
+    }
+
+    /* Card 3 — right edge, 10% higher */
+    .ctx-card--3 .ctx-card-img {
+      right: 0;
+      left: auto;
+      top: 185px;
+      width: 323px;
+      filter: drop-shadow(-9.5px 8.3px 4.7px rgba(0,0,0,0.25));
+      transform: rotate(4.9deg);
+    }
+    .ctx-card--3:hover .ctx-card-img {
+      transform: rotate(4.9deg) translateY(-10px) scale(1.02);
+      filter: drop-shadow(-12px 14px 10px rgba(0,0,0,0.35));
+    }
+
+    @media (max-width: 1024px) {
+      #cs-context { height: auto; padding: 48px 24px; }
+      .ctx-cards { height: auto; flex-direction: column; }
+      .ctx-card { min-height: 400px; }
+      .ctx-heading { width: 100%; }
+      .ctx-h2 { font-size: 28px; line-height: 34px; }
+    }
+
+    /* ================================================================
+       05 — CHALLENGE
+    ================================================================ */
+    #cs-challenge {
+      display: flex;
+      height: 900px;
+      padding: 64px;
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 40px;
+      align-self: stretch;
+      background: var(--bg-dark, #1A1C16);
+      overflow: hidden;
+    }
+
+    .challenge-section {
+      background-color: #1a1c16;
+      padding: 64px;
+      width: 100%;
+      box-sizing: border-box;
+    }
+
+    .challenge-inner {
+      position: relative;
+      height: 772px;
+      width: 100%;
+      overflow: hidden;
+    }
+
+    /* ── TEXT ── */
+    .challenge-text {
+      position: absolute;
+      top: 64px;
+      left: 9px;
+      width: min(810px, 58%);
+      z-index: 2;
+
+      font-family: 'Lora', serif;
+      font-weight: 400;
+      font-size: clamp(28px, 3.6vw, 52px);
+      line-height: clamp(32px, 3.9vw, 56px);
+      letter-spacing: -0.03em;
+      color: #f4f4eb;
+    }
+
+    .challenge-text strong {
+      font-weight: 700;
+    }
+
+    /* ── IMAGE STACK ── */
+
+    /* 1. Positioning anchor — pushed left so it bleeds */
+    .challenge-image-frame {
+      position: absolute;
+      left: -274px;
+      top: 0;
+      width: 2107.813px;
+      height: 1063.118px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      pointer-events: none;
+    }
+
+    /* 2. The rotation wrapper */
+    .challenge-image-rotated {
+      transform: rotate(-4.7deg);
+      flex-shrink: 0;
+    }
+
+    /* 3. The image's own frame */
+    .challenge-image-inner {
+      position: relative;
+      width: 2041.017px;
+      height: 898.891px;
+      overflow: hidden;
+    }
+
+    /* 4. The actual image — offset within its frame */
+    .challenge-img {
+      position: absolute;
+      width: 99.69%;
+      height: 159.71%;
+      left: 4.25%;
+      top: -16.95%;
+      max-width: none;
+      object-fit: cover;
+    }
+
+    @media (max-width: 1440px) {
+      .challenge-image-frame {
+        transform-origin: top right;
+        transform: scale(calc(min(100vw, 1440px) / 1440));
+        left: calc(-274px * (min(100vw, 1440px) / 1440));
+      }
+      .challenge-inner {
+        height: calc(772px * (min(100vw, 1440px) / 1440));
       }
     }
 
-    /* ── BEFORE / AFTER COMPARISON ── */
-    .cs-before-after { border-radius: 12px; overflow: hidden; box-shadow: 0 8px 32px rgba(0,0,0,0.1); }
-    .cs-ba-labels { display: grid; grid-template-columns: 1fr 1fr; background: var(--bg); border-bottom: 1px solid var(--rule); }
-    .cs-ba-label { font-family: var(--font-mono); font-size: 10px; text-transform: uppercase; letter-spacing: 0.1em; padding: 10px 16px; }
-    .cs-ba-before { color: var(--red, #9b4a4a); border-right: 1px solid var(--rule); }
-    .cs-ba-after  { color: var(--green, #2b7a3a); }
+    @media (max-width: 768px) {
+      .challenge-section {
+        padding: 40px 24px;
+      }
+      .challenge-text {
+        position: relative;
+        top: auto;
+        transform: none;
+        left: 0;
+        width: 100%;
+        font-size: clamp(22px, 5vw, 36px);
+        line-height: 1.15;
+        margin-bottom: 32px;
+      }
+      .challenge-inner {
+        height: auto;
+        overflow: visible;
+        display: flex;
+        flex-direction: column;
+      }
+      .challenge-image-frame {
+        position: relative;
+        left: -10%;
+        width: 120%;
+        height: auto;
+        aspect-ratio: 2107 / 1063;
+        transform: none;
+      }
+      .challenge-image-rotated {
+        transform: rotate(-4.7deg) scale(0.95);
+      }
+    }
 
-    /* ── BROWSER CHROME MOCKUP ── */
-    .browser-mock { border-radius: 12px; overflow: hidden; box-shadow: 0 24px 64px rgba(0,0,0,0.16); border: 1px solid rgba(0,0,0,0.06); }
-    .browser-mock__bar { background: #E4E4E4; padding: 10px 16px; display: flex; align-items: center; gap: 6px; }
-    .browser-mock__dot { width: 11px; height: 11px; border-radius: 50%; flex-shrink: 0; }
-    .browser-mock__dot:nth-child(1) { background: #FF5F57; }
-    .browser-mock__dot:nth-child(2) { background: #FEBC2E; }
-    .browser-mock__dot:nth-child(3) { background: #28C840; }
-    .browser-mock__url { flex: 1; background: white; border-radius: 6px; font-size: 11px; padding: 4px 12px; color: #888; font-family: var(--font-mono); margin-left: 8px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-    .browser-mock__screen { max-height: 540px; overflow-y: auto; overflow-x: hidden; }
-    .browser-mock__screen img, .browser-mock__screen video { width: 100%; height: auto; display: block; }
-    [data-theme="dark"] .browser-mock__bar { background: #2A2A2A; }
-    [data-theme="dark"] .browser-mock__url { background: #3A3A3A; color: #888; }
+    /* ================================================================
+       06 — JOURNEY
+    ================================================================ */
+    .journey-section {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      padding: 64px;
+      gap: 40px;
+      background: #1A1C16;
+      width: 100%;
+      box-sizing: border-box;
+      min-height: 900px;
+    }
+
+    .journey-tag {
+      font-family: 'DM Sans', sans-serif;
+      font-weight: 700;
+      font-size: 11px;
+      line-height: 14px;
+      letter-spacing: 0.6em;
+      text-transform: uppercase;
+      color: #DEE895;
+    }
+
+    /* Two-column: heading left, body text right */
+    .journey-header-row {
+      display: flex;
+      flex-direction: row;
+      gap: 40px;
+      width: 100%;
+      align-items: flex-start;
+    }
+
+    .journey-heading-wrap {
+      width: 440px;
+      flex-shrink: 0;
+    }
+
+    .journey-heading {
+      font-family: 'Lora', serif;
+      font-weight: 400;
+      font-size: 40px;
+      line-height: 44px;
+      letter-spacing: -0.025em;
+      color: #F4F4EB;
+      margin: 0;
+    }
+
+    /* Body text — three spaced paragraphs */
+    .journey-body-col {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 24px;
+    }
+
+    .journey-body-col p {
+      font-family: 'DM Sans', sans-serif;
+      font-weight: 400;
+      font-size: 17px;
+      line-height: 31px;
+      color: #F4F4EB;
+      margin: 0;
+    }
+
+    .journey-body-col strong {
+      font-weight: 700;
+    }
+
+    /* ── Journey illustration image ── */
+    .journey-cards-img {
+      width: 100%;
+      height: auto;
+      display: block;
+    }
+
+    @media (max-width: 1024px) {
+      .journey-section     { padding: 48px 24px; min-height: auto; }
+      .journey-header-row  { flex-direction: column; }
+      .journey-heading-wrap { width: 100%; }
+      .journey-heading     { font-size: 28px; line-height: 34px; }
+      .journey-body-col p  { font-size: 15px; line-height: 26px; }
+      .journey-cards       { height: auto; overflow-x: auto; }
+    }
+
+    /* ================================================================
+       07 — RESEARCH
+    ================================================================ */
+    #cs-research {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      padding: 64px;
+      gap: 40px;
+      background: #1A1C16;
+      width: 100%;
+      box-sizing: border-box;
+      min-height: 900px;
+    }
+
+    .research-tag {
+      font-family: 'DM Sans', sans-serif;
+      font-weight: 700;
+      font-size: 11px;
+      line-height: 14px;
+      letter-spacing: 0.6em;
+      text-transform: uppercase;
+      color: #DEE895;
+    }
+
+    /* Main row: left text + right panel */
+    .research-row {
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      gap: 40px;
+      width: 100%;
+      flex: 1;
+    }
+
+    /* Left column */
+    .research-left {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      gap: 20px;
+      width: 369px;
+      flex-shrink: 0;
+      align-self: stretch;
+    }
+
+    .research-heading {
+      font-family: 'Lora', serif;
+      font-weight: 400;
+      font-size: 40px;
+      line-height: 44px;
+      letter-spacing: -0.025em;
+      color: #F4F4EB;
+      margin: 0;
+    }
+
+    .research-body {
+      font-family: 'DM Sans', sans-serif;
+      font-weight: 400;
+      font-size: 17px;
+      line-height: 31px;
+      color: #F4F4EB;
+      margin: 0;
+    }
+
+    /* Right panel — cream, exact Figma dimensions */
+    .research-panel {
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      gap: 31.43px;
+      width: 903.03px;
+      height: 554px;
+      flex-shrink: 0;
+      background: #F4F4EB;
+      overflow: hidden;
+    }
+
+    /* Image container — Frame 189 */
+    .research-panel-img-wrap {
+      position: relative;
+      width: 504.94px;
+      height: 554px;
+      flex-shrink: 0;
+      overflow: hidden;
+    }
+
+    /* Image — absolutely offset per spec */
+    .research-panel-img {
+      position: absolute;
+      left: 11.17px;
+      top: 32.13px;
+      width: 504.94px;
+      height: 554px;
+      object-fit: cover;
+      object-position: top left;
+      filter: drop-shadow(-10.476px 12.571px 6.984px rgba(0,0,0,0.25));
+    }
+
+    /* Principles column — Frame 188 */
+    .research-panel-right {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      gap: 27.94px;
+      width: 338.72px;
+      height: 554px;
+      flex-shrink: 0;
+    }
+
+    /* "What managers wanted" label */
+    .research-panel-label {
+      font-family: 'DM Sans', sans-serif;
+      font-weight: 400;
+      font-size: 16.76px;
+      line-height: 22px;
+      color: #21281A;
+      margin: 0;
+    }
+
+    /* Principles list — Frame 176: gap 27.94px */
+    .research-principles {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 27.94px;
+    }
+
+    /* Each principle row */
+    .research-principle {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      width: 338.72px;
+      padding: 5.587px 11.174px;
+      box-sizing: border-box;
+      border-radius: 4px;
+      transition: background 0.25s ease;
+    }
+
+    .rp-title {
+      font-family: 'DM Sans', sans-serif;
+      font-weight: 400;
+      font-size: 12.5712px;
+      line-height: 16px;
+      color: #21281A;
+      margin: 0;
+    }
+
+    .rp-note {
+      display: none;
+      font-family: 'DM Sans', sans-serif;
+      font-weight: 400;
+      font-size: 11px;
+      line-height: 16px;
+      color: #21281A;
+      margin: 5px 0 0;
+    }
+
+    /* Active — lime highlight */
+    .research-principle.is-active { background: #DEE895; }
+    .research-principle.is-active .rp-title { font-weight: 700; }
+    .research-principle.is-active .rp-note  { display: block; }
+
+    @media (max-width: 1024px) {
+      #cs-research    { padding: 48px 24px; min-height: auto; }
+      .research-row   { flex-direction: column; }
+      .research-left  { width: 100%; }
+      .research-panel { flex-direction: column; height: auto; }
+      .research-panel-img-wrap { width: 100%; height: 280px; }
+      .research-panel-right    { width: 100%; }
+    }
+
+    /* ================================================================
+       08 — WORKSHOP
+    ================================================================ */
+    #cs-workshop {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      padding: 64px;
+      gap: 40px;
+      background: #1A1C16;
+      width: 100%;
+      box-sizing: border-box;
+      min-height: 900px;
+    }
+
+    .workshop-tag {
+      font-family: 'DM Sans', sans-serif;
+      font-weight: 700;
+      font-size: 11px;
+      line-height: 14px;
+      letter-spacing: 0.6em;
+      text-transform: uppercase;
+      color: #DEE895;
+    }
+
+    /* Main row: photos left, text right */
+    .workshop-row {
+      display: flex;
+      flex-direction: row;
+      justify-content: flex-end;
+      align-items: center;
+      gap: 40px;
+      width: 100%;
+      height: 718px;
+      flex: 1;
+    }
+
+    /* ── Photo grid (left) ── */
+    .workshop-photos {
+      display: flex;
+      flex-direction: column;
+      gap: 40px;
+      width: 806px;
+      height: 718px;
+      flex-shrink: 0;
+    }
+
+    .workshop-photo-main {
+      width: 100%;
+      flex: 1;
+      overflow: hidden;
+    }
+    .workshop-photo-main img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+
+    .workshop-photo-row {
+      display: flex;
+      flex-direction: row;
+      gap: 20px;
+      height: 256px;
+      flex-shrink: 0;
+    }
+
+    .workshop-photo-sm {
+      flex: 1;
+      height: 256px;
+      overflow: hidden;
+    }
+    .workshop-photo-sm img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+
+    /* ── Text column (right, bottom-aligned) ── */
+    .workshop-text {
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      gap: 20px;
+      width: 466px;
+      height: 718px;
+      flex-shrink: 0;
+    }
+
+    .workshop-heading {
+      font-family: 'Lora', serif;
+      font-weight: 400;
+      font-size: 40px;
+      line-height: 44px;
+      letter-spacing: -0.025em;
+      color: #F4F4EB;
+      margin: 0;
+    }
+
+    .workshop-body {
+      font-family: 'DM Sans', sans-serif;
+      font-weight: 400;
+      font-size: 17px;
+      line-height: 31px;
+      color: #F4F4EB;
+      margin: 0;
+    }
+
+    @media (max-width: 1024px) {
+      #cs-workshop       { padding: 48px 24px; min-height: auto; }
+      .workshop-row      { flex-direction: column; height: auto; }
+      .workshop-photos   { width: 100%; height: auto; }
+      .workshop-text     { width: 100%; height: auto; justify-content: flex-start; }
+      .workshop-heading  { font-size: 28px; line-height: 34px; }
+      .workshop-body     { font-size: 15px; line-height: 26px; }
+    }
+
+    /* ================================================================
+       09 — ITERATION V1 BUILT
+    ================================================================ */
+    #cs-v1 {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      padding: 64px;
+      gap: 40px;
+      background: #1A1C16;
+      width: 100%;
+      box-sizing: border-box;
+      min-height: 900px;
+    }
+
+    .v1-tag {
+      font-family: 'DM Sans', sans-serif;
+      font-weight: 700;
+      font-size: 11px;
+      line-height: 14px;
+      letter-spacing: 0.6em;
+      text-transform: uppercase;
+      color: #DEE895;
+    }
+
+    /* Main row */
+    .v1-row {
+      display: flex;
+      flex-direction: row;
+      justify-content: center;
+      align-items: center;
+      gap: 40px;
+      width: 100%;
+      height: 718px;
+      flex: 1;
+    }
+
+    /* Left text block */
+    .v1-text {
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      gap: 20px;
+      width: 522px;
+      height: 263px;
+      flex-shrink: 0;
+    }
+
+    .v1-heading {
+      font-family: 'Lora', serif;
+      font-weight: 400;
+      font-size: 40px;
+      line-height: 44px;
+      letter-spacing: -0.025em;
+      color: #F4F4EB;
+      margin: 0;
+    }
+
+    .v1-body {
+      font-family: 'DM Sans', sans-serif;
+      font-weight: 400;
+      font-size: 17px;
+      line-height: 31px;
+      color: #F4F4EB;
+      margin: 0;
+    }
+
+    /* Right panel — cream, overflow hidden clips the oversize images */
+    .v1-panel {
+      flex: 1;
+      height: 718px;
+      background: #F4F4EB;
+      position: relative;
+      overflow: hidden;
+      align-self: stretch;
+    }
+
+    /* Caption — top of panel */
+    .v1-caption {
+      position: absolute;
+      left: 29.19px;
+      top: 28.8px;
+      width: 637.67px;
+      font-family: 'DM Sans', sans-serif;
+      font-style: italic;
+      font-weight: 400;
+      font-size: 11px;
+      line-height: 17px;
+      color: #21281A;
+      z-index: 3;
+    }
+
+    /* Single image — offset from top-left with drop shadow */
+    .v1-img-1 {
+      position: absolute;
+      left: 9.12px;
+      top: 32px;
+      width: calc(100% - 9.12px);
+      height: calc(100% - 32px);
+      object-fit: cover;
+      object-position: top left;
+      filter: drop-shadow(-8.212px 15.056px 5.475px rgba(0,0,0,0.5));
+      transition: transform 0.45s cubic-bezier(0.4, 0, 0.2, 1),
+                  filter  0.45s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    .v1-img-1:hover {
+      transform: translateY(-10px) scale(1.02);
+      filter: drop-shadow(-10px 24px 16px rgba(0,0,0,0.65));
+    }
+
+    @media (max-width: 1024px) {
+      #cs-v1       { padding: 48px 24px; min-height: auto; }
+      .v1-row      { flex-direction: column; height: auto; }
+      .v1-text     { width: 100%; height: auto; }
+      .v1-panel    { width: 100%; height: 480px; }
+      .v1-heading  { font-size: 28px; line-height: 34px; }
+    }
+
+    /* ================================================================
+       10 — ITERATION V1 TESTED
+    ================================================================ */
+    #cs-v1-tested {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      padding: 64px;
+      gap: 40px;
+      background: #1A1C16;
+      width: 100%;
+      box-sizing: border-box;
+    }
+
+    /* Main two-column row */
+    .v1t-row {
+      display: flex;
+      flex-direction: row;
+      align-items: flex-start;
+      gap: 40px;
+      width: 100%;
+    }
+
+    /* Left: text */
+    .v1t-text {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+      width: 352px;
+      flex-shrink: 0;
+    }
+
+    .v1t-heading {
+      font-family: 'Lora', serif;
+      font-weight: 400;
+      font-size: 40px;
+      line-height: 44px;
+      letter-spacing: -0.025em;
+      color: #F4F4EB;
+      margin: 0;
+    }
+
+    .v1t-body {
+      font-family: 'DM Sans', sans-serif;
+      font-weight: 400;
+      font-size: 17px;
+      line-height: 31px;
+      color: #F4F4EB;
+      margin: 0;
+    }
+
+    /* Right: grid of context blocks + issues */
+    .v1t-right {
+      display: flex;
+      flex-direction: column;
+      gap: 40px;
+      flex: 1;
+      min-width: 0;
+    }
+
+    /* ── Context blocks: 920×521 container, 4 blocks absolutely placed ── */
+    /* Matches Frame 139 + Context_Block 1–4 from Figma exactly */
+    .v1t-grid {
+      position: relative;
+      width: 100%;
+      aspect-ratio: 920 / 521;
+    }
+
+    .v1t-block {
+      position: absolute;
+      background: #F4F4EB;
+      overflow: hidden;
+    }
+
+    /* Block positions — percentages derived from Figma absolute coords in 920×521 */
+    /* Block 1: left:0,  top:0,    width:450, height:250.5 */
+    .v1t-block-1 { left: 0%;      top: 0%;      width: 48.91%; height: 48.08%; }
+    /* Block 2: left:470, top:0 */
+    .v1t-block-2 { left: 51.09%;  top: 0%;      width: 48.91%; height: 48.08%; }
+    /* Block 3: left:0,  top:270.5 */
+    .v1t-block-3 { left: 0%;      top: 51.92%;  width: 48.91%; height: 48.08%; }
+    /* Block 4: left:470, top:270.5 */
+    .v1t-block-4 { left: 51.09%;  top: 51.92%;  width: 48.91%; height: 48.08%; }
+
+    /* Label — top-left of each block, padding: 16px, z-index above image */
+    .v1t-block-label {
+      position: absolute;
+      top: 0;
+      left: 0;
+      padding: 16px;
+      z-index: 2;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    /* Block 1 label spans full width; others are narrower so image shows through */
+    .v1t-block-1 .v1t-block-label { right: 0; }
+    .v1t-block-2 .v1t-block-label { right: 63.6%;  } /* 286/450 */
+    .v1t-block-3 .v1t-block-label { right: 46%;    } /* 207/450 */
+    .v1t-block-4 .v1t-block-label { right: 59.8%;  } /* 269/450 */
+
+    .v1t-block-title {
+      font-family: 'DM Sans', sans-serif;
+      font-weight: 600;
+      font-size: 15px;
+      line-height: 23px;
+      color: #21281A;
+    }
+
+    .v1t-block-stat {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-family: 'DM Sans', sans-serif;
+      font-weight: 400;
+      font-size: 12px;
+      line-height: 20px;
+      color: #21281A;
+    }
+
+    .v1t-block-stat::before {
+      content: '';
+      display: inline-block;
+      width: 14px;
+      height: 14px;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 14 14' fill='none'%3E%3Cpath d='M2 7.5L5.5 11L12 4' stroke='%2321281A' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+      background-size: contain;
+      background-repeat: no-repeat;
+      flex-shrink: 0;
+    }
+
+    /* Screenshot images — absolute, skewed per Figma */
+    /* Shared skew stays on `transform`; hover lift uses separate `translate` property */
+    .v1t-block-img {
+      position: absolute;
+      width: auto;
+      transform-origin: bottom right;
+      transform: matrix(1, 0.05, -0.14, 0.99, 0, 0);
+      transition: translate 0.4s cubic-bezier(0.4, 0, 0.2, 1),
+                  filter   0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .v1t-block:hover .v1t-block-img {
+      translate: 0 -10px;
+    }
+
+    /* Block 1 — lower-right corner, height:88% */
+    .v1t-block-1 .v1t-block-img {
+      right: 0;
+      bottom: 0;
+      height: 88%;
+      filter: drop-shadow(-5.24px 6.73px 3px rgba(0,0,0,0.5));
+    }
+
+    /* Block 2 — lower-right corner, height:82.8% */
+    .v1t-block-2 .v1t-block-img {
+      right: 0;
+      bottom: 0;
+      height: 82.8%;
+      filter: drop-shadow(-10.88px 8.46px 4.84px rgba(0,0,0,0.4));
+    }
+
+    /* Block 3 — left:44.7%, top:-4.2%, height:120.4% (already correct per Figma) */
+    .v1t-block-3 .v1t-block-img {
+      left: 44.7%;
+      top: -4.2%;
+      height: 120.4%;
+      transform-origin: top left;
+      filter: drop-shadow(-1.17px -8.17px 3.52px rgba(0,0,0,0.5));
+    }
+
+    /* Block 4 — lower-right corner, height:96.9% */
+    .v1t-block-4 .v1t-block-img {
+      right: 0;
+      bottom: 0;
+      height: 96.9%;
+      filter: drop-shadow(-4.49px 7.85px 0.78px rgba(0,0,0,0.5));
+    }
+
+    .v1t-block:hover .v1t-block-1 .v1t-block-img,
+    .v1t-block:hover .v1t-block-2 .v1t-block-img,
+    .v1t-block:hover .v1t-block-4 .v1t-block-img {
+      filter: drop-shadow(-8px 14px 10px rgba(0,0,0,0.6));
+    }
+
+    /* Bottom issues row */
+    .v1t-issues {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 40px;
+      width: 100%;
+    }
+
+    .v1t-issue {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .v1t-issue-tag {
+      font-family: 'DM Mono', monospace;
+      font-weight: 500;
+      font-size: 11px;
+      line-height: 14px;
+      letter-spacing: 0.0012em;
+      text-transform: uppercase;
+      color: #DEE895;
+    }
+
+    .v1t-issue-title {
+      font-family: 'DM Sans', sans-serif;
+      font-weight: 700;
+      font-size: 18px;
+      line-height: 23px;
+      color: #F4F4EB;
+      margin: 0;
+    }
+
+    .v1t-issue-body {
+      font-family: 'DM Sans', sans-serif;
+      font-weight: 400;
+      font-size: 14px;
+      line-height: 18px;
+      color: #F4F4EB;
+      margin: 0;
+    }
+
+    .v1t-issue-quote {
+      font-family: 'DM Sans', sans-serif;
+      font-style: italic;
+      font-weight: 400;
+      font-size: 14px;
+      line-height: 18px;
+      color: #F4F4EB;
+      margin: 0;
+    }
+
+    @media (max-width: 1024px) {
+      #cs-v1-tested  { padding: 48px 24px; }
+      .v1t-row       { flex-direction: column; }
+      .v1t-text      { width: 100%; }
+      .v1t-heading   { font-size: 28px; line-height: 34px; }
+      .v1t-body      { font-size: 15px; line-height: 26px; }
+      .v1t-grid      { aspect-ratio: 450 / 521; }
+      .v1t-block-2   { left: 0; top: 48.18%; }
+      .v1t-block-3   { top: 51.92%; }
+      .v1t-block-4   { left: 0; top: 75.82%; }
+      .v1t-issues    { grid-template-columns: 1fr; gap: 32px; }
+    }
+
+    /* ================================================================
+       11 — INTERFACE DESIGN
+    ================================================================ */
+    #cs-interface {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      padding: 64px;
+      gap: 40px;
+      width: 100%;
+      height: 900px;
+      background: #1A1C16;
+      flex: none;
+      align-self: stretch;
+      overflow: hidden;
+    }
+
+    .iface-tag {
+      font-family: 'DM Sans', sans-serif;
+      font-weight: 700;
+      font-size: 11px;
+      line-height: 14px;
+      letter-spacing: 0.6em;
+      text-transform: uppercase;
+      color: #DEE895;
+      flex: none;
+    }
+
+    /* Frame 140 */
+    .iface-content {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 20px;
+      width: 100%;
+      flex-grow: 1;
+      align-self: stretch;
+    }
+
+    /* Frame 137 — two-column heading row */
+    .iface-header-row {
+      display: flex;
+      flex-direction: row;
+      justify-content: center;
+      align-items: flex-start;
+      gap: 40px;
+      width: 100%;
+      flex: none;
+    }
+
+    .iface-heading {
+      font-family: 'Lora', serif;
+      font-style: normal;
+      font-weight: 400;
+      font-size: 40px;
+      line-height: 44px;
+      letter-spacing: -0.025em;
+      color: #F4F4EB;
+      width: 600px;
+      flex-shrink: 0;
+      margin: 0;
+    }
+
+    .iface-lead {
+      font-family: 'DM Sans', sans-serif;
+      font-style: normal;
+      font-weight: 700;
+      font-size: 17px;
+      line-height: 31px;
+      color: #F4F4EB;
+      flex: 1;
+      margin: 0;
+    }
+
+    /* Cream panel — Heuristic Design */
+    .iface-panel {
+      position: relative;
+      width: 100%;
+      flex-grow: 1;
+      background: #F4F4EB;
+      overflow: hidden;
+      display: flex;
+      flex-direction: row;
+      align-items: flex-start;
+    }
+
+    /* "Scan first. Read never." caption — left side */
+    .iface-panel-caption {
+      position: absolute;
+      left: 78px;
+      top: 80px;
+      font-family: 'DM Sans', sans-serif;
+      font-style: normal;
+      font-weight: 400;
+      font-size: 24px;
+      line-height: 31px;
+      color: #21281A;
+      z-index: 2;
+      pointer-events: none;
+      width: 340px;
+    }
+
+    /* Scrolling dashboard container — right side */
+    .iface-dashboard {
+      position: absolute;
+      right: -40px;
+      top: 0;
+      width: 58%;
+      height: 100%;
+      overflow: hidden;
+      transform: matrix(1, 0.09, -0.26, 0.97, 0, 0);
+      transform-origin: top right;
+      filter: drop-shadow(-16px 20px 32px rgba(0,0,0,0.22));
+      border-radius: 12px 12px 0 0;
+    }
+
+    .iface-dashboard img {
+      width: 100%;
+      height: auto;
+      display: block;
+      border-radius: 12px 12px 0 0;
+      /* Auto-scroll animation — simulates animated GIF scrolling through dashboard */
+      animation: dashboard-scroll 18s linear infinite;
+      animation-delay: 1s;
+    }
+
+    @keyframes dashboard-scroll {
+      0%   { transform: translateY(0); }
+      90%  { transform: translateY(calc(-100% + var(--panel-h, 500px))); }
+      100% { transform: translateY(calc(-100% + var(--panel-h, 500px))); }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .iface-dashboard img { animation: none; }
+    }
+
+    @media (max-width: 1024px) {
+      #cs-interface      { height: auto; padding: 48px 24px; }
+      .iface-header-row  { flex-direction: column; }
+      .iface-heading     { width: 100%; font-size: 28px; line-height: 34px; }
+      .iface-panel       { min-height: 380px; }
+      .iface-panel-caption { font-size: 18px; left: 24px; top: 24px; width: auto; }
+      .iface-dashboard   { width: 70%; right: -20px; }
+    }
+
+    @media (max-width: 768px) {
+      .iface-dashboard   { width: 90%; right: -10px; }
+    }
+
   </style>
 </head>
 <body>
 
+  <div id="cs-progress" role="progressbar" aria-label="Reading progress"></div>
+
   <!-- Cursor -->
   <div id="custom-cursor" aria-hidden="true">
-    <img src="../assets/cursor-light.png" alt="" width="1003" height="830">
+    <img src="../Asset/cursor-light.png" alt="" width="52" height="52">
   </div>
 
-  <!-- Sticky section nav -->
-  <nav class="cs-sticky-nav" aria-label="Section navigation">
-    <a class="cs-snav-item" href="#cs-problem"> <span class="cs-snav-dot"></span><span class="cs-snav-label">Problem</span></a>
-    <a class="cs-snav-item" href="#cs-decision"><span class="cs-snav-dot"></span><span class="cs-snav-label">Decision</span></a>
-    <a class="cs-snav-item" href="#cs-fixes">   <span class="cs-snav-dot"></span><span class="cs-snav-label">Fixes</span></a>
-    <a class="cs-snav-item" href="#cs-outcome"> <span class="cs-snav-dot"></span><span class="cs-snav-label">Outcome</span></a>
-    <a class="cs-snav-item" href="#cs-coda">    <span class="cs-snav-dot"></span><span class="cs-snav-label">Reflection</span></a>
-  </nav>
-
-  <!-- Progress + Nav -->
-  <div id="cs-progress" role="progressbar" aria-label="Reading progress"></div>
+  <!-- Nav -->
   <nav class="cs-nav" aria-label="Case study navigation">
-    <a class="cs-nav-back" href="../index.html#work">
-      <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M10 3L5 8l5 5"/></svg>
-      Back
-    </a>
-    <div class="cs-nav-right">
-      <button class="cs-nav-theme" id="theme-toggle" aria-label="Toggle dark mode">☀</button>
-      <a class="cs-nav-cta" href="https://arvo-ai.figma.site/" target="_blank" rel="noopener">Try prototype →</a>
-    </div>
+    <a class="cs-nav-back" href="../index.html">Back</a>
+    <span class="cs-nav-divider"></span>
+    <span class="cs-nav-logo">ARVO</span>
   </nav>
 
-  <!-- ── 00 HERO ── -->
-  <section class="cs-section cs-hero" id="cs-hero" data-gsap="reveal" aria-label="ARVO case study">
-    <div class="cs-hero-bg" aria-hidden="true"></div>
-    <div class="cs-hero-inner">
-      <div>
-        <h1 class="cs-hero-h1" data-gsap="headline">
-          A startup hired us<br>
-          to fix <em>seven</em> problems.<br>
-          We fixed <em>two.</em><br>
-          Here's why that<br>
-          was exactly right.
-        </h1>
-        <p class="cs-hero-sub">Six weeks. A team of six. A client who needed convincing. And a usability study that required uncomfortable honesty from everyone in the room.</p>
-        <a class="cs-hero-cta" href="#cs-problem">Read the story ↓</a>
+  <!-- ══════════════════════════════════════
+       01  HERO
+  ══════════════════════════════════════ -->
+  <section id="cs-hero" aria-label="ARVO — hero">
+
+    <div class="hero-text">
+      <div class="hero-title-group">
+        <h1 class="hero-title">ARVO.</h1>
+        <p class="hero-sub">Designing an AI manager copilot so managers can lead, not administrate.</p>
       </div>
-      <aside class="cs-hero-meta" aria-label="Project details">
-        <div class="cs-meta-row">
-          <span class="cs-meta-label">Role</span>
-          <span class="cs-meta-value">Project Lead PM+UX</span>
-        </div>
-        <div class="cs-meta-row">
-          <span class="cs-meta-label">Team</span>
-          <span class="cs-meta-value">6 Designers</span>
-        </div>
-        <div class="cs-meta-row">
-          <span class="cs-meta-label">Methods</span>
-          <span class="cs-meta-value">Moderated sessions, co-creation workshop, prototype testing</span>
-        </div>
-        <div class="cs-meta-row">
-          <span class="cs-meta-label">Type</span>
-          <span class="cs-meta-value">B2B HR Tech SaaS</span>
-        </div>
-        <div class="cs-meta-row">
-          <span class="cs-meta-label">Deliverable</span>
-          <span class="cs-meta-value">Strategic roadmap + production-ready design</span>
-        </div>
-        <div class="cs-meta-row">
-          <span class="cs-meta-label">Duration</span>
-          <span class="cs-meta-value">6-week sprint, Feb–Mar 2026</span>
-        </div>
-        <div class="cs-meta-row">
-          <span class="cs-meta-label">Read</span>
-          <span class="cs-meta-value">~8 min</span>
-        </div>
-      </aside>
     </div>
+
+    <div class="hero-media">
+      <video autoplay loop muted playsinline preload="auto">
+        <source src="../Asset/arvo-hero.mp4" type="video/mp4">
+      </video>
+    </div>
+
   </section>
 
-  <!-- ── ACT 1: THE PROBLEM ── -->
-  <section class="cs-section cs-section--dark" id="cs-problem" data-gsap="reveal" aria-label="The problem">
-    <div class="cs-inner">
-      <p class="cs-section-label">01 The Problem</p>
-      <h2 class="cs-h2" data-gsap="headline"><em>83%</em> of managers quit<br>before finishing the session.</h2>
+  <!-- ══════════════════════════════════════
+       02  ABOUT
+  ══════════════════════════════════════ -->
+  <section id="cs-about" aria-label="About ARVO">
 
-      <!-- Stats -->
-      <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:clamp(24px,4vw,56px);margin:clamp(40px,5vw,64px) 0;">
-        <div>
-          <p class="cs-stat-hero" style="font-size:clamp(80px,12vw,120px);">83%</p>
-          <span class="cs-stat-hero-label">Rejection rate — Round 1</span>
-          <p style="font-family:var(--font-mono);font-size:11px;color:rgba(255,255,255,0.45);margin-top:8px;line-height:1.5;">10 of 12 managers gave up before completing a single task on the original dashboard.</p>
-        </div>
-        <div>
-          <p class="cs-stat-hero" style="font-size:clamp(56px,8vw,88px);">12</p>
-          <span class="cs-stat-hero-label">Moderated sessions</span>
-          <p style="font-family:var(--font-mono);font-size:11px;color:rgba(255,255,255,0.45);margin-top:8px;line-height:1.5;">Managers across 8 industries — the exact users ARVO would live or die by.</p>
-        </div>
-        <div>
-          <p class="cs-stat-hero" style="font-size:clamp(56px,8vw,88px);">5</p>
-          <span class="cs-stat-hero-label">Friction points found</span>
-          <p style="font-family:var(--font-mono);font-size:11px;color:rgba(255,255,255,0.45);margin-top:8px;line-height:1.5;">Every session revealed the same pattern: the tool meant to save time was consuming it.</p>
+    <div class="about-row">
+
+      <!-- Left: heading + stats -->
+      <div class="about-left">
+        <p class="about-heading">I led the product and UX strategy for ARVO, an AI manager copilot. Before any design work started, our team needed to know: was this even a design problem?</p>
+
+        <div class="about-stats">
+          <div class="about-stat">
+            <span class="about-stat-num">12 of 13</span>
+            <span class="about-stat-label">Users completed flows without facilitation.</span>
+          </div>
+          <div class="about-stat">
+            <span class="about-stat-num">3 mins</span>
+            <span class="about-stat-label">average task completion time</span>
+          </div>
+          <div class="about-stat">
+            <span class="about-stat-num">2 of 7</span>
+            <span class="about-stat-label">features scoped; the most important call made.</span>
+          </div>
         </div>
       </div>
 
-      <p class="cs-body">Ten of twelve managers quit before finishing the session. The dashboard was supposed to surface team health signals (indicators of how a team is doing — stress, workload, risk) in minutes — but interpreting it took longer than the insight was worth.</p>
+      <!-- Right: metadata + CTA -->
+      <div class="about-right">
 
-      <!-- A1: Original dashboard screenshot -->
-      <figure class="cs-bleed" style="margin-top:44px;">
-        <div class="browser-mock">
-          <div class="browser-mock__bar">
-            <span class="browser-mock__dot"></span>
-            <span class="browser-mock__dot"></span>
-            <span class="browser-mock__dot"></span>
-            <div class="browser-mock__url">app.arvo.io/dashboard</div>
-          </div>
-          <div class="browser-mock__screen">
-            <img src="../assets/images/arvo-original-dashboard.png" alt="Original ARVO dashboard — dense text layout that 83% of managers abandoned before completing a task" loading="lazy" width="1400" height="900" style="width:100%;height:auto;display:block;">
+        <div class="about-meta-item">
+          <span class="about-meta-tag">ROLE</span>
+          <span class="about-meta-val">Project Lead</span>
+        </div>
+
+        <div class="about-meta-item">
+          <span class="about-meta-tag">TEAM</span>
+          <span class="about-meta-val">3 UX Researchers · 2 UI Designers · 1 PM</span>
+        </div>
+
+        <div class="about-meta-item">
+          <span class="about-meta-tag">SPRINT</span>
+          <div style="display:flex;flex-direction:column;gap:5px;">
+            <span class="about-meta-val">6 weeks (Jan – Mar 2026)</span>
+            <span class="about-meta-val">Discover → Build → Test → Handover</span>
           </div>
         </div>
-        <figcaption style="font-size:12px;color:rgba(255,255,255,0.3);margin-top:12px;font-family:var(--font-mono);letter-spacing:0.08em;text-align:center;">"A report I have to read, not a tool I can use." — Manager F, Round 1</figcaption>
-      </figure>
+
+        <div class="about-meta-item">
+          <span class="about-meta-tag">PARTICIPANTS</span>
+          <span class="about-meta-val">25 managers tested across 2 rounds</span>
+        </div>
+
+        <div class="about-meta-item">
+          <span class="about-meta-tag">METHODS</span>
+          <span class="about-meta-val">User interview, usability testing, competitive analysis, workshop facilitation, research, strategy, scoping, design, client management</span>
+        </div>
+
+        <div class="about-meta-item">
+          <span class="about-meta-tag">OUTCOME</span>
+          <span class="about-meta-val">2 resolved · 5 escalated</span>
+        </div>
+
+        <a class="about-cta" href="#"><span>View Demo →</span></a>
+
+      </div>
     </div>
+
   </section>
 
-  <!-- ── ACT 2: THE DECISION ── -->
-  <section class="cs-section" id="cs-decision" data-gsap="reveal" aria-label="The decision">
-    <div class="cs-inner">
-      <p class="cs-section-label">02 The Decision</p>
-      <h2 class="cs-h2" data-gsap="headline">Seven problems.<br><em>Two</em> we could fix.</h2>
-      <p class="cs-body">We mapped every friction point from twelve sessions into three buckets: design problems, product-level decisions, and out-of-scope issues — only the founder could unlock the third category.</p>
+  <!-- ══════════════════════════════════════
+       03  FINAL PROTOTYPE
+  ══════════════════════════════════════ -->
+  <section id="cs-proto" aria-label="Final prototype">
+    <div class="proto-inner">
+      <div class="proto-row">
 
-      <!-- Problem map -->
-      <div class="problem-list" role="list" aria-label="Seven problems mapped">
-        <div class="problem-row" role="listitem">
-          <span class="problem-dot problem-dot--fix" aria-hidden="true"></span>
-          <div>
-            <p class="problem-name">Cognitive Overload</p>
-            <p class="problem-sub">Dashboard reads like a static report — 67% missed critical signals entirely</p>
-          </div>
-          <span class="problem-badge problem-badge--fix">We fix this</span>
+        <!-- Left: large feature -->
+        <div class="proto-feature">
+          <img src="../Asset/arvo-proto-feature.png" alt="ARVO final prototype — laptop mockup">
         </div>
-        <div class="problem-row" role="listitem">
-          <span class="problem-dot problem-dot--fix" aria-hidden="true"></span>
-          <div>
-            <p class="problem-name">Jargon Friction</p>
-            <p class="problem-sub">92% couldn't act on labels like "Strengths-use fit" or "Execution risk"</p>
-          </div>
-          <span class="problem-badge problem-badge--fix">We fix this</span>
-        </div>
-        <div class="problem-row" role="listitem">
-          <span class="problem-dot problem-dot--biz" aria-hidden="true"></span>
-          <div>
-            <p class="problem-name">Anonymity Gap</p>
-            <p class="problem-sub">67% didn't trust responses couldn't be traced — needs a product-level architecture decision</p>
-          </div>
-          <span class="problem-badge problem-badge--biz">Client decision</span>
-        </div>
-        <div class="problem-row" role="listitem">
-          <span class="problem-dot problem-dot--biz" aria-hidden="true"></span>
-          <div>
-            <p class="problem-name">Manager Authority Gap</p>
-            <p class="problem-sub">58% felt powerless — recommendations required HR authority managers don't have</p>
-          </div>
-          <span class="problem-badge problem-badge--biz">Client decision</span>
-        </div>
-        <div class="problem-row" role="listitem">
-          <span class="problem-dot problem-dot--biz" aria-hidden="true"></span>
-          <div>
-            <p class="problem-name">Survey Fatigue</p>
-            <p class="problem-sub">Weekly check-ins felt like "another task" — frequency is a product strategy call</p>
-          </div>
-          <span class="problem-badge problem-badge--biz">Client decision</span>
-        </div>
-        <div class="problem-row" role="listitem">
-          <span class="problem-dot problem-dot--scope" aria-hidden="true"></span>
-          <div>
-            <p class="problem-name">Digital Homework Trap</p>
-            <p class="problem-sub">Checklists felt like admin — partially addressed via calendar integration</p>
-          </div>
-          <span class="problem-badge problem-badge--scope">Partially addressed</span>
-        </div>
-        <div class="problem-row" role="listitem">
-          <span class="problem-dot problem-dot--scope" aria-hidden="true"></span>
-          <div>
-            <p class="problem-name">AI Output Jargon</p>
-            <p class="problem-sub">AI-generated labels were too academic — mitigated in our plain-English taxonomy work</p>
-          </div>
-          <span class="problem-badge problem-badge--scope">Partially addressed</span>
-        </div>
-      </div>
 
-      <!-- 2 of 7 stat -->
-      <div class="stat-grid" style="grid-template-columns:1fr 1fr;max-width:440px;margin-bottom:48px;">
-        <div class="stat-cell">
-          <p class="stat-num">2</p>
-          <p class="stat-label">Problems we scoped</p>
-          <p class="stat-desc">Cognitive overload + jargon</p>
+        <!-- Right: two sub images -->
+        <div class="proto-subs">
+          <div class="proto-sub proto-sub--2">
+            <img src="../Asset/arvo-proto-sub-2.png?v=2" alt="ARVO dashboard — energy trend view">
+          </div>
+          <div class="proto-sub proto-sub--1">
+            <img src="../Asset/arvo-proto-sub-1.png?v=2" alt="ARVO — critical alerts and priority actions">
+          </div>
         </div>
-        <div class="stat-cell">
-          <p class="stat-num">7</p>
-          <p class="stat-label">Total mapped</p>
-          <p class="stat-desc">Five returned to client — three from research, two surfaced during usability testing.</p>
-        </div>
-      </div>
 
-      <!-- A2: Research synthesis — cs-split -->
-      <div class="cs-split" style="margin-top:36px;align-items:center;">
-        <p class="cs-body">Before any design work started, we ran a co-creation session with the ARVO team to agree which battles were ours to fight. Shared ownership before any solution was named.</p>
-        <figure>
-          <img src="../assets/arvo-research-synthesis.png" alt="Research synthesis — findings mapped from 12 moderated sessions across 8 industries" loading="lazy" style="width:100%;height:auto;display:block;border-radius:8px;box-shadow:0 4px 20px rgba(0,0,0,0.1);">
-          <p class="cs-img-cap">Research synthesis — 12 sessions, 8 industries, before anything went into Figma.</p>
-        </figure>
-      </div>
-
-      <!-- ── THE BRIGHTSPOT ── -->
-      <div style="margin-top:52px;border-left:3px solid var(--arvo-green);background:rgba(150,171,30,0.07);border-radius:0 12px 12px 0;padding:28px 32px;">
-        <div style="display:flex;align-items:center;gap:10px;margin-bottom:12px;">
-          <span style="font-size:15px;line-height:1;color:var(--arvo-green);" aria-hidden="true">★</span>
-          <span style="font-family:var(--font-mono);font-size:10px;text-transform:uppercase;letter-spacing:0.12em;color:var(--arvo-green);">The Brightspot</span>
-        </div>
-        <h3 style="font-family:var(--font-display);font-size:clamp(20px,2.5vw,26px);font-weight:400;color:var(--ink);margin-bottom:12px;line-height:1.2;" data-gsap="headline">One thing we didn't touch.</h3>
-        <p class="cs-body" style="margin-bottom:0;">Energizers &amp; Drainers — the one section managers actually opened without being prompted. Most of the dashboard was ignored. This wasn't. Our recommendation: protect it. Don't redesign what's working.</p>
       </div>
     </div>
   </section>
 
-  <!-- ── ACT 3: THE FIXES ── -->
-  <section class="cs-section" id="cs-fixes" data-gsap="reveal" aria-label="The design fixes">
-    <div class="cs-inner">
-      <p class="cs-section-label">03 The Fixes</p>
-      <h2 class="cs-h2" data-gsap="headline">Two problems.<br><em>Two decisions.</em></h2>
-      <p class="cs-body" style="margin-bottom:56px;">We scoped hard and fixed properly. Every decision traces back to something a real manager told us in session.</p>
+  <!-- ══════════════════════════════════════
+       04  CONTEXT
+  ══════════════════════════════════════ -->
+  <section id="cs-context" aria-label="Context">
 
-      <!-- Fix 01: Cognitive Overload -->
-      <div class="decision-box">
-        <span class="decision-badge">Fix 01 — Cognitive Overload</span>
-        <p class="decision-problem">Dense text. Critical signals missed by 67%.</p>
-        <p class="decision-body">Everything competed for attention at once — managers scanned straight past at-risk alerts because the dashboard read like a report. One colour, one number, immediate meaning. No interpretation required.</p>
-        <span class="decision-arrow">→ Traffic-light dials</span>
-      </div>
-      <!-- A3 full-bleed -->
-      <figure class="cs-bleed" style="margin-top:32px;margin-bottom:clamp(48px,6vw,80px);">
-        <img src="../assets/arvo-designfixes-4.gif"
-             alt="Before: Dense text widget. After: Traffic-light dial showing the same data without requiring reading."
-             data-video-fallback="../assets/arvo-designfixes-1.mp4"
-             style="width:100%;height:auto;display:block;"
-             loading="lazy">
-        <p class="cs-img-cap">Dense text widget (before) → Traffic-light dial (after). Same data. One requires reading. One doesn't.</p>
-      </figure>
+    <span class="ctx-section-tag">Context</span>
 
-      <!-- Fix 02: Jargon Friction -->
-      <div class="decision-box">
-        <span class="decision-badge">Fix 02 — Jargon Friction</span>
-        <p class="decision-problem">Labels 50% (6/12) of experienced managers found too generic to act on.</p>
-        <p class="decision-body">Terms like "Strengths-use fit at 2.2" are meaningful in research. Paralyzing at 9am. We rewrote every AI label into plain English — not dumbed down, just usable. The content didn't change. The trust did.</p>
-        <span class="decision-arrow">→ Plain-English taxonomy</span>
+    <div class="ctx-content">
+
+      <!-- Heading -->
+      <div class="ctx-heading">
+        <h2 class="ctx-h2">Managers aren't underperforming. They're under-supported.</h2>
+        <p class="ctx-lead">ARVO's vision was right, but adoption was low. Before opening Figma, the team needed to understand whether it was entirely a design flaw at all.</p>
       </div>
-      <!-- A4 full-bleed -->
-      <figure class="cs-bleed" style="margin-top:32px;">
-        <div class="cs-before-after" style="border-radius:0;">
-          <div class="cs-ba-labels">
-            <span class="cs-ba-label cs-ba-before">Academic jargon · 50% couldn't act</span>
-            <span class="cs-ba-label cs-ba-after">Plain English · Immediate clarity</span>
+
+      <!-- 3 cards -->
+      <div class="ctx-cards">
+
+        <!-- Card 1 -->
+        <div class="ctx-card ctx-card--1">
+          <div class="ctx-card-text">
+            <div class="ctx-card-text-inner">
+              <div class="ctx-card-text-body">
+                <h3 class="ctx-card-title">Managers had no time to read</h3>
+                <p class="ctx-card-body">10 of 12 managers spent 70–90% of their week on execution. A dashboard that required reading before it let you act wasn't helping.</p>
+              </div>
+              <span class="ctx-card-badge">Unactionable</span>
+            </div>
           </div>
-          <img src="../assets/images/arvo-label-comparison.png" alt="Before: Academic HR labels like 'Strengths-use fit'. After: Plain-English equivalents managers can immediately act on." loading="lazy" width="1450" height="742" style="width:100%;height:auto;display:block;">
+          <img class="ctx-card-img" src="../Asset/arvo-context-1.png?v=2" alt="Document screenshot — managers had no time to read">
         </div>
-        <p class="cs-img-cap">Academic terminology (before) → plain English (after). The argument is about language, not layout.</p>
-      </figure>
+
+        <!-- Card 2 -->
+        <div class="ctx-card ctx-card--2">
+          <div class="ctx-card-text">
+            <div class="ctx-card-text-inner">
+              <div class="ctx-card-text-body">
+                <h3 class="ctx-card-title">The signals were buried</h3>
+                <p class="ctx-card-body">Critical team alerts sat below paragraphs of passive copy with no visual hierarchy. 8 of 12 managers skimmed past them entirely.</p>
+              </div>
+              <span class="ctx-card-badge">Critical Signals Missed</span>
+            </div>
+          </div>
+          <img class="ctx-card-img" src="../Asset/arvo-context-2.png?v=2" alt="Document screenshot — signals were buried">
+        </div>
+
+        <!-- Card 3 -->
+        <div class="ctx-card ctx-card--3">
+          <div class="ctx-card-text">
+            <div class="ctx-card-text-inner">
+              <div class="ctx-card-text-body">
+                <h3 class="ctx-card-title">The language was academic, not practical</h3>
+                <p class="ctx-card-body">"Micro-experiment," "Emotional Labor," "Privacy Threshold" confused 11 of 12 managers. The platform was speaking HR textbook. Its users were thinking in deadlines.</p>
+              </div>
+              <span class="ctx-card-badge">Complex Jargons</span>
+            </div>
+          </div>
+          <img class="ctx-card-img" src="../Asset/arvo-context-3.png?v=2" alt="Document screenshot — complex jargon">
+        </div>
+
+      </div>
+    </div>
+
+  </section>
+
+  <!-- ══════════════════════════════════════
+       05  CHALLENGE
+  ══════════════════════════════════════ -->
+  <section id="cs-challenge" class="challenge-section" aria-label="Challenge">
+    <div class="challenge-inner">
+
+      <div class="challenge-text">
+        <p>Before jumping right into tackling a UI redesign, we needed to figure out how ARVO is suppose to
+          <strong>effectively supplement managers' workflow</strong> without adding more admin.
+        </p>
+      </div>
+
+      <div class="challenge-image-frame">
+        <div class="challenge-image-rotated">
+          <div class="challenge-image-inner">
+            <img src="../Asset/arvo-challenge.png" alt="ARVO dashboard on two iPads" class="challenge-img" />
+          </div>
+        </div>
+      </div>
+
     </div>
   </section>
 
-  <!-- ── ACT 4: OUTCOME ── -->
-  <section class="cs-section" id="cs-outcome" data-gsap="reveal" aria-label="The outcome">
-    <div class="cs-inner">
-      <p class="cs-section-label">04 Outcome</p>
+  <!-- ══════════════════════════════════════
+       06  JOURNEY
+  ══════════════════════════════════════ -->
+  <section id="cs-journey" class="journey-section" aria-label="Journey">
 
-      <!-- A5 at top — first element in section -->
-      <figure class="outcome-lead-img cs-bleed">
-        <div class="browser-mock">
-          <div class="browser-mock__bar">
-            <span class="browser-mock__dot"></span>
-            <span class="browser-mock__dot"></span>
-            <span class="browser-mock__dot"></span>
-            <div class="browser-mock__url">app.arvo.io/dashboard · redesigned</div>
-          </div>
-          <div class="browser-mock__screen">
-            <img src="../assets/images/arvo-final-dashboard.png" alt="Redesigned ARVO dashboard — traffic-light dials and plain-English labels. 93% of testers understood team health in under three minutes." loading="lazy" width="1400" height="900" style="width:100%;height:auto;display:block;">
-          </div>
-        </div>
-      </figure>
+    <span class="journey-tag">Journey</span>
 
-      <h2 class="cs-h2" data-gsap="headline"><em>93%</em> understood it<br>in under three minutes.</h2>
-
-      <!-- Stats -->
-      <div class="stat-grid">
-        <div class="stat-cell">
-          <p class="stat-num">93%</p>
-          <p class="stat-label">Instant comprehension — Round 2</p>
-          <p class="stat-desc">Managers read team health without reading a sentence. Round 1 baseline: 17%.</p>
-        </div>
-        <div class="stat-cell">
-          <p class="stat-num">13</p>
-          <p class="stat-label">Testers — Round 2</p>
-          <p class="stat-desc">Fresh pool of managers. Neither problem from Round 1 appeared again.</p>
-        </div>
-        <div class="stat-cell">
-          <p class="stat-num">2 of 7</p>
-          <p class="stat-label">Problems resolved by design</p>
-          <p class="stat-desc">Five returned to client — three from research, two surfaced during usability testing. Not a design failure, but a boundary.</p>
-        </div>
+    <!-- Heading + body -->
+    <div class="journey-header-row">
+      <div class="journey-heading-wrap">
+        <h2 class="journey-heading">Six weeks. Two cohorts. The process changed shape twice.</h2>
       </div>
-
-      <p class="cs-body">Presenting the three unresolved problems was the hardest facilitation moment of the project. A designer who papers over business-logic failures with prettier screens isn't solving problems — they're delaying them.</p>
-
-      <!-- Eileen pull quote -->
-      <div class="pull-quote-wrap">
-        <div class="pull-quote-marks" aria-hidden="true">"</div>
-        <blockquote>
-          <p class="pull-quote-text">"Working with this team was a genuinely impressive experience. From the outset, they handled all project concerns with professionalism and responsiveness. What stood out most was their user research capability — they recruited the right profiles within a very short timeframe, and conducted interviews in a manner that participants described as approachable, friendly, and open. Their design recommendations were methodically tested and immediately actionable, directly strengthening the product's user experience. The final mockups reflected a level of craft and polish I wouldn't hesitate to put in front of investors or clients. Any organisation looking to undertake serious UX work would be fortunate to have this team."</p>
-          <footer class="pull-quote-attr">Eileen Zhang · Founder, ARVO · 2026</footer>
-        </blockquote>
+      <div class="journey-body-col">
+        <p>Round 1 tested the original platform. Round 2 tested our first attempt at fixing it. Each round told us what was broken, then what we'd got right, and what we'd missed.</p>
+        <p>In round 1, we asked 12 managers across 8 industries how managers handle people-development today, and where does their trust around anonymous data sit? Then we gave them the original ARVO platform and three tasks. The most revealing was a timed 3-minute check: extract for the most critical team insight before your next "hypothetical" meeting. <strong>Most ran out of time.</strong></p>
+        <p>Five issues resulted and while two were easily resolved by design the rest aren't on the screen.</p>
       </div>
     </div>
+
+    <!-- Journey illustration -->
+    <img class="journey-cards-img" src="../Asset/arvo-journey.png" alt="ARVO research journey — 6 steps from interviews to outcome" loading="lazy" />
+
   </section>
 
-  <!-- ── CODA: REFLECTION ── -->
-  <section class="cs-section cs-section--dark" id="cs-coda" data-gsap="reveal" aria-label="Reflection">
-    <div class="cs-inner">
-      <p class="cs-section-label">05 Reflection</p>
-      <h2 class="cs-h2" data-gsap="headline">What leading this<br>actually <em>taught me.</em></h2>
-      <p class="cs-body" style="max-width:640px;margin-bottom:48px;">The hardest skill in this project wasn't designing the interface — it was telling a founder that three of her seven problems weren't ours to solve.</p>
+  <!-- ══════════════════════════════════════
+       07  RESEARCH
+  ══════════════════════════════════════ -->
+  <section id="cs-research" aria-label="Research">
 
-      <div class="retro-grid">
-        <div class="retro-card">
-          <span class="retro-dot" style="background:#c8a840;"></span>
-          <div>
-            <p class="retro-title">Hold the design boundary — out loud</p>
-            <p class="retro-body">Knowing where design ends isn't enough. Explaining that boundary in a way that feels like partnership, not refusal, takes preparation — I wrote the client brief for the three business problems before the final presentation.</p>
-          </div>
-        </div>
-        <div class="retro-card">
-          <span class="retro-dot" style="background:var(--arvo-green);"></span>
-          <div>
-            <p class="retro-title">Workshop structure is leadership structure</p>
-            <p class="retro-body">How you run a co-creation session shapes what a client accepts afterwards. Opening with user quotes before any findings was deliberate — it changed the tone from critique to shared investigation.</p>
-          </div>
-        </div>
-        <div class="retro-card">
-          <span class="retro-dot" style="background:#d94a4a;"></span>
-          <div>
-            <p class="retro-title">Scope decisions are the hardest decisions</p>
-            <p class="retro-body">Fixing three things well beats fixing seven partially. Holding scope against a client who wants everything solved at once was harder than the design work itself.</p>
-          </div>
-        </div>
+    <span class="research-tag">Research</span>
+
+    <div class="research-row">
+
+      <!-- Left: heading + body -->
+      <div class="research-left">
+        <h2 class="research-heading">Turned insights into principles for what "good" looks like</h2>
+        <p class="research-body">Research told us what managers didn't like. Still it pointed us in the direction of what good design could possibly look like. These five principles came from what managers said and became the rules every design decision was tested against.</p>
       </div>
 
-      <div class="cs-case-nav">
-        <a class="cs-case-nav-link" href="pethaus.html">← Paw Haus</a>
-        <a class="cs-case-nav-link" href="seletar.html">Seletar Airport →</a>
+      <!-- Right: cream panel -->
+      <div class="research-panel">
+
+        <!-- Image -->
+        <div class="research-panel-img-wrap">
+          <img class="research-panel-img" src="../Asset/arvo-research-v0.png" alt="Research Round 1 — manager insights" data-cache-bust="true" />
+        </div>
+
+        <!-- Principles -->
+        <div class="research-panel-right">
+          <p class="research-panel-label">What managers wanted</p>
+          <div class="research-principles">
+
+            <div class="research-principle" data-index="1">
+              <p class="rp-title">01&nbsp;&nbsp;3 minutes read or it'll be ignored</p>
+              <p class="rp-note">Manager's Paradox — 10 of 12 managers care about their team but spend 70–80% of their week on execution. So this report cannot take more than 3 minutes or it'll be pointless to use.</p>
+            </div>
+
+            <div class="research-principle" data-index="2">
+              <p class="rp-title">02&nbsp;&nbsp;Scan first. Read never.</p>
+              <p class="rp-note">Cognitive method — 8 of 12 managers skimmed past alerts entirely because it was buried below dense rows of passive reporting.</p>
+            </div>
+
+            <div class="research-principle" data-index="3">
+              <p class="rp-title">03&nbsp;&nbsp;No jargon. Manager language only</p>
+              <p class="rp-note">Jargon &amp; management 101 — 11 of 12 managers were confused by complex terms like 'micro-experiment', 'emotional labour' and 'privacy threshold'. For a quick read it left managers with more questions.</p>
+            </div>
+
+            <div class="research-principle" data-index="4">
+              <p class="rp-title">04&nbsp;&nbsp;Earn trust before asking for it</p>
+              <p class="rp-note">Heavenly Gap — 9 of 12 managers were confident about being able to identify who wrote comments/survey responses; anonymous data is only useful if people believed it is.</p>
+            </div>
+
+            <div class="research-principle" data-index="5">
+              <p class="rp-title">05&nbsp;&nbsp;Visible and actionable, or neither</p>
+              <p class="rp-note">Structural Resignation — 7 of 12 managers were frustrated to be shown systemic problems where they had no authority to fix. Less control, more stress, no improvement to visibility.</p>
+            </div>
+
+          </div>
+        </div>
+
       </div>
+
     </div>
+
   </section>
 
-  <!-- CONTACT FOOTER -->
-  <footer style="background:#1f2b1f;padding:clamp(80px,10vw,140px) clamp(32px,7vw,112px) clamp(48px,6vw,80px);" aria-label="Contact">
-    <h2 style="font-family:'DM Serif Display',serif;font-size:clamp(28px,4vw,42px);font-weight:400;line-height:1.15;letter-spacing:-0.02em;color:#F4F4EB;margin-bottom:clamp(16px,2vw,24px);">Let's work together.</h2>
-    <p style="font-family:'DM Sans',sans-serif;font-size:clamp(15px,1.4vw,18px);line-height:1.72;color:rgba(244,244,235,0.68);max-width:56ch;margin-bottom:clamp(36px,4vw,56px);">Open to UX research, product strategy, customer success, and partnerships roles in Singapore. If you're building something complex that needs to feel simple — let's talk.</p>
-    <div style="display:flex;flex-wrap:wrap;gap:clamp(12px,1.5vw,16px);margin-bottom:clamp(56px,8vw,112px);">
-      <a href="mailto:andreeyahlee@gmail.com" style="display:inline-flex;align-items:center;gap:8px;min-height:44px;padding:10px 22px;border:1px solid rgba(244,244,235,0.35);border-radius:100px;font-family:'DM Sans',sans-serif;font-size:14px;font-weight:500;color:#F4F4EB;text-decoration:none;transition:background 0.2s,border-color 0.2s;" onmouseover="this.style.background='rgba(244,244,235,0.08)';this.style.borderColor='rgba(244,244,235,0.6)'" onmouseout="this.style.background='transparent';this.style.borderColor='rgba(244,244,235,0.35)'">andreeyahlee@gmail.com</a>
-      <a href="https://www.linkedin.com/in/andrealee-/" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;gap:8px;min-height:44px;padding:10px 22px;border:1px solid rgba(244,244,235,0.35);border-radius:100px;font-family:'DM Sans',sans-serif;font-size:14px;font-weight:500;color:#F4F4EB;text-decoration:none;transition:background 0.2s,border-color 0.2s;" onmouseover="this.style.background='rgba(244,244,235,0.08)';this.style.borderColor='rgba(244,244,235,0.6)'" onmouseout="this.style.background='transparent';this.style.borderColor='rgba(244,244,235,0.35)'">LinkedIn →</a>
-      <a href="https://drive.google.com/file/d/1bMgT6sMRa9Tbtc2sUFGb11WrcM488deY/view?usp=drive_link" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;gap:8px;min-height:44px;padding:10px 22px;border:1px solid rgba(244,244,235,0.35);border-radius:100px;font-family:'DM Sans',sans-serif;font-size:14px;font-weight:500;color:#F4F4EB;text-decoration:none;transition:background 0.2s,border-color 0.2s;" onmouseover="this.style.background='rgba(244,244,235,0.08)';this.style.borderColor='rgba(244,244,235,0.6)'" onmouseout="this.style.background='transparent';this.style.borderColor='rgba(244,244,235,0.35)'">Resume →</a>
-    </div>
-    <p style="font-family:'DM Mono',monospace;font-size:11px;letter-spacing:0.12em;color:rgba(244,244,235,0.3);border-top:1px solid rgba(244,244,235,0.1);padding-top:clamp(20px,2.5vw,28px);">Andrea Lee · Singapore · 2026 · Built from scratch.</p>
-  </footer>
+  <!-- ══════════════════════════════════════
+       08  WORKSHOP
+  ══════════════════════════════════════ -->
+  <section id="cs-workshop" aria-label="Workshop">
 
+    <span class="workshop-tag">Workshop</span>
+
+    <div class="workshop-row">
+
+      <!-- Left: photo grid -->
+      <div class="workshop-photos">
+        <div class="workshop-photo-main">
+          <img src="../Asset/arvo-workshop-feature.png" alt="Co-creation workshop — full team" loading="lazy" />
+        </div>
+        <div class="workshop-photo-row">
+          <div class="workshop-photo-sm">
+            <img src="../Asset/arvo-workshop-3.png" alt="Workshop — sticky note exercise" loading="lazy" />
+          </div>
+          <div class="workshop-photo-sm">
+            <img src="../Asset/arvo-workshop-2.png" alt="Workshop — client mapping session" loading="lazy" />
+          </div>
+          <div class="workshop-photo-sm">
+            <img src="../Asset/arvo-workshop-1.png" alt="Workshop — team discussion" loading="lazy" />
+          </div>
+        </div>
+      </div>
+
+      <!-- Right: text, bottom-aligned -->
+      <div class="workshop-text">
+        <h2 class="workshop-heading">I brought the client into the room before opening Figma.</h2>
+        <p class="workshop-body">Instead of returning with wireframes, I ran a co-creation workshop. We mapped each friction point against business impact and design feasibility together with our client. Involving the client mid-process helped build the diagnosis and the final recommendations don't land as a surprise. As Team Lead, my goal wasn't sign-off. It was shared ownership of the problem space.</p>
+      </div>
+
+    </div>
+
+  </section>
+
+  <!-- ══════════════════════════════════════
+       09  ITERATION V1 BUILT
+  ══════════════════════════════════════ -->
+  <section id="cs-v1" aria-label="Version 1 Built">
+
+    <span class="v1-tag">Version One Built</span>
+
+    <div class="v1-row">
+
+      <!-- Left: text -->
+      <div class="v1-text">
+        <h2 class="v1-heading">We built. Then we tested what we'd built.</h2>
+        <p class="v1-body">The first iteration applied what Round 1 had taught us — single-page architecture, traffic-light signals, energisers elevated. We weren't done just yet, we needed to test it again to iron out any unforeseen gaps.</p>
+      </div>
+
+      <!-- Right: cream panel with two overlapping screens -->
+      <div class="v1-panel">
+        <p class="v1-caption">First iteration — Improved structure, unresolved friction</p>
+        <img class="v1-img-1" src="../Asset/arvo-iter1-built.png" alt="ARVO V1 — first iteration" loading="lazy" />
+      </div>
+
+    </div>
+
+  </section>
+
+  <!-- ══════════════════════════════════════
+       10  ITERATION V1 TESTED
+  ══════════════════════════════════════ -->
+  <section id="cs-v1-tested" aria-label="ARVO — V1 tested">
+
+    <p class="v1-tag">Version one tested</p>
+
+    <div class="v1t-row">
+
+      <!-- Left: text -->
+      <div class="v1t-text">
+        <h2 class="v1t-heading">Testing our first iteration: Hits &amp; misses.</h2>
+        <p class="v1t-body">13 managers. 4 evaluative scenario tasks. The Manager's Paradox and Cognitive Overload were resolved. The timed 3-minute baseline — our hardest task — passed for 12 of 13 managers. However, two new issues came through clearly that hadn't surfaced in Round 1.</p>
+      </div>
+
+      <!-- Right: hits grid + issues -->
+      <div class="v1t-right">
+
+        <!-- 2×2 hits -->
+        <div class="v1t-grid">
+
+          <div class="v1t-block v1t-block-1">
+            <div class="v1t-block-label">
+              <span class="v1t-block-title">Traffic light signals</span>
+              <span class="v1t-block-stat">12 of 13 managers</span>
+            </div>
+            <img class="v1t-block-img" src="../Asset/arvo-iter1-test-1.png" alt="Traffic light signals screen" loading="lazy" />
+          </div>
+
+          <div class="v1t-block v1t-block-2">
+            <div class="v1t-block-label">
+              <span class="v1t-block-title">Energisers &amp; early warnings</span>
+              <span class="v1t-block-stat">10 of 13 managers</span>
+            </div>
+            <img class="v1t-block-img" src="../Asset/arvo-iter1-test-2.png" alt="Energisers and early warnings screen" loading="lazy" />
+          </div>
+
+          <div class="v1t-block v1t-block-3">
+            <div class="v1t-block-label">
+              <span class="v1t-block-title">Single-page architecture</span>
+              <span class="v1t-block-stat">9 of 13 managers</span>
+            </div>
+            <img class="v1t-block-img" src="../Asset/arvo-iter1-test-3.png" alt="Single-page architecture screen" loading="lazy" />
+          </div>
+
+          <div class="v1t-block v1t-block-4">
+            <div class="v1t-block-label">
+              <span class="v1t-block-title">Micro-interventions</span>
+              <span class="v1t-block-stat">8 of 13 managers</span>
+            </div>
+            <img class="v1t-block-img" src="../Asset/arvo-iter1-test-4.png" alt="Micro-interventions screen" loading="lazy" />
+          </div>
+
+        </div>
+
+        <!-- Two new issues -->
+        <div class="v1t-issues">
+
+          <div class="v1t-issue">
+            <span class="v1t-issue-tag">Issue 06 · found in Round 2</span>
+            <h3 class="v1t-issue-title">Accessibility Crisis</h3>
+            <p class="v1t-issue-body">7 of 13 managers couldn't read the profile page. Light-gray text on white failed WCAG AA. UI fix applied in the final iteration — full product audit still needed.</p>
+            <p class="v1t-issue-quote">"It's gray, so it's not so visible for me... unless I have a bigger screen." — Manager, Retail</p>
+          </div>
+
+          <div class="v1t-issue">
+            <span class="v1t-issue-tag">Issue 07 · found in Round 2</span>
+            <h3 class="v1t-issue-title">Digital Homework Trap</h3>
+            <p class="v1t-issue-body">9 of 13 found the weekly checklist a chore regardless of content quality. Hence we applied a calendar integration in the final iteration where the underlying cadence model is a product decision.</p>
+            <p class="v1t-issue-quote">"Take away the mark as done, please. It's crazy." — Manager, Energy</p>
+          </div>
+
+        </div>
+
+      </div>
+    </div>
+
+  </section>
+
+  <!-- ══════════════════════════════════════
+       11  INTERFACE DESIGN
+  ══════════════════════════════════════ -->
+  <section id="cs-interface" aria-label="Interface Design">
+
+    <span class="iface-tag">Interface Design</span>
+
+    <div class="iface-content">
+
+      <!-- Heading row -->
+      <div class="iface-header-row">
+        <h2 class="iface-heading">Translated heuristics into a flow managers could complete in 3 minutes.</h2>
+        <p class="iface-lead">The 3-minute baseline. Every design decision was tested against one scenario: can a manager extract their most critical team insight and take action before they're rushing to their next meeting? The final iteration fixed what Round 2 confirmed was broken. Three decisions — each one earned by a finding, each one protecting what Round 2 had already validated.</p>
+      </div>
+
+      <!-- Heuristic Design — cream panel with auto-scrolling dashboard -->
+      <div class="iface-panel" id="iface-panel">
+        <span class="iface-panel-caption">Scan first. Read never.</span>
+        <div class="iface-dashboard">
+          <img src="../Asset/arvo-interface-design.png" alt="ARVO published dashboard — final iteration" />
+        </div>
+      </div>
+
+    </div>
+
+  </section>
+
+  <!-- ══════════════════════════════════════
+       12 – 16  SECTIONS (coming next)
+  ══════════════════════════════════════ -->
+  <!-- placeholder — sections will be added frame by frame -->
+
+
+  <!-- ================================================================
+       SCRIPTS
+  ================================================================ -->
   <script>
-  'use strict';
-  gsap.registerPlugin(ScrollTrigger, CustomEase);
-  CustomEase.create('spring', '0.22, 1, 0.36, 1');
-  gsap.defaults({ ease: 'spring' });
+    gsap.registerPlugin(ScrollTrigger);
+    const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-  const isMobile      = window.matchMedia('(max-width: 639px)').matches;
-  const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    /* ── Research: image cycle + synced principle highlight ── */
+    (() => {
+      const cb = Date.now();
+      const frames = [
+        `../Asset/arvo-research-v0.png?v=${cb}`,
+        `../Asset/arvo-research-v1.png?v=${cb}`,
+        `../Asset/arvo-research-v2.png?v=${cb}`,
+        `../Asset/arvo-research-v3.png?v=${cb}`,
+        `../Asset/arvo-research-v4.png?v=${cb}`,
+        `../Asset/arvo-research-v5.png?v=${cb}`,
+      ];
+      /* Preload all frames */
+      frames.forEach(src => { const i = new Image(); i.src = src; });
 
-  /* ── THEME TOGGLE ── */
-  (function () {
-    const btn  = document.getElementById('theme-toggle');
-    const html = document.documentElement;
-    const KEY  = 'arvo-theme';
-    function isDark() { return html.getAttribute('data-theme') === 'dark'; }
-    function setTheme(dark) {
-      html.setAttribute('data-theme', dark ? 'dark' : 'light');
-      btn.textContent = dark ? '☾' : '☀';
-      btn.setAttribute('aria-label', dark ? 'Switch to light mode' : 'Switch to dark mode');
-      try { localStorage.setItem(KEY, dark ? 'dark' : 'light'); } catch (e) {}
+      const img = document.querySelector('.research-panel-img');
+      const principles = document.querySelectorAll('.research-principle');
+      if (!img || reducedMotion) return;
+
+      let idx = 0;
+
+      function setFrame(i) {
+        img.src = frames[i];
+        /* frame 0 = no highlight; frames 1-5 = highlight principle 1-5 */
+        principles.forEach(p => p.classList.remove('is-active'));
+        if (i > 0) {
+          const active = document.querySelector(`.research-principle[data-index="${i}"]`);
+          if (active) active.classList.add('is-active');
+        }
+      }
+
+      setInterval(() => {
+        idx = (idx + 1) % frames.length;
+        setFrame(idx);
+      }, 1600);
+    })();
+
+    /* ── Interface panel: set --panel-h for scroll animation ── */
+    (() => {
+      const panel = document.getElementById('iface-panel');
+      if (!panel) return;
+      const update = () => panel.style.setProperty('--panel-h', panel.offsetHeight + 'px');
+      update();
+      window.addEventListener('resize', update, { passive: true });
+    })();
+
+    /* ── Progress bar ── */
+    window.addEventListener('scroll', () => {
+      const max = document.documentElement.scrollHeight - window.innerHeight;
+      if (max > 0) document.getElementById('cs-progress').style.width = (window.scrollY / max * 100) + '%';
+    }, { passive: true });
+
+    /* ── Hero entrance ── */
+    if (!reducedMotion) {
+      gsap.from('.hero-title', { y: 48, opacity: 0, duration: 1.0, ease: 'power3.out', delay: 0.15 });
+      gsap.from('.hero-sub',   { y: 28, opacity: 0, duration: 0.85, ease: 'power3.out', delay: 0.4 });
+      gsap.from('.hero-media', { y: 72, opacity: 0, duration: 1.2,  ease: 'power3.out', delay: 0.55 });
+
+      /* ── V1 panel: raise on scroll into view ── */
+      gsap.from('.v1-img-1', {
+        y: 60,
+        opacity: 0,
+        duration: 1.1,
+        ease: 'power3.out',
+        scrollTrigger: {
+          trigger: '#cs-v1',
+          start: 'top 75%',
+          toggleActions: 'play none none none',
+        }
+      });
     }
-    const saved = (() => { try { return localStorage.getItem(KEY); } catch (e) { return null; } })();
-    setTheme(saved === 'dark');
-    btn.addEventListener('click', () => setTheme(!isDark()));
-  })();
-
-  if (!reducedMotion) {
-    /* ── HERO ENTRANCE ── */
-    gsap.from('.cs-hero-h1',    { y: 48, opacity: 0, duration: 1.0, delay: 0.1 });
-    gsap.from('.cs-hero-sub',   { y: 24, opacity: 0, duration: 0.8, delay: 0.35 });
-    gsap.from('.cs-hero-cta',   { y: 16, opacity: 0, duration: 0.6, delay: 0.55 });
-    gsap.from('.cs-meta-row',   { y: 12, opacity: 0, stagger: 0.05, duration: 0.5, delay: 0.4 });
-
-    /* ── SECTION LABELS ── */
-    gsap.utils.toArray('.cs-section-label').forEach(el => {
-      gsap.from(el, { x: -20, opacity: 0, duration: 0.5,
-        scrollTrigger: { trigger: el, start: 'top 88%', once: true } });
-    });
-
-    /* ── HEADLINES ── */
-    gsap.utils.toArray('[data-gsap="headline"]').forEach(el => {
-      gsap.from(el, { y: 36, opacity: 0, duration: 0.8,
-        scrollTrigger: { trigger: el, start: 'top 85%', once: true } });
-    });
-
-    /* ── BODY COPY ── */
-    gsap.utils.toArray('.cs-body').forEach(el => {
-      gsap.from(el, { y: 16, opacity: 0, duration: 0.6,
-        scrollTrigger: { trigger: el, start: 'top 88%', once: true } });
-    });
-
-    /* ── STAT CELLS ── */
-    document.querySelectorAll('.stat-grid').forEach(grid => {
-      gsap.from(grid.querySelectorAll('.stat-cell'), {
-        y: 24, opacity: 0, stagger: 0.1, duration: 0.65,
-        scrollTrigger: { trigger: grid, start: 'top 82%', once: true }
-      });
-    });
-
-    /* ── PROBLEM ROWS ── */
-    gsap.from('.problem-row', {
-      x: -20, opacity: 0, stagger: 0.06, duration: 0.55,
-      scrollTrigger: { trigger: '.problem-list', start: 'top 78%', once: true }
-    });
-
-    /* ── DECISION PAIRS ── */
-    document.querySelectorAll('.decision-pair').forEach(pair => {
-      gsap.from(Array.from(pair.children), {
-        y: 32, opacity: 0, stagger: 0.12, duration: 0.7,
-        scrollTrigger: { trigger: pair, start: 'top 82%', once: true }
-      });
-    });
-
-    /* ── OUTCOME LEAD IMAGE ── */
-    gsap.from('.outcome-lead-img', {
-      clipPath: 'inset(100% 0 0 0)', duration: 1.1,
-      scrollTrigger: { trigger: '.outcome-lead-img', start: 'top 85%', once: true }
-    });
-
-    /* ── EILEEN PULL QUOTE ── */
-    gsap.timeline({ scrollTrigger: { trigger: '.pull-quote-wrap', start: 'top 78%', once: true } })
-      .from('.pull-quote-marks',  { scale: 0, opacity: 0, duration: 0.4, ease: 'back.out(1.5)' })
-      .fromTo('.pull-quote-text',
-        { clipPath: 'inset(0 100% 0 0)', opacity: 1 },
-        { clipPath: 'inset(0 0% 0 0)', duration: 1.0 }, '-=0.05')
-      .from('.pull-quote-attr', { opacity: 0, y: 8, duration: 0.5 }, '-=0.2');
-
-    /* ── RETRO CARDS ── */
-    gsap.utils.toArray('.retro-card').forEach((el, i) => {
-      gsap.from(el, { y: 24, opacity: 0, duration: 0.6, delay: i * 0.1,
-        scrollTrigger: { trigger: '#cs-coda', start: 'top 76%', once: true } });
-    });
-  }
-
-  ScrollTrigger.refresh();
-
-  /* ── PROGRESS BAR ── */
-  window.addEventListener('scroll', () => {
-    const max = document.documentElement.scrollHeight - window.innerHeight;
-    document.getElementById('cs-progress').style.width = (window.scrollY / max * 100) + '%';
-  }, { passive: true });
-
-  /* ── STICKY NAV ACTIVE STATE ── */
-  (function () {
-    const items = document.querySelectorAll('.cs-snav-item');
-    function setActive(id) {
-      items.forEach(item => item.classList.toggle('is-active', item.getAttribute('href') === '#' + id));
-    }
-    ['cs-problem','cs-decision','cs-fixes','cs-outcome','cs-coda'].forEach(id => {
-      const el = document.getElementById(id);
-      if (!el) return;
-      ScrollTrigger.create({
-        trigger: el, start: 'top center', end: 'bottom center',
-        onEnter: () => setActive(id),
-        onEnterBack: () => setActive(id),
-      });
-    });
-  })();
   </script>
 
   <script>
-  (function () {
-    const cursor = document.getElementById('custom-cursor');
-    if (!cursor || window.matchMedia('(pointer: coarse)').matches) return;
-    let visible = false;
-    document.addEventListener('mousemove', e => {
-      cursor.style.transform = `translate(${e.clientX - 24}px, ${e.clientY - 24}px)`;
-      if (!visible) { cursor.style.opacity = '1'; visible = true; }
-    });
-    document.addEventListener('mouseleave', () => { cursor.style.opacity = '0'; visible = false; });
-    document.addEventListener('mouseenter', () => { cursor.style.opacity = '1'; visible = true; });
-  })();
+    /* ── Cursor ── */
+    (function () {
+      const cursor = document.getElementById('custom-cursor');
+      if (!cursor || window.matchMedia('(pointer: coarse)').matches) return;
+      let visible = false;
+      const HALF = 26;
+      document.addEventListener('mousemove', e => {
+        cursor.style.transform = `translate(${e.clientX - HALF}px, ${e.clientY - HALF}px)`;
+        if (!visible) { cursor.style.opacity = '1'; visible = true; }
+      });
+      document.addEventListener('mouseleave', () => { cursor.style.opacity = '0'; visible = false; });
+    })();
   </script>
 
 </body>

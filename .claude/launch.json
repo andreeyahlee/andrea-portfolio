@@ -3,8 +3,8 @@
   "configurations": [
     {
       "name": "portfolio",
-      "runtimeExecutable": "npx",
-      "runtimeArgs": ["serve", "/Users/andrealee/Desktop/andrea-portfolio v1/andrea-portfolio", "-l", "4321", "--no-clipboard"],
+      "runtimeExecutable": "python3",
+      "runtimeArgs": ["-m", "http.server", "4321"],
       "port": 4321
     }
   ]

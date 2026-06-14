@@ -7,72 +7,22 @@
   <meta name="description" content="Andrea Lee — Product Designer & UX Researcher based in Singapore. Portfolio 2026.">
   <meta name="robots" content="index, follow">
   <meta http-equiv="X-Content-Type-Options" content="nosniff">
-  <meta name="category" content="portfolio, design, professional">
+
+  <!-- Google Fonts: Lora (display) + Caveat (handwritten nav logo) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Architects+Daughter&family=Lora:ital,wght@0,400;1,400&display=swap" rel="stylesheet">
+
   <style>
-    /* ── Self-hosted fonts (no Google Fonts dependency) ── */
-    @font-face {
-      font-family: 'DM Mono';
-      font-style: normal;
-      font-weight: 300;
-      font-display: swap;
-      src: url('Asset/fonts/dm-mono-300.woff2') format('woff2');
-    }
-    @font-face {
-      font-family: 'DM Mono';
-      font-style: italic;
-      font-weight: 300;
-      font-display: swap;
-      src: url('Asset/fonts/dm-mono-300-italic.woff2') format('woff2');
-    }
-    @font-face {
-      font-family: 'DM Mono';
-      font-style: normal;
-      font-weight: 400;
-      font-display: swap;
-      src: url('Asset/fonts/dm-mono-400.woff2') format('woff2');
-    }
-    @font-face {
-      font-family: 'DM Mono';
-      font-style: normal;
-      font-weight: 500;
-      font-display: swap;
-      src: url('Asset/fonts/dm-mono-500.woff2') format('woff2');
-    }
-    @font-face {
-      font-family: 'DM Sans';
-      font-style: normal;
-      font-weight: 400;
-      font-display: swap;
-      src: url('Asset/fonts/dm-sans-400.woff2') format('woff2');
-    }
-    @font-face {
-      font-family: 'DM Sans';
-      font-style: normal;
-      font-weight: 500;
-      font-display: swap;
-      src: url('Asset/fonts/dm-sans-500.woff2') format('woff2');
-    }
-    @font-face {
-      font-family: 'DM Sans';
-      font-style: italic;
-      font-weight: 400;
-      font-display: swap;
-      src: url('Asset/fonts/dm-sans-400-italic.woff2') format('woff2');
-    }
-    @font-face {
-      font-family: 'DM Serif Display';
-      font-style: normal;
-      font-weight: 400;
-      font-display: swap;
-      src: url('Asset/fonts/dm-serif-400.woff2') format('woff2');
-    }
-    @font-face {
-      font-family: 'DM Serif Display';
-      font-style: italic;
-      font-weight: 400;
-      font-display: swap;
-      src: url('Asset/fonts/dm-serif-400-italic.woff2') format('woff2');
-    }
+    /* ── Self-hosted fonts ── */
+    @font-face { font-family:'DM Mono'; font-style:normal; font-weight:300; font-display:swap; src:url('Asset/fonts/dm-mono-300.woff2') format('woff2'); }
+    @font-face { font-family:'DM Mono'; font-style:italic; font-weight:300; font-display:swap; src:url('Asset/fonts/dm-mono-300-italic.woff2') format('woff2'); }
+    @font-face { font-family:'DM Mono'; font-style:normal; font-weight:400; font-display:swap; src:url('Asset/fonts/dm-mono-400.woff2') format('woff2'); }
+    @font-face { font-family:'DM Mono'; font-style:normal; font-weight:500; font-display:swap; src:url('Asset/fonts/dm-mono-500.woff2') format('woff2'); }
+    @font-face { font-family:'DM Sans'; font-style:normal; font-weight:400; font-display:swap; src:url('Asset/fonts/dm-sans-400.woff2') format('woff2'); }
+    @font-face { font-family:'DM Sans'; font-style:normal; font-weight:500; font-display:swap; src:url('Asset/fonts/dm-sans-500.woff2') format('woff2'); }
+    @font-face { font-family:'DM Sans'; font-style:italic; font-weight:400; font-display:swap; src:url('Asset/fonts/dm-sans-400-italic.woff2') format('woff2'); }
+    @font-face { font-family:'DM Sans'; font-style:normal; font-weight:600; font-display:swap; src:url('Asset/fonts/dm-sans-500.woff2') format('woff2'); }
   </style>
 
   <style>
@@ -84,136 +34,134 @@
       --bg-light:  #f4f4eb;
       --lime:      #dee895;
       --ink-light: #f4f4eb;
-      --ink-dark:  #21281a;
+      --ink-dark:  #1a1c16;
       --ink-dim:   rgba(244,244,235,0.55);
 
-      --font-display: 'DM Serif Display', Georgia, serif;
+      --font-display: 'Lora', Georgia, serif;
       --font-body:    'DM Sans', Arial, sans-serif;
       --font-mono:    'DM Mono', 'IBM Plex Mono', monospace;
+      --font-hand:    'Architects Daughter', cursive;
 
-      --pad-h:  2rem;
-      --pad-v:  4rem;
-      --gap:    2.5rem;
-      --gap-sm: 1.25rem;
-      --gap-xs: 0.625rem;
-
-      --radius-card: 0 50px 0 0;
+      --max-w: 1312px;
+      --pad:   64px;
       --ease-bounce: cubic-bezier(0.175,0.885,0.327,1.41);
       --dur-fast: 0.2s;
       --dur-slow: 0.35s;
     }
 
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-    html { font-size: 16px; scroll-behavior: smooth; overflow-x: hidden; }
+    html { font-size: 16px; scroll-behavior: smooth; }
     body {
       font-family: var(--font-body);
       background: var(--bg-dark);
       color: var(--ink-light);
       overflow-x: hidden;
-      max-width: 100vw;
       cursor: none;
     }
 
     /* ================================================================
        LIGHT MODE
     ================================================================ */
-    body.light-mode                   { background: var(--bg-light); color: var(--ink-dark); }
-    body.light-mode .section          { background: var(--bg-light); }
-    body.light-mode .tagline__text,
-    body.light-mode .testimonials__headline,
-    body.light-mode .contact__heading { color: var(--ink-dark); }
-    body.light-mode .contact__desc    { color: rgba(33,40,26,0.6); }
+    body.light-mode                        { background: var(--bg-light); color: var(--ink-dark); }
+    body.light-mode .section               { background: var(--bg-light); }
+    body.light-mode .hero__tagline         { color: var(--ink-dark); }
+    body.light-mode .t-label              { color: #6b7a00; }
+    body.light-mode .works__headline,
+    body.light-mode .test__headline,
+    body.light-mode .contact__heading      { color: var(--ink-dark); }
+    body.light-mode .contact__desc         { color: rgba(26,28,22,0.65); }
     body.light-mode .t-card__quote,
-    body.light-mode .t-card__name     { color: var(--ink-dark); }
-    body.light-mode .t-card__role     { color: rgba(33,40,26,0.55); }
-    body.light-mode .t-card__category { color: #6b7a00; }
-    body.light-mode .ah-copy          { background: var(--bg-light); }
-    body.light-mode .ah-copy__heading { color: var(--ink-dark); }
-    body.light-mode .ah-copy__body    { color: rgba(33,40,26,0.7); }
-    body.light-mode .client-logo      { filter: brightness(0); }
-    body.light-mode .social-link      { color: var(--ink-dark); }
-    body.light-mode .t-label          { color: #6b7a00; }
-    body.light-mode .card__role       { color: #6b7a00; }
-    body.light-mode .card__highlight  { color: #6b7a00; }
+    body.light-mode .t-card__name         { color: var(--ink-dark); }
+    body.light-mode .t-card__role          { color: rgba(26,28,22,0.55); }
+    body.light-mode .t-card__category      { color: #6b7a00; }
+    body.light-mode .client-logo           { filter: brightness(0); }
+    body.light-mode .social-link           { color: var(--ink-dark); }
+    body.light-mode .card__role            { color: #6b7a00; }
+    body.light-mode .card__highlight       { color: #6b7a00; }
+    body.light-mode .contact__decor-text   { color: rgba(26,28,22,0.06); }
+    body.light-mode .nav                   { background: var(--bg-dark); border-color: rgba(222,232,149,0.18); }
+    body.light-mode .nav__links a          { color: var(--ink-light); }
+    body.light-mode .nav__links a:hover    { color: var(--lime); }
+    body.light-mode .nav__logo-text        { color: var(--ink-light); }
+    body.light-mode .nav__ham-line         { background: var(--ink-light); }
+    body.light-mode .nav__mobile-menu      { background: var(--bg-dark); border-color: rgba(222,232,149,0.18); }
+    body.light-mode .nav__mobile-menu li a { color: rgba(244,244,235,0.7); }
+    body.light-mode .nav__mobile-menu li a:hover { color: var(--lime); background: rgba(244,244,235,0.05); }
 
     /* ================================================================
-       NAVIGATION
-       Dark mode (dark page) → LIGHT cream pill
-       Light mode (light page) → DARK pill
+       NAVIGATION — floating pill
     ================================================================ */
     .nav {
       position: fixed;
-      top: 1.5rem;
-      left: 50%;
-      transform: translateX(-50%);
+      top: 0;
+      left: 0;
       z-index: 999;
-      width: min(650px, calc(100% - 2rem));
-      /* default: light pill on dark page */
-      background: var(--bg-light);
-      border: 1px solid rgba(33,40,26,0.1);
-      border-radius: 30px;
-      padding: 8px 16px;
+      width: 100%;
+      min-height: 104px;
+      background: var(--bg-dark);
+      /* 32px padding all round; 1440px frame centred (content 1376px) */
+      padding: 32px max(32px, calc((100% - 1440px) / 2 + 32px));
       display: flex;
       align-items: center;
       justify-content: space-between;
-      gap: 1rem;
-      box-shadow: 0 4px 24px rgba(0,0,0,0.25);
-      transition: background var(--dur-fast), border-color var(--dur-fast), box-shadow var(--dur-fast);
-    }
-
-    /* light mode: dark pill on light page */
-    body.light-mode .nav {
-      background: var(--bg-dark);
-      border-color: rgba(222,232,149,0.18);
-      box-shadow: 0 4px 24px rgba(0,0,0,0.45);
+      gap: 10px;
+      transition: background var(--dur-fast);
     }
 
     .nav__logo {
       display: flex;
       align-items: center;
-      flex-shrink: 0;
+      gap: 10px;
       text-decoration: none;
+      flex-shrink: 0;
     }
 
-    .nav__logo img {
-      height: 26px;
-      width: auto;
+    .nav__logo-text {
+      font-family: var(--font-hand);
+      font-weight: 700;
+      font-size: 26px;
+      line-height: 1;
+      letter-spacing: -0.04em;
+      text-transform: uppercase;
+      color: var(--ink-light);
+      white-space: nowrap;
+    }
+
+    .nav__logo-flower {
+      width: 40px; height: 40px;
       display: block;
+      flex-shrink: 0;
+      object-fit: contain;
     }
 
     .nav__right {
       display: flex;
       align-items: center;
-      gap: 1.75rem;
+      gap: 40px;
     }
 
     .nav__links {
       display: flex;
-      gap: 1.75rem;
+      gap: 40px;
       list-style: none;
       align-items: center;
     }
 
-    /* default (light nav): dark text */
     .nav__links a {
-      font-family: var(--font-mono);
-      font-weight: 500;
-      font-size: 11px;
-      letter-spacing: 0.12px;
-      text-transform: uppercase;
-      color: rgba(33,40,26,0.55);
+      font-family: var(--font-hand);
+      font-weight: 400;
+      font-size: 24px;
+      line-height: 33px;
+      letter-spacing: -0.02em;
+      text-transform: none;
+      color: var(--ink-light);
       text-decoration: none;
       transition: color var(--dur-fast);
       white-space: nowrap;
     }
+    .nav__links a:hover { color: var(--lime); }
 
-    .nav__links a:hover { color: var(--ink-dark); }
-
-    /* light mode (dark nav): light text */
-    body.light-mode .nav__links a       { color: rgba(244,244,235,0.55); }
-    body.light-mode .nav__links a:hover { color: var(--lime); }
-
-    /* ── Pill toggle ── */
+    /* Theme toggle */
     .nav__toggle {
       display: flex;
       align-items: center;
@@ -224,65 +172,98 @@
       flex-shrink: 0;
       transition: opacity var(--dur-fast);
     }
-
     .nav__toggle:hover { opacity: 0.8; }
 
-    #theme-cta-img {
-      display: block;
-      height: 36px;
-      width: auto;
-      pointer-events: none;
+    #theme-cta-img { display: block; width: 80px; height: 40px; object-fit: contain; pointer-events: none; }
+
+    /* Hamburger */
+    .nav__hamburger {
+      display: none;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      gap: 4.5px;
+      background: none;
+      border: none;
+      cursor: pointer;
+      padding: 3px;
+      flex-shrink: 0;
+      width: 28px; height: 28px;
     }
+    .nav__ham-line {
+      display: block;
+      width: 18px; height: 1.5px;
+      background: var(--ink-light);
+      border-radius: 2px;
+      transition: transform 0.25s ease, opacity 0.2s ease, width 0.2s ease;
+      transform-origin: center;
+    }
+    .nav.is-open .nav__ham-line:nth-child(1) { transform: translateY(6px) rotate(45deg); }
+    .nav.is-open .nav__ham-line:nth-child(2) { opacity: 0; width: 0; }
+    .nav.is-open .nav__ham-line:nth-child(3) { transform: translateY(-6px) rotate(-45deg); }
+
+    /* Mobile dropdown */
+    .nav__mobile-menu {
+      position: absolute;
+      top: calc(100% - 8px);
+      left: var(--pad); right: var(--pad);
+      background: var(--bg-dark);
+      border: 1px solid rgba(222,232,149,0.18);
+      border-radius: 20px;
+      box-shadow: 0 4px 24px rgba(0,0,0,0.25);
+      overflow: hidden;
+      max-height: 0; opacity: 0;
+      pointer-events: none;
+      transition: max-height 0.3s ease, opacity 0.2s ease;
+    }
+    .nav__mobile-menu ul {
+      list-style: none;
+      padding: 0.625rem 0.5rem;
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+    .nav__mobile-menu li a {
+      display: block;
+      padding: 0.75rem 0.875rem;
+      font-family: var(--font-hand);
+      font-weight: 400;
+      font-size: 20px;
+      letter-spacing: -0.03em;
+      text-transform: none;
+      color: rgba(244,244,235,0.8);
+      text-decoration: none;
+      border-radius: 10px;
+      transition: color var(--dur-fast), background var(--dur-fast);
+    }
+    .nav__mobile-menu li a:hover { color: var(--lime); background: rgba(244,244,235,0.05); }
+    .nav.is-open .nav__mobile-menu { max-height: 200px; opacity: 1; pointer-events: auto; }
 
     /* ================================================================
-       SECTION SYSTEM
+       SHARED UTILITIES
     ================================================================ */
     .section {
-      position: sticky;
-      top: 0;
       width: 100%;
-      max-width: 100vw;
-      height: 100vh;
-      overflow: hidden;
       background: var(--bg-dark);
-      display: flex;
-      flex-direction: column;
     }
-
-    #hero         { z-index: 10; }
-    #showreel     { z-index: 20; }
-    #tagline      { z-index: 30; }
-    #testimonials { z-index: 40; }
-    #afterhours   { z-index: 50; }
-    #contact      { z-index: 60; }
 
     .inner {
-      flex: 1;
-      width: 100%;
-      padding: 5.5rem var(--pad-h) var(--pad-h);
-      display: flex;
-      flex-direction: column;
-      gap: var(--gap-sm);
-      min-height: 0;
+      max-width: calc(var(--max-w) + var(--pad) * 2);
+      margin: 0 auto;
+      padding: var(--pad);
     }
 
-    /* ================================================================
-       TYPE UTILITIES
-    ================================================================ */
     .t-label {
       font-family: var(--font-mono);
-      font-weight: 500;
+      font-weight: 700;
       font-size: 11px;
       line-height: 14px;
-      letter-spacing: 0.0012em;
+      letter-spacing: 0.6em;
       text-transform: uppercase;
       color: var(--lime);
-      flex-shrink: 0;
+      display: block;
     }
 
-    /* ================================================================
-       CTA BUTTON
-    ================================================================ */
     .btn {
       display: inline-flex;
       align-items: center;
@@ -301,197 +282,163 @@
       cursor: pointer;
       white-space: nowrap;
       transition: background var(--dur-fast), color var(--dur-fast);
-      flex-shrink: 0;
     }
-
-    .btn:hover {
-      background: var(--lime);
-      color: var(--ink-dark);
-    }
+    .btn:hover { background: var(--lime); color: var(--ink-dark); }
 
     /* ================================================================
        01 — HERO
     ================================================================ */
     #hero {
-      align-items: stretch;
-      justify-content: flex-end;
-      padding-top: clamp(5rem, 13vw, 12rem);
-    }
-
-    .hero__image-wrap {
-      width: 100%;
-      flex: 1 1 0%;     /* 0% base prevents GIF natural-height leaking into flex sizing */
-      min-height: 0;
-      max-height: 100%; /* hard ceiling: never taller than the section */
-      position: relative;
-      overflow: hidden;
-    }
-
-    .hero__image {
-      position: absolute;
-      inset: 0;
-      width: 100%;
-      height: 100%;
-      max-width: 100%;
-      object-fit: cover;
-      object-position: center center;
-      pointer-events: none;
-    }
-
-    .hero__scroll-cue {
-      position: absolute;
-      bottom: 2rem;
-      left: 50%;
-      transform: translateX(-50%);
-      font-family: var(--font-mono);
-      font-size: 11px;
-      letter-spacing: 0.12px;
-      text-transform: uppercase;
-      color: var(--ink-light);
-      opacity: 0.3;
-    }
-
-    /* ================================================================
-       02 — SHOWREEL  — full-frame, no padding, no label
-    ================================================================ */
-    #showreel { padding: 0; }
-
-    .showreel__canvas {
-      width: 100%;
-      max-width: 100%;
-      flex: 1;
-      min-height: 0;
-      overflow: hidden;
-      position: relative;
-    }
-
-    .showreel__vid {
-      position: absolute;
-      inset: 0;
-      width: 100%;
-      height: 100%;
-      max-width: 100%;
-      object-fit: cover;
-      pointer-events: none;
-    }
-
-    /* ================================================================
-       03 — TAGLINE + SELECTED WORKS  (Figma 26:42)
-    ================================================================ */
-    #tagline .inner {
-      padding: 32px;
-      gap: 40px;
-      justify-content: center;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
       align-items: center;
-      text-align: center;
+      justify-content: flex-end;
+      padding: var(--pad);
+      padding-top: calc(var(--pad) + 104px); /* nav clearance */
+      gap: 40px;
     }
 
-    .tagline__text {
+    /* Replace src with your exported peeps PNG/SVG — e.g. Asset/Hero_Peeps.png */
+    .hero__peeps {
+      width: 100%;
+      max-width: var(--max-w);
+      flex: 1;
+      min-height: 300px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero__peeps img {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      object-position: center bottom;
+    }
+
+    .hero__tagline {
       font-family: var(--font-display);
       font-weight: 400;
-      font-size: clamp(2.5rem, 5.56vw, 5rem);
-      line-height: 0.975em;
-      letter-spacing: -0.015em;
-      text-transform: uppercase;
+      font-size: clamp(1.75rem, 3.61vw, 3.25rem);
+      line-height: 56px;
+      letter-spacing: -0.03em;
       color: var(--ink-light);
-      text-align: center;
-      align-self: stretch;
+      max-width: var(--max-w);
+      width: 100%;
     }
 
-    .tagline__text em {
-      font-family: var(--font-display);
-      font-style: italic;
-      font-weight: 400;
+    /* Handwritten accent inside the hero sentence */
+    .hero__hand {
+      font-family: var(--font-hand);
+      font-size: 1.12em;
+      letter-spacing: 0;
     }
 
-    /* Works grid — used inside #tagline */
+    /* ================================================================
+       02 — SELECTED WORKS
+    ================================================================ */
+    #works {
+      padding: 0;
+    }
+
+    #works .inner {
+      display: flex;
+      flex-direction: column;
+      gap: 40px;
+    }
+
+    /* Asymmetric grid: large ARVO + 2 stacked small */
     .works__grid {
       display: flex;
       gap: 50.67px;
-      justify-content: center;
-      align-items: flex-start;
-      flex-shrink: 0;
-      max-width: 1127px;
+      align-items: stretch;
+      width: 100%;
     }
 
-    /* ── Card ── */
-    .card {
-      width: 342px;
-      height: 380px;
-      border-radius: 0 63.33px 0 0;
+    /* Large card */
+    .card--large {
+      flex: 2.69; /* ~919 / 342 ratio */
+      min-height: 500px;
+      border-radius: 0;
       overflow: hidden;
       position: relative;
-      flex-shrink: 0;
       cursor: pointer;
+      --card-overlay: rgba(0,0,0,0.4);
     }
 
-    /* Per-card default overlay via CSS custom property */
-    .card--arvo    { --card-overlay: rgba(0,0,0,0.4); }
-    .card--seletar { --card-overlay: transparent; }
-    .card--pawhaus { --card-overlay: rgba(26,28,22,0.6); }
+    /* Small-card column */
+    .works__small-col {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 51px;
+    }
+
+    /* Small cards */
+    .card--small {
+      flex: 1;
+      min-height: 200px;
+      border-radius: 0;
+      overflow: hidden;
+      position: relative;
+      cursor: pointer;
+      --card-overlay: transparent;
+    }
+    .card--small.card--pawhaus { --card-overlay: rgba(26,28,22,0.6); }
+
+    /* Shared card internals */
+    .card--large,
+    .card--small {
+      position: relative;
+    }
 
     .card__bg {
       position: absolute;
       inset: 0;
-      width: 100%;
-      height: 100%;
+      width: 100%; height: 100%;
       object-fit: cover;
     }
 
-    /* Overlay: default state from per-card var, darkens on hover */
     .card__overlay {
       position: absolute;
       inset: 0;
       background: var(--card-overlay, transparent);
-      border-radius: inherit;
       transition: background var(--dur-slow);
     }
+    .card--large:hover .card__overlay,
+    .card--small:hover .card__overlay { background: rgba(0,0,0,0.75); }
 
-    .card:hover .card__overlay { background: rgba(0,0,0,0.75); }
-
-    /* ── Default state: title / type / role at bottom ── */
     .card__default-info {
       position: absolute;
       bottom: 0; left: 0; right: 0;
-      padding: 10.13px 20.27px;
+      padding: 8px 16px 16px;
       display: flex;
       flex-direction: column;
-      gap: 12.67px;
+      gap: 8px;
       color: var(--ink-light);
       transition: opacity var(--dur-slow);
     }
-
-    .card:hover .card__default-info { opacity: 0; pointer-events: none; }
+    .card--large:hover .card__default-info,
+    .card--small:hover .card__default-info { opacity: 0; pointer-events: none; }
 
     .card__title {
       font-family: var(--font-display);
-      font-size: 45.6px;
-      line-height: 63px;
-      letter-spacing: -0.005em;
+      font-size: clamp(1.5rem, 2vw, 1.625rem);
+      line-height: 1.23;
+      letter-spacing: -0.015em;
       color: var(--ink-light);
     }
 
-    .card__type {
-      font-family: var(--font-mono);
-      font-weight: 400;
-      font-size: 12.67px;
-      line-height: 16px;
-      letter-spacing: 0.001em;
-      text-transform: uppercase;
+    .card__subtitle {
+      font-family: var(--font-body);
+      font-weight: 600;
+      font-size: 15px;
+      line-height: 23px;
       color: var(--ink-light);
     }
 
-    .card__role {
-      font-family: var(--font-mono);
-      font-weight: 400;
-      font-size: 12.67px;
-      line-height: 16px;
-      letter-spacing: 0.001em;
-      text-transform: uppercase;
-      color: var(--ink-light);
-    }
-
-    /* ── Hover state: category / description / CTA ── */
     .card__hover-info {
       position: absolute;
       inset: 0;
@@ -499,13 +446,12 @@
       display: flex;
       flex-direction: column;
       justify-content: space-between;
-      text-align: left;
       color: var(--ink-light);
       opacity: 0;
       transition: opacity var(--dur-slow);
     }
-
-    .card:hover .card__hover-info { opacity: 1; }
+    .card--large:hover .card__hover-info,
+    .card--small:hover .card__hover-info { opacity: 1; }
 
     .card__category {
       font-family: var(--font-mono);
@@ -513,18 +459,15 @@
       letter-spacing: 0.1px;
       text-transform: uppercase;
       opacity: 0.8;
-      flex-shrink: 0;
     }
 
     .card__description {
       font-family: var(--font-display);
-      font-size: 1.5rem;
-      line-height: 1.15;
-      flex: 1;
+      font-size: clamp(1.1rem, 1.5vw, 1.4rem);
+      line-height: 1.3;
       display: flex;
       flex-direction: column;
-      justify-content: center;
-      gap: 0.45em;
+      gap: 0.4em;
     }
 
     .card__highlight { color: var(--lime); }
@@ -534,38 +477,109 @@
       font-size: 14px;
       color: var(--ink-light);
       text-decoration: none;
-      flex-shrink: 0;
       transition: opacity var(--dur-fast);
     }
-
     .card__cta:hover { opacity: 0.75; }
 
+    .works__cta-row {
+      display: flex;
+      justify-content: flex-start;
+    }
+
     /* ================================================================
-       04 — CLIENTS & TESTIMONIALS  (Figma 52:124 + 267:825)
+       03 — CLIENTS & TESTIMONIALS
     ================================================================ */
     #testimonials .inner {
-      gap: var(--gap-sm);
-      justify-content: space-between;
-    }
-
-    /* Marquee */
-    .clients-marquee {
-      overflow: hidden;
-      width: 100%;
-      flex-shrink: 0;
-    }
-
-    .clients-track {
       display: flex;
-      gap: 100px;
-      align-items: center;
-      width: max-content;
-      animation: marquee 22s linear infinite;
+      flex-direction: column;
+      gap: 40px;
     }
 
-    @keyframes marquee {
-      0%   { transform: translateX(0); }
-      100% { transform: translateX(-50%); }
+    .test__headline {
+      font-family: var(--font-display);
+      font-weight: 400;
+      font-size: clamp(1.75rem, 2.78vw, 2.5rem);
+      line-height: 1.1;
+      letter-spacing: -0.025em;
+      color: var(--ink-light);
+      text-align: center;
+      max-width: var(--max-w);
+      width: 100%;
+    }
+
+    /* 4-across testimonial row — horizontal scroll on smaller screens */
+    .test__row {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 40px;
+      width: 100%;
+    }
+
+    .t-card {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 20px;
+      text-align: center;
+    }
+
+    .t-card__body {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 20px;
+    }
+
+    .t-card__category {
+      font-family: var(--font-body);
+      font-weight: 600;
+      font-size: 13px;
+      line-height: 17px;
+      color: var(--ink-light);
+      text-align: center;
+    }
+
+    .t-card__quote {
+      font-family: var(--font-display);
+      font-style: italic;
+      font-weight: 400;
+      font-size: clamp(0.9rem, 1.1vw, 1.125rem);
+      line-height: 1.45;
+      letter-spacing: -0.01em;
+      color: var(--ink-light);
+    }
+
+    .t-card__attribution {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .t-card__name {
+      font-family: var(--font-body);
+      font-weight: 600;
+      font-size: 15px;
+      line-height: 23px;
+      color: var(--ink-light);
+    }
+
+    .t-card__role {
+      font-family: var(--font-body);
+      font-style: italic;
+      font-size: 13px;
+      line-height: 23px;
+      color: rgba(244,244,235,0.65);
+    }
+
+    /* Client logos row */
+    .clients-row {
+      display: flex;
+      flex-direction: row;
+      justify-content: center;
+      align-items: center;
+      gap: 100px;
+      width: 100%;
+      padding-top: 20px;
     }
 
     .client-logo {
@@ -573,269 +587,61 @@
       flex-shrink: 0;
       opacity: 0.85;
     }
-
-    /* Per-logo sizes from Figma 52:124 */
-    .client-logo--guerlain { width: 302px;  height: 124px; }
-    .client-logo--arvo     { width: 217px;  height: 125px; }
-    .client-logo--cpf      { width: 312px;  height: 124px; }
-
-    .testimonials__headline {
-      font-family: var(--font-display);
-      font-weight: 400;
-      font-size: clamp(1.75rem, 3.6vw, 3.25rem);
-      line-height: 1.37;
-      letter-spacing: -0.01em;
-      color: var(--ink-light);
-      text-align: center;
-      flex-shrink: 0;
-    }
-
-    /* Nav wrapper: arrows + centered testimonial */
-    .testimonials__nav {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 24px;
-      flex: 1;
-      min-height: 0;
-      width: 100%;
-    }
-
-    .t-nav-btn {
-      width: 44px;
-      height: 44px;
-      border-radius: 50%;
-      border: 1px solid rgba(244,244,235,0.22);
-      background: transparent;
-      color: var(--ink-light);
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      flex-shrink: 0;
-      transition: background var(--dur-fast), opacity var(--dur-fast), border-color var(--dur-fast);
-    }
-
-    .t-nav-btn:hover { background: rgba(244,244,235,0.1); border-color: rgba(244,244,235,0.5); }
-    .t-nav-btn:disabled { opacity: 0.25; cursor: default; pointer-events: none; }
-
-    body.light-mode .t-nav-btn {
-      border-color: rgba(33,40,26,0.25);
-      color: var(--ink-dark);
-    }
-    body.light-mode .t-nav-btn:hover {
-      background: rgba(33,40,26,0.08);
-      border-color: rgba(33,40,26,0.5);
-    }
-
-    /* Grid: centered container, relative for overlay cards */
-    .testimonials__grid {
-      position: relative;
-      flex: 1;
-      align-self: stretch;
-      max-width: 500px;
-      min-height: 260px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-
-    /* Cards: text-only, absolute, fade one at a time */
-    .t-card {
-      position: absolute;
-      inset: 0;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      gap: 16px;
-      text-align: center;
-      padding: 1rem 2rem;
-      background: none;
-      box-shadow: none;
-      border-radius: 0;
-      overflow: visible;
-      opacity: 0;
-      pointer-events: none;
-      transition: opacity 0.4s ease;
-      cursor: default;
-    }
-
-    .t-card--active {
-      opacity: 1;
-      pointer-events: auto;
-    }
-
-    .t-card__category {
-      font-family: var(--font-mono);
-      font-weight: 500;
-      font-size: 11px;
-      letter-spacing: 0.12px;
-      text-transform: uppercase;
-      color: var(--lime);
-    }
-
-    .t-card__quote {
-      font-family: var(--font-body);
-      font-size: 24px;
-      line-height: 1.35;
-      color: var(--ink-light);
-    }
-
-    .t-card__name {
-      font-family: var(--font-body);
-      font-size: 14px;
-      line-height: 1.28;
-      color: var(--ink-light);
-    }
-
-    .t-card__role {
-      font-family: var(--font-mono);
-      font-size: 10px;
-      letter-spacing: 0.1px;
-      text-transform: uppercase;
-      color: rgba(244,244,235,0.55);
-    }
+    .client-logo--guerlain { width: 200px; height: auto; }
+    .client-logo--arvo     { width: 150px; height: auto; }
+    .client-logo--cpf      { width: 200px; height: auto; }
 
     /* ================================================================
-       05 — AFTER HOURS  (Figma 75:271)
-       3-col absolute layout: col width=28.703vw, h-gap=6.944vw, v-gap=11.11vh
+       04 — CONTACT / ABOUT
     ================================================================ */
-    #afterhours {
-      display: block;
-      padding: 0;
-    }
-
-    /* All children are absolute inside the 100vw × 100vh section */
-    .ah-block {
-      position: absolute;
+    #contact {
       overflow: hidden;
-      display: block;
-      text-decoration: none;
-      border-radius: 0;
-      transition: transform var(--dur-slow) var(--ease-bounce);
     }
 
-    .ah-block img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      display: block;
-      pointer-events: none;
+    #contact .inner {
+      display: flex;
+      flex-direction: row;
+      align-items: flex-end;
+      gap: 40px;
+      min-height: 600px;
     }
 
-    .ah-block:hover { transform: scale(0.985); }
-
-    /* ── Column 1 (left: 0) ── */
-    .ah-block--hackathon {
-      left: 0; top: 0;
-      width: 28.703vw;
-      height: 25.926vh;
-    }
-
-    .ah-block--travel {
-      left: 0; top: 37.037vh;
-      width: 28.703vw;
-      height: 62.963vh;
-    }
-
-    /* ── Column 2 (left: 35.648vw) ── */
-    .ah-block--sketch {
-      left: 35.648vw; top: 0;
-      width: 28.703vw;
-      height: 37.667vh;
-    }
-
-    .ah-copy {
-      position: absolute;
-      left: 35.648vw; top: 37.037vh;
-      width: 28.703vw;
-      height: 62.333vh;
+    .contact__copy {
+      flex-shrink: 0;
+      width: min(450px, 100%);
       display: flex;
       flex-direction: column;
-      justify-content: center;
-      align-items: center;
-      padding: 2rem;
       gap: 40px;
-      background: var(--bg-dark);
-      z-index: 2; /* sit above all photo blocks — incl. sketch that GSAP shifts down */
+      padding-bottom: 8px;
     }
 
-    /* ── Column 3 (left: 71.296vw) ── */
-    .ah-block--pilates {
-      left: 71.296vw; top: 0;
-      width: 28.704vw;
-      height: 62.963vh;
+    .contact__copy-inner {
+      display: flex;
+      flex-direction: column;
+      gap: 40px;
     }
 
-    .ah-block--pulse {
-      left: 71.296vw; top: 74.074vh;
-      width: 28.704vw;
-      height: 25.926vh;
+    .contact__text {
+      display: flex;
+      flex-direction: column;
+      gap: 24px;
     }
-
-    /* ── Image labels ── */
-    .ah-label {
-      position: absolute;
-      font-family: var(--font-display);
-      font-weight: 400;
-      font-size: clamp(14px, 1.667vw, 24px);
-      line-height: 1.375;
-      color: var(--ink-light);
-      pointer-events: none;
-    }
-
-    .ah-label--dark { color: var(--ink-dark); }
-
-    .ah-block--hackathon .ah-label { bottom: 16px; left: 16px; right: 16px; text-align: center; }
-    .ah-block--travel    .ah-label { bottom: 24px; left: 16px; right: 16px; text-align: center; }
-    .ah-block--sketch    .ah-label { bottom: 16px; right: 16px; text-align: right; }
-    .ah-block--pilates   .ah-label { bottom: 16px; right: 16px; }
-    .ah-block--pulse     .ah-label { bottom: 24px; left: 16px; }
-
-    /* ── After Hours copy block ── */
-    .ah-copy__heading {
-      font-family: var(--font-display);
-      font-weight: 400;
-      font-size: clamp(2.5rem, 5.56vw, 5rem);
-      line-height: 0.975em;
-      letter-spacing: -0.015em;
-      color: var(--ink-light);
-      text-align: center;
-    }
-
-    .ah-copy__heading em { font-style: italic; }
-
-    .ah-copy__body {
-      font-family: var(--font-body);
-      font-weight: 400;
-      font-size: clamp(0.875rem, 1.25vw, 1.125rem);
-      line-height: 1.28;
-      color: var(--ink-light);
-      text-align: center;
-    }
-
-    /* ================================================================
-       06 — CONTACT
-    ================================================================ */
-    #contact .inner { justify-content: center; gap: var(--gap); }
 
     .contact__heading {
       font-family: var(--font-display);
       font-weight: 400;
-      font-size: clamp(3rem, 7vw, 7rem);
-      line-height: 0.975em;
-      letter-spacing: -0.015em;
+      font-size: clamp(2.5rem, 3.61vw, 3.25rem);
+      line-height: 56px;
+      letter-spacing: -0.03em;
       color: var(--ink-light);
-      max-width: 800px;
     }
 
     .contact__desc {
       font-family: var(--font-body);
-      font-size: 1.1rem;
-      line-height: 1.6;
-      color: var(--ink-dim);
-      max-width: 540px;
+      font-weight: 400;
+      font-size: 17px;
+      line-height: 25px;
+      color: var(--ink-light);
     }
 
     .contact__socials {
@@ -848,21 +654,49 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      width: 1.75rem;
-      height: 1.75rem;
+      width: 30px; height: 30px;
       color: var(--ink-light);
-      opacity: 0.55;
+      opacity: 0.6;
       text-decoration: none;
       transition: opacity var(--dur-fast), transform var(--dur-slow) var(--ease-bounce);
     }
-
     .social-link:hover { opacity: 1; transform: scale(1.1); }
+    .social-link svg { width: 100%; height: 100%; fill: currentColor; display: block; }
 
-    .social-link svg {
-      width: 100%;
-      height: 100%;
-      fill: currentColor;
-      display: block;
+    .contact__copyright {
+      font-family: var(--font-mono);
+      font-weight: 500;
+      font-size: 11px;
+      line-height: 14px;
+      letter-spacing: 0.0012em;
+      text-transform: uppercase;
+      color: rgba(244,244,235,0.5);
+    }
+    body.light-mode .contact__copyright { color: rgba(26,28,22,0.5); }
+
+    /* Decorative right element — large overflow text */
+    .contact__decor {
+      flex: 1;
+      position: relative;
+      align-self: stretch;
+      overflow: hidden;
+      min-width: 0;
+    }
+
+    .contact__decor-text {
+      font-family: var(--font-display);
+      font-style: italic;
+      font-weight: 400;
+      font-size: clamp(8rem, 14vw, 16rem);
+      line-height: 0.9;
+      letter-spacing: -0.05em;
+      color: rgba(244,244,235,0.06);
+      white-space: nowrap;
+      position: absolute;
+      bottom: 0;
+      left: -0.05em;
+      pointer-events: none;
+      user-select: none;
     }
 
     /* ================================================================
@@ -897,229 +731,87 @@
     }
 
     /* ================================================================
-       HAMBURGER + MOBILE DROPDOWN
+       TOUCH — tap-to-reveal hover state
     ================================================================ */
-    .nav__hamburger {
-      display: none;
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
-      gap: 4.5px;
-      background: none;
-      border: none;
-      cursor: pointer;
-      padding: 3px;
-      flex-shrink: 0;
-      width: 28px;
-      height: 28px;
-    }
-
-    .nav__ham-line {
-      display: block;
-      width: 18px;
-      height: 1.5px;
-      background: var(--ink-dark);
-      border-radius: 2px;
-      transition: transform 0.25s ease, opacity 0.2s ease, width 0.2s ease;
-      transform-origin: center;
-    }
-
-    body.light-mode .nav__ham-line { background: var(--ink-light); }
-
-    /* Animate to × when open */
-    .nav.is-open .nav__ham-line:nth-child(1) { transform: translateY(6px) rotate(45deg); }
-    .nav.is-open .nav__ham-line:nth-child(2) { opacity: 0; width: 0; }
-    .nav.is-open .nav__ham-line:nth-child(3) { transform: translateY(-6px) rotate(-45deg); }
-
-    /* Dropdown panel */
-    .nav__mobile-menu {
-      position: absolute;
-      top: calc(100% + 10px);
-      left: 0;
-      right: 0;
-      background: var(--bg-light);
-      border: 1px solid rgba(33,40,26,0.1);
-      border-radius: 20px;
-      box-shadow: 0 4px 24px rgba(0,0,0,0.25);
-      overflow: hidden;
-      max-height: 0;
-      opacity: 0;
-      pointer-events: none;
-      transition: max-height 0.3s ease, opacity 0.2s ease;
-    }
-
-    body.light-mode .nav__mobile-menu {
-      background: var(--bg-dark);
-      border-color: rgba(222,232,149,0.18);
-      box-shadow: 0 4px 24px rgba(0,0,0,0.45);
-    }
-
-    .nav__mobile-menu ul {
-      list-style: none;
-      padding: 0.625rem 0.5rem;
-      margin: 0;
-      display: flex;
-      flex-direction: column;
-      gap: 2px;
-    }
-
-    .nav__mobile-menu li a {
-      display: block;
-      padding: 0.75rem 0.875rem;
-      font-family: var(--font-mono);
-      font-weight: 500;
-      font-size: 11px;
-      letter-spacing: 0.12px;
-      text-transform: uppercase;
-      color: rgba(33,40,26,0.7);
-      text-decoration: none;
-      border-radius: 10px;
-      transition: color var(--dur-fast), background var(--dur-fast);
-    }
-
-    .nav__mobile-menu li a:hover,
-    .nav__mobile-menu li a:active { color: var(--ink-dark); background: rgba(33,40,26,0.05); }
-
-    body.light-mode .nav__mobile-menu li a { color: rgba(244,244,235,0.7); }
-    body.light-mode .nav__mobile-menu li a:hover,
-    body.light-mode .nav__mobile-menu li a:active { color: var(--lime); background: rgba(244,244,235,0.05); }
-
-    /* ================================================================
-       RESPONSIVE — DESKTOP / TABLET / MOBILE
-    ================================================================ */
-
-    /* Stable/dynamic viewport height — excludes mobile browser chrome */
-    @supports (height: 100svh) {
-      .section { height: 100svh; }
-    }
-    @supports (height: 100dvh) {
-      .section { height: 100dvh; }
-    }
-
-    /* ============================================================
-       TABLET  768px – 1024px
-    ============================================================ */
-    @media (max-width: 1024px) {
-      :root { --pad-h: 1.5rem; }
-
-      .nav { width: min(600px, calc(100% - 2rem)); }
-      .hero__image-wrap { width: 100%; }
-      .tagline__text { font-size: clamp(2rem, 6.5vw, 4rem); }
-
-      /* Works cards in tagline: scale to fit 3-col at tablet */
-      .works__grid { gap: 20px; max-width: 100%; }
-      .card { width: min(280px, 29vw); height: min(320px, 33vw); }
-
-      /* Testimonials */
-      .testimonials__headline { font-size: clamp(1.5rem, 3vw, 2.5rem); }
-
-      /* After Hours: vw/vh absolute layout scales naturally at tablet */
-      .ah-copy__heading { font-size: clamp(2rem, 4.5vw, 3.5rem); }
-      .ah-label { font-size: clamp(12px, 1.4vw, 18px); }
-    }
-
-    /* ============================================================
-       MOBILE  ≤767px
-    ============================================================ */
-    @media (max-width: 767px) {
-      :root { --pad-h: 1.25rem; --gap: 1.5rem; --gap-sm: 0.875rem; }
-
-      /* Nav */
-      .nav { width: min(420px, calc(100% - 1.5rem)); padding: 7px 14px; }
-      .nav__links { display: none; }
-      .nav__hamburger { display: flex; }
-      .nav.is-open .nav__mobile-menu { max-height: 200px; opacity: 1; pointer-events: auto; }
-
-      /* Hero: reduce top breathing room on mobile */
-      #hero { padding-top: 4rem; }
-
-      /* Hero GIF: contain on mobile so it never overflows viewport edge */
-      .hero__image {
-        object-fit: contain;
-        object-position: center center;
-      }
-
-      /* Tagline */
-      .tagline__text { font-size: clamp(1.75rem, 8vw, 3.5rem); line-height: 0.975em; }
-
-      /* Works cards: horizontal scroll strip */
-      .works__grid {
-        flex-direction: row;
-        flex-wrap: nowrap;
-        overflow-x: auto;
-        -webkit-overflow-scrolling: touch;
-        scroll-snap-type: x mandatory;
-        justify-content: flex-start;
-        gap: 12px;
-        width: 100%;
-        padding-bottom: 0.5rem;
-        scrollbar-width: none;
-        max-width: 100%;
-      }
-      .works__grid::-webkit-scrollbar { display: none; }
-      .card {
-        width: min(260px, 72vw);
-        height: 300px;
-        flex-shrink: 0;
-        scroll-snap-align: start;
-      }
-
-      /* Testimonials */
-      .testimonials__headline { font-size: clamp(1.35rem, 4.5vw, 2rem); }
-      .t-nav-btn { width: 36px; height: 36px; }
-      .t-card__quote { font-size: 18px; }
-      .testimonials__grid { min-height: 180px; }
-
-      /* After Hours: 2-col grid for mobile */
-      #afterhours {
-        display: grid !important;
-        grid-template-columns: 1fr 1fr;
-        grid-template-rows: 1fr 1.3fr 1fr 0.85fr;
-        gap: 0.375rem;
-        padding: 4.5rem 0.375rem 0.375rem;
-        height: 100vh;
-      }
-      #afterhours .ah-block,
-      #afterhours .ah-copy {
-        position: static;
-        width: auto;
-        height: auto;
-        transform: none;
-      }
-      .ah-block--hackathon { grid-column: 1; grid-row: 1; }
-      .ah-block--sketch    { grid-column: 2; grid-row: 1; }
-      .ah-block--pilates   { grid-column: 1 / 3; grid-row: 2; }
-      .ah-block--travel    { grid-column: 1; grid-row: 3; }
-      .ah-copy             { grid-column: 2; grid-row: 3; padding: 0.75rem; align-items: flex-start; gap: 12px; }
-      .ah-block--pulse     { grid-column: 1 / 3; grid-row: 4; }
-      .ah-label { font-size: 12px; bottom: 8px; }
-
-      /* Contact */
-      .contact__heading { font-size: clamp(2.5rem, 9vw, 5rem); }
-      .contact__desc    { font-size: 0.95rem; }
-      .contact__socials { flex-wrap: wrap; gap: 1rem; }
-    }
-
-    /* Touch devices: tap-to-reveal hover state */
     @media (hover: none) {
       .card--tapped .card__default-info { opacity: 0; pointer-events: none; }
       .card--tapped .card__hover-info   { opacity: 1; }
       .card--tapped .card__overlay      { background: rgba(0,0,0,0.75); }
     }
 
-    /* ============================================================
-       SMALL MOBILE  ≤479px
-    ============================================================ */
-    @media (max-width: 479px) {
-      :root { --pad-h: 1rem; }
+    /* ================================================================
+       RESPONSIVE — TABLET  768–1024px
+    ================================================================ */
+    @media (max-width: 1024px) {
+      :root { --pad: 40px; }
 
-      .tagline__text { font-size: clamp(1.5rem, 9vw, 3rem); }
-      .card { width: min(240px, calc(100vw - 2.5rem)); height: 280px; }
-      .testimonials__headline { font-size: clamp(1.1rem, 4.5vw, 1.5rem); }
-      .t-card__quote { font-size: 16px; }
-      .ah-copy__heading { font-size: clamp(1.75rem, 8vw, 2.5rem); }
-      .contact__heading { font-size: clamp(1.75rem, 10vw, 2.75rem); }
-      .contact__desc    { font-size: 0.875rem; }
+      .hero__tagline { font-size: clamp(1.5rem, 3vw, 2.5rem); line-height: 1.15; }
+
+      .works__grid { flex-direction: column; gap: 24px; }
+      .card--large { min-height: 400px; }
+      .works__small-col { flex-direction: row; gap: 24px; }
+      .card--small { min-height: 260px; }
+
+      .test__row { grid-template-columns: repeat(2, 1fr); gap: 40px 24px; }
+
+      .clients-row { gap: 60px; }
+      .client-logo--guerlain { width: 150px; }
+      .client-logo--arvo     { width: 110px; }
+      .client-logo--cpf      { width: 150px; }
+
+      #contact .inner { flex-direction: column; min-height: auto; gap: 40px; }
+      .contact__copy { width: 100%; }
+      .contact__decor { min-height: 200px; width: 100%; }
+      .contact__decor-text { font-size: clamp(5rem, 14vw, 10rem); }
+    }
+
+    /* ================================================================
+       RESPONSIVE — MOBILE  ≤767px
+    ================================================================ */
+    @media (max-width: 767px) {
+      :root { --pad: 24px; }
+
+      /* Nav */
+      .nav { min-height: 80px; padding: 20px var(--pad); }
+      .nav__links { display: none; }
+      .nav__hamburger { display: flex; }
+
+      /* Hero */
+      #hero { padding-top: calc(24px + 80px); gap: 24px; min-height: auto; padding-bottom: 40px; }
+      .hero__peeps { min-height: 200px; flex: none; height: 50vw; }
+      .hero__tagline { font-size: clamp(1.4rem, 5vw, 2rem); line-height: 1.2; }
+
+      /* Works */
+      .works__grid { flex-direction: column; gap: 16px; }
+      .card--large { min-height: 300px; }
+      .works__small-col { flex-direction: column; gap: 16px; }
+      .card--small { min-height: 220px; }
+
+      /* Testimonials */
+      .test__headline { font-size: clamp(1.35rem, 4.5vw, 2rem); }
+      .test__row {
+        grid-template-columns: 1fr;
+        gap: 40px;
+      }
+
+      .clients-row { flex-wrap: wrap; gap: 32px; justify-content: center; }
+      .client-logo--guerlain,
+      .client-logo--arvo,
+      .client-logo--cpf { width: 120px; height: auto; }
+
+      /* Contact */
+      #contact .inner { flex-direction: column; }
+      .contact__heading { font-size: clamp(2rem, 7vw, 2.5rem); line-height: 1.15; }
+      .contact__decor { display: none; }
+    }
+
+    /* ================================================================
+       SMALL MOBILE  ≤479px
+    ================================================================ */
+    @media (max-width: 479px) {
+      :root { --pad: 20px; }
+      .hero__tagline { font-size: clamp(1.25rem, 6vw, 1.75rem); }
+      .contact__heading { font-size: clamp(1.75rem, 8vw, 2.25rem); }
     }
   </style>
   <link rel="stylesheet" href="Asset/skiper40.css">
@@ -1134,13 +826,17 @@
   <!-- ── NAV ── -->
   <nav class="nav" id="main-nav">
     <a class="nav__logo" href="/" aria-label="Andrea Lee">
-      <img id="nav-logo" src="Asset/Nav_logo_light.png" alt="Andrea Lee" />
+      <span class="nav__logo-text">Andrea Lee</span>
+      <img class="nav__logo-flower"
+           src="Asset/cursor-light.png"
+           alt="" aria-hidden="true" />
     </a>
     <div class="nav__right">
       <ul class="nav__links">
         <li><a href="works.html">Work</a></li>
-        <li><a href="#testimonials">Clients</a></li>
-        <li><a href="#contact">Contact</a></li>
+        <li><a href="#testimonials">Testimonials</a></li>
+        <li><a href="about.html">About</a></li>
+        <li><a href="#contact">Contact Me</a></li>
       </ul>
       <button class="nav__hamburger" id="nav-hamburger" aria-label="Toggle menu" aria-expanded="false">
         <span class="nav__ham-line"></span>
@@ -1159,45 +855,39 @@
     <div class="nav__mobile-menu" id="nav-mobile-menu">
       <ul>
         <li><a href="works.html">Work</a></li>
-        <li><a href="#testimonials">Clients</a></li>
-        <li><a href="#contact">Contact</a></li>
+        <li><a href="#testimonials">Testimonials</a></li>
+        <li><a href="about.html">About</a></li>
+        <li><a href="#contact">Contact Me</a></li>
       </ul>
     </div>
   </nav>
 
   <!-- ── 01 HERO ── -->
   <section class="section" id="hero">
-    <div class="hero__image-wrap">
-      <img class="hero__image" src="Asset/Hero - Intro.gif" alt="Andrea Lee — Portfolio 2026" />
+    <div class="hero__peeps">
+      <img src="Asset/hero-peeps.png" alt="A diverse crowd of illustrated people" />
     </div>
-    <span class="hero__scroll-cue">[ Scroll ]</span>
+    <p class="hero__tagline">
+      I'm a <span class="hero__hand">late bloomer</span> product designer with an unconventional background.
+      I chose this path to help people connect better with digital products
+      without feeling left behind.
+    </p>
   </section>
 
-  <!-- ── 02 SHOWREEL — full frame, no label ── -->
-  <section class="section" id="showreel">
-    <div class="showreel__canvas">
-      <img class="showreel__vid" src="Asset/Hero_Vid.gif" alt="Portfolio showreel" />
-    </div>
-  </section>
-
-  <!-- ── 03 TAGLINE + SELECTED WORKS  (Figma 26:42) ── -->
-  <section class="section" id="tagline">
+  <!-- ── 02 SELECTED WORKS ── -->
+  <section class="section" id="works">
     <div class="inner">
-      <h1 class="tagline__text">
-        I Make Complex Things<br>
-        <em>Stupidly</em> Simple
-      </h1>
+      <span class="t-label">Selected Works</span>
 
       <div class="works__grid">
 
-        <!-- ARVO -->
-        <article class="card card--arvo">
+        <!-- ARVO — large card -->
+        <article class="card--large">
           <img class="card__bg" src="Asset/Card 1 - ARVO - Default (clean).png" alt="ARVO" />
           <div class="card__overlay"></div>
           <div class="card__default-info">
-            <p class="card__title" style="text-transform:uppercase">ARVO</p>
-            <span class="card__type">b2b SAAS | Website redesign</span>
-            <span class="card__role">Project Lead</span>
+            <p class="card__title">ARVO</p>
+            <span class="card__subtitle">b2b SAAS | Website redesign &nbsp;&middot;&nbsp; Project Lead</span>
           </div>
           <div class="card__hover-info">
             <span class="card__category">An AI Manager Co-pilot</span>
@@ -1209,210 +899,170 @@
           </div>
         </article>
 
-        <!-- Seletar Airport -->
-        <article class="card card--seletar">
-          <img class="card__bg" src="Asset/Card 2 - Seletar - Default (clean).png" alt="Seletar Airport" />
-          <div class="card__overlay"></div>
-          <div class="card__default-info">
-            <p class="card__title">Seletar Airport</p>
-            <span class="card__type">Website redesign (Self-initiated)</span>
-            <span class="card__role">Lead UX Researcher</span>
-          </div>
-          <div class="card__hover-info">
-            <span class="card__category">Travel &amp; Aviation B2B / B2C Informational site</span>
-            <div class="card__description">
-              <span>A masterclass in physical transit, but a <span class="card__highlight">ghost town for digital architecture.</span></span>
-            </div>
-            <a class="card__cta" href="case-studies/seletar.html">View case study →</a>
-          </div>
-        </article>
+        <!-- Small-card column -->
+        <div class="works__small-col">
 
-        <!-- Paw Haus -->
-        <article class="card card--pawhaus">
-          <img class="card__bg" src="Asset/Card 3 - PawHaus - Default (Clean).png" alt="Paw Haus" />
-          <div class="card__overlay"></div>
-          <div class="card__default-info">
-            <p class="card__title">Paw Haus</p>
-            <span class="card__type">E-commerce (Self-initiated)</span>
-            <span class="card__role">End-to-End Product Designer</span>
-          </div>
-          <div class="card__hover-info">
-            <span class="card__category">A pet safety-first online shopping experience</span>
-            <div class="card__description">
-              <span>Pet owners stressed over safety of products.</span>
-              <span><span class="card__highlight">I designed trust.</span></span>
+          <!-- Seletar Airport -->
+          <article class="card--small">
+            <img class="card__bg" src="Asset/Card 2 - Seletar - Default (clean).png" alt="Seletar Airport" />
+            <div class="card__overlay"></div>
+            <div class="card__default-info">
+              <p class="card__title">Seletar Airport</p>
+              <span class="card__subtitle">Website redesign &nbsp;&middot;&nbsp; Lead UX Researcher</span>
             </div>
-            <a class="card__cta" href="case-studies/pethaus.html">View case study →</a>
-          </div>
-        </article>
+            <div class="card__hover-info">
+              <span class="card__category">Travel &amp; Aviation B2B / B2C</span>
+              <div class="card__description">
+                <span>A masterclass in physical transit, but a <span class="card__highlight">ghost town for digital architecture.</span></span>
+              </div>
+              <a class="card__cta" href="case-studies/seletar.html">View case study →</a>
+            </div>
+          </article>
 
+          <!-- Paw Haus -->
+          <article class="card--small card--pawhaus">
+            <img class="card__bg" src="Asset/Card 3 - PawHaus - Default (Clean).png" alt="Paw Haus" />
+            <div class="card__overlay"></div>
+            <div class="card__default-info">
+              <p class="card__title">Paw Haus</p>
+              <span class="card__subtitle">E-commerce &nbsp;&middot;&nbsp; End-to-end Product Designer</span>
+            </div>
+            <div class="card__hover-info">
+              <span class="card__category">Pet safety-first shopping</span>
+              <div class="card__description">
+                <span>Pet owners stressed over product safety.</span>
+                <span><span class="card__highlight">I designed trust.</span></span>
+              </div>
+              <a class="card__cta" href="case-studies/pethaus.html">View case study →</a>
+            </div>
+          </article>
+
+        </div><!-- end .works__small-col -->
       </div><!-- end .works__grid -->
 
-      <span class="t-label">Product Designer · UX Researcher · Singapore · Open to opportunities</span>
-      <a class="btn" href="works.html">View All Works →</a>
+      <div class="works__cta-row">
+        <a class="btn" href="works.html">View All Works →</a>
+      </div>
     </div>
   </section>
 
-  <!-- ── 04 CLIENTS & TESTIMONIALS (Figma 52:124 + 267:825) ── -->
+  <!-- ── 03 CLIENTS & TESTIMONIALS ── -->
   <section class="section" id="testimonials">
     <div class="inner">
       <span class="t-label">Clients &amp; Testimonials</span>
 
-      <div class="clients-marquee">
-        <div class="clients-track">
-          <img class="client-logo client-logo--guerlain"
-               src="Asset/Logo_Guerlain_Light.png"
-               data-dark-src="Asset/Logo_Guerlain_Light.png"
-               data-light-src="Asset/Logo_Guerlain_Dark.png"
-               alt="Guerlain" />
-          <img class="client-logo client-logo--arvo"
-               src="Asset/Logo_ARVO_Light.png"
-               data-dark-src="Asset/Logo_ARVO_Light.png"
-               data-light-src="Asset/Logo_ARVO_dark.png"
-               alt="ARVO" />
-          <img class="client-logo client-logo--cpf"
-               src="Asset/Logo_CPF_white.png"
-               data-dark-src="Asset/Logo_CPF_white.png"
-               data-light-src="Asset/Logo_CPF_black.png"
-               alt="CPF" />
-          <img class="client-logo client-logo--guerlain"
-               src="Asset/Logo_Guerlain_Light.png"
-               data-dark-src="Asset/Logo_Guerlain_Light.png"
-               data-light-src="Asset/Logo_Guerlain_Dark.png"
-               aria-hidden="true" alt="" />
-          <img class="client-logo client-logo--arvo"
-               src="Asset/Logo_ARVO_Light.png"
-               data-dark-src="Asset/Logo_ARVO_Light.png"
-               data-light-src="Asset/Logo_ARVO_dark.png"
-               aria-hidden="true" alt="" />
-          <img class="client-logo client-logo--cpf"
-               src="Asset/Logo_CPF_white.png"
-               data-dark-src="Asset/Logo_CPF_white.png"
-               data-light-src="Asset/Logo_CPF_black.png"
-               aria-hidden="true" alt="" />
-        </div>
-      </div>
-
-      <p class="testimonials__headline">
+      <p class="test__headline">
         From digital systems to physical spaces:<br>
         What they say about working together.
       </p>
 
-      <div class="testimonials__nav">
-        <button class="t-nav-btn t-nav-btn--prev" id="test-prev" aria-label="Previous testimonial">
-          <svg width="20" height="20" viewBox="0 0 20 20" fill="none"><path d="M12.5 4.5L7 10L12.5 15.5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
-        </button>
+      <div class="test__row">
 
-        <div class="testimonials__grid" id="test-grid">
-
-          <div class="t-card">
-            <div class="t-card__category">Product Design</div>
+        <div class="t-card">
+          <div class="t-card__body">
+            <span class="t-card__category">Product Design</span>
             <p class="t-card__quote">"Their design recommendations were methodically tested and immediately actionable, directly strengthening the product's user experience."</p>
+          </div>
+          <div class="t-card__attribution">
             <div class="t-card__name">Eileen Zhang</div>
             <div class="t-card__role">Founder, ARVO</div>
           </div>
+        </div>
 
-          <div class="t-card">
-            <div class="t-card__category">Workshop</div>
+        <div class="t-card">
+          <div class="t-card__body">
+            <span class="t-card__category">Workshop</span>
             <p class="t-card__quote">"Andrea designed and executed an exclusive, high-touch Christmas wreath workshop tailored for us. The experience was meticulously crafted and matched our brand's luxury aesthetic."</p>
+          </div>
+          <div class="t-card__attribution">
             <div class="t-card__name">Charline Tang</div>
             <div class="t-card__role">Brand General Manager, SEA, Guerlain</div>
           </div>
+        </div>
 
-          <div class="t-card">
-            <div class="t-card__category">Event Styling</div>
+        <div class="t-card">
+          <div class="t-card__body">
+            <span class="t-card__category">Event Styling</span>
             <p class="t-card__quote">"Engaged last minute for a proposal and she came through. Even though it was drizzling, she still powered through the setup with a smile. Amazing service and really beautiful set up."</p>
+          </div>
+          <div class="t-card__attribution">
             <div class="t-card__name">Clement Loh</div>
             <div class="t-card__role">Private Client, Engagement</div>
           </div>
+        </div>
 
-          <div class="t-card">
-            <div class="t-card__category">Event Styling</div>
-            <p class="t-card__quote">"Engaged M&amp;P for my wedding at 1-Atico. Andrea listened patiently to my requests and was able to conceptualise the design perfectly. The whole set up was so dreamy."</p>
+        <div class="t-card">
+          <div class="t-card__body">
+            <span class="t-card__category">Event Styling</span>
+            <p class="t-card__quote">"Engaged M&amp;P for my wedding at 1-Atico. Andrea listened patiently to my requests and conceptualised the design perfectly. The whole set up was so dreamy."</p>
+          </div>
+          <div class="t-card__attribution">
             <div class="t-card__name">Desiree Ang</div>
             <div class="t-card__role">Private Client, Wedding</div>
           </div>
+        </div>
 
-        </div><!-- end .testimonials__grid -->
+      </div><!-- end .test__row -->
 
-        <button class="t-nav-btn t-nav-btn--next" id="test-next" aria-label="Next testimonial">
-          <svg width="20" height="20" viewBox="0 0 20 20" fill="none"><path d="M7.5 4.5L13 10L7.5 15.5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
-        </button>
-      </div><!-- end .testimonials__nav -->
+      <div class="clients-row">
+        <img class="client-logo client-logo--guerlain"
+             src="Asset/Logo_Guerlain_Light.png"
+             data-dark-src="Asset/Logo_Guerlain_Light.png"
+             data-light-src="Asset/Logo_Guerlain_Dark.png"
+             alt="Guerlain" />
+        <img class="client-logo client-logo--arvo"
+             src="Asset/Logo_ARVO_Light.png"
+             data-dark-src="Asset/Logo_ARVO_Light.png"
+             data-light-src="Asset/Logo_ARVO_dark.png"
+             alt="ARVO" />
+        <img class="client-logo client-logo--cpf"
+             src="Asset/Logo_CPF_white.png"
+             data-dark-src="Asset/Logo_CPF_white.png"
+             data-light-src="Asset/Logo_CPF_black.png"
+             alt="CPF" />
+      </div>
 
     </div>
   </section>
 
-  <!-- ── 05 AFTER HOURS  (Figma 75:271) ── -->
-  <section class="section" id="afterhours">
-
-    <!-- Col 1 — left -->
-    <a class="ah-block ah-block--hackathon"
-       href="https://www.linkedin.com/posts/andrealee-_buildforgoodstewards-thegoodhack-goodhubsea-ugcPost-7459788590886068224-gxNm/"
-       target="_blank" rel="noopener" aria-label="The Good Hack Hackathon">
-      <img src="Asset/ah-hackathon.png" alt="The Good Hack Hackathon" />
-      <span class="ah-label">The Good Hack Hackathon</span>
-    </a>
-
-    <a class="ah-block ah-block--travel"
-       href="https://www.instagram.com/lee.andrea/"
-       target="_blank" rel="noopener" aria-label="Travel">
-      <img src="Asset/ah-travel.png" alt="Planning my next getaway" />
-      <span class="ah-label">Planning my next getaway</span>
-    </a>
-
-    <!-- Col 2 — centre -->
-    <a class="ah-block ah-block--sketch"
-       href="https://andreeyahlee8.wixsite.com/andrea-lee/portfolio-collections/the-event-architect"
-       target="_blank" rel="noopener" aria-label="Sketching">
-      <img src="Asset/ah-sketch.png" alt="Sketching" />
-      <span class="ah-label ah-label--dark">Sketching</span>
-    </a>
-
-    <div class="ah-copy">
-      <h2 class="ah-copy__heading">After<br><em>Hours</em></h2>
-      <p class="ah-copy__body">A sneak into what fills my calendar outside of my current 9–5.</p>
-    </div>
-
-    <!-- Col 3 — right -->
-    <a class="ah-block ah-block--pilates"
-       href="https://www.instagram.com/lee.andrea/"
-       target="_blank" rel="noopener" aria-label="Pilates">
-      <img src="Asset/ah-pilates.png" alt="Pilates" />
-      <span class="ah-label">Pilates</span>
-    </a>
-
-    <a class="ah-block ah-block--pulse"
-       href="https://pulse-ogp.vercel.app/"
-       target="_blank" rel="noopener" aria-label="Constantly building">
-      <img src="Asset/ah-pulse.png" alt="Constantly building" />
-      <span class="ah-label">Constantly building</span>
-    </a>
-
-  </section>
-
-  <!-- ── 06 CONTACT ── -->
+  <!-- ── 04 CONTACT / ABOUT ── -->
   <section class="section" id="contact">
     <div class="inner">
-      <h2 class="contact__heading">Let&rsquo;s work together or chit chat!</h2>
-      <p class="contact__desc">
-        Open to UX design and research roles in Singapore or Australia. If you&rsquo;re building something complex that needs to feel simple, particularly for social good &mdash; let&rsquo;s talk!
-      </p>
-      <div class="contact__socials">
-        <a class="social-link" href="mailto:andreeyahlee@gmail.com" aria-label="Email">
-          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/></svg>
-        </a>
-        <a class="social-link" href="https://www.linkedin.com/in/andrealee-" target="_blank" rel="noopener" aria-label="LinkedIn">
-          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>
-        </a>
-        <a class="social-link" href="https://www.instagram.com/lee.andrea/" target="_blank" rel="noopener" aria-label="Instagram">
-          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 1 0 0 12.324 6.162 6.162 0 0 0 0-12.324zM12 16a4 4 0 1 1 0-8 4 4 0 0 1 0 8zm6.406-11.845a1.44 1.44 0 1 0 0 2.881 1.44 1.44 0 0 0 0-2.881z"/></svg>
-        </a>
-        <a class="social-link" href="https://drive.google.com/file/d/1bMgT6sMRa9Tbtc2sUFGb11WrcM488deY/view?usp=drive_link" target="_blank" rel="noopener" aria-label="Resume">
-          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M14 2H6c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V8l-6-6zm2 16H8v-2h8v2zm0-4H8v-2h8v2zm-3-5V3.5L18.5 9H13z"/></svg>
-        </a>
+
+      <div class="contact__copy">
+        <span class="t-label">Product Designer · UX Researcher · Singapore · Open to opportunities</span>
+        <div class="contact__copy-inner">
+          <div class="contact__text">
+            <h2 class="contact__heading">Let&rsquo;s work together or chat!</h2>
+            <p class="contact__desc">
+              Open to UX design and research roles in Singapore or Australia.
+              If you&rsquo;re building something complex that needs to feel simple,
+              particularly for social good &mdash; let&rsquo;s talk!
+            </p>
+          </div>
+          <div class="contact__socials">
+            <a class="social-link" href="mailto:andreeyahlee@gmail.com" aria-label="Email">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/></svg>
+            </a>
+            <a class="social-link" href="https://www.linkedin.com/in/andrealee-" target="_blank" rel="noopener" aria-label="LinkedIn">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>
+            </a>
+            <a class="social-link" href="https://www.instagram.com/lee.andrea/" target="_blank" rel="noopener" aria-label="Instagram">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 1 0 0 12.324 6.162 6.162 0 0 0 0-12.324zM12 16a4 4 0 1 1 0-8 4 4 0 0 1 0 8zm6.406-11.845a1.44 1.44 0 1 0 0 2.881 1.44 1.44 0 0 0 0-2.881z"/></svg>
+            </a>
+            <a class="social-link" href="https://drive.google.com/file/d/1bMgT6sMRa9Tbtc2sUFGb11WrcM488deY/view?usp=drive_link" target="_blank" rel="noopener" aria-label="Resume">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M14 2H6c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V8l-6-6zm2 16H8v-2h8v2zm0-4H8v-2h8v2zm-3-5V3.5L18.5 9H13z"/></svg>
+            </a>
+          </div>
+        </div>
+        <span class="contact__copyright">Portfolio built from scratch &nbsp;&middot;&nbsp; &copy;Andrea Lee 2026</span>
       </div>
-      <span class="t-label">Product Designer · UX Researcher · Singapore · Open to opportunities</span>
+
+      <!-- Decorative overflow text — fills right side of contact section -->
+      <div class="contact__decor" aria-hidden="true">
+        <span class="contact__decor-text">Andrea</span>
+      </div>
+
     </div>
   </section>
 
@@ -1427,9 +1077,8 @@
     function updateCursorSrc(target) {
       const isLight   = document.body.classList.contains('light-mode');
       const isOverNav = mainNavEl && mainNavEl.contains(target);
-      /* Nav bg is always opposite of page — so flip cursor when over nav */
-      const useDark = isOverNav ? !isLight : isLight;
-      const newSrc  = useDark ? 'Asset/cursor-dark.png' : 'Asset/cursor-light.png';
+      const useDark   = isOverNav ? !isLight : isLight;
+      const newSrc    = useDark ? 'Asset/cursor-dark.png' : 'Asset/cursor-light.png';
       if (cursorImg.src !== newSrc) cursorImg.src = newSrc;
     }
 
@@ -1449,65 +1098,41 @@
     document.addEventListener('mouseleave', () => { cursorEl.style.display = 'none'; });
 
     /* ── Theme toggle ── */
-    const toggle  = document.getElementById('theme-toggle');
-    const navLogo = document.getElementById('nav-logo');
+    const toggle = document.getElementById('theme-toggle');
 
     toggle.addEventListener('click', () => {
       const isLight = document.body.classList.toggle('light-mode');
-      navLogo.src   = isLight ? 'Asset/Nav_logo_dark.png'  : 'Asset/Nav_logo_light.png';
       updateCursorSrc(document.elementFromPoint(mouseX, mouseY));
-      /* Swap all images that have data-dark-src / data-light-src (logos + CTA toggle) */
       document.querySelectorAll('[data-dark-src]').forEach(img => {
         img.src = isLight ? img.dataset.lightSrc : img.dataset.darkSrc;
       });
     });
 
-    /* ── Testimonials: one at a time, index-based ── */
-    const testCards = Array.from(document.querySelectorAll('.t-card'));
-    const testPrev  = document.getElementById('test-prev');
-    const testNext  = document.getElementById('test-next');
-    let currentIdx  = 0;
-
-    function showTestimonial(idx) {
-      testCards.forEach((card, i) => card.classList.toggle('t-card--active', i === idx));
-      testPrev.disabled = idx === 0;
-      testNext.disabled = idx === testCards.length - 1;
-    }
-
-    if (testCards.length && testPrev && testNext) {
-      testPrev.addEventListener('click', () => { if (currentIdx > 0) showTestimonial(--currentIdx); });
-      testNext.addEventListener('click', () => { if (currentIdx < testCards.length - 1) showTestimonial(++currentIdx); });
-      showTestimonial(0);
-    }
-
-    /* ── Works cards: tap-to-reveal on touch devices ── */
+    /* ── Works cards: tap-to-reveal on touch ── */
     if (window.matchMedia('(hover: none)').matches) {
-      const workCards = document.querySelectorAll('.works__grid .card');
-      const REVERT_MS = 3200;
+      const workCards = document.querySelectorAll('.card--large, .card--small');
       workCards.forEach(card => {
-        let timer = null;
-        card.addEventListener('click', e => {
+        card.addEventListener('click', () => {
           if (card.classList.contains('card--tapped')) return;
-          workCards.forEach(c => { c.classList.remove('card--tapped'); clearTimeout(c._tapTimer); });
+          workCards.forEach(c => c.classList.remove('card--tapped'));
           card.classList.add('card--tapped');
-          card._tapTimer = setTimeout(() => card.classList.remove('card--tapped'), REVERT_MS);
+          setTimeout(() => card.classList.remove('card--tapped'), 3200);
         });
       });
     }
 
-    /* ── Hamburger menu ── */
+    /* ── Hamburger ── */
     const hamburger  = document.getElementById('nav-hamburger');
-    const mainNav    = document.getElementById('main-nav');
     const mobileMenu = document.getElementById('nav-mobile-menu');
 
     hamburger.addEventListener('click', () => {
-      const isOpen = mainNav.classList.toggle('is-open');
+      const isOpen = mainNavEl.classList.toggle('is-open');
       hamburger.setAttribute('aria-expanded', String(isOpen));
     });
 
     mobileMenu.querySelectorAll('a').forEach(link => {
       link.addEventListener('click', () => {
-        mainNav.classList.remove('is-open');
+        mainNavEl.classList.remove('is-open');
         hamburger.setAttribute('aria-expanded', 'false');
       });
     });
@@ -1519,56 +1144,58 @@
   <script>
     gsap.registerPlugin(ScrollTrigger);
 
-    /* ── Hero: image scale on load ── */
-    gsap.from('.hero__image', {
+    /* Hero */
+    gsap.from('.hero__peeps img', {
       scale: 1.04, duration: 1.6, ease: 'power2.out', delay: 0.2
     });
-
-    /* ── Tagline: text reveal on scroll ── */
-    gsap.from('.tagline__text', {
-      y: 60, opacity: 0, duration: 1, ease: 'power3.out',
-      scrollTrigger: { trigger: '#tagline', start: 'top 80%' }
+    gsap.from('.hero__tagline', {
+      y: 40, opacity: 0, duration: 1, ease: 'power3.out', delay: 0.4
     });
-    gsap.from('#tagline .t-label', {
+
+    /* Works */
+    gsap.from('#works .t-label', {
       y: 20, opacity: 0, duration: 0.6, ease: 'power3.out',
-      scrollTrigger: { trigger: '#tagline', start: 'top 75%' }
+      scrollTrigger: { trigger: '#works', start: 'top 85%' }
     });
-
-    /* ── Works cards: stagger up ── */
-    gsap.from('.works__grid .card', {
-      y: 70, opacity: 0, duration: 0.9, stagger: 0.15, ease: 'power3.out',
+    gsap.from('.card--large', {
+      y: 60, opacity: 0, duration: 0.9, ease: 'power3.out',
+      scrollTrigger: { trigger: '.works__grid', start: 'top 85%' }
+    });
+    gsap.from('.card--small', {
+      y: 60, opacity: 0, duration: 0.9, stagger: 0.15, ease: 'power3.out',
       scrollTrigger: { trigger: '.works__grid', start: 'top 82%' }
     });
-    gsap.from('#tagline .btn', {
-      y: 20, opacity: 0, duration: 0.6, ease: 'power3.out', delay: 0.1,
-      scrollTrigger: { trigger: '.works__grid', start: 'bottom 85%' }
+    gsap.from('.works__cta-row', {
+      y: 20, opacity: 0, duration: 0.6, ease: 'power3.out',
+      scrollTrigger: { trigger: '.works__cta-row', start: 'top 90%' }
     });
 
-    /* ── Testimonials: marquee + cards ── */
-    gsap.from('.clients-marquee', {
-      opacity: 0, duration: 0.8, ease: 'power2.out',
-      scrollTrigger: { trigger: '.clients-marquee', start: 'top 88%' }
+    /* Testimonials */
+    gsap.from('.test__headline', {
+      y: 40, opacity: 0, duration: 0.9, ease: 'power3.out',
+      scrollTrigger: { trigger: '#testimonials', start: 'top 85%' }
     });
     gsap.from('.t-card', {
-      y: 50, opacity: 0, duration: 0.8, stagger: 0.14, ease: 'power3.out',
-      clearProps: 'all',
-      scrollTrigger: { trigger: '#testimonials', start: 'top 82%' }
+      y: 50, opacity: 0, duration: 0.8, stagger: 0.12, ease: 'power3.out',
+      scrollTrigger: { trigger: '.test__row', start: 'top 88%' }
+    });
+    gsap.from('.clients-row img', {
+      opacity: 0, duration: 0.6, stagger: 0.1,
+      scrollTrigger: { trigger: '.clients-row', start: 'top 90%' }
     });
 
-    /* ── After Hours blocks: stagger in ── */
-    gsap.from('.ah-block, .ah-copy', {
-      opacity: 0, y: 30, duration: 0.8, stagger: 0.1, ease: 'power3.out',
-      scrollTrigger: { trigger: '#afterhours', start: 'top 80%' }
-    });
-
-    /* ── Contact ── */
+    /* Contact */
     gsap.from('.contact__heading', {
       y: 60, opacity: 0, duration: 1, ease: 'power3.out',
-      scrollTrigger: { trigger: '#contact', start: 'top 78%' }
+      scrollTrigger: { trigger: '#contact', start: 'top 80%' }
     });
     gsap.from(['.contact__desc', '.contact__socials', '#contact .t-label'], {
       y: 25, opacity: 0, duration: 0.7, stagger: 0.12, ease: 'power3.out',
-      scrollTrigger: { trigger: '#contact', start: 'top 72%' }
+      scrollTrigger: { trigger: '#contact', start: 'top 75%' }
+    });
+    gsap.from('.contact__decor-text', {
+      x: 120, opacity: 0, duration: 1.2, ease: 'power2.out',
+      scrollTrigger: { trigger: '#contact', start: 'top 80%' }
     });
   </script>
 </body>
