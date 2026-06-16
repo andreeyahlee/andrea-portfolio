@@ -827,17 +827,32 @@
     .contact__decor {
       flex: 1;
       min-width: 0;
-      overflow: hidden;
       display: flex;
       align-items: flex-end;
     }
 
-    .contact__peeps {
+    .footer-peeps-crowd {
+      position: relative;
       width: 100%;
-      height: auto;
-      display: block;
-      pointer-events: none;
-      user-select: none;
+      aspect-ratio: 817 / 542;
+      flex-shrink: 0;
+      overflow: visible;
+    }
+
+    .footer-peep {
+      position: absolute;
+      width: 22.5%;
+      height: 47.8%;
+      object-fit: contain;
+      object-position: bottom center;
+      transform-origin: center bottom;
+      transition: filter 0.3s ease;
+      will-change: transform;
+      cursor: default;
+    }
+
+    .footer-peep:hover {
+      filter: drop-shadow(0 18px 36px rgba(0,0,0,0.3));
     }
 
     /* ================================================================
@@ -1225,7 +1240,38 @@
 
       <!-- Decorative crowd illustration — fills right side of contact section -->
       <div class="contact__decor" aria-hidden="true">
-        <img class="contact__peeps" src="Asset/Footer-peeps.png" alt="">
+        <div class="footer-peeps-crowd">
+          <!-- Row 6 — back row -->
+          <img class="footer-peep" src="Asset/footer_peep22.png" style="left:20.9%;top:-2.8%" alt="">
+          <img class="footer-peep" src="Asset/footer_peep23.png" style="left:43.7%;top:-2.8%" alt="">
+          <img class="footer-peep" src="Asset/footer_peep24.png" style="left:66.6%;top:-2.8%" alt="">
+          <img class="footer-peep" src="Asset/footer_peep21.png" style="left:88.0%;top:-2.8%" alt="">
+          <!-- Row 5 -->
+          <img class="footer-peep" src="Asset/footer_peep20.png" style="left:31.4%;top:10.5%" alt="">
+          <img class="footer-peep" src="Asset/footer_peep18.png" style="left:54.3%;top:10.5%" alt="">
+          <img class="footer-peep" src="Asset/footer_peep19.png" style="left:77.1%;top:10.5%" alt="">
+          <img class="footer-peep" src="Asset/footer_peep17.png" style="left:100.0%;top:10.5%" alt="">
+          <!-- Row 4 -->
+          <img class="footer-peep" src="Asset/footer_peep14.png" style="left:20.8%;top:20.8%" alt="">
+          <img class="footer-peep" src="Asset/footer_peep15.png" style="left:43.6%;top:20.8%" alt="">
+          <img class="footer-peep" src="Asset/footer_peep16.png" style="left:66.5%;top:20.8%" alt="">
+          <img class="footer-peep" src="Asset/footer_peep13.png" style="left:89.4%;top:20.8%" alt="">
+          <!-- Row 3 -->
+          <img class="footer-peep" src="Asset/footer_peep11.png" style="left:31.4%;top:31.4%" alt="">
+          <img class="footer-peep" src="Asset/footer_peep09.png" style="left:54.3%;top:31.4%" alt="">
+          <img class="footer-peep" src="Asset/footer_peep10.png" style="left:77.1%;top:31.4%" alt="">
+          <img class="footer-peep" src="Asset/footer_peep12.png" style="left:100.0%;top:31.4%" alt="">
+          <!-- Row 2 -->
+          <img class="footer-peep" src="Asset/footer_peep05.png" style="left:22.1%;top:41.9%" alt="">
+          <img class="footer-peep" src="Asset/footer_peep08.png" style="left:44.3%;top:41.9%" alt="">
+          <img class="footer-peep" src="Asset/footer_peep07.png" style="left:66.5%;top:41.9%" alt="">
+          <img class="footer-peep" src="Asset/footer_peep06.png" style="left:88.6%;top:41.9%" alt="">
+          <!-- Row 1 — front row -->
+          <img class="footer-peep" src="Asset/footer_peep01.png" style="left:31.4%;top:52.2%" alt="">
+          <img class="footer-peep" src="Asset/footer_peep03.png" style="left:54.2%;top:52.2%" alt="">
+          <img class="footer-peep" src="Asset/footer_peep04.png" style="left:77.2%;top:52.2%" alt="">
+          <img class="footer-peep" src="Asset/footer_peep02.png" style="left:100.0%;top:52.2%" alt="">
+        </div>
       </div>
 
     </div>
@@ -1422,9 +1468,19 @@
       y: 25, opacity: 0, duration: 0.7, stagger: 0.12, ease: 'power3.out',
       scrollTrigger: { trigger: '#contact', start: 'top 75%' }
     });
-    gsap.from('.contact__peeps', {
-      y: 40, opacity: 0, duration: 1.2, ease: 'power2.out',
-      scrollTrigger: { trigger: '#contact', start: 'top 80%' }
+    gsap.from('.footer-peep', {
+      y: 30, opacity: 0, duration: 1, stagger: 0.025, ease: 'power3.out',
+      scrollTrigger: { trigger: '#contact', start: 'top 85%' }
+    });
+    document.querySelectorAll('.footer-peep').forEach(peep => {
+      peep.addEventListener('mouseenter', function () {
+        gsap.killTweensOf(this);
+        gsap.timeline()
+          .to(this, { y: '-12%', scaleY: 1.04, scaleX: 1.02, duration: 0.32, ease: 'back.out(1.6)' })
+          .to(this, { y: '-7%', duration: 0.38, ease: 'sine.inOut' })
+          .to(this, { y: '-13%', duration: 0.42, ease: 'sine.inOut' })
+          .to(this, { y: 0, scaleY: 1, scaleX: 1, duration: 0.5, ease: 'power2.inOut' });
+      });
     });
 
     /* ── Testimonial spotlight ── */
