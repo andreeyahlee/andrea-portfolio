@@ -8,10 +8,10 @@
   <meta name="robots" content="index, follow">
   <meta http-equiv="X-Content-Type-Options" content="nosniff">
 
-  <!-- Google Fonts: Lora (display) + Caveat (handwritten nav logo) -->
+  <!-- Google Fonts: Lora (display) + Gochi Hand (handwritten nav) -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Architects+Daughter&family=Lora:ital,wght@0,400;1,400&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Gochi+Hand&family=Lora:ital,wght@0,400;1,400&display=swap" rel="stylesheet">
 
   <style>
     /* ── Self-hosted fonts ── */
@@ -40,7 +40,7 @@
       --font-display: 'Lora', Georgia, serif;
       --font-body:    'DM Sans', Arial, sans-serif;
       --font-mono:    'DM Mono', 'IBM Plex Mono', monospace;
-      --font-hand:    'Architects Daughter', cursive;
+      --font-hand:    'Gochi Hand', cursive;
 
       --max-w: 1312px;
       --pad:   64px;
@@ -76,17 +76,15 @@
     body.light-mode .t-card__category      { color: #6b7a00; }
     body.light-mode .client-logo           { filter: brightness(0); }
     body.light-mode .social-link           { color: var(--ink-dark); }
-    body.light-mode .card__role            { color: #6b7a00; }
-    body.light-mode .card__highlight       { color: #6b7a00; }
     body.light-mode .contact__decor-text   { color: rgba(26,28,22,0.06); }
-    body.light-mode .nav                   { background: var(--bg-dark); border-color: rgba(222,232,149,0.18); }
-    body.light-mode .nav__links a          { color: var(--ink-light); }
-    body.light-mode .nav__links a:hover    { color: var(--lime); }
-    body.light-mode .nav__logo-text        { color: var(--ink-light); }
-    body.light-mode .nav__ham-line         { background: var(--ink-light); }
-    body.light-mode .nav__mobile-menu      { background: var(--bg-dark); border-color: rgba(222,232,149,0.18); }
-    body.light-mode .nav__mobile-menu li a { color: rgba(244,244,235,0.7); }
-    body.light-mode .nav__mobile-menu li a:hover { color: var(--lime); background: rgba(244,244,235,0.05); }
+    body.light-mode .nav                   { background: var(--bg-light); }
+    body.light-mode .nav__links a          { color: var(--ink-dark); }
+    body.light-mode .nav__links a:hover    { color: #6b7a00; }
+    body.light-mode .nav__logo-text        { color: var(--ink-dark); }
+    body.light-mode .nav__ham-line         { background: var(--ink-dark); }
+    body.light-mode .nav__mobile-menu      { background: var(--bg-light); border-color: rgba(26,28,22,0.15); }
+    body.light-mode .nav__mobile-menu li a { color: rgba(26,28,22,0.7); }
+    body.light-mode .nav__mobile-menu li a:hover { color: #6b7a00; background: rgba(26,28,22,0.05); }
 
     /* ================================================================
        NAVIGATION — floating pill
@@ -161,20 +159,78 @@
     }
     .nav__links a:hover { color: var(--lime); }
 
-    /* Theme toggle */
+    /* Theme toggle — coded pill */
     .nav__toggle {
+      box-sizing: border-box;
       display: flex;
       align-items: center;
-      padding: 0;
-      background: none;
-      border: none;
+      justify-content: center;
+      padding: 4px;
+      width: 83px;
+      height: 30px;
+      /* dark mode: cream pill */
+      background: #f4f4eb;
+      border: 0.95px solid var(--lime);
+      box-shadow: inset 0 4px 4px rgba(0,0,0,0.25);
+      border-radius: 95px;
       cursor: pointer;
       flex-shrink: 0;
-      transition: opacity var(--dur-fast);
+      transition: background 0.3s ease;
     }
-    .nav__toggle:hover { opacity: 0.8; }
+    /* light mode: olive pill */
+    body.light-mode .nav__toggle { background: #6b7060; }
+    .nav__toggle:hover { opacity: 0.85; }
 
-    #theme-cta-img { display: block; width: 80px; height: 40px; object-fit: contain; pointer-events: none; }
+    .toggle__inner {
+      display: flex;
+      flex-direction: row;
+      justify-content: space-between;
+      align-items: center;
+      /* dark mode inner: 75×22 */
+      width: 75px;
+      height: 22px;
+      gap: 3px;
+      pointer-events: none;
+    }
+    body.light-mode .toggle__inner { width: 72px; }
+
+    /* dark mode: sun on RIGHT (order 1); light mode: moon on LEFT (order 0) */
+    .toggle__icon {
+      width: 33px;
+      height: 22px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      order: 1;
+    }
+    body.light-mode .toggle__icon { order: 0; width: 27px; height: 20px; }
+
+    .toggle__sun  { display: block; width: 100%; height: 100%; }
+    .toggle__moon { display: none;  width: 100%; height: 100%; }
+    body.light-mode .toggle__sun  { display: none;  }
+    body.light-mode .toggle__moon { display: block; }
+
+    /* dark mode: dark thumb on LEFT (order 0) */
+    .toggle__thumb {
+      box-sizing: border-box;
+      width: 42px;
+      height: 22px;
+      background: #1a1c16;
+      border: 1px solid var(--lime);
+      box-shadow: 0 10px 4px rgba(0,0,0,0.25);
+      border-radius: 95px;
+      flex-shrink: 0;
+      order: 0;
+      transition: background 0.3s ease, box-shadow 0.3s ease, height 0.3s ease;
+    }
+    /* light mode: cream thumb on RIGHT (order 1) */
+    body.light-mode .toggle__thumb {
+      background: #f4f4eb;
+      box-shadow: -3px 2px 2px rgba(0,0,0,0.69), inset -1px -6px 4px rgba(0,0,0,0.25);
+      height: 20px;
+      order: 1;
+    }
 
     /* Hamburger */
     .nav__hamburger {
@@ -289,7 +345,9 @@
        01 — HERO
     ================================================================ */
     #hero {
-      min-height: 100vh;
+      height: 100vh;
+      min-height: 600px;
+      max-height: 900px;
       display: flex;
       flex-direction: column;
       align-items: center;
@@ -299,23 +357,31 @@
       gap: 40px;
     }
 
-    /* Replace src with your exported peeps PNG/SVG — e.g. Asset/Hero_Peeps.png */
     .hero__peeps {
+      /* Fill the full hero width and all available flex height.
+         No aspect-ratio — peep % positions scale to any container shape. */
       width: 100%;
-      max-width: var(--max-w);
-      flex: 1;
-      min-height: 300px;
+      max-width: var(--max-w); /* prevent peeps spreading beyond 1312px on ultra-wide monitors */
+      flex: 1 1 auto;
+      min-height: 0;
       position: relative;
-      overflow: hidden;
+      overflow: visible;
     }
 
-    .hero__peeps img {
+    .peep {
       position: absolute;
-      inset: 0;
-      width: 100%;
-      height: 100%;
+      width: 14.26%;
+      height: 47.72%;
       object-fit: contain;
-      object-position: center bottom;
+      object-position: center center;
+      transform-origin: center bottom;
+      transition: filter 0.3s ease;
+      will-change: transform;
+      cursor: default;
+    }
+
+    .peep:hover {
+      filter: drop-shadow(0 18px 36px rgba(0,0,0,0.3));
     }
 
     .hero__tagline {
@@ -334,6 +400,13 @@
       font-family: var(--font-hand);
       font-size: 1.12em;
       letter-spacing: 0;
+      display: inline-block;
+      transition: color 0.2s ease;
+      cursor: default;
+    }
+
+    .hero__hand:hover {
+      color: var(--lime);
     }
 
     /* ================================================================
@@ -346,145 +419,132 @@
     #works .inner {
       display: flex;
       flex-direction: column;
-      gap: 40px;
+      gap: 20px;
     }
 
-    /* Asymmetric grid: large ARVO + 2 stacked small */
     .works__grid {
       display: flex;
-      gap: 50.67px;
-      align-items: stretch;
+      flex-direction: column;
+      gap: 20px;
       width: 100%;
     }
 
-    /* Large card */
-    .card--large {
-      flex: 2.69; /* ~919 / 342 ratio */
-      min-height: 500px;
-      border-radius: 0;
-      overflow: hidden;
+    /* Card base — all full-width, stacked */
+    .card {
       position: relative;
-      cursor: pointer;
-      --card-overlay: rgba(0,0,0,0.4);
-    }
-
-    /* Small-card column */
-    .works__small-col {
-      flex: 1;
-      display: flex;
-      flex-direction: column;
-      gap: 51px;
-    }
-
-    /* Small cards */
-    .card--small {
-      flex: 1;
+      overflow: hidden;
+      isolation: isolate;
+      width: 100%;
+      aspect-ratio: 1312 / 500;
       min-height: 200px;
-      border-radius: 0;
-      overflow: hidden;
-      position: relative;
+      border-radius: 16px;
       cursor: pointer;
-      --card-overlay: transparent;
-    }
-    .card--small.card--pawhaus { --card-overlay: rgba(26,28,22,0.6); }
-
-    /* Shared card internals */
-    .card--large,
-    .card--small {
-      position: relative;
     }
 
-    .card__bg {
+    .card--arvo    { background: #31332a; }
+    .card--seletar { background: #304c95; }
+    .card--pawhaus { background: #d09a94; }
+
+    /* Inner body — left-side text layout */
+    .card__body {
       position: absolute;
       inset: 0;
-      width: 100%; height: 100%;
-      object-fit: cover;
-    }
-
-    .card__overlay {
-      position: absolute;
-      inset: 0;
-      background: var(--card-overlay, transparent);
-      transition: background var(--dur-slow);
-    }
-    .card--large:hover .card__overlay,
-    .card--small:hover .card__overlay { background: rgba(0,0,0,0.75); }
-
-    .card__default-info {
-      position: absolute;
-      bottom: 0; left: 0; right: 0;
-      padding: 8px 16px 16px;
-      display: flex;
-      flex-direction: column;
-      gap: 8px;
-      color: var(--ink-light);
-      transition: opacity var(--dur-slow);
-    }
-    .card--large:hover .card__default-info,
-    .card--small:hover .card__default-info { opacity: 0; pointer-events: none; }
-
-    .card__title {
-      font-family: var(--font-display);
-      font-size: clamp(1.5rem, 2vw, 1.625rem);
-      line-height: 1.23;
-      letter-spacing: -0.015em;
-      color: var(--ink-light);
-    }
-
-    .card__subtitle {
-      font-family: var(--font-body);
-      font-weight: 600;
-      font-size: 15px;
-      line-height: 23px;
-      color: var(--ink-light);
-    }
-
-    .card__hover-info {
-      position: absolute;
-      inset: 0;
-      padding: 16px;
+      padding: clamp(20px, 2.44vw, 32px);
       display: flex;
       flex-direction: column;
       justify-content: space-between;
-      color: var(--ink-light);
-      opacity: 0;
-      transition: opacity var(--dur-slow);
-    }
-    .card--large:hover .card__hover-info,
-    .card--small:hover .card__hover-info { opacity: 1; }
-
-    .card__category {
-      font-family: var(--font-mono);
-      font-size: 10px;
-      letter-spacing: 0.1px;
-      text-transform: uppercase;
-      opacity: 0.8;
+      z-index: 2;
     }
 
-    .card__description {
+    .card__case-title {
       font-family: var(--font-display);
-      font-size: clamp(1.1rem, 1.5vw, 1.4rem);
-      line-height: 1.3;
+      font-weight: 700;
+      font-size: clamp(18px, 2.22vw, 32px);
+      line-height: 1.156; /* 37/32 from Figma */
+      letter-spacing: -0.02em; /* -0.64px at 32px */
+      color: var(--ink-light);
+      max-width: clamp(220px, 40vw, 520px);
+    }
+    .card__case-title strong { font-weight: 700; display: block; }
+
+    .card__foot {
       display: flex;
       flex-direction: column;
-      gap: 0.4em;
+      gap: 4px;
     }
 
-    .card__highlight { color: var(--lime); }
+    .card__project-name {
+      font-family: var(--font-hand);
+      font-size: clamp(28px, 3.47vw, 50px);
+      line-height: 1.05;
+      color: #f4f4eb;
+    }
 
-    .card__cta {
+    .card__project-meta {
       font-family: var(--font-body);
-      font-size: 14px;
-      color: var(--ink-light);
+      font-weight: 400;
+      font-size: clamp(12px, 1.04vw, 15px);
+      line-height: 1.55;
+      color: rgba(244, 244, 235, 0.75);
+    }
+
+    /* Mockup images — absolutely positioned on right side */
+    .card__mockup {
+      position: absolute;
+      pointer-events: none;
+      object-fit: contain;
+      z-index: 1;
+    }
+
+    /* ARVO — Figma: x=656/1312=50%, y=19/500=3.8%, w=683.8/1312=52.1% */
+    .card__mockup--arvo {
+      left: 50%;
+      top: 3.8%;
+      width: 52.1%;
+      height: auto;
+      filter: drop-shadow(-20px 28px 4px rgba(0,0,0,0.45));
+    }
+
+    /* Seletar — Figma Group6: x=578/1312=44.1%, y=57/500=11.4%, w=803/1312=61.2% */
+    .card__mockup--seletar {
+      left: 44.1%;
+      top: 11.4%;
+      width: 61.2%;
+      height: auto;
+      filter: drop-shadow(-14px 20px 3px rgba(0,0,0,0.4));
+    }
+
+    /* PawHaus — Figma MacBook: x=808/1312=61.6%, y=48/500=9.6%, w=756.6/1312=57.7% */
+    .card__mockup--pawhaus {
+      left: 61.6%;
+      top: 9.6%;
+      width: 57.7%;
+      height: auto;
+      filter: drop-shadow(-14px 20px 4px rgba(0,0,0,0.35));
+    }
+
+    /* "View all works" CTA — right-aligned */
+    .card__cta-btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 16px 32px;
+      white-space: nowrap;
+      overflow: hidden;
+      background: var(--lime);
+      border: 3px solid var(--lime);
+      border-radius: 100px;
+      font-family: var(--font-body);
+      font-weight: 600;
+      font-size: 13px;
+      line-height: normal;
+      color: #21281a;
       text-decoration: none;
+      box-shadow: -8px 7px 3.6px -3px rgba(0,0,0,0.25), inset 1px -2px 4px 2px rgba(0,0,0,0.25);
+      align-self: flex-end;
       transition: opacity var(--dur-fast);
     }
-    .card__cta:hover { opacity: 0.75; }
-
-    .works__cta-row {
-      display: flex;
-      justify-content: flex-start;
-    }
+    .card__cta-btn:hover { opacity: 0.85; }
 
     /* ================================================================
        03 — CLIENTS & TESTIMONIALS
@@ -492,59 +552,137 @@
     #testimonials .inner {
       display: flex;
       flex-direction: column;
-      gap: 40px;
+      gap: 60px;
     }
 
+    /* Heading — large Lora display text */
     .test__headline {
       font-family: var(--font-display);
       font-weight: 400;
-      font-size: clamp(1.75rem, 2.78vw, 2.5rem);
-      line-height: 1.1;
-      letter-spacing: -0.025em;
+      font-size: clamp(1.75rem, 3.6vw, 3.25rem);
+      line-height: 1.08;
+      letter-spacing: -0.03em;
       color: var(--ink-light);
       text-align: center;
-      max-width: var(--max-w);
+      width: 100%;
+    }
+    body.light-mode .test__headline { color: var(--ink-dark); }
+
+    /* Carousel wrapper: groups the track + dots as one unit */
+    .test__carousel {
+      display: flex;
+      flex-direction: column;
+      gap: 32px;
       width: 100%;
     }
 
-    /* 4-across testimonial row — horizontal scroll on smaller screens */
+    /* Spotlight carousel — active card front, adjacent faded */
     .test__row {
-      display: grid;
-      grid-template-columns: repeat(4, 1fr);
-      gap: 40px;
+      position: relative;
       width: 100%;
+      min-height: 300px;
+      overflow: hidden;
+      -webkit-mask-image: linear-gradient(to right, transparent 0%, rgba(0,0,0,0.5) 12%, black 26%, black 74%, rgba(0,0,0,0.5) 88%, transparent 100%);
+      mask-image: linear-gradient(to right, transparent 0%, rgba(0,0,0,0.5) 12%, black 26%, black 74%, rgba(0,0,0,0.5) 88%, transparent 100%);
     }
 
     .t-card {
+      position: absolute;
+      left: 50%;
+      top: 0;
+      width: min(80%, 540px);
       display: flex;
       flex-direction: column;
       align-items: center;
       gap: 20px;
       text-align: center;
+      opacity: 0;
+      transform: translateX(-50%);
+      transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.4s ease;
+      pointer-events: none;
+    }
+
+    .t-card.active {
+      opacity: 1;
+      transform: translateX(-50%);
+      pointer-events: auto;
+      z-index: 2;
+    }
+
+    .t-card.t-prev {
+      opacity: 0.3;
+      transform: translateX(calc(-50% - 580px));
+      z-index: 1;
+    }
+
+    .t-card.t-next {
+      opacity: 0.3;
+      transform: translateX(calc(-50% + 580px));
+      z-index: 1;
     }
 
     .t-card__body {
       display: flex;
       flex-direction: column;
       align-items: center;
-      gap: 20px;
+      gap: 16px;
     }
 
+    .test__nav {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .test__dots {
+      display: flex;
+      gap: 18px;
+      align-items: center;
+    }
+
+    .test__dot {
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      background: rgba(244,244,235,0.25);
+      flex-shrink: 0;
+      transition: width 0.3s ease, height 0.3s ease, background 0.3s ease;
+      cursor: pointer;
+    }
+    .test__dot.active {
+      width: 20px;
+      height: 20px;
+      background: var(--lime);
+    }
+    body.light-mode .test__dot { background: rgba(26,28,22,0.2); }
+    body.light-mode .test__dot.active { background: #6b7a00; }
+
+    /* Category — smallest label, purely contextual */
     .t-card__category {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      background: #6b7060;
+      padding: 3px 12px;
+      border-radius: 5px;
       font-family: var(--font-body);
       font-weight: 600;
-      font-size: 13px;
-      line-height: 17px;
+      font-size: 11px;
+      line-height: normal;
+      letter-spacing: 0.04em;
       color: var(--ink-light);
-      text-align: center;
+      white-space: nowrap;
+      opacity: 0.8;
     }
+    body.light-mode .t-card__category { color: var(--ink-light); }
 
+    /* Quote — the headline of each card */
     .t-card__quote {
       font-family: var(--font-display);
       font-style: italic;
       font-weight: 400;
-      font-size: clamp(0.9rem, 1.1vw, 1.125rem);
-      line-height: 1.45;
+      font-size: clamp(1.0625rem, 1.68vw, 1.375rem);
+      line-height: 1.55;
       letter-spacing: -0.01em;
       color: var(--ink-light);
     }
@@ -555,41 +693,54 @@
       gap: 4px;
     }
 
+    /* Name — clear attribution */
     .t-card__name {
       font-family: var(--font-body);
       font-weight: 600;
-      font-size: 15px;
-      line-height: 23px;
+      font-size: 14px;
+      line-height: 20px;
       color: var(--ink-light);
     }
 
+    /* Role — softest layer */
     .t-card__role {
       font-family: var(--font-body);
       font-style: italic;
-      font-size: 13px;
-      line-height: 23px;
-      color: rgba(244,244,235,0.65);
+      font-size: 12px;
+      line-height: 18px;
+      color: rgba(244,244,235,0.5);
     }
 
-    /* Client logos row */
-    .clients-row {
+    /* Client logos — continuous marquee */
+    .clients-marquee {
+      overflow: hidden;
+      width: 100%;
+      -webkit-mask-image: linear-gradient(to right, transparent 0%, black 12%, black 88%, transparent 100%);
+      mask-image: linear-gradient(to right, transparent 0%, black 12%, black 88%, transparent 100%);
+    }
+
+    .clients-track {
       display: flex;
-      flex-direction: row;
-      justify-content: center;
       align-items: center;
       gap: 100px;
-      width: 100%;
-      padding-top: 20px;
+      width: max-content;
+      animation: marquee 18s linear infinite;
+    }
+    .clients-marquee:hover .clients-track { animation-play-state: paused; }
+
+    @keyframes marquee {
+      from { transform: translateX(0); }
+      to   { transform: translateX(-50%); }
     }
 
     .client-logo {
       object-fit: contain;
       flex-shrink: 0;
-      opacity: 0.85;
+      opacity: 0.75;
     }
-    .client-logo--guerlain { width: 200px; height: auto; }
-    .client-logo--arvo     { width: 150px; height: auto; }
-    .client-logo--cpf      { width: 200px; height: auto; }
+    .client-logo--guerlain { width: clamp(100px, 17.4vw, 228px); height: auto; }
+    .client-logo--arvo     { width: clamp(76px, 12.5vw, 164px); height: auto; }
+    .client-logo--cpf      { width: clamp(100px, 17.9vw, 235px); height: auto; }
 
     /* ================================================================
        04 — CONTACT / ABOUT
@@ -730,14 +881,6 @@
       body { cursor: auto; }
     }
 
-    /* ================================================================
-       TOUCH — tap-to-reveal hover state
-    ================================================================ */
-    @media (hover: none) {
-      .card--tapped .card__default-info { opacity: 0; pointer-events: none; }
-      .card--tapped .card__hover-info   { opacity: 1; }
-      .card--tapped .card__overlay      { background: rgba(0,0,0,0.75); }
-    }
 
     /* ================================================================
        RESPONSIVE — TABLET  768–1024px
@@ -747,17 +890,10 @@
 
       .hero__tagline { font-size: clamp(1.5rem, 3vw, 2.5rem); line-height: 1.15; }
 
-      .works__grid { flex-direction: column; gap: 24px; }
-      .card--large { min-height: 400px; }
-      .works__small-col { flex-direction: row; gap: 24px; }
-      .card--small { min-height: 260px; }
-
-      .test__row { grid-template-columns: repeat(2, 1fr); gap: 40px 24px; }
-
-      .clients-row { gap: 60px; }
-      .client-logo--guerlain { width: 150px; }
-      .client-logo--arvo     { width: 110px; }
-      .client-logo--cpf      { width: 150px; }
+      /* tablet: cards stay full-width, nudge mockup positions */
+      .card__mockup--arvo    { width: 60%; filter: drop-shadow(-14px 20px 2px rgba(0,0,0,0.45)); }
+      .card__mockup--seletar { left: 38%; width: 66%; filter: drop-shadow(-10px 15px 2px rgba(0,0,0,0.4)); }
+      .card__mockup--pawhaus { left: 54%; width: 62%; filter: drop-shadow(-10px 15px 3px rgba(0,0,0,0.35)); }
 
       #contact .inner { flex-direction: column; min-height: auto; gap: 40px; }
       .contact__copy { width: 100%; }
@@ -778,26 +914,23 @@
 
       /* Hero */
       #hero { padding-top: calc(24px + 80px); gap: 24px; min-height: auto; padding-bottom: 40px; }
-      .hero__peeps { min-height: 200px; flex: none; height: 50vw; }
+      .hero__peeps {
+        margin-left: calc(-1 * var(--pad));
+        margin-right: calc(-1 * var(--pad));
+        width: calc(100% + 2 * var(--pad));
+        max-width: none; /* override max-width so peeps fill mobile width edge-to-edge */
+      }
       .hero__tagline { font-size: clamp(1.4rem, 5vw, 2rem); line-height: 1.2; }
 
-      /* Works */
-      .works__grid { flex-direction: column; gap: 16px; }
-      .card--large { min-height: 300px; }
-      .works__small-col { flex-direction: column; gap: 16px; }
-      .card--small { min-height: 220px; }
+      /* Works — mobile: taller aspect-ratio, text wider, mockups smaller */
+      .card { aspect-ratio: 3 / 2; }
+      .card__case-title { max-width: 58%; }
+      /* top% = desktop_top × (500/1312)/(2/3) = desktop_top × 0.5717 */
+      .card__mockup--arvo    { left: 44%;  top: 2.2%; width: 68%; filter: drop-shadow(-8px 12px 2px rgba(0,0,0,0.45)); }
+      .card__mockup--seletar { left: 38%;  top: 6.5%; width: 72%; filter: drop-shadow(-6px 10px 2px rgba(0,0,0,0.4)); }
+      .card__mockup--pawhaus { left: 54%;  top: 5.5%; width: 68%; filter: drop-shadow(-6px 10px 2px rgba(0,0,0,0.35)); }
 
-      /* Testimonials */
-      .test__headline { font-size: clamp(1.35rem, 4.5vw, 2rem); }
-      .test__row {
-        grid-template-columns: 1fr;
-        gap: 40px;
-      }
 
-      .clients-row { flex-wrap: wrap; gap: 32px; justify-content: center; }
-      .client-logo--guerlain,
-      .client-logo--arvo,
-      .client-logo--cpf { width: 120px; height: auto; }
 
       /* Contact */
       #contact .inner { flex-direction: column; }
@@ -829,6 +962,8 @@
       <span class="nav__logo-text">Andrea Lee</span>
       <img class="nav__logo-flower"
            src="Asset/cursor-light.png"
+           data-dark-src="Asset/cursor-light.png"
+           data-light-src="Asset/cursor-dark.png"
            alt="" aria-hidden="true" />
     </a>
     <div class="nav__right">
@@ -844,11 +979,27 @@
         <span class="nav__ham-line"></span>
       </button>
       <button class="nav__toggle" id="theme-toggle" aria-label="Toggle light mode">
-        <img id="theme-cta-img"
-             src="Asset/Nav_Dark mode CTA.png"
-             data-dark-src="Asset/Nav_Dark mode CTA.png"
-             data-light-src="Asset/Nav_Light mode CTA.png"
-             alt="Toggle theme" />
+        <span class="toggle__inner">
+          <span class="toggle__icon" aria-hidden="true">
+            <!-- sun: visible in dark mode — click to go light -->
+            <svg class="toggle__sun" width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <circle cx="10" cy="10" r="3.5" fill="#1a1c16"/>
+              <line x1="10" y1="1.5" x2="10" y2="3.5" stroke="#1a1c16" stroke-width="1.5" stroke-linecap="round"/>
+              <line x1="10" y1="16.5" x2="10" y2="18.5" stroke="#1a1c16" stroke-width="1.5" stroke-linecap="round"/>
+              <line x1="1.5" y1="10" x2="3.5" y2="10" stroke="#1a1c16" stroke-width="1.5" stroke-linecap="round"/>
+              <line x1="16.5" y1="10" x2="18.5" y2="10" stroke="#1a1c16" stroke-width="1.5" stroke-linecap="round"/>
+              <line x1="3.93" y1="3.93" x2="5.34" y2="5.34" stroke="#1a1c16" stroke-width="1.5" stroke-linecap="round"/>
+              <line x1="14.66" y1="14.66" x2="16.07" y2="16.07" stroke="#1a1c16" stroke-width="1.5" stroke-linecap="round"/>
+              <line x1="16.07" y1="3.93" x2="14.66" y2="5.34" stroke="#1a1c16" stroke-width="1.5" stroke-linecap="round"/>
+              <line x1="5.34" y1="14.66" x2="3.93" y2="16.07" stroke="#1a1c16" stroke-width="1.5" stroke-linecap="round"/>
+            </svg>
+            <!-- moon: visible in light mode — click to go dark -->
+            <svg class="toggle__moon" width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M17 12.9A8 8 0 0 1 7.1 3a8 8 0 1 0 9.9 9.9z" fill="#dee895"/>
+            </svg>
+          </span>
+          <span class="toggle__thumb"></span>
+        </span>
       </button>
     </div>
     <!-- Mobile dropdown -->
@@ -864,8 +1015,52 @@
 
   <!-- ── 01 HERO ── -->
   <section class="section" id="hero">
-    <div class="hero__peeps">
-      <img src="Asset/hero-peeps.png" alt="A diverse crowd of illustrated people" />
+    <div class="hero__peeps" id="hero-peeps" role="img" aria-label="A diverse crowd of illustrated people">
+      <!-- Row 6 — back row, renders below all others -->
+      <img class="peep" src="Asset/Peep35.png" style="left:0%;top:0%" alt="" aria-hidden="true">
+      <img class="peep" src="Asset/Peep39.png" style="left:13.39%;top:0%" alt="" aria-hidden="true">
+      <img class="peep" src="Asset/Peep34.png" style="left:27.85%;top:0%" alt="" aria-hidden="true">
+      <img class="peep" src="Asset/Peep33.png" style="left:42.31%;top:0%" alt="" aria-hidden="true">
+      <img class="peep" src="Asset/Peep38.png" style="left:56.77%;top:0%" alt="" aria-hidden="true">
+      <img class="peep" src="Asset/Peep37.png" style="left:71.23%;top:0%" alt="" aria-hidden="true">
+      <img class="peep" src="Asset/Peep36.png" style="left:85.70%;top:0%" alt="" aria-hidden="true">
+      <!-- Row 5 -->
+      <img class="peep" src="Asset/Peep31.png" style="left:6.71%;top:10.46%" alt="" aria-hidden="true">
+      <img class="peep" src="Asset/Peep28.png" style="left:21.18%;top:10.46%" alt="" aria-hidden="true">
+      <img class="peep" src="Asset/Peep27.png" style="left:35.64%;top:10.46%" alt="" aria-hidden="true">
+      <img class="peep" src="Asset/Peep30.png" style="left:50.10%;top:10.46%" alt="" aria-hidden="true">
+      <img class="peep" src="Asset/Peep29.png" style="left:64.56%;top:10.46%" alt="" aria-hidden="true">
+      <img class="peep" src="Asset/Peep32.png" style="left:79.02%;top:10.46%" alt="" aria-hidden="true">
+      <!-- Row 4 -->
+      <img class="peep" src="Asset/Peep23.png" style="left:0.06%;top:20.91%" alt="" aria-hidden="true">
+      <img class="peep" src="Asset/Peep20.png" style="left:13.45%;top:20.91%" alt="" aria-hidden="true">
+      <img class="peep" src="Asset/Peep21.png" style="left:27.91%;top:20.91%" alt="" aria-hidden="true">
+      <img class="peep" src="Asset/Peep22.png" style="left:42.37%;top:20.91%" alt="" aria-hidden="true">
+      <img class="peep" src="Asset/Peep26.png" style="left:56.83%;top:20.91%" alt="" aria-hidden="true">
+      <img class="peep" src="Asset/Peep25.png" style="left:71.29%;top:20.91%" alt="" aria-hidden="true">
+      <img class="peep" src="Asset/Peep24.png" style="left:85.74%;top:20.91%" alt="" aria-hidden="true">
+      <!-- Row 3 -->
+      <img class="peep" src="Asset/Peep17.png" style="left:6.71%;top:31.37%" alt="" aria-hidden="true">
+      <img class="peep" src="Asset/Peep19.png" style="left:21.18%;top:31.37%" alt="" aria-hidden="true">
+      <img class="peep" src="Asset/Peep18.png" style="left:35.64%;top:31.37%" alt="" aria-hidden="true">
+      <img class="peep" src="Asset/Peep15.png" style="left:50.10%;top:31.37%" alt="" aria-hidden="true">
+      <img class="peep" src="Asset/Peep14.png" style="left:64.56%;top:31.37%" alt="" aria-hidden="true">
+      <img class="peep" src="Asset/Peep16.png" style="left:79.03%;top:31.37%" alt="" aria-hidden="true">
+      <!-- Row 2 -->
+      <img class="peep" src="Asset/Peep09.png" style="left:0.83%;top:41.83%" alt="" aria-hidden="true">
+      <img class="peep" src="Asset/Peep12.png" style="left:14.85%;top:41.83%" alt="" aria-hidden="true">
+      <img class="peep" src="Asset/Peep07.png" style="left:28.88%;top:41.83%" alt="" aria-hidden="true">
+      <img class="peep" src="Asset/Peep10.png" style="left:42.84%;top:41.83%" alt="" aria-hidden="true">
+      <img class="peep" src="Asset/Peep11.png" style="left:56.86%;top:41.83%" alt="" aria-hidden="true">
+      <img class="peep" src="Asset/Peep13.png" style="left:70.89%;top:41.83%" alt="" aria-hidden="true">
+      <img class="peep" src="Asset/Peep08.png" style="left:84.91%;top:41.83%" alt="" aria-hidden="true">
+      <!-- Row 1 — front row, renders on top -->
+      <img class="peep" src="Asset/Peep06.png" style="left:6.71%;top:52.28%" alt="" aria-hidden="true">
+      <img class="peep" src="Asset/Peep02.png" style="left:21.15%;top:52.28%" alt="" aria-hidden="true">
+      <img class="peep" src="Asset/Peep03.png" style="left:35.65%;top:52.28%" alt="" aria-hidden="true">
+      <img class="peep" src="Asset/Peep05.png" style="left:50.09%;top:52.28%" alt="" aria-hidden="true">
+      <img class="peep" src="Asset/Peep04.png" style="left:64.58%;top:52.28%" alt="" aria-hidden="true">
+      <img class="peep" src="Asset/Peep01.png" style="left:79.03%;top:52.30%" alt="" aria-hidden="true">
     </div>
     <p class="hero__tagline">
       I'm a <span class="hero__hand">late bloomer</span> product designer with an unconventional background.
@@ -881,68 +1076,45 @@
 
       <div class="works__grid">
 
-        <!-- ARVO — large card -->
-        <article class="card--large">
-          <img class="card__bg" src="Asset/Card 1 - ARVO - Default (clean).png" alt="ARVO" />
-          <div class="card__overlay"></div>
-          <div class="card__default-info">
-            <p class="card__title">ARVO</p>
-            <span class="card__subtitle">b2b SAAS | Website redesign &nbsp;&middot;&nbsp; Project Lead</span>
-          </div>
-          <div class="card__hover-info">
-            <span class="card__category">An AI Manager Co-pilot</span>
-            <div class="card__description">
-              <span>We came to fix an interface.</span>
-              <span>Research said otherwise and <span class="card__highlight">we pushed back 5 issues.</span></span>
+        <!-- ARVO -->
+        <article class="card card--arvo" onclick="location.href='case-studies/arvo.html'">
+          <div class="card__body">
+            <p class="card__case-title"><strong>Seven Problems, One Copilot:</strong> Redesigning AI support so managers can lead.</p>
+            <div class="card__foot">
+              <p class="card__project-name">ARVO</p>
+              <p class="card__project-meta">Jan – Mar 2026<br>Project Lead</p>
             </div>
-            <a class="card__cta" href="case-studies/arvo.html">View case study →</a>
           </div>
+          <img class="card__mockup card__mockup--arvo" src="Asset/Card 1 - ARVO - Default (clean).png" alt="ARVO product interface" />
         </article>
 
-        <!-- Small-card column -->
-        <div class="works__small-col">
+        <!-- Seletar Airport -->
+        <article class="card card--seletar" onclick="location.href='case-studies/seletar.html'">
+          <div class="card__body">
+            <p class="card__case-title"><strong>The Subang Advantage:</strong> Redesigning a website to match a 15-minute airport.</p>
+            <div class="card__foot">
+              <p class="card__project-name">Seletar Airport</p>
+              <p class="card__project-meta">Nov 2025 – Jan 2026<br>UX Research Lead</p>
+            </div>
+          </div>
+          <img class="card__mockup card__mockup--seletar" src="Asset/Card 2 - Seletar - Default (clean).png" alt="Seletar Airport on phone and tablet" />
+        </article>
 
-          <!-- Seletar Airport -->
-          <article class="card--small">
-            <img class="card__bg" src="Asset/Card 2 - Seletar - Default (clean).png" alt="Seletar Airport" />
-            <div class="card__overlay"></div>
-            <div class="card__default-info">
-              <p class="card__title">Seletar Airport</p>
-              <span class="card__subtitle">Website redesign &nbsp;&middot;&nbsp; Lead UX Researcher</span>
+        <!-- Paw Haus -->
+        <article class="card card--pawhaus" onclick="location.href='case-studies/pethaus.html'">
+          <div class="card__body">
+            <p class="card__case-title"><strong>Trust Over Treats:</strong> A pet-ecommerce brand built around reading the label.</p>
+            <div class="card__foot">
+              <p class="card__project-name">Paw Haus</p>
+              <p class="card__project-meta">Sep – Nov 2025<br>End-to-end Product Designer</p>
             </div>
-            <div class="card__hover-info">
-              <span class="card__category">Travel &amp; Aviation B2B / B2C</span>
-              <div class="card__description">
-                <span>A masterclass in physical transit, but a <span class="card__highlight">ghost town for digital architecture.</span></span>
-              </div>
-              <a class="card__cta" href="case-studies/seletar.html">View case study →</a>
-            </div>
-          </article>
+          </div>
+          <img class="card__mockup card__mockup--pawhaus" src="Asset/Card 3 - Paw Haus - Default (clean).png" alt="Paw Haus app" />
+        </article>
 
-          <!-- Paw Haus -->
-          <article class="card--small card--pawhaus">
-            <img class="card__bg" src="Asset/Card 3 - PawHaus - Default (Clean).png" alt="Paw Haus" />
-            <div class="card__overlay"></div>
-            <div class="card__default-info">
-              <p class="card__title">Paw Haus</p>
-              <span class="card__subtitle">E-commerce &nbsp;&middot;&nbsp; End-to-end Product Designer</span>
-            </div>
-            <div class="card__hover-info">
-              <span class="card__category">Pet safety-first shopping</span>
-              <div class="card__description">
-                <span>Pet owners stressed over product safety.</span>
-                <span><span class="card__highlight">I designed trust.</span></span>
-              </div>
-              <a class="card__cta" href="case-studies/pethaus.html">View case study →</a>
-            </div>
-          </article>
-
-        </div><!-- end .works__small-col -->
       </div><!-- end .works__grid -->
 
-      <div class="works__cta-row">
-        <a class="btn" href="works.html">View All Works →</a>
-      </div>
+      <a class="card__cta-btn" href="works.html">View all works →</a>
     </div>
   </section>
 
@@ -953,74 +1125,78 @@
 
       <p class="test__headline">
         From digital systems to physical spaces:<br>
-        What they say about working together.
+        What they say about working with me.
       </p>
 
-      <div class="test__row">
-
-        <div class="t-card">
-          <div class="t-card__body">
-            <span class="t-card__category">Product Design</span>
-            <p class="t-card__quote">"Their design recommendations were methodically tested and immediately actionable, directly strengthening the product's user experience."</p>
-          </div>
-          <div class="t-card__attribution">
-            <div class="t-card__name">Eileen Zhang</div>
-            <div class="t-card__role">Founder, ARVO</div>
-          </div>
+      <div class="clients-marquee">
+        <div class="clients-track">
+          <img class="client-logo client-logo--guerlain" src="Asset/Logo_Guerlain_Light.png" alt="Guerlain" />
+          <img class="client-logo client-logo--arvo"     src="Asset/Logo_ARVO_Light.png"    alt="ARVO" />
+          <img class="client-logo client-logo--cpf"      src="Asset/Logo_CPF_white.png"     alt="CPF" />
+          <img class="client-logo client-logo--guerlain" src="Asset/Logo_Guerlain_Light.png" alt="" aria-hidden="true" />
+          <img class="client-logo client-logo--arvo"     src="Asset/Logo_ARVO_Light.png"    alt="" aria-hidden="true" />
+          <img class="client-logo client-logo--cpf"      src="Asset/Logo_CPF_white.png"     alt="" aria-hidden="true" />
         </div>
-
-        <div class="t-card">
-          <div class="t-card__body">
-            <span class="t-card__category">Workshop</span>
-            <p class="t-card__quote">"Andrea designed and executed an exclusive, high-touch Christmas wreath workshop tailored for us. The experience was meticulously crafted and matched our brand's luxury aesthetic."</p>
-          </div>
-          <div class="t-card__attribution">
-            <div class="t-card__name">Charline Tang</div>
-            <div class="t-card__role">Brand General Manager, SEA, Guerlain</div>
-          </div>
-        </div>
-
-        <div class="t-card">
-          <div class="t-card__body">
-            <span class="t-card__category">Event Styling</span>
-            <p class="t-card__quote">"Engaged last minute for a proposal and she came through. Even though it was drizzling, she still powered through the setup with a smile. Amazing service and really beautiful set up."</p>
-          </div>
-          <div class="t-card__attribution">
-            <div class="t-card__name">Clement Loh</div>
-            <div class="t-card__role">Private Client, Engagement</div>
-          </div>
-        </div>
-
-        <div class="t-card">
-          <div class="t-card__body">
-            <span class="t-card__category">Event Styling</span>
-            <p class="t-card__quote">"Engaged M&amp;P for my wedding at 1-Atico. Andrea listened patiently to my requests and conceptualised the design perfectly. The whole set up was so dreamy."</p>
-          </div>
-          <div class="t-card__attribution">
-            <div class="t-card__name">Desiree Ang</div>
-            <div class="t-card__role">Private Client, Wedding</div>
-          </div>
-        </div>
-
-      </div><!-- end .test__row -->
-
-      <div class="clients-row">
-        <img class="client-logo client-logo--guerlain"
-             src="Asset/Logo_Guerlain_Light.png"
-             data-dark-src="Asset/Logo_Guerlain_Light.png"
-             data-light-src="Asset/Logo_Guerlain_Dark.png"
-             alt="Guerlain" />
-        <img class="client-logo client-logo--arvo"
-             src="Asset/Logo_ARVO_Light.png"
-             data-dark-src="Asset/Logo_ARVO_Light.png"
-             data-light-src="Asset/Logo_ARVO_dark.png"
-             alt="ARVO" />
-        <img class="client-logo client-logo--cpf"
-             src="Asset/Logo_CPF_white.png"
-             data-dark-src="Asset/Logo_CPF_white.png"
-             data-light-src="Asset/Logo_CPF_black.png"
-             alt="CPF" />
       </div>
+
+      <div class="test__carousel">
+        <div class="test__row">
+
+          <div class="t-card active">
+            <div class="t-card__body">
+              <span class="t-card__category">Product Design</span>
+              <p class="t-card__quote">"Their design recommendations were methodically tested and immediately actionable, directly strengthening the product's user experience."</p>
+            </div>
+            <div class="t-card__attribution">
+              <div class="t-card__name">Eileen Zhang</div>
+              <div class="t-card__role">Founder, ARVO</div>
+            </div>
+          </div>
+
+          <div class="t-card">
+            <div class="t-card__body">
+              <span class="t-card__category">Workshop</span>
+              <p class="t-card__quote">"Andrea designed and executed an exclusive, high-touch Christmas wreath workshop tailored for us. Managing everything and the experience was meticulously crafted and matched well with our brand's luxury aesthetic."</p>
+            </div>
+            <div class="t-card__attribution">
+              <div class="t-card__name">Charline Tang</div>
+              <div class="t-card__role">Brand General Manager, SEA, Guerlain</div>
+            </div>
+          </div>
+
+          <div class="t-card">
+            <div class="t-card__body">
+              <span class="t-card__category">Event Styling</span>
+              <p class="t-card__quote">"Engaged last minute for a proposal and she came through. Even though it was drizzling, she still powered through the setup with a smile. Amazing service and really beautiful set up."</p>
+            </div>
+            <div class="t-card__attribution">
+              <div class="t-card__name">Clement Loh</div>
+              <div class="t-card__role">Private Client, Engagement</div>
+            </div>
+          </div>
+
+          <div class="t-card">
+            <div class="t-card__body">
+              <span class="t-card__category">Event Styling</span>
+              <p class="t-card__quote">"Engaged M&amp;P for my wedding at 1-Atico. Andrea listened patiently to my requests and conceptualised the design perfectly. The whole set up was so dreamy."</p>
+            </div>
+            <div class="t-card__attribution">
+              <div class="t-card__name">Desiree Ang</div>
+              <div class="t-card__role">Private Client, Wedding</div>
+            </div>
+          </div>
+
+        </div><!-- end .test__row -->
+
+        <div class="test__nav">
+          <div class="test__dots">
+            <span class="test__dot active"></span>
+            <span class="test__dot"></span>
+            <span class="test__dot"></span>
+            <span class="test__dot"></span>
+          </div>
+        </div>
+      </div><!-- end .test__carousel -->
 
     </div>
   </section>
@@ -1075,9 +1251,8 @@
     let mouseX = -200, mouseY = -200, rafPending = false;
 
     function updateCursorSrc(target) {
-      const isLight   = document.body.classList.contains('light-mode');
-      const isOverNav = mainNavEl && mainNavEl.contains(target);
-      const useDark   = isOverNav ? !isLight : isLight;
+      const isLight = document.body.classList.contains('light-mode');
+      const useDark = isLight;
       const newSrc    = useDark ? 'Asset/cursor-dark.png' : 'Asset/cursor-light.png';
       if (cursorImg.src !== newSrc) cursorImg.src = newSrc;
     }
@@ -1108,18 +1283,6 @@
       });
     });
 
-    /* ── Works cards: tap-to-reveal on touch ── */
-    if (window.matchMedia('(hover: none)').matches) {
-      const workCards = document.querySelectorAll('.card--large, .card--small');
-      workCards.forEach(card => {
-        card.addEventListener('click', () => {
-          if (card.classList.contains('card--tapped')) return;
-          workCards.forEach(c => c.classList.remove('card--tapped'));
-          card.classList.add('card--tapped');
-          setTimeout(() => card.classList.remove('card--tapped'), 3200);
-        });
-      });
-    }
 
     /* ── Hamburger ── */
     const hamburger  = document.getElementById('nav-hamburger');
@@ -1144,10 +1307,99 @@
   <script>
     gsap.registerPlugin(ScrollTrigger);
 
-    /* Hero */
-    gsap.from('.hero__peeps img', {
-      scale: 1.04, duration: 1.6, ease: 'power2.out', delay: 0.2
+    /* Hero — entrance */
+    gsap.from('.peep', {
+      y: 30, opacity: 0, duration: 1, stagger: 0.025, ease: 'power3.out', delay: 0.15
     });
+
+    /* Hero — peep hover: rise, bob once, settle back */
+    document.querySelectorAll('.peep').forEach(peep => {
+      peep.addEventListener('mouseenter', function () {
+        gsap.killTweensOf(this);
+        gsap.timeline()
+          .to(this, { y: '-12%', scaleY: 1.04, scaleX: 1.02, duration: 0.32, ease: 'back.out(1.6)' })
+          .to(this, { y: '-7%', duration: 0.38, ease: 'sine.inOut' })
+          .to(this, { y: '-13%', duration: 0.42, ease: 'sine.inOut' })
+          .to(this, { y: 0, scaleY: 1, scaleX: 1, duration: 0.5, ease: 'power2.inOut' });
+      });
+    });
+
+    /* "late bloomer" — lime text + flower burst (up then rain down) + idle wriggle */
+    const lateBloom = document.querySelector('.hero__hand');
+    if (lateBloom) {
+      let isHovered = false;
+
+      /* Idle wriggle every 10s */
+      function doWriggle() {
+        if (isHovered) return;
+        gsap.timeline()
+          .to(lateBloom, { rotate: -5, x: -2, duration: 0.07, ease: 'power2.inOut' })
+          .to(lateBloom, { rotate:  6, x:  3, duration: 0.08, ease: 'power2.inOut' })
+          .to(lateBloom, { rotate: -5, x: -2, duration: 0.08, ease: 'power2.inOut' })
+          .to(lateBloom, { rotate:  4, x:  2, duration: 0.07, ease: 'power2.inOut' })
+          .to(lateBloom, { rotate: -2, x: -1, duration: 0.06, ease: 'power2.inOut' })
+          .to(lateBloom, { rotate:  0, x:  0, duration: 0.10, ease: 'elastic.out(1,0.4)' });
+      }
+      setInterval(doWriggle, 10000);
+
+      lateBloom.addEventListener('mouseenter', function () {
+        isHovered = true;
+        gsap.killTweensOf(lateBloom);
+        gsap.set(lateBloom, { rotate: 0, x: 0 });
+
+        const rect = this.getBoundingClientRect();
+        const cx = rect.left + rect.width / 2;
+        const cy = rect.top + rect.height / 2;
+        const fallDist = window.innerHeight - cy + 60;
+
+        const sizes  = [14, 24, 18, 34, 20, 28, 16, 30];
+        const angles = [-148, -125, -108, -90, -72, -55, -35, -18];
+
+        sizes.forEach((size, i) => {
+          const deg   = angles[i] + (Math.random() * 14 - 7);
+          const rad   = deg * Math.PI / 180;
+          const riseH = 70 + Math.random() * 80;
+          const peakX = Math.cos(rad) * (riseH * 0.7);
+          const peakY = Math.sin(rad) * riseH;          /* negative = above origin */
+          const spin  = (Math.random() > 0.5 ? 1 : -1) * (130 + Math.random() * 150);
+
+          const el = document.createElement('div');
+          el.style.cssText = [
+            'position:fixed',
+            `width:${size}px`, `height:${size}px`,
+            `left:${cx - size / 2}px`, `top:${cy - size / 2}px`,
+            'pointer-events:none', 'z-index:9999',
+            'background:#dee895',
+            'mask-image:url(Asset/cursor-dark.png)',
+            '-webkit-mask-image:url(Asset/cursor-dark.png)',
+            'mask-size:contain', '-webkit-mask-size:contain',
+            'mask-repeat:no-repeat', '-webkit-mask-repeat:no-repeat',
+            'mask-position:center', '-webkit-mask-position:center',
+          ].join(';');
+          document.body.appendChild(el);
+
+          gsap.timeline({ delay: i * 0.04 + Math.random() * 0.03 })
+            /* shoot up */
+            .fromTo(el,
+              { opacity: 0, scale: 0, rotate: Math.random() * 60 - 30 },
+              { opacity: 1, x: peakX, y: peakY, scale: 1,
+                rotate: `+=${spin}`, duration: 0.44, ease: 'power2.out' })
+            /* rain down off screen */
+            .to(el, {
+              y: peakY + fallDist,
+              x: peakX + (Math.random() * 50 - 25),
+              opacity: 0, scale: 0.5,
+              rotate: `+=${spin * 0.6}`,
+              duration: 0.75 + Math.random() * 0.35,
+              ease: 'power2.in',
+              onComplete: () => el.remove()
+            });
+        });
+      });
+
+      lateBloom.addEventListener('mouseleave', () => { isHovered = false; });
+    }
+
     gsap.from('.hero__tagline', {
       y: 40, opacity: 0, duration: 1, ease: 'power3.out', delay: 0.4
     });
@@ -1157,17 +1409,9 @@
       y: 20, opacity: 0, duration: 0.6, ease: 'power3.out',
       scrollTrigger: { trigger: '#works', start: 'top 85%' }
     });
-    gsap.from('.card--large', {
-      y: 60, opacity: 0, duration: 0.9, ease: 'power3.out',
-      scrollTrigger: { trigger: '.works__grid', start: 'top 85%' }
-    });
-    gsap.from('.card--small', {
+    gsap.from('.card', {
       y: 60, opacity: 0, duration: 0.9, stagger: 0.15, ease: 'power3.out',
-      scrollTrigger: { trigger: '.works__grid', start: 'top 82%' }
-    });
-    gsap.from('.works__cta-row', {
-      y: 20, opacity: 0, duration: 0.6, ease: 'power3.out',
-      scrollTrigger: { trigger: '.works__cta-row', start: 'top 90%' }
+      scrollTrigger: { trigger: '.works__grid', start: 'top 85%' }
     });
 
     /* Testimonials */
@@ -1175,13 +1419,17 @@
       y: 40, opacity: 0, duration: 0.9, ease: 'power3.out',
       scrollTrigger: { trigger: '#testimonials', start: 'top 85%' }
     });
-    gsap.from('.t-card', {
-      y: 50, opacity: 0, duration: 0.8, stagger: 0.12, ease: 'power3.out',
-      scrollTrigger: { trigger: '.test__row', start: 'top 88%' }
+    gsap.from('.test__nav', {
+      y: 16, opacity: 0, duration: 0.6, ease: 'power3.out',
+      scrollTrigger: { trigger: '.test__nav', start: 'top 95%' }
     });
-    gsap.from('.clients-row img', {
-      opacity: 0, duration: 0.6, stagger: 0.1,
-      scrollTrigger: { trigger: '.clients-row', start: 'top 90%' }
+    gsap.from('.test__nav', {
+      opacity: 0, duration: 0.6,
+      scrollTrigger: { trigger: '.test__nav', start: 'top 92%' }
+    });
+    gsap.from('.clients-marquee', {
+      opacity: 0, duration: 0.6,
+      scrollTrigger: { trigger: '.clients-marquee', start: 'top 90%' }
     });
 
     /* Contact */
@@ -1197,6 +1445,40 @@
       x: 120, opacity: 0, duration: 1.2, ease: 'power2.out',
       scrollTrigger: { trigger: '#contact', start: 'top 80%' }
     });
+
+    /* ── Testimonial spotlight ── */
+    (function () {
+      const cards = Array.from(document.querySelectorAll('.t-card'));
+      const dots  = Array.from(document.querySelectorAll('.test__dot'));
+      const row   = document.querySelector('.test__row');
+      let cur = 0, touchStartX = 0;
+
+      function go(n) {
+        const len = cards.length;
+        n = (n + len) % len;
+        const prev = (n - 1 + len) % len;
+        const next = (n + 1) % len;
+        cards.forEach(c => c.classList.remove('active', 't-prev', 't-next'));
+        dots.forEach(d => d.classList.remove('active'));
+        cards[n].classList.add('active');
+        cards[prev].classList.add('t-prev');
+        cards[next].classList.add('t-next');
+        dots[n].classList.add('active');
+        cur = n;
+      }
+
+      dots.forEach((d, i) => d.addEventListener('click', () => go(i)));
+
+      row.addEventListener('touchstart', e => { touchStartX = e.touches[0].clientX; }, { passive: true });
+      row.addEventListener('touchend', e => {
+        const dx = e.changedTouches[0].clientX - touchStartX;
+        if (Math.abs(dx) > 40) go(dx < 0 ? cur + 1 : cur - 1);
+      }, { passive: true });
+
+      go(0);
+    })();
+
+
   </script>
 </body>
 </html>
