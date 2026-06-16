@@ -76,7 +76,6 @@
     body.light-mode .t-card__category      { color: #6b7a00; }
     body.light-mode .client-logo           { filter: brightness(0); }
     body.light-mode .social-link           { color: var(--ink-dark); }
-    body.light-mode .contact__decor-text   { color: rgba(26,28,22,0.06); }
     body.light-mode .nav                   { background: var(--bg-light); }
     body.light-mode .nav__links a          { color: var(--ink-dark); }
     body.light-mode .nav__links a:hover    { color: #6b7a00; }
@@ -825,7 +824,7 @@
     }
     body.light-mode .contact__copyright { color: rgba(26,28,22,0.5); }
 
-    /* Decorative right element — large overflow text */
+    /* Decorative right element — footer crowd illustration */
     .contact__decor {
       flex: 1;
       position: relative;
@@ -834,18 +833,13 @@
       min-width: 0;
     }
 
-    .contact__decor-text {
-      font-family: var(--font-display);
-      font-style: italic;
-      font-weight: 400;
-      font-size: clamp(8rem, 14vw, 16rem);
-      line-height: 0.9;
-      letter-spacing: -0.05em;
-      color: rgba(244,244,235,0.06);
-      white-space: nowrap;
+    .contact__peeps {
       position: absolute;
       bottom: 0;
-      left: -0.05em;
+      left: 0;
+      width: 100%;
+      height: auto;
+      display: block;
       pointer-events: none;
       user-select: none;
     }
@@ -898,7 +892,6 @@
       #contact .inner { flex-direction: column; min-height: auto; gap: 40px; }
       .contact__copy { width: 100%; }
       .contact__decor { min-height: 200px; width: 100%; }
-      .contact__decor-text { font-size: clamp(5rem, 14vw, 10rem); }
     }
 
     /* ================================================================
@@ -1234,9 +1227,9 @@
         <span class="contact__copyright">Portfolio built from scratch &nbsp;&middot;&nbsp; &copy;Andrea Lee 2026</span>
       </div>
 
-      <!-- Decorative overflow text — fills right side of contact section -->
+      <!-- Decorative crowd illustration — fills right side of contact section -->
       <div class="contact__decor" aria-hidden="true">
-        <span class="contact__decor-text">Andrea</span>
+        <img class="contact__peeps" src="Asset/Footer-peeps.png" alt="">
       </div>
 
     </div>
@@ -1433,8 +1426,8 @@
       y: 25, opacity: 0, duration: 0.7, stagger: 0.12, ease: 'power3.out',
       scrollTrigger: { trigger: '#contact', start: 'top 75%' }
     });
-    gsap.from('.contact__decor-text', {
-      x: 120, opacity: 0, duration: 1.2, ease: 'power2.out',
+    gsap.from('.contact__peeps', {
+      y: 40, opacity: 0, duration: 1.2, ease: 'power2.out',
       scrollTrigger: { trigger: '#contact', start: 'top 80%' }
     });
 
