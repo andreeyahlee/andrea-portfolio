@@ -753,7 +753,6 @@
       flex-direction: row;
       align-items: flex-end;
       gap: 40px;
-      min-height: 600px;
     }
 
     .contact__copy {
@@ -827,16 +826,13 @@
     /* Decorative right element — footer crowd illustration */
     .contact__decor {
       flex: 1;
-      position: relative;
-      align-self: stretch;
-      overflow: hidden;
       min-width: 0;
+      overflow: hidden;
+      display: flex;
+      align-items: flex-end;
     }
 
     .contact__peeps {
-      position: absolute;
-      bottom: 0;
-      left: 0;
       width: 100%;
       height: auto;
       display: block;
