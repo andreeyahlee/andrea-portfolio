@@ -438,6 +438,8 @@
       min-height: 200px;
       border-radius: 16px;
       cursor: pointer;
+      will-change: transform;
+      transition: box-shadow 0.3s ease;
     }
 
     .card--arvo    { background: #31332a; }
@@ -773,8 +775,20 @@
     .contact__text {
       display: flex;
       flex-direction: column;
-      gap: 24px;
+      gap: 40px;
     }
+
+    .contact__email {
+      font-family: var(--font-hand);
+      font-size: 32px;
+      line-height: 30px;
+      letter-spacing: -0.05em;
+      color: var(--ink-light);
+      text-decoration: none;
+      display: block;
+    }
+    .contact__email:hover { text-decoration: underline; }
+    body.light-mode .contact__email { color: var(--ink-dark); }
 
     .contact__heading {
       font-family: var(--font-display);
@@ -795,7 +809,7 @@
 
     .contact__socials {
       display: flex;
-      gap: 1.5rem;
+      gap: 40px;
       align-items: center;
     }
 
@@ -922,7 +936,12 @@
         margin-left: calc(-1 * var(--pad));
         margin-right: calc(-1 * var(--pad));
         width: calc(100% + 2 * var(--pad));
-        max-width: none; /* override max-width so peeps fill mobile width edge-to-edge */
+        max-width: none;
+        /* Lock W:H so peep boxes stay landscape-ish.
+           No-gap threshold: W/H ≥ 1.045 (derived from image ratio 369/518 and row math).
+           5/3 ≈ 1.67 gives a 1.6× safety margin and a compact but visible crowd height. */
+        aspect-ratio: 5 / 3;
+        flex: 0 0 auto; /* stop growing — height is set by aspect-ratio, not leftover space */
       }
       .hero__tagline { font-size: clamp(1.4rem, 5vw, 2rem); line-height: 1.2; }
 
@@ -950,10 +969,64 @@
       .hero__tagline { font-size: clamp(1.25rem, 6vw, 1.75rem); }
       .contact__heading { font-size: clamp(1.75rem, 8vw, 2.25rem); }
     }
+
+    /* ================================================================
+       LOADER
+    ================================================================ */
+    #loader {
+      position: fixed;
+      inset: 0;
+      z-index: 9999;
+      background: var(--bg-dark);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      transition: opacity 0.7s ease, visibility 0.7s ease;
+    }
+    #loader.loader--hidden {
+      opacity: 0;
+      visibility: hidden;
+      pointer-events: none;
+    }
+    .loader__video {
+      width: 347px;
+      max-width: 80vw;
+      /* bg removal handled per-frame via canvas in JS — no blend mode needed here */
+    }
+    .loader__text {
+      font-family: var(--font-display);
+      font-size: 22px;
+      font-weight: 400;
+      line-height: 28px;
+      letter-spacing: -0.01em;
+      color: var(--ink-light);
+      text-align: center;
+    }
+    .loader__dots span {
+      opacity: 0;
+      animation: loader-dot 1.5s ease-in-out infinite;
+    }
+    .loader__dots span:nth-child(1) { animation-delay: 0s; }
+    .loader__dots span:nth-child(2) { animation-delay: 0.3s; }
+    .loader__dots span:nth-child(3) { animation-delay: 0.6s; }
+    @keyframes loader-dot {
+      0%, 100% { opacity: 0; }
+      30%, 70%  { opacity: 1; }
+    }
   </style>
   <link rel="stylesheet" href="Asset/skiper40.css">
 </head>
 <body>
+
+  <!-- ── LOADER ── -->
+  <div id="loader" role="status" aria-label="Loading">
+    <video class="loader__video" autoplay muted loop playsinline>
+      <source src="Asset/Loading_bicycle.mp4" type="video/mp4">
+    </video>
+    <p class="loader__text">loading<span class="loader__dots"><span>.</span><span>.</span><span>.</span></span></p>
+  </div>
 
   <!-- ── CURSOR FOLLOWER ── -->
   <div id="cursor-follower" aria-hidden="true">
@@ -1214,16 +1287,14 @@
         <div class="contact__copy-inner">
           <div class="contact__text">
             <h2 class="contact__heading">Let&rsquo;s work together or chat!</h2>
+            <a class="contact__email" href="mailto:andreeyahlee@gmail.com">andreeyahlee@gmail.com</a>
             <p class="contact__desc">
-              Open to UX design and research roles in Singapore or Australia.
-              If you&rsquo;re building something complex that needs to feel simple,
+              Open to UX design and research roles or freelancing service.
+              If you&rsquo;re building something complex that needs to feel simple
               particularly for social good &mdash; let&rsquo;s talk!
             </p>
           </div>
           <div class="contact__socials">
-            <a class="social-link" href="mailto:andreeyahlee@gmail.com" aria-label="Email">
-              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/></svg>
-            </a>
             <a class="social-link" href="https://www.linkedin.com/in/andrealee-" target="_blank" rel="noopener" aria-label="LinkedIn">
               <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>
             </a>
@@ -1235,7 +1306,7 @@
             </a>
           </div>
         </div>
-        <span class="contact__copyright">Portfolio built from scratch &nbsp;&middot;&nbsp; &copy;Andrea Lee 2026</span>
+        <span class="contact__copyright">Portfolio built from scratch &nbsp;&middot;&nbsp; Copyright &copy;Andrea Lee 2026</span>
       </div>
 
       <!-- Decorative crowd illustration — fills right side of contact section -->
@@ -1278,6 +1349,106 @@
   </section>
 
   <script>
+    /* ── Loader ── */
+    (function () {
+      const loaderEl = document.getElementById('loader');
+      const MIN_MS   = 1200;
+      const startTs  = Date.now();
+      let   hidden   = false;
+
+      function hideLoader() {
+        if (hidden) return;
+        hidden = true;
+        loaderEl.classList.add('loader--hidden');
+      }
+
+      window.addEventListener('load', function () {
+        const elapsed   = Date.now() - startTs;
+        const remaining = Math.max(0, MIN_MS - elapsed);
+        setTimeout(hideLoader, remaining);
+      });
+
+      // Between-page: intercept clicks to other HTML pages
+      document.querySelectorAll('a[href]').forEach(function (link) {
+        const href = link.getAttribute('href');
+        if (href && href.endsWith('.html') && !href.startsWith('http') && !href.startsWith('//')) {
+          link.addEventListener('click', function (e) {
+            e.preventDefault();
+            hidden = false;
+            loaderEl.classList.remove('loader--hidden');
+            setTimeout(function () { window.location.href = href; }, 600);
+          });
+        }
+      });
+
+      /* Canvas-based white background removal.
+         Flood-fills from every edge pixel, marking connected near-white pixels as
+         transparent. Interior white fills (enclosed by dark outlines) are never
+         reached by the flood fill and stay opaque — so the character's white body
+         remains white while only the surrounding background disappears. */
+      var video  = loaderEl.querySelector('video');
+      var canvas = document.createElement('canvas');
+      canvas.className = 'loader__video';
+      video.parentNode.insertBefore(canvas, video);
+      video.style.display = 'none';
+
+      var ctx = canvas.getContext('2d', { willReadFrequently: true });
+      var rafId;
+
+      function removeBg(data, w, h) {
+        var n       = w * h;
+        var visited = new Uint8Array(n);
+        var stack   = [];
+
+        function tryPush(i) {
+          if (i >= 0 && i < n && !visited[i] &&
+              data[i * 4]     > 220 &&
+              data[i * 4 + 1] > 220 &&
+              data[i * 4 + 2] > 220) {
+            visited[i] = 1;
+            stack.push(i);
+          }
+        }
+
+        // Seed from all four edges
+        for (var x = 0; x < w; x++) { tryPush(x); tryPush((h - 1) * w + x); }
+        for (var y = 1; y < h - 1; y++) { tryPush(y * w); tryPush(y * w + w - 1); }
+
+        while (stack.length) {
+          var i = stack.pop();
+          data[i * 4 + 3] = 0; // make transparent
+          var px = i % w, py = (i / w) | 0;
+          if (px > 0)     tryPush(i - 1);
+          if (px < w - 1) tryPush(i + 1);
+          if (py > 0)     tryPush(i - w);
+          if (py < h - 1) tryPush(i + w);
+        }
+      }
+
+      function renderFrame() {
+        if (video.readyState >= 2 && canvas.width > 0) {
+          ctx.clearRect(0, 0, canvas.width, canvas.height);
+          ctx.drawImage(video, 0, 0);
+          var imgData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+          removeBg(imgData.data, canvas.width, canvas.height);
+          ctx.putImageData(imgData, 0, 0);
+        }
+        rafId = requestAnimationFrame(renderFrame);
+      }
+
+      video.addEventListener('loadedmetadata', function () {
+        canvas.width  = video.videoWidth;
+        canvas.height = video.videoHeight;
+      });
+
+      video.addEventListener('play', function () {
+        cancelAnimationFrame(rafId);
+        renderFrame();
+      });
+
+      video.play().catch(function () {});
+    })();
+
     /* ── Cursor follower ── */
     const cursorEl  = document.getElementById('cursor-follower');
     const cursorImg = document.getElementById('cursor-img');
@@ -1464,7 +1635,7 @@
       y: 60, opacity: 0, duration: 1, ease: 'power3.out',
       scrollTrigger: { trigger: '#contact', start: 'top 80%' }
     });
-    gsap.from(['.contact__desc', '.contact__socials', '#contact .t-label'], {
+    gsap.from(['.contact__email', '.contact__desc', '.contact__socials', '#contact .t-label'], {
       y: 25, opacity: 0, duration: 0.7, stagger: 0.12, ease: 'power3.out',
       scrollTrigger: { trigger: '#contact', start: 'top 75%' }
     });
@@ -1515,6 +1686,44 @@
       go(0);
     })();
 
+    /* ── Card hover: tilt + parallax ── */
+    (function () {
+      function lerp(a, b, t) { return a + (b - a) * t; }
+
+      function tilt(card, opts) {
+        const { maxTilt = 6, lift = -10, child = null, childShift = 12 } = opts;
+        let cX = 0, cY = 0, cL = 0, tX = 0, tY = 0, tL = 0, raf = null;
+
+        function frame() {
+          cX = lerp(cX, tX, 0.1);
+          cY = lerp(cY, tY, 0.1);
+          cL = lerp(cL, tL, 0.1);
+          const idle = tL === 0 && Math.abs(cX) < 0.02 && Math.abs(cY) < 0.02 && Math.abs(cL) < 0.02;
+          if (idle) {
+            card.style.transform = '';
+            if (child) child.style.transform = '';
+            raf = null; return;
+          }
+          card.style.transform = `perspective(900px) rotateX(${cY.toFixed(3)}deg) rotateY(${cX.toFixed(3)}deg) translateY(${cL.toFixed(2)}px)`;
+          if (child) child.style.transform = `translate(${(cX / maxTilt * childShift).toFixed(2)}px, ${(cY / maxTilt * childShift).toFixed(2)}px)`;
+          raf = requestAnimationFrame(frame);
+        }
+        function go() { if (!raf) raf = requestAnimationFrame(frame); }
+
+        card.addEventListener('mouseenter', () => { tL = lift; go(); });
+        card.addEventListener('mousemove', e => {
+          const r = card.getBoundingClientRect();
+          tX = ((e.clientX - r.left) / r.width  - 0.5) * 2 * maxTilt;
+          tY = -((e.clientY - r.top)  / r.height - 0.5) * 2 * maxTilt;
+          go();
+        });
+        card.addEventListener('mouseleave', () => { tX = 0; tY = 0; tL = 0; go(); });
+      }
+
+      document.querySelectorAll('.card').forEach(card => {
+        tilt(card, { maxTilt: 6, lift: -10, child: card.querySelector('.card__mockup'), childShift: 14 });
+      });
+    })();
 
   </script>
 </body>
