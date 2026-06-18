@@ -516,20 +516,20 @@
       filter: drop-shadow(-24px 31px 2px rgba(0,0,0,0.85));
     }
 
-    /* Seletar in 646×290 half card */
+    /* Seletar in 646×290 half card — Figma: left 288px, top 47px on 646px card */
     .half-card.card--seletar .card__mockup--seletar {
-      left: 36%;
-      top: -8%;
+      left: 44.6%;
+      top: 47px;
       width: 78%;
-      filter: drop-shadow(-12px 18px 3px rgba(0,0,0,0.4));
+      filter: drop-shadow(-10px 19px 1px rgba(0,0,0,0.5));
     }
 
-    /* PawHaus in 646×290 half card */
+    /* PawHaus in 646×290 half card — Figma: left 286px, top 32px on 646px card */
     .half-card.card--pawhaus .card__mockup--pawhaus {
-      left: 44%;
-      top: -14%;
+      left: 44.3%;
+      top: 32px;
       width: 76%;
-      filter: drop-shadow(-12px 18px 4px rgba(0,0,0,0.35));
+      filter: drop-shadow(-13px 8px 1px rgba(0,0,0,0.5));
     }
 
     /* ================================================================
@@ -576,33 +576,33 @@
       object-fit: contain;
     }
 
-    /* Pulse — 3 phones fan, top right */
+    /* Pulse — 3 phones fan, top right — Figma: group left 94px, top -20px, w 333px */
     .ow-card--pulse .ow-card__img {
       right: -10px;
-      top: -16px;
-      height: 210px;
+      top: -20px;
+      height: 260px;
       width: auto;
       object-position: right top;
     }
 
-    /* ThriveLab — full-width at top, slightly oversized + rounded */
+    /* ThriveLab — full-width at top — Figma: left 0, top -20px, w 100%, h 220px */
     .ow-card--thrive .ow-card__vid {
       left: -3px;
-      top: -11px;
+      top: -20px;
       width: calc(100% + 6px);
-      height: 222px;
+      height: 220px;
       object-fit: cover;
       border-radius: 20px;
       box-shadow: 0px 10px 4px 0px rgba(0,0,0,0.52);
     }
     .ow-card--thrive .ow-card__badge { top: 133px; }
 
-    /* KinCare — rotated card at offset */
+    /* KinCare — rotated card — Figma: left 60px, top -74px, w 346px, rotate 21.5deg */
     .ow-card--kincare .ow-card__vid {
-      left: 83px;
-      top: -37px;
-      width: 315px;
-      height: 236px;
+      left: 60px;
+      top: -74px;
+      width: 346px;
+      height: auto;
       object-fit: cover;
       border-radius: 20px;
       box-shadow: -10px 18px 4px 0px rgba(0,0,0,0.5);
@@ -620,12 +620,12 @@
       opacity: 0.72;
     }
 
-    /* Tallyboard — square rotated mockup, top right */
+    /* Tallyboard — square rotated mockup — Figma: left 139px, top -50px, 250×250px, rotate -13.19deg */
     .ow-card--tallyboard .ow-card__vid {
-      left: 144px;
-      top: -45px;
-      width: 246px;
-      height: 246px;
+      left: 139px;
+      top: -50px;
+      width: 250px;
+      height: 250px;
       object-fit: cover;
       border-radius: 20px;
       box-shadow: -10px 16px 6px 0px rgba(0,0,0,0.51);
@@ -1178,77 +1178,59 @@
 
       <div class="ev-grid">
 
-        <!-- Daniel & Desiree -->
+        <!-- 1-Atico -->
         <div class="ev-card ev-card--photo">
-          <img class="ev-card__bg" src="Asset/Event_Daniel_Desiree.png" alt="Daniel & Desiree wedding" />
+          <img class="ev-card__bg" src="Asset/Event_Daniel_Desiree.png" alt="1-Atico wedding" />
           <div class="ev-card__overlay"></div>
           <div class="ev-card__body">
-            <h3 class="ev-card__name">Daniel &amp; Desiree</h3>
-            <div class="ev-card__venue">
-              <p>1-Atico</p>
-              <p>Wedding</p>
-            </div>
+            <h3 class="ev-card__name">1-Atico</h3>
+            <p class="ev-card__venue">Wedding</p>
           </div>
         </div>
 
-        <!-- Swee Sien & Jia Min -->
+        <!-- St Margaret -->
         <div class="ev-card ev-card--photo">
-          <img class="ev-card__bg" src="Asset/Event_SweeSien_JiaMin.png" alt="Swee Sien & Jia Min wedding" />
+          <img class="ev-card__bg" src="Asset/Event_SweeSien_JiaMin.png" alt="St Margaret wedding" />
           <div class="ev-card__overlay"></div>
           <div class="ev-card__body">
-            <h3 class="ev-card__name">Swee Sien &amp; Jia Min</h3>
-            <div class="ev-card__venue">
-              <p>St Margaret</p>
-              <p>Wedding</p>
-            </div>
+            <h3 class="ev-card__name">St Margaret</h3>
+            <p class="ev-card__venue">Wedding</p>
           </div>
         </div>
 
-        <!-- Nic & Lee -->
+        <!-- LASALLE | Working Title -->
         <div class="ev-card ev-card--photo">
-          <img class="ev-card__bg" src="Asset/Event_Nic_Lee.png" alt="Nic & Lee wedding" />
+          <img class="ev-card__bg" src="Asset/Event_Nic_Lee.png" alt="LASALLE Working Title wedding" />
           <div class="ev-card__overlay"></div>
           <div class="ev-card__body">
-            <h3 class="ev-card__name">Nic &amp; Lee</h3>
-            <div class="ev-card__venue">
-              <p>Working Title</p>
-              <p>Wedding</p>
-            </div>
+            <h3 class="ev-card__name">LASALLE | Working Title</h3>
+            <p class="ev-card__venue">Wedding</p>
           </div>
         </div>
 
-        <!-- Ben & Morrie -->
+        <!-- Grace Assembly -->
         <div class="ev-card ev-card--photo">
-          <img class="ev-card__bg" src="Asset/Event_Ben_Morrie.png" alt="Ben & Morrie wedding" />
+          <img class="ev-card__bg" src="Asset/Event_Ben_Morrie.png" alt="Grace Assembly wedding" />
           <div class="ev-card__overlay"></div>
           <div class="ev-card__body">
-            <h3 class="ev-card__name">Ben &amp; Morrie</h3>
-            <div class="ev-card__venue">
-              <p>Working Title</p>
-              <p>Wedding</p>
-            </div>
+            <h3 class="ev-card__name">Grace Assembly</h3>
+            <p class="ev-card__venue">Wedding</p>
           </div>
         </div>
 
-        <!-- Long Service Awards -->
+        <!-- Central Provident Fund -->
         <div class="ev-card ev-card--light">
           <div class="ev-card__body">
-            <h3 class="ev-card__name">Long Service Awards</h3>
-            <div class="ev-card__venue">
-              <p>Central Provident Fund</p>
-              <p>Corporate celebration</p>
-            </div>
+            <h3 class="ev-card__name">Central Provident Fund</h3>
+            <p class="ev-card__venue">Corporate event</p>
           </div>
         </div>
 
-        <!-- Christmas Workshop -->
+        <!-- Guerlain -->
         <div class="ev-card ev-card--light">
           <div class="ev-card__body">
-            <h3 class="ev-card__name">Christmas Workshop</h3>
-            <div class="ev-card__venue">
-              <p>Guerlain</p>
-              <p>Craft</p>
-            </div>
+            <h3 class="ev-card__name">Guerlain</h3>
+            <p class="ev-card__venue">Team bonding workshop</p>
           </div>
         </div>
 

@@ -945,13 +945,12 @@
       }
       .hero__tagline { font-size: clamp(1.4rem, 5vw, 2rem); line-height: 1.2; }
 
-      /* Works — mobile: taller aspect-ratio, text wider, mockups smaller */
-      .card { aspect-ratio: 3 / 2; }
-      .card__case-title { max-width: 58%; }
-      /* top% = desktop_top × (500/1312)/(2/3) = desktop_top × 0.5717 */
-      .card__mockup--arvo    { left: 44%;  top: 2.2%; width: 68%; filter: drop-shadow(-8px 12px 2px rgba(0,0,0,0.45)); }
-      .card__mockup--seletar { left: 38%;  top: 6.5%; width: 72%; filter: drop-shadow(-6px 10px 2px rgba(0,0,0,0.4)); }
-      .card__mockup--pawhaus { left: 54%;  top: 5.5%; width: 68%; filter: drop-shadow(-6px 10px 2px rgba(0,0,0,0.35)); }
+      /* Works — mobile: Figma 376×305 card, mockups bleed from left-centre */
+      .card { aspect-ratio: 376 / 305; }
+      .card__case-title { max-width: 55%; font-size: 14px; line-height: 1.3; }
+      .card__mockup--arvo    { left: 27%; top: 18%; width: 76%;  filter: drop-shadow(-8px 12px 2px rgba(0,0,0,0.45)); }
+      .card__mockup--seletar { left: 16%; top: 11%; width: 128%; filter: drop-shadow(-6px 10px 2px rgba(0,0,0,0.4)); }
+      .card__mockup--pawhaus { left: 22%; top: 14%; width: 100%; filter: drop-shadow(-6px 10px 2px rgba(0,0,0,0.35)); }
 
 
 
