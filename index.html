@@ -357,10 +357,10 @@
     }
 
     .hero__peeps {
-      /* Fill the full hero width and all available flex height.
-         No aspect-ratio — peep % positions scale to any container shape. */
-      width: 100%;
-      max-width: var(--max-w); /* prevent peeps spreading beyond 1312px on ultra-wide monitors */
+      /* Break out of hero's horizontal padding → edge-to-edge crowd */
+      width: calc(100% + 2 * var(--pad));
+      margin-left: calc(-1 * var(--pad));
+      max-width: none;
       flex: 1 1 auto;
       min-height: 0;
       position: relative;
@@ -422,25 +422,34 @@
     }
 
     .works__grid {
-      display: flex;
-      flex-direction: column;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
       gap: 20px;
       width: 100%;
     }
 
-    /* Card base — all full-width, stacked */
+    /* Card base */
     .card {
       position: relative;
       overflow: hidden;
       isolation: isolate;
       width: 100%;
-      aspect-ratio: 1312 / 500;
+      aspect-ratio: 64 / 38; /* default for right-column half-height cards */
       min-height: 200px;
       border-radius: 16px;
       cursor: pointer;
       will-change: transform;
       transition: box-shadow 0.3s ease;
     }
+
+    /* ARVO spans both grid rows — height driven by adjacent cards */
+    .card--arvo {
+      grid-column: 1;
+      grid-row: 1 / 3;
+      aspect-ratio: unset;
+    }
+    .card--seletar { grid-column: 2; grid-row: 1; }
+    .card--pawhaus { grid-column: 2; grid-row: 2; }
 
     .card--arvo    { background: #31332a; }
     .card--seletar { background: #304c95; }
@@ -457,16 +466,29 @@
       z-index: 2;
     }
 
-    .card__case-title {
+    /* Card headline + subtitle (replaces single card__case-title) */
+    .card__case-text {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+    .card__case-headline {
       font-family: var(--font-display);
       font-weight: 700;
-      font-size: clamp(18px, 2.22vw, 32px);
-      line-height: 1.156; /* 37/32 from Figma */
-      letter-spacing: -0.02em; /* -0.64px at 32px */
+      font-size: clamp(16px, 1.8vw, 26px);
+      line-height: 1.2;
+      letter-spacing: -0.02em;
       color: var(--ink-light);
-      max-width: clamp(220px, 40vw, 520px);
+      max-width: clamp(180px, 42%, 400px);
     }
-    .card__case-title strong { font-weight: 700; display: block; }
+    .card__case-sub {
+      font-family: var(--font-body);
+      font-weight: 400;
+      font-size: clamp(11px, 0.9vw, 14px);
+      line-height: 1.5;
+      color: rgba(244,244,235,0.8);
+      max-width: clamp(180px, 42%, 360px);
+    }
 
     .card__foot {
       display: flex;
@@ -497,29 +519,29 @@
       z-index: 1;
     }
 
-    /* ARVO — Figma: x=656/1312=50%, y=19/500=3.8%, w=683.8/1312=52.1% */
+    /* ARVO — left col, tall card (~646×800) */
     .card__mockup--arvo {
-      left: 50%;
-      top: 3.8%;
-      width: 52.1%;
+      left: 38%;
+      top: 4%;
+      width: 72%;
       height: auto;
       filter: drop-shadow(-20px 28px 4px rgba(0,0,0,0.45));
     }
 
-    /* Seletar — Figma Group6: x=578/1312=44.1%, y=57/500=11.4%, w=803/1312=61.2% */
+    /* Seletar — right col top, half-height card (~646×380) */
     .card__mockup--seletar {
-      left: 44.1%;
-      top: 11.4%;
-      width: 61.2%;
+      left: 32%;
+      top: 8%;
+      width: 78%;
       height: auto;
       filter: drop-shadow(-14px 20px 3px rgba(0,0,0,0.4));
     }
 
-    /* PawHaus — Figma MacBook: x=808/1312=61.6%, y=48/500=9.6%, w=756.6/1312=57.7% */
+    /* PawHaus — right col bottom, half-height card (~646×380) */
     .card__mockup--pawhaus {
-      left: 61.6%;
-      top: 9.6%;
-      width: 57.7%;
+      left: 40%;
+      top: 6%;
+      width: 72%;
       height: auto;
       filter: drop-shadow(-14px 20px 4px rgba(0,0,0,0.35));
     }
@@ -712,7 +734,16 @@
       color: rgba(244,244,235,0.5);
     }
 
-    /* Client logos — continuous marquee */
+    /* Client logos — static 3-logo row */
+    .clients-static {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      width: 100%;
+      padding: 20px 40px;
+    }
+
+    /* Client logos — continuous marquee (kept for other uses) */
     .clients-marquee {
       overflow: hidden;
       width: 100%;
@@ -909,10 +940,10 @@
 
       .hero__tagline { font-size: clamp(1.5rem, 3vw, 2.5rem); line-height: 1.15; }
 
-      /* tablet: cards stay full-width, nudge mockup positions */
-      .card__mockup--arvo    { width: 60%; filter: drop-shadow(-14px 20px 2px rgba(0,0,0,0.45)); }
-      .card__mockup--seletar { left: 38%; width: 66%; filter: drop-shadow(-10px 15px 2px rgba(0,0,0,0.4)); }
-      .card__mockup--pawhaus { left: 54%; width: 62%; filter: drop-shadow(-10px 15px 3px rgba(0,0,0,0.35)); }
+      /* tablet: keep 2-col grid, nudge mockup positions */
+      .card__mockup--arvo    { width: 72%; filter: drop-shadow(-14px 20px 2px rgba(0,0,0,0.45)); }
+      .card__mockup--seletar { left: 30%; width: 80%; filter: drop-shadow(-10px 15px 2px rgba(0,0,0,0.4)); }
+      .card__mockup--pawhaus { left: 38%; width: 74%; filter: drop-shadow(-10px 15px 3px rgba(0,0,0,0.35)); }
 
       #contact .inner { flex-direction: column; min-height: auto; gap: 40px; }
       .contact__copy { width: 100%; }
@@ -945,9 +976,16 @@
       }
       .hero__tagline { font-size: clamp(1.4rem, 5vw, 2rem); line-height: 1.2; }
 
-      /* Works — mobile: Figma 376×305 card, mockups bleed from left-centre */
+      /* Works — mobile: single column, 376×305 aspect ratio */
+      .works__grid {
+        grid-template-columns: 1fr;
+      }
+      .card--arvo    { grid-column: 1; grid-row: auto; aspect-ratio: 376 / 305; }
+      .card--seletar { grid-column: 1; grid-row: auto; aspect-ratio: 376 / 305; }
+      .card--pawhaus { grid-column: 1; grid-row: auto; aspect-ratio: 376 / 305; }
       .card { aspect-ratio: 376 / 305; }
-      .card__case-title { max-width: 55%; font-size: 14px; line-height: 1.3; }
+      .card__case-headline { max-width: 55%; font-size: 14px; line-height: 1.2; }
+      .card__case-sub { max-width: 55%; font-size: 11px; }
       .card__mockup--arvo    { left: 27%; top: 18%; width: 76%;  filter: drop-shadow(-8px 12px 2px rgba(0,0,0,0.45)); }
       .card__mockup--seletar { left: 16%; top: 11%; width: 128%; filter: drop-shadow(-6px 10px 2px rgba(0,0,0,0.4)); }
       .card__mockup--pawhaus { left: 22%; top: 14%; width: 100%; filter: drop-shadow(-6px 10px 2px rgba(0,0,0,0.35)); }
@@ -1155,10 +1193,13 @@
         <!-- ARVO -->
         <article class="card card--arvo" onclick="location.href='case-studies/arvo.html'">
           <div class="card__body">
-            <p class="card__case-title"><strong>Seven Problems, One Copilot:</strong> Redesigning AI support so managers can lead.</p>
+            <div class="card__case-text">
+              <p class="card__case-headline">AI Manager Copilot</p>
+              <p class="card__case-sub">Redesigning AI support so managers can lead.</p>
+            </div>
             <div class="card__foot">
               <p class="card__project-name">ARVO</p>
-              <p class="card__project-meta">Jan – Mar 2026<br>Project Lead</p>
+              <p class="card__project-meta">Jan – Mar 2026 · Project Lead</p>
             </div>
           </div>
           <img class="card__mockup card__mockup--arvo" src="Asset/Card 1 - ARVO - Default (clean).png?v=2" alt="ARVO product interface" />
@@ -1167,10 +1208,13 @@
         <!-- Seletar Airport -->
         <article class="card card--seletar" onclick="location.href='case-studies/seletar.html'">
           <div class="card__body">
-            <p class="card__case-title"><strong>The Subang Advantage:</strong> Redesigning a website to match a 15-minute airport.</p>
+            <div class="card__case-text">
+              <p class="card__case-headline">The Subang Advantage</p>
+              <p class="card__case-sub">Redesigning a website to match a 15-minute airport.</p>
+            </div>
             <div class="card__foot">
               <p class="card__project-name">Seletar Airport</p>
-              <p class="card__project-meta">Nov 2025 – Jan 2026<br>UX Research Lead</p>
+              <p class="card__project-meta">Nov 2025 – Jan 2026 · UX Research Lead</p>
             </div>
           </div>
           <img class="card__mockup card__mockup--seletar" src="Asset/Card 2 - Seletar - Default (clean).png?v=2" alt="Seletar Airport on phone and tablet" />
@@ -1179,10 +1223,13 @@
         <!-- Paw Haus -->
         <article class="card card--pawhaus" onclick="location.href='case-studies/pethaus.html'">
           <div class="card__body">
-            <p class="card__case-title"><strong>Trust Over Treats:</strong> A pet-ecommerce brand built around reading the label.</p>
+            <div class="card__case-text">
+              <p class="card__case-headline">Trust Over Treats</p>
+              <p class="card__case-sub">An e-comm brand built around reading the label.</p>
+            </div>
             <div class="card__foot">
               <p class="card__project-name">Paw Haus</p>
-              <p class="card__project-meta">Sep – Nov 2025<br>End-to-end Product Designer</p>
+              <p class="card__project-meta">Sep – Nov 2025 · End-to-end Product Designer</p>
             </div>
           </div>
           <img class="card__mockup card__mockup--pawhaus" src="Asset/Card 3 - Paw Haus - Default (clean).png?v=2" alt="Paw Haus app" />
@@ -1199,21 +1246,16 @@
     <div class="inner">
       <span class="t-label">Clients &amp; Testimonials</span>
 
+      <div class="clients-static">
+        <img class="client-logo client-logo--guerlain" src="Asset/Logo_Guerlain_Light.png" alt="Guerlain" />
+        <img class="client-logo client-logo--arvo"     src="Asset/Logo_ARVO_Light.png"    alt="ARVO" />
+        <img class="client-logo client-logo--cpf"      src="Asset/Logo_CPF_white.png"     alt="CPF" />
+      </div>
+
       <p class="test__headline">
         From digital systems to physical spaces:<br>
         What they say about working with me.
       </p>
-
-      <div class="clients-marquee">
-        <div class="clients-track">
-          <img class="client-logo client-logo--guerlain" src="Asset/Logo_Guerlain_Light.png" alt="Guerlain" />
-          <img class="client-logo client-logo--arvo"     src="Asset/Logo_ARVO_Light.png"    alt="ARVO" />
-          <img class="client-logo client-logo--cpf"      src="Asset/Logo_CPF_white.png"     alt="CPF" />
-          <img class="client-logo client-logo--guerlain" src="Asset/Logo_Guerlain_Light.png" alt="" aria-hidden="true" />
-          <img class="client-logo client-logo--arvo"     src="Asset/Logo_ARVO_Light.png"    alt="" aria-hidden="true" />
-          <img class="client-logo client-logo--cpf"      src="Asset/Logo_CPF_white.png"     alt="" aria-hidden="true" />
-        </div>
-      </div>
 
       <div class="test__carousel">
         <div class="test__row">
