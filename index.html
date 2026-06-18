@@ -504,11 +504,13 @@
     }
 
     .card__project-meta {
-      font-family: var(--font-body);
+      font-family: var(--font-mono);
       font-weight: 400;
-      font-size: clamp(12px, 1.04vw, 15px);
-      line-height: 1.55;
-      color: rgba(244, 244, 235, 0.75);
+      font-size: 10px;
+      line-height: 1.7;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: rgba(244, 244, 235, 0.65);
     }
 
     /* Mockup images — absolutely positioned on right side */
@@ -519,28 +521,28 @@
       z-index: 1;
     }
 
-    /* ARVO — left col, tall card (~646×800) */
+    /* ARVO — left col, tall card (~646×800): mockup starts at ~25% from left */
     .card__mockup--arvo {
-      left: 38%;
-      top: 4%;
-      width: 72%;
+      left: 25%;
+      top: 3%;
+      width: 74%;
       height: auto;
       filter: drop-shadow(-20px 28px 4px rgba(0,0,0,0.45));
     }
 
-    /* Seletar — right col top, half-height card (~646×380) */
+    /* Seletar — right col top (~646×380): mockup starts at ~25% from left */
     .card__mockup--seletar {
-      left: 32%;
-      top: 8%;
-      width: 78%;
+      left: 25%;
+      top: 3%;
+      width: 80%;
       height: auto;
       filter: drop-shadow(-14px 20px 3px rgba(0,0,0,0.4));
     }
 
-    /* PawHaus — right col bottom, half-height card (~646×380) */
+    /* PawHaus — right col bottom (~646×380): mockup starts at ~34% from left */
     .card__mockup--pawhaus {
-      left: 40%;
-      top: 6%;
+      left: 34%;
+      top: 3%;
       width: 72%;
       height: auto;
       filter: drop-shadow(-14px 20px 4px rgba(0,0,0,0.35));
@@ -1199,7 +1201,7 @@
             </div>
             <div class="card__foot">
               <p class="card__project-name">ARVO</p>
-              <p class="card__project-meta">Jan – Mar 2026 · Project Lead</p>
+              <p class="card__project-meta">Jan – Mar 2026<br>Project Lead</p>
             </div>
           </div>
           <img class="card__mockup card__mockup--arvo" src="Asset/Card 1 - ARVO - Default (clean).png?v=2" alt="ARVO product interface" />
@@ -1214,7 +1216,7 @@
             </div>
             <div class="card__foot">
               <p class="card__project-name">Seletar Airport</p>
-              <p class="card__project-meta">Nov 2025 – Jan 2026 · UX Research Lead</p>
+              <p class="card__project-meta">Nov 2025 – Jan 2026<br>UX Research Lead</p>
             </div>
           </div>
           <img class="card__mockup card__mockup--seletar" src="Asset/Card 2 - Seletar - Default (clean).png?v=2" alt="Seletar Airport on phone and tablet" />
@@ -1229,7 +1231,7 @@
             </div>
             <div class="card__foot">
               <p class="card__project-name">Paw Haus</p>
-              <p class="card__project-meta">Sep – Nov 2025 · End-to-end Product Designer</p>
+              <p class="card__project-meta">Sep – Nov 2025<br>End-to-end Product Designer</p>
             </div>
           </div>
           <img class="card__mockup card__mockup--pawhaus" src="Asset/Card 3 - Paw Haus - Default (clean).png?v=2" alt="Paw Haus app" />
@@ -1666,9 +1668,9 @@
       y: 40, opacity: 0, duration: 0.9, ease: 'power3.out',
       scrollTrigger: { trigger: '#testimonials', start: 'top 85%' }
     });
-    gsap.from('.clients-marquee', {
+    gsap.from('.clients-static', {
       opacity: 0, duration: 0.6,
-      scrollTrigger: { trigger: '.clients-marquee', start: 'top 90%' }
+      scrollTrigger: { trigger: '.clients-static', start: 'top 90%' }
     });
 
     /* Contact */
