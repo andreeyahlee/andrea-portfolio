@@ -123,6 +123,8 @@
       color: var(--ink-light);
       white-space: nowrap;
     }
+    /* Short logo form ("Andrea L.") — shown only on tablet/mobile compact nav */
+    .nav__logo-text--short { display: none; }
 
     .nav__logo-flower {
       width: 40px; height: 40px;
@@ -367,6 +369,16 @@
       overflow: visible;
     }
 
+    /* Caps the crowd's width so peeps stay densely packed on wide screens
+       instead of stretching edge-to-edge with the breakout container */
+    .hero__peeps-inner {
+      position: relative;
+      width: 100%;
+      height: 100%;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
     .peep {
       position: absolute;
       width: 14.26%;
@@ -521,29 +533,29 @@
       z-index: 1;
     }
 
-    /* ARVO — left col, tall card (~646×800): mockup starts at ~25% from left */
+    /* ARVO — left col tall card: mockup fills from left edge, starts ~20% from top */
     .card__mockup--arvo {
-      left: 25%;
-      top: 3%;
-      width: 74%;
+      left: 0%;
+      top: 20%;
+      width: 106%;
       height: auto;
-      filter: drop-shadow(-20px 28px 4px rgba(0,0,0,0.45));
+      filter: drop-shadow(-24.6px 31.1px 1.8px black);
     }
 
-    /* Seletar — right col top (~646×380): mockup starts at ~25% from left */
+    /* Seletar — right col top: mockup starts ~34% from left, ~26% from top */
     .card__mockup--seletar {
-      left: 25%;
-      top: 3%;
-      width: 80%;
+      left: 34%;
+      top: 26%;
+      width: 87%;
       height: auto;
       filter: drop-shadow(-14px 20px 3px rgba(0,0,0,0.4));
     }
 
-    /* PawHaus — right col bottom (~646×380): mockup starts at ~34% from left */
+    /* PawHaus — right col bottom: mockup starts ~38% from left, ~27% from top */
     .card__mockup--pawhaus {
-      left: 34%;
-      top: 3%;
-      width: 72%;
+      left: 38%;
+      top: 27%;
+      width: 76%;
       height: auto;
       filter: drop-shadow(-14px 20px 4px rgba(0,0,0,0.35));
     }
@@ -736,16 +748,7 @@
       color: rgba(244,244,235,0.5);
     }
 
-    /* Client logos — static 3-logo row */
-    .clients-static {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      width: 100%;
-      padding: 20px 40px;
-    }
-
-    /* Client logos — continuous marquee (kept for other uses) */
+    /* Client logos — continuous marquee */
     .clients-marquee {
       overflow: hidden;
       width: 100%;
@@ -940,16 +943,27 @@
     @media (max-width: 1024px) {
       :root { --pad: 40px; }
 
+      /* Nav — compact tablet/mobile nav (Figma Nav_bar_dark / Nav_bar_light) */
+      .nav__logo-text--full  { display: none; }
+      .nav__logo-text--short { display: inline; }
+      .nav__links { display: none; }
+      .nav__hamburger { display: flex; width: 40px; height: 40px; }
+      .nav__ham-line { width: 22px; height: 2px; }
+
+      .nav__toggle { width: 40px; height: 40px; }
+      .toggle__inner { width: auto; height: auto; gap: 0; }
+      .toggle__thumb { display: none; }
+      .toggle__icon { width: 20px; height: 20px; order: 0; }
+      body.light-mode .toggle__icon { width: 27px; height: 20px; order: 0; }
+
       .hero__tagline { font-size: clamp(1.5rem, 3vw, 2.5rem); line-height: 1.15; }
 
-      /* tablet: keep 2-col grid, nudge mockup positions */
-      .card__mockup--arvo    { width: 72%; filter: drop-shadow(-14px 20px 2px rgba(0,0,0,0.45)); }
-      .card__mockup--seletar { left: 30%; width: 80%; filter: drop-shadow(-10px 15px 2px rgba(0,0,0,0.4)); }
-      .card__mockup--pawhaus { left: 38%; width: 74%; filter: drop-shadow(-10px 15px 3px rgba(0,0,0,0.35)); }
+      /* tablet: keep 2-col grid, hide headline/subtitle, use Figma tablet positions */
+      .card__case-text { display: none; }
+      .card__mockup--arvo    { left: 33%; top: 2.5%; width: 83%; filter: drop-shadow(-14px 20px 2px rgba(0,0,0,0.45)); }
+      .card__mockup--seletar { left: 46%; top: 6%;   width: 86%; filter: drop-shadow(-10px 15px 2px rgba(0,0,0,0.4)); }
+      .card__mockup--pawhaus { left: 32%; top: 2%;   width: 88%; filter: drop-shadow(-10px 15px 3px rgba(0,0,0,0.35)); }
 
-      #contact .inner { flex-direction: column; min-height: auto; gap: 40px; }
-      .contact__copy { width: 100%; }
-      .contact__decor { min-height: 200px; width: 100%; }
     }
 
     /* ================================================================
@@ -986,11 +1000,10 @@
       .card--seletar { grid-column: 1; grid-row: auto; aspect-ratio: 376 / 305; }
       .card--pawhaus { grid-column: 1; grid-row: auto; aspect-ratio: 376 / 305; }
       .card { aspect-ratio: 376 / 305; }
-      .card__case-headline { max-width: 55%; font-size: 14px; line-height: 1.2; }
-      .card__case-sub { max-width: 55%; font-size: 11px; }
-      .card__mockup--arvo    { left: 27%; top: 18%; width: 76%;  filter: drop-shadow(-8px 12px 2px rgba(0,0,0,0.45)); }
-      .card__mockup--seletar { left: 16%; top: 11%; width: 128%; filter: drop-shadow(-6px 10px 2px rgba(0,0,0,0.4)); }
-      .card__mockup--pawhaus { left: 22%; top: 14%; width: 100%; filter: drop-shadow(-6px 10px 2px rgba(0,0,0,0.35)); }
+      .card__case-text { display: none; }
+      .card__mockup--arvo    { left: 36%; top: 3%;  width: 75%;  filter: drop-shadow(-8px 12px 2px rgba(0,0,0,0.45)); }
+      .card__mockup--seletar { left: -2%; top: 30%; width: 120%; filter: drop-shadow(-6px 10px 2px rgba(0,0,0,0.4)); }
+      .card__mockup--pawhaus { left: 3%;  top: 33%; width: 93%;  filter: drop-shadow(-6px 10px 2px rgba(0,0,0,0.35)); }
 
 
 
@@ -1075,7 +1088,8 @@
   <!-- ── NAV ── -->
   <nav class="nav" id="main-nav">
     <a class="nav__logo" href="/" aria-label="Andrea Lee">
-      <span class="nav__logo-text">Andrea Lee</span>
+      <span class="nav__logo-text nav__logo-text--full">Andrea Lee</span>
+      <span class="nav__logo-text nav__logo-text--short">Andrea L.</span>
       <img class="nav__logo-flower"
            src="Asset/cursor-light.png"
            data-dark-src="Asset/cursor-light.png"
@@ -1132,6 +1146,7 @@
   <!-- ── 01 HERO ── -->
   <section class="section" id="hero">
     <div class="hero__peeps" id="hero-peeps" role="img" aria-label="A diverse crowd of illustrated people">
+      <div class="hero__peeps-inner">
       <!-- Row 6 — back row, renders below all others -->
       <img class="peep" src="Asset/Peep35.png" style="left:0%;top:0%" alt="" aria-hidden="true">
       <img class="peep" src="Asset/Peep39.png" style="left:13.39%;top:0%" alt="" aria-hidden="true">
@@ -1177,6 +1192,7 @@
       <img class="peep" src="Asset/Peep05.png" style="left:50.09%;top:52.28%" alt="" aria-hidden="true">
       <img class="peep" src="Asset/Peep04.png" style="left:64.58%;top:52.28%" alt="" aria-hidden="true">
       <img class="peep" src="Asset/Peep01.png" style="left:79.03%;top:52.30%" alt="" aria-hidden="true">
+      </div>
     </div>
     <p class="hero__tagline">
       I'm a <span class="hero__hand">late bloomer</span> product designer with an unconventional background.
@@ -1226,7 +1242,7 @@
         <article class="card card--pawhaus" onclick="location.href='case-studies/pethaus.html'">
           <div class="card__body">
             <div class="card__case-text">
-              <p class="card__case-headline">Trust Over Treats</p>
+              <p class="card__case-headline">Trust Over Treats:</p>
               <p class="card__case-sub">An e-comm brand built around reading the label.</p>
             </div>
             <div class="card__foot">
@@ -1248,10 +1264,15 @@
     <div class="inner">
       <span class="t-label">Clients &amp; Testimonials</span>
 
-      <div class="clients-static">
-        <img class="client-logo client-logo--guerlain" src="Asset/Logo_Guerlain_Light.png" alt="Guerlain" />
-        <img class="client-logo client-logo--arvo"     src="Asset/Logo_ARVO_Light.png"    alt="ARVO" />
-        <img class="client-logo client-logo--cpf"      src="Asset/Logo_CPF_white.png"     alt="CPF" />
+      <div class="clients-marquee">
+        <div class="clients-track">
+          <img class="client-logo client-logo--guerlain" src="Asset/Logo_Guerlain_Light.png" alt="Guerlain" />
+          <img class="client-logo client-logo--arvo"     src="Asset/Logo_ARVO_Light.png"    alt="ARVO" />
+          <img class="client-logo client-logo--cpf"      src="Asset/Logo_CPF_white.png"     alt="CPF" />
+          <img class="client-logo client-logo--guerlain" src="Asset/Logo_Guerlain_Light.png" alt="" aria-hidden="true" />
+          <img class="client-logo client-logo--arvo"     src="Asset/Logo_ARVO_Light.png"    alt="" aria-hidden="true" />
+          <img class="client-logo client-logo--cpf"      src="Asset/Logo_CPF_white.png"     alt="" aria-hidden="true" />
+        </div>
       </div>
 
       <p class="test__headline">
@@ -1668,9 +1689,9 @@
       y: 40, opacity: 0, duration: 0.9, ease: 'power3.out',
       scrollTrigger: { trigger: '#testimonials', start: 'top 85%' }
     });
-    gsap.from('.clients-static', {
+    gsap.from('.clients-marquee', {
       opacity: 0, duration: 0.6,
-      scrollTrigger: { trigger: '.clients-static', start: 'top 90%' }
+      scrollTrigger: { trigger: '.clients-marquee', start: 'top 90%' }
     });
 
     /* Contact */
