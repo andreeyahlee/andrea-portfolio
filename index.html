@@ -508,6 +508,12 @@
       gap: 4px;
     }
 
+    /* ARVO desktop: name + meta sit bottom-right, opposite the headline column */
+    .card--arvo .card__foot {
+      align-self: flex-end;
+      text-align: right;
+    }
+
     .card__project-name {
       font-family: var(--font-hand);
       font-size: clamp(28px, 3.47vw, 50px);
@@ -533,11 +539,12 @@
       z-index: 1;
     }
 
-    /* ARVO — left col tall card: mockup fills from left edge, starts ~20% from top */
+    /* ARVO — left col tall card: mockup fills from left edge, starts ~20% from top.
+       Width kept under 100% so the dark card bg shows on the right for the bottom-right name/meta. */
     .card__mockup--arvo {
       left: 0%;
       top: 20%;
-      width: 106%;
+      width: 74%;
       height: auto;
       filter: drop-shadow(-24.6px 31.1px 1.8px black);
     }
@@ -609,15 +616,17 @@
     .test__carousel {
       display: flex;
       flex-direction: column;
-      gap: 32px;
+      gap: 16px;
       width: 100%;
     }
 
-    /* Spotlight carousel — active card front, adjacent faded */
+    /* Spotlight carousel — active card front, adjacent faded.
+       Height is set per-active-card by JS so dots hug the card like Figma's auto-layout. */
     .test__row {
       position: relative;
       width: 100%;
-      min-height: 300px;
+      height: 300px;
+      transition: height 0.4s ease;
       overflow: hidden;
       -webkit-mask-image: linear-gradient(to right, transparent 0%, rgba(0,0,0,0.5) 12%, black 26%, black 74%, rgba(0,0,0,0.5) 88%, transparent 100%);
       mask-image: linear-gradient(to right, transparent 0%, rgba(0,0,0,0.5) 12%, black 26%, black 74%, rgba(0,0,0,0.5) 88%, transparent 100%);
@@ -891,8 +900,8 @@
 
     .footer-peep {
       position: absolute;
-      width: 22.5%;
-      height: 47.8%;
+      width: 15.6%;
+      height: 33.1%;
       object-fit: contain;
       object-position: bottom center;
       transform-origin: center bottom;
@@ -960,6 +969,7 @@
 
       /* tablet: keep 2-col grid, hide headline/subtitle, use Figma tablet positions */
       .card__case-text { display: none; }
+      .card--arvo .card__foot { align-self: flex-start; text-align: left; }
       .card__mockup--arvo    { left: 28%; top: 21%;  width: 92%; filter: drop-shadow(-14px 20px 2px rgba(0,0,0,0.45)); }
       .card__mockup--seletar { left: 46%; top: 6%;   width: 86%; filter: drop-shadow(-10px 15px 2px rgba(0,0,0,0.4)); }
       .card__mockup--pawhaus { left: 32%; top: 2%;   width: 88%; filter: drop-shadow(-10px 15px 3px rgba(0,0,0,0.35)); }
@@ -1737,6 +1747,7 @@
         cards[next].classList.add('t-next');
         dots[n].classList.add('active');
         cur = n;
+        row.style.height = cards[n].offsetHeight + 'px';
       }
 
       dots.forEach((d, i) => d.addEventListener('click', () => go(i)));
