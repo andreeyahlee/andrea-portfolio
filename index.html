@@ -487,19 +487,20 @@
     .card__case-headline {
       font-family: var(--font-display);
       font-weight: 700;
-      font-size: clamp(16px, 1.8vw, 26px);
-      line-height: 1.2;
+      font-size: clamp(20px, 2.2vw, 32px);
+      line-height: 1.156;
       letter-spacing: -0.02em;
       color: var(--ink-light);
-      max-width: clamp(180px, 42%, 400px);
+      max-width: 100%;
     }
     .card__case-sub {
       font-family: var(--font-body);
       font-weight: 400;
-      font-size: clamp(11px, 0.9vw, 14px);
-      line-height: 1.5;
-      color: rgba(244,244,235,0.8);
-      max-width: clamp(180px, 42%, 360px);
+      font-size: clamp(16px, 1.8vw, 26px);
+      line-height: 1.231;
+      letter-spacing: -0.058em;
+      color: var(--ink-light);
+      max-width: 100%;
     }
 
     .card__foot {
@@ -513,6 +514,10 @@
       align-self: flex-end;
       text-align: right;
     }
+
+    /* Seletar/PawHaus: name + meta stay within the left text column so the mockup doesn't crowd them */
+    .card--seletar .card__foot { max-width: 50%; }
+    .card--pawhaus .card__foot { max-width: 47.7%; }
 
     .card__project-name {
       font-family: var(--font-hand);
@@ -539,30 +544,29 @@
       z-index: 1;
     }
 
-    /* ARVO — left col tall card: mockup fills from left edge, starts ~20% from top.
-       Width kept under 100% so the dark card bg shows on the right for the bottom-right name/meta. */
+    /* ARVO — mockup bleeds off the left/bottom edges of the card, matching Figma's rotated card photo */
     .card__mockup--arvo {
       left: 0%;
-      top: 20%;
-      width: 74%;
+      top: 19.2%;
+      width: 83.9%;
       height: auto;
       filter: drop-shadow(-24.6px 31.1px 1.8px black);
     }
 
-    /* Seletar — right col top: mockup starts ~34% from left, ~26% from top */
+    /* Seletar — right col top: mockup group starts ~35% from left, ~28.7% from top */
     .card__mockup--seletar {
-      left: 34%;
-      top: 26%;
-      width: 87%;
+      left: 35%;
+      top: 28.7%;
+      width: 87.4%;
       height: auto;
       filter: drop-shadow(-14px 20px 3px rgba(0,0,0,0.4));
     }
 
-    /* PawHaus — right col bottom: mockup starts ~38% from left, ~27% from top */
+    /* PawHaus — right col bottom: laptop mockup starts ~38.9% from left, ~32.8% from top */
     .card__mockup--pawhaus {
-      left: 38%;
-      top: 27%;
-      width: 76%;
+      left: 38.9%;
+      top: 32.8%;
+      width: 69.3%;
       height: auto;
       filter: drop-shadow(-14px 20px 4px rgba(0,0,0,0.35));
     }
@@ -577,7 +581,7 @@
       overflow: hidden;
       background: var(--lime);
       border: 3px solid var(--lime);
-      border-radius: 100px;
+      border-radius: 10px;
       font-family: var(--font-body);
       font-weight: 600;
       font-size: 13px;
