@@ -596,7 +596,6 @@
       border-radius: 20px;
       box-shadow: 0px 10px 4px 0px rgba(0,0,0,0.52);
     }
-    .ow-card--thrive .ow-card__badge { top: 133px; }
 
     /* KinCare — rotated card — Figma: left 28.1%, top -3.26%, w 85.8%, h 96%, rotate 21.5deg */
     .ow-card--kincare .ow-card__vid {
@@ -634,27 +633,13 @@
       transform-origin: center;
     }
 
-    /* Stacked body: badge sits directly above text block at bottom */
-    .ow-card__body--flow {
-      position: absolute;
-      bottom: 0; left: 0; right: 0;
-      padding: 32px;
-      display: flex;
-      flex-direction: column;
-      gap: 12px;
-      z-index: 2;
-    }
-    .ow-card__body--flow .ow-card__badge {
-      position: static;
-      align-self: flex-start;
-    }
-
+    /* Badge always sits top-left, flush with card padding — same on every card per Figma */
     .ow-card__badge {
       position: absolute;
       left: 32px;
-      top: 154px;
+      top: 32px;
       background: #31332a;
-      color: #d09a94;
+      color: #dee895;
       font-family: var(--font-mono);
       font-weight: 700;
       font-size: 10px;
@@ -664,11 +649,6 @@
       border-radius: 100px;
       white-space: nowrap;
       z-index: 2;
-    }
-
-    .ow-card--light .ow-card__badge {
-      background: rgba(26,28,22,0.1);
-      color: rgba(26,28,22,0.5);
     }
 
     .ow-card__body {
@@ -681,6 +661,17 @@
       flex-direction: column;
       gap: 8px;
       z-index: 2;
+    }
+
+    /* Two-column cards: text lives in the left half only, matching Figma's split layout */
+    .ow-card--pulse .ow-card__body,
+    .ow-card--kincare .ow-card__body {
+      right: 50%;
+      padding-right: 12px;
+    }
+    .ow-card--tallyboard .ow-card__body {
+      right: 51.6%;
+      padding-right: 12px;
     }
 
     .ow-card__title {
@@ -956,6 +947,11 @@
   <link rel="stylesheet" href="Asset/skiper40.css">
 </head>
 <body>
+  <script>
+    try {
+      if (localStorage.getItem('andrea-theme') === 'light') document.body.classList.add('light-mode');
+    } catch (e) {}
+  </script>
 
   <!-- ── LOADER ── -->
   <div id="loader" role="status" aria-label="Loading">
@@ -1144,24 +1140,20 @@
         <!-- Longtail Valley -->
         <div class="ow-card ow-card--dark ow-card--dino">
           <video class="ow-card__vid" src="Asset/Work_Card_Dino.mov" muted loop playsinline preload="auto"></video>
-          <div class="ow-card__body ow-card__body--flow">
-            <span class="ow-card__badge">In Construction</span>
-            <div>
-              <p class="ow-card__title">Longtail Valley</p>
-              <p class="ow-card__meta">An animated dino short series / Concept, direction and production</p>
-            </div>
+          <span class="ow-card__badge">In Construction</span>
+          <div class="ow-card__body">
+            <p class="ow-card__title">Longtail Valley</p>
+            <p class="ow-card__meta">An animated dino short series / Concept, direction and production</p>
           </div>
         </div>
 
         <!-- Tallyboard -->
         <div class="ow-card ow-card--light ow-card--tallyboard">
           <video class="ow-card__vid" src="Asset/Work_Card_Tallyboard.mov" muted loop playsinline preload="auto"></video>
-          <div class="ow-card__body ow-card__body--flow">
-            <span class="ow-card__badge">In Construction</span>
-            <div>
-              <p class="ow-card__title">Tallyboard</p>
-              <p class="ow-card__meta">For board game lovers to track their group scores.</p>
-            </div>
+          <span class="ow-card__badge">In Construction</span>
+          <div class="ow-card__body">
+            <p class="ow-card__title">Tallyboard</p>
+            <p class="ow-card__meta">For board game lovers to track their group scores.</p>
           </div>
         </div>
 
@@ -1438,6 +1430,7 @@
 
     toggle.addEventListener('click', () => {
       const isLight = document.body.classList.toggle('light-mode');
+      try { localStorage.setItem('andrea-theme', isLight ? 'light' : 'dark'); } catch (e) {}
       updateCursorSrc();
       document.querySelectorAll('[data-dark-src]').forEach(img => {
         img.src = isLight ? img.dataset.lightSrc : img.dataset.darkSrc;

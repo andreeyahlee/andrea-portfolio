@@ -1081,6 +1081,11 @@
   <link rel="stylesheet" href="Asset/skiper40.css">
 </head>
 <body>
+  <script>
+    try {
+      if (localStorage.getItem('andrea-theme') === 'light') document.body.classList.add('light-mode');
+    } catch (e) {}
+  </script>
 
   <!-- ── LOADER ── -->
   <div id="loader" role="status" aria-label="Loading">
@@ -1557,6 +1562,7 @@
 
     toggle.addEventListener('click', () => {
       const isLight = document.body.classList.toggle('light-mode');
+      try { localStorage.setItem('andrea-theme', isLight ? 'light' : 'dark'); } catch (e) {}
       updateCursorSrc(document.elementFromPoint(mouseX, mouseY));
       document.querySelectorAll('[data-dark-src]').forEach(img => {
         img.src = isLight ? img.dataset.lightSrc : img.dataset.darkSrc;
