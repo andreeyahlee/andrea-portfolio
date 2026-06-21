@@ -544,13 +544,14 @@
       z-index: 1;
     }
 
-    /* ARVO — mockup bleeds off the left/bottom edges of the card, matching Figma's rotated card photo */
+    /* ARVO — mockup bleeds off the left/bottom edges of the card; rotation is already baked into the source PNG, so no CSS transform is applied here */
     .card__mockup--arvo {
-      left: 0%;
-      top: 19.2%;
-      width: 83.9%;
+      left: -28.42%;
+      bottom: -36.69%;
+      top: auto;
+      width: 88.65%;
       height: auto;
-      filter: drop-shadow(-24.6px 31.1px 1.8px black);
+      filter: drop-shadow(-25.175px 31.839px 1.851px black);
     }
 
     /* Seletar — right col top: mockup group starts ~35% from left, ~28.7% from top */
@@ -1258,7 +1259,7 @@
         <article class="card card--seletar" onclick="location.href='case-studies/seletar.html'">
           <div class="card__body">
             <div class="card__case-text">
-              <p class="card__case-headline">The Subang Advantage</p>
+              <p class="card__case-headline">The Subang Advantage:</p>
               <p class="card__case-sub">Redesigning a website to match a 15-minute airport.</p>
             </div>
             <div class="card__foot">
