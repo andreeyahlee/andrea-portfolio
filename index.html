@@ -992,17 +992,29 @@
       .nav__hamburger { display: flex; }
 
       /* Hero */
-      #hero { padding-top: calc(24px + 80px); gap: 24px; min-height: auto; padding-bottom: 40px; }
+      #hero { height: auto; padding-top: calc(24px + 80px); gap: 24px; min-height: auto; padding-bottom: 40px; }
+      /* Crowd doesn't scale down on mobile — it stays desktop-sized (1200×395.5px,
+         peeps ~171×189px) and the narrower viewport just crops a window into it,
+         bottom-aligned so the front row stays anchored above the tagline. */
       .hero__peeps {
         margin-left: calc(-1 * var(--pad));
         margin-right: calc(-1 * var(--pad));
         width: calc(100% + 2 * var(--pad));
         max-width: none;
-        /* Lock W:H so peep boxes stay landscape-ish.
-           No-gap threshold: W/H ≥ 1.045 (derived from image ratio 369/518 and row math).
-           5/3 ≈ 1.67 gives a 1.6× safety margin and a compact but visible crowd height. */
-        aspect-ratio: 5 / 3;
-        flex: 0 0 auto; /* stop growing — height is set by aspect-ratio, not leftover space */
+        height: 203px;
+        aspect-ratio: unset;
+        flex: 0 0 auto;
+        overflow: hidden;
+        display: flex;
+        justify-content: center;
+        align-items: flex-end;
+      }
+      .hero__peeps-inner {
+        width: 1200px;
+        height: 395.5px;
+        max-width: none;
+        margin: 0;
+        flex-shrink: 0;
       }
       .hero__tagline { font-size: clamp(1.4rem, 5vw, 2rem); line-height: 1.2; }
 
