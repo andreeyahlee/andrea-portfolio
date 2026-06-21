@@ -2,2339 +2,1025 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>ARVO — Andrea Lee</title>
   <meta name="description" content="Designing an AI manager copilot so managers can lead, not administrate.">
 
-  <!-- Theme flash prevention -->
-  <script>(function(){try{var t=localStorage.getItem('andrea-theme')||'dark';document.documentElement.setAttribute('data-theme',t);}catch(e){}})();</script>
-
-  <!-- Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,300..700&display=swap" rel="stylesheet">
-  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&display=swap" rel="stylesheet">
-  <link href="https://fonts.googleapis.com/css2?family=DM+Mono:ital,wght@0,400;0,500;1,400&display=swap" rel="stylesheet">
-  <link href="https://fonts.googleapis.com/css2?family=Lora:wght@400;500&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Gochi+Hand&family=Lora:ital,wght@0,400;1,400&display=swap" rel="stylesheet">
 
-  <!-- GSAP -->
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+  <style>
+    @font-face { font-family:'DM Mono'; font-style:normal; font-weight:300; font-display:swap; src:url('../Asset/fonts/dm-mono-300.woff2') format('woff2'); }
+    @font-face { font-family:'DM Mono'; font-style:italic; font-weight:300; font-display:swap; src:url('../Asset/fonts/dm-mono-300-italic.woff2') format('woff2'); }
+    @font-face { font-family:'DM Mono'; font-style:normal; font-weight:400; font-display:swap; src:url('../Asset/fonts/dm-mono-400.woff2') format('woff2'); }
+    @font-face { font-family:'DM Mono'; font-style:normal; font-weight:500; font-display:swap; src:url('../Asset/fonts/dm-mono-500.woff2') format('woff2'); }
+    @font-face { font-family:'DM Sans'; font-style:normal; font-weight:400; font-display:swap; src:url('../Asset/fonts/dm-sans-400.woff2') format('woff2'); }
+    @font-face { font-family:'DM Sans'; font-style:normal; font-weight:500; font-display:swap; src:url('../Asset/fonts/dm-sans-500.woff2') format('woff2'); }
+    @font-face { font-family:'DM Sans'; font-style:italic; font-weight:400; font-display:swap; src:url('../Asset/fonts/dm-sans-400-italic.woff2') format('woff2'); }
+    @font-face { font-family:'DM Sans'; font-style:normal; font-weight:600; font-display:swap; src:url('../Asset/fonts/dm-sans-500.woff2') format('woff2'); }
+  </style>
 
   <style>
     /* ================================================================
        TOKENS
     ================================================================ */
     :root {
-      --bg:           #141c16;
-      --bg-section:   #f3f2ec;
-      --bg-light:     #F4F4EB;
-      --bg-dark:      #1A1C16;
-      --ink:          #f4f4eb;
-      --ink-dark:     #1a1c16;
-      --ink-muted:    rgba(244,244,235,0.5);
-      --arvo-green:   #96ab1e;
-      --arvo-amber:   #c98a2e;
-      --font-display: 'DM Serif Display', serif;
-      --font-body:    'DM Sans', sans-serif;
-      --font-mono:    'DM Mono', monospace;
-      --pad-x:        clamp(24px, 5vw, 80px);
-      --pad-y:        clamp(64px, 8vw, 120px);
-      --radius:       16px;
-      --radius-sm:    10px;
+      --bg-dark:   #1a1c16;
+      --bg-light:  #f4f4eb;
+      --lime:      #dee895;
+      --ink-light: #f4f4eb;
+      --ink-dark:  #1a1c16;
+      --arvo:      #31332a;
+
+      --font-display: 'Lora', Georgia, serif;
+      --font-body:    'DM Sans', Arial, sans-serif;
+      --font-mono:    'DM Mono', 'IBM Plex Mono', monospace;
+      --font-hand:    'Gochi Hand', cursive;
+
+      --max-w: 1312px;
+      --pad:   64px;
+      --ease-bounce: cubic-bezier(0.175,0.885,0.327,1.41);
+      --dur-fast: 0.2s;
+      --dur-slow: 0.35s;
     }
 
-    /* ================================================================
-       RESET
-    ================================================================ */
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-    html { scroll-behavior: auto; -webkit-text-size-adjust: 100%; overflow-x: hidden; }
-    body { font-family: var(--font-body); background: var(--bg); color: var(--ink); overflow-x: hidden; }
-    a { color: inherit; text-decoration: none; }
-    img, video { display: block; max-width: 100%; }
-    *, *::before, *::after { cursor: none !important; }
-
-    /* ================================================================
-       PROGRESS BAR
-    ================================================================ */
-    #cs-progress {
-      position: fixed; top: 0; left: 0;
-      height: 3px; width: 0%;
-      background: var(--arvo-green);
-      z-index: 300; pointer-events: none;
-      transition: width 0.1s linear;
+    html { font-size: 16px; scroll-behavior: smooth; }
+    body {
+      font-family: var(--font-body);
+      background: var(--bg-dark);
+      color: var(--ink-light);
+      overflow-x: hidden;
+      cursor: none;
     }
 
     /* ================================================================
-       CURSOR
+       LIGHT MODE
     ================================================================ */
-    #custom-cursor {
-      position: fixed; top: 0; left: 0;
-      width: 52px; height: 52px;
-      pointer-events: none; z-index: 9999;
-      opacity: 0; will-change: transform;
-      overflow: hidden;
-    }
-    #custom-cursor img { width: 100%; height: auto; display: block; }
-    @media (hover: none) { #custom-cursor { display: none !important; } }
+    body.light-mode                   { background: var(--bg-light); color: var(--ink-dark); }
+    body.light-mode .section          { background: var(--bg-light); }
+    body.light-mode .t-label          { color: #6b7a00; }
+    body.light-mode .nav              { background: var(--bg-light); }
+    body.light-mode .nav__links a     { color: var(--ink-dark); }
+    body.light-mode .nav__links a:hover,
+    body.light-mode .nav__links a[aria-current="page"] { color: #6b7a00; }
+    body.light-mode .nav__logo-text   { color: var(--ink-dark); }
+    body.light-mode .nav__ham-line    { background: var(--ink-dark); }
+    body.light-mode .nav__mobile-menu { background: var(--bg-light); border-color: rgba(26,28,22,0.15); }
+    body.light-mode .nav__mobile-menu li a { color: rgba(26,28,22,0.7); }
+    body.light-mode .nav__mobile-menu li a:hover { color: #6b7a00; background: rgba(26,28,22,0.05); }
+    body.light-mode .nav__toggle      { background: #6b7060; }
+    body.light-mode .toggle__inner    { width: 72px; }
+    body.light-mode .toggle__icon     { order: 0; width: 27px; height: 20px; }
+    body.light-mode .toggle__sun      { display: none;  }
+    body.light-mode .toggle__moon     { display: block; }
+    body.light-mode .cs-h2,
+    body.light-mode .cs-stat__num,
+    body.light-mode .cs-col__title,
+    body.light-mode .cs-zigzag-text,
+    body.light-mode .cs-card__title  { color: var(--ink-dark); }
+    body.light-mode .cs-body,
+    body.light-mode .cs-stat__caption,
+    body.light-mode .cs-col__body,
+    body.light-mode .cs-card__body  { color: rgba(26,28,22,0.65); }
+    body.light-mode .cs-divider     { background: rgba(26,28,22,0.15); }
+    body.light-mode .cs-back        { color: rgba(26,28,22,0.7); }
+    body.light-mode .cs-tag         { background: rgba(26,28,22,0.06); color: rgba(26,28,22,0.7); }
+    body.light-mode .contact__heading,
+    body.light-mode .contact__desc    { color: var(--ink-dark); }
+    body.light-mode .contact__email   { color: var(--ink-dark); }
+    body.light-mode .social-link      { color: var(--ink-dark); }
+    body.light-mode .contact__copyright { color: rgba(26,28,22,0.5); }
 
     /* ================================================================
        NAV
     ================================================================ */
-    .cs-nav {
-      position: fixed; top: 20px; left: 50%;
-      transform: translateX(-50%);
-      z-index: 100;
-      display: flex; align-items: center; gap: 28px;
-      background: rgba(20,28,22,0.8);
-      backdrop-filter: blur(14px);
-      -webkit-backdrop-filter: blur(14px);
-      border: 1px solid rgba(255,255,255,0.08);
-      border-radius: 100px;
-      padding: 10px 22px;
-      font-family: var(--font-mono);
-      font-size: 11px;
-      letter-spacing: 0.08em;
-      text-transform: uppercase;
-      color: var(--ink-muted);
-      white-space: nowrap;
+    .nav {
+      position: fixed; top: 0; left: 0; z-index: 999; width: 100%; min-height: 104px;
+      background: var(--bg-dark); padding: 32px max(32px, calc((100% - 1440px) / 2 + 32px));
+      display: flex; align-items: center; justify-content: space-between; gap: 10px;
+      transition: background var(--dur-fast);
     }
-    .cs-nav a { transition: color 0.2s ease; }
-    .cs-nav a:hover { color: var(--ink); }
-    .cs-nav-back { display: flex; align-items: center; gap: 6px; }
-    .cs-nav-back::before { content: '←'; font-size: 13px; }
-    .cs-nav-logo { color: var(--arvo-green); font-weight: 500; }
-    .cs-nav-divider {
-      width: 1px; height: 14px;
-      background: rgba(255,255,255,0.15);
-      flex-shrink: 0;
-    }
+    .nav__logo { display: flex; align-items: center; gap: 10px; text-decoration: none; flex-shrink: 0; }
+    .nav__logo-text { font-family: var(--font-hand); font-weight: 700; font-size: 26px; line-height: 1; letter-spacing: -0.04em; text-transform: uppercase; color: var(--ink-light); white-space: nowrap; }
+    .nav__logo-text--short { display: none; }
+    .nav__logo-flower { width: 40px; height: 40px; display: block; flex-shrink: 0; object-fit: contain; }
+    .nav__right { display: flex; align-items: center; gap: 40px; }
+    .nav__links { display: flex; gap: 40px; list-style: none; align-items: center; }
+    .nav__links a { font-family: var(--font-hand); font-weight: 400; font-size: 24px; line-height: 33px; letter-spacing: -0.02em; color: var(--ink-light); text-decoration: none; transition: color var(--dur-fast); white-space: nowrap; }
+    .nav__links a:hover, .nav__links a[aria-current="page"] { color: var(--lime); }
+
+    .nav__toggle { box-sizing: border-box; display: flex; align-items: center; justify-content: center; padding: 4px; width: 83px; height: 30px; background: #f4f4eb; border: 0.95px solid var(--lime); box-shadow: inset 0 4px 4px rgba(0,0,0,0.25); border-radius: 95px; cursor: pointer; flex-shrink: 0; transition: background 0.3s ease; }
+    body.light-mode .nav__toggle { background: #6b7060; }
+    .nav__toggle:hover { opacity: 0.85; }
+    .toggle__inner { display: flex; flex-direction: row; justify-content: space-between; align-items: center; width: 75px; height: 22px; gap: 3px; pointer-events: none; }
+    body.light-mode .toggle__inner { width: 72px; }
+    .toggle__icon { width: 33px; height: 22px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; order: 1; }
+    body.light-mode .toggle__icon { order: 0; width: 27px; height: 20px; }
+    .toggle__sun  { display: block; width: 100%; height: 100%; }
+    .toggle__moon { display: none;  width: 100%; height: 100%; }
+    body.light-mode .toggle__sun  { display: none;  }
+    body.light-mode .toggle__moon { display: block; }
+    .toggle__thumb { box-sizing: border-box; width: 42px; height: 22px; background: #1a1c16; border: 1px solid var(--lime); box-shadow: 0 10px 4px rgba(0,0,0,0.25); border-radius: 95px; flex-shrink: 0; order: 0; transition: background 0.3s ease, box-shadow 0.3s ease, height 0.3s ease; }
+    body.light-mode .toggle__thumb { background: #f4f4eb; box-shadow: -3px 2px 2px rgba(0,0,0,0.69), inset -1px -6px 4px rgba(0,0,0,0.25); height: 20px; order: 1; }
+
+    .nav__hamburger { display: none; flex-direction: column; justify-content: center; align-items: center; gap: 4.5px; background: none; border: none; cursor: pointer; padding: 3px; flex-shrink: 0; width: 28px; height: 28px; }
+    .nav__ham-line { display: block; width: 18px; height: 1.5px; background: var(--ink-light); border-radius: 2px; transition: transform 0.25s ease, opacity 0.2s ease, width 0.2s ease; transform-origin: center; }
+    .nav.is-open .nav__ham-line:nth-child(1) { transform: translateY(6px) rotate(45deg); }
+    .nav.is-open .nav__ham-line:nth-child(2) { opacity: 0; width: 0; }
+    .nav.is-open .nav__ham-line:nth-child(3) { transform: translateY(-6px) rotate(-45deg); }
+
+    .nav__mobile-menu { position: absolute; top: calc(100% - 8px); left: var(--pad); right: var(--pad); background: var(--bg-dark); border: 1px solid rgba(222,232,149,0.18); border-radius: 20px; box-shadow: 0 4px 24px rgba(0,0,0,0.25); overflow: hidden; max-height: 0; opacity: 0; pointer-events: none; transition: max-height 0.3s ease, opacity 0.2s ease; }
+    .nav__mobile-menu ul { list-style: none; padding: 0.625rem 0.5rem; display: flex; flex-direction: column; gap: 2px; }
+    .nav__mobile-menu li a { display: block; padding: 0.75rem 0.875rem; font-family: var(--font-hand); font-weight: 400; font-size: 20px; letter-spacing: -0.03em; color: rgba(244,244,235,0.8); text-decoration: none; border-radius: 10px; transition: color var(--dur-fast), background var(--dur-fast); }
+    .nav__mobile-menu li a:hover { color: var(--lime); background: rgba(244,244,235,0.05); }
+    .nav.is-open .nav__mobile-menu { max-height: 200px; opacity: 1; pointer-events: auto; }
 
     /* ================================================================
-       01 — HERO
+       SHARED UTILITIES
     ================================================================ */
-    #cs-hero {
-      /* Figma: Hero */
-      display: flex;
-      flex-direction: column;
-      justify-content: flex-start;
-      align-items: center;
-      padding: 64px 0 0;
-      gap: 40px;
-      width: 100%;
-      height: 900px;
-      background: linear-gradient(0deg, rgba(0,0,0,0.2), rgba(0,0,0,0.2)), #1A1C16;
-      overflow: hidden;
-      flex: none;
-      align-self: stretch;
-    }
-
-    /* Frame 55 — text wrapper */
-    .hero-text {
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
-      padding: 0;
-      gap: 40px;
-      width: 100%;
-      flex: none;
-      align-self: stretch;
-    }
-
-    /* Frame 471 — title + subtitle stack */
-    .hero-title-group {
-      display: flex;
-      flex-direction: column;
-      align-items: flex-start;
-      padding: 0;
-      gap: 10px;
-      width: 100%;
-      flex: none;
-      align-self: stretch;
-    }
-
-    .hero-title {
-      /* Figma: ARVO. */
-      width: 100%;
-      font-family: 'Lora', serif;
-      font-style: normal;
-      font-weight: 400;
-      font-size: 52px;
-      line-height: 56px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      text-align: center;
-      letter-spacing: -0.03em;
-      color: #F4F4EB;
-      flex: none;
-      align-self: stretch;
-    }
-
-    .hero-sub {
-      /* Figma: subtitle */
-      width: 100%;
-      font-family: 'Lora', serif;
-      font-style: normal;
-      font-weight: 400;
-      font-size: 22px;
-      line-height: 28px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      text-align: center;
-      letter-spacing: -0.01em;
-      color: #DEE895;
-      flex: none;
-      align-self: stretch;
-    }
-
-    /* ARVO_Hero_Vid — video container */
-    .hero-media {
-      flex: none;
-      align-self: stretch;
-      width: 100%;
-      height: 598px;
-      overflow: hidden;
-      pointer-events: none;
-    }
-
-    .hero-media video {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      object-position: center 67%;
-      display: block;
-    }
-
-    @media (max-width: 768px) {
-      #cs-hero { height: auto; min-height: 560px; gap: 24px; }
-      .hero-title { font-size: 36px; line-height: 40px; }
-      .hero-sub   { font-size: 16px; line-height: 22px; }
-      .hero-media { height: auto; }
-      .hero-media video { height: auto; object-fit: unset; }
-    }
+    .section { width: 100%; background: var(--bg-dark); }
+    .inner { max-width: calc(var(--max-w) + var(--pad) * 2); margin: 0 auto; padding: var(--pad); }
+    .t-label { font-family: var(--font-mono); font-weight: 700; font-size: 11px; line-height: 14px; letter-spacing: 0.6em; text-transform: uppercase; color: var(--lime); display: block; margin-bottom: 40px; }
 
     /* ================================================================
-       02 — ABOUT
+       CURSOR FOLLOWER / LOADER
     ================================================================ */
-    #cs-about {
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
-      padding: 64px;
-      gap: 40px;
-      width: 100%;
-      height: 900px;
-      background: #1A1C16;
-      flex: none;
-      align-self: stretch;
-      overflow: hidden;
-    }
+    #cursor-follower { position: fixed; top: 0; left: 0; width: 52px; pointer-events: none; z-index: 9999; display: none; will-change: transform; }
+    @keyframes cursor-spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+    #cursor-follower img { width: 100%; height: auto; display: block; transform-origin: center center; animation: cursor-spin 5s linear infinite; }
+    @media (hover: none) { #cursor-follower { display: none !important; } body { cursor: auto; } }
 
-    /* Frame 470 — main row */
-    .about-row {
-      display: flex;
-      flex-direction: row;
-      justify-content: center;
-      align-items: flex-start;
-      padding: 0;
-      gap: 40px;
-      width: 100%;
-      flex-grow: 1;
-      align-self: stretch;
-    }
+    #loader { position: fixed; inset: 0; z-index: 9999; background: var(--bg-dark); display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 10px; transition: opacity 0.7s ease, visibility 0.7s ease; }
+    #loader.loader--hidden { opacity: 0; visibility: hidden; pointer-events: none; }
+    .loader__video { width: 347px; max-width: 80vw; }
+    .loader__text { font-family: var(--font-display); font-size: 22px; font-weight: 400; line-height: 28px; letter-spacing: -0.01em; color: var(--ink-light); text-align: center; }
+    .loader__dots span { opacity: 0; animation: loader-dot 1.5s ease-in-out infinite; }
+    .loader__dots span:nth-child(1) { animation-delay: 0s; }
+    .loader__dots span:nth-child(2) { animation-delay: 0.3s; }
+    .loader__dots span:nth-child(3) { animation-delay: 0.6s; }
+    @keyframes loader-dot { 0%, 100% { opacity: 0; } 30%, 70% { opacity: 1; } }
 
-    /* Frame 469 — left column */
-    .about-left {
-      display: flex;
-      flex-direction: column;
-      align-items: flex-start;
-      padding: 0;
-      gap: 40px;
-      flex-grow: 1;
-      align-self: stretch;
-    }
+    /* ================================================================
+       CASE STUDY — SHARED
+    ================================================================ */
+    .cs-back { display: inline-flex; align-items: center; gap: 10px; font-family: var(--font-body); font-size: 14px; color: rgba(244,244,235,0.7); text-decoration: none; transition: color var(--dur-fast); }
+    .cs-back:hover { color: var(--lime); }
+    .cs-back svg { width: 18px; height: 18px; }
 
-    /* About_intro — heading fills flex-grow */
-    .about-heading {
-      font-family: 'Lora', serif;
-      font-style: normal;
-      font-weight: 400;
-      font-size: 40px;
-      line-height: 44px;
-      letter-spacing: -0.025em;
-      color: #F4F4EB;
-      flex-grow: 1;
-      align-self: stretch;
-      display: flex;
-      align-items: center;
-    }
+    .cs-h2 { font-family: var(--font-display); font-weight: 400; font-size: clamp(1.75rem, 3vw, 2.5rem); line-height: 1.2; letter-spacing: -0.02em; color: var(--ink-light); }
+    .cs-body { font-family: var(--font-body); font-weight: 400; font-size: 17px; line-height: 1.6; color: rgba(244,244,235,0.7); }
+    .cs-body strong { font-weight: 700; color: var(--ink-light); }
+    body.light-mode .cs-body strong { color: var(--ink-dark); }
+    .cs-divider { width: 100%; height: 1px; background: rgba(244,244,235,0.15); margin: 40px 0; }
+    .cs-tag { display: inline-flex; align-items: center; font-family: var(--font-mono); font-size: 11px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: rgba(244,244,235,0.7); background: rgba(244,244,235,0.06); padding: 6px 12px; border-radius: 20px; }
+    .cs-shot { width: 100%; display: block; border-radius: 14px; box-shadow: 0 24px 48px rgba(0,0,0,0.35); }
 
-    /* About_statsbar */
-    .about-stats {
-      display: flex;
-      flex-direction: row;
-      justify-content: center;
-      align-items: center;
-      padding: 0;
-      gap: 40px;
-      width: 100%;
-      flex: none;
-      align-self: stretch;
-    }
+    /* ── Hero ── */
+    #cs-hero { padding-top: 104px; }
+    .cs-hero__inner { padding-top: 56px; padding-bottom: 56px; display: flex; align-items: center; gap: 48px; min-height: calc(100vh - 104px); }
+    .cs-hero__col { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 32px; }
+    .cs-hero__badge { display: inline-flex; align-items: center; justify-content: center; width: 84px; height: 50px; background: var(--bg-light); color: var(--ink-dark); border-radius: 14px; font-family: var(--font-hand); font-size: 22px; box-shadow: 0 8px 20px rgba(0,0,0,0.25); }
+    .cs-hero__eyebrow { font-family: var(--font-mono); font-size: 12px; font-weight: 700; letter-spacing: 0.05em; text-transform: uppercase; color: rgba(244,244,235,0.55); line-height: 1.6; }
+    .cs-hero__title { font-family: var(--font-display); font-weight: 400; font-size: clamp(2.25rem, 4.5vw, 3.5rem); line-height: 1.15; letter-spacing: -0.02em; color: var(--ink-light); }
+    .cs-hero__desc { font-family: var(--font-body); font-size: 17px; line-height: 1.7; color: rgba(244,244,235,0.7); max-width: 460px; }
+    .cs-hero__cta { display: inline-flex; align-items: center; gap: 10px; align-self: flex-start; background: var(--lime); color: var(--ink-dark); font-family: var(--font-body); font-weight: 600; font-size: 13px; padding: 16px 32px; border-radius: 10px; text-decoration: none; box-shadow: 0 10px 4px rgba(0,0,0,0.25); transition: transform var(--dur-fast) var(--ease-bounce); }
+    .cs-hero__cta:hover { transform: translateY(-2px); }
+    .cs-hero__mockup { flex: 1.3; min-width: 0; }
+    .cs-hero__mockup img { width: 100%; display: block; }
 
-    .about-stat {
-      display: flex;
-      flex-direction: column;
-      align-items: flex-start;
-      padding: 0;
-      gap: 10px;
-      flex-grow: 1;
-      align-self: stretch;
-    }
+    /* ── Project Specs ── */
+    .cs-stats { display: flex; gap: 64px; margin-bottom: 40px; }
+    .cs-stat { flex: 1; min-width: 0; }
+    .cs-stat__num { font-family: var(--font-display); font-size: clamp(2.5rem, 4vw, 3.5rem); font-weight: 400; color: var(--ink-light); line-height: 1; margin-bottom: 12px; }
+    .cs-stat__caption { font-family: var(--font-body); font-size: 14px; line-height: 1.5; color: rgba(244,244,235,0.65); }
+    .cs-cols { display: flex; gap: 64px; }
+    .cs-col { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 14px; }
+    .cs-col__title { font-family: var(--font-display); font-size: 22px; font-weight: 400; color: var(--ink-light); }
+    .cs-col__body { font-family: var(--font-body); font-size: 15px; line-height: 1.65; color: rgba(244,244,235,0.65); }
+    .cs-col__body strong { font-weight: 700; color: var(--ink-light); }
+    body.light-mode .cs-col__body strong { color: var(--ink-dark); }
 
-    .about-stat-num {
-      font-family: 'Lora', serif;
-      font-style: normal;
-      font-weight: 400;
-      font-size: 56px;
-      line-height: 56px;
-      letter-spacing: -0.04em;
-      color: #F4F4EB;
-      flex: none;
-      align-self: stretch;
-    }
+    /* ── Zigzag (Shaky Brief / Redesign / Workshop) ── */
+    .cs-zigzag-row { display: flex; align-items: flex-start; gap: 48px; }
+    .cs-zigzag-row--reverse { flex-direction: row-reverse; }
+    .cs-zigzag-media { flex: 1.2; min-width: 0; }
+    .cs-zigzag-media img { width: 100%; display: block; border-radius: 14px; box-shadow: 0 24px 48px rgba(0,0,0,0.35); }
+    .cs-zigzag-text { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 16px; padding-top: 16px; }
+    .cs-zigzag-text .cs-h2 { font-size: clamp(1.4rem, 2.2vw, 1.75rem); }
 
-    .about-stat-label {
-      font-family: 'DM Sans', sans-serif;
-      font-style: normal;
-      font-weight: 400;
-      font-size: 15px;
-      line-height: 27px;
-      color: #F4F4EB;
-      flex: none;
-      align-self: stretch;
-    }
+    /* ── Shaky Brief side list ── */
+    .cs-tablist { display: flex; flex-direction: column; gap: 0; }
+    .cs-tabitem { padding: 24px 0; border-top: 1px solid rgba(244,244,235,0.12); font-family: var(--font-display); font-size: 17px; color: rgba(244,244,235,0.85); }
+    .cs-tabitem:last-child { border-bottom: 1px solid rgba(244,244,235,0.12); }
 
-    /* About_Role — right sidebar */
-    .about-right {
-      display: flex;
-      flex-direction: column;
-      justify-content: space-between;
-      align-items: flex-start;
-      padding: 16px;
-      gap: 40px;
-      width: 392px;
-      flex-shrink: 0;
-      align-self: stretch;
-    }
+    /* ── Workshop industries ── */
+    .cs-tagrow { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 8px; }
 
-    .about-meta-item {
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      align-items: flex-start;
-      padding: 0;
-      gap: 10px;
-      width: 100%;
-      flex: none;
-      align-self: stretch;
-    }
+    /* ── Decision framework (How I made the call) ── */
+    .cs-decision-q { font-family: var(--font-display); font-size: clamp(1.4rem, 2.2vw, 1.75rem); color: var(--ink-light); margin: 24px 0 40px; max-width: 720px; }
+    .cs-decision-cards { display: flex; gap: 32px; }
+    .cs-decision-card { flex: 1; min-width: 0; padding: 32px; border-radius: 16px; display: flex; flex-direction: column; gap: 12px; }
+    .cs-decision-card--yes { background: rgba(222,232,149,0.08); border: 1px solid rgba(222,232,149,0.3); }
+    .cs-decision-card--no { background: rgba(244,244,235,0.04); border: 1px solid rgba(244,244,235,0.12); }
+    .cs-decision-card__title { font-family: var(--font-display); font-size: 19px; color: var(--ink-light); }
+    .cs-decision-card__body { font-family: var(--font-body); font-size: 14px; line-height: 1.6; color: rgba(244,244,235,0.65); }
 
-    .about-meta-tag {
-      font-family: 'DM Sans', sans-serif;
-      font-style: normal;
-      font-weight: 600;
-      font-size: 13px;
-      line-height: 17px;
-      color: #F4F4EB;
-      align-self: stretch;
-    }
+    /* ── Timeline (How it unfolded) ── */
+    .cs-timeline { display: flex; gap: 32px; position: relative; }
+    .cs-timeline::before { content: ''; position: absolute; top: 6px; left: 0; right: 0; height: 1px; background: rgba(244,244,235,0.15); }
+    .cs-tl-step { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 10px; position: relative; padding-top: 24px; }
+    .cs-tl-step::before { content: ''; position: absolute; top: 0; left: 0; width: 13px; height: 13px; border-radius: 50%; background: var(--bg-dark); border: 2px solid var(--lime); }
+    .cs-tl-step__round { font-family: var(--font-mono); font-size: 11px; font-weight: 700; letter-spacing: 0.05em; text-transform: uppercase; color: var(--lime); }
+    .cs-tl-step__name { font-family: var(--font-display); font-size: 19px; color: var(--ink-light); }
+    .cs-tl-step__body { font-family: var(--font-body); font-size: 14px; line-height: 1.6; color: rgba(244,244,235,0.65); }
 
-    .about-meta-val {
-      font-family: 'DM Sans', sans-serif;
-      font-style: normal;
-      font-weight: 400;
-      font-size: 15px;
-      line-height: 27px;
-      color: #F4F4EB;
-      align-self: stretch;
-    }
+    /* ── Before / After ── */
+    .cs-ba { display: flex; gap: 32px; margin-top: 16px; }
+    .cs-ba__col { flex: 1; min-width: 0; }
+    .cs-ba__label { display: block; font-family: var(--font-mono); font-size: 11px; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; color: rgba(244,244,235,0.6); margin-bottom: 16px; }
+    .cs-ba__col img { width: 100%; display: block; border-radius: 14px; box-shadow: 0 24px 48px rgba(0,0,0,0.35); }
 
-    .about-cta {
-      box-sizing: border-box;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
-      padding: 17px 33px;
-      gap: 10px;
-      width: 150px;
-      height: 51px;
-      border: 3px solid #DEE895;
-      border-radius: 100px;
-      text-decoration: none;
-      flex: none;
-    }
+    /* ── Impact stats (second) ── */
+    .cs-impact { display: flex; gap: 64px; }
+    .cs-impact__item { flex: 1; min-width: 0; }
+    .cs-impact__num { font-family: var(--font-display); font-size: clamp(1.75rem, 3vw, 2.25rem); font-weight: 400; color: var(--ink-light); }
+    .cs-impact__tag { display: block; font-family: var(--font-mono); font-size: 11px; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; color: var(--lime); margin: 10px 0 8px; }
+    .cs-impact__body { font-family: var(--font-body); font-size: 14px; line-height: 1.6; color: rgba(244,244,235,0.65); }
 
-    .about-cta span {
-      font-family: 'DM Sans', sans-serif;
-      font-style: normal;
-      font-weight: 600;
-      font-size: 13px;
-      line-height: 17px;
-      color: #F4F4EB;
-      text-decoration: none;
-      white-space: nowrap;
-    }
-    .about-cta:hover {
-      background: #DEE895;
-    }
-    .about-cta:hover span {
-      color: #1A1C16;
-    }
+    /* ── Final Prototype (light showcase) ── */
+    #cs-finalproto { background: var(--bg-light); }
+    #cs-finalproto .cs-shot-wrap { margin-bottom: 32px; }
+    .cs-finalproto__phones { display: flex; gap: 24px; }
+    .cs-finalproto__phones img { width: 100%; display: block; }
+    .cs-finalproto__phones-single { width: 100%; display: block; border-radius: 14px; }
 
+    /* ── Reflections ── */
+    .cs-cards-2x2 { display: grid; grid-template-columns: 1fr 1fr; gap: 32px 64px; }
+    .cs-card__title { font-family: var(--font-display); font-size: 19px; color: var(--ink-light); margin-bottom: 10px; }
+    .cs-card__body { font-family: var(--font-body); font-size: 14px; line-height: 1.65; color: rgba(244,244,235,0.65); }
+
+    /* ── Project Stack ── */
+    .cs-stack { display: flex; gap: 48px; }
+    .cs-stack__col { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 6px; }
+    .cs-stack__label { font-family: var(--font-mono); font-size: 11px; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; color: var(--lime); margin-bottom: 6px; }
+    .cs-stack__row { font-family: var(--font-body); font-size: 14px; color: rgba(244,244,235,0.75); line-height: 1.8; }
+    .cs-stack__row strong { display: block; font-family: var(--font-display); font-size: 16px; color: var(--ink-light); font-weight: 400; }
+
+    /* ── Next case study ── */
+    .cs-next { display: flex; align-items: center; justify-content: space-between; gap: 24px; }
+    .cs-next__link { font-family: var(--font-display); font-size: clamp(1.25rem, 2vw, 1.6rem); color: rgba(244,244,235,0.6); text-decoration: none; transition: color var(--dur-fast); }
+    .cs-next__link:hover { color: var(--lime); }
+    .cs-next__link--next { text-align: right; }
+
+    /* ================================================================
+       CONTACT / FOOTER (shared)
+    ================================================================ */
+    #contact .inner { display: flex; flex-direction: row; align-items: flex-end; gap: 40px; }
+    .contact__copy { flex-shrink: 0; width: min(450px, 100%); display: flex; flex-direction: column; gap: 40px; padding-bottom: 8px; }
+    .contact__copy-inner { display: flex; flex-direction: column; gap: 40px; }
+    .contact__text { display: flex; flex-direction: column; gap: 40px; }
+    .contact__email { font-family: var(--font-hand); font-size: 32px; line-height: 30px; letter-spacing: -0.05em; color: var(--ink-light); text-decoration: none; display: block; }
+    .contact__email:hover { text-decoration: underline; }
+    .contact__heading { font-family: var(--font-display); font-weight: 400; font-size: clamp(2.5rem, 3.61vw, 3.25rem); line-height: 56px; letter-spacing: -0.03em; color: var(--ink-light); }
+    .contact__desc { font-family: var(--font-body); font-weight: 400; font-size: 17px; line-height: 25px; color: var(--ink-light); }
+    .contact__socials { display: flex; gap: 40px; align-items: center; }
+    .social-link { display: flex; align-items: center; justify-content: center; width: 30px; height: 30px; color: var(--ink-light); opacity: 0.6; text-decoration: none; transition: opacity var(--dur-fast), transform var(--dur-slow) var(--ease-bounce); }
+    .social-link:hover { opacity: 1; transform: scale(1.1); }
+    .social-link svg { width: 100%; height: 100%; fill: currentColor; display: block; }
+    .contact__copyright { font-family: var(--font-mono); font-weight: 500; font-size: 11px; line-height: 14px; letter-spacing: 0.0012em; text-transform: uppercase; color: rgba(244,244,235,0.5); }
+    .contact__decor { flex: 1; min-width: 0; display: flex; align-items: flex-end; }
+    .footer-peeps-crowd { position: relative; width: 100%; aspect-ratio: 817 / 542; flex-shrink: 0; overflow: visible; }
+    .footer-peep { position: absolute; width: 15.6%; height: 33.1%; object-fit: contain; object-position: bottom center; transform-origin: center bottom; transition: filter 0.3s ease; will-change: transform; cursor: default; }
+    .footer-peep:hover { filter: drop-shadow(0 18px 36px rgba(0,0,0,0.3)); }
+
+    /* ================================================================
+       RESPONSIVE
+    ================================================================ */
     @media (max-width: 1024px) {
-      #cs-about { height: auto; padding: 48px 32px; }
-      .about-row { flex-direction: column; }
-      .about-right { width: 100%; }
-      .about-heading { font-size: 28px; line-height: 34px; }
-      .about-stat-num { font-size: 40px; line-height: 40px; }
+      :root { --pad: 40px; }
+      .nav__logo-text--full  { display: none; }
+      .nav__logo-text--short { display: inline; }
+      .nav__links { display: none; }
+      .nav__hamburger { display: flex; width: 40px; height: 40px; }
+      .nav__ham-line { width: 22px; height: 2px; }
+      .nav__toggle { width: 40px; height: 40px; }
+      .toggle__inner { width: auto; height: auto; gap: 0; }
+      .toggle__thumb { display: none; }
+      .toggle__icon { width: 20px; height: 20px; order: 0; }
+      body.light-mode .toggle__icon { width: 27px; height: 20px; order: 0; }
+
+      .cs-hero__inner { flex-direction: column; min-height: auto; gap: 32px; }
+      .cs-stats, .cs-cols, .cs-decision-cards, .cs-ba, .cs-impact, .cs-stack { flex-wrap: wrap; gap: 32px; }
+      .cs-stats .cs-stat, .cs-cols .cs-col, .cs-impact .cs-impact__item, .cs-stack .cs-stack__col { flex: 1 1 45%; }
+      .cs-timeline { flex-wrap: wrap; }
+      .cs-timeline::before { display: none; }
+      .cs-timeline .cs-tl-step { flex: 1 1 45%; }
+      .cs-zigzag-row, .cs-zigzag-row--reverse { flex-direction: column; }
+      .cs-finalproto__phones { flex-wrap: wrap; }
+      .cs-finalproto__phones img { flex: 1 1 45%; }
+      .cs-cards-2x2 { grid-template-columns: 1fr; }
+    }
+
+    @media (max-width: 767px) {
+      :root { --pad: 24px; }
+      .nav { min-height: 80px; padding: 20px var(--pad); }
+      .nav__links { display: none; }
+      .nav__hamburger { display: flex; }
+
+      #cs-hero { padding-top: 80px; }
+      .cs-stats { flex-direction: column; gap: 24px; }
+      .cs-cols { flex-direction: column; gap: 24px; }
+      .cs-decision-cards { flex-direction: column; }
+      .cs-timeline .cs-tl-step { flex: 1 1 100%; }
+      .cs-ba { flex-direction: column; gap: 24px; }
+      .cs-impact { flex-direction: column; gap: 24px; }
+      .cs-stack { flex-direction: column; gap: 24px; }
+      .cs-finalproto__phones { flex-direction: column; }
+      .cs-finalproto__phones img { flex: 1 1 100%; }
+      .cs-next { flex-direction: column; align-items: flex-start; gap: 12px; }
+      .cs-next__link--next { text-align: left; }
+
+      #contact .inner { flex-direction: column; align-items: stretch; }
+      .contact__copy { width: 100%; }
+      .contact__heading { font-size: clamp(2rem, 7vw, 2.5rem); line-height: 1.15; }
+      .contact__decor { display: none; }
+    }
+
+    @media (max-width: 479px) {
+      :root { --pad: 20px; }
+      .contact__heading { font-size: clamp(1.75rem, 8vw, 2.25rem); }
     }
-
-    /* ================================================================
-       03 — FINAL PROTOTYPE
-    ================================================================ */
-    #cs-proto {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      padding: 64px;
-      gap: 40px;
-      width: 100%;
-      height: 900px;
-      background: #1A1C16;
-      flex: none;
-      align-self: stretch;
-      overflow: hidden;
-    }
-
-    /* Frame 118 */
-    .proto-inner {
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
-      padding: 0;
-      gap: 40px;
-      width: 100%;
-      flex-grow: 1;
-      align-self: stretch;
-    }
-
-    /* Image row */
-    .proto-row {
-      display: flex;
-      flex-direction: row;
-      justify-content: center;
-      align-items: flex-start;
-      padding: 0;
-      gap: 20px;
-      width: 100%;
-      flex-grow: 1;
-      align-self: stretch;
-    }
-
-    /* Left: feature image */
-    .proto-feature {
-      width: 784px;
-      height: 100%;
-      flex-shrink: 0;
-      overflow: hidden;
-    }
-
-    .proto-feature img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      object-position: center center;
-      display: block;
-    }
-
-    /* Right: two sub-image containers */
-    .proto-subs {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      padding: 0;
-      gap: 20px;
-      flex-grow: 1;
-      align-self: stretch;
-    }
-
-    .proto-sub {
-      position: relative;
-      width: 100%;
-      background: var(--bg-light, #F4F4EB);
-      flex-grow: 1;
-      overflow: hidden;
-    }
-
-    .proto-sub img {
-      position: absolute;
-      left: 29px;
-      top: 23px;
-      width: calc(100% + 116px); /* 626/510 ratio overflow */
-      height: auto;
-      filter: drop-shadow(0px 4px 4px rgba(0,0,0,0.5));
-      border-radius: 10px;
-    }
-
-    .proto-sub--2 img {
-      left: 29px;
-      top: 23px;
-      width: 120%;
-    }
-
-    .proto-sub--1 img {
-      left: 34px;
-      top: 33px;
-      width: 105%;
-    }
-
-    @media (max-width: 1024px) {
-      #cs-proto { height: auto; padding: 48px 24px; }
-      .proto-row { flex-direction: column; }
-      .proto-feature { width: 100%; height: 400px; }
-      .proto-sub img { position: relative; left: auto; top: auto; width: 100%; filter: none; }
-    }
-
-    /* ================================================================
-       04 — CONTEXT
-    ================================================================ */
-    #cs-context {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      padding: 64px;
-      gap: 40px;
-      width: 100%;
-      height: 900px;
-      background: #1A1C16;
-      flex: none;
-      align-self: stretch;
-      overflow: hidden;
-    }
-
-    /* Section tag */
-    .ctx-section-tag {
-      font-family: 'DM Sans', sans-serif;
-      font-weight: 700;
-      font-size: 11px;
-      line-height: 14px;
-      letter-spacing: 0.6em;
-      text-transform: uppercase;
-      color: #DEE895;
-      align-self: stretch;
-      flex: none;
-    }
-
-    /* Frame 167 */
-    .ctx-content {
-      display: flex;
-      flex-direction: column;
-      align-items: flex-start;
-      padding: 0;
-      gap: 40px;
-      align-self: stretch;
-      flex-grow: 1;
-    }
-
-    /* Frame 137 */
-    .ctx-heading {
-      display: flex;
-      flex-direction: column;
-      align-items: flex-start;
-      gap: 10px;
-      width: 805px;
-      flex: none;
-    }
-
-    .ctx-h2 {
-      font-family: 'Lora', serif;
-      font-style: normal;
-      font-weight: 400;
-      font-size: 40px;
-      line-height: 44px;
-      letter-spacing: -0.025em;
-      color: #F4F4EB;
-      align-self: stretch;
-    }
-
-    .ctx-lead {
-      font-family: 'DM Sans', sans-serif;
-      font-weight: 400;
-      font-size: 17px;
-      line-height: 31px;
-      color: #F4F4EB;
-      align-self: stretch;
-    }
-
-    /* Frame 139 — cards row */
-    .ctx-cards {
-      display: flex;
-      flex-direction: row;
-      align-items: center;
-      padding: 0;
-      gap: 20px;
-      width: 100%;
-      height: 428px;
-      flex: none;
-      align-self: stretch;
-      flex-grow: 0;
-    }
-
-    /* Each card — Context_Block */
-    .ctx-card {
-      position: relative;
-      flex: 1 0 0;
-      align-self: stretch;
-      background: var(--bg-light, #F4F4EB);
-      overflow: hidden;
-    }
-
-    /* Frame 130 — text section, absolute top */
-    .ctx-card-text {
-      display: flex;
-      flex-direction: column;
-      align-items: flex-start;
-      padding: 32px;
-      position: absolute;
-      left: 0; right: 0; top: 0;
-      z-index: 2;
-    }
-
-    /* Frame 126 inner gap */
-    .ctx-card-text-inner {
-      display: flex;
-      flex-direction: column;
-      align-items: flex-start;
-      gap: 20px;
-      width: 100%;
-    }
-
-    /* Frame 135 / Frame 141 — title + body */
-    .ctx-card-text-body {
-      display: flex;
-      flex-direction: column;
-      align-items: flex-start;
-      gap: 10px;
-      width: 100%;
-    }
-
-    /* Card title — Lora 22px */
-    .ctx-card-title {
-      font-family: 'Lora', serif;
-      font-style: normal;
-      font-weight: 400;
-      font-size: 22px;
-      line-height: 28px;
-      letter-spacing: -0.01em;
-      color: #21281A;
-      align-self: stretch;
-    }
-
-    /* Card body — DM Sans 15px */
-    .ctx-card-body {
-      font-family: 'DM Sans', sans-serif;
-      font-weight: 400;
-      font-size: 15px;
-      line-height: 27px;
-      color: #21281A;
-      align-self: stretch;
-    }
-
-    /* Frame 127 — badge */
-    .ctx-card-badge {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      padding: 4px 16px;
-      gap: 10px;
-      background: #FED5D1;
-      border-radius: 10px;
-      font-family: 'DM Sans', sans-serif;
-      font-weight: 600;
-      font-size: 11px;
-      line-height: 14px;
-      color: #FF1900;
-      white-space: nowrap;
-      flex: none;
-    }
-
-    /* Card images — absolute, hover animates */
-    .ctx-card-img {
-      position: absolute;
-      transition: transform 0.45s cubic-bezier(0.4, 0, 0.2, 1),
-                  filter 0.45s cubic-bezier(0.4, 0, 0.2, 1);
-      will-change: transform;
-    }
-
-    /* Card 1 — image anchored to right edge */
-    .ctx-card--1 .ctx-card-img {
-      right: 0;
-      left: auto;
-      top: 162px;
-      width: 487px;
-      filter: drop-shadow(-8px 5px 5.8px rgba(0,0,0,0.25));
-    }
-    .ctx-card--1:hover .ctx-card-img {
-      transform: translateY(-10px) scale(1.02);
-      filter: drop-shadow(-10px 12px 10px rgba(0,0,0,0.3));
-    }
-
-    /* Card 2 — bottom-right placement per reference */
-    .ctx-card--2 .ctx-card-img {
-      left: 90px;
-      top: 134px;
-      width: calc(100% - 50px);
-      height: auto;
-      transform-origin: top left;
-      filter: drop-shadow(-7px 4px 3px rgba(0,0,0,0.25));
-      transform: matrix(0.99, 0.12, -0.13, 0.99, 0, 0);
-    }
-    .ctx-card--2:hover .ctx-card-img {
-      transform: matrix(0.99, 0.12, -0.13, 0.99, 0, -10px) scale(1.02);
-      filter: drop-shadow(-9px 10px 10px rgba(0,0,0,0.35));
-    }
-
-    /* Card 3 — right edge, 10% higher */
-    .ctx-card--3 .ctx-card-img {
-      right: 0;
-      left: auto;
-      top: 185px;
-      width: 323px;
-      filter: drop-shadow(-9.5px 8.3px 4.7px rgba(0,0,0,0.25));
-      transform: rotate(4.9deg);
-    }
-    .ctx-card--3:hover .ctx-card-img {
-      transform: rotate(4.9deg) translateY(-10px) scale(1.02);
-      filter: drop-shadow(-12px 14px 10px rgba(0,0,0,0.35));
-    }
-
-    @media (max-width: 1024px) {
-      #cs-context { height: auto; padding: 48px 24px; }
-      .ctx-cards { height: auto; flex-direction: column; }
-      .ctx-card { min-height: 400px; }
-      .ctx-heading { width: 100%; }
-      .ctx-h2 { font-size: 28px; line-height: 34px; }
-    }
-
-    /* ================================================================
-       05 — CHALLENGE
-    ================================================================ */
-    #cs-challenge {
-      display: flex;
-      height: 900px;
-      padding: 64px;
-      flex-direction: column;
-      align-items: flex-start;
-      gap: 40px;
-      align-self: stretch;
-      background: var(--bg-dark, #1A1C16);
-      overflow: hidden;
-    }
-
-    .challenge-section {
-      background-color: #1a1c16;
-      padding: 64px;
-      width: 100%;
-      box-sizing: border-box;
-    }
-
-    .challenge-inner {
-      position: relative;
-      height: 772px;
-      width: 100%;
-      overflow: hidden;
-    }
-
-    /* ── TEXT ── */
-    .challenge-text {
-      position: absolute;
-      top: 64px;
-      left: 9px;
-      width: min(810px, 58%);
-      z-index: 2;
-
-      font-family: 'Lora', serif;
-      font-weight: 400;
-      font-size: clamp(28px, 3.6vw, 52px);
-      line-height: clamp(32px, 3.9vw, 56px);
-      letter-spacing: -0.03em;
-      color: #f4f4eb;
-    }
-
-    .challenge-text strong {
-      font-weight: 700;
-    }
-
-    /* ── IMAGE STACK ── */
-
-    /* 1. Positioning anchor — pushed left so it bleeds */
-    .challenge-image-frame {
-      position: absolute;
-      left: -274px;
-      top: 0;
-      width: 2107.813px;
-      height: 1063.118px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      pointer-events: none;
-    }
-
-    /* 2. The rotation wrapper */
-    .challenge-image-rotated {
-      transform: rotate(-4.7deg);
-      flex-shrink: 0;
-    }
-
-    /* 3. The image's own frame */
-    .challenge-image-inner {
-      position: relative;
-      width: 2041.017px;
-      height: 898.891px;
-      overflow: hidden;
-    }
-
-    /* 4. The actual image — offset within its frame */
-    .challenge-img {
-      position: absolute;
-      width: 99.69%;
-      height: 159.71%;
-      left: 4.25%;
-      top: -16.95%;
-      max-width: none;
-      object-fit: cover;
-    }
-
-    @media (max-width: 1440px) {
-      .challenge-image-frame {
-        transform-origin: top right;
-        transform: scale(calc(min(100vw, 1440px) / 1440));
-        left: calc(-274px * (min(100vw, 1440px) / 1440));
-      }
-      .challenge-inner {
-        height: calc(772px * (min(100vw, 1440px) / 1440));
-      }
-    }
-
-    @media (max-width: 768px) {
-      .challenge-section {
-        padding: 40px 24px;
-      }
-      .challenge-text {
-        position: relative;
-        top: auto;
-        transform: none;
-        left: 0;
-        width: 100%;
-        font-size: clamp(22px, 5vw, 36px);
-        line-height: 1.15;
-        margin-bottom: 32px;
-      }
-      .challenge-inner {
-        height: auto;
-        overflow: visible;
-        display: flex;
-        flex-direction: column;
-      }
-      .challenge-image-frame {
-        position: relative;
-        left: -10%;
-        width: 120%;
-        height: auto;
-        aspect-ratio: 2107 / 1063;
-        transform: none;
-      }
-      .challenge-image-rotated {
-        transform: rotate(-4.7deg) scale(0.95);
-      }
-    }
-
-    /* ================================================================
-       06 — JOURNEY
-    ================================================================ */
-    .journey-section {
-      display: flex;
-      flex-direction: column;
-      align-items: flex-start;
-      padding: 64px;
-      gap: 40px;
-      background: #1A1C16;
-      width: 100%;
-      box-sizing: border-box;
-      min-height: 900px;
-    }
-
-    .journey-tag {
-      font-family: 'DM Sans', sans-serif;
-      font-weight: 700;
-      font-size: 11px;
-      line-height: 14px;
-      letter-spacing: 0.6em;
-      text-transform: uppercase;
-      color: #DEE895;
-    }
-
-    /* Two-column: heading left, body text right */
-    .journey-header-row {
-      display: flex;
-      flex-direction: row;
-      gap: 40px;
-      width: 100%;
-      align-items: flex-start;
-    }
-
-    .journey-heading-wrap {
-      width: 440px;
-      flex-shrink: 0;
-    }
-
-    .journey-heading {
-      font-family: 'Lora', serif;
-      font-weight: 400;
-      font-size: 40px;
-      line-height: 44px;
-      letter-spacing: -0.025em;
-      color: #F4F4EB;
-      margin: 0;
-    }
-
-    /* Body text — three spaced paragraphs */
-    .journey-body-col {
-      flex: 1;
-      display: flex;
-      flex-direction: column;
-      gap: 24px;
-    }
-
-    .journey-body-col p {
-      font-family: 'DM Sans', sans-serif;
-      font-weight: 400;
-      font-size: 17px;
-      line-height: 31px;
-      color: #F4F4EB;
-      margin: 0;
-    }
-
-    .journey-body-col strong {
-      font-weight: 700;
-    }
-
-    /* ── Journey illustration image ── */
-    .journey-cards-img {
-      width: 100%;
-      height: auto;
-      display: block;
-    }
-
-    @media (max-width: 1024px) {
-      .journey-section     { padding: 48px 24px; min-height: auto; }
-      .journey-header-row  { flex-direction: column; }
-      .journey-heading-wrap { width: 100%; }
-      .journey-heading     { font-size: 28px; line-height: 34px; }
-      .journey-body-col p  { font-size: 15px; line-height: 26px; }
-      .journey-cards       { height: auto; overflow-x: auto; }
-    }
-
-    /* ================================================================
-       07 — RESEARCH
-    ================================================================ */
-    #cs-research {
-      display: flex;
-      flex-direction: column;
-      align-items: flex-start;
-      padding: 64px;
-      gap: 40px;
-      background: #1A1C16;
-      width: 100%;
-      box-sizing: border-box;
-      min-height: 900px;
-    }
-
-    .research-tag {
-      font-family: 'DM Sans', sans-serif;
-      font-weight: 700;
-      font-size: 11px;
-      line-height: 14px;
-      letter-spacing: 0.6em;
-      text-transform: uppercase;
-      color: #DEE895;
-    }
-
-    /* Main row: left text + right panel */
-    .research-row {
-      display: flex;
-      flex-direction: row;
-      align-items: center;
-      gap: 40px;
-      width: 100%;
-      flex: 1;
-    }
-
-    /* Left column */
-    .research-left {
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      gap: 20px;
-      width: 369px;
-      flex-shrink: 0;
-      align-self: stretch;
-    }
-
-    .research-heading {
-      font-family: 'Lora', serif;
-      font-weight: 400;
-      font-size: 40px;
-      line-height: 44px;
-      letter-spacing: -0.025em;
-      color: #F4F4EB;
-      margin: 0;
-    }
-
-    .research-body {
-      font-family: 'DM Sans', sans-serif;
-      font-weight: 400;
-      font-size: 17px;
-      line-height: 31px;
-      color: #F4F4EB;
-      margin: 0;
-    }
-
-    /* Right panel — cream, exact Figma dimensions */
-    .research-panel {
-      display: flex;
-      flex-direction: row;
-      align-items: center;
-      gap: 31.43px;
-      width: 903.03px;
-      height: 554px;
-      flex-shrink: 0;
-      background: #F4F4EB;
-      overflow: hidden;
-    }
-
-    /* Image container — Frame 189 */
-    .research-panel-img-wrap {
-      position: relative;
-      width: 504.94px;
-      height: 554px;
-      flex-shrink: 0;
-      overflow: hidden;
-    }
-
-    /* Image — absolutely offset per spec */
-    .research-panel-img {
-      position: absolute;
-      left: 11.17px;
-      top: 32.13px;
-      width: 504.94px;
-      height: 554px;
-      object-fit: cover;
-      object-position: top left;
-      filter: drop-shadow(-10.476px 12.571px 6.984px rgba(0,0,0,0.25));
-    }
-
-    /* Principles column — Frame 188 */
-    .research-panel-right {
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      gap: 27.94px;
-      width: 338.72px;
-      height: 554px;
-      flex-shrink: 0;
-    }
-
-    /* "What managers wanted" label */
-    .research-panel-label {
-      font-family: 'DM Sans', sans-serif;
-      font-weight: 400;
-      font-size: 16.76px;
-      line-height: 22px;
-      color: #21281A;
-      margin: 0;
-    }
-
-    /* Principles list — Frame 176: gap 27.94px */
-    .research-principles {
-      display: flex;
-      flex-direction: column;
-      align-items: flex-start;
-      gap: 27.94px;
-    }
-
-    /* Each principle row */
-    .research-principle {
-      display: flex;
-      flex-direction: column;
-      align-items: flex-start;
-      width: 338.72px;
-      padding: 5.587px 11.174px;
-      box-sizing: border-box;
-      border-radius: 4px;
-      transition: background 0.25s ease;
-    }
-
-    .rp-title {
-      font-family: 'DM Sans', sans-serif;
-      font-weight: 400;
-      font-size: 12.5712px;
-      line-height: 16px;
-      color: #21281A;
-      margin: 0;
-    }
-
-    .rp-note {
-      display: none;
-      font-family: 'DM Sans', sans-serif;
-      font-weight: 400;
-      font-size: 11px;
-      line-height: 16px;
-      color: #21281A;
-      margin: 5px 0 0;
-    }
-
-    /* Active — lime highlight */
-    .research-principle.is-active { background: #DEE895; }
-    .research-principle.is-active .rp-title { font-weight: 700; }
-    .research-principle.is-active .rp-note  { display: block; }
-
-    @media (max-width: 1024px) {
-      #cs-research    { padding: 48px 24px; min-height: auto; }
-      .research-row   { flex-direction: column; }
-      .research-left  { width: 100%; }
-      .research-panel { flex-direction: column; height: auto; }
-      .research-panel-img-wrap { width: 100%; height: 280px; }
-      .research-panel-right    { width: 100%; }
-    }
-
-    /* ================================================================
-       08 — WORKSHOP
-    ================================================================ */
-    #cs-workshop {
-      display: flex;
-      flex-direction: column;
-      align-items: flex-start;
-      padding: 64px;
-      gap: 40px;
-      background: #1A1C16;
-      width: 100%;
-      box-sizing: border-box;
-      min-height: 900px;
-    }
-
-    .workshop-tag {
-      font-family: 'DM Sans', sans-serif;
-      font-weight: 700;
-      font-size: 11px;
-      line-height: 14px;
-      letter-spacing: 0.6em;
-      text-transform: uppercase;
-      color: #DEE895;
-    }
-
-    /* Main row: photos left, text right */
-    .workshop-row {
-      display: flex;
-      flex-direction: row;
-      justify-content: flex-end;
-      align-items: center;
-      gap: 40px;
-      width: 100%;
-      height: 718px;
-      flex: 1;
-    }
-
-    /* ── Photo grid (left) ── */
-    .workshop-photos {
-      display: flex;
-      flex-direction: column;
-      gap: 40px;
-      width: 806px;
-      height: 718px;
-      flex-shrink: 0;
-    }
-
-    .workshop-photo-main {
-      width: 100%;
-      flex: 1;
-      overflow: hidden;
-    }
-    .workshop-photo-main img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      display: block;
-    }
-
-    .workshop-photo-row {
-      display: flex;
-      flex-direction: row;
-      gap: 20px;
-      height: 256px;
-      flex-shrink: 0;
-    }
-
-    .workshop-photo-sm {
-      flex: 1;
-      height: 256px;
-      overflow: hidden;
-    }
-    .workshop-photo-sm img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      display: block;
-    }
-
-    /* ── Text column (right, bottom-aligned) ── */
-    .workshop-text {
-      display: flex;
-      flex-direction: column;
-      justify-content: flex-end;
-      gap: 20px;
-      width: 466px;
-      height: 718px;
-      flex-shrink: 0;
-    }
-
-    .workshop-heading {
-      font-family: 'Lora', serif;
-      font-weight: 400;
-      font-size: 40px;
-      line-height: 44px;
-      letter-spacing: -0.025em;
-      color: #F4F4EB;
-      margin: 0;
-    }
-
-    .workshop-body {
-      font-family: 'DM Sans', sans-serif;
-      font-weight: 400;
-      font-size: 17px;
-      line-height: 31px;
-      color: #F4F4EB;
-      margin: 0;
-    }
-
-    @media (max-width: 1024px) {
-      #cs-workshop       { padding: 48px 24px; min-height: auto; }
-      .workshop-row      { flex-direction: column; height: auto; }
-      .workshop-photos   { width: 100%; height: auto; }
-      .workshop-text     { width: 100%; height: auto; justify-content: flex-start; }
-      .workshop-heading  { font-size: 28px; line-height: 34px; }
-      .workshop-body     { font-size: 15px; line-height: 26px; }
-    }
-
-    /* ================================================================
-       09 — ITERATION V1 BUILT
-    ================================================================ */
-    #cs-v1 {
-      display: flex;
-      flex-direction: column;
-      align-items: flex-start;
-      padding: 64px;
-      gap: 40px;
-      background: #1A1C16;
-      width: 100%;
-      box-sizing: border-box;
-      min-height: 900px;
-    }
-
-    .v1-tag {
-      font-family: 'DM Sans', sans-serif;
-      font-weight: 700;
-      font-size: 11px;
-      line-height: 14px;
-      letter-spacing: 0.6em;
-      text-transform: uppercase;
-      color: #DEE895;
-    }
-
-    /* Main row */
-    .v1-row {
-      display: flex;
-      flex-direction: row;
-      justify-content: center;
-      align-items: center;
-      gap: 40px;
-      width: 100%;
-      height: 718px;
-      flex: 1;
-    }
-
-    /* Left text block */
-    .v1-text {
-      display: flex;
-      flex-direction: column;
-      justify-content: flex-end;
-      gap: 20px;
-      width: 522px;
-      height: 263px;
-      flex-shrink: 0;
-    }
-
-    .v1-heading {
-      font-family: 'Lora', serif;
-      font-weight: 400;
-      font-size: 40px;
-      line-height: 44px;
-      letter-spacing: -0.025em;
-      color: #F4F4EB;
-      margin: 0;
-    }
-
-    .v1-body {
-      font-family: 'DM Sans', sans-serif;
-      font-weight: 400;
-      font-size: 17px;
-      line-height: 31px;
-      color: #F4F4EB;
-      margin: 0;
-    }
-
-    /* Right panel — cream, overflow hidden clips the oversize images */
-    .v1-panel {
-      flex: 1;
-      height: 718px;
-      background: #F4F4EB;
-      position: relative;
-      overflow: hidden;
-      align-self: stretch;
-    }
-
-    /* Caption — top of panel */
-    .v1-caption {
-      position: absolute;
-      left: 29.19px;
-      top: 28.8px;
-      width: 637.67px;
-      font-family: 'DM Sans', sans-serif;
-      font-style: italic;
-      font-weight: 400;
-      font-size: 11px;
-      line-height: 17px;
-      color: #21281A;
-      z-index: 3;
-    }
-
-    /* Single image — offset from top-left with drop shadow */
-    .v1-img-1 {
-      position: absolute;
-      left: 9.12px;
-      top: 32px;
-      width: calc(100% - 9.12px);
-      height: calc(100% - 32px);
-      object-fit: cover;
-      object-position: top left;
-      filter: drop-shadow(-8.212px 15.056px 5.475px rgba(0,0,0,0.5));
-      transition: transform 0.45s cubic-bezier(0.4, 0, 0.2, 1),
-                  filter  0.45s cubic-bezier(0.4, 0, 0.2, 1);
-    }
-    .v1-img-1:hover {
-      transform: translateY(-10px) scale(1.02);
-      filter: drop-shadow(-10px 24px 16px rgba(0,0,0,0.65));
-    }
-
-    @media (max-width: 1024px) {
-      #cs-v1       { padding: 48px 24px; min-height: auto; }
-      .v1-row      { flex-direction: column; height: auto; }
-      .v1-text     { width: 100%; height: auto; }
-      .v1-panel    { width: 100%; height: 480px; }
-      .v1-heading  { font-size: 28px; line-height: 34px; }
-    }
-
-    /* ================================================================
-       10 — ITERATION V1 TESTED
-    ================================================================ */
-    #cs-v1-tested {
-      display: flex;
-      flex-direction: column;
-      align-items: flex-start;
-      padding: 64px;
-      gap: 40px;
-      background: #1A1C16;
-      width: 100%;
-      box-sizing: border-box;
-    }
-
-    /* Main two-column row */
-    .v1t-row {
-      display: flex;
-      flex-direction: row;
-      align-items: flex-start;
-      gap: 40px;
-      width: 100%;
-    }
-
-    /* Left: text */
-    .v1t-text {
-      display: flex;
-      flex-direction: column;
-      gap: 20px;
-      width: 352px;
-      flex-shrink: 0;
-    }
-
-    .v1t-heading {
-      font-family: 'Lora', serif;
-      font-weight: 400;
-      font-size: 40px;
-      line-height: 44px;
-      letter-spacing: -0.025em;
-      color: #F4F4EB;
-      margin: 0;
-    }
-
-    .v1t-body {
-      font-family: 'DM Sans', sans-serif;
-      font-weight: 400;
-      font-size: 17px;
-      line-height: 31px;
-      color: #F4F4EB;
-      margin: 0;
-    }
-
-    /* Right: grid of context blocks + issues */
-    .v1t-right {
-      display: flex;
-      flex-direction: column;
-      gap: 40px;
-      flex: 1;
-      min-width: 0;
-    }
-
-    /* ── Context blocks: 920×521 container, 4 blocks absolutely placed ── */
-    /* Matches Frame 139 + Context_Block 1–4 from Figma exactly */
-    .v1t-grid {
-      position: relative;
-      width: 100%;
-      aspect-ratio: 920 / 521;
-    }
-
-    .v1t-block {
-      position: absolute;
-      background: #F4F4EB;
-      overflow: hidden;
-    }
-
-    /* Block positions — percentages derived from Figma absolute coords in 920×521 */
-    /* Block 1: left:0,  top:0,    width:450, height:250.5 */
-    .v1t-block-1 { left: 0%;      top: 0%;      width: 48.91%; height: 48.08%; }
-    /* Block 2: left:470, top:0 */
-    .v1t-block-2 { left: 51.09%;  top: 0%;      width: 48.91%; height: 48.08%; }
-    /* Block 3: left:0,  top:270.5 */
-    .v1t-block-3 { left: 0%;      top: 51.92%;  width: 48.91%; height: 48.08%; }
-    /* Block 4: left:470, top:270.5 */
-    .v1t-block-4 { left: 51.09%;  top: 51.92%;  width: 48.91%; height: 48.08%; }
-
-    /* Label — top-left of each block, padding: 16px, z-index above image */
-    .v1t-block-label {
-      position: absolute;
-      top: 0;
-      left: 0;
-      padding: 16px;
-      z-index: 2;
-      display: flex;
-      flex-direction: column;
-      gap: 4px;
-    }
-
-    /* Block 1 label spans full width; others are narrower so image shows through */
-    .v1t-block-1 .v1t-block-label { right: 0; }
-    .v1t-block-2 .v1t-block-label { right: 63.6%;  } /* 286/450 */
-    .v1t-block-3 .v1t-block-label { right: 46%;    } /* 207/450 */
-    .v1t-block-4 .v1t-block-label { right: 59.8%;  } /* 269/450 */
-
-    .v1t-block-title {
-      font-family: 'DM Sans', sans-serif;
-      font-weight: 600;
-      font-size: 15px;
-      line-height: 23px;
-      color: #21281A;
-    }
-
-    .v1t-block-stat {
-      display: flex;
-      align-items: center;
-      gap: 6px;
-      font-family: 'DM Sans', sans-serif;
-      font-weight: 400;
-      font-size: 12px;
-      line-height: 20px;
-      color: #21281A;
-    }
-
-    .v1t-block-stat::before {
-      content: '';
-      display: inline-block;
-      width: 14px;
-      height: 14px;
-      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 14 14' fill='none'%3E%3Cpath d='M2 7.5L5.5 11L12 4' stroke='%2321281A' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
-      background-size: contain;
-      background-repeat: no-repeat;
-      flex-shrink: 0;
-    }
-
-    /* Screenshot images — absolute, skewed per Figma */
-    /* Shared skew stays on `transform`; hover lift uses separate `translate` property */
-    .v1t-block-img {
-      position: absolute;
-      width: auto;
-      transform-origin: bottom right;
-      transform: matrix(1, 0.05, -0.14, 0.99, 0, 0);
-      transition: translate 0.4s cubic-bezier(0.4, 0, 0.2, 1),
-                  filter   0.4s cubic-bezier(0.4, 0, 0.2, 1);
-    }
-
-    .v1t-block:hover .v1t-block-img {
-      translate: 0 -10px;
-    }
-
-    /* Block 1 — lower-right corner, height:88% */
-    .v1t-block-1 .v1t-block-img {
-      right: 0;
-      bottom: 0;
-      height: 88%;
-      filter: drop-shadow(-5.24px 6.73px 3px rgba(0,0,0,0.5));
-    }
-
-    /* Block 2 — lower-right corner, height:82.8% */
-    .v1t-block-2 .v1t-block-img {
-      right: 0;
-      bottom: 0;
-      height: 82.8%;
-      filter: drop-shadow(-10.88px 8.46px 4.84px rgba(0,0,0,0.4));
-    }
-
-    /* Block 3 — left:44.7%, top:-4.2%, height:120.4% (already correct per Figma) */
-    .v1t-block-3 .v1t-block-img {
-      left: 44.7%;
-      top: -4.2%;
-      height: 120.4%;
-      transform-origin: top left;
-      filter: drop-shadow(-1.17px -8.17px 3.52px rgba(0,0,0,0.5));
-    }
-
-    /* Block 4 — lower-right corner, height:96.9% */
-    .v1t-block-4 .v1t-block-img {
-      right: 0;
-      bottom: 0;
-      height: 96.9%;
-      filter: drop-shadow(-4.49px 7.85px 0.78px rgba(0,0,0,0.5));
-    }
-
-    .v1t-block:hover .v1t-block-1 .v1t-block-img,
-    .v1t-block:hover .v1t-block-2 .v1t-block-img,
-    .v1t-block:hover .v1t-block-4 .v1t-block-img {
-      filter: drop-shadow(-8px 14px 10px rgba(0,0,0,0.6));
-    }
-
-    /* Bottom issues row */
-    .v1t-issues {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 40px;
-      width: 100%;
-    }
-
-    .v1t-issue {
-      display: flex;
-      flex-direction: column;
-      gap: 10px;
-    }
-
-    .v1t-issue-tag {
-      font-family: 'DM Mono', monospace;
-      font-weight: 500;
-      font-size: 11px;
-      line-height: 14px;
-      letter-spacing: 0.0012em;
-      text-transform: uppercase;
-      color: #DEE895;
-    }
-
-    .v1t-issue-title {
-      font-family: 'DM Sans', sans-serif;
-      font-weight: 700;
-      font-size: 18px;
-      line-height: 23px;
-      color: #F4F4EB;
-      margin: 0;
-    }
-
-    .v1t-issue-body {
-      font-family: 'DM Sans', sans-serif;
-      font-weight: 400;
-      font-size: 14px;
-      line-height: 18px;
-      color: #F4F4EB;
-      margin: 0;
-    }
-
-    .v1t-issue-quote {
-      font-family: 'DM Sans', sans-serif;
-      font-style: italic;
-      font-weight: 400;
-      font-size: 14px;
-      line-height: 18px;
-      color: #F4F4EB;
-      margin: 0;
-    }
-
-    @media (max-width: 1024px) {
-      #cs-v1-tested  { padding: 48px 24px; }
-      .v1t-row       { flex-direction: column; }
-      .v1t-text      { width: 100%; }
-      .v1t-heading   { font-size: 28px; line-height: 34px; }
-      .v1t-body      { font-size: 15px; line-height: 26px; }
-      .v1t-grid      { aspect-ratio: 450 / 521; }
-      .v1t-block-2   { left: 0; top: 48.18%; }
-      .v1t-block-3   { top: 51.92%; }
-      .v1t-block-4   { left: 0; top: 75.82%; }
-      .v1t-issues    { grid-template-columns: 1fr; gap: 32px; }
-    }
-
-    /* ================================================================
-       11 — INTERFACE DESIGN
-    ================================================================ */
-    #cs-interface {
-      display: flex;
-      flex-direction: column;
-      align-items: flex-start;
-      padding: 64px;
-      gap: 40px;
-      width: 100%;
-      height: 900px;
-      background: #1A1C16;
-      flex: none;
-      align-self: stretch;
-      overflow: hidden;
-    }
-
-    .iface-tag {
-      font-family: 'DM Sans', sans-serif;
-      font-weight: 700;
-      font-size: 11px;
-      line-height: 14px;
-      letter-spacing: 0.6em;
-      text-transform: uppercase;
-      color: #DEE895;
-      flex: none;
-    }
-
-    /* Frame 140 */
-    .iface-content {
-      display: flex;
-      flex-direction: column;
-      align-items: flex-start;
-      gap: 20px;
-      width: 100%;
-      flex-grow: 1;
-      align-self: stretch;
-    }
-
-    /* Frame 137 — two-column heading row */
-    .iface-header-row {
-      display: flex;
-      flex-direction: row;
-      justify-content: center;
-      align-items: flex-start;
-      gap: 40px;
-      width: 100%;
-      flex: none;
-    }
-
-    .iface-heading {
-      font-family: 'Lora', serif;
-      font-style: normal;
-      font-weight: 400;
-      font-size: 40px;
-      line-height: 44px;
-      letter-spacing: -0.025em;
-      color: #F4F4EB;
-      width: 600px;
-      flex-shrink: 0;
-      margin: 0;
-    }
-
-    .iface-lead {
-      font-family: 'DM Sans', sans-serif;
-      font-style: normal;
-      font-weight: 700;
-      font-size: 17px;
-      line-height: 31px;
-      color: #F4F4EB;
-      flex: 1;
-      margin: 0;
-    }
-
-    /* Cream panel — Heuristic Design */
-    .iface-panel {
-      position: relative;
-      width: 100%;
-      flex-grow: 1;
-      background: #F4F4EB;
-      overflow: hidden;
-      display: flex;
-      flex-direction: row;
-      align-items: flex-start;
-    }
-
-    /* "Scan first. Read never." caption — left side */
-    .iface-panel-caption {
-      position: absolute;
-      left: 78px;
-      top: 80px;
-      font-family: 'DM Sans', sans-serif;
-      font-style: normal;
-      font-weight: 400;
-      font-size: 24px;
-      line-height: 31px;
-      color: #21281A;
-      z-index: 2;
-      pointer-events: none;
-      width: 340px;
-    }
-
-    /* Scrolling dashboard container — right side */
-    .iface-dashboard {
-      position: absolute;
-      right: -40px;
-      top: 0;
-      width: 58%;
-      height: 100%;
-      overflow: hidden;
-      transform: matrix(1, 0.09, -0.26, 0.97, 0, 0);
-      transform-origin: top right;
-      filter: drop-shadow(-16px 20px 32px rgba(0,0,0,0.22));
-      border-radius: 12px 12px 0 0;
-    }
-
-    .iface-dashboard img {
-      width: 100%;
-      height: auto;
-      display: block;
-      border-radius: 12px 12px 0 0;
-      /* Auto-scroll animation — simulates animated GIF scrolling through dashboard */
-      animation: dashboard-scroll 18s linear infinite;
-      animation-delay: 1s;
-    }
-
-    @keyframes dashboard-scroll {
-      0%   { transform: translateY(0); }
-      90%  { transform: translateY(calc(-100% + var(--panel-h, 500px))); }
-      100% { transform: translateY(calc(-100% + var(--panel-h, 500px))); }
-    }
-
-    @media (prefers-reduced-motion: reduce) {
-      .iface-dashboard img { animation: none; }
-    }
-
-    @media (max-width: 1024px) {
-      #cs-interface      { height: auto; padding: 48px 24px; }
-      .iface-header-row  { flex-direction: column; }
-      .iface-heading     { width: 100%; font-size: 28px; line-height: 34px; }
-      .iface-panel       { min-height: 380px; }
-      .iface-panel-caption { font-size: 18px; left: 24px; top: 24px; width: auto; }
-      .iface-dashboard   { width: 70%; right: -20px; }
-    }
-
-    @media (max-width: 768px) {
-      .iface-dashboard   { width: 90%; right: -10px; }
-    }
-
   </style>
 </head>
 <body>
+  <script>
+    try {
+      if (localStorage.getItem('andrea-theme') === 'light') document.body.classList.add('light-mode');
+    } catch (e) {}
+  </script>
 
-  <div id="cs-progress" role="progressbar" aria-label="Reading progress"></div>
-
-  <!-- Cursor -->
-  <div id="custom-cursor" aria-hidden="true">
-    <img src="../Asset/cursor-light.png" alt="" width="52" height="52">
+  <div id="loader" role="status" aria-label="Loading">
+    <video class="loader__video" autoplay muted loop playsinline>
+      <source src="../Asset/Loading_bicycle.mp4" type="video/mp4">
+    </video>
+    <p class="loader__text">loading<span class="loader__dots"><span>.</span><span>.</span><span>.</span></span></p>
   </div>
 
-  <!-- Nav -->
-  <nav class="cs-nav" aria-label="Case study navigation">
-    <a class="cs-nav-back" href="../index.html">Back</a>
-    <span class="cs-nav-divider"></span>
-    <span class="cs-nav-logo">ARVO</span>
+  <div id="cursor-follower" aria-hidden="true">
+    <img id="cursor-img" src="../Asset/cursor-light.png" alt="" />
+  </div>
+
+  <nav class="nav" id="main-nav">
+    <a class="nav__logo" href="../index.html" aria-label="Andrea Lee">
+      <span class="nav__logo-text nav__logo-text--full">Andrea Lee</span>
+      <span class="nav__logo-text nav__logo-text--short">Andrea L.</span>
+      <img class="nav__logo-flower"
+           src="../Asset/cursor-light.png"
+           data-dark-src="../Asset/cursor-light.png"
+           data-light-src="../Asset/cursor-dark.png"
+           alt="" aria-hidden="true" />
+    </a>
+    <div class="nav__right">
+      <ul class="nav__links">
+        <li><a href="../works.html">Work</a></li>
+        <li><a href="../index.html#testimonials">Testimonials</a></li>
+        <li><a href="../about.html">About</a></li>
+        <li><a href="#contact">Contact Me</a></li>
+      </ul>
+      <button class="nav__hamburger" id="nav-hamburger" aria-label="Toggle menu" aria-expanded="false">
+        <span class="nav__ham-line"></span>
+        <span class="nav__ham-line"></span>
+        <span class="nav__ham-line"></span>
+      </button>
+      <button class="nav__toggle" id="theme-toggle" aria-label="Toggle light mode">
+        <span class="toggle__inner">
+          <span class="toggle__icon" aria-hidden="true">
+            <svg class="toggle__sun" width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <circle cx="10" cy="10" r="3.5" fill="#1a1c16"/>
+              <line x1="10" y1="1.5" x2="10" y2="3.5" stroke="#1a1c16" stroke-width="1.5" stroke-linecap="round"/>
+              <line x1="10" y1="16.5" x2="10" y2="18.5" stroke="#1a1c16" stroke-width="1.5" stroke-linecap="round"/>
+              <line x1="1.5" y1="10" x2="3.5" y2="10" stroke="#1a1c16" stroke-width="1.5" stroke-linecap="round"/>
+              <line x1="16.5" y1="10" x2="18.5" y2="10" stroke="#1a1c16" stroke-width="1.5" stroke-linecap="round"/>
+              <line x1="3.93" y1="3.93" x2="5.34" y2="5.34" stroke="#1a1c16" stroke-width="1.5" stroke-linecap="round"/>
+              <line x1="14.66" y1="14.66" x2="16.07" y2="16.07" stroke="#1a1c16" stroke-width="1.5" stroke-linecap="round"/>
+              <line x1="16.07" y1="3.93" x2="14.66" y2="5.34" stroke="#1a1c16" stroke-width="1.5" stroke-linecap="round"/>
+              <line x1="5.34" y1="14.66" x2="3.93" y2="16.07" stroke="#1a1c16" stroke-width="1.5" stroke-linecap="round"/>
+            </svg>
+            <svg class="toggle__moon" width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M17 12.9A8 8 0 0 1 7.1 3a8 8 0 1 0 9.9 9.9z" fill="#dee895"/>
+            </svg>
+          </span>
+          <span class="toggle__thumb"></span>
+        </span>
+      </button>
+    </div>
+    <div class="nav__mobile-menu" id="nav-mobile-menu">
+      <ul>
+        <li><a href="../works.html">Work</a></li>
+        <li><a href="../index.html#testimonials">Testimonials</a></li>
+        <li><a href="../about.html">About</a></li>
+        <li><a href="#contact">Contact Me</a></li>
+      </ul>
+    </div>
   </nav>
 
-  <!-- ══════════════════════════════════════
-       01  HERO
-  ══════════════════════════════════════ -->
-  <section id="cs-hero" aria-label="ARVO — hero">
-
-    <div class="hero-text">
-      <div class="hero-title-group">
-        <h1 class="hero-title">ARVO.</h1>
-        <p class="hero-sub">Designing an AI manager copilot so managers can lead, not administrate.</p>
+  <!-- ── HERO ── -->
+  <section class="section" id="cs-hero" aria-label="ARVO case study hero">
+    <div class="inner cs-hero__inner">
+      <div class="cs-hero__col" data-gsap="hero">
+        <a class="cs-back" href="../works.html">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+          back
+        </a>
+        <div class="cs-hero__badge">ARVO</div>
+        <p class="cs-hero__eyebrow">AI Manager Copilot · B2B SaaS – AI/Enterprise Project Lead · 2026 · 6 weeks</p>
+        <h1 class="cs-hero__title">From rejected dashboard to validated redesign.</h1>
+        <p class="cs-hero__desc">ARVO is an AI tool that helps managers spot early signs of team burnout and suggests what to do next. Managers rejected the first version. I led the team that found out why and discovered most of the problems weren't ones design could fix.</p>
+        <a class="cs-hero__cta" href="#cs-finalproto">View Demo →</a>
       </div>
-    </div>
-
-    <div class="hero-media">
-      <video autoplay loop muted playsinline preload="auto">
-        <source src="../Asset/arvo-hero.mp4" type="video/mp4">
-      </video>
-    </div>
-
-  </section>
-
-  <!-- ══════════════════════════════════════
-       02  ABOUT
-  ══════════════════════════════════════ -->
-  <section id="cs-about" aria-label="About ARVO">
-
-    <div class="about-row">
-
-      <!-- Left: heading + stats -->
-      <div class="about-left">
-        <p class="about-heading">I led the product and UX strategy for ARVO, an AI manager copilot. Before any design work started, our team needed to know: was this even a design problem?</p>
-
-        <div class="about-stats">
-          <div class="about-stat">
-            <span class="about-stat-num">12 of 13</span>
-            <span class="about-stat-label">Users completed flows without facilitation.</span>
-          </div>
-          <div class="about-stat">
-            <span class="about-stat-num">3 mins</span>
-            <span class="about-stat-label">average task completion time</span>
-          </div>
-          <div class="about-stat">
-            <span class="about-stat-num">2 of 7</span>
-            <span class="about-stat-label">features scoped; the most important call made.</span>
-          </div>
-        </div>
-      </div>
-
-      <!-- Right: metadata + CTA -->
-      <div class="about-right">
-
-        <div class="about-meta-item">
-          <span class="about-meta-tag">ROLE</span>
-          <span class="about-meta-val">Project Lead</span>
-        </div>
-
-        <div class="about-meta-item">
-          <span class="about-meta-tag">TEAM</span>
-          <span class="about-meta-val">3 UX Researchers · 2 UI Designers · 1 PM</span>
-        </div>
-
-        <div class="about-meta-item">
-          <span class="about-meta-tag">SPRINT</span>
-          <div style="display:flex;flex-direction:column;gap:5px;">
-            <span class="about-meta-val">6 weeks (Jan – Mar 2026)</span>
-            <span class="about-meta-val">Discover → Build → Test → Handover</span>
-          </div>
-        </div>
-
-        <div class="about-meta-item">
-          <span class="about-meta-tag">PARTICIPANTS</span>
-          <span class="about-meta-val">25 managers tested across 2 rounds</span>
-        </div>
-
-        <div class="about-meta-item">
-          <span class="about-meta-tag">METHODS</span>
-          <span class="about-meta-val">User interview, usability testing, competitive analysis, workshop facilitation, research, strategy, scoping, design, client management</span>
-        </div>
-
-        <div class="about-meta-item">
-          <span class="about-meta-tag">OUTCOME</span>
-          <span class="about-meta-val">2 resolved · 5 escalated</span>
-        </div>
-
-        <a class="about-cta" href="#"><span>View Demo →</span></a>
-
-      </div>
-    </div>
-
-  </section>
-
-  <!-- ══════════════════════════════════════
-       03  FINAL PROTOTYPE
-  ══════════════════════════════════════ -->
-  <section id="cs-proto" aria-label="Final prototype">
-    <div class="proto-inner">
-      <div class="proto-row">
-
-        <!-- Left: large feature -->
-        <div class="proto-feature">
-          <img src="../Asset/arvo-proto-feature.png" alt="ARVO final prototype — laptop mockup">
-        </div>
-
-        <!-- Right: two sub images -->
-        <div class="proto-subs">
-          <div class="proto-sub proto-sub--2">
-            <img src="../Asset/arvo-proto-sub-2.png?v=2" alt="ARVO dashboard — energy trend view">
-          </div>
-          <div class="proto-sub proto-sub--1">
-            <img src="../Asset/arvo-proto-sub-1.png?v=2" alt="ARVO — critical alerts and priority actions">
-          </div>
-        </div>
-
+      <div class="cs-hero__mockup">
+        <img src="../Asset/arvo-hero-mockup.png" alt="ARVO landing screen on a laptop, showing role selector for Employee, Manager, and HR & People">
       </div>
     </div>
   </section>
 
-  <!-- ══════════════════════════════════════
-       04  CONTEXT
-  ══════════════════════════════════════ -->
-  <section id="cs-context" aria-label="Context">
-
-    <span class="ctx-section-tag">Context</span>
-
-    <div class="ctx-content">
-
-      <!-- Heading -->
-      <div class="ctx-heading">
-        <h2 class="ctx-h2">Managers aren't underperforming. They're under-supported.</h2>
-        <p class="ctx-lead">ARVO's vision was right, but adoption was low. Before opening Figma, the team needed to understand whether it was entirely a design flaw at all.</p>
-      </div>
-
-      <!-- 3 cards -->
-      <div class="ctx-cards">
-
-        <!-- Card 1 -->
-        <div class="ctx-card ctx-card--1">
-          <div class="ctx-card-text">
-            <div class="ctx-card-text-inner">
-              <div class="ctx-card-text-body">
-                <h3 class="ctx-card-title">Managers had no time to read</h3>
-                <p class="ctx-card-body">10 of 12 managers spent 70–90% of their week on execution. A dashboard that required reading before it let you act wasn't helping.</p>
-              </div>
-              <span class="ctx-card-badge">Unactionable</span>
-            </div>
-          </div>
-          <img class="ctx-card-img" src="../Asset/arvo-context-1.png?v=2" alt="Document screenshot — managers had no time to read">
+  <!-- ── PROJECT SPECS ── -->
+  <section class="section" id="cs-specs" aria-label="Project specs">
+    <div class="inner">
+      <span class="t-label">Key Metrics</span>
+      <div class="cs-stats" data-gsap="stagger">
+        <div class="cs-stat" data-gsap="card">
+          <p class="cs-stat__num">83%</p>
+          <p class="cs-stat__caption">rejected the original platform in our initial research round (10 of 12)</p>
         </div>
-
-        <!-- Card 2 -->
-        <div class="ctx-card ctx-card--2">
-          <div class="ctx-card-text">
-            <div class="ctx-card-text-inner">
-              <div class="ctx-card-text-body">
-                <h3 class="ctx-card-title">The signals were buried</h3>
-                <p class="ctx-card-body">Critical team alerts sat below paragraphs of passive copy with no visual hierarchy. 8 of 12 managers skimmed past them entirely.</p>
-              </div>
-              <span class="ctx-card-badge">Critical Signals Missed</span>
-            </div>
-          </div>
-          <img class="ctx-card-img" src="../Asset/arvo-context-2.png?v=2" alt="Document screenshot — signals were buried">
+        <div class="cs-stat" data-gsap="card">
+          <p class="cs-stat__num">93%</p>
+          <p class="cs-stat__caption">validated our redesigned ARVO platform in the second round of user testing (12 of 13).</p>
         </div>
-
-        <!-- Card 3 -->
-        <div class="ctx-card ctx-card--3">
-          <div class="ctx-card-text">
-            <div class="ctx-card-text-inner">
-              <div class="ctx-card-text-body">
-                <h3 class="ctx-card-title">The language was academic, not practical</h3>
-                <p class="ctx-card-body">"Micro-experiment," "Emotional Labor," "Privacy Threshold" confused 11 of 12 managers. The platform was speaking HR textbook. Its users were thinking in deadlines.</p>
-              </div>
-              <span class="ctx-card-badge">Complex Jargons</span>
-            </div>
-          </div>
-          <img class="ctx-card-img" src="../Asset/arvo-context-3.png?v=2" alt="Document screenshot — complex jargon">
-        </div>
-
-      </div>
-    </div>
-
-  </section>
-
-  <!-- ══════════════════════════════════════
-       05  CHALLENGE
-  ══════════════════════════════════════ -->
-  <section id="cs-challenge" class="challenge-section" aria-label="Challenge">
-    <div class="challenge-inner">
-
-      <div class="challenge-text">
-        <p>Before jumping right into tackling a UI redesign, we needed to figure out how ARVO is suppose to
-          <strong>effectively supplement managers' workflow</strong> without adding more admin.
-        </p>
-      </div>
-
-      <div class="challenge-image-frame">
-        <div class="challenge-image-rotated">
-          <div class="challenge-image-inner">
-            <img src="../Asset/arvo-challenge.png" alt="ARVO dashboard on two iPads" class="challenge-img" />
-          </div>
+        <div class="cs-stat" data-gsap="card">
+          <p class="cs-stat__num">2 of 7</p>
+          <p class="cs-stat__caption">problems scoped → the remaining 5 were returned to our Client.</p>
         </div>
       </div>
-
+      <div class="cs-divider"></div>
+      <div class="cs-cols" data-gsap="stagger">
+        <div class="cs-col" data-gsap="card">
+          <h3 class="cs-col__title">Challenge</h3>
+          <p class="cs-col__body">Assessing all seven issues, most weren't things a redesign could fix on its own. The real challenge was figuring out how to rebuild ARVO around <strong>how managers actually work</strong>, not just how it looked, and knowing which problems were ours to solve and which belonged to the product itself.</p>
+        </div>
+        <div class="cs-col" data-gsap="card">
+          <h3 class="cs-col__title">Impact</h3>
+          <p class="cs-col__body">Two pressing issues, managers too time-poor to read the dashboard and too overloaded to spot what mattered, were <strong>solved with a clearer layout and a simple visual signal</strong>. Two deeper ones, around trust and powerlessness, went back to the founder with the design implications explained. Of the rest, confusing AI language was rewritten from workshop terms; accessibility and a redesigned task step await round-two results.</p>
+        </div>
+        <div class="cs-col" data-gsap="card">
+          <h3 class="cs-col__title">My Contribution</h3>
+          <p class="cs-col__body">I led the full six-week sprint from start to finish, covering <strong>scoping, recruitment, facilitation and synthesis</strong>. I designed and ran the workshop myself, bringing the founder in as a collaborator rather than someone we reported back to, so the decisions carried her ownership from day one. When research surfaced seven problems pulling in different directions, I took lead in deciding what ARVO should focus on first.</p>
+        </div>
+      </div>
     </div>
   </section>
 
-  <!-- ══════════════════════════════════════
-       06  JOURNEY
-  ══════════════════════════════════════ -->
-  <section id="cs-journey" class="journey-section" aria-label="Journey">
-
-    <span class="journey-tag">Journey</span>
-
-    <!-- Heading + body -->
-    <div class="journey-header-row">
-      <div class="journey-heading-wrap">
-        <h2 class="journey-heading">Six weeks. Two cohorts. The process changed shape twice.</h2>
-      </div>
-      <div class="journey-body-col">
-        <p>Round 1 tested the original platform. Round 2 tested our first attempt at fixing it. Each round told us what was broken, then what we'd got right, and what we'd missed.</p>
-        <p>In round 1, we asked 12 managers across 8 industries how managers handle people-development today, and where does their trust around anonymous data sit? Then we gave them the original ARVO platform and three tasks. The most revealing was a timed 3-minute check: extract for the most critical team insight before your next "hypothetical" meeting. <strong>Most ran out of time.</strong></p>
-        <p>Five issues resulted and while two were easily resolved by design the rest aren't on the screen.</p>
+  <!-- ── SHAKY BRIEF ── -->
+  <section class="section" id="cs-brief" aria-label="Shaky brief">
+    <div class="inner">
+      <span class="t-label">Shaky Brief</span>
+      <div class="cs-zigzag-row">
+        <div class="cs-zigzag-media" data-gsap="card">
+          <img src="../Asset/arvo-original-interface.png" alt="The original ARVO interface, annotated: raw AI jargon, dense wall of text, equal-weight signals">
+        </div>
+        <div class="cs-zigzag-text" data-gsap="card" style="flex:1.4;">
+          <h2 class="cs-h2">A working product that managers wouldn't open.</h2>
+          <p class="cs-body">When our Client presented ARVO, it was already live. However its target audience, primarily managers weren't using it, and assumed it must have been an interface issue. We were recruited to fix it. After conducting an initial round of interviews with 12 managers and tested ARVO's original interface. The screens weren't the deepest problem, we uncovered 5 issues then and not all were design-related.</p>
+          <div class="cs-tablist">
+            <div class="cs-tabitem">Manager's personal dashboard</div>
+            <div class="cs-tabitem">Team insights</div>
+            <div class="cs-tabitem">Team energy drivers, drainers &amp; actions</div>
+          </div>
+        </div>
       </div>
     </div>
-
-    <!-- Journey illustration -->
-    <img class="journey-cards-img" src="../Asset/arvo-journey.png" alt="ARVO research journey — 6 steps from interviews to outcome" loading="lazy" />
-
   </section>
 
-  <!-- ══════════════════════════════════════
-       07  RESEARCH
-  ══════════════════════════════════════ -->
-  <section id="cs-research" aria-label="Research">
-
-    <span class="research-tag">Research</span>
-
-    <div class="research-row">
-
-      <!-- Left: heading + body -->
-      <div class="research-left">
-        <h2 class="research-heading">Turned insights into principles for what "good" looks like</h2>
-        <p class="research-body">Research told us what managers didn't like. Still it pointed us in the direction of what good design could possibly look like. These five principles came from what managers said and became the rules every design decision was tested against.</p>
-      </div>
-
-      <!-- Right: cream panel -->
-      <div class="research-panel">
-
-        <!-- Image -->
-        <div class="research-panel-img-wrap">
-          <img class="research-panel-img" src="../Asset/arvo-research-v0.png" alt="Research Round 1 — manager insights" data-cache-bust="true" />
+  <!-- ── WORKSHOP ── -->
+  <section class="section" id="cs-workshop" aria-label="Workshop">
+    <div class="inner">
+      <span class="t-label">Workshop</span>
+      <div class="cs-zigzag-row">
+        <div class="cs-zigzag-media" data-gsap="card">
+          <img src="../Asset/arvo-workshop-photos.jpg" alt="Co-design workshop in progress — team clustering sticky notes on whiteboards">
         </div>
-
-        <!-- Principles -->
-        <div class="research-panel-right">
-          <p class="research-panel-label">What managers wanted</p>
-          <div class="research-principles">
-
-            <div class="research-principle" data-index="1">
-              <p class="rp-title">01&nbsp;&nbsp;3 minutes read or it'll be ignored</p>
-              <p class="rp-note">Manager's Paradox — 10 of 12 managers care about their team but spend 70–80% of their week on execution. So this report cannot take more than 3 minutes or it'll be pointless to use.</p>
-            </div>
-
-            <div class="research-principle" data-index="2">
-              <p class="rp-title">02&nbsp;&nbsp;Scan first. Read never.</p>
-              <p class="rp-note">Cognitive method — 8 of 12 managers skimmed past alerts entirely because it was buried below dense rows of passive reporting.</p>
-            </div>
-
-            <div class="research-principle" data-index="3">
-              <p class="rp-title">03&nbsp;&nbsp;No jargon. Manager language only</p>
-              <p class="rp-note">Jargon &amp; management 101 — 11 of 12 managers were confused by complex terms like 'micro-experiment', 'emotional labour' and 'privacy threshold'. For a quick read it left managers with more questions.</p>
-            </div>
-
-            <div class="research-principle" data-index="4">
-              <p class="rp-title">04&nbsp;&nbsp;Earn trust before asking for it</p>
-              <p class="rp-note">Heavenly Gap — 9 of 12 managers were confident about being able to identify who wrote comments/survey responses; anonymous data is only useful if people believed it is.</p>
-            </div>
-
-            <div class="research-principle" data-index="5">
-              <p class="rp-title">05&nbsp;&nbsp;Visible and actionable, or neither</p>
-              <p class="rp-note">Structural Resignation — 7 of 12 managers were frustrated to be shown systemic problems where they had no authority to fix. Less control, more stress, no improvement to visibility.</p>
-            </div>
-
+        <div class="cs-zigzag-text" data-gsap="card">
+          <h2 class="cs-h2">Conducted 12 interviews across 8 industries. A pattern showed up fast.</h2>
+          <p class="cs-body">Every session moderated by the team, we spoke with our managers and had them test out ARVO's original dashboard to better understand what worked and what didn't. Then I facilitated a co-design workshop, a working session where I bring the client into the room to make decisions together rather than just present findings. With our Client there, the direction carried their buy-in from day one.</p>
+          <div class="cs-tagrow">
+            <span class="cs-tag">Tech</span>
+            <span class="cs-tag">F&amp;B</span>
+            <span class="cs-tag">Hospitality</span>
+            <span class="cs-tag">Education</span>
+            <span class="cs-tag">Retail</span>
+            <span class="cs-tag">Finance</span>
+            <span class="cs-tag">Energy</span>
+            <span class="cs-tag">Consulting</span>
           </div>
         </div>
+      </div>
+    </div>
+  </section>
 
+  <!-- ── HOW I MADE THE CALL ── -->
+  <section class="section" id="cs-decision" aria-label="How I made the call">
+    <div class="inner">
+      <span class="t-label">How I made the call</span>
+      <p class="cs-decision-q">Can it be fixed by design? Or does it need the product itself to change? It would have been easy to start redrawing screens. Instead we ran each problem through a single question first and decided if the problem could be solved by design.</p>
+      <div class="cs-decision-cards" data-gsap="stagger">
+        <div class="cs-decision-card cs-decision-card--yes" data-gsap="card">
+          <p class="cs-decision-card__title">Yes, design can fix it!</p>
+          <p class="cs-decision-card__body">A screen problem. We could redraw, restructure, or relabel our way to a fix.</p>
+        </div>
+        <div class="cs-decision-card cs-decision-card--no" data-gsap="card">
+          <p class="cs-decision-card__title">Nope, return it to Client.</p>
+          <p class="cs-decision-card__body">A product or culture problem. No interface change could reach it, so we returned it with the evidence.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── THE SEVEN PROBLEMS ── -->
+  <section class="section" id="cs-seven" aria-label="The seven problems">
+    <div class="inner">
+      <span class="t-label">The Redesign</span>
+      <h2 class="cs-h2" style="margin-bottom:16px;">The seven problems</h2>
+      <p class="cs-body" style="max-width:640px; margin-bottom:8px;"><strong>Two had a design answer. Five didn't. One I protected.</strong></p>
+      <p class="cs-body" style="max-width:640px;">Here's the full reveal. Two were fixable by design, one was protected since it was highly praised. The remaining five went back to our Client.</p>
+    </div>
+  </section>
+
+  <!-- ── HOW IT UNFOLDED ── -->
+  <section class="section" id="cs-unfolded" aria-label="How it unfolded">
+    <div class="inner">
+      <span class="t-label">How it unfolded</span>
+      <h2 class="cs-h2" style="margin-bottom:8px;">The problems weren't all found at once.</h2>
+      <p class="cs-body" style="max-width:640px; margin-bottom:40px;">Some surfaced in the first round of interviews. Others only appeared later, when fresh users tested the redesign.</p>
+      <div class="cs-timeline" data-gsap="stagger">
+        <div class="cs-tl-step" data-gsap="card">
+          <span class="cs-tl-step__round">Round 1 · Research</span>
+          <h3 class="cs-tl-step__name">Interview</h3>
+          <p class="cs-tl-step__body">12 managers across 8 industries. The first five problems surfaced here — first findings.</p>
+        </div>
+        <div class="cs-tl-step" data-gsap="card">
+          <span class="cs-tl-step__round">Mid-point</span>
+          <h3 class="cs-tl-step__name">Workshop</h3>
+          <p class="cs-tl-step__body">I turned the findings into a shared problem map with our Client and set the design direction.</p>
+        </div>
+        <div class="cs-tl-step" data-gsap="card">
+          <span class="cs-tl-step__round">Build</span>
+          <h3 class="cs-tl-step__name">Redesign</h3>
+          <p class="cs-tl-step__body">Solved the two design problems. Reworked the language. Handed the rest back.</p>
+        </div>
+        <div class="cs-tl-step" data-gsap="card">
+          <span class="cs-tl-step__round">Round 2 · Testing</span>
+          <h3 class="cs-tl-step__name">Validation</h3>
+          <p class="cs-tl-step__body">13 new users tested the redesign. Two new problems surfaced that round one couldn't — new findings.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── THE REDESIGN (dashboard) ── -->
+  <section class="section" id="cs-redesign" aria-label="The redesign">
+    <div class="inner">
+      <span class="t-label">The Redesign</span>
+      <h2 class="cs-h2" style="margin-bottom:40px;">The two problems that we could solve.</h2>
+
+      <div class="cs-zigzag-row" style="margin-bottom:64px;">
+        <div class="cs-zigzag-text" data-gsap="card">
+          <h2 class="cs-h2" style="font-size:clamp(1.4rem,2.2vw,1.75rem);">A single page replaced a dense, multi-tab dashboard.</h2>
+          <p class="cs-body">Managers had no time to dig through multiple tabs to piece data together. We rebuilt ARVO as one screen where everything in a single glance, no navigation. This solved the Manager's Paradox: the tool now fits the ninety seconds a manager actually has.</p>
+        </div>
+        <div class="cs-zigzag-media" data-gsap="card">
+          <img src="../Asset/arvo-redesign-singlepage.png" alt="ARVO redesigned single-page dashboard labeled Single-Page Architecture">
+        </div>
+      </div>
+
+      <div class="cs-zigzag-row cs-zigzag-row--reverse">
+        <div class="cs-zigzag-media" data-gsap="card">
+          <img src="../Asset/arvo-redesign-trafficlight.png" alt="Team signals card with traffic-light dial ratings, labeled Traffic-Light Dial System">
+        </div>
+        <div class="cs-zigzag-text" data-gsap="card">
+          <h2 class="cs-h2" style="font-size:clamp(1.4rem,2.2vw,1.75rem);">Traffic-light dials replaced a wall of equal-weight data.</h2>
+          <p class="cs-body">Cognitive overload is what happens when everything competes for attention at once. On the old screen every number and walls of text looked equally urgent, so nothing stood out. I added a simple red, amber, green system, so a manager sees at a glance what needs them and what's fine. The screen finally had a hierarchy.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── KNOWING WHAT NOT TO TOUCH ── -->
+  <section class="section" id="cs-protect" aria-label="Knowing what not to touch">
+    <div class="inner">
+      <span class="t-label">Knowing what not to touch</span>
+      <h2 class="cs-h2" style="margin-bottom:40px;">The hardest call was leaving something alone.</h2>
+      <div class="cs-zigzag-row">
+        <div class="cs-zigzag-text" data-gsap="card">
+          <span class="cs-tag" style="align-self:flex-start;">The brightspot protected</span>
+          <h2 class="cs-h2" style="font-size:clamp(1.4rem,2.2vw,1.75rem); font-family:var(--font-hand); font-weight:400;">Energisers &amp; Drainers</h2>
+          <p class="cs-body">All 12 managers responded positively to this feature and it mirrored how they already think about their teams. The instinct on a redesign is to change everything. However, a principle we applied was if it ain't broke, don't change it. Protecting what works is as much a design decision as fixing what doesn't.</p>
+        </div>
+        <div class="cs-zigzag-media" data-gsap="card">
+          <img src="../Asset/arvo-protected-feature.png" alt="Critical alerts panel and What energised the team panel, shown as two overlapping tablet screens">
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── BEFORE & AFTER ── -->
+  <section class="section" id="cs-beforeafter" aria-label="Before and after">
+    <div class="inner">
+      <span class="t-label">Before &amp; after</span>
+      <h2 class="cs-h2" style="margin-bottom:8px;">The redesign managers validated.</h2>
+      <p class="cs-body" style="max-width:640px;">The same dashboard, before and after. On the left, the version managers rejected. On the right, the version they validated.</p>
+      <div class="cs-ba" data-gsap="stagger">
+        <div class="cs-ba__col" data-gsap="card">
+          <span class="cs-ba__label">Before — rejected</span>
+          <img src="../Asset/arvo-before-rejected.png" alt="Stack of screenshots showing the original, dense ARVO dashboard pages">
+        </div>
+        <div class="cs-ba__col" data-gsap="card">
+          <span class="cs-ba__label">After — validated</span>
+          <img src="../Asset/arvo-after-validated.png" alt="Stack of screenshots showing the redesigned, single-page ARVO dashboard">
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── IMPACT ── -->
+  <section class="section" id="cs-impact" aria-label="Impact">
+    <div class="inner">
+      <span class="t-label">Impact</span>
+      <h2 class="cs-h2" style="margin-bottom:40px;">What changed across two rounds.</h2>
+      <div class="cs-impact" data-gsap="stagger">
+        <div class="cs-impact__item" data-gsap="card">
+          <p class="cs-impact__num">83% → 93%</p>
+          <span class="cs-impact__tag">Research → Testing</span>
+          <p class="cs-impact__body">rejected the original, then validated the redesign</p>
+        </div>
+        <div class="cs-impact__item" data-gsap="card">
+          <p class="cs-impact__num">5</p>
+          <span class="cs-impact__tag">The Handback</span>
+          <p class="cs-impact__body">problems returned to ARVO's Founder as an evidenced product brief</p>
+        </div>
+        <div class="cs-impact__item" data-gsap="card">
+          <p class="cs-impact__num">2</p>
+          <span class="cs-impact__tag">Solved by design</span>
+          <p class="cs-impact__body">single-page layout + traffic-light dials fixed what drove the rejection</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── FINAL PROTOTYPE (light showcase) ── -->
+  <section class="section" id="cs-finalproto" aria-label="Final prototype">
+    <div class="inner">
+      <div class="cs-shot-wrap" data-gsap="card">
+        <img class="cs-finalproto__phones-single" src="../Asset/arvo-finalproto-laptop.png" alt="ARVO final redesigned dashboard shown on a laptop screen" style="border-radius:0;">
+      </div>
+      <div class="cs-finalproto__phones" data-gsap="card">
+        <img src="../Asset/arvo-finalproto-phones.png" alt="Three phone mockups of the ARVO redesign: team summary, critical alerts, and schedule action modal">
+      </div>
+    </div>
+  </section>
+
+  <!-- ── REFLECTIONS ── -->
+  <section class="section" id="cs-reflections" aria-label="Reflections">
+    <div class="inner">
+      <span class="t-label">Reflections</span>
+      <h2 class="cs-h2" style="margin-bottom:40px;">What I learned as Lead while working on ARVO.</h2>
+      <div class="cs-cards-2x2" data-gsap="stagger">
+        <div data-gsap="card">
+          <h3 class="cs-card__title">Question the brief on day one.</h3>
+          <p class="cs-card__body">The most useful thing I did wasn't jumping straight into redesigning a screen with the team. It was asking whether the screens were even the problem. Next time that question comes first.</p>
+        </div>
+        <div data-gsap="card">
+          <h3 class="cs-card__title">Handing problems back is a deliverable.</h3>
+          <p class="cs-card__body">An eye-opening experience was getting used to the possibility that design can have its limitations while trying to solve issues users may have. Through ARVO, a written brief naming each returned problem, its owner, and suggesting next step was just as useful to ARVO's Founder than any feature built on a whim.</p>
+        </div>
+        <div data-gsap="card">
+          <h3 class="cs-card__title">Protecting what works is a decision.</h3>
+          <p class="cs-card__body">Considering whether to leave Energisers &amp; Drainers untouched took more conviction than redesigning it. Restraint is a skill I want to keep practising.</p>
+        </div>
+        <div data-gsap="card">
+          <h3 class="cs-card__title">Alignment before the client, every time.</h3>
+          <p class="cs-card__body">I've always believed that presenting a united front is key to giving a client peace of mind, so I made it a point to get my team fully aligned before every meeting with our Client. She actually called this out as a major strength in her feedback. Seeing the impact it had, I now do this intentionally with every project.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── PROJECT STACK ── -->
+  <section class="section" id="cs-stack-section" aria-label="Project stack">
+    <div class="inner">
+      <span class="t-label">Project Stack</span>
+      <div class="cs-stack" data-gsap="stagger" style="margin-bottom:40px;">
+        <div class="cs-stack__col" data-gsap="card">
+          <span class="cs-stack__label">Role</span>
+          <p class="cs-stack__row"><strong>Project Lead</strong>Research, facilitation, synthesis, design direction</p>
+        </div>
+        <div class="cs-stack__col" data-gsap="card">
+          <span class="cs-stack__label">Team</span>
+          <p class="cs-stack__row">3 UX Researchers · 2 UI Designers · 1 PM</p>
+        </div>
+        <div class="cs-stack__col" data-gsap="card">
+          <span class="cs-stack__label">Timeline</span>
+          <p class="cs-stack__row"><strong>6 weeks</strong> (Jan – Mar 2026)<br>Two research rounds, one workshop</p>
+        </div>
+      </div>
+      <div class="cs-stack" data-gsap="stagger">
+        <div class="cs-stack__col" data-gsap="card">
+          <span class="cs-stack__label">Research</span>
+          <p class="cs-stack__row">User Interviews<br>Usability Testing<br>Affinity Mapping<br>Competitive Analysis<br>Co-creation Workshop</p>
+        </div>
+        <div class="cs-stack__col" data-gsap="card">
+          <span class="cs-stack__label">Strategy</span>
+          <p class="cs-stack__row">Problem Scoping<br>Root Cause Classification<br>Stakeholder Alignment<br>Plain-English Taxonomy</p>
+        </div>
+        <div class="cs-stack__col" data-gsap="card">
+          <span class="cs-stack__label">Design</span>
+          <p class="cs-stack__row">Information Architecture<br>Interaction Design<br>UI Design<br>Accessibility Audit (WCAG AA)<br>Prototyping</p>
+        </div>
+        <div class="cs-stack__col" data-gsap="card">
+          <span class="cs-stack__label">Deliverables</span>
+          <p class="cs-stack__row">Interactive Figma Prototype<br>React / HTML / CSS Components<br>Plain-English Taxonomy Doc<br>Competitive Analysis Report<br>UX Research Report<br>Final presentation</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── NEXT CASE STUDY ── -->
+  <section class="section" id="cs-next-section" aria-label="Next case study">
+    <div class="inner">
+      <span class="t-label">Next case study</span>
+      <div class="cs-next">
+        <a class="cs-next__link cs-next__link--prev" href="pethaus.html">← Paw Haus</a>
+        <a class="cs-next__link cs-next__link--next" href="seletar.html">Seletar Airport →</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── CONTACT ── -->
+  <section class="section" id="contact">
+    <div class="inner">
+
+      <div class="contact__copy">
+        <span class="t-label">Product Designer · UX Researcher · Singapore · Open to opportunities</span>
+        <div class="contact__copy-inner">
+          <div class="contact__text">
+            <h2 class="contact__heading">Let&rsquo;s work together or chat!</h2>
+            <a class="contact__email" href="mailto:andreeyahlee@gmail.com">andreeyahlee@gmail.com</a>
+            <p class="contact__desc">
+              Open to UX design and research roles or freelancing service.
+              If you&rsquo;re building something complex that needs to feel simple
+              particularly for social good &mdash; let&rsquo;s talk!
+            </p>
+          </div>
+          <div class="contact__socials">
+            <a class="social-link" href="https://www.linkedin.com/in/andrealee-" target="_blank" rel="noopener" aria-label="LinkedIn">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>
+            </a>
+            <a class="social-link" href="https://www.instagram.com/lee.andrea/" target="_blank" rel="noopener" aria-label="Instagram">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 1 0 0 12.324 6.162 6.162 0 0 0 0-12.324zM12 16a4 4 0 1 1 0-8 4 4 0 0 1 0 8zm6.406-11.845a1.44 1.44 0 1 0 0 2.881 1.44 1.44 0 0 0 0-2.881z"/></svg>
+            </a>
+            <a class="social-link" href="https://drive.google.com/file/d/1bMgT6sMRa9Tbtc2sUFGb11WrcM488deY/view?usp=drive_link" target="_blank" rel="noopener" aria-label="Resume">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M14 2H6c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V8l-6-6zm2 16H8v-2h8v2zm0-4H8v-2h8v2zm-3-5V3.5L18.5 9H13z"/></svg>
+            </a>
+          </div>
+        </div>
+        <span class="contact__copyright">Portfolio built from scratch &nbsp;&middot;&nbsp; Copyright &copy;Andrea Lee 2026</span>
+      </div>
+
+      <div class="contact__decor" aria-hidden="true">
+        <div class="footer-peeps-crowd">
+          <img class="footer-peep" src="../Asset/footer_peep22.png" style="left:20.9%;top:-2.8%" alt="">
+          <img class="footer-peep" src="../Asset/footer_peep23.png" style="left:43.7%;top:-2.8%" alt="">
+          <img class="footer-peep" src="../Asset/footer_peep24.png" style="left:66.6%;top:-2.8%" alt="">
+          <img class="footer-peep" src="../Asset/footer_peep21.png" style="left:88.0%;top:-2.8%" alt="">
+          <img class="footer-peep" src="../Asset/footer_peep20.png" style="left:31.4%;top:10.5%" alt="">
+          <img class="footer-peep" src="../Asset/footer_peep18.png" style="left:54.3%;top:10.5%" alt="">
+          <img class="footer-peep" src="../Asset/footer_peep19.png" style="left:77.1%;top:10.5%" alt="">
+          <img class="footer-peep" src="../Asset/footer_peep17.png" style="left:100.0%;top:10.5%" alt="">
+          <img class="footer-peep" src="../Asset/footer_peep14.png" style="left:20.8%;top:20.8%" alt="">
+          <img class="footer-peep" src="../Asset/footer_peep15.png" style="left:43.6%;top:20.8%" alt="">
+          <img class="footer-peep" src="../Asset/footer_peep16.png" style="left:66.5%;top:20.8%" alt="">
+          <img class="footer-peep" src="../Asset/footer_peep13.png" style="left:89.4%;top:20.8%" alt="">
+          <img class="footer-peep" src="../Asset/footer_peep11.png" style="left:31.4%;top:31.4%" alt="">
+          <img class="footer-peep" src="../Asset/footer_peep09.png" style="left:54.3%;top:31.4%" alt="">
+          <img class="footer-peep" src="../Asset/footer_peep10.png" style="left:77.1%;top:31.4%" alt="">
+          <img class="footer-peep" src="../Asset/footer_peep12.png" style="left:100.0%;top:31.4%" alt="">
+          <img class="footer-peep" src="../Asset/footer_peep05.png" style="left:22.1%;top:41.9%" alt="">
+          <img class="footer-peep" src="../Asset/footer_peep08.png" style="left:44.3%;top:41.9%" alt="">
+          <img class="footer-peep" src="../Asset/footer_peep07.png" style="left:66.5%;top:41.9%" alt="">
+          <img class="footer-peep" src="../Asset/footer_peep06.png" style="left:88.6%;top:41.9%" alt="">
+          <img class="footer-peep" src="../Asset/footer_peep01.png" style="left:31.4%;top:52.2%" alt="">
+          <img class="footer-peep" src="../Asset/footer_peep03.png" style="left:54.2%;top:52.2%" alt="">
+          <img class="footer-peep" src="../Asset/footer_peep04.png" style="left:77.2%;top:52.2%" alt="">
+          <img class="footer-peep" src="../Asset/footer_peep02.png" style="left:100.0%;top:52.2%" alt="">
+        </div>
       </div>
 
     </div>
-
   </section>
 
-  <!-- ══════════════════════════════════════
-       08  WORKSHOP
-  ══════════════════════════════════════ -->
-  <section id="cs-workshop" aria-label="Workshop">
-
-    <span class="workshop-tag">Workshop</span>
-
-    <div class="workshop-row">
-
-      <!-- Left: photo grid -->
-      <div class="workshop-photos">
-        <div class="workshop-photo-main">
-          <img src="../Asset/arvo-workshop-feature.png" alt="Co-creation workshop — full team" loading="lazy" />
-        </div>
-        <div class="workshop-photo-row">
-          <div class="workshop-photo-sm">
-            <img src="../Asset/arvo-workshop-3.png" alt="Workshop — sticky note exercise" loading="lazy" />
-          </div>
-          <div class="workshop-photo-sm">
-            <img src="../Asset/arvo-workshop-2.png" alt="Workshop — client mapping session" loading="lazy" />
-          </div>
-          <div class="workshop-photo-sm">
-            <img src="../Asset/arvo-workshop-1.png" alt="Workshop — team discussion" loading="lazy" />
-          </div>
-        </div>
-      </div>
-
-      <!-- Right: text, bottom-aligned -->
-      <div class="workshop-text">
-        <h2 class="workshop-heading">I brought the client into the room before opening Figma.</h2>
-        <p class="workshop-body">Instead of returning with wireframes, I ran a co-creation workshop. We mapped each friction point against business impact and design feasibility together with our client. Involving the client mid-process helped build the diagnosis and the final recommendations don't land as a surprise. As Team Lead, my goal wasn't sign-off. It was shared ownership of the problem space.</p>
-      </div>
-
-    </div>
-
-  </section>
-
-  <!-- ══════════════════════════════════════
-       09  ITERATION V1 BUILT
-  ══════════════════════════════════════ -->
-  <section id="cs-v1" aria-label="Version 1 Built">
-
-    <span class="v1-tag">Version One Built</span>
-
-    <div class="v1-row">
-
-      <!-- Left: text -->
-      <div class="v1-text">
-        <h2 class="v1-heading">We built. Then we tested what we'd built.</h2>
-        <p class="v1-body">The first iteration applied what Round 1 had taught us — single-page architecture, traffic-light signals, energisers elevated. We weren't done just yet, we needed to test it again to iron out any unforeseen gaps.</p>
-      </div>
-
-      <!-- Right: cream panel with two overlapping screens -->
-      <div class="v1-panel">
-        <p class="v1-caption">First iteration — Improved structure, unresolved friction</p>
-        <img class="v1-img-1" src="../Asset/arvo-iter1-built.png" alt="ARVO V1 — first iteration" loading="lazy" />
-      </div>
-
-    </div>
-
-  </section>
-
-  <!-- ══════════════════════════════════════
-       10  ITERATION V1 TESTED
-  ══════════════════════════════════════ -->
-  <section id="cs-v1-tested" aria-label="ARVO — V1 tested">
-
-    <p class="v1-tag">Version one tested</p>
-
-    <div class="v1t-row">
-
-      <!-- Left: text -->
-      <div class="v1t-text">
-        <h2 class="v1t-heading">Testing our first iteration: Hits &amp; misses.</h2>
-        <p class="v1t-body">13 managers. 4 evaluative scenario tasks. The Manager's Paradox and Cognitive Overload were resolved. The timed 3-minute baseline — our hardest task — passed for 12 of 13 managers. However, two new issues came through clearly that hadn't surfaced in Round 1.</p>
-      </div>
-
-      <!-- Right: hits grid + issues -->
-      <div class="v1t-right">
-
-        <!-- 2×2 hits -->
-        <div class="v1t-grid">
-
-          <div class="v1t-block v1t-block-1">
-            <div class="v1t-block-label">
-              <span class="v1t-block-title">Traffic light signals</span>
-              <span class="v1t-block-stat">12 of 13 managers</span>
-            </div>
-            <img class="v1t-block-img" src="../Asset/arvo-iter1-test-1.png" alt="Traffic light signals screen" loading="lazy" />
-          </div>
-
-          <div class="v1t-block v1t-block-2">
-            <div class="v1t-block-label">
-              <span class="v1t-block-title">Energisers &amp; early warnings</span>
-              <span class="v1t-block-stat">10 of 13 managers</span>
-            </div>
-            <img class="v1t-block-img" src="../Asset/arvo-iter1-test-2.png" alt="Energisers and early warnings screen" loading="lazy" />
-          </div>
-
-          <div class="v1t-block v1t-block-3">
-            <div class="v1t-block-label">
-              <span class="v1t-block-title">Single-page architecture</span>
-              <span class="v1t-block-stat">9 of 13 managers</span>
-            </div>
-            <img class="v1t-block-img" src="../Asset/arvo-iter1-test-3.png" alt="Single-page architecture screen" loading="lazy" />
-          </div>
-
-          <div class="v1t-block v1t-block-4">
-            <div class="v1t-block-label">
-              <span class="v1t-block-title">Micro-interventions</span>
-              <span class="v1t-block-stat">8 of 13 managers</span>
-            </div>
-            <img class="v1t-block-img" src="../Asset/arvo-iter1-test-4.png" alt="Micro-interventions screen" loading="lazy" />
-          </div>
-
-        </div>
-
-        <!-- Two new issues -->
-        <div class="v1t-issues">
-
-          <div class="v1t-issue">
-            <span class="v1t-issue-tag">Issue 06 · found in Round 2</span>
-            <h3 class="v1t-issue-title">Accessibility Crisis</h3>
-            <p class="v1t-issue-body">7 of 13 managers couldn't read the profile page. Light-gray text on white failed WCAG AA. UI fix applied in the final iteration — full product audit still needed.</p>
-            <p class="v1t-issue-quote">"It's gray, so it's not so visible for me... unless I have a bigger screen." — Manager, Retail</p>
-          </div>
-
-          <div class="v1t-issue">
-            <span class="v1t-issue-tag">Issue 07 · found in Round 2</span>
-            <h3 class="v1t-issue-title">Digital Homework Trap</h3>
-            <p class="v1t-issue-body">9 of 13 found the weekly checklist a chore regardless of content quality. Hence we applied a calendar integration in the final iteration where the underlying cadence model is a product decision.</p>
-            <p class="v1t-issue-quote">"Take away the mark as done, please. It's crazy." — Manager, Energy</p>
-          </div>
-
-        </div>
-
-      </div>
-    </div>
-
-  </section>
-
-  <!-- ══════════════════════════════════════
-       11  INTERFACE DESIGN
-  ══════════════════════════════════════ -->
-  <section id="cs-interface" aria-label="Interface Design">
-
-    <span class="iface-tag">Interface Design</span>
-
-    <div class="iface-content">
-
-      <!-- Heading row -->
-      <div class="iface-header-row">
-        <h2 class="iface-heading">Translated heuristics into a flow managers could complete in 3 minutes.</h2>
-        <p class="iface-lead">The 3-minute baseline. Every design decision was tested against one scenario: can a manager extract their most critical team insight and take action before they're rushing to their next meeting? The final iteration fixed what Round 2 confirmed was broken. Three decisions — each one earned by a finding, each one protecting what Round 2 had already validated.</p>
-      </div>
-
-      <!-- Heuristic Design — cream panel with auto-scrolling dashboard -->
-      <div class="iface-panel" id="iface-panel">
-        <span class="iface-panel-caption">Scan first. Read never.</span>
-        <div class="iface-dashboard">
-          <img src="../Asset/arvo-interface-design.png" alt="ARVO published dashboard — final iteration" />
-        </div>
-      </div>
-
-    </div>
-
-  </section>
-
-  <!-- ══════════════════════════════════════
-       12 – 16  SECTIONS (coming next)
-  ══════════════════════════════════════ -->
-  <!-- placeholder — sections will be added frame by frame -->
-
-
-  <!-- ================================================================
-       SCRIPTS
-  ================================================================ -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
   <script>
     gsap.registerPlugin(ScrollTrigger);
-    const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-    /* ── Research: image cycle + synced principle highlight ── */
-    (() => {
-      const cb = Date.now();
-      const frames = [
-        `../Asset/arvo-research-v0.png?v=${cb}`,
-        `../Asset/arvo-research-v1.png?v=${cb}`,
-        `../Asset/arvo-research-v2.png?v=${cb}`,
-        `../Asset/arvo-research-v3.png?v=${cb}`,
-        `../Asset/arvo-research-v4.png?v=${cb}`,
-        `../Asset/arvo-research-v5.png?v=${cb}`,
-      ];
-      /* Preload all frames */
-      frames.forEach(src => { const i = new Image(); i.src = src; });
+    (function () {
+      const loaderEl = document.getElementById('loader');
+      const MIN_MS   = 1200;
+      const startTs  = Date.now();
+      let   hidden   = false;
 
-      const img = document.querySelector('.research-panel-img');
-      const principles = document.querySelectorAll('.research-principle');
-      if (!img || reducedMotion) return;
+      function hideLoader() {
+        if (hidden) return;
+        hidden = true;
+        loaderEl.classList.add('loader--hidden');
+      }
 
-      let idx = 0;
+      window.addEventListener('load', function () {
+        const elapsed   = Date.now() - startTs;
+        const remaining = Math.max(0, MIN_MS - elapsed);
+        setTimeout(hideLoader, remaining);
+      });
 
-      function setFrame(i) {
-        img.src = frames[i];
-        /* frame 0 = no highlight; frames 1-5 = highlight principle 1-5 */
-        principles.forEach(p => p.classList.remove('is-active'));
-        if (i > 0) {
-          const active = document.querySelector(`.research-principle[data-index="${i}"]`);
-          if (active) active.classList.add('is-active');
+      document.querySelectorAll('a[href]').forEach(function (link) {
+        const href = link.getAttribute('href');
+        if (href && href.endsWith('.html') && !href.startsWith('http') && !href.startsWith('//')) {
+          link.addEventListener('click', function (e) {
+            e.preventDefault();
+            hidden = false;
+            loaderEl.classList.remove('loader--hidden');
+            setTimeout(function () { window.location.href = href; }, 600);
+          });
+        }
+      });
+
+      var video  = loaderEl.querySelector('video');
+      var canvas = document.createElement('canvas');
+      canvas.className = 'loader__video';
+      video.parentNode.insertBefore(canvas, video);
+      video.style.display = 'none';
+
+      var ctx = canvas.getContext('2d', { willReadFrequently: true });
+      var rafId;
+
+      function removeBg(data, w, h) {
+        var n       = w * h;
+        var visited = new Uint8Array(n);
+        var stack   = [];
+
+        function tryPush(i) {
+          if (i >= 0 && i < n && !visited[i] &&
+              data[i * 4]     > 220 &&
+              data[i * 4 + 1] > 220 &&
+              data[i * 4 + 2] > 220) {
+            visited[i] = 1;
+            stack.push(i);
+          }
+        }
+
+        for (var x = 0; x < w; x++) { tryPush(x); tryPush((h - 1) * w + x); }
+        for (var y = 1; y < h - 1; y++) { tryPush(y * w); tryPush(y * w + w - 1); }
+
+        while (stack.length) {
+          var i = stack.pop();
+          data[i * 4 + 3] = 0;
+          var px = i % w, py = (i / w) | 0;
+          if (px > 0)     tryPush(i - 1);
+          if (px < w - 1) tryPush(i + 1);
+          if (py > 0)     tryPush(i - w);
+          if (py < h - 1) tryPush(i + w);
         }
       }
 
-      setInterval(() => {
-        idx = (idx + 1) % frames.length;
-        setFrame(idx);
-      }, 1600);
-    })();
-
-    /* ── Interface panel: set --panel-h for scroll animation ── */
-    (() => {
-      const panel = document.getElementById('iface-panel');
-      if (!panel) return;
-      const update = () => panel.style.setProperty('--panel-h', panel.offsetHeight + 'px');
-      update();
-      window.addEventListener('resize', update, { passive: true });
-    })();
-
-    /* ── Progress bar ── */
-    window.addEventListener('scroll', () => {
-      const max = document.documentElement.scrollHeight - window.innerHeight;
-      if (max > 0) document.getElementById('cs-progress').style.width = (window.scrollY / max * 100) + '%';
-    }, { passive: true });
-
-    /* ── Hero entrance ── */
-    if (!reducedMotion) {
-      gsap.from('.hero-title', { y: 48, opacity: 0, duration: 1.0, ease: 'power3.out', delay: 0.15 });
-      gsap.from('.hero-sub',   { y: 28, opacity: 0, duration: 0.85, ease: 'power3.out', delay: 0.4 });
-      gsap.from('.hero-media', { y: 72, opacity: 0, duration: 1.2,  ease: 'power3.out', delay: 0.55 });
-
-      /* ── V1 panel: raise on scroll into view ── */
-      gsap.from('.v1-img-1', {
-        y: 60,
-        opacity: 0,
-        duration: 1.1,
-        ease: 'power3.out',
-        scrollTrigger: {
-          trigger: '#cs-v1',
-          start: 'top 75%',
-          toggleActions: 'play none none none',
+      function renderFrame() {
+        if (video.readyState >= 2 && canvas.width > 0) {
+          ctx.clearRect(0, 0, canvas.width, canvas.height);
+          ctx.drawImage(video, 0, 0);
+          var imgData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+          removeBg(imgData.data, canvas.width, canvas.height);
+          ctx.putImageData(imgData, 0, 0);
         }
+        rafId = requestAnimationFrame(renderFrame);
+      }
+
+      video.addEventListener('loadedmetadata', function () {
+        canvas.width  = video.videoWidth;
+        canvas.height = video.videoHeight;
+      });
+
+      video.addEventListener('play', function () {
+        cancelAnimationFrame(rafId);
+        renderFrame();
+      });
+
+      video.play().catch(function () {});
+    })();
+
+    const cursorEl  = document.getElementById('cursor-follower');
+    const cursorImg = document.getElementById('cursor-img');
+    const HALF = 26;
+    let mouseX = -200, mouseY = -200, rafPending = false;
+
+    function updateCursorSrc() {
+      const isLight = document.body.classList.contains('light-mode');
+      const newSrc  = isLight ? '../Asset/cursor-dark.png' : '../Asset/cursor-light.png';
+      if (cursorImg.src.indexOf(newSrc) === -1) cursorImg.src = newSrc;
+    }
+
+    document.addEventListener('mousemove', e => {
+      mouseX = e.clientX; mouseY = e.clientY;
+      updateCursorSrc();
+      if (!rafPending) {
+        rafPending = true;
+        requestAnimationFrame(() => {
+          cursorEl.style.display = 'block';
+          cursorEl.style.transform = `translate(${mouseX - HALF}px, ${mouseY - HALF}px)`;
+          rafPending = false;
+        });
+      }
+    });
+    document.addEventListener('mouseleave', () => { cursorEl.style.display = 'none'; });
+
+    const toggle = document.getElementById('theme-toggle');
+    toggle.addEventListener('click', () => {
+      const isLight = document.body.classList.toggle('light-mode');
+      try { localStorage.setItem('andrea-theme', isLight ? 'light' : 'dark'); } catch (e) {}
+      updateCursorSrc();
+      document.querySelectorAll('[data-dark-src]').forEach(img => {
+        img.src = isLight ? img.dataset.lightSrc : img.dataset.darkSrc;
+      });
+    });
+
+    const hamburger  = document.getElementById('nav-hamburger');
+    const mobileMenu = document.getElementById('nav-mobile-menu');
+    const mainNavEl  = document.getElementById('main-nav');
+
+    hamburger.addEventListener('click', () => {
+      const isOpen = mainNavEl.classList.toggle('is-open');
+      hamburger.setAttribute('aria-expanded', String(isOpen));
+    });
+    mobileMenu.querySelectorAll('a').forEach(link => {
+      link.addEventListener('click', () => {
+        mainNavEl.classList.remove('is-open');
+        hamburger.setAttribute('aria-expanded', 'false');
+      });
+    });
+
+    if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      document.querySelectorAll('[data-gsap="stagger"]').forEach(container => {
+        const cards = container.querySelectorAll('[data-gsap="card"]');
+        if (!cards.length) return;
+        gsap.from(cards, {
+          y: 28, opacity: 0, duration: 0.65, stagger: 0.1, ease: 'power3.out',
+          scrollTrigger: { trigger: container, start: 'top 80%' }
+        });
+      });
+      document.querySelectorAll('.cs-zigzag-row').forEach(row => {
+        gsap.from(row.children, {
+          y: 28, opacity: 0, duration: 0.7, stagger: 0.12, ease: 'power3.out',
+          scrollTrigger: { trigger: row, start: 'top 80%' }
+        });
+      });
+      gsap.from('#cs-hero .cs-hero__col > *', {
+        y: 24, opacity: 0, duration: 0.7, stagger: 0.08, ease: 'power3.out', delay: 0.2
+      });
+      gsap.from('#cs-hero .cs-hero__mockup', {
+        y: 24, opacity: 0, duration: 0.8, ease: 'power3.out', delay: 0.3
+      });
+
+      gsap.from('.contact__heading', {
+        y: 60, opacity: 0, duration: 1, ease: 'power3.out',
+        scrollTrigger: { trigger: '#contact', start: 'top 80%' }
+      });
+      gsap.from(['.contact__email', '.contact__desc', '.contact__socials', '#contact .t-label'], {
+        y: 25, opacity: 0, duration: 0.7, stagger: 0.12, ease: 'power3.out',
+        scrollTrigger: { trigger: '#contact', start: 'top 75%' }
+      });
+      gsap.from('.footer-peep', {
+        y: 30, opacity: 0, duration: 1, stagger: 0.025, ease: 'power3.out',
+        scrollTrigger: { trigger: '#contact', start: 'top 85%' }
+      });
+      document.querySelectorAll('.footer-peep').forEach(peep => {
+        peep.addEventListener('mouseenter', function () {
+          gsap.killTweensOf(this);
+          gsap.timeline()
+            .to(this, { y: '-12%', scaleY: 1.04, scaleX: 1.02, duration: 0.32, ease: 'back.out(1.6)' })
+            .to(this, { y: '-7%', duration: 0.38, ease: 'sine.inOut' })
+            .to(this, { y: '-13%', duration: 0.42, ease: 'sine.inOut' })
+            .to(this, { y: 0, scaleY: 1, scaleX: 1, duration: 0.5, ease: 'power2.inOut' });
+        });
       });
     }
-  </script>
-
-  <script>
-    /* ── Cursor ── */
-    (function () {
-      const cursor = document.getElementById('custom-cursor');
-      if (!cursor || window.matchMedia('(pointer: coarse)').matches) return;
-      let visible = false;
-      const HALF = 26;
-      document.addEventListener('mousemove', e => {
-        cursor.style.transform = `translate(${e.clientX - HALF}px, ${e.clientY - HALF}px)`;
-        if (!visible) { cursor.style.opacity = '1'; visible = true; }
-      });
-      document.addEventListener('mouseleave', () => { cursor.style.opacity = '0'; visible = false; });
-    })();
   </script>
 
 </body>

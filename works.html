@@ -113,6 +113,7 @@
       color: var(--ink-light);
       white-space: nowrap;
     }
+    .nav__logo-text--short { display: none; }
 
     .nav__logo-flower {
       width: 40px; height: 40px;
@@ -891,6 +892,19 @@
     @media (max-width: 1024px) {
       :root { --pad: 40px; }
 
+      /* Nav — compact tablet/mobile nav (Figma Nav_bar_dark / Nav_bar_light) */
+      .nav__logo-text--full  { display: none; }
+      .nav__logo-text--short { display: inline; }
+      .nav__links { display: none; }
+      .nav__hamburger { display: flex; width: 40px; height: 40px; }
+      .nav__ham-line { width: 22px; height: 2px; }
+
+      .nav__toggle { width: 40px; height: 40px; }
+      .toggle__inner { width: auto; height: auto; gap: 0; }
+      .toggle__thumb { display: none; }
+      .toggle__icon { width: 20px; height: 20px; order: 0; }
+      body.light-mode .toggle__icon { width: 27px; height: 20px; order: 0; }
+
       .pd-grid .card--arvo { height: 520px; }
       .card.half-card { height: 250px; }
 
@@ -969,7 +983,8 @@
   <!-- ── NAV ── -->
   <nav class="nav" id="main-nav">
     <a class="nav__logo" href="/" aria-label="Andrea Lee">
-      <span class="nav__logo-text">Andrea Lee</span>
+      <span class="nav__logo-text nav__logo-text--full">Andrea Lee</span>
+      <span class="nav__logo-text nav__logo-text--short">Andrea L.</span>
       <img class="nav__logo-flower"
            src="Asset/cursor-light.png"
            data-dark-src="Asset/cursor-light.png"
