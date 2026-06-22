@@ -373,11 +373,17 @@
     .social-link { display: flex; align-items: center; justify-content: center; width: 30px; height: 30px; color: var(--ink-light); opacity: 0.6; text-decoration: none; transition: opacity var(--dur-fast), transform var(--dur-slow) var(--ease-bounce); }
     .social-link:hover { opacity: 1; transform: scale(1.1); }
     .social-link svg { width: 100%; height: 100%; fill: currentColor; display: block; }
-    .contact__copyright { font-family: var(--font-mono); font-weight: 500; font-size: 11px; line-height: 14px; letter-spacing: 0.0012em; text-transform: uppercase; color: rgba(244,244,235,0.5); }
+    .contact__copyright { font-family: var(--font-mono); font-weight: 500; font-size: 11px; line-height: 14px; letter-spacing: 0.0012em; color: rgba(244,244,235,0.5); }
     .contact__decor { flex: 1; min-width: 0; display: flex; align-items: flex-end; }
     .footer-peeps-crowd { position: relative; width: 100%; aspect-ratio: 817 / 542; flex-shrink: 0; overflow: visible; }
-    .footer-peep { position: absolute; width: 15.6%; height: 33.1%; object-fit: contain; object-position: bottom center; transform-origin: center bottom; transition: filter 0.3s ease; will-change: transform; cursor: default; }
+    .footer-peep { position: absolute; width: 22.53%; height: 47.72%; object-fit: contain; object-position: bottom center; transform-origin: center bottom; transition: filter 0.3s ease; will-change: transform; cursor: default; }
     .footer-peep:hover { filter: drop-shadow(0 18px 36px rgba(0,0,0,0.3)); }
+    .fp01 { left: 31.43%; top: 52.30%; } .fp02 { left: 99.97%; top: 52.28%; } .fp03 { left: 54.25%; top: 52.28%; } .fp04 { left: 77.16%; top: 52.28%; }
+    .fp05 { left: 22.14%; top: 41.83%; } .fp06 { left: 88.61%; top: 41.83%; } .fp07 { left: 66.45%; top: 41.83%; } .fp08 { left: 44.30%; top: 41.83%; }
+    .fp09 { left: 54.29%; top: 31.37%; } .fp10 { left: 77.14%; top: 31.37%; } .fp11 { left: 31.43%; top: 31.37%; } .fp12 { left: 99.99%; top: 31.37%; }
+    .fp13 { left: 89.35%; top: 20.91%; } .fp14 { left: 20.83%; top: 20.91%; } .fp15 { left: 43.65%; top: 20.91%; } .fp16 { left: 66.50%; top: 20.91%; }
+    .fp17 { left: 99.99%; top: 10.46%; } .fp18 { left: 54.29%; top: 10.46%; } .fp19 { left: 77.14%; top: 10.46%; } .fp20 { left: 31.44%; top: 10.46%; }
+    .fp21 { left: 88.00%; top: -2.77%; } .fp22 { left: 20.90%; top: 0%; } .fp23 { left: 43.75%; top: 0%; } .fp24 { left: 66.60%; top: 0%; }
 
     /* ================================================================
        RESPONSIVE
@@ -394,6 +400,7 @@
       .toggle__thumb { display: none; }
       .toggle__icon { width: 20px; height: 20px; order: 0; }
       body.light-mode .toggle__icon { width: 27px; height: 20px; order: 0; }
+      .contact__heading { line-height: 44px; }
 
       .cs-hero__inner { flex-direction: column; min-height: auto; gap: 32px; }
       .cs-stats, .cs-cols, .cs-decision-cards, .cs-ba, .cs-impact, .cs-stack { flex-wrap: wrap; gap: 32px; }
@@ -432,7 +439,15 @@
       #contact .inner { flex-direction: column; align-items: stretch; }
       .contact__copy { width: 100%; }
       .contact__heading { font-size: clamp(2rem, 7vw, 2.5rem); line-height: 1.15; }
-      .contact__decor { display: none; }
+      .contact__decor { order: -1; flex: none; width: 100%; }
+      .footer-peeps-crowd { aspect-ratio: 376 / 468.7354; }
+      .footer-peep { width: 36.54%; height: 41.18%; }
+      .fp01 { left: 102.61%; top: 47.41%; } .fp02 { left: -8.53%; top: 47.41%; } .fp03 { left: 65.61%; top: 47.41%; } .fp04 { left: 28.46%; top: 47.41%; }
+      .fp05 { left: 12.94%; top: 38.38%; } .fp06 { left: 120.73%; top: 38.38%; } .fp07 { left: 84.80%; top: 38.38%; } .fp08 { left: 48.87%; top: 38.38%; }
+      .fp09 { left: 65.58%; top: 29.36%; } .fp10 { left: 28.52%; top: 29.36%; } .fp11 { left: 102.65%; top: 29.36%; } .fp12 { left: -8.53%; top: 29.36%; }
+      .fp13 { left: 121.93%; top: 20.34%; } .fp14 { left: 10.80%; top: 20.34%; } .fp15 { left: 47.82%; top: 20.34%; } .fp16 { left: 84.88%; top: 20.34%; }
+      .fp17 { left: -8.53%; top: 11.31%; } .fp18 { left: 65.58%; top: 11.31%; } .fp19 { left: 28.52%; top: 11.31%; } .fp20 { left: 102.63%; top: 11.31%; }
+      .fp21 { left: 119.75%; top: -0.10%; } .fp22 { left: 10.92%; top: 2.29%; } .fp23 { left: 47.97%; top: 2.29%; } .fp24 { left: 85.03%; top: 2.29%; }
     }
 
     @media (max-width: 479px) {
@@ -958,35 +973,35 @@
             </a>
           </div>
         </div>
-        <span class="contact__copyright">Portfolio built from scratch &nbsp;&middot;&nbsp; Copyright &copy;Andrea Lee 2026</span>
+        <span class="contact__copyright">PORTFOLIO BUILT FROM SCRATCH BY ANDREA L. &copy;All rights reserved 2026</span>
       </div>
 
       <div class="contact__decor" aria-hidden="true">
         <div class="footer-peeps-crowd">
-          <img class="footer-peep" src="../Asset/footer_peep22.png" style="left:20.9%;top:-2.8%" alt="">
-          <img class="footer-peep" src="../Asset/footer_peep23.png" style="left:43.7%;top:-2.8%" alt="">
-          <img class="footer-peep" src="../Asset/footer_peep24.png" style="left:66.6%;top:-2.8%" alt="">
-          <img class="footer-peep" src="../Asset/footer_peep21.png" style="left:88.0%;top:-2.8%" alt="">
-          <img class="footer-peep" src="../Asset/footer_peep20.png" style="left:31.4%;top:10.5%" alt="">
-          <img class="footer-peep" src="../Asset/footer_peep18.png" style="left:54.3%;top:10.5%" alt="">
-          <img class="footer-peep" src="../Asset/footer_peep19.png" style="left:77.1%;top:10.5%" alt="">
-          <img class="footer-peep" src="../Asset/footer_peep17.png" style="left:100.0%;top:10.5%" alt="">
-          <img class="footer-peep" src="../Asset/footer_peep14.png" style="left:20.8%;top:20.8%" alt="">
-          <img class="footer-peep" src="../Asset/footer_peep15.png" style="left:43.6%;top:20.8%" alt="">
-          <img class="footer-peep" src="../Asset/footer_peep16.png" style="left:66.5%;top:20.8%" alt="">
-          <img class="footer-peep" src="../Asset/footer_peep13.png" style="left:89.4%;top:20.8%" alt="">
-          <img class="footer-peep" src="../Asset/footer_peep11.png" style="left:31.4%;top:31.4%" alt="">
-          <img class="footer-peep" src="../Asset/footer_peep09.png" style="left:54.3%;top:31.4%" alt="">
-          <img class="footer-peep" src="../Asset/footer_peep10.png" style="left:77.1%;top:31.4%" alt="">
-          <img class="footer-peep" src="../Asset/footer_peep12.png" style="left:100.0%;top:31.4%" alt="">
-          <img class="footer-peep" src="../Asset/footer_peep05.png" style="left:22.1%;top:41.9%" alt="">
-          <img class="footer-peep" src="../Asset/footer_peep08.png" style="left:44.3%;top:41.9%" alt="">
-          <img class="footer-peep" src="../Asset/footer_peep07.png" style="left:66.5%;top:41.9%" alt="">
-          <img class="footer-peep" src="../Asset/footer_peep06.png" style="left:88.6%;top:41.9%" alt="">
-          <img class="footer-peep" src="../Asset/footer_peep01.png" style="left:31.4%;top:52.2%" alt="">
-          <img class="footer-peep" src="../Asset/footer_peep03.png" style="left:54.2%;top:52.2%" alt="">
-          <img class="footer-peep" src="../Asset/footer_peep04.png" style="left:77.2%;top:52.2%" alt="">
-          <img class="footer-peep" src="../Asset/footer_peep02.png" style="left:100.0%;top:52.2%" alt="">
+          <img class="footer-peep fp22" src="../Asset/footer_peep22.png" alt="">
+          <img class="footer-peep fp23" src="../Asset/footer_peep23.png" alt="">
+          <img class="footer-peep fp24" src="../Asset/footer_peep24.png" alt="">
+          <img class="footer-peep fp21" src="../Asset/footer_peep21.png" alt="">
+          <img class="footer-peep fp20" src="../Asset/footer_peep20.png" alt="">
+          <img class="footer-peep fp18" src="../Asset/footer_peep18.png" alt="">
+          <img class="footer-peep fp19" src="../Asset/footer_peep19.png" alt="">
+          <img class="footer-peep fp17" src="../Asset/footer_peep17.png" alt="">
+          <img class="footer-peep fp14" src="../Asset/footer_peep14.png" alt="">
+          <img class="footer-peep fp15" src="../Asset/footer_peep15.png" alt="">
+          <img class="footer-peep fp16" src="../Asset/footer_peep16.png" alt="">
+          <img class="footer-peep fp13" src="../Asset/footer_peep13.png" alt="">
+          <img class="footer-peep fp11" src="../Asset/footer_peep11.png" alt="">
+          <img class="footer-peep fp09" src="../Asset/footer_peep09.png" alt="">
+          <img class="footer-peep fp10" src="../Asset/footer_peep10.png" alt="">
+          <img class="footer-peep fp12" src="../Asset/footer_peep12.png" alt="">
+          <img class="footer-peep fp05" src="../Asset/footer_peep05.png" alt="">
+          <img class="footer-peep fp08" src="../Asset/footer_peep08.png" alt="">
+          <img class="footer-peep fp07" src="../Asset/footer_peep07.png" alt="">
+          <img class="footer-peep fp06" src="../Asset/footer_peep06.png" alt="">
+          <img class="footer-peep fp01" src="../Asset/footer_peep01.png" alt="">
+          <img class="footer-peep fp03" src="../Asset/footer_peep03.png" alt="">
+          <img class="footer-peep fp04" src="../Asset/footer_peep04.png" alt="">
+          <img class="footer-peep fp02" src="../Asset/footer_peep02.png" alt="">
         </div>
       </div>
 
