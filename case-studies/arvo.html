@@ -76,13 +76,15 @@
     body.light-mode .toggle__sun      { display: none;  }
     body.light-mode .toggle__moon     { display: block; }
     body.light-mode .cs-h2,
-    body.light-mode .cs-stat__num,
     body.light-mode .cs-col__title,
     body.light-mode .cs-zigzag-text,
+    body.light-mode .cs-decision-head__title,
+    body.light-mode .cs-decision-card__title,
     body.light-mode .cs-card__title  { color: var(--ink-dark); }
     body.light-mode .cs-body,
-    body.light-mode .cs-stat__caption,
     body.light-mode .cs-col__body,
+    body.light-mode .cs-decision-head__body,
+    body.light-mode .cs-decision-card__body,
     body.light-mode .cs-card__body  { color: rgba(26,28,22,0.65); }
     body.light-mode .cs-divider     { background: rgba(26,28,22,0.15); }
     body.light-mode .cs-back        { color: rgba(26,28,22,0.7); }
@@ -181,20 +183,36 @@
     #cs-hero { padding-top: 104px; }
     .cs-hero__inner { padding-top: 56px; padding-bottom: 56px; display: flex; align-items: center; gap: 48px; min-height: calc(100vh - 104px); }
     .cs-hero__col { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 32px; }
-    .cs-hero__badge { display: inline-flex; align-items: center; justify-content: center; width: 84px; height: 50px; background: var(--bg-light); color: var(--ink-dark); border-radius: 14px; font-family: var(--font-hand); font-size: 22px; box-shadow: 0 8px 20px rgba(0,0,0,0.25); }
+    .cs-hero__badge { display: inline-flex; align-items: center; justify-content: center; align-self: flex-end; width: 112px; height: 67px; background: var(--bg-light); color: var(--ink-dark); border-radius: 14px; font-family: var(--font-hand); font-size: 22px; box-shadow: 0 8px 20px rgba(0,0,0,0.25); }
     .cs-hero__eyebrow { font-family: var(--font-mono); font-size: 12px; font-weight: 700; letter-spacing: 0.05em; text-transform: uppercase; color: rgba(244,244,235,0.55); line-height: 1.6; }
     .cs-hero__title { font-family: var(--font-display); font-weight: 400; font-size: clamp(2.25rem, 4.5vw, 3.5rem); line-height: 1.15; letter-spacing: -0.02em; color: var(--ink-light); }
     .cs-hero__desc { font-family: var(--font-body); font-size: 17px; line-height: 1.7; color: rgba(244,244,235,0.7); max-width: 460px; }
-    .cs-hero__cta { display: inline-flex; align-items: center; gap: 10px; align-self: flex-start; background: var(--lime); color: var(--ink-dark); font-family: var(--font-body); font-weight: 600; font-size: 13px; padding: 16px 32px; border-radius: 10px; text-decoration: none; box-shadow: 0 10px 4px rgba(0,0,0,0.25); transition: transform var(--dur-fast) var(--ease-bounce); }
+    .cs-hero__cta { display: inline-flex; align-items: center; gap: 10px; align-self: flex-end; background: var(--lime); color: var(--ink-dark); font-family: var(--font-body); font-weight: 600; font-size: 13px; padding: 16px 32px; border-radius: 10px; text-decoration: none; box-shadow: 0 10px 4px rgba(0,0,0,0.25); transition: transform var(--dur-fast) var(--ease-bounce); }
     .cs-hero__cta:hover { transform: translateY(-2px); }
     .cs-hero__mockup { flex: 1.3; min-width: 0; }
-    .cs-hero__mockup img { width: 100%; display: block; }
+    .cs-hero__screen { position: relative; }
+    .cs-hero__bezel { width: 100%; display: block; position: relative; z-index: 2; }
+    .cs-hero__video {
+      position: absolute;
+      z-index: 1;
+      object-fit: cover;
+      object-position: top center;
+      left: 15.51%; top: 24.87%; width: 84.43%; height: 65.69%;
+    }
 
     /* ── Project Specs ── */
-    .cs-stats { display: flex; gap: 64px; margin-bottom: 40px; }
-    .cs-stat { flex: 1; min-width: 0; }
-    .cs-stat__num { font-family: var(--font-display); font-size: clamp(2.5rem, 4vw, 3.5rem); font-weight: 400; color: var(--ink-light); line-height: 1; margin-bottom: 12px; }
-    .cs-stat__caption { font-family: var(--font-body); font-size: 14px; line-height: 1.5; color: rgba(244,244,235,0.65); }
+    .cs-stats { display: flex; gap: 64px; margin-bottom: 56px; }
+    .cs-stat {
+      flex: 1; min-width: 0; box-sizing: border-box;
+      background: var(--bg-light); padding: 16px; border-radius: 30px;
+      box-shadow: -25px 32px 3px rgba(0,0,0,0.5);
+    }
+    .cs-stat:nth-child(1) { transform: rotate(-7deg); }
+    .cs-stat:nth-child(2) { transform: rotate(7deg); }
+    .cs-stat:nth-child(3) { transform: rotate(-9deg); }
+    .cs-stat__inner { background: var(--bg-dark); border-radius: 14px; padding: 16px; display: flex; flex-direction: column; gap: 10px; }
+    .cs-stat__num { font-family: var(--font-display); font-weight: 400; font-size: clamp(2.25rem, 3.8vw, 3.5rem); letter-spacing: -2.24px; color: var(--ink-light); line-height: 1; }
+    .cs-stat__caption { font-family: var(--font-body); font-size: 15px; line-height: 1.33; color: var(--ink-light); }
     .cs-cols { display: flex; gap: 64px; }
     .cs-col { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 14px; }
     .cs-col__title { font-family: var(--font-display); font-size: 22px; font-weight: 400; color: var(--ink-light); }
@@ -207,6 +225,21 @@
     .cs-zigzag-row--reverse { flex-direction: row-reverse; }
     .cs-zigzag-media { flex: 1.2; min-width: 0; }
     .cs-zigzag-media img { width: 100%; display: block; border-radius: 14px; box-shadow: 0 24px 48px rgba(0,0,0,0.35); }
+
+    /* ── Redesign — looping 4-screen walkthrough ── */
+    .cs-redesign-loop { position: relative; width: 100%; aspect-ratio: 717 / 587; border-radius: 14px; overflow: hidden; box-shadow: 0 24px 48px rgba(0,0,0,0.35); }
+    .cs-redesign-loop__frame { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; display: block; opacity: 0; animation: cs-redesign-fade 16s infinite; }
+    @keyframes cs-redesign-fade {
+      0%   { opacity: 0; }
+      3%   { opacity: 1; }
+      22%  { opacity: 1; }
+      25%  { opacity: 0; }
+      100% { opacity: 0; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .cs-redesign-loop__frame { animation: none; opacity: 0; }
+      .cs-redesign-loop__frame:first-child { opacity: 1; }
+    }
     .cs-zigzag-text { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 16px; padding-top: 16px; }
     .cs-zigzag-text .cs-h2 { font-size: clamp(1.4rem, 2.2vw, 1.75rem); }
 
@@ -215,26 +248,69 @@
     .cs-tabitem { padding: 24px 0; border-top: 1px solid rgba(244,244,235,0.12); font-family: var(--font-display); font-size: 17px; color: rgba(244,244,235,0.85); }
     .cs-tabitem:last-child { border-bottom: 1px solid rgba(244,244,235,0.12); }
 
+    /* Shaky Brief — two-column: media+text stacked on the left, 3 bleeding screenshot cards on the right */
+    .cs-brief-grid { display: flex; align-items: stretch; gap: 24px; }
+    .cs-brief-left { flex: 1.4; min-width: 0; display: flex; flex-direction: column; gap: 32px; }
+    .cs-brief-left .cs-zigzag-text { padding-top: 0; }
+    .cs-role-list { flex: 1; min-width: 0; display: flex; flex-direction: column; border-radius: 14px; overflow: hidden; box-shadow: 0 24px 48px rgba(0,0,0,0.35); }
+    .cs-role-card { position: relative; background: var(--bg-light); }
+    .cs-role-card + .cs-role-card { border-top: 1px solid rgba(26,28,22,0.08); }
+    .cs-role-card img { width: 100%; display: block; pointer-events: none; }
+    .cs-role-card__label { position: absolute; top: 24px; left: 24px; font-family: var(--font-body); font-weight: 700; font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--ink-dark); }
+
+    /* Workshop — scattered polaroid-style photo collage */
+    .cs-workshop-collage { flex: 1.2; min-width: 0; position: relative; aspect-ratio: 818 / 852; }
+    .cs-workshop-photo { position: absolute; box-sizing: border-box; background: var(--bg-light); border-radius: 30px; }
+    .cs-workshop-photo img { width: 100%; height: 100%; display: block; object-fit: cover; border-radius: 17px; pointer-events: none; }
+    .cs-workshop-photo--1 { left: 16.41%; top: 3.44%; width: 76.40%; height: 58.45%; padding: 3.2%; transform: rotate(-4.42deg); box-shadow: -13.7px 17.5px 2.5px rgba(0,0,0,0.5); z-index: 4; }
+    .cs-workshop-photo--2 { left: 0.22%; top: 48.68%; width: 49.63%; height: 38.26%; padding: 3.2%; transform: rotate(9.34deg); box-shadow: -9px 11.4px 1.6px rgba(0,0,0,0.5); z-index: 1; }
+    .cs-workshop-photo--3 { left: 53.65%; top: 54.6%; width: 49.63%; height: 38.26%; padding: 3.2%; transform: rotate(-12.19deg); box-shadow: -9px 11.4px 1.6px rgba(0,0,0,0.5); z-index: 2; }
+    .cs-workshop-photo--4 { left: 27.64%; top: 72.13%; width: 30.54%; height: 22.73%; padding: 5.2%; transform: rotate(-15.26deg); box-shadow: -9px 11.4px 1.6px rgba(0,0,0,0.5); z-index: 3; }
+    .cs-workshop-photo__caption { position: absolute; top: 12%; left: 11%; right: 11%; font-family: var(--font-body); font-weight: 700; font-size: 13px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--ink-light); }
+
     /* ── Workshop industries ── */
     .cs-tagrow { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 8px; }
 
     /* ── Decision framework (How I made the call) ── */
-    .cs-decision-q { font-family: var(--font-display); font-size: clamp(1.4rem, 2.2vw, 1.75rem); color: var(--ink-light); margin: 24px 0 40px; max-width: 720px; }
-    .cs-decision-cards { display: flex; gap: 32px; }
-    .cs-decision-card { flex: 1; min-width: 0; padding: 32px; border-radius: 16px; display: flex; flex-direction: column; gap: 12px; }
-    .cs-decision-card--yes { background: rgba(222,232,149,0.08); border: 1px solid rgba(222,232,149,0.3); }
-    .cs-decision-card--no { background: rgba(244,244,235,0.04); border: 1px solid rgba(244,244,235,0.12); }
-    .cs-decision-card__title { font-family: var(--font-display); font-size: 19px; color: var(--ink-light); }
-    .cs-decision-card__body { font-family: var(--font-body); font-size: 14px; line-height: 1.6; color: rgba(244,244,235,0.65); }
+    .cs-decision-head { display: flex; flex-direction: column; align-items: center; gap: 40px; text-align: center; margin: 24px auto 56px; max-width: 722px; }
+    .cs-decision-head__title { font-family: var(--font-display); font-weight: 400; font-size: clamp(1.75rem, 3.2vw, 2.5rem); line-height: 1.1; letter-spacing: -0.025em; color: var(--ink-light); }
+    .cs-decision-head__body { font-family: var(--font-body); font-size: 17px; line-height: 1.47; color: var(--ink-light); }
+    .cs-decision-cards { display: flex; align-items: center; gap: 32px; }
+    .cs-decision-card { flex: 1; min-width: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 10px; text-align: center; }
+    .cs-decision-card__title { font-family: var(--font-hand); font-size: 35px; line-height: 1; color: var(--ink-light); }
+    .cs-decision-card__body { font-family: var(--font-body); font-size: 17px; line-height: 1.47; color: var(--ink-light); }
+    .cs-decision-peep { flex: 1; min-width: 0; max-width: 280px; display: block; margin: 0 auto; }
+
+    /* ── Seven problems carousel ── */
+    .cs-seven-row { display: flex; align-items: center; gap: 40px; }
+    .cs-carousel { flex: 1; min-width: 0; display: flex; align-items: center; justify-content: center; gap: 16px; }
+    .cs-carousel__viewport { flex: 1; min-width: 0; max-width: 630px; border-radius: 14px; overflow: hidden; box-shadow: 0 24px 48px rgba(0,0,0,0.35); }
+    .cs-carousel__slide { width: 100%; aspect-ratio: 630 / 651; display: block; object-fit: cover; }
+    .cs-carousel__arrow { flex-shrink: 0; width: 30px; height: 30px; display: flex; align-items: center; justify-content: center; border: none; background: none; padding: 0; color: rgba(244,244,235,0.45); cursor: pointer; transition: color var(--dur-fast), transform var(--dur-fast); }
+    .cs-carousel__arrow:hover { color: var(--lime); transform: scale(1.15); }
+    .cs-carousel__arrow svg { width: 100%; height: 100%; }
+    .cs-carousel__arrow--next svg { transform: scaleX(-1); }
+    body.light-mode .cs-carousel__arrow { color: rgba(26,28,22,0.35); }
+    .cs-seven-text { flex: 1; min-width: 280px; max-width: 514px; display: flex; flex-direction: column; gap: 16px; }
 
     /* ── Timeline (How it unfolded) ── */
-    .cs-timeline { display: flex; gap: 32px; position: relative; }
-    .cs-timeline::before { content: ''; position: absolute; top: 6px; left: 0; right: 0; height: 1px; background: rgba(244,244,235,0.15); }
-    .cs-tl-step { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 10px; position: relative; padding-top: 24px; }
-    .cs-tl-step::before { content: ''; position: absolute; top: 0; left: 0; width: 13px; height: 13px; border-radius: 50%; background: var(--bg-dark); border: 2px solid var(--lime); }
-    .cs-tl-step__round { font-family: var(--font-mono); font-size: 11px; font-weight: 700; letter-spacing: 0.05em; text-transform: uppercase; color: var(--lime); }
-    .cs-tl-step__name { font-family: var(--font-display); font-size: 19px; color: var(--ink-light); }
-    .cs-tl-step__body { font-family: var(--font-body); font-size: 14px; line-height: 1.6; color: rgba(244,244,235,0.65); }
+    .cs-unfolded-stage { position: relative; width: 100%; aspect-ratio: 1312 / 515; margin-top: 8px; }
+    .cs-unfolded-card {
+      position: absolute; box-sizing: border-box; width: 23.86%; aspect-ratio: 313 / 263;
+      background: var(--bg-light); border: 3px solid var(--ink-dark); border-radius: 30px;
+      padding: clamp(14px, 2.4vw, 32px); display: flex; flex-direction: column; justify-content: space-between; gap: 20px;
+      box-shadow: -14px 18px 3px rgba(0,0,0,0.35);
+    }
+    .cs-unfolded-card:nth-child(1) { left: 4.78%; top: 8.06%; transform: rotate(-17.78deg); }
+    .cs-unfolded-card:nth-child(2) { left: 25.55%; top: 8.11%; transform: rotate(15.37deg); }
+    .cs-unfolded-card:nth-child(3) { left: 51.55%; top: 7.22%; transform: rotate(-14.1deg); }
+    .cs-unfolded-card:nth-child(4) { left: 73.51%; top: 10.65%; transform: rotate(19.57deg); }
+    .cs-unfolded-card > div { display: flex; flex-direction: column; gap: 10px; }
+    .cs-unfolded-card__round { font-family: var(--font-body); font-weight: 700; font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--ink-dark); text-align: center; }
+    .cs-unfolded-card__name { font-family: var(--font-display); font-weight: 500; font-size: 18px; color: var(--ink-dark); }
+    .cs-unfolded-card__body { font-family: var(--font-body); font-size: clamp(12px, 1.1vw, 15px); line-height: 1.35; color: var(--ink-dark); }
+    .cs-unfolded-card__tag { font-family: var(--font-body); font-size: 12px; color: #6b7060; }
+    .cs-unfolded-peep { position: absolute; left: 45.03%; top: 36.31%; width: 18.53%; display: block; pointer-events: none; }
 
     /* ── Before / After ── */
     .cs-ba { display: flex; gap: 32px; margin-top: 16px; }
@@ -244,7 +320,15 @@
 
     /* ── Impact stats (second) ── */
     .cs-impact { display: flex; gap: 64px; }
-    .cs-impact__item { flex: 1; min-width: 0; }
+    .cs-impact__item {
+      flex: 1; min-width: 0; box-sizing: border-box;
+      background: var(--bg-light); padding: 16px; border-radius: 30px;
+      box-shadow: -25px 32px 3px rgba(0,0,0,0.5);
+    }
+    .cs-impact__item:nth-child(1) { transform: rotate(-6deg); }
+    .cs-impact__item:nth-child(2) { transform: rotate(6deg); }
+    .cs-impact__item:nth-child(3) { transform: rotate(-8deg); }
+    .cs-impact__inner { background: var(--bg-dark); border-radius: 14px; padding: 20px; display: flex; flex-direction: column; }
     .cs-impact__num { font-family: var(--font-display); font-size: clamp(1.75rem, 3vw, 2.25rem); font-weight: 400; color: var(--ink-light); }
     .cs-impact__tag { display: block; font-family: var(--font-mono); font-size: 11px; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; color: var(--lime); margin: 10px 0 8px; }
     .cs-impact__body { font-family: var(--font-body); font-size: 14px; line-height: 1.6; color: rgba(244,244,235,0.65); }
@@ -314,10 +398,13 @@
       .cs-hero__inner { flex-direction: column; min-height: auto; gap: 32px; }
       .cs-stats, .cs-cols, .cs-decision-cards, .cs-ba, .cs-impact, .cs-stack { flex-wrap: wrap; gap: 32px; }
       .cs-stats .cs-stat, .cs-cols .cs-col, .cs-impact .cs-impact__item, .cs-stack .cs-stack__col { flex: 1 1 45%; }
-      .cs-timeline { flex-wrap: wrap; }
-      .cs-timeline::before { display: none; }
-      .cs-timeline .cs-tl-step { flex: 1 1 45%; }
+      .cs-unfolded-stage { aspect-ratio: auto; height: auto; display: flex; flex-direction: column; gap: 20px; }
+      .cs-unfolded-card { position: static; width: 100%; aspect-ratio: auto; transform: none !important; box-shadow: -10px 14px 2px rgba(0,0,0,0.35); }
+      .cs-unfolded-peep { display: none; }
       .cs-zigzag-row, .cs-zigzag-row--reverse { flex-direction: column; }
+      .cs-seven-row { flex-direction: column; }
+      .cs-seven-text { max-width: 100%; }
+      .cs-brief-grid { flex-direction: column; }
       .cs-finalproto__phones { flex-wrap: wrap; }
       .cs-finalproto__phones img { flex: 1 1 45%; }
       .cs-cards-2x2 { grid-template-columns: 1fr; }
@@ -330,12 +417,12 @@
       .nav__hamburger { display: flex; }
 
       #cs-hero { padding-top: 80px; }
-      .cs-stats { flex-direction: column; gap: 24px; }
+      .cs-hero__video { left: 11.36%; top: 3.84%; width: 77.16%; height: 78.71%; }
+      .cs-stats { flex-direction: column; gap: 48px; }
       .cs-cols { flex-direction: column; gap: 24px; }
       .cs-decision-cards { flex-direction: column; }
-      .cs-timeline .cs-tl-step { flex: 1 1 100%; }
       .cs-ba { flex-direction: column; gap: 24px; }
-      .cs-impact { flex-direction: column; gap: 24px; }
+      .cs-impact { flex-direction: column; gap: 48px; }
       .cs-stack { flex-direction: column; gap: 24px; }
       .cs-finalproto__phones { flex-direction: column; }
       .cs-finalproto__phones img { flex: 1 1 100%; }
@@ -441,7 +528,15 @@
         <a class="cs-hero__cta" href="#cs-finalproto">View Demo →</a>
       </div>
       <div class="cs-hero__mockup">
-        <img src="../Asset/arvo-hero-mockup.png" alt="ARVO landing screen on a laptop, showing role selector for Employee, Manager, and HR & People">
+        <div class="cs-hero__screen">
+          <video class="cs-hero__video" autoplay loop muted playsinline>
+            <source src="../Asset/arvo-hero-dashboard.mp4" type="video/mp4">
+          </video>
+          <picture>
+            <source media="(max-width: 767px)" srcset="../Asset/arvo-hero-laptop_mobile-bezel.png">
+            <img class="cs-hero__bezel" src="../Asset/arvo-hero-laptop-bezel.png" alt="ARVO dashboard demo playing on a laptop screen">
+          </picture>
+        </div>
       </div>
     </div>
   </section>
@@ -452,16 +547,22 @@
       <span class="t-label">Key Metrics</span>
       <div class="cs-stats" data-gsap="stagger">
         <div class="cs-stat" data-gsap="card">
-          <p class="cs-stat__num">83%</p>
-          <p class="cs-stat__caption">rejected the original platform in our initial research round (10 of 12)</p>
+          <div class="cs-stat__inner">
+            <p class="cs-stat__num">83%</p>
+            <p class="cs-stat__caption">rejected the original platform in our initial research round (10 of 12)</p>
+          </div>
         </div>
         <div class="cs-stat" data-gsap="card">
-          <p class="cs-stat__num">93%</p>
-          <p class="cs-stat__caption">validated our redesigned ARVO platform in the second round of user testing (12 of 13).</p>
+          <div class="cs-stat__inner">
+            <p class="cs-stat__num">93%</p>
+            <p class="cs-stat__caption">validated our redesigned ARVO platform in the second round of user testing (12 of 13).</p>
+          </div>
         </div>
         <div class="cs-stat" data-gsap="card">
-          <p class="cs-stat__num">2 of 7</p>
-          <p class="cs-stat__caption">problems scoped → the remaining 5 were returned to our Client.</p>
+          <div class="cs-stat__inner">
+            <p class="cs-stat__num">2 of 7</p>
+            <p class="cs-stat__caption">problems scoped → the remaining 5 were returned to our Client.</p>
+          </div>
         </div>
       </div>
       <div class="cs-divider"></div>
@@ -486,17 +587,28 @@
   <section class="section" id="cs-brief" aria-label="Shaky brief">
     <div class="inner">
       <span class="t-label">Shaky Brief</span>
-      <div class="cs-zigzag-row">
-        <div class="cs-zigzag-media" data-gsap="card">
-          <img src="../Asset/arvo-original-interface.png" alt="The original ARVO interface, annotated: raw AI jargon, dense wall of text, equal-weight signals">
+      <div class="cs-brief-grid">
+        <div class="cs-brief-left">
+          <div class="cs-zigzag-media" data-gsap="card">
+            <img src="../Asset/arvo-brief-original.png" alt="The original ARVO interface, annotated: raw AI jargon, dense wall of text, equal-weight signals">
+          </div>
+          <div class="cs-zigzag-text" data-gsap="card">
+            <h2 class="cs-h2">A working product that managers wouldn't open.</h2>
+            <p class="cs-body">When our Client presented ARVO, it was already live. However its target audience, primarily managers weren't using it, and assumed it must have been an interface issue. We were recruited to fix it. After conducting an initial round of interviews with 12 managers and tested ARVO's original interface. The screens weren't the deepest problem, we uncovered 5 issues then and not all were design-related.</p>
+          </div>
         </div>
-        <div class="cs-zigzag-text" data-gsap="card" style="flex:1.4;">
-          <h2 class="cs-h2">A working product that managers wouldn't open.</h2>
-          <p class="cs-body">When our Client presented ARVO, it was already live. However its target audience, primarily managers weren't using it, and assumed it must have been an interface issue. We were recruited to fix it. After conducting an initial round of interviews with 12 managers and tested ARVO's original interface. The screens weren't the deepest problem, we uncovered 5 issues then and not all were design-related.</p>
-          <div class="cs-tablist">
-            <div class="cs-tabitem">Manager's personal dashboard</div>
-            <div class="cs-tabitem">Team insights</div>
-            <div class="cs-tabitem">Team energy drivers, drainers &amp; actions</div>
+        <div class="cs-role-list" data-gsap="stagger">
+          <div class="cs-role-card" data-gsap="card">
+            <span class="cs-role-card__label">Manager's personal dashboard</span>
+            <img src="../Asset/arvo-brief-role1.png" alt="Manager's personal dashboard screenshot">
+          </div>
+          <div class="cs-role-card" data-gsap="card">
+            <span class="cs-role-card__label">Team insights</span>
+            <img src="../Asset/arvo-brief-role2.png" alt="Team insights screenshot">
+          </div>
+          <div class="cs-role-card" data-gsap="card">
+            <span class="cs-role-card__label">Team energy drivers, drainers &amp; actions</span>
+            <img src="../Asset/arvo-brief-role3.png" alt="Team energy drivers, drainers and actions screenshot">
           </div>
         </div>
       </div>
@@ -508,8 +620,20 @@
     <div class="inner">
       <span class="t-label">Workshop</span>
       <div class="cs-zigzag-row">
-        <div class="cs-zigzag-media" data-gsap="card">
-          <img src="../Asset/arvo-workshop-photos.jpg" alt="Co-design workshop in progress — team clustering sticky notes on whiteboards">
+        <div class="cs-workshop-collage" data-gsap="stagger">
+          <div class="cs-workshop-photo cs-workshop-photo--1" data-gsap="card">
+            <img src="../Asset/arvo-workshop-01.jpg" alt="Co-design workshop in progress — team clustering sticky notes on whiteboards">
+            <span class="cs-workshop-photo__caption">Co-design workshop in progress</span>
+          </div>
+          <div class="cs-workshop-photo cs-workshop-photo--2" data-gsap="card">
+            <img src="../Asset/arvo-workshop-02.jpg" alt="Co-design workshop photo">
+          </div>
+          <div class="cs-workshop-photo cs-workshop-photo--3" data-gsap="card">
+            <img src="../Asset/arvo-workshop-03.jpg" alt="Co-design workshop photo">
+          </div>
+          <div class="cs-workshop-photo cs-workshop-photo--4" data-gsap="card">
+            <img src="../Asset/arvo-workshop-04.jpg" alt="Co-design workshop photo">
+          </div>
         </div>
         <div class="cs-zigzag-text" data-gsap="card">
           <h2 class="cs-h2">Conducted 12 interviews across 8 industries. A pattern showed up fast.</h2>
@@ -533,13 +657,17 @@
   <section class="section" id="cs-decision" aria-label="How I made the call">
     <div class="inner">
       <span class="t-label">How I made the call</span>
-      <p class="cs-decision-q">Can it be fixed by design? Or does it need the product itself to change? It would have been easy to start redrawing screens. Instead we ran each problem through a single question first and decided if the problem could be solved by design.</p>
+      <div class="cs-decision-head">
+        <h2 class="cs-decision-head__title">Can it be fixed by design? Or does it need the product itself to change?</h2>
+        <p class="cs-decision-head__body">It would have been easy to start redrawing screens. Instead we ran each problem through a single question first and decided if the problem could be solved by design.</p>
+      </div>
       <div class="cs-decision-cards" data-gsap="stagger">
-        <div class="cs-decision-card cs-decision-card--yes" data-gsap="card">
+        <div class="cs-decision-card" data-gsap="card">
           <p class="cs-decision-card__title">Yes, design can fix it!</p>
           <p class="cs-decision-card__body">A screen problem. We could redraw, restructure, or relabel our way to a fix.</p>
         </div>
-        <div class="cs-decision-card cs-decision-card--no" data-gsap="card">
+        <img class="cs-decision-peep" src="../Asset/arvo-peep-decision.svg" alt="" data-gsap="card">
+        <div class="cs-decision-card" data-gsap="card">
           <p class="cs-decision-card__title">Nope, return it to Client.</p>
           <p class="cs-decision-card__body">A product or culture problem. No interface change could reach it, so we returned it with the evidence.</p>
         </div>
@@ -550,10 +678,24 @@
   <!-- ── THE SEVEN PROBLEMS ── -->
   <section class="section" id="cs-seven" aria-label="The seven problems">
     <div class="inner">
-      <span class="t-label">The Redesign</span>
-      <h2 class="cs-h2" style="margin-bottom:16px;">The seven problems</h2>
-      <p class="cs-body" style="max-width:640px; margin-bottom:8px;"><strong>Two had a design answer. Five didn't. One I protected.</strong></p>
-      <p class="cs-body" style="max-width:640px;">Here's the full reveal. Two were fixable by design, one was protected since it was highly praised. The remaining five went back to our Client.</p>
+      <span class="t-label">The seven problems</span>
+      <div class="cs-seven-row" data-gsap="stagger">
+        <div class="cs-carousel" data-gsap="card">
+          <button class="cs-carousel__arrow cs-carousel__arrow--prev" type="button" aria-label="Previous problem">
+            <svg viewBox="0 0 30 30" fill="none"><path d="M19 6L10 15L19 24" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </button>
+          <div class="cs-carousel__viewport">
+            <img class="cs-carousel__slide" id="cs-seven-slide" src="../Asset/arvo-problem-card-01.png" alt="Problem 1 of 8 — Manager's Paradox, solved: single-page architecture and clear role separation. 11 of 13 managers approved.">
+          </div>
+          <button class="cs-carousel__arrow cs-carousel__arrow--next" type="button" aria-label="Next problem">
+            <svg viewBox="0 0 30 30" fill="none"><path d="M11 6L20 15L11 24" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </button>
+        </div>
+        <div class="cs-seven-text" data-gsap="card">
+          <h2 class="cs-h2">Two had a design answer. Five didn't. One I protected.</h2>
+          <p class="cs-body">Here's the full reveal. Two were fixable by design, one was protected since it was highly praised. The remaining five went back to our Client.</p>
+        </div>
+      </div>
     </div>
   </section>
 
@@ -563,27 +705,38 @@
       <span class="t-label">How it unfolded</span>
       <h2 class="cs-h2" style="margin-bottom:8px;">The problems weren't all found at once.</h2>
       <p class="cs-body" style="max-width:640px; margin-bottom:40px;">Some surfaced in the first round of interviews. Others only appeared later, when fresh users tested the redesign.</p>
-      <div class="cs-timeline" data-gsap="stagger">
-        <div class="cs-tl-step" data-gsap="card">
-          <span class="cs-tl-step__round">Round 1 · Research</span>
-          <h3 class="cs-tl-step__name">Interview</h3>
-          <p class="cs-tl-step__body">12 managers across 8 industries. The first five problems surfaced here — first findings.</p>
+      <div class="cs-unfolded-stage" data-gsap="stagger">
+        <div class="cs-unfolded-card" data-gsap="card">
+          <div>
+            <span class="cs-unfolded-card__round">Round 1 · Research</span>
+            <h3 class="cs-unfolded-card__name">Interview</h3>
+            <p class="cs-unfolded-card__body">12 managers across 8 industries. The first five problems surfaced here.</p>
+          </div>
+          <span class="cs-unfolded-card__tag">first findings</span>
         </div>
-        <div class="cs-tl-step" data-gsap="card">
-          <span class="cs-tl-step__round">Mid-point</span>
-          <h3 class="cs-tl-step__name">Workshop</h3>
-          <p class="cs-tl-step__body">I turned the findings into a shared problem map with our Client and set the design direction.</p>
+        <div class="cs-unfolded-card" data-gsap="card">
+          <div>
+            <span class="cs-unfolded-card__round">Mid-point</span>
+            <h3 class="cs-unfolded-card__name">Workshop</h3>
+            <p class="cs-unfolded-card__body">I turned the findings into a shared problem map with our Client and set the design direction.</p>
+          </div>
         </div>
-        <div class="cs-tl-step" data-gsap="card">
-          <span class="cs-tl-step__round">Build</span>
-          <h3 class="cs-tl-step__name">Redesign</h3>
-          <p class="cs-tl-step__body">Solved the two design problems. Reworked the language. Handed the rest back.</p>
+        <div class="cs-unfolded-card" data-gsap="card">
+          <div>
+            <span class="cs-unfolded-card__round">Build</span>
+            <h3 class="cs-unfolded-card__name">Redesign</h3>
+            <p class="cs-unfolded-card__body">Solved the two design problems. Reworked the language. Handed the rest back.</p>
+          </div>
         </div>
-        <div class="cs-tl-step" data-gsap="card">
-          <span class="cs-tl-step__round">Round 2 · Testing</span>
-          <h3 class="cs-tl-step__name">Validation</h3>
-          <p class="cs-tl-step__body">13 new users tested the redesign. Two new problems surfaced that round one couldn't — new findings.</p>
+        <div class="cs-unfolded-card" data-gsap="card">
+          <div>
+            <span class="cs-unfolded-card__round">Round 2 · Testing</span>
+            <h3 class="cs-unfolded-card__name">Validation</h3>
+            <p class="cs-unfolded-card__body">13 new users tested the redesign. Two new problems surfaced that round one couldn't.</p>
+          </div>
+          <span class="cs-unfolded-card__tag">new findings</span>
         </div>
+        <img class="cs-unfolded-peep" src="../Asset/arvo-peep-unfolded.svg" alt="" aria-hidden="true">
       </div>
     </div>
   </section>
@@ -604,9 +757,14 @@
         </div>
       </div>
 
-      <div class="cs-zigzag-row cs-zigzag-row--reverse">
+      <div class="cs-zigzag-row">
         <div class="cs-zigzag-media" data-gsap="card">
-          <img src="../Asset/arvo-redesign-trafficlight.png" alt="Team signals card with traffic-light dial ratings, labeled Traffic-Light Dial System">
+          <div class="cs-redesign-loop" role="img" aria-label="Team signals walkthrough: selecting a traffic-light signal, then drilling into recommended actions for Strengths-use fit">
+            <img class="cs-redesign-loop__frame" src="../Asset/arvo-redesign-loop-01.png" alt="" style="animation-delay: 0s;">
+            <img class="cs-redesign-loop__frame" src="../Asset/arvo-redesign-loop-02.png" alt="" style="animation-delay: -4s;">
+            <img class="cs-redesign-loop__frame" src="../Asset/arvo-redesign-loop-03.png" alt="" style="animation-delay: -8s;">
+            <img class="cs-redesign-loop__frame" src="../Asset/arvo-redesign-loop-04.png" alt="" style="animation-delay: -12s;">
+          </div>
         </div>
         <div class="cs-zigzag-text" data-gsap="card">
           <h2 class="cs-h2" style="font-size:clamp(1.4rem,2.2vw,1.75rem);">Traffic-light dials replaced a wall of equal-weight data.</h2>
@@ -643,11 +801,11 @@
       <div class="cs-ba" data-gsap="stagger">
         <div class="cs-ba__col" data-gsap="card">
           <span class="cs-ba__label">Before — rejected</span>
-          <img src="../Asset/arvo-before-rejected.png" alt="Stack of screenshots showing the original, dense ARVO dashboard pages">
+          <img src="../Asset/arvo-before.png" alt="Stack of screenshots showing the original, dense ARVO dashboard pages">
         </div>
         <div class="cs-ba__col" data-gsap="card">
           <span class="cs-ba__label">After — validated</span>
-          <img src="../Asset/arvo-after-validated.png" alt="Stack of screenshots showing the redesigned, single-page ARVO dashboard">
+          <img src="../Asset/arvo-after.png" alt="Stack of screenshots showing the redesigned, single-page ARVO dashboard">
         </div>
       </div>
     </div>
@@ -660,19 +818,25 @@
       <h2 class="cs-h2" style="margin-bottom:40px;">What changed across two rounds.</h2>
       <div class="cs-impact" data-gsap="stagger">
         <div class="cs-impact__item" data-gsap="card">
-          <p class="cs-impact__num">83% → 93%</p>
-          <span class="cs-impact__tag">Research → Testing</span>
-          <p class="cs-impact__body">rejected the original, then validated the redesign</p>
+          <div class="cs-impact__inner">
+            <p class="cs-impact__num">83% → 93%</p>
+            <span class="cs-impact__tag">Research → Testing</span>
+            <p class="cs-impact__body">rejected the original, then validated the redesign</p>
+          </div>
         </div>
         <div class="cs-impact__item" data-gsap="card">
-          <p class="cs-impact__num">5</p>
-          <span class="cs-impact__tag">The Handback</span>
-          <p class="cs-impact__body">problems returned to ARVO's Founder as an evidenced product brief</p>
+          <div class="cs-impact__inner">
+            <p class="cs-impact__num">5</p>
+            <span class="cs-impact__tag">The Handback</span>
+            <p class="cs-impact__body">problems returned to ARVO's Founder as an evidenced product brief</p>
+          </div>
         </div>
         <div class="cs-impact__item" data-gsap="card">
-          <p class="cs-impact__num">2</p>
-          <span class="cs-impact__tag">Solved by design</span>
-          <p class="cs-impact__body">single-page layout + traffic-light dials fixed what drove the rejection</p>
+          <div class="cs-impact__inner">
+            <p class="cs-impact__num">2</p>
+            <span class="cs-impact__tag">Solved by design</span>
+            <p class="cs-impact__body">single-page layout + traffic-light dials fixed what drove the rejection</p>
+          </div>
         </div>
       </div>
     </div>
@@ -975,6 +1139,26 @@
         hamburger.setAttribute('aria-expanded', 'false');
       });
     });
+
+    const sevenSlides = [
+      { src: '../Asset/arvo-problem-card-01.png', alt: "Problem 1 of 8 — Manager's Paradox, solved: single-page architecture and clear role separation. 11 of 13 managers approved." },
+      { src: '../Asset/arvo-problem-card-02.png', alt: 'Problem 2 of 8 — Cognitive overload, solved: clear priority signals so managers can scan for issues faster. 12 of 13 managers approved.' },
+      { src: '../Asset/arvo-problem-card-03.png', alt: 'Problem 3 of 8 — Energisers & Drainers, protected: the one feature managers loved, so we left it alone.' },
+      { src: '../Asset/arvo-problem-card-04.png', alt: 'Problem 4 of 8 — AI Jargons & Management 101, returned to client: the plain-English translation layer is a workaround until the AI model is retrained with a proper taxonomy.' },
+      { src: '../Asset/arvo-problem-card-05.png', alt: 'Problem 5 of 8 — Honesty Gap, returned to client.' },
+      { src: '../Asset/arvo-problem-card-06.png', alt: 'Problem 6 of 8 — Structural Resignation, returned to client.' },
+      { src: '../Asset/arvo-problem-card-07.png', alt: 'Problem 7 of 8 — Homework trap, returned to client.' },
+      { src: '../Asset/arvo-problem-card-08.png', alt: 'Problem 8 of 8 — Accessibility, returned to client.' }
+    ];
+    let sevenIndex = 0;
+    const sevenImg = document.getElementById('cs-seven-slide');
+    function showSevenSlide(i) {
+      sevenIndex = (i + sevenSlides.length) % sevenSlides.length;
+      sevenImg.src = sevenSlides[sevenIndex].src;
+      sevenImg.alt = sevenSlides[sevenIndex].alt;
+    }
+    document.querySelector('.cs-carousel__arrow--prev').addEventListener('click', () => showSevenSlide(sevenIndex - 1));
+    document.querySelector('.cs-carousel__arrow--next').addEventListener('click', () => showSevenSlide(sevenIndex + 1));
 
     if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
       document.querySelectorAll('[data-gsap="stagger"]').forEach(container => {
