@@ -1279,9 +1279,9 @@
       </div>
     </div>
     <p class="hero__tagline">
-      I'm a <span class="hero__hand">late bloomer</span> product designer with an unconventional background.
+      I'm a <span class="hero__hand">UX</span> designer with an unconventional career background.
       I chose this path to help people connect better with digital products
-      without feeling left behind.
+      <span class="hero__hand">without feeling left behind</span>.
     </p>
   </section>
 
@@ -1679,12 +1679,11 @@
       });
     });
 
-    /* "late bloomer" — lime text + flower burst (up then rain down) + idle wriggle */
-    const lateBloom = document.querySelector('.hero__hand');
-    if (lateBloom) {
+    /* hero handwritten accents — lime text + flower burst (up then rain down) + idle wriggle */
+    document.querySelectorAll('.hero__hand').forEach(function (lateBloom, idx) {
       let isHovered = false;
 
-      /* Idle wriggle every 10s */
+      /* Idle wriggle every 10s, staggered per accent so they don't wriggle in sync */
       function doWriggle() {
         if (isHovered) return;
         gsap.timeline()
@@ -1695,7 +1694,7 @@
           .to(lateBloom, { rotate: -2, x: -1, duration: 0.06, ease: 'power2.inOut' })
           .to(lateBloom, { rotate:  0, x:  0, duration: 0.10, ease: 'elastic.out(1,0.4)' });
       }
-      setInterval(doWriggle, 10000);
+      setTimeout(function () { setInterval(doWriggle, 10000); }, idx * 1200);
 
       lateBloom.addEventListener('mouseenter', function () {
         isHovered = true;
@@ -1753,7 +1752,7 @@
       });
 
       lateBloom.addEventListener('mouseleave', () => { isHovered = false; });
-    }
+    });
 
     gsap.from('.hero__tagline', {
       y: 40, opacity: 0, duration: 1, ease: 'power3.out', delay: 0.4
