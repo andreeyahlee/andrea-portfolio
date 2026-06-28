@@ -821,6 +821,9 @@
       letter-spacing: -0.01em;
       color: var(--ink-light);
       margin: 0;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
     }
     body.light .evc-name { color: var(--ink-dark); }
 
@@ -852,7 +855,7 @@
       align-items: center;
       justify-content: center;
       gap: 24px;
-      margin-top: 40px;
+      margin-top: 80px;
     }
 
     .evc-dots {
@@ -1943,7 +1946,7 @@
       const RADIUS = 460;
       const SPIN_DUR = 0.82;
       const DRAG_FACTOR = 0.35;
-      const AUTOPLAY_SPEED = 12; // degrees per second, continuous
+      const AUTOPLAY_SPEED = -12; // degrees per second, continuous (negative = left-to-right)
 
       let angle = 0;       // current ring rotation (deg)
       let activeIndex = 0;
