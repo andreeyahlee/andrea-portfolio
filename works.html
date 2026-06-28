@@ -731,6 +731,227 @@
       flex-shrink: 0;
     }
 
+    /* ----- Whirlwind 3D Carousel Ring ----- */
+    .ev-carousel-stage {
+      position: relative;
+      width: 100%;
+      height: 420px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      perspective: 1600px;
+      overflow: hidden;
+      touch-action: pan-y;
+    }
+
+    .ev-ring {
+      position: relative;
+      width: 380px;
+      height: 292px;
+      transform-style: preserve-3d;
+      cursor: grab;
+    }
+    .ev-ring.is-dragging { cursor: grabbing; }
+    .ev-carousel-card.is-active { cursor: pointer; }
+
+    .ev-carousel-card {
+      position: absolute;
+      inset: 0;
+      backface-visibility: hidden;
+      will-change: transform, opacity, filter;
+    }
+
+    .evc-shell {
+      width: 100%;
+      height: 100%;
+      border-radius: 16px;
+      overflow: hidden;
+      background: var(--bg-dark);
+      box-shadow: 0 20px 40px rgba(0,0,0,0.35);
+      display: flex;
+      flex-direction: column;
+      backface-visibility: hidden;
+    }
+    body.light .evc-shell { background: var(--bg-light); }
+
+    .evc-inner {
+      display: flex;
+      flex-direction: column;
+      height: 100%;
+    }
+
+    .evc-img-wrap {
+      width: 100%;
+      aspect-ratio: 450 / 250;
+      overflow: hidden;
+      flex-shrink: 0;
+    }
+    .evc-img-wrap img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+      transition: transform 0.5s ease;
+    }
+    .ev-carousel-card.is-active .evc-img-wrap img:hover {
+      transform: scale(1.05);
+    }
+
+    .evc-row {
+      display: flex;
+      align-items: center;
+      gap: 24px;
+      padding: 16px 18px;
+    }
+
+    .evc-text {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      flex: 1 0 0;
+      min-width: 0;
+    }
+
+    .evc-name {
+      font-family: var(--font-display);
+      font-weight: 700;
+      font-size: 18px;
+      line-height: 24px;
+      letter-spacing: -0.01em;
+      color: var(--ink-light);
+      margin: 0;
+    }
+    body.light .evc-name { color: var(--ink-dark); }
+
+    .evc-meta {
+      font-family: var(--font-body);
+      font-weight: 400;
+      font-size: 13px;
+      line-height: 15px;
+      color: var(--ink-light);
+      margin: 0;
+    }
+    .evc-meta strong { font-weight: 700; }
+    body.light .evc-meta { color: var(--ink-dark); }
+
+    .evc-badge {
+      background: #dfe0de;
+      color: var(--ink-dark);
+      font-family: var(--font-body);
+      font-weight: 600;
+      font-size: 13px;
+      padding: 4px 16px;
+      border-radius: 10px;
+      white-space: nowrap;
+      flex-shrink: 0;
+    }
+
+    .evc-nav {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 24px;
+      margin-top: 40px;
+    }
+
+    .evc-dots {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .evc-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: rgba(244,244,235,0.25);
+      border: none;
+      padding: 0;
+      cursor: pointer;
+      transition: background 0.2s ease, transform 0.2s ease;
+    }
+    .evc-dot.is-active {
+      background: var(--lime);
+      transform: scale(1.25);
+    }
+    body.light .evc-dot { background: rgba(26,28,22,0.2); }
+
+    /* ----- Lightbox overlay ----- */
+    .evc-overlay {
+      position: fixed;
+      inset: 0;
+      z-index: 200;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: rgba(26,28,22,0.75);
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.25s ease;
+      padding: 40px 24px;
+    }
+    .evc-overlay.is-open {
+      opacity: 1;
+      pointer-events: auto;
+    }
+    .evc-overlay__box {
+      width: min(640px, 100%);
+      border-radius: 16px;
+      overflow: hidden;
+      background: var(--bg-dark);
+      box-shadow: 0 30px 60px rgba(0,0,0,0.5);
+      transform: scale(0.92);
+      transition: transform 0.25s ease;
+    }
+    .evc-overlay.is-open .evc-overlay__box { transform: scale(1); }
+    body.light .evc-overlay__box { background: var(--bg-light); }
+
+    .evc-overlay__img {
+      width: 100%;
+      aspect-ratio: 450 / 250;
+      object-fit: cover;
+      display: block;
+    }
+
+    .evc-overlay__row {
+      display: flex;
+      align-items: center;
+      gap: 24px;
+      padding: 20px 24px;
+    }
+    .evc-overlay__text {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      flex: 1 0 0;
+      min-width: 0;
+    }
+    .evc-overlay__name {
+      font-family: var(--font-display);
+      font-weight: 700;
+      font-size: 20px;
+      line-height: 26px;
+      letter-spacing: -0.01em;
+      color: var(--ink-light);
+      margin: 0;
+    }
+    body.light .evc-overlay__name { color: var(--ink-dark); }
+    .evc-overlay__meta {
+      font-family: var(--font-body);
+      font-weight: 400;
+      font-size: 13px;
+      line-height: 15px;
+      color: var(--ink-light);
+      margin: 0;
+    }
+    .evc-overlay__meta strong { font-weight: 700; }
+    body.light .evc-overlay__meta { color: var(--ink-dark); }
+
+    @media (max-width: 767px) {
+      .ev-carousel-stage { height: 340px; perspective: 1000px; }
+      .ev-ring { width: 280px; height: 216px; }
+    }
+
     /* ================================================================
        SECTION 4 — CONTACT
     ================================================================ */
@@ -1219,81 +1440,145 @@
 
       <span class="t-label">Event Styling</span>
 
-      <div class="ev-grid">
+      <div class="ev-carousel-stage" role="region" aria-label="Event styling portfolio">
+        <div class="ev-ring" id="evRing">
 
-        <!-- Central Provident Fund -->
-        <article class="ev-card">
-          <img class="ev-card__img" src="Asset/Event_Card_5.png" alt="Central Provident Fund corporate event" />
-          <div class="ev-card__row">
-            <div class="ev-card__text">
-              <h3 class="ev-card__name">Central Provident Fund</h3>
-              <p class="ev-card__meta">Corporate event | <strong>2024</strong></p>
+          <article class="ev-carousel-card" data-index="0" aria-label="Central Provident Fund – Corporate event">
+            <div class="evc-shell">
+              <div class="evc-inner">
+                <div class="evc-img-wrap">
+                  <img src="Asset/Event_Card_5.png"
+                       alt="Central Provident Fund corporate event styling"
+                       loading="lazy" draggable="false" />
+                </div>
+                <div class="evc-row">
+                  <div class="evc-text">
+                    <h3 class="evc-name">Central Provident Fund</h3>
+                    <p class="evc-meta">Corporate event | <strong>2024</strong></p>
+                  </div>
+                  <span class="evc-badge">in construction</span>
+                </div>
+              </div>
             </div>
-            <span class="ev-card__badge">in construction</span>
-          </div>
-        </article>
+          </article>
 
-        <!-- Guerlain -->
-        <article class="ev-card">
-          <img class="ev-card__img" src="Asset/Event_Card_6.png" alt="Guerlain team bonding workshop" />
-          <div class="ev-card__row">
-            <div class="ev-card__text">
-              <h3 class="ev-card__name">Guerlain</h3>
-              <p class="ev-card__meta">Team bonding workshop 2024</p>
+          <article class="ev-carousel-card" data-index="1" aria-label="Guerlain – Team bonding workshop">
+            <div class="evc-shell">
+              <div class="evc-inner">
+                <div class="evc-img-wrap">
+                  <img src="Asset/Event_Card_6.png"
+                       alt="Guerlain team bonding workshop styling"
+                       loading="lazy" draggable="false" />
+                </div>
+                <div class="evc-row">
+                  <div class="evc-text">
+                    <h3 class="evc-name">Guerlain</h3>
+                    <p class="evc-meta">Team bonding workshop 2024</p>
+                  </div>
+                  <span class="evc-badge">in construction</span>
+                </div>
+              </div>
             </div>
-            <span class="ev-card__badge">in construction</span>
-          </div>
-        </article>
+          </article>
 
-        <!-- 1-Atico -->
-        <article class="ev-card">
-          <img class="ev-card__img" src="Asset/Event_Card_1.png" alt="1-Atico wedding" />
-          <div class="ev-card__row">
-            <div class="ev-card__text">
-              <h3 class="ev-card__name">1-Atico</h3>
-              <p class="ev-card__meta">Wedding | <strong>2025</strong></p>
+          <article class="ev-carousel-card" data-index="2" aria-label="1-Atico – Wedding">
+            <div class="evc-shell">
+              <div class="evc-inner">
+                <div class="evc-img-wrap">
+                  <img src="Asset/Event_Card_1.png"
+                       alt="1-Atico wedding event styling"
+                       loading="lazy" draggable="false" />
+                </div>
+                <div class="evc-row">
+                  <div class="evc-text">
+                    <h3 class="evc-name">1-Atico</h3>
+                    <p class="evc-meta">Wedding | <strong>2025</strong></p>
+                  </div>
+                  <span class="evc-badge">in construction</span>
+                </div>
+              </div>
             </div>
-            <span class="ev-card__badge">in construction</span>
-          </div>
-        </article>
+          </article>
 
-        <!-- St Margaret -->
-        <article class="ev-card">
-          <img class="ev-card__img" src="Asset/Event_Card_2.png" alt="St Margaret wedding" />
-          <div class="ev-card__row">
-            <div class="ev-card__text">
-              <h3 class="ev-card__name">St Margaret</h3>
-              <p class="ev-card__meta">Wedding | <strong>2025</strong></p>
+          <article class="ev-carousel-card" data-index="3" aria-label="St Margaret – Wedding">
+            <div class="evc-shell">
+              <div class="evc-inner">
+                <div class="evc-img-wrap">
+                  <img src="Asset/Event_Card_2.png"
+                       alt="St Margaret wedding event styling"
+                       loading="lazy" draggable="false" />
+                </div>
+                <div class="evc-row">
+                  <div class="evc-text">
+                    <h3 class="evc-name">St Margaret</h3>
+                    <p class="evc-meta">Wedding | <strong>2025</strong></p>
+                  </div>
+                  <span class="evc-badge">in construction</span>
+                </div>
+              </div>
             </div>
-            <span class="ev-card__badge">in construction</span>
-          </div>
-        </article>
+          </article>
 
-        <!-- LASALLE | Working Title -->
-        <article class="ev-card">
-          <img class="ev-card__img" src="Asset/Event_Card_3.png" alt="LASALLE Working Title wedding" />
-          <div class="ev-card__row">
-            <div class="ev-card__text">
-              <h3 class="ev-card__name">LASALLE | Working Title</h3>
-              <p class="ev-card__meta">Wedding | <strong>2025</strong></p>
+          <article class="ev-carousel-card" data-index="4" aria-label="LASALLE Working Title – Wedding">
+            <div class="evc-shell">
+              <div class="evc-inner">
+                <div class="evc-img-wrap">
+                  <img src="Asset/Event_Card_3.png"
+                       alt="LASALLE Working Title wedding event styling"
+                       loading="lazy" draggable="false" />
+                </div>
+                <div class="evc-row">
+                  <div class="evc-text">
+                    <h3 class="evc-name">LASALLE | Working Title</h3>
+                    <p class="evc-meta">Wedding | <strong>2025</strong></p>
+                  </div>
+                  <span class="evc-badge">in construction</span>
+                </div>
+              </div>
             </div>
-            <span class="ev-card__badge">in construction</span>
-          </div>
-        </article>
+          </article>
 
-        <!-- Grace Assembly -->
-        <article class="ev-card">
-          <img class="ev-card__img" src="Asset/Event_Card_4.png" alt="Grace Assembly wedding" />
-          <div class="ev-card__row">
-            <div class="ev-card__text">
-              <h3 class="ev-card__name">Grace Assembly</h3>
-              <p class="ev-card__meta">Wedding | <strong>2025</strong></p>
+          <article class="ev-carousel-card" data-index="5" aria-label="Grace Assembly – Wedding">
+            <div class="evc-shell">
+              <div class="evc-inner">
+                <div class="evc-img-wrap">
+                  <img src="Asset/Event_Card_4.png"
+                       alt="Grace Assembly wedding event styling"
+                       loading="lazy" draggable="false" />
+                </div>
+                <div class="evc-row">
+                  <div class="evc-text">
+                    <h3 class="evc-name">Grace Assembly</h3>
+                    <p class="evc-meta">Wedding | <strong>2025</strong></p>
+                  </div>
+                  <span class="evc-badge">in construction</span>
+                </div>
+              </div>
             </div>
-            <span class="ev-card__badge">in construction</span>
-          </div>
-        </article>
+          </article>
 
-      </div><!-- /.ev-grid -->
+        </div><!-- /#evRing -->
+
+        <!-- Nav controls -->
+        <div class="evc-nav" aria-label="Carousel controls">
+          <div class="evc-dots" role="tablist"></div>
+        </div>
+
+      </div><!-- /.ev-carousel-stage -->
+
+      <!-- Click-to-expand overlay (lightbox) -->
+      <div class="evc-overlay" id="evcOverlay" aria-hidden="true">
+        <div class="evc-overlay__box">
+          <img class="evc-overlay__img" alt="" />
+          <div class="evc-overlay__row">
+            <div class="evc-overlay__text">
+              <h3 class="evc-overlay__name"></h3>
+              <p class="evc-overlay__meta"></p>
+            </div>
+            <span class="evc-badge">in construction</span>
+          </div>
+        </div>
+      </div>
     </div><!-- /.inner -->
   </section>
 
@@ -1549,10 +1834,6 @@
       y: 20, opacity: 0, duration: 0.6, ease: 'power3.out',
       scrollTrigger: { trigger: '#event-styling', start: 'top 85%' }
     });
-    gsap.from('.ev-card', {
-      y: 40, opacity: 0, duration: 0.7, stagger: 0.08, ease: 'power3.out',
-      scrollTrigger: { trigger: '.ev-grid', start: 'top 85%' }
-    });
 
     /* Contact */
     gsap.from('.contact__heading', {
@@ -1646,8 +1927,192 @@
         });
       }
 
-      document.querySelectorAll('.ev-card').forEach(card => {
-        tilt(card, { maxTilt: 4, lift: -8 });
+    })();
+  </script>
+
+  <script>
+    (function () {
+      const ring = document.getElementById('evRing');
+      if (!ring) return;
+
+      const overlay = document.getElementById('evcOverlay');
+
+      const cards = Array.from(ring.querySelectorAll('.ev-carousel-card'));
+      const N = cards.length;
+      const STEP = 360 / N;
+      const RADIUS = 460;
+      const SPIN_DUR = 0.82;
+      const DRAG_FACTOR = 0.35;
+      const AUTOPLAY_SPEED = 12; // degrees per second, continuous
+
+      let angle = 0;       // current ring rotation (deg)
+      let activeIndex = 0;
+      let isDragging = false;
+      let dragStartX = 0;
+      let dragStartAngle = 0;
+      let spinning = false;
+      let autoplayOn = true;
+      let lightboxOpen = false;
+      let hovering = false;
+
+      cards.forEach((card, i) => {
+        card.style.transformOrigin = `50% 50% ${-RADIUS}px`;
+        gsap.set(card, { rotationY: i * STEP, z: RADIUS });
+      });
+
+      const dotsWrap = document.querySelector('.evc-dots');
+      cards.forEach((_, i) => {
+        const dot = document.createElement('button');
+        dot.className = 'evc-dot';
+        dot.setAttribute('role', 'tab');
+        dot.setAttribute('aria-label', 'Go to slide ' + (i + 1));
+        dot.addEventListener('click', () => spinTo(i));
+        dotsWrap.appendChild(dot);
+      });
+      const dots = Array.from(dotsWrap.querySelectorAll('.evc-dot'));
+
+      function normalize(a) {
+        a = a % 360;
+        if (a > 180) a -= 360;
+        if (a < -180) a += 360;
+        return a;
+      }
+
+      function updateDepth() {
+        cards.forEach((card, i) => {
+          const cardAngle = normalize(i * STEP - angle);
+          const t = Math.cos(cardAngle * Math.PI / 180); // 1 = front, -1 = back
+          const opacity = gsap.utils.mapRange(-1, 1, 0.1, 1, t);
+          const scale = gsap.utils.mapRange(-1, 1, 0.75, 1, t);
+          const blur = gsap.utils.mapRange(-1, 1, 6, 0, t);
+          gsap.set(card, {
+            opacity,
+            scale,
+            filter: `blur(${blur}px)`,
+            zIndex: Math.round(t * 100)
+          });
+          const isActive = Math.abs(cardAngle) < STEP / 2;
+          card.classList.toggle('is-active', isActive);
+          if (isActive) activeIndex = i;
+        });
+        dots.forEach((d, i) => d.classList.toggle('is-active', i === activeIndex));
+      }
+
+      function setAngle(a) {
+        angle = a;
+        gsap.set(ring, { rotationY: -angle });
+        updateDepth();
+      }
+
+      function spinTo(index) {
+        if (spinning) return;
+        const targetAngle = index * STEP;
+        let diff = normalize(targetAngle - normalize(angle));
+        const newAngle = angle + diff;
+        spinning = true;
+        gsap.fromTo(
+          { v: angle },
+          { v: angle },
+          {
+            v: newAngle,
+            duration: SPIN_DUR,
+            ease: 'power3.out',
+            onUpdate: function () { setAngle(this.targets()[0].v); },
+            onComplete: () => { spinning = false; }
+          }
+        );
+      }
+
+      /* Autoplay — smooth continuous turn, paused on hover / drag / lightbox */
+      function startAutoplay() { autoplayOn = true; }
+      function stopAutoplay() { autoplayOn = false; }
+
+      gsap.ticker.add((time, deltaMS) => {
+        if (autoplayOn && !isDragging && !spinning && !hovering && !lightboxOpen) {
+          setAngle(angle + AUTOPLAY_SPEED * (deltaMS / 1000));
+        }
+      });
+
+      const stage = document.querySelector('.ev-carousel-stage');
+      stage?.addEventListener('mouseenter', () => { hovering = true; });
+      stage?.addEventListener('mouseleave', () => { hovering = false; });
+
+      ring.addEventListener('keydown', (e) => {
+        if (e.key === 'ArrowRight') spinTo((activeIndex + 1) % N);
+        if (e.key === 'ArrowLeft') spinTo((activeIndex - 1 + N) % N);
+      });
+      ring.setAttribute('tabindex', '0');
+
+      function onDragStart(clientX) {
+        if (spinning) return;
+        isDragging = true;
+        dragStartX = clientX;
+        dragStartAngle = angle;
+        ring.classList.add('is-dragging');
+      }
+      function onDragMove(clientX) {
+        if (!isDragging) return;
+        const delta = (clientX - dragStartX) * DRAG_FACTOR;
+        setAngle(dragStartAngle + delta);
+      }
+      function onDragEnd() {
+        if (!isDragging) return;
+        isDragging = false;
+        ring.classList.remove('is-dragging');
+        const nearest = Math.round(-angle / STEP);
+        spinTo(((nearest % N) + N) % N);
+      }
+
+      ring.addEventListener('mousedown', (e) => onDragStart(e.clientX));
+      window.addEventListener('mousemove', (e) => onDragMove(e.clientX));
+      window.addEventListener('mouseup', onDragEnd);
+
+      ring.addEventListener('touchstart', (e) => onDragStart(e.touches[0].clientX), { passive: true });
+      ring.addEventListener('touchmove', (e) => onDragMove(e.touches[0].clientX), { passive: true });
+      ring.addEventListener('touchend', onDragEnd);
+
+      function openLightbox(card) {
+        if (!overlay) return;
+        lightboxOpen = true;
+        const img = card.querySelector('.evc-img-wrap img');
+        const name = card.querySelector('.evc-name');
+        const meta = card.querySelector('.evc-meta');
+        overlay.querySelector('.evc-overlay__img').src = img.src;
+        overlay.querySelector('.evc-overlay__img').alt = img.alt;
+        overlay.querySelector('.evc-overlay__name').textContent = name.textContent;
+        overlay.querySelector('.evc-overlay__meta').innerHTML = meta.innerHTML;
+        overlay.classList.add('is-open');
+        overlay.setAttribute('aria-hidden', 'false');
+      }
+      function closeLightbox() {
+        if (!overlay) return;
+        overlay.classList.remove('is-open');
+        overlay.setAttribute('aria-hidden', 'true');
+        lightboxOpen = false;
+      }
+      overlay?.addEventListener('click', (e) => {
+        if (e.target === overlay) closeLightbox();
+      });
+      document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape') closeLightbox();
+      });
+
+      cards.forEach((card, i) => {
+        card.addEventListener('click', () => {
+          if (i === activeIndex) {
+            openLightbox(card);
+          } else {
+            spinTo(i);
+          }
+        });
+      });
+
+      updateDepth();
+      startAutoplay();
+
+      gsap.from('.ev-carousel-stage', {
+        y: 40, opacity: 0, duration: 0.8, ease: 'power3.out',
+        scrollTrigger: { trigger: '.ev-carousel-stage', start: 'top 85%' }
       });
     })();
   </script>
