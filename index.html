@@ -303,6 +303,9 @@
       width: 100%;
       background: var(--bg-dark);
     }
+    .section + .section {
+      margin-top: 100px;
+    }
 
     .inner {
       max-width: calc(var(--max-w) + var(--pad) * 2);
@@ -320,6 +323,9 @@
       color: var(--lime);
       display: block;
     }
+
+    .label-mask { display: inline-block; overflow: hidden; }
+    .label-mask__inner { display: inline-block; }
 
     .btn {
       display: inline-flex;
@@ -440,7 +446,29 @@
       width: 100%;
     }
 
-    /* Card base */
+    /* Double-bezel shell — direct grid item; wraps the existing .card */
+    .card-shell {
+      display: flex;
+      flex-direction: column;
+      padding: 5px;
+      border-radius: 1.6rem;
+      border: 1px solid rgba(255, 255, 255, 0.07);
+      background: rgba(255, 255, 255, 0.02);
+      box-sizing: border-box;
+      transform-style: preserve-3d;
+      will-change: transform;
+      transition: border-color 0.4s ease;
+      clip-path: inset(0% 0 0 0);
+    }
+    .card-shell:hover { border-color: rgba(255, 255, 255, 0.15); }
+
+    /* Shell-only grid placement (kept separate from .card--* so the shell's
+       neutral bezel background/border doesn't get overridden by project colors) */
+    .card-shell--arvo    { grid-column: 1; grid-row: 1 / 3; }
+    .card-shell--seletar { grid-column: 2; grid-row: 1; }
+    .card-shell--pawhaus { grid-column: 2; grid-row: 2; }
+
+    /* Card base (acts as the "card-inner" bezel layer) */
     .card {
       position: relative;
       overflow: hidden;
@@ -448,7 +476,8 @@
       width: 100%;
       aspect-ratio: 64 / 38; /* default for right-column half-height cards */
       min-height: 200px;
-      border-radius: 16px;
+      border-radius: calc(1.6rem - 5px);
+      box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.07);
       cursor: pointer;
       will-change: transform;
       transition: box-shadow 0.3s ease;
@@ -456,12 +485,9 @@
 
     /* ARVO spans both grid rows — height driven by adjacent cards */
     .card--arvo {
-      grid-column: 1;
-      grid-row: 1 / 3;
       aspect-ratio: unset;
+      height: 100%;
     }
-    .card--seletar { grid-column: 2; grid-row: 1; }
-    .card--pawhaus { grid-column: 2; grid-row: 2; }
 
     .card--arvo    { background: #31332a; }
     .card--seletar { background: #304c95; }
@@ -501,6 +527,18 @@
       letter-spacing: -0.058em;
       color: var(--ink-light);
       max-width: 100%;
+    }
+
+    .card__metric {
+      font-family: var(--font-mono);
+      font-weight: 700;
+      font-size: 11px;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      color: var(--lime);
+      opacity: 0.9;
+      margin-top: 6px;
+      display: block;
     }
 
     .card__foot {
@@ -601,7 +639,16 @@
     #testimonials .inner {
       display: flex;
       flex-direction: column;
-      gap: 60px;
+      gap: 80px;
+    }
+
+    /* Groups the heading with its carousel — own 40px rhythm per Figma */
+    .test__group {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 40px;
+      width: 100%;
     }
 
     /* Heading — large Lora display text */
@@ -616,6 +663,19 @@
       width: 100%;
     }
     body.light-mode .test__headline { color: var(--ink-dark); }
+
+    /* Supporting context line under the headline */
+    .test__context {
+      font-family: var(--font-body);
+      font-size: 0.8rem;
+      line-height: 1.55;
+      opacity: 0.5;
+      max-width: 44ch;
+      text-align: center;
+      color: var(--ink-light);
+      margin: 0;
+    }
+    body.light-mode .test__context { color: var(--ink-dark); }
 
     /* Carousel wrapper: groups the track + dots as one unit */
     .test__carousel {
@@ -641,17 +701,23 @@
       position: absolute;
       left: 50%;
       top: 0;
-      width: min(80%, 540px);
+      width: min(85%, 497px);
       display: flex;
       flex-direction: column;
       align-items: center;
+      justify-content: center;
       gap: 20px;
+      padding: 32px;
+      border: 1px solid var(--ink-light);
+      border-radius: 10px;
+      box-sizing: border-box;
       text-align: center;
       opacity: 0;
       transform: translateX(-50%);
       transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.4s ease;
       pointer-events: none;
     }
+    body.light-mode .t-card { border-color: var(--ink-dark); }
 
     .t-card.active {
       opacity: 1;
@@ -672,11 +738,23 @@
       z-index: 1;
     }
 
+    /* Featured testimonial — Eileen Zhang's card carries a brighter accent
+       border and a slightly larger quote to signal top billing */
+    .t-card--featured {
+      border-color: var(--lime);
+      border-width: 2px;
+    }
+    body.light-mode .t-card--featured { border-color: #6b7a00; }
+    .t-card--featured .t-card__quote {
+      font-size: clamp(1.1875rem, 1.9vw, 1.5rem);
+      line-height: 1.4;
+    }
+
     .t-card__body {
       display: flex;
       flex-direction: column;
       align-items: center;
-      gap: 16px;
+      gap: 20px;
     }
 
     .test__nav {
@@ -714,11 +792,11 @@
       align-items: center;
       justify-content: center;
       background: #6b7060;
-      padding: 3px 12px;
+      padding: 4px 16px;
       border-radius: 5px;
       font-family: var(--font-body);
       font-weight: 600;
-      font-size: 11px;
+      font-size: 13px;
       line-height: normal;
       letter-spacing: 0.04em;
       color: var(--ink-light);
@@ -733,7 +811,7 @@
       font-style: italic;
       font-weight: 400;
       font-size: clamp(1.0625rem, 1.68vw, 1.375rem);
-      line-height: 1.55;
+      line-height: 1.45;
       letter-spacing: -0.01em;
       color: var(--ink-light);
     }
@@ -741,15 +819,35 @@
     .t-card__attribution {
       display: flex;
       flex-direction: column;
-      gap: 4px;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .t-card__avatar {
+      width: 38px;
+      height: 38px;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.08);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: var(--font-body);
+      font-size: 0.72rem;
+      font-weight: 600;
+      letter-spacing: 0.04em;
+      color: var(--ink-light);
+    }
+    body.light-mode .t-card__avatar {
+      background: rgba(26, 28, 22, 0.08);
+      color: var(--ink-dark);
     }
 
     /* Name — clear attribution */
     .t-card__name {
       font-family: var(--font-body);
       font-weight: 600;
-      font-size: 14px;
-      line-height: 20px;
+      font-size: 15px;
+      line-height: 23px;
       color: var(--ink-light);
     }
 
@@ -757,8 +855,8 @@
     .t-card__role {
       font-family: var(--font-body);
       font-style: italic;
-      font-size: 12px;
-      line-height: 18px;
+      font-size: 13px;
+      line-height: 23px;
       color: rgba(244,244,235,0.5);
     }
 
@@ -775,14 +873,27 @@
       align-items: center;
       gap: 100px;
       width: max-content;
-      animation: marquee 18s linear infinite;
     }
-    .clients-marquee:hover .clients-track { animation-play-state: paused; }
 
-    @keyframes marquee {
-      from { transform: translateX(0); }
-      to   { transform: translateX(-50%); }
+    .client-logo-item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      flex-shrink: 0;
     }
+
+    .client-logo-context {
+      font-size: 0.62rem;
+      letter-spacing: 0.07em;
+      text-transform: uppercase;
+      opacity: 0.38;
+      margin-top: -2px;
+      text-align: center;
+      display: block;
+      color: var(--ink-light);
+      white-space: nowrap;
+    }
+    body.light-mode .client-logo-context { color: var(--ink-dark); }
 
     .client-logo {
       object-fit: contain;
@@ -1049,9 +1160,10 @@
       .works__grid {
         grid-template-columns: 1fr;
       }
-      .card--arvo    { grid-column: 1; grid-row: auto; aspect-ratio: 376 / 305; }
-      .card--seletar { grid-column: 1; grid-row: auto; aspect-ratio: 376 / 305; }
-      .card--pawhaus { grid-column: 1; grid-row: auto; aspect-ratio: 376 / 305; }
+      .card-shell--arvo    { grid-column: 1; grid-row: auto; }
+      .card-shell--seletar { grid-column: 1; grid-row: auto; }
+      .card-shell--pawhaus { grid-column: 1; grid-row: auto; }
+      .card--arvo { height: auto; aspect-ratio: 376 / 305; }
       .card { aspect-ratio: 376 / 305; }
       .card__case-text { display: none; }
       .card__mockup--arvo    { left: 36%; top: 3%;  width: 75%;  filter: drop-shadow(-8px 12px 2px rgba(0,0,0,0.45)); }
@@ -1289,54 +1401,66 @@
   <!-- ── 02 SELECTED WORKS ── -->
   <section class="section" id="works">
     <div class="inner">
-      <span class="t-label">Selected Works</span>
+      <span class="t-label"><span class="label-mask"><span class="label-mask__inner">Selected Works</span></span></span>
 
       <div class="works__grid">
 
         <!-- ARVO -->
-        <article class="card card--arvo" onclick="location.href='case-studies/arvo.html'">
-          <div class="card__body">
-            <div class="card__case-text">
-              <p class="card__case-headline">AI Manager Copilot</p>
-              <p class="card__case-sub">Redesigning AI support so managers can lead.</p>
+        <div class="card-shell card-shell--arvo">
+          <article class="card card--arvo" onclick="location.href='case-studies/arvo.html'">
+            <div class="card__body">
+              <div class="card__case-text">
+                <p class="card__case-headline">AI Manager Copilot</p>
+                <p class="card__case-sub">Redesigning AI support so managers can lead.</p>
+                <span class="card__metric">Task completion 83% &rarr; 93%</span>
+              </div>
+              <div class="card__foot">
+                <p class="card__project-name">ARVO</p>
+                <p class="card__project-meta">Jan – Mar 2026</p>
+                <p class="card__project-meta">Project Lead</p>
+              </div>
             </div>
-            <div class="card__foot">
-              <p class="card__project-name">ARVO</p>
-              <p class="card__project-meta">Jan – Mar 2026<br>Project Lead</p>
-            </div>
-          </div>
-          <img class="card__mockup card__mockup--arvo" src="Asset/Card 1 - ARVO - Default (clean).png?v=2" alt="ARVO product interface" />
-        </article>
+            <img class="card__mockup card__mockup--arvo" src="Asset/Card 1 - ARVO - Default (clean).png?v=2" alt="ARVO product interface" />
+          </article>
+        </div>
 
         <!-- Seletar Airport -->
-        <article class="card card--seletar" onclick="location.href='case-studies/seletar.html'">
-          <div class="card__body">
-            <div class="card__case-text">
-              <p class="card__case-headline">The Subang Advantage:</p>
-              <p class="card__case-sub">Redesigning a website to match a 15-minute airport.</p>
+        <div class="card-shell card-shell--seletar">
+          <article class="card card--seletar" onclick="location.href='case-studies/seletar.html'">
+            <div class="card__body">
+              <div class="card__case-text">
+                <p class="card__case-headline">The Subang Advantage:</p>
+                <p class="card__case-sub">Redesigning a website to match a 15-minute airport.</p>
+                <span class="card__metric">SEQ score 3.0 &rarr; 4.8</span>
+              </div>
+              <div class="card__foot">
+                <p class="card__project-name">Seletar Airport</p>
+                <p class="card__project-meta">Nov 2025 – Jan 2026</p>
+                <p class="card__project-meta">UX Research Lead</p>
+              </div>
             </div>
-            <div class="card__foot">
-              <p class="card__project-name">Seletar Airport</p>
-              <p class="card__project-meta">Nov 2025 – Jan 2026<br>UX Research Lead</p>
-            </div>
-          </div>
-          <img class="card__mockup card__mockup--seletar" src="Asset/Card 2 - Seletar - Default (clean).png?v=2" alt="Seletar Airport on phone and tablet" />
-        </article>
+            <img class="card__mockup card__mockup--seletar" src="Asset/Card 2 - Seletar - Default (clean).png?v=2" alt="Seletar Airport on phone and tablet" />
+          </article>
+        </div>
 
         <!-- Paw Haus -->
-        <article class="card card--pawhaus" onclick="location.href='case-studies/pethaus.html'">
-          <div class="card__body">
-            <div class="card__case-text">
-              <p class="card__case-headline">Trust Over Treats:</p>
-              <p class="card__case-sub">An e-comm brand built around reading the label.</p>
+        <div class="card-shell card-shell--pawhaus">
+          <article class="card card--pawhaus" onclick="location.href='case-studies/pethaus.html'">
+            <div class="card__body">
+              <div class="card__case-text">
+                <p class="card__case-headline">Trust Over Treats:</p>
+                <p class="card__case-sub">An e-comm brand built around reading the label.</p>
+                <span class="card__metric">4.8/5 trust score</span>
+              </div>
+              <div class="card__foot">
+                <p class="card__project-name">Paw Haus</p>
+                <p class="card__project-meta">Sep – Nov 2025</p>
+                <p class="card__project-meta">End-to-end Product Designer</p>
+              </div>
             </div>
-            <div class="card__foot">
-              <p class="card__project-name">Paw Haus</p>
-              <p class="card__project-meta">Sep – Nov 2025<br>End-to-end Product Designer</p>
-            </div>
-          </div>
-          <img class="card__mockup card__mockup--pawhaus" src="Asset/Card 3 - Paw Haus - Default (clean).png?v=2" alt="Paw Haus app" />
-        </article>
+            <img class="card__mockup card__mockup--pawhaus" src="Asset/Card 3 - Paw Haus - Default (clean).png?v=2" alt="Paw Haus app" />
+          </article>
+        </div>
 
       </div><!-- end .works__grid -->
 
@@ -1351,29 +1475,53 @@
 
       <div class="clients-marquee">
         <div class="clients-track">
-          <img class="client-logo client-logo--guerlain" src="Asset/Logo_Guerlain_Light.png" alt="Guerlain" />
-          <img class="client-logo client-logo--arvo"     src="Asset/Logo_ARVO_Light.png"    alt="ARVO" />
-          <img class="client-logo client-logo--cpf"      src="Asset/Logo_CPF_white.png"     alt="CPF" />
-          <img class="client-logo client-logo--guerlain" src="Asset/Logo_Guerlain_Light.png" alt="" aria-hidden="true" />
-          <img class="client-logo client-logo--arvo"     src="Asset/Logo_ARVO_Light.png"    alt="" aria-hidden="true" />
-          <img class="client-logo client-logo--cpf"      src="Asset/Logo_CPF_white.png"     alt="" aria-hidden="true" />
+          <div class="client-logo-item">
+            <img class="client-logo client-logo--guerlain" src="Asset/Logo_Guerlain_Light.png" alt="Guerlain" />
+            <span class="client-logo-context">Guerlain &middot; LVMH Group</span>
+          </div>
+          <div class="client-logo-item">
+            <img class="client-logo client-logo--arvo" src="Asset/Logo_ARVO_Light.png" alt="ARVO" />
+            <span class="client-logo-context">ARVO &middot; AI Startup</span>
+          </div>
+          <div class="client-logo-item">
+            <img class="client-logo client-logo--cpf" src="Asset/Logo_CPF_white.png" alt="CPF" />
+            <span class="client-logo-context">CPF Board &middot; Government</span>
+          </div>
+          <div class="client-logo-item" aria-hidden="true">
+            <img class="client-logo client-logo--guerlain" src="Asset/Logo_Guerlain_Light.png" alt="" />
+            <span class="client-logo-context">Guerlain &middot; LVMH Group</span>
+          </div>
+          <div class="client-logo-item" aria-hidden="true">
+            <img class="client-logo client-logo--arvo" src="Asset/Logo_ARVO_Light.png" alt="" />
+            <span class="client-logo-context">ARVO &middot; AI Startup</span>
+          </div>
+          <div class="client-logo-item" aria-hidden="true">
+            <img class="client-logo client-logo--cpf" src="Asset/Logo_CPF_white.png" alt="" />
+            <span class="client-logo-context">CPF Board &middot; Government</span>
+          </div>
         </div>
       </div>
 
+      <div class="test__group">
       <p class="test__headline">
         From digital systems to physical spaces:<br>
         What they say about working with me.
       </p>
 
+      <p class="test__context">
+        From product design to physical spaces &mdash; what collaborators say about working with me.
+      </p>
+
       <div class="test__carousel">
         <div class="test__row">
 
-          <div class="t-card active">
+          <div class="t-card t-card--featured active">
             <div class="t-card__body">
               <span class="t-card__category">Product Design</span>
               <p class="t-card__quote">"Their design recommendations were methodically tested and immediately actionable, directly strengthening the product's user experience."</p>
             </div>
             <div class="t-card__attribution">
+              <div class="t-card__avatar" aria-hidden="true">EZ</div>
               <div class="t-card__name">Eileen Zhang</div>
               <div class="t-card__role">Founder, ARVO</div>
             </div>
@@ -1385,6 +1533,7 @@
               <p class="t-card__quote">"Andrea designed and executed an exclusive, high-touch Christmas wreath workshop tailored for us. Managing everything and the experience was meticulously crafted and matched well with our brand's luxury aesthetic."</p>
             </div>
             <div class="t-card__attribution">
+              <div class="t-card__avatar" aria-hidden="true">CT</div>
               <div class="t-card__name">Charline Tang</div>
               <div class="t-card__role">Brand General Manager, SEA, Guerlain</div>
             </div>
@@ -1396,6 +1545,7 @@
               <p class="t-card__quote">"Engaged last minute for a proposal and she came through. Even though it was drizzling, she still powered through the setup with a smile. Amazing service and really beautiful set up."</p>
             </div>
             <div class="t-card__attribution">
+              <div class="t-card__avatar" aria-hidden="true">CL</div>
               <div class="t-card__name">Clement Loh</div>
               <div class="t-card__role">Private Client, Engagement</div>
             </div>
@@ -1407,6 +1557,7 @@
               <p class="t-card__quote">"Engaged M&amp;P for my wedding at 1-Atico. Andrea listened patiently to my requests and conceptualised the design perfectly. The whole set up was so dreamy."</p>
             </div>
             <div class="t-card__attribution">
+              <div class="t-card__avatar" aria-hidden="true">DA</div>
               <div class="t-card__name">Desiree Ang</div>
               <div class="t-card__role">Private Client, Wedding</div>
             </div>
@@ -1423,6 +1574,7 @@
           </div>
         </div>
       </div><!-- end .test__carousel -->
+      </div><!-- end .test__group -->
 
     </div>
   </section>
@@ -1833,19 +1985,30 @@
     });
 
     /* Works */
-    gsap.from('#works .t-label', {
-      y: 20, opacity: 0, duration: 0.6, ease: 'power3.out',
+    gsap.from('#works .label-mask__inner', {
+      y: '112%', duration: 0.92, ease: 'power4.out',
       scrollTrigger: { trigger: '#works', start: 'top 85%' }
     });
-    gsap.from('.card', {
-      y: 60, opacity: 0, duration: 0.9, stagger: 0.15, ease: 'power3.out',
-      scrollTrigger: { trigger: '.works__grid', start: 'top 85%' }
+    gsap.from('.card-shell', {
+      clipPath: 'inset(100% 0 0 0)', duration: 1.05, stagger: 0.13, ease: 'power4.out',
+      scrollTrigger: { trigger: '.works__grid', start: 'top 74%' }
     });
 
     /* Testimonials */
     gsap.from('.test__headline', {
       y: 40, opacity: 0, duration: 0.9, ease: 'power3.out',
       scrollTrigger: { trigger: '#testimonials', start: 'top 85%' }
+    });
+    /* Carousel shows one card at a time, so the stagger from the prompt
+       collapses to a single slide-in on the active card; clearProps hands
+       both transform and opacity back to the carousel's own CSS classes
+       (.t-card{opacity:0} / .t-card.active{opacity:1}, translateX(-50%))
+       once the tween completes — otherwise the leftover inline opacity:1
+       outranks the CSS rule once nav moves the active class elsewhere,
+       leaving this card stuck visible and overlapping the new active one. */
+    gsap.from('.t-card.active', {
+      x: 60, opacity: 0, duration: 0.7, ease: 'power3.out', clearProps: 'transform,opacity',
+      scrollTrigger: { trigger: '.test__carousel', start: 'top 68%' }
     });
     gsap.from('.clients-marquee', {
       opacity: 0, duration: 0.6,
@@ -1909,42 +2072,43 @@
       go(0);
     })();
 
-    /* ── Card hover: tilt + parallax ── */
-    (function () {
-      function lerp(a, b, t) { return a + (b - a) * t; }
-
-      function tilt(card, opts) {
-        const { maxTilt = 6, lift = -10, child = null, childShift = 12 } = opts;
-        let cX = 0, cY = 0, cL = 0, tX = 0, tY = 0, tL = 0, raf = null;
-
-        function frame() {
-          cX = lerp(cX, tX, 0.1);
-          cY = lerp(cY, tY, 0.1);
-          cL = lerp(cL, tL, 0.1);
-          const idle = tL === 0 && Math.abs(cX) < 0.02 && Math.abs(cY) < 0.02 && Math.abs(cL) < 0.02;
-          if (idle) {
-            card.style.transform = '';
-            if (child) child.style.transform = '';
-            raf = null; return;
-          }
-          card.style.transform = `perspective(900px) rotateX(${cY.toFixed(3)}deg) rotateY(${cX.toFixed(3)}deg) translateY(${cL.toFixed(2)}px)`;
-          if (child) child.style.transform = `translate(${(cX / maxTilt * childShift).toFixed(2)}px, ${(cY / maxTilt * childShift).toFixed(2)}px)`;
-          raf = requestAnimationFrame(frame);
-        }
-        function go() { if (!raf) raf = requestAnimationFrame(frame); }
-
-        card.addEventListener('mouseenter', () => { tL = lift; go(); });
-        card.addEventListener('mousemove', e => {
-          const r = card.getBoundingClientRect();
-          tX = ((e.clientX - r.left) / r.width  - 0.5) * 2 * maxTilt;
-          tY = -((e.clientY - r.top)  / r.height - 0.5) * 2 * maxTilt;
-          go();
+    /* ── Card hover: cursor tilt + image parallax ── */
+    document.querySelectorAll('.card-shell').forEach(card => {
+      const img = card.querySelector('img');
+      card.addEventListener('mousemove', e => {
+        const r = card.getBoundingClientRect();
+        const x = (e.clientX - r.left) / r.width - 0.5, y = (e.clientY - r.top) / r.height - 0.5;
+        gsap.to(card, {
+          rotateX: -y * 8, rotateY: x * 8,
+          transformPerspective: 900, duration: 0.4, ease: 'power2.out'
         });
-        card.addEventListener('mouseleave', () => { tX = 0; tY = 0; tL = 0; go(); });
-      }
+        gsap.to(img, { x: x * 20, y: y * 20, duration: 0.45, ease: 'power2.out' });
+      });
+      card.addEventListener('mouseleave', () => {
+        gsap.to(card, { rotateX: 0, rotateY: 0, duration: 0.85, ease: 'elastic.out(1,0.5)' });
+        gsap.to(img, { x: 0, y: 0, duration: 1, ease: 'elastic.out(1,0.42)' });
+      });
+    });
 
-      document.querySelectorAll('.card').forEach(card => {
-        tilt(card, { maxTilt: 6, lift: -10, child: card.querySelector('.card__mockup'), childShift: 14 });
+    /* ── Client logo marquee: GSAP drive + spotlight hover ── */
+    (function () {
+      const marquee = document.querySelector('.clients-marquee');
+      const track = document.querySelector('.clients-track');
+      if (!marquee || !track) return;
+
+      const w = track.scrollWidth / 2;
+      const ticker = gsap.to(track, { x: -w, duration: 18, ease: 'none', repeat: -1 });
+      marquee.addEventListener('mouseenter', () => ticker.pause());
+      marquee.addEventListener('mouseleave', () => ticker.play());
+
+      const logos = document.querySelectorAll('.client-logo-item');
+      logos.forEach(logo => {
+        logo.addEventListener('mouseenter', () => {
+          gsap.to(logo, { opacity: 1, scale: 1.08, duration: 0.26 });
+          logos.forEach(l => { if (l !== logo) gsap.to(l, { opacity: 0.3, duration: 0.26 }); });
+        });
+        logo.addEventListener('mouseleave', () =>
+          gsap.to(logos, { opacity: 1, scale: 1, duration: 0.4 }));
       });
     })();
 
