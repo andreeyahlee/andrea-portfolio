@@ -409,14 +409,8 @@
       max-width: min(658px, 55%);
     }
 
-    /* 2-column case study grid */
+    /* Single-column stack of equal-height landscape cards (Figma node 846-5673) */
     .pd-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 20px;
-    }
-
-    .pd-right-col {
       display: flex;
       flex-direction: column;
       gap: 20px;
@@ -428,48 +422,52 @@
       overflow: hidden;
       isolation: isolate;
       width: 100%;
+      aspect-ratio: 1184 / 271;
       border-radius: 16px;
       cursor: pointer;
       will-change: transform;
       transition: box-shadow 0.3s ease;
     }
 
-    /* Works page — ARVO takes full left column height */
-    .pd-grid .card--arvo {
-      aspect-ratio: unset;
-      height: 600px;
-    }
-
-    /* Half-height cards for right column */
-    .card.half-card {
-      aspect-ratio: unset;
-      height: 290px;
-    }
-
     .card--arvo    { background: #31332a; }
     .card--seletar { background: #304c95; }
     .card--pawhaus { background: #d09a94; }
 
+    /* Inner body — left text column; width/padding set per card to match Figma's
+       per-card text-column proportions. Mockups bleed outside it, positioned
+       absolutely against the full .card (see .card__mockup rules below). */
     .card__body {
       position: absolute;
-      inset: 0;
-      padding: clamp(20px, 2.44vw, 32px);
+      left: 0;
+      top: 0;
+      bottom: 0;
       display: flex;
       flex-direction: column;
-      justify-content: space-between;
+      justify-content: center;
+      gap: 48px;
       z-index: 2;
     }
+    .card--arvo    .card__body,
+    .card--seletar .card__body,
+    .card--pawhaus .card__body { max-width: 40%; padding: 38px; }
 
+    /* All three cards share ARVO's Display/LG headline + Display/MD sub (locked tokens) */
     .card__case-title {
       font-family: var(--font-display);
-      font-size: clamp(14px, 1.5vw, 22px);
-      line-height: 1.27;
-      letter-spacing: -0.01em;
+      font-size: 32px;
+      line-height: 37px;
+      letter-spacing: -0.02em;
       color: var(--ink-light);
-      max-width: min(280px, 55%);
+      max-width: 100%;
     }
     .card__case-headline { font-weight: 700; margin: 0; }
-    .card__case-sub      { font-weight: 400; margin: 0; }
+    .card__case-sub      {
+      font-weight: 400;
+      margin: 0;
+      font-size: 26px;
+      line-height: 32px;
+      letter-spacing: -0.015em;
+    }
 
     .card__foot {
       display: flex;
@@ -477,16 +475,20 @@
       gap: 12px;
     }
 
-    .card__project-name {
-      font-family: var(--font-hand);
-      font-size: clamp(26px, 2.5vw, 36px);
-      line-height: 0.94; /* 30/32 */
-      letter-spacing: -0.05em;
-      color: #f4f4eb;
+    /* All three cards: name + meta right-align within the text column */
+    .card--arvo    .card__foot,
+    .card--seletar .card__foot,
+    .card--pawhaus .card__foot {
+      align-self: flex-end;
+      text-align: right;
     }
 
-    .half-card .card__project-name {
-      font-size: clamp(22px, 2vw, 30px);
+    .card__project-name {
+      font-family: var(--font-hand);
+      font-size: clamp(28px, 3.47vw, 55px);
+      line-height: 50px;
+      letter-spacing: 0;
+      color: #f4f4eb;
     }
 
     .card__project-meta {
@@ -509,28 +511,31 @@
       height: auto;
     }
 
-    /* ARVO in 646×600 card — Figma: left 154px, top 127px, w 526px on 646px card */
-    .pd-grid .card__mockup--arvo {
-      left: 23.8%;
-      top: 127px;
-      width: 81.4%;
-      filter: drop-shadow(-24px 31px 2px rgba(0,0,0,0.85));
+    /* ARVO — right half of the card, bleeding past top/bottom edges
+       (clipped by .card's overflow:hidden); rotation is already baked into
+       the source PNG, so no CSS transform is applied here */
+    .card__mockup--arvo {
+      left: 49.07%;
+      top: 1.85%;
+      width: 46.79%;
+      filter: drop-shadow(-25.175px 31.839px 1.851px black);
     }
 
-    /* Seletar in 646×290 half card — Figma: left 288px, top 47px on 646px card */
-    .half-card.card--seletar .card__mockup--seletar {
-      left: 44.6%;
-      top: 47px;
-      width: 78%;
-      filter: drop-shadow(-10px 19px 1px rgba(0,0,0,0.5));
+    /* Seletar — right side, bleeding above the card's top edge; expanded to
+       touch the card's right edge (clipped by .card's overflow:hidden) */
+    .card__mockup--seletar {
+      left: 57.07%;
+      top: -13.43%;
+      width: 43%;
+      filter: drop-shadow(-12.492px 24.249px 1.58px rgba(0,0,0,0.5));
     }
 
-    /* PawHaus in 646×290 half card — Figma: left 286px, top 32px on 646px card */
-    .half-card.card--pawhaus .card__mockup--pawhaus {
-      left: 44.3%;
-      top: 32px;
-      width: 76%;
-      filter: drop-shadow(-13px 8px 1px rgba(0,0,0,0.5));
+    /* PawHaus — right side, nearly filling the card's full height */
+    .card__mockup--pawhaus {
+      left: 53.46%;
+      top: 3.69%;
+      width: 39.02%;
+      filter: drop-shadow(-14px 20px 4px rgba(0,0,0,0.35));
     }
 
     /* ================================================================
@@ -542,152 +547,109 @@
       gap: 40px;
     }
 
-    .ow-grid {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 20px;
-    }
-
-    .ow-card {
-      position: relative;
-      height: 307px;
-      overflow: hidden;
-      border-radius: 12px;
-      cursor: default;
-      will-change: transform;
-      transition: box-shadow 0.3s ease;
-    }
-
-    .ow-card--light { background: #f4f4eb; }
-    .ow-card--light .ow-card__title { color: var(--ink-dark); }
-    .ow-card--light .ow-card__meta  { color: rgba(26,28,22,0.6); }
-
-    .ow-card--dark  { background: #282c1e; }
-    .ow-card--dark .ow-card__title  { color: var(--ink-light); }
-    .ow-card--dark .ow-card__meta   { color: rgba(244,244,235,0.65); }
-
-    .ow-card--olive { background: #6b7060; }
-    .ow-card--olive .ow-card__title { color: var(--ink-light); }
-    .ow-card--olive .ow-card__meta  { color: rgba(244,244,235,0.65); }
-
-    .ow-card__img,
-    .ow-card__vid {
-      position: absolute;
-      pointer-events: none;
-      object-fit: contain;
-    }
-
-    /* Pulse — 3 phones fan, top right — Figma group: left 24.9%, top -10.75%, w 85.6%, h 143.8% */
-    .ow-card--pulse .ow-card__img {
-      left: 24.9%;
-      top: -10.75%;
-      width: 85.6%;
-      height: 143.8%;
-      object-fit: contain;
-      object-position: top left;
-    }
-
-    /* ThriveLab — full-width at top — Figma: left 0, top -6.5%, w 100%, h 71.7% */
-    .ow-card--thrive .ow-card__vid {
-      left: 0;
-      top: -6.5%;
-      width: 100%;
-      height: 71.7%;
-      object-fit: cover;
-      border-radius: 20px;
-      box-shadow: 0px 10px 4px 0px rgba(0,0,0,0.52);
-    }
-
-    /* KinCare — rotated card — Figma: left 28.1%, top -3.26%, w 85.8%, h 96%, rotate 21.5deg */
-    .ow-card--kincare .ow-card__vid {
-      left: 28.1%;
-      top: -3.26%;
-      width: 85.8%;
-      height: 96%;
-      object-fit: cover;
-      border-radius: 20px;
-      box-shadow: -10px 18px 4px 0px rgba(0,0,0,0.5);
-      transform: rotate(21.5deg);
-      transform-origin: center;
-    }
-
-    /* Longtail Valley — full card cover at 72% opacity */
-    .ow-card--dino .ow-card__vid {
-      left: 0;
-      top: 0;
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      opacity: 0.72;
-    }
-
-    /* Tallyboard — square rotated mockup — Figma: left 34.6%, top -9.45%, w 80%, h 101.4%, rotate 13.81deg */
-    .ow-card--tallyboard .ow-card__vid {
-      left: 34.6%;
-      top: -9.45%;
-      width: 80%;
-      height: 101.4%;
-      object-fit: cover;
-      border-radius: 20px;
-      box-shadow: -10px 16px 6px 0px rgba(0,0,0,0.51);
-      transform: rotate(13.81deg);
-      transform-origin: center;
-    }
-
-    /* Badge always sits top-left, flush with card padding — same on every card per Figma */
-    .ow-card__badge {
-      position: absolute;
-      left: 32px;
-      top: 32px;
-      background: #31332a;
-      color: #dee895;
-      font-family: var(--font-mono);
-      font-weight: 700;
-      font-size: 10px;
-      letter-spacing: 0.08em;
-      text-transform: uppercase;
-      padding: 4px 16px;
-      border-radius: 100px;
-      white-space: nowrap;
-      z-index: 2;
-    }
-
-    .ow-card__body {
-      position: absolute;
-      bottom: 0;
-      left: 0;
-      right: 0;
-      padding: 0 32px 20px;
+    /* List of project rows (Figma node 567-3170) — replaces the old 3-col card grid */
+    .ow-list {
       display: flex;
       flex-direction: column;
-      gap: 8px;
-      z-index: 2;
+      gap: 40px;
     }
 
-    /* Two-column cards: text lives in the left half only, matching Figma's split layout */
-    .ow-card--pulse .ow-card__body,
-    .ow-card--kincare .ow-card__body {
-      right: 50%;
-      padding-right: 12px;
-    }
-    .ow-card--tallyboard .ow-card__body {
-      right: 51.6%;
-      padding-right: 12px;
+    .ow-row {
+      display: flex;
+      align-items: center;
+      gap: 40px;
+      width: 100%;
+      cursor: default;
     }
 
-    .ow-card__title {
+    .card-disabled { opacity: 0.6; cursor: not-allowed; }
+    /* Side Quests rows: keep full-strength text per Figma — only the disabled
+       cursor/tooltip affordance applies, not the dimmed-opacity treatment */
+    .ow-row.card-disabled { opacity: 1; }
+
+    .ow-row__text {
+      display: flex;
+      flex: 1 0 0;
+      align-items: center;
+      gap: 40px;
+      min-width: 0;
+      color: var(--ink-light);
+    }
+
+    .ow-row__name {
       font-family: var(--font-display);
-      font-weight: 700;
+      font-weight: 500;
       font-size: 18px;
       line-height: 24px;
-      letter-spacing: -0.01em;
+      white-space: nowrap;
+      flex-shrink: 0;
     }
 
-    .ow-card__meta {
+    .ow-row__desc {
       font-family: var(--font-body);
       font-weight: 400;
       font-size: 13px;
-      line-height: 18px;
+      line-height: 15px;
+      flex: 1 0 0;
+      min-width: 0;
+      color: var(--ink-light);
+    }
+
+    .ow-row__year {
+      font-family: var(--font-body);
+      font-weight: 600;
+      font-size: 13px;
+      color: var(--ink-light);
+      white-space: nowrap;
+      flex-shrink: 0;
+    }
+
+    .ow-row__badge {
+      background: #dfe0de;
+      color: var(--ink-dark);
+      font-family: var(--font-body);
+      font-weight: 600;
+      font-size: 13px;
+      padding: 4px 16px;
+      border-radius: 10px;
+      white-space: nowrap;
+      flex-shrink: 0;
+    }
+
+    .ow-row__divider {
+      height: 1px;
+      width: 100%;
+      background: rgba(244,244,235,0.15);
+    }
+
+    /* Cursor-following hover preview — follows the pointer while hovering a row,
+       shows the matching project's image/video on loop until the cursor leaves */
+    .ow-preview {
+      position: fixed;
+      left: 0;
+      top: 0;
+      width: 320px;
+      height: 252px;
+      border-radius: 16px;
+      overflow: hidden;
+      pointer-events: none;
+      z-index: 50;
+      opacity: 0;
+      transform: translate(-50%, -120%);
+      box-shadow: 0 24px 48px rgba(0,0,0,0.35);
+      transition: opacity 0.2s ease;
+    }
+    .ow-preview--light { background: #f4f4eb; }
+    .ow-preview--dark  { background: #282c1e; }
+    .ow-preview--olive { background: #6b7060; }
+
+    .ow-preview__media {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: none;
     }
 
     /* ================================================================
@@ -705,74 +667,69 @@
       gap: 20px;
     }
 
+    /* Card: image on top, name/meta + "in construction" badge in a row below
+       (Figma node 552-4482) — replaces the old photo-with-text-overlay card */
     .ev-card {
-      position: relative;
-      aspect-ratio: 4 / 3;
-      overflow: hidden;
-      border-radius: 12px;
-      background: #f4f4eb;
-      cursor: default;
-      will-change: transform;
-      transition: box-shadow 0.3s ease;
-    }
-
-    .ev-card__bg {
-      position: absolute;
-      inset: 0;
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      object-position: center;
-    }
-
-    .ev-card__overlay {
-      position: absolute;
-      inset: 0;
-      background: rgba(0,0,0,0.45);
-      z-index: 1;
-    }
-
-    .ev-card__body {
-      position: absolute;
-      bottom: 0;
-      left: 0;
-      right: 0;
-      padding: 0 24px 24px;
-      z-index: 2;
       display: flex;
       flex-direction: column;
       gap: 10px;
+      cursor: default;
     }
 
-    /* Name is the large display element (shown first) */
+    .ev-card__img {
+      width: 100%;
+      aspect-ratio: 450 / 250;
+      object-fit: cover;
+      border-radius: 12px;
+      display: block;
+    }
+
+    .ev-card__row {
+      display: flex;
+      align-items: center;
+      gap: 40px;
+      width: 100%;
+    }
+
+    .ev-card__text {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      flex: 1 0 0;
+      min-width: 0;
+    }
+
     .ev-card__name {
       font-family: var(--font-display);
-      font-weight: 400;
-      font-size: clamp(18px, 1.8vw, 26px);
-      line-height: 1.23;
-      letter-spacing: -0.015em;
+      font-weight: 700;
+      font-size: 18px;
+      line-height: 24px;
+      letter-spacing: -0.01em;
+      color: var(--ink-light);
       margin: 0;
     }
 
-    /* Venue block: DM Sans SemiBold 15px, two lines, no uppercase */
-    .ev-card__venue {
+    .ev-card__meta {
+      font-family: var(--font-body);
+      font-weight: 400;
+      font-size: 13px;
+      line-height: 15px;
+      color: var(--ink-light);
+      margin: 0;
+    }
+    .ev-card__meta strong { font-weight: 700; }
+
+    .ev-card__badge {
+      background: #dfe0de;
+      color: var(--ink-dark);
       font-family: var(--font-body);
       font-weight: 600;
-      font-size: 15px;
-      line-height: 23px;
-      letter-spacing: 0;
-      text-transform: none;
-      display: flex;
-      flex-direction: column;
+      font-size: 13px;
+      padding: 4px 16px;
+      border-radius: 10px;
+      white-space: nowrap;
+      flex-shrink: 0;
     }
-    .ev-card__venue p { margin: 0; }
-
-    .ev-card--photo .ev-card__name   { color: #f4f4eb; }
-    .ev-card--photo .ev-card__venue  { color: rgba(244,244,235,0.75); }
-
-    .ev-card--light { background: #f4f4eb; }
-    .ev-card--light .ev-card__name   { color: var(--ink-dark); }
-    .ev-card--light .ev-card__venue  { color: rgba(26,28,22,0.55); }
 
     /* ================================================================
        SECTION 4 — CONTACT
@@ -930,8 +887,24 @@
       .toggle__icon { width: 20px; height: 20px; order: 0; }
       body.light-mode .toggle__icon { width: 27px; height: 20px; order: 0; }
 
-      .pd-grid .card--arvo { height: 520px; }
-      .card.half-card { height: 250px; }
+      /* tablet: the single-column landscape stack (846-5673) is desktop-only —
+         keep tablet's old 2-col grid (ARVO full left column, Seletar/PawHaus stacked right) */
+      .pd-grid { display: grid; grid-template-columns: 1fr 1fr; }
+      .pd-grid .card--arvo {
+        grid-column: 1;
+        grid-row: 1 / 3;
+        aspect-ratio: unset;
+        height: 520px;
+      }
+      .card--seletar { grid-column: 2; grid-row: 1; }
+      .card--pawhaus { grid-column: 2; grid-row: 2; }
+      .card.half-card { aspect-ratio: unset; height: 250px; }
+      .card__body { max-width: none; padding: clamp(20px, 2.44vw, 32px); }
+      .card__case-title { font-size: clamp(14px, 1.5vw, 22px); line-height: 1.27; max-width: min(280px, 55%); }
+      .card--arvo .card__case-headline, .card--arvo .card__case-sub { font-size: inherit; line-height: inherit; letter-spacing: inherit; }
+      .card--arvo .card__foot { align-self: flex-start; text-align: left; }
+      .card__project-name { font-size: clamp(26px, 2.5vw, 36px); line-height: 0.94; letter-spacing: -0.05em; }
+      .half-card .card__project-name { font-size: clamp(22px, 2vw, 30px); }
 
       .pd-grid .card__mockup--arvo       { left: 25%; top: 12%; width: 90%; }
       .half-card.card--seletar .card__mockup--seletar { left: 30%; top: -5%;  width: 85%; }
@@ -955,6 +928,7 @@
       .pd-intro { max-width: 100%; font-size: clamp(18px, 4vw, 24px); }
 
       .pd-grid { grid-template-columns: 1fr; }
+      .card--arvo, .card--seletar, .card--pawhaus { grid-column: 1; grid-row: auto; }
 
       .pd-grid .card--arvo { height: auto; aspect-ratio: 4 / 3; }
       .pd-grid .card__mockup--arvo { left: 35%; top: 5%; width: 80%; }
@@ -1095,7 +1069,7 @@
 
       <div class="pd-grid">
 
-        <!-- ARVO — left column, full height -->
+        <!-- ARVO -->
         <article class="card card--arvo" onclick="location.href='case-studies/arvo.html'">
           <div class="card__body">
             <div class="card__case-title">
@@ -1115,48 +1089,46 @@
                alt="ARVO product dashboard interface" />
         </article>
 
-        <!-- Right column: Seletar + PawHaus stacked -->
-        <div class="pd-right-col">
-
-          <article class="card card--seletar half-card" onclick="location.href='case-studies/seletar.html'">
-            <div class="card__body">
-              <div class="card__case-title">
-                <p class="card__case-headline">The Subang Advantage:</p>
-                <p class="card__case-sub">Redesigning a website to match a 15-minute airport.</p>
-              </div>
-              <div class="card__foot">
-                <p class="card__project-name">Seletar Airport</p>
-                <div class="card__project-meta">
-                  <p>Nov 2025 &ndash; Jan 2026</p>
-                  <p>UX Research Lead</p>
-                </div>
+        <!-- Seletar Airport -->
+        <article class="card card--seletar half-card" onclick="location.href='case-studies/seletar.html'">
+          <div class="card__body">
+            <div class="card__case-title">
+              <p class="card__case-headline">The Subang Advantage:</p>
+              <p class="card__case-sub">Redesigning a website to match a 15-minute airport.</p>
+            </div>
+            <div class="card__foot">
+              <p class="card__project-name">Seletar Airport</p>
+              <div class="card__project-meta">
+                <p>Nov 2025 &ndash; Jan 2026</p>
+                <p>UX Research Lead</p>
               </div>
             </div>
-            <img class="card__mockup card__mockup--seletar"
-                 src="Asset/Card 2 - Seletar - Default (clean).png?v=2"
-                 alt="Seletar Airport website redesign" />
-          </article>
+          </div>
+          <img class="card__mockup card__mockup--seletar"
+               src="Asset/Card 2 - Seletar - Default (clean).png?v=2"
+               alt="Seletar Airport website redesign" />
+        </article>
 
-          <article class="card card--pawhaus half-card" onclick="location.href='case-studies/pethaus.html'">
-            <div class="card__body">
-              <div class="card__case-title">
-                <p class="card__case-headline">Trust Over Treats:</p>
-                <p class="card__case-sub">An e-comm brand built around reading the label.</p>
-              </div>
-              <div class="card__foot">
-                <p class="card__project-name">Paw Haus</p>
-                <div class="card__project-meta">
-                  <p>Sep &ndash; Nov 2025</p>
-                  <p>End-to-End Product Designer</p>
-                </div>
+        <!-- Paw Haus -->
+        <article class="card card--pawhaus half-card" onclick="location.href='case-studies/pethaus.html'">
+          <div class="card__body">
+            <div class="card__case-title">
+              <p class="card__case-headline">Trust Over Treats:</p>
+              <p class="card__case-sub">An e-comm brand built around reading the label.</p>
+            </div>
+            <div class="card__foot">
+              <p class="card__project-name">Paw Haus</p>
+              <div class="card__project-meta">
+                <p>Sep &ndash; Nov 2025</p>
+                <p>End-to-End Product Designer</p>
               </div>
             </div>
-            <img class="card__mockup card__mockup--pawhaus"
-                 src="Asset/Card 3 - Paw Haus - Default (clean).png?v=2"
-                 alt="Paw Haus ecommerce website" />
-          </article>
+          </div>
+          <img class="card__mockup card__mockup--pawhaus"
+               src="Asset/Card 3 - Paw Haus - Default (clean).png?v=2"
+               alt="Paw Haus ecommerce website" />
+        </article>
 
-        </div><!-- /.pd-right-col -->
       </div><!-- /.pd-grid -->
     </div><!-- /.inner -->
   </section>
@@ -1167,61 +1139,75 @@
   <section class="section" id="other-works">
     <div class="inner">
 
-      <span class="t-label">Other Works</span>
+      <span class="t-label">Side Quests</span>
 
-      <div class="ow-grid">
-
-        <!-- Pulse -->
-        <div class="ow-card ow-card--light ow-card--pulse">
-          <img class="ow-card__img" src="Asset/Work_Card_Pulse.png" alt="Pulse app — three phone screens" />
-          <span class="ow-card__badge">In Construction</span>
-          <div class="ow-card__body">
-            <p class="ow-card__title">Pulse</p>
-            <p class="ow-card__meta">Elderly care &middot; Hackathon / Lead UX Designer</p>
-          </div>
-        </div>
-
-        <!-- ThriveLab -->
-        <div class="ow-card ow-card--light ow-card--thrive">
-          <video class="ow-card__vid" src="Asset/Work_Card_Thrive.mov" muted loop playsinline preload="auto"></video>
-          <span class="ow-card__badge">In Construction</span>
-          <div class="ow-card__body">
-            <p class="ow-card__title">ThriveLab</p>
-            <p class="ow-card__meta">Health &amp; Wellness &middot; All-in-one tracker / End-to-end Product Designer</p>
-          </div>
-        </div>
-
-        <!-- KinCare -->
-        <div class="ow-card ow-card--olive ow-card--kincare">
-          <video class="ow-card__vid" src="Asset/Work_Card_KinCare.mov" muted loop playsinline preload="auto"></video>
-          <span class="ow-card__badge">In Construction</span>
-          <div class="ow-card__body">
-            <p class="ow-card__title">KinCare</p>
-            <p class="ow-card__meta">Caregiving / End-to-end Product Designer</p>
-          </div>
-        </div>
-
-        <!-- Longtail Valley -->
-        <div class="ow-card ow-card--dark ow-card--dino">
-          <video class="ow-card__vid" src="Asset/Work_Card_Dino.mov" muted loop playsinline preload="auto"></video>
-          <span class="ow-card__badge">In Construction</span>
-          <div class="ow-card__body">
-            <p class="ow-card__title">Longtail Valley</p>
-            <p class="ow-card__meta">An animated dino short series / Concept, direction and production</p>
-          </div>
-        </div>
+      <div class="ow-list">
 
         <!-- Tallyboard -->
-        <div class="ow-card ow-card--light ow-card--tallyboard">
-          <video class="ow-card__vid" src="Asset/Work_Card_Tallyboard.mov" muted loop playsinline preload="auto"></video>
-          <span class="ow-card__badge">In Construction</span>
-          <div class="ow-card__body">
-            <p class="ow-card__title">Tallyboard</p>
-            <p class="ow-card__meta">For board game lovers to track their group scores.</p>
+        <div class="ow-row card-disabled" title="Coming soon" data-preview="tallyboard" data-variant="light">
+          <div class="ow-row__text">
+            <span class="ow-row__name">Tallyboard</span>
+            <span class="ow-row__desc">For board game lovers to track their group scores.</span>
           </div>
+          <span class="ow-row__year">2026</span>
+          <span class="ow-row__badge">in construction</span>
         </div>
+        <div class="ow-row__divider"></div>
 
-      </div><!-- /.ow-grid -->
+        <!-- Longtail Valley -->
+        <div class="ow-row card-disabled" title="Coming soon" data-preview="dino" data-variant="dark">
+          <div class="ow-row__text">
+            <span class="ow-row__name">Longtail Valley</span>
+            <span class="ow-row__desc">An animated dino-short series produced for my nephews</span>
+          </div>
+          <span class="ow-row__year">2026</span>
+          <span class="ow-row__badge">in construction</span>
+        </div>
+        <div class="ow-row__divider"></div>
+
+        <!-- KinCare -->
+        <div class="ow-row card-disabled" title="Coming soon" data-preview="kincare" data-variant="olive">
+          <div class="ow-row__text">
+            <span class="ow-row__name">KinCare</span>
+            <span class="ow-row__desc">Civic-tech: For the triple-hatting caregiver holding it altogether</span>
+          </div>
+          <span class="ow-row__year">2026</span>
+          <span class="ow-row__badge">in construction</span>
+        </div>
+        <div class="ow-row__divider"></div>
+
+        <!-- Pulse -->
+        <div class="ow-row card-disabled" title="Coming soon" data-preview="pulse" data-variant="light">
+          <div class="ow-row__text">
+            <span class="ow-row__name">Pulse</span>
+            <span class="ow-row__desc">The Good Hack: A civic tech hackathon for social good</span>
+          </div>
+          <span class="ow-row__year">2026</span>
+          <span class="ow-row__badge">in construction</span>
+        </div>
+        <div class="ow-row__divider"></div>
+
+        <!-- ThriveLab -->
+        <div class="ow-row card-disabled" title="Coming soon" data-preview="thrive" data-variant="light">
+          <div class="ow-row__text">
+            <span class="ow-row__name">ThriveLab</span>
+            <span class="ow-row__desc">Health &amp; Wellness | All-in-one tracker</span>
+          </div>
+          <span class="ow-row__year">2025</span>
+          <span class="ow-row__badge">in construction</span>
+        </div>
+        <div class="ow-row__divider"></div>
+
+      </div><!-- /.ow-list -->
+
+      <!-- Cursor-following hover preview — shows the matching project media on loop -->
+      <div class="ow-preview" id="ow-preview" aria-hidden="true">
+        <video  class="ow-preview__media" data-media="tallyboard" src="Asset/Work_Card_Tallyboard.mov" muted loop playsinline preload="auto"></video>
+        <video  class="ow-preview__media" data-media="dino"       src="Asset/Work_Card_Dino.mov"       muted loop playsinline preload="auto"></video>
+        <video  class="ow-preview__media" data-media="kincare"    src="Asset/Work_Card_KinCare.mov"    muted loop playsinline preload="auto"></video>
+        <img    class="ow-preview__media" data-media="pulse"      src="Asset/Work_Card_Pulse.png" alt="" />
+        <video  class="ow-preview__media" data-media="thrive"     src="Asset/Work_Card_Thrive.mov"     muted loop playsinline preload="auto"></video>
+      </div>
     </div><!-- /.inner -->
   </section>
 
@@ -1235,65 +1221,77 @@
 
       <div class="ev-grid">
 
-        <!-- 1-Atico -->
-        <div class="ev-card ev-card--photo">
-          <img class="ev-card__bg" src="Asset/Event_Card_1.png" alt="1-Atico wedding" />
-          <div class="ev-card__overlay"></div>
-          <div class="ev-card__body">
-            <h3 class="ev-card__name">1-Atico</h3>
-            <p class="ev-card__venue">Wedding</p>
-          </div>
-        </div>
-
-        <!-- St Margaret -->
-        <div class="ev-card ev-card--photo">
-          <img class="ev-card__bg" src="Asset/Event_Card_2.png" alt="St Margaret wedding" />
-          <div class="ev-card__overlay"></div>
-          <div class="ev-card__body">
-            <h3 class="ev-card__name">St Margaret</h3>
-            <p class="ev-card__venue">Wedding</p>
-          </div>
-        </div>
-
-        <!-- LASALLE | Working Title -->
-        <div class="ev-card ev-card--photo">
-          <img class="ev-card__bg" src="Asset/Event_Card_3.png" alt="LASALLE Working Title wedding" />
-          <div class="ev-card__overlay"></div>
-          <div class="ev-card__body">
-            <h3 class="ev-card__name">LASALLE | Working Title</h3>
-            <p class="ev-card__venue">Wedding</p>
-          </div>
-        </div>
-
-        <!-- Grace Assembly -->
-        <div class="ev-card ev-card--photo">
-          <img class="ev-card__bg" src="Asset/Event_Card_4.png" alt="Grace Assembly wedding" />
-          <div class="ev-card__overlay"></div>
-          <div class="ev-card__body">
-            <h3 class="ev-card__name">Grace Assembly</h3>
-            <p class="ev-card__venue">Wedding</p>
-          </div>
-        </div>
-
         <!-- Central Provident Fund -->
-        <div class="ev-card ev-card--photo">
-          <img class="ev-card__bg" src="Asset/Event_Card_5.png" alt="Central Provident Fund corporate event" />
-          <div class="ev-card__overlay"></div>
-          <div class="ev-card__body">
-            <h3 class="ev-card__name">Central Provident Fund</h3>
-            <p class="ev-card__venue">Corporate event</p>
+        <article class="ev-card">
+          <img class="ev-card__img" src="Asset/Event_Card_5.png" alt="Central Provident Fund corporate event" />
+          <div class="ev-card__row">
+            <div class="ev-card__text">
+              <h3 class="ev-card__name">Central Provident Fund</h3>
+              <p class="ev-card__meta">Corporate event | <strong>2024</strong></p>
+            </div>
+            <span class="ev-card__badge">in construction</span>
           </div>
-        </div>
+        </article>
 
         <!-- Guerlain -->
-        <div class="ev-card ev-card--photo">
-          <img class="ev-card__bg" src="Asset/Event_Card_6.png" alt="Guerlain team bonding workshop" />
-          <div class="ev-card__overlay"></div>
-          <div class="ev-card__body">
-            <h3 class="ev-card__name">Guerlain</h3>
-            <p class="ev-card__venue">Team bonding workshop</p>
+        <article class="ev-card">
+          <img class="ev-card__img" src="Asset/Event_Card_6.png" alt="Guerlain team bonding workshop" />
+          <div class="ev-card__row">
+            <div class="ev-card__text">
+              <h3 class="ev-card__name">Guerlain</h3>
+              <p class="ev-card__meta">Team bonding workshop 2024</p>
+            </div>
+            <span class="ev-card__badge">in construction</span>
           </div>
-        </div>
+        </article>
+
+        <!-- 1-Atico -->
+        <article class="ev-card">
+          <img class="ev-card__img" src="Asset/Event_Card_1.png" alt="1-Atico wedding" />
+          <div class="ev-card__row">
+            <div class="ev-card__text">
+              <h3 class="ev-card__name">1-Atico</h3>
+              <p class="ev-card__meta">Wedding | <strong>2025</strong></p>
+            </div>
+            <span class="ev-card__badge">in construction</span>
+          </div>
+        </article>
+
+        <!-- St Margaret -->
+        <article class="ev-card">
+          <img class="ev-card__img" src="Asset/Event_Card_2.png" alt="St Margaret wedding" />
+          <div class="ev-card__row">
+            <div class="ev-card__text">
+              <h3 class="ev-card__name">St Margaret</h3>
+              <p class="ev-card__meta">Wedding | <strong>2025</strong></p>
+            </div>
+            <span class="ev-card__badge">in construction</span>
+          </div>
+        </article>
+
+        <!-- LASALLE | Working Title -->
+        <article class="ev-card">
+          <img class="ev-card__img" src="Asset/Event_Card_3.png" alt="LASALLE Working Title wedding" />
+          <div class="ev-card__row">
+            <div class="ev-card__text">
+              <h3 class="ev-card__name">LASALLE | Working Title</h3>
+              <p class="ev-card__meta">Wedding | <strong>2025</strong></p>
+            </div>
+            <span class="ev-card__badge">in construction</span>
+          </div>
+        </article>
+
+        <!-- Grace Assembly -->
+        <article class="ev-card">
+          <img class="ev-card__img" src="Asset/Event_Card_4.png" alt="Grace Assembly wedding" />
+          <div class="ev-card__row">
+            <div class="ev-card__text">
+              <h3 class="ev-card__name">Grace Assembly</h3>
+              <p class="ev-card__meta">Wedding | <strong>2025</strong></p>
+            </div>
+            <span class="ev-card__badge">in construction</span>
+          </div>
+        </article>
 
       </div><!-- /.ev-grid -->
     </div><!-- /.inner -->
@@ -1541,9 +1539,9 @@
       y: 20, opacity: 0, duration: 0.6, ease: 'power3.out',
       scrollTrigger: { trigger: '#other-works', start: 'top 85%' }
     });
-    gsap.from('.ow-card', {
-      y: 40, opacity: 0, duration: 0.7, stagger: 0.08, ease: 'power3.out',
-      scrollTrigger: { trigger: '.ow-grid', start: 'top 85%' }
+    gsap.from('.ow-row', {
+      y: 20, opacity: 0, duration: 0.6, stagger: 0.06, ease: 'power3.out',
+      scrollTrigger: { trigger: '.ow-list', start: 'top 85%' }
     });
 
     /* Event Styling */
@@ -1620,14 +1618,33 @@
         tilt(card, { maxTilt: 6, lift: -10, child: card.querySelector('.card__mockup'), childShift: 14 });
       });
 
-      document.querySelectorAll('.ow-card').forEach(card => {
-        tilt(card, { maxTilt: 5, lift: -8 });
-        const vid = card.querySelector('video');
-        if (vid) {
-          card.addEventListener('mouseenter', () => { vid.currentTime = 0; vid.play().catch(() => {}); });
-          card.addEventListener('mouseleave', () => { vid.pause(); vid.currentTime = 0; });
-        }
-      });
+      /* Side Quests rows — cursor-following preview, playing the matching
+         project's media on loop until the pointer leaves the row */
+      const owPreview = document.getElementById('ow-preview');
+      if (owPreview) {
+        document.querySelectorAll('.ow-row').forEach(row => {
+          const key = row.dataset.preview;
+          const media = owPreview.querySelectorAll('[data-media="' + key + '"]');
+
+          row.addEventListener('mouseenter', () => {
+            owPreview.className = 'ow-preview ow-preview--' + row.dataset.variant;
+            owPreview.querySelectorAll('.ow-preview__media').forEach(m => { m.style.display = 'none'; });
+            media.forEach(m => {
+              m.style.display = 'block';
+              if (m.tagName === 'VIDEO') { m.currentTime = 0; m.play().catch(() => {}); }
+            });
+            owPreview.style.opacity = '1';
+          });
+          row.addEventListener('mousemove', e => {
+            owPreview.style.left = e.clientX + 'px';
+            owPreview.style.top = e.clientY + 'px';
+          });
+          row.addEventListener('mouseleave', () => {
+            owPreview.style.opacity = '0';
+            media.forEach(m => { if (m.tagName === 'VIDEO') m.pause(); });
+          });
+        });
+      }
 
       document.querySelectorAll('.ev-card').forEach(card => {
         tilt(card, { maxTilt: 4, lift: -8 });

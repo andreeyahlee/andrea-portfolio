@@ -346,7 +346,7 @@
        01 — HERO
     ================================================================ */
     #hero {
-      height: 100vh;
+      height: 100dvh;
       min-height: 600px;
       max-height: 900px;
       display: flex;
@@ -1158,6 +1158,7 @@
 
   <!-- ── LOADER ── -->
   <div id="loader" role="status" aria-label="Loading">
+    <div id="loader-progress" style="position:fixed;top:0;left:0;height:2px;width:0%;background:#dee895;z-index:9999"></div>
     <video class="loader__video" autoplay muted loop playsinline>
       <source src="Asset/Loading_bicycle.mp4" type="video/mp4">
     </video>
@@ -1500,14 +1501,15 @@
     /* ── Loader ── */
     (function () {
       const loaderEl = document.getElementById('loader');
-      const MIN_MS   = 1200;
+      const MIN_MS   = 2500; /* matches the loader-progress bar's 2.5s fill, so exit always starts at 100% */
       const startTs  = Date.now();
       let   hidden   = false;
 
       function hideLoader() {
         if (hidden) return;
         hidden = true;
-        loaderEl.classList.add('loader--hidden');
+        if (window.__loaderExit) { window.__loaderExit(); }
+        else { loaderEl.classList.add('loader--hidden'); }
       }
 
       window.addEventListener('load', function () {
@@ -1524,6 +1526,7 @@
             e.preventDefault();
             hidden = false;
             loaderEl.classList.remove('loader--hidden');
+            if (window.__loaderProgressStart) { window.__loaderProgressStart(); }
             setTimeout(function () { window.location.href = href; }, 600);
           });
         }
@@ -1662,10 +1665,81 @@
   <script>
     gsap.registerPlugin(ScrollTrigger);
 
+    /* ── Loader progress bar + exit wipe (called by the loader script above,
+       which loads before GSAP and can't call gsap directly) ── */
+    (function () {
+      function loaderProgressStart() {
+        gsap.killTweensOf('#loader-progress');
+        gsap.set('#loader-progress', { width: '0%' });
+        gsap.to('#loader-progress', { width: '100%', duration: 2.5, ease: 'power2.inOut' });
+      }
+      function loaderExit() {
+        gsap.timeline()
+          .to('#loader', { clipPath: 'inset(0 0 100% 0)', duration: 0.8, ease: 'power4.inOut' })
+          .add(function () {
+            document.getElementById('loader').classList.add('loader--hidden');
+            gsap.set('#loader', { clearProps: 'clipPath' });
+            gsap.set('#loader-progress', { width: '0%' });
+          });
+        gsap.from('#hero', { opacity: 0, y: 60, duration: 1, ease: 'power3.out' });
+      }
+      loaderProgressStart();
+      window.__loaderProgressStart = loaderProgressStart;
+      window.__loaderExit = loaderExit;
+    })();
+
     /* Hero — entrance */
     gsap.from('.peep', {
       y: 30, opacity: 0, duration: 1, stagger: 0.025, ease: 'power3.out', delay: 0.15
     });
+
+    /* Hero — ambient idle motion (from Figma smart-animate, node 797-51935):
+       a curated dozen peeps take turns doing a quiet bob or head-wiggle across
+       a 10s loop, rippling through the crowd rather than animating all at once. */
+    (function () {
+      const ENTRANCE_DONE = 0.15 + 38 * 0.025 + 1; /* let entrance settle first */
+      const CYCLE = 10;
+
+      function idleBob(el, startPct) {
+        gsap.timeline({ repeat: -1, delay: ENTRANCE_DONE + (startPct / 100) * CYCLE })
+          .to(el, { y: -6, duration: CYCLE * 0.065, ease: 'power1.inOut' })
+          .to(el, { y: 0, duration: CYCLE * 0.045, ease: 'power1.out' })
+          .to(el, { y: -4, duration: CYCLE * 0.035, ease: 'power1.in' })
+          .to(el, { y: 0, duration: CYCLE * 0.055, ease: 'none' })
+          .to(el, { y: 0, duration: CYCLE * 0.8, ease: 'none' }); /* hold for rest of cycle */
+      }
+
+      function idleWiggle(el, startPct) {
+        gsap.timeline({ repeat: -1, delay: ENTRANCE_DONE + (startPct / 100) * CYCLE })
+          .to(el, { y: -5, scaleX: -1, duration: CYCLE * 0.045, ease: 'power1.inOut' })
+          .to(el, { y: -5, scaleX: -1, duration: CYCLE * 0.11, ease: 'none' })
+          .to(el, { y: 0, scaleX: 1, duration: CYCLE * 0.045, ease: 'power1.inOut' })
+          .to(el, { y: 0, scaleX: 1, duration: CYCLE * 0.8, ease: 'none' }); /* hold for rest of cycle */
+      }
+
+      const idlePeeps = [
+        { src: 'Peep39.png', type: 'wiggle', startPct: 0 },
+        { src: 'Peep34.png', type: 'bob',    startPct: 0 },
+        { src: 'Peep11.png', type: 'bob',    startPct: 7 },
+        { src: 'Peep10.png', type: 'wiggle', startPct: 7 },
+        { src: 'Peep30.png', type: 'bob',    startPct: 20 },
+        { src: 'Peep27.png', type: 'wiggle', startPct: 20 },
+        { src: 'Peep22.png', type: 'bob',    startPct: 35 },
+        { src: 'Peep21.png', type: 'wiggle', startPct: 35 },
+        { src: 'Peep19.png', type: 'wiggle', startPct: 52 },
+        { src: 'Peep18.png', type: 'bob',    startPct: 52 },
+        { src: 'Peep03.png', type: 'bob',    startPct: 70 },
+        { src: 'Peep02.png', type: 'wiggle', startPct: 70 },
+      ];
+
+      idlePeeps.forEach(function (spec) {
+        const el = document.querySelector('.peep[src$="' + spec.src + '"]');
+        if (!el) return;
+        gsap.set(el, { transformOrigin: 'center bottom' });
+        if (spec.type === 'bob') idleBob(el, spec.startPct);
+        else idleWiggle(el, spec.startPct);
+      });
+    })();
 
     /* Hero — peep hover: rise, bob once, settle back */
     document.querySelectorAll('.peep').forEach(peep => {
