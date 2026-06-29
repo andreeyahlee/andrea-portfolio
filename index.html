@@ -947,9 +947,39 @@
       color: var(--ink-light);
       text-decoration: none;
       display: block;
+      transition: letter-spacing 0.65s cubic-bezier(0.76, 0, 0.24, 1);
+      will-change: transform;
     }
-    .contact__email:hover { text-decoration: underline; }
+    .contact__email:hover { letter-spacing: -0.01em; }
     body.light-mode .contact__email { color: var(--ink-dark); }
+
+    /* Resume CTA — pill button reusing the site's lime outline button language */
+    .cta-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      padding: 12px 24px;
+      border: 2px solid var(--lime);
+      border-radius: 100px;
+      text-decoration: none;
+      color: var(--lime);
+      transition: background var(--dur-fast), color var(--dur-fast);
+      width: fit-content;
+    }
+    .cta-pill:hover { background: var(--lime); color: var(--ink-dark); }
+    .cta-label {
+      font-family: var(--font-mono);
+      font-weight: 600;
+      font-size: 13px;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+    }
+    .cta-icon {
+      font-family: var(--font-mono);
+      font-weight: 500;
+      font-size: 11px;
+      opacity: 0.75;
+    }
 
     .contact__heading {
       font-family: var(--font-display);
@@ -1015,6 +1045,7 @@
 
     .footer-peep {
       position: absolute;
+      display: inline-block;
       width: 22.53%;
       height: 47.72%;
       object-fit: contain;
@@ -1594,6 +1625,10 @@
               If you&rsquo;re building something complex that needs to feel simple
               particularly for social good &mdash; let&rsquo;s talk!
             </p>
+            <a class="cta-pill" href="https://drive.google.com/file/d/1bMgT6sMRa9Tbtc2sUFGb11WrcM488deY/view?usp=drive_link" target="_blank" rel="noopener noreferrer">
+              <span class="cta-label">View Resume</span>
+              <span class="cta-icon" aria-hidden="true">PDF &#8599;</span>
+            </a>
           </div>
           <div class="contact__socials">
             <a class="social-link" href="https://www.linkedin.com/in/andrealee-" target="_blank" rel="noopener" aria-label="LinkedIn">
@@ -1601,9 +1636,6 @@
             </a>
             <a class="social-link" href="https://www.instagram.com/lee.andrea/" target="_blank" rel="noopener" aria-label="Instagram">
               <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 1 0 0 12.324 6.162 6.162 0 0 0 0-12.324zM12 16a4 4 0 1 1 0-8 4 4 0 0 1 0 8zm6.406-11.845a1.44 1.44 0 1 0 0 2.881 1.44 1.44 0 0 0 0-2.881z"/></svg>
-            </a>
-            <a class="social-link" href="https://drive.google.com/file/d/1bMgT6sMRa9Tbtc2sUFGb11WrcM488deY/view?usp=drive_link" target="_blank" rel="noopener" aria-label="Resume">
-              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M14 2H6c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V8l-6-6zm2 16H8v-2h8v2zm0-4H8v-2h8v2zm-3-5V3.5L18.5 9H13z"/></svg>
             </a>
           </div>
         </div>
@@ -2017,25 +2049,56 @@
 
     /* Contact */
     gsap.from('.contact__heading', {
-      y: 60, opacity: 0, duration: 1, ease: 'power3.out',
-      scrollTrigger: { trigger: '#contact', start: 'top 80%' }
+      filter: 'blur(12px)', opacity: 0, y: 22, duration: 1.2, ease: 'power3.out',
+      scrollTrigger: { trigger: '#contact', start: 'top 72%' }
     });
-    gsap.from(['.contact__email', '.contact__desc', '.contact__socials', '#contact .t-label'], {
+    gsap.from(['.contact__email', '.contact__desc', '.cta-pill', '#contact .t-label'], {
       y: 25, opacity: 0, duration: 0.7, stagger: 0.12, ease: 'power3.out',
       scrollTrigger: { trigger: '#contact', start: 'top 75%' }
     });
-    gsap.from('.footer-peep', {
-      y: 30, opacity: 0, duration: 1, stagger: 0.025, ease: 'power3.out',
-      scrollTrigger: { trigger: '#contact', start: 'top 85%' }
+    gsap.from('.social-link', {
+      y: 24, opacity: 0, duration: 0.6, stagger: 0.1, ease: 'back.out(2)',
+      scrollTrigger: { trigger: '#contact', start: 'top 62%' }
     });
+    gsap.from('.footer-peep', {
+      y: 62, opacity: 0, duration: 0.48,
+      stagger: { each: 0.038, from: 'start' },
+      ease: 'back.out(1.85)',
+      scrollTrigger: { trigger: '#contact', start: 'top 90%' }
+    });
+
+    const peepBobs = new Map();
+    document.querySelectorAll('.footer-peep').forEach((peep, i) => {
+      const bob = gsap.to(peep, {
+        y: '-=6', duration: 1.0 + (i % 5) * 0.22,
+        ease: 'sine.inOut', yoyo: true, repeat: -1, delay: i * 0.06
+      });
+      peepBobs.set(peep, bob);
+    });
+
+    let facingPaused = false;
+    document.addEventListener('mousemove', e => {
+      if (facingPaused) return;
+      document.querySelectorAll('.footer-peep').forEach(p => {
+        const r = p.getBoundingClientRect();
+        const dx = e.clientX - (r.left + r.width / 2);
+        if (Math.abs(dx) < 260) {
+          gsap.to(p, { scaleX: dx > 0 ? 1 : -1, duration: 0.32, ease: 'power2.out' });
+        }
+      });
+    });
+
     document.querySelectorAll('.footer-peep').forEach(peep => {
       peep.addEventListener('mouseenter', function () {
+        facingPaused = true;
+        const bob = peepBobs.get(this);
+        if (bob) bob.pause();
         gsap.killTweensOf(this);
-        gsap.timeline()
-          .to(this, { y: '-12%', scaleY: 1.04, scaleX: 1.02, duration: 0.32, ease: 'back.out(1.6)' })
+        gsap.timeline({ onComplete: () => { facingPaused = false; if (bob) bob.resume(); } })
+          .to(this, { y: '-12%', scaleX: 1, scaleY: 1.04, duration: 0.32, ease: 'back.out(1.6)' })
           .to(this, { y: '-7%', duration: 0.38, ease: 'sine.inOut' })
           .to(this, { y: '-13%', duration: 0.42, ease: 'sine.inOut' })
-          .to(this, { y: 0, scaleY: 1, scaleX: 1, duration: 0.5, ease: 'power2.inOut' });
+          .to(this, { y: 0, scaleY: 1, duration: 0.5, ease: 'power2.inOut' });
       });
     });
 
@@ -2089,6 +2152,14 @@
         gsap.to(img, { x: 0, y: 0, duration: 1, ease: 'elastic.out(1,0.42)' });
       });
     });
+
+    /* ── Contact email: kinetic hover scale ── */
+    (function () {
+      const em = document.querySelector('.contact__email');
+      if (!em) return;
+      em.addEventListener('mouseenter', () => gsap.to(em, { scale: 1.022, duration: 0.38, ease: 'power2.out' }));
+      em.addEventListener('mouseleave', () => gsap.to(em, { scale: 1, duration: 0.65, ease: 'elastic.out(1,0.5)' }));
+    })();
 
     /* ── Client logo marquee: GSAP drive + spotlight hover ── */
     (function () {

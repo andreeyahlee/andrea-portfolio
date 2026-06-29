@@ -402,6 +402,17 @@
       gap: 40px;
     }
 
+    .page-eyebrow {
+      display: block;
+      font-size: 0.68rem;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      opacity: 0.38;
+      margin-bottom: 0.75rem;
+      color: var(--ink-light);
+    }
+    body.light-mode .page-eyebrow { color: var(--ink-dark); }
+
     .pd-intro {
       font-family: var(--font-display);
       font-weight: 400;
@@ -608,16 +619,22 @@
     }
 
     .ow-row__badge {
-      background: #dfe0de;
-      color: var(--ink-dark);
       font-family: var(--font-body);
+      font-size: 0.6rem;
       font-weight: 600;
-      font-size: 13px;
-      padding: 4px 16px;
-      border-radius: 10px;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--ink-light);
+      border: 1px solid rgba(244,244,235,0.2);
+      border-radius: 9999px;
+      padding: 0.18rem 0.55rem;
+      opacity: 0.65;
       white-space: nowrap;
       flex-shrink: 0;
+      transition: opacity 0.3s ease;
     }
+    body.light-mode .ow-row__badge { color: var(--ink-dark); border-color: rgba(26,28,22,0.2); }
+    .ow-row:hover .ow-row__badge { opacity: 0.82; }
 
     .ow-row__divider {
       height: 1px;
@@ -800,6 +817,16 @@
     .ev-carousel-card.is-active .evc-img-wrap img:hover {
       transform: scale(1.05);
     }
+
+    .section-bridge {
+      font-size: 0.85rem;
+      opacity: 0.55;
+      max-width: 50ch;
+      margin-bottom: 2rem;
+      line-height: 1.6;
+      color: var(--ink-light);
+    }
+    body.light-mode .section-bridge { color: var(--ink-dark); }
 
     .evc-row {
       display: flex;
@@ -1292,7 +1319,10 @@
   <section class="section" id="product-design">
     <div class="inner">
 
-      <p class="pd-intro">Product design and UX research across enterprise tools, civic spaces, and consumer apps.</p>
+      <div class="works-hero">
+        <span class="page-eyebrow">Work</span>
+        <p class="pd-intro">Product design and UX research across enterprise tools, civic spaces, and consumer apps.</p>
+      </div>
 
       <div class="pd-grid">
 
@@ -1366,7 +1396,7 @@
   <section class="section" id="other-works">
     <div class="inner">
 
-      <span class="t-label">Side Quests</span>
+      <span class="t-label">In the Lab</span>
 
       <div class="ow-list">
 
@@ -1374,10 +1404,10 @@
         <div class="ow-row card-disabled" title="Coming soon" data-preview="tallyboard" data-variant="light">
           <div class="ow-row__text">
             <span class="ow-row__name">Tallyboard</span>
-            <span class="ow-row__desc">For board game lovers to track their group scores.</span>
+            <span class="ow-row__desc">Score tracker for board game nights.</span>
           </div>
           <span class="ow-row__year">2026</span>
-          <span class="ow-row__badge">in construction</span>
+          <span class="ow-row__badge">In Progress</span>
         </div>
         <div class="ow-row__divider"></div>
 
@@ -1385,10 +1415,10 @@
         <div class="ow-row card-disabled" title="Coming soon" data-preview="dino" data-variant="dark">
           <div class="ow-row__text">
             <span class="ow-row__name">Longtail Valley</span>
-            <span class="ow-row__desc">An animated dino-short series produced for my nephews</span>
+            <span class="ow-row__desc">Animated dinosaur series. Side project, pure joy.</span>
           </div>
           <span class="ow-row__year">2026</span>
-          <span class="ow-row__badge">in construction</span>
+          <span class="ow-row__badge">In Progress</span>
         </div>
         <div class="ow-row__divider"></div>
 
@@ -1396,10 +1426,10 @@
         <div class="ow-row card-disabled" title="Coming soon" data-preview="kincare" data-variant="olive">
           <div class="ow-row__text">
             <span class="ow-row__name">KinCare</span>
-            <span class="ow-row__desc">Civic-tech: For the triple-hatting caregiver holding it altogether</span>
+            <span class="ow-row__desc">Caregiving coordination across generations.</span>
           </div>
           <span class="ow-row__year">2026</span>
-          <span class="ow-row__badge">in construction</span>
+          <span class="ow-row__badge">In Progress</span>
         </div>
         <div class="ow-row__divider"></div>
 
@@ -1407,10 +1437,10 @@
         <div class="ow-row card-disabled" title="Coming soon" data-preview="pulse" data-variant="light">
           <div class="ow-row__text">
             <span class="ow-row__name">Pulse</span>
-            <span class="ow-row__desc">The Good Hack: A civic tech hackathon for social good</span>
+            <span class="ow-row__desc">Voice-first app for elderly users. Hackathon concept.</span>
           </div>
           <span class="ow-row__year">2026</span>
-          <span class="ow-row__badge">in construction</span>
+          <span class="ow-row__badge">In Progress</span>
         </div>
         <div class="ow-row__divider"></div>
 
@@ -1418,10 +1448,10 @@
         <div class="ow-row card-disabled" title="Coming soon" data-preview="thrive" data-variant="light">
           <div class="ow-row__text">
             <span class="ow-row__name">ThriveLab</span>
-            <span class="ow-row__desc">Health &amp; Wellness | All-in-one tracker</span>
+            <span class="ow-row__desc">All-in-one health tracker. Exploring habit design.</span>
           </div>
           <span class="ow-row__year">2025</span>
-          <span class="ow-row__badge">in construction</span>
+          <span class="ow-row__badge">In Progress</span>
         </div>
         <div class="ow-row__divider"></div>
 
@@ -1445,6 +1475,8 @@
     <div class="inner">
 
       <span class="t-label">Event Styling</span>
+
+      <p class="section-bridge">Before UX, I ran a luxury event design studio for four years. These are the physical spaces I shaped — same eye, different medium.</p>
 
       <div class="ev-carousel-stage" role="region" aria-label="Event styling portfolio">
         <div class="ev-ring" id="evRing">
@@ -1818,8 +1850,8 @@
     gsap.registerPlugin(ScrollTrigger);
 
     /* Product Design — entrance */
-    gsap.from('.pd-intro', {
-      y: 30, opacity: 0, duration: 0.9, ease: 'power3.out', delay: 0.1
+    gsap.from('.works-hero', {
+      opacity: 0, y: 36, duration: 0.9, ease: 'power3.out', delay: 0.2
     });
     gsap.from('.pd-grid .card', {
       y: 60, opacity: 0, duration: 0.9, stagger: 0.12, ease: 'power3.out', delay: 0.25
@@ -1831,13 +1863,17 @@
       scrollTrigger: { trigger: '#other-works', start: 'top 85%' }
     });
     gsap.from('.ow-row', {
-      y: 20, opacity: 0, duration: 0.6, stagger: 0.06, ease: 'power3.out',
-      scrollTrigger: { trigger: '.ow-list', start: 'top 85%' }
+      clipPath: 'inset(0 100% 0 0)', duration: 0.85, stagger: 0.1, ease: 'power4.inOut',
+      scrollTrigger: { trigger: '.ow-list', start: 'top 72%' }
     });
 
     /* Event Styling */
     gsap.from('#event-styling .t-label', {
       y: 20, opacity: 0, duration: 0.6, ease: 'power3.out',
+      scrollTrigger: { trigger: '#event-styling', start: 'top 85%' }
+    });
+    gsap.from('.section-bridge', {
+      y: 20, opacity: 0, duration: 0.6, delay: 0.1, ease: 'power3.out',
       scrollTrigger: { trigger: '#event-styling', start: 'top 85%' }
     });
 
