@@ -89,6 +89,11 @@
     body.light-mode .cs-divider     { background: rgba(26,28,22,0.15); }
     body.light-mode .cs-back        { color: rgba(26,28,22,0.7); }
     body.light-mode .cs-tag         { background: rgba(26,28,22,0.06); color: rgba(26,28,22,0.7); }
+    body.light-mode .cs-workshop-subhead { color: var(--ink-dark); }
+    body.light-mode .cs-workshop-meta { color: #6b7a00; }
+    body.light-mode .cs-pill { background: rgba(107,112,96,0.2); color: var(--ink-dark); }
+    body.light-mode .cs-decision-card { box-shadow: 0 0 0 1.5px rgba(26,28,22,0.1); }
+    body.light-mode .cs-decision-or { color: var(--ink-dark); }
     body.light-mode .contact__heading,
     body.light-mode .contact__desc    { color: var(--ink-dark); }
     body.light-mode .contact__email   { color: var(--ink-dark); }
@@ -314,58 +319,69 @@
     .rc-tile--c3-3 .rc-tile__inner { width: 87.66%; height: 78.02%; border-radius: 6px; }
 
     /* Workshop — scattered polaroid-style photo collage */
-    .cs-workshop-collage { flex: 1.2; min-width: 0; position: relative; aspect-ratio: 818 / 852; }
-    .cs-workshop-photo { position: absolute; box-sizing: border-box; background: var(--bg-light); border-radius: 30px; }
-    .cs-workshop-photo img { width: 100%; height: 100%; display: block; object-fit: cover; border-radius: 17px; pointer-events: none; }
-    .cs-workshop-photo--1 { left: 16.41%; top: 3.44%; width: 76.40%; height: 58.45%; padding: 3.2%; transform: rotate(-4.42deg); box-shadow: -13.7px 17.5px 2.5px rgba(0,0,0,0.5); z-index: 4; }
-    .cs-workshop-photo--2 { left: 0.22%; top: 48.68%; width: 49.63%; height: 38.26%; padding: 3.2%; transform: rotate(9.34deg); box-shadow: -9px 11.4px 1.6px rgba(0,0,0,0.5); z-index: 1; }
-    .cs-workshop-photo--3 { left: 53.65%; top: 54.6%; width: 49.63%; height: 38.26%; padding: 3.2%; transform: rotate(-12.19deg); box-shadow: -9px 11.4px 1.6px rgba(0,0,0,0.5); z-index: 2; }
-    .cs-workshop-photo--4 { left: 27.64%; top: 72.13%; width: 30.54%; height: 22.73%; padding: 5.2%; transform: rotate(-15.26deg); box-shadow: -9px 11.4px 1.6px rgba(0,0,0,0.5); z-index: 3; }
-    .cs-workshop-photo__caption { position: absolute; top: 12%; left: 11%; right: 11%; font-family: var(--font-body); font-weight: 700; font-size: 13px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--ink-light); }
+    .cs-workshop-collage { flex: 1.2; min-width: 0; position: relative; aspect-ratio: 621 / 724; }
+    /* border + overflow:hidden replaces the old padding+bg approach */
+    .cs-workshop-photo { position: absolute; box-sizing: border-box; border-radius: 10px; border: 5px solid var(--ink-light); overflow: hidden; }
+    .cs-workshop-photo img { position: absolute; inset: 0; width: 100%; height: 100%; display: block; object-fit: cover; pointer-events: none; }
+    /* left/top = centre of each card; translate(-50%,-50%) re-anchors so rotation is around card centre */
+    .cs-workshop-photo--1 { left: 53.20%; top: 43.44%; width: 68.37%; height: 46.80%; transform: translate(-50%,-50%) rotate(-4.42deg); box-shadow: -9.332px 11.877px 3.393px rgba(0,0,0,0.5); z-index: 4; }
+    .cs-workshop-photo--2 { left: 26.73%; top: 71.57%; width: 44.40%; height: 30.63%; transform: translate(-50%,-50%) rotate(9.34deg);  box-shadow: -6.107px 7.772px 2.221px rgba(0,0,0,0.5); z-index: 1; }
+    .cs-workshop-photo--3 { left: 74.54%; top: 76.32%; width: 44.40%; height: 30.63%; transform: translate(-50%,-50%) rotate(-12.19deg); box-shadow: -6.107px 7.772px 2.221px rgba(0,0,0,0.5); z-index: 2; }
+    .cs-workshop-photo--4 { left: 43.49%; top: 86.74%; width: 33.93%; height: 19.54%; transform: translate(-50%,-50%) rotate(-15.26deg); box-shadow: -7.582px 9.65px 2.757px rgba(0,0,0,0.5); z-index: 3; }
+    .cs-workshop-photo__caption { position: absolute; top: 16px; left: 16px; right: 16px; z-index: 1; font-family: var(--font-body); font-weight: 700; font-size: 11.5px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--ink-light); }
 
     /* ── Workshop industries ── */
     .cs-tagrow { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 8px; }
 
+    /* ── Workshop sub-sections ── */
+    #cs-workshop .cs-zigzag-text { gap: 40px; }
+    #cs-workshop .cs-h2 { font-size: 40px; line-height: 44px; letter-spacing: -1px; }
+    .cs-workshop-subsection { display: flex; flex-direction: column; gap: 12px; }
+    .cs-workshop-subhead { font-family: var(--font-display); font-weight: 400; font-size: 26px; line-height: 32px; letter-spacing: -0.015em; color: var(--ink-light); }
+    .cs-workshop-meta { font-family: var(--font-body); font-weight: 600; font-size: 13px; line-height: 1.4; color: var(--lime); }
+    .cs-pillrow { display: flex; flex-wrap: wrap; gap: 8px; }
+    .cs-pill { display: inline-flex; align-items: center; font-family: var(--font-body); font-weight: 600; font-size: 13px; color: var(--ink-light); background: #6b7060; padding: 4px 16px; border-radius: 100px; }
+
     /* ── Decision framework (How I made the call) ── */
     .cs-decision-head { display: flex; flex-direction: column; align-items: center; gap: 40px; text-align: center; margin: 24px auto 56px; max-width: 722px; }
-    .cs-decision-head__title { font-family: var(--font-display); font-weight: 400; font-size: clamp(1.75rem, 3.2vw, 2.5rem); line-height: 1.1; letter-spacing: -0.025em; color: var(--ink-light); }
-    .cs-decision-head__body { font-family: var(--font-body); font-size: 17px; line-height: 1.47; color: var(--ink-light); }
-    .cs-decision-cards { display: flex; align-items: center; gap: 32px; }
-    .cs-decision-card { flex: 1; min-width: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 10px; text-align: center; }
-    .cs-decision-card__title { font-family: var(--font-hand); font-size: 35px; line-height: 1; color: var(--ink-light); }
-    .cs-decision-card__body { font-family: var(--font-body); font-size: 17px; line-height: 1.47; color: var(--ink-light); }
-    .cs-decision-peep { flex: 1; min-width: 0; max-width: 280px; display: block; margin: 0 auto; }
+    .cs-decision-head__title { font-family: var(--font-display); font-weight: 400; font-size: 40px; line-height: 44px; letter-spacing: -1px; color: var(--ink-light); }
+    .cs-decision-head__body { font-family: var(--font-body); font-size: 17px; line-height: 25px; color: var(--ink-light); }
+    .cs-decision-cards { display: flex; align-items: stretch; gap: 40px; }
+    .cs-decision-card { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 10px; padding: 32px; border-radius: 10px; background: var(--ink-light); color: var(--ink-dark); }
+    .cs-decision-card__title { font-family: var(--font-hand); font-size: 35px; line-height: 35px; color: var(--ink-dark); }
+    .cs-decision-card__subtitle { font-family: var(--font-display); font-weight: 500; font-size: 18px; line-height: 24px; color: var(--ink-dark); }
+    .cs-decision-card__body { font-family: var(--font-body); font-size: 17px; line-height: 25px; color: var(--ink-dark); }
+    .cs-decision-or { flex-shrink: 0; width: 177px; display: flex; align-items: center; justify-content: center; font-family: var(--font-hand); font-size: 100px; line-height: 1; color: var(--ink-light); text-align: center; }
 
-    /* ── Seven problems carousel ── */
-    .cs-seven-row { display: flex; align-items: center; gap: 40px; }
-    .cs-carousel { flex: 1; min-width: 0; display: flex; align-items: center; justify-content: center; gap: 16px; }
-    .cs-carousel__viewport { flex: 1; min-width: 0; max-width: 630px; border-radius: 14px; overflow: hidden; box-shadow: 0 24px 48px rgba(0,0,0,0.35); }
-    .cs-carousel__slide { width: 100%; aspect-ratio: 630 / 651; display: block; object-fit: cover; }
-    .cs-carousel__arrow { flex-shrink: 0; width: 30px; height: 30px; display: flex; align-items: center; justify-content: center; border: none; background: none; padding: 0; color: rgba(244,244,235,0.45); cursor: pointer; transition: color var(--dur-fast), transform var(--dur-fast); }
-    .cs-carousel__arrow:hover { color: var(--lime); transform: scale(1.15); }
-    .cs-carousel__arrow svg { width: 100%; height: 100%; }
-    .cs-carousel__arrow--next svg { transform: scaleX(-1); }
-    body.light-mode .cs-carousel__arrow { color: rgba(26,28,22,0.35); }
-    .cs-seven-text { flex: 1; min-width: 280px; max-width: 514px; display: flex; flex-direction: column; gap: 16px; }
-
-    /* ── Timeline (How it unfolded) ── */
-    .cs-unfolded-stage { position: relative; width: 100%; aspect-ratio: 1312 / 515; margin-top: 8px; }
-    .cs-unfolded-card {
-      position: absolute; box-sizing: border-box; width: 23.86%; aspect-ratio: 313 / 263;
-      background: var(--bg-light); border: 3px solid var(--ink-dark); border-radius: 30px;
-      padding: clamp(14px, 2.4vw, 32px); display: flex; flex-direction: column; justify-content: space-between; gap: 20px;
-      box-shadow: -14px 18px 3px rgba(0,0,0,0.35);
+    /* ── Seven problems — two-column sticky layout ── */
+    #cs-seven .inner { display: flex; gap: 40px; align-items: flex-start; }
+    .cs-seven-left { flex: 0 0 calc(50% - 20px); position: sticky; top: 100px; display: flex; flex-direction: column; gap: 20px; }
+    .cs-seven-intro { display: flex; flex-direction: column; gap: 16px; }
+    .cs-seven-stack { flex: 1; display: flex; flex-direction: column; gap: 10px; }
+    .cs-seven-card {
+      position: relative; background: #f4f4eb; border-radius: 16px; overflow: hidden;
+      display: flex; align-items: stretch; min-height: 400px; flex-shrink: 0;
     }
-    .cs-unfolded-card:nth-child(1) { left: 4.78%; top: 8.06%; transform: rotate(-17.78deg); }
-    .cs-unfolded-card:nth-child(2) { left: 25.55%; top: 8.11%; transform: rotate(15.37deg); }
-    .cs-unfolded-card:nth-child(3) { left: 51.55%; top: 7.22%; transform: rotate(-14.1deg); }
-    .cs-unfolded-card:nth-child(4) { left: 73.51%; top: 10.65%; transform: rotate(19.57deg); }
-    .cs-unfolded-card > div { display: flex; flex-direction: column; gap: 10px; }
-    .cs-unfolded-card__round { font-family: var(--font-body); font-weight: 700; font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--ink-dark); text-align: center; }
-    .cs-unfolded-card__name { font-family: var(--font-display); font-weight: 500; font-size: 18px; color: var(--ink-dark); }
-    .cs-unfolded-card__body { font-family: var(--font-body); font-size: clamp(12px, 1.1vw, 15px); line-height: 1.35; color: var(--ink-dark); }
-    .cs-unfolded-card__tag { font-family: var(--font-body); font-size: 12px; color: #6b7060; }
-    .cs-unfolded-peep { position: absolute; left: 45.03%; top: 36.31%; width: 18.53%; display: block; pointer-events: none; }
+    .cs-seven-card__badge {
+      position: absolute; top: 16px; right: 16px; z-index: 2;
+      font-family: var(--font-mono); font-weight: 700; font-size: 11px; letter-spacing: 0.06em; text-transform: uppercase;
+      padding: 5px 16px; border-radius: 100px;
+    }
+    .cs-badge--solved { background: var(--ink-dark); color: var(--lime); }
+    .cs-badge--protected { background: var(--lime); color: var(--ink-dark); }
+    .cs-badge--returned { background: #fdedd5; color: #a0622a; }
+    .cs-seven-card__left {
+      flex: 0 0 40%; padding: 32px 28px; display: flex; flex-direction: column; gap: 12px; position: relative; z-index: 1;
+    }
+    .cs-seven-card__title { font-family: var(--font-display); font-weight: 700; font-size: 24px; line-height: 30px; letter-spacing: -0.01em; color: var(--ink-dark); }
+    .cs-seven-card__desc { font-family: var(--font-body); font-size: 15px; line-height: 23px; color: rgba(33,40,26,0.65); }
+    .cs-seven-card__stat { font-family: var(--font-body); font-size: 15px; line-height: 23px; color: rgba(33,40,26,0.9); margin-top: auto; }
+    .cs-seven-card__right { flex: 1; position: relative; overflow: hidden; }
+    .cs-seven-card__right img {
+      position: absolute; top: 5%; left: -5%; width: 118%; height: auto;
+      transform: perspective(1400px) rotateY(-10deg) rotateX(4deg);
+      transform-origin: top center;
+    }
 
     /* ── Before / After ── */
     .cs-ba { display: flex; gap: 32px; margin-top: 16px; }
@@ -469,12 +485,11 @@
       .cs-cols .cs-col, .cs-impact .cs-impact__item, .cs-stack .cs-stack__col { flex: 1 1 45%; }
       .cs-impact-wrap { flex-wrap: wrap; gap: 32px; }
       .cs-impact__peep { width: clamp(100px, 20vw, 160px); }
-      .cs-unfolded-stage { aspect-ratio: auto; height: auto; display: flex; flex-direction: column; gap: 20px; }
-      .cs-unfolded-card { position: static; width: 100%; aspect-ratio: auto; transform: none !important; box-shadow: -10px 14px 2px rgba(0,0,0,0.35); }
-      .cs-unfolded-peep { display: none; }
       .cs-zigzag-row, .cs-zigzag-row--reverse { flex-direction: column; }
-      .cs-seven-row { flex-direction: column; }
-      .cs-seven-text { max-width: 100%; }
+      .cs-workshop-collage { width: 100%; }
+      #cs-seven .inner { gap: 28px; }
+      .cs-seven-left { top: 80px; }
+      .cs-seven-card { min-height: 360px; }
       .cs-brief-text { max-width: 100%; }
       .cs-role-list { flex-wrap: wrap; gap: 24px; }
       .cs-role-card { flex: 1 1 45%; }
@@ -510,6 +525,14 @@
       .cs-finalproto__phones img { flex: 1 1 100%; }
       .cs-next { flex-direction: column; align-items: flex-start; gap: 12px; }
       .cs-next__link--next { text-align: left; }
+      #cs-seven .inner { flex-direction: column; gap: 32px; }
+      .cs-seven-left { position: static; flex: none; width: 100%; }
+      .cs-seven-stack { gap: 10px; }
+      .cs-seven-card { flex-direction: column; min-height: auto; border-radius: 12px; }
+      .cs-seven-card__left { flex: none; width: 100%; padding: 24px 24px 16px; }
+      .cs-seven-card__title { font-size: 20px; line-height: 26px; }
+      .cs-seven-card__right { height: 220px; }
+      .cs-seven-card__right img { position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover; object-position: top left; transform: none; }
 
       #contact .inner { flex-direction: column; align-items: stretch; }
       .contact__copy { width: 100%; }
@@ -657,7 +680,7 @@
     <div class="inner">
       <span class="t-label">Key Metrics</span>
       <div class="cs-specs-row" data-gsap="stagger">
-        <div class="cs-specs-stats" data-gsap="stagger">
+        <div class="cs-specs-stats">
           <div class="cs-spec-card" data-gsap="card">
             <div class="cs-spec-card__inner">
               <p class="cs-spec-num">83%</p>
@@ -697,9 +720,9 @@
   </section>
 
   <!-- ── WORKSHOP ── -->
-  <section class="section" id="cs-workshop" aria-label="Workshop">
+  <section class="section" id="cs-workshop" aria-label="Research and workshop">
     <div class="inner">
-      <span class="t-label">Workshop</span>
+      <span class="t-label">Transforming data into solutions</span>
       <div class="cs-zigzag-row">
         <div class="cs-workshop-collage" data-gsap="stagger">
           <div class="cs-workshop-photo cs-workshop-photo--1" data-gsap="card">
@@ -707,27 +730,37 @@
             <span class="cs-workshop-photo__caption">Co-design workshop in progress</span>
           </div>
           <div class="cs-workshop-photo cs-workshop-photo--2" data-gsap="card">
-            <img src="../Asset/arvo-workshop-02.jpg" alt="Co-design workshop photo">
+            <img src="../Asset/arvo-workshop-03.jpg" alt="Co-design workshop — participants working at a table">
           </div>
           <div class="cs-workshop-photo cs-workshop-photo--3" data-gsap="card">
-            <img src="../Asset/arvo-workshop-03.jpg" alt="Co-design workshop photo">
+            <img src="../Asset/arvo-workshop-02.jpg" alt="Co-design workshop — sticky notes on a whiteboard">
           </div>
           <div class="cs-workshop-photo cs-workshop-photo--4" data-gsap="card">
-            <img src="../Asset/arvo-workshop-04.jpg" alt="Co-design workshop photo">
+            <img src="../Asset/arvo-workshop-04.jpg" alt="Co-design workshop notes">
           </div>
         </div>
         <div class="cs-zigzag-text" data-gsap="card">
-          <h2 class="cs-h2">We were expecting a UI problem. We found something harder.</h2>
-          <p class="cs-body">Every session moderated by the team, we spoke with our managers and had them test out ARVO's original dashboard to better understand what worked and what didn't. Then I facilitated a co-design workshop, a working session where I bring the client into the room to make decisions together rather than just present findings. With our Client there, the direction carried their buy-in from day one.</p>
-          <div class="cs-tagrow">
-            <span class="cs-tag">Tech</span>
-            <span class="cs-tag">F&amp;B</span>
-            <span class="cs-tag">Hospitality</span>
-            <span class="cs-tag">Education</span>
-            <span class="cs-tag">Retail</span>
-            <span class="cs-tag">Finance</span>
-            <span class="cs-tag">Energy</span>
-            <span class="cs-tag">Consulting</span>
+          <h2 class="cs-h2">We went in expecting a UI problem. We found something harder.</h2>
+
+          <div class="cs-workshop-subsection">
+            <h3 class="cs-workshop-subhead">Interview &amp; Usability Testing Round 1</h3>
+            <p class="cs-workshop-meta">Research · 12 interviews · 8 industries</p>
+            <p class="cs-body">Every session moderated by the team, we spoke with managers and had them test out ARVO's original dashboard to understand what worked and what didn't. Interviews surfaced seven recurring problems — far more than a visual refresh could fix.</p>
+            <div class="cs-pillrow">
+              <span class="cs-pill">Tech</span>
+              <span class="cs-pill">F&amp;B</span>
+              <span class="cs-pill">Hospitality</span>
+              <span class="cs-pill">Education</span>
+              <span class="cs-pill">Retail</span>
+              <span class="cs-pill">Finance</span>
+              <span class="cs-pill">Energy</span>
+              <span class="cs-pill">Consulting</span>
+            </div>
+          </div>
+
+          <div class="cs-workshop-subsection">
+            <h3 class="cs-workshop-subhead">Workshop</h3>
+            <p class="cs-body">After research I ran a co-design workshop with the founder — a working session where I brought the client into the room to make decisions together rather than just present findings back to them. With our client there, the direction carried her buy-in from day one.</p>
           </div>
         </div>
       </div>
@@ -735,22 +768,24 @@
   </section>
 
   <!-- ── HOW I MADE THE CALL ── -->
-  <section class="section" id="cs-decision" aria-label="How I made the call">
+  <section class="section" id="cs-decision" aria-label="The scope call">
     <div class="inner">
-      <span class="t-label">How I made the call</span>
+      <span class="t-label">The scope call</span>
       <div class="cs-decision-head">
-        <h2 class="cs-decision-head__title">Before moving ahead, I had to decide which problems were mine to solve.</h2>
+        <h2 class="cs-decision-head__title">Before moving pixels, I had to decide which problems were ours to solve.</h2>
         <p class="cs-decision-head__body">It would have been easy to start redrawing screens. Instead we ran each problem through a single question first and decided if the problem could be solved by design.</p>
       </div>
       <div class="cs-decision-cards" data-gsap="stagger">
         <div class="cs-decision-card" data-gsap="card">
           <p class="cs-decision-card__title">Yes, design can fix it!</p>
-          <p class="cs-decision-card__body">A screen problem. We could redraw, restructure, or relabel our way to a fix.</p>
+          <p class="cs-decision-card__subtitle">A screen problem.</p>
+          <p class="cs-decision-card__body">We could redraw, restructure, or relabel our way to a fix. The issue lived in the interface.</p>
         </div>
-        <img class="cs-decision-peep" src="../Asset/arvo-peep-decision.svg" alt="" data-gsap="card">
+        <div class="cs-decision-or" aria-hidden="true" data-gsap="card">OR</div>
         <div class="cs-decision-card" data-gsap="card">
           <p class="cs-decision-card__title">Nope, return it to Client.</p>
-          <p class="cs-decision-card__body">A product or culture problem. No interface change could reach it, so we returned it with the evidence.</p>
+          <p class="cs-decision-card__subtitle">A product or culture problem.</p>
+          <p class="cs-decision-card__body">No interface change could reach it, so we returned it with the evidence. These five belonged to the founder's product decisions, not ours.</p>
         </div>
       </div>
     </div>
@@ -759,66 +794,110 @@
   <!-- ── THE SEVEN PROBLEMS ── -->
   <section class="section" id="cs-seven" aria-label="The seven problems">
     <div class="inner">
-      <span class="t-label">What we actually uncovered</span>
-      <div class="cs-seven-row" data-gsap="stagger">
-        <div class="cs-carousel" data-gsap="card">
-          <button class="cs-carousel__arrow cs-carousel__arrow--prev" type="button" aria-label="Previous problem">
-            <svg viewBox="0 0 30 30" fill="none"><path d="M19 6L10 15L19 24" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
-          </button>
-          <div class="cs-carousel__viewport">
-            <img class="cs-carousel__slide" id="cs-seven-slide" src="../Asset/arvo-problem-card-01.png" alt="Problem 1 of 8 — Manager's Paradox, solved: single-page architecture and clear role separation. 11 of 13 managers approved.">
-          </div>
-          <button class="cs-carousel__arrow cs-carousel__arrow--next" type="button" aria-label="Next problem">
-            <svg viewBox="0 0 30 30" fill="none"><path d="M11 6L20 15L11 24" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
-          </button>
-        </div>
-        <div class="cs-seven-text" data-gsap="card">
-          <h2 class="cs-h2">And what we chose to do with each one.</h2>
-          <p class="cs-body">Here's the full reveal. Two were fixable by design, one was protected since it was highly praised. The remaining five went back to our Client.</p>
+      <div class="cs-seven-left">
+        <span class="t-label">The seven problems</span>
+        <div class="cs-seven-intro">
+          <h2 class="cs-h2">What we actually uncovered and what we chose to do with each one.</h2>
+          <p class="cs-body">Five problems surfaced in round one research. Two more appeared when a second pool of fresh users tested the redesign. Not all of them had a design answer. The discipline was in telling them apart.</p>
         </div>
       </div>
-    </div>
-  </section>
+      <div class="cs-seven-stack" id="cs-seven-stack">
 
-  <!-- ── HOW IT UNFOLDED ── -->
-  <section class="section" id="cs-unfolded" aria-label="How it unfolded">
-    <div class="inner">
-      <span class="t-label">How it unfolded</span>
-      <h2 class="cs-h2" style="margin-bottom:8px;">The problems weren't all found at once.</h2>
-      <p class="cs-body" style="max-width:640px; margin-bottom:40px;">Some surfaced in the first round of interviews. Others only appeared later, when fresh users tested the redesign.</p>
-      <div class="cs-unfolded-stage" data-gsap="stagger">
-        <div class="cs-unfolded-card" data-gsap="card">
-          <div>
-            <span class="cs-unfolded-card__round">Round 1 · Research</span>
-            <h3 class="cs-unfolded-card__name">Interview</h3>
-            <p class="cs-unfolded-card__body">12 managers across 8 industries. The first five problems surfaced here.</p>
+        <div class="cs-seven-card">
+          <span class="cs-seven-card__badge cs-badge--solved">Solved</span>
+          <div class="cs-seven-card__left">
+            <h3 class="cs-seven-card__title">Manager's Paradox</h3>
+            <p class="cs-seven-card__desc">no time to read a dense dashboard so we designed singular page architecture, clear role separation and no ambiguity on context of each page.</p>
+            <p class="cs-seven-card__stat">11 of 13 managers approved.</p>
           </div>
-          <span class="cs-unfolded-card__tag">first findings</span>
-        </div>
-        <div class="cs-unfolded-card" data-gsap="card">
-          <div>
-            <span class="cs-unfolded-card__round">Mid-point</span>
-            <h3 class="cs-unfolded-card__name">Workshop</h3>
-            <p class="cs-unfolded-card__body">I turned the findings into a shared problem map with our Client and set the design direction.</p>
+          <div class="cs-seven-card__right">
+            <img src="../Asset/arvo-problem-01.png" alt="Manager's Paradox solution — single-page architecture with clear role separation">
           </div>
         </div>
-        <div class="cs-unfolded-card" data-gsap="card">
-          <div>
-            <span class="cs-unfolded-card__round">Build</span>
-            <h3 class="cs-unfolded-card__name">Redesign</h3>
-            <p class="cs-unfolded-card__body">Solved the two design problems. Reworked the language. Handed the rest back.</p>
+
+        <div class="cs-seven-card">
+          <span class="cs-seven-card__badge cs-badge--solved">Solved</span>
+          <div class="cs-seven-card__left">
+            <h3 class="cs-seven-card__title">Cognitive Overload</h3>
+            <p class="cs-seven-card__desc">overwhelming wall of text and every signal looked equally urgent so we added clear signals for managers to easily scan for issues and prioritise key tasks faster.</p>
+            <p class="cs-seven-card__stat">12 of 13 managers approved.</p>
+          </div>
+          <div class="cs-seven-card__right">
+            <img src="../Asset/arvo-problem-02.png" alt="Cognitive Overload solution — priority signals for faster issue scanning">
           </div>
         </div>
-        <div class="cs-unfolded-card" data-gsap="card">
-          <div>
-            <span class="cs-unfolded-card__round">Round 2 · Testing</span>
-            <h3 class="cs-unfolded-card__name">Validation</h3>
-            <p class="cs-unfolded-card__body">13 new users tested the redesign. Two new problems surfaced that round one couldn't.</p>
+
+        <div class="cs-seven-card">
+          <span class="cs-seven-card__badge cs-badge--protected">Protected</span>
+          <div class="cs-seven-card__left">
+            <h3 class="cs-seven-card__title">Energisers &amp; Drainers</h3>
+            <p class="cs-seven-card__desc">managers consistently rated this as the most valuable feature in the product. we preserved it and built around it rather than rebuild it from scratch.</p>
           </div>
-          <span class="cs-unfolded-card__tag">new findings</span>
+          <div class="cs-seven-card__right">
+            <img src="../Asset/arvo-problem-03.png" alt="Energisers & Drainers — preserved as-is">
+          </div>
         </div>
-        <img class="cs-unfolded-peep" src="../Asset/arvo-peep-unfolded.svg" alt="" aria-hidden="true">
-      </div>
+
+        <div class="cs-seven-card">
+          <span class="cs-seven-card__badge cs-badge--returned">Returned</span>
+          <div class="cs-seven-card__left">
+            <h3 class="cs-seven-card__title">AI Jargons &amp; Mgt 101</h3>
+            <p class="cs-seven-card__desc">The plain-English translation layer is just a temporary workaround; the AI model itself needs to be retrained with a proper language taxonomy.</p>
+            <p class="cs-seven-card__desc">Handed over the taxonomy documentation, but advised our Client to test it further to ensure the simple phrasing fits each specific industry.</p>
+          </div>
+          <div class="cs-seven-card__right">
+            <img src="../Asset/arvo-problem-04.png" alt="AI Jargons — returned to client">
+          </div>
+        </div>
+
+        <div class="cs-seven-card">
+          <span class="cs-seven-card__badge cs-badge--returned">Returned</span>
+          <div class="cs-seven-card__left">
+            <h3 class="cs-seven-card__title">Honesty Gap</h3>
+            <p class="cs-seven-card__desc">Managers fear dishonest feedback because small team sizes destroy anonymity, and design alone can't fix fundamental privacy flaws.</p>
+            <p class="cs-seven-card__desc">Advised the client to set a minimum team size threshold for reporting to strictly protect employee identity.</p>
+          </div>
+          <div class="cs-seven-card__right">
+            <img src="../Asset/arvo-problem-05.png" alt="Honesty Gap — returned to client">
+          </div>
+        </div>
+
+        <div class="cs-seven-card">
+          <span class="cs-seven-card__badge cs-badge--returned">Returned</span>
+          <div class="cs-seven-card__left">
+            <h3 class="cs-seven-card__title">Structural Resignation</h3>
+            <p class="cs-seven-card__desc">Problems raised like salary increment and more leaves are a culture issue, not a tool issue. Managers don't have the ability to influence such issues.</p>
+          </div>
+          <div class="cs-seven-card__right">
+            <img src="../Asset/arvo-problem-06.png" alt="Structural Resignation — returned to client">
+          </div>
+        </div>
+
+        <div class="cs-seven-card">
+          <span class="cs-seven-card__badge cs-badge--returned">Returned</span>
+          <div class="cs-seven-card__left">
+            <h3 class="cs-seven-card__title">Homework Trap</h3>
+            <p class="cs-seven-card__desc">Weekly surveys feel like administrative busywork, while action checklists add friction by forcing managers off the platform to complete tasks.</p>
+            <p class="cs-seven-card__desc">We advised shifting to a bi-weekly or monthly cadence and building a native scheduling tool to streamline workflows. (Note: Discovered in round two testing; solution is pending validation.)</p>
+          </div>
+          <div class="cs-seven-card__right">
+            <img src="../Asset/arvo-problem-07.png" alt="Homework Trap — returned to client">
+          </div>
+        </div>
+
+        <div class="cs-seven-card">
+          <span class="cs-seven-card__badge cs-badge--returned">Returned</span>
+          <div class="cs-seven-card__left">
+            <h3 class="cs-seven-card__title">Accessibility</h3>
+            <p class="cs-seven-card__desc">Managers reported that the platform's colors were too light, causing severe eye strain during use. We then fixed the colour contrast in the final iteration to improve readability.</p>
+            <p class="cs-seven-card__desc">(Note: Discovered in round two testing; solution is pending validation.)</p>
+          </div>
+          <div class="cs-seven-card__right">
+            <img src="../Asset/arvo-problem-08.png" alt="Accessibility — returned to client">
+          </div>
+        </div>
+
+      </div><!-- /.cs-seven-stack -->
     </div>
   </section>
 
@@ -1224,25 +1303,6 @@
       });
     });
 
-    const sevenSlides = [
-      { src: '../Asset/arvo-problem-card-01.png', alt: "Problem 1 of 8 — Manager's Paradox, solved: single-page architecture and clear role separation. 11 of 13 managers approved." },
-      { src: '../Asset/arvo-problem-card-02.png', alt: 'Problem 2 of 8 — Cognitive overload, solved: clear priority signals so managers can scan for issues faster. 12 of 13 managers approved.' },
-      { src: '../Asset/arvo-problem-card-03.png', alt: 'Problem 3 of 8 — Energisers & Drainers, protected: the one feature managers loved, so we left it alone.' },
-      { src: '../Asset/arvo-problem-card-04.png', alt: 'Problem 4 of 8 — AI Jargons & Management 101, returned to client: the plain-English translation layer is a workaround until the AI model is retrained with a proper taxonomy.' },
-      { src: '../Asset/arvo-problem-card-05.png', alt: 'Problem 5 of 8 — Honesty Gap, returned to client.' },
-      { src: '../Asset/arvo-problem-card-06.png', alt: 'Problem 6 of 8 — Structural Resignation, returned to client.' },
-      { src: '../Asset/arvo-problem-card-07.png', alt: 'Problem 7 of 8 — Homework trap, returned to client.' },
-      { src: '../Asset/arvo-problem-card-08.png', alt: 'Problem 8 of 8 — Accessibility, returned to client.' }
-    ];
-    let sevenIndex = 0;
-    const sevenImg = document.getElementById('cs-seven-slide');
-    function showSevenSlide(i) {
-      sevenIndex = (i + sevenSlides.length) % sevenSlides.length;
-      sevenImg.src = sevenSlides[sevenIndex].src;
-      sevenImg.alt = sevenSlides[sevenIndex].alt;
-    }
-    document.querySelector('.cs-carousel__arrow--prev').addEventListener('click', () => showSevenSlide(sevenIndex - 1));
-    document.querySelector('.cs-carousel__arrow--next').addEventListener('click', () => showSevenSlide(sevenIndex + 1));
 
     if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
       document.querySelectorAll('[data-gsap="stagger"]').forEach(container => {
