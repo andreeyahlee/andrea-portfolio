@@ -282,16 +282,12 @@
     ================================================================ */
     .ab-hooked-row { display: flex; gap: 20px; overflow-x: auto; scrollbar-width: none; padding-bottom: 4px; }
     .ab-hooked-row::-webkit-scrollbar { display: none; }
+    .ab-hooked-link { flex: 0 0 auto; display: flex; transition: transform var(--dur-fast) var(--ease-bounce); }
+    .ab-hooked-link:hover { transform: translateY(-4px); }
     .ab-hooked-cover {
-      flex: 0 0 auto; width: clamp(90px, 11vw, 140px); aspect-ratio: 2/3;
+      flex: 0 0 auto; height: clamp(135px, 16.5vw, 210px); width: auto;
       border-radius: 6px; object-fit: cover;
       box-shadow: 0 6px 16px rgba(0,0,0,0.35);
-    }
-    .ab-hooked-cover--placeholder {
-      display: flex; align-items: flex-end; padding: 10px;
-      font-family: var(--font-body); font-weight: 700; font-size: 11px; line-height: 1.25;
-      text-transform: uppercase; letter-spacing: 0.02em; color: rgba(255,255,255,0.92);
-      text-shadow: 0 1px 3px rgba(0,0,0,0.4);
     }
 
     /* ================================================================
@@ -543,13 +539,19 @@
     <div class="inner">
       <span class="t-label">What I&rsquo;m hooked on at the moment</span>
       <div class="ab-hooked-row">
-        <div class="ab-hooked-cover ab-hooked-cover--placeholder" style="background:#5b2a86;" role="img" aria-label="Crime Junkie podcast cover">Crime Junkie</div>
-        <div class="ab-hooked-cover ab-hooked-cover--placeholder" style="background:#6e1f24;" role="img" aria-label="Rotten podcast cover">Rotten</div>
-        <div class="ab-hooked-cover ab-hooked-cover--placeholder" style="background:#d98a4e;" role="img" aria-label="Lenny's Podcast cover">Lenny&rsquo;s Podcast</div>
-        <div class="ab-hooked-cover ab-hooked-cover--placeholder" style="background:#1b2a20;" role="img" aria-label="Verity by Colleen Hoover book cover">Verity &mdash; Colleen Hoover</div>
-        <div class="ab-hooked-cover ab-hooked-cover--placeholder" style="background:#a31f2c;" role="img" aria-label="A Court of Thorns and Roses by Sarah J. Maas book cover">A Court of Thorns and Roses</div>
-        <div class="ab-hooked-cover ab-hooked-cover--placeholder" style="background:#f4f1e8; color:#1a1c16; text-shadow:none;" role="img" aria-label="Thinking, Fast and Slow by Daniel Kahneman book cover">Thinking, Fast and Slow</div>
-        <div class="ab-hooked-cover ab-hooked-cover--placeholder" style="background:#f4d63a; color:#1a1c16; text-shadow:none;" role="img" aria-label="The Effective Product Design book cover">The Effective Product Design</div>
+        <a class="ab-hooked-link" href="https://open.spotify.com/show/3DgfoleqaW61T2amZQKINx" target="_blank" rel="noopener">
+          <img class="ab-hooked-cover" src="Asset/about_hooked_crime-junkie.png" alt="Crime Junkie podcast cover" loading="lazy">
+        </a>
+        <a class="ab-hooked-link" href="https://open.spotify.com/show/2DZwvzn6Z3xCFZrwZGDrbj" target="_blank" rel="noopener">
+          <img class="ab-hooked-cover" src="Asset/about_hooked_rotten.png" alt="Rotten Mango podcast cover" loading="lazy">
+        </a>
+        <a class="ab-hooked-link" href="https://open.spotify.com/show/2dR1MUZEHCOnz1LVfNac0j" target="_blank" rel="noopener">
+          <img class="ab-hooked-cover" src="Asset/about_hooked_lenny.png" alt="Lenny's Podcast cover" loading="lazy">
+        </a>
+        <img class="ab-hooked-cover" src="Asset/about_hooked_verity.png" alt="Verity by Colleen Hoover book cover" loading="lazy">
+        <img class="ab-hooked-cover" src="Asset/about_hooked_acortar.png" alt="A Court of Thorns and Roses by Sarah J. Maas book cover" loading="lazy">
+        <img class="ab-hooked-cover" src="Asset/about_hooked_thinkfast.png" alt="Thinking, Fast and Slow by Daniel Kahneman book cover" loading="lazy">
+        <img class="ab-hooked-cover" src="Asset/about_hooked_pd.png" alt="The Effective Product Design book cover" loading="lazy">
       </div>
     </div>
   </section>

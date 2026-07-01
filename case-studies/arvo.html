@@ -182,48 +182,64 @@
 
     /* ── Hero ── */
     #cs-hero { padding-top: 104px; }
-    .cs-hero__inner { padding-top: 56px; padding-bottom: 56px; display: flex; align-items: center; gap: 48px; min-height: calc(100dvh - 104px); }
-    .cs-hero__col { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 40px; }
-    .cs-hero__wordmark { font-family: var(--font-hand); font-size: 80px; line-height: 50px; color: var(--ink-light); }
-    .cs-hero__eyebrow { font-family: var(--font-mono); font-size: 12px; font-weight: 700; letter-spacing: 0.05em; text-transform: uppercase; color: rgba(244,244,235,0.55); line-height: 1.6; }
-    .cs-hero__title { font-family: var(--font-display); font-weight: 400; font-size: clamp(2.25rem, 4.5vw, 3.5rem); line-height: 1.15; letter-spacing: -0.02em; color: var(--ink-light); }
-    .cs-hero__desc { font-family: var(--font-body); font-size: 17px; line-height: 1.7; color: rgba(244,244,235,0.7); max-width: 460px; }
-    .cs-hero__cta { display: inline-flex; align-items: center; justify-content: center; align-self: flex-start; gap: 10px; background: var(--lime); color: var(--ink-dark); font-family: var(--font-body); font-weight: 600; font-size: 13px; padding: 16px 32px; border-radius: 10px; text-decoration: none; box-shadow: -8px 7px 3.6px -3px rgba(0,0,0,0.25), inset 1px -2px 4px 2px rgba(0,0,0,0.25); transition: transform var(--dur-fast) var(--ease-bounce); }
+    .cs-hero__topbar { width: 100%; padding: 16px var(--pad); }
+    .cs-hero__body { display: flex; flex-direction: column; gap: 40px; padding: 32px var(--pad) 56px; }
+    .cs-hero__row { display: flex; align-items: flex-end; gap: 40px; width: 100%; }
+    .cs-hero__col { flex: 1 1 761px; min-width: 0; display: flex; flex-direction: column; gap: 20px; }
+    .cs-hero__tags { display: flex; flex-wrap: wrap; gap: 5px; }
+    .cs-hero__tag { display: inline-flex; align-items: center; justify-content: center; padding: 4px 16px; background: #6b7060; color: var(--ink-light); font-family: var(--font-body); font-weight: 700; font-size: 11px; line-height: 1.5; letter-spacing: 0.14em; text-transform: uppercase; border-radius: 10px; white-space: nowrap; }
+    .cs-hero__heading { display: flex; flex-direction: column; gap: 10px; }
+    .cs-hero__title { font-family: var(--font-display); font-weight: 400; font-size: clamp(2rem, 4vw, 3.25rem); line-height: 1.08; letter-spacing: -0.03em; color: var(--ink-light); }
+    .cs-hero__desc { font-family: var(--font-body); font-weight: 400; font-size: 17px; line-height: 1.47; color: var(--ink-light); }
+    .cs-hero__cta { flex: 1 1 300px; min-width: 0; display: flex; align-items: center; justify-content: center; padding: 16px 32px; background: var(--lime); border: 3px solid var(--lime); border-radius: 10px; box-shadow: -8px 7px 3.6px -3px rgba(0,0,0,0.25), inset 1px -2px 4px 2px rgba(0,0,0,0.25); text-decoration: none; transition: transform var(--dur-fast) var(--ease-bounce); }
     .cs-hero__cta:hover { transform: translateY(-2px); }
-    .cs-hero__mockup { flex: 1.3; min-width: 0; }
-    .cs-hero__screen { position: relative; }
-    .cs-hero__bezel { width: 100%; display: block; position: relative; z-index: 2; }
-    .cs-hero__video {
-      position: absolute;
-      z-index: 1;
-      object-fit: cover;
-      object-position: top center;
-      left: 15.51%; top: 24.87%; width: 84.43%; height: 65.69%;
+    .cs-hero__cta-text { font-family: var(--font-body); font-weight: 600; font-size: 13px; color: var(--ink-dark); text-decoration: underline; white-space: nowrap; }
+    .cs-hero__mockup-wrap { width: 100%; background: var(--bg-light); display: flex; flex-direction: column; align-items: center; overflow: hidden; }
+    .cs-hero__screen {
+      position: relative; width: 900px; max-width: 100%; flex-shrink: 0;
+      aspect-ratio: 900 / 530;
     }
+    /* Laptop composite layers — all abs within .cs-hero__screen */
+    /* Using top+left+width+height (not inset) because img replaced elements
+       don't stretch with inset alone — browser falls back to 300×150 default */
+    .cs-laptop__layer { position: absolute; display: block; }
+    .cs-laptop__casing       { top: 5.77%;  left: 9.13%;  width: 81.81%; height: 90.83%; z-index: 1; }
+    .cs-laptop__screen-border{ top: 6.42%;  left: 9.53%;  width: 81.01%; height: 89.53%; z-index: 2; }
+    .cs-hero__video {
+      position: absolute; z-index: 3;
+      left: 11.19%; top: 9.09%; width: 77.59%; height: 84.95%;
+      border-radius: 1.4%; overflow: hidden;
+      object-fit: cover; object-position: top center;
+    }
+    .cs-laptop__camera       { top: 6.38%;  left: 46.53%; width: 0.55%;   height: 0.89%;  z-index: 4; }
+    .cs-laptop__union        { top: 96.55%; left: 0;       width: 100%;    height: 2.41%;  z-index: 5; }
+    .cs-laptop__bottom-l     { top: 93.87%; left: 0;       width: 50%;     height: 2.68%;  z-index: 5; }
+    .cs-laptop__bottom-r     { top: 93.87%; left: 50%;     width: 50%;     height: 2.68%;  z-index: 5; transform: scaleX(-1); }
+    .cs-laptop__foot         { top: 93.87%; left: 42.86%;  width: 14.28%;  height: 1.90%;  z-index: 6; }
+    .cs-laptop__foot2        { top: 93.87%; left: 42.86%;  width: 14.28%;  height: 1.90%;  z-index: 6; }
 
     /* ── Project Specs ── */
-    .cs-specs-inner { padding: 0 64px; }
-    .cs-stats { position: relative; width: 100%; aspect-ratio: 1184 / 247; margin-bottom: 56px; }
-    .cs-stat {
-      position: absolute; box-sizing: border-box;
-      background: var(--bg-dark); border: 1px solid var(--ink-light); padding: 16px; border-radius: 30px;
+    .cs-specs-row { display: flex; gap: 40px; align-items: flex-start; }
+    /* Rotated card stack */
+    .cs-specs-stats { position: relative; flex-shrink: 0; width: 420px; height: 580px; }
+    .cs-spec-card {
+      position: absolute; width: 376px;
+      background: var(--bg-dark); border: 1px solid var(--ink-light);
+      border-radius: 30px; padding: 16px;
       box-shadow: -25px 32px 3px rgba(0,0,0,0.5);
     }
-    .cs-stat:nth-child(1) { left: 3.04%; top: -6.48%; width: 33.75%; height: 93.71%; transform: rotate(9.79deg); }
-    .cs-stat:nth-child(2) { left: 32.94%; top: 3.64%; width: 32.38%; height: 78.12%; transform: rotate(-3.53deg) skewX(-0.92deg); }
-    .cs-stat:nth-child(3) { left: 63.6%; top: -6.48%; width: 33.41%; height: 97.92%; transform: rotate(11.34deg) skewX(2.9deg); }
-    .cs-stat__inner {
-      width: 100%; height: 100%; box-sizing: border-box;
-      background: var(--bg-dark); border-radius: 14px; padding: 16px;
-      display: flex; flex-direction: column; align-items: flex-start; gap: 10px;
-    }
-    .cs-stat__num { width: 100%; font-family: var(--font-display); font-weight: 400; font-size: clamp(2.25rem, 3.8vw, 3.5rem); letter-spacing: -2.24px; color: var(--ink-light); line-height: 1; }
-    .cs-stat__caption { width: 100%; font-family: var(--font-body); font-size: 15px; line-height: 1.33; color: var(--ink-light); }
-    .cs-cols { display: flex; gap: 40px; }
-    .cs-col { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 10px; }
+    .cs-spec-card:nth-child(1) { top: 30px;  left: 22px; transform: rotate(9.79deg); }
+    .cs-spec-card:nth-child(2) { top: 185px; left: 10px; transform: rotate(-3.53deg) skewX(-0.92deg); }
+    .cs-spec-card:nth-child(3) { top: 370px; left: 16px; transform: rotate(11.34deg) skewX(2.9deg); }
+    .cs-spec-card__inner { background: var(--bg-dark); border-radius: 14px; padding: 16px; display: flex; flex-direction: column; gap: 10px; }
+    .cs-spec-num { font-family: var(--font-display); font-weight: 400; font-size: 56px; line-height: 56px; letter-spacing: -0.04em; color: var(--ink-light); }
+    .cs-spec-caption { font-family: var(--font-body); font-size: 15px; line-height: 20px; color: var(--ink-light); }
+    /* 2×2 grid: Challenge | Impact / (empty) | My Contribution */
+    .cs-cols { display: grid; grid-template-columns: repeat(2, 1fr); gap: 40px; flex: 1; min-width: 0; align-content: start; }
+    .cs-col { display: flex; flex-direction: column; gap: 10px; }
     .cs-col__title { font-family: var(--font-hand); font-size: 35px; line-height: 35px; font-weight: 400; color: var(--ink-light); }
-    .cs-col__body { font-family: var(--font-body); font-size: 15px; line-height: 1.333; color: var(--ink-light); }
-    .cs-col__body strong { font-weight: 700; color: var(--ink-light); }
+    .cs-col__body { font-family: var(--font-body); font-size: 15px; line-height: 20px; color: var(--ink-light); }
+    .cs-col__body strong { font-weight: 700; }
     body.light-mode .cs-col__body strong { color: var(--ink-dark); }
 
     /* ── Zigzag (Shaky Brief / Redesign / Workshop) ── */
@@ -357,8 +373,9 @@
     .cs-ba__label { display: block; font-family: var(--font-mono); font-size: 11px; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; color: rgba(244,244,235,0.6); margin-bottom: 16px; }
     .cs-ba__col img { width: 100%; display: block; border-radius: 14px; box-shadow: 0 24px 48px rgba(0,0,0,0.35); }
 
-    /* ── Impact stats (second) ── */
-    .cs-impact { display: flex; gap: 64px; }
+    /* ── Impact stats ── */
+    .cs-impact-wrap { display: flex; gap: 40px; align-items: flex-end; }
+    .cs-impact { display: flex; gap: 48px; flex: 1; min-width: 0; }
     .cs-impact__item {
       flex: 1; min-width: 0; box-sizing: border-box;
       background: var(--bg-light); padding: 16px; border-radius: 30px;
@@ -371,6 +388,7 @@
     .cs-impact__num { font-family: var(--font-display); font-size: clamp(1.75rem, 3vw, 2.25rem); font-weight: 400; color: var(--ink-light); }
     .cs-impact__tag { display: block; font-family: var(--font-mono); font-size: 11px; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; color: var(--lime); margin: 10px 0 8px; }
     .cs-impact__body { font-family: var(--font-body); font-size: 14px; line-height: 1.6; color: rgba(244,244,235,0.65); }
+    .cs-impact__peep { flex: 0 0 auto; width: clamp(120px, 15vw, 220px); display: block; object-fit: contain; object-position: bottom; }
 
     /* ── Final Prototype (light showcase) ── */
     #cs-finalproto { background: var(--bg-light); }
@@ -441,12 +459,16 @@
       body.light-mode .toggle__icon { width: 27px; height: 20px; order: 0; }
       .contact__heading { line-height: 44px; }
 
-      .cs-hero__inner { flex-direction: column; min-height: auto; gap: 32px; }
-      .cs-specs-inner { padding: 0; }
-      .cs-stats { position: static; aspect-ratio: auto; display: flex; flex-wrap: wrap; gap: 32px; margin-bottom: 32px; }
-      .cs-stat { position: static !important; left: auto !important; top: auto !important; width: auto !important; height: auto !important; flex: 1 1 45%; transform: none !important; }
+      .cs-hero__row { flex-direction: column; align-items: stretch; gap: 24px; }
+      .cs-hero__col { flex-basis: auto; }
+      .cs-hero__cta { flex-basis: auto; align-self: stretch; }
+      .cs-specs-row { flex-direction: column; gap: 40px; }
+      .cs-specs-stats { position: static; width: 100%; height: auto; display: flex; flex-direction: column; gap: 16px; }
+      .cs-spec-card { position: static; width: 100%; transform: none !important; box-shadow: none; }
       .cs-cols, .cs-decision-cards, .cs-ba, .cs-impact, .cs-stack { flex-wrap: wrap; gap: 32px; }
       .cs-cols .cs-col, .cs-impact .cs-impact__item, .cs-stack .cs-stack__col { flex: 1 1 45%; }
+      .cs-impact-wrap { flex-wrap: wrap; gap: 32px; }
+      .cs-impact__peep { width: clamp(100px, 20vw, 160px); }
       .cs-unfolded-stage { aspect-ratio: auto; height: auto; display: flex; flex-direction: column; gap: 20px; }
       .cs-unfolded-card { position: static; width: 100%; aspect-ratio: auto; transform: none !important; box-shadow: -10px 14px 2px rgba(0,0,0,0.35); }
       .cs-unfolded-peep { display: none; }
@@ -468,17 +490,21 @@
       .nav__hamburger { display: flex; }
 
       #cs-hero { padding-top: 80px; }
-      .cs-hero__video { left: 11.36%; top: 3.84%; width: 77.16%; height: 78.71%; }
+      .cs-hero__topbar { padding: 12px var(--pad); }
+      .cs-hero__body { padding: 24px var(--pad) 40px; gap: 32px; }
+      .cs-hero__mockup-wrap { padding: 16px; }
       .cs-zigzag-media--card { aspect-ratio: auto; height: auto; }
       .cs-zigzag-media__stage { flex: none; }
       .cs-zigzag-media__stage img { height: auto; object-fit: initial; }
       .cs-role-list { flex-direction: column; gap: 24px; }
       .cs-role-card { aspect-ratio: auto; height: 280px; }
       .cs-stats { flex-direction: column; gap: 48px; }
-      .cs-cols { flex-direction: column; gap: 24px; }
+      .cs-cols { grid-template-columns: 1fr; gap: 24px; }
       .cs-decision-cards { flex-direction: column; }
       .cs-ba { flex-direction: column; gap: 24px; }
+      .cs-impact-wrap { flex-direction: column; }
       .cs-impact { flex-direction: column; gap: 48px; }
+      .cs-impact__peep { width: 140px; align-self: center; }
       .cs-stack { flex-direction: column; gap: 24px; }
       .cs-finalproto__phones { flex-direction: column; }
       .cs-finalproto__phones img { flex: 1 1 100%; }
@@ -579,27 +605,48 @@
 
   <!-- ── HERO ── -->
   <section class="section" id="cs-hero" aria-label="ARVO case study hero">
-    <div class="inner cs-hero__inner">
-      <div class="cs-hero__col" data-gsap="hero">
-        <a class="cs-back" href="../works.html">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
-          back
+    <div class="cs-hero__topbar">
+      <a class="cs-back" href="../works.html">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+        back
+      </a>
+    </div>
+    <div class="cs-hero__body">
+      <div class="cs-hero__row">
+        <div class="cs-hero__col" data-gsap="hero">
+          <div class="cs-hero__tags">
+            <span class="cs-hero__tag">AI Manager Copilot</span>
+            <span class="cs-hero__tag">B2B SaaS</span>
+            <span class="cs-hero__tag">Project Lead</span>
+            <span class="cs-hero__tag">2026 · 6 weeks</span>
+          </div>
+          <div class="cs-hero__heading">
+            <h1 class="cs-hero__title">From rejected dashboard to validated redesign.</h1>
+            <p class="cs-hero__desc">ARVO is an AI tool that helps managers spot early signs of team burnout and suggests what to do next. Managers rejected the first version. I led the team that found out why and discovered most of the problems weren't ones design could fix.</p>
+          </div>
+        </div>
+        <a class="cs-hero__cta" href="#cs-finalproto">
+          <span class="cs-hero__cta-text">View Demo →</span>
         </a>
-        <p class="cs-hero__wordmark">ARVO</p>
-        <p class="cs-hero__eyebrow">AI Manager Copilot · B2B SaaS - AI/Enterprise Project Lead · 2026 · 6 weeks</p>
-        <h1 class="cs-hero__title">From rejected dashboard to validated redesign.</h1>
-        <p class="cs-hero__desc">ARVO is an AI tool that helps managers spot early signs of team burnout and suggests what to do next. Managers rejected the first version. I led the team that found out why and discovered most of the problems weren't ones design could fix.</p>
-        <a class="cs-hero__cta" href="#cs-finalproto">View Demo →</a>
       </div>
-      <div class="cs-hero__mockup">
-        <div class="cs-hero__screen">
+      <div class="cs-hero__mockup-wrap" data-gsap="hero">
+        <div class="cs-hero__screen" role="img" aria-label="ARVO dashboard demo playing on a laptop screen">
+          <!-- Laptop body (outside casing) -->
+          <img class="cs-laptop__layer cs-laptop__casing" src="../Asset/arvo-laptop-casing.svg" alt="">
+          <!-- Screen black border / bezel -->
+          <img class="cs-laptop__layer cs-laptop__screen-border" src="../Asset/arvo-laptop-screen-border.svg" alt="">
+          <!-- Dashboard video — plays through screen opening -->
           <video class="cs-hero__video" autoplay loop muted playsinline>
             <source src="../Asset/arvo-hero-dashboard.mp4" type="video/mp4">
           </video>
-          <picture>
-            <source media="(max-width: 767px)" srcset="../Asset/arvo-hero-laptop_mobile-bezel.png">
-            <img class="cs-hero__bezel" src="../Asset/arvo-hero-laptop-bezel.png" alt="ARVO dashboard demo playing on a laptop screen">
-          </picture>
+          <!-- Camera dot -->
+          <img class="cs-laptop__layer cs-laptop__camera" src="../Asset/arvo-laptop-camera.svg" aria-hidden="true" alt="">
+          <!-- Bottom casing -->
+          <img class="cs-laptop__layer cs-laptop__union" src="../Asset/arvo-laptop-union.svg" aria-hidden="true" alt="">
+          <img class="cs-laptop__layer cs-laptop__bottom-l" src="../Asset/arvo-laptop-bottom-left.svg" aria-hidden="true" alt="">
+          <img class="cs-laptop__layer cs-laptop__bottom-r" src="../Asset/arvo-laptop-bottom-right.svg" aria-hidden="true" alt="">
+          <img class="cs-laptop__layer cs-laptop__foot" src="../Asset/arvo-laptop-foot.svg" aria-hidden="true" alt="">
+          <img class="cs-laptop__layer cs-laptop__foot2" src="../Asset/arvo-laptop-foot2.svg" aria-hidden="true" alt="">
         </div>
       </div>
     </div>
@@ -609,80 +656,40 @@
   <section class="section" id="cs-specs" aria-label="Project specs">
     <div class="inner">
       <span class="t-label">Key Metrics</span>
-      <div class="cs-specs-inner">
-      <div class="cs-stats" data-gsap="stagger">
-        <div class="cs-stat">
-          <div class="cs-stat__inner" data-gsap="card">
-            <p class="cs-stat__num">83%</p>
-            <p class="cs-stat__caption">rejected the original platform in our initial research round (10 of 12)</p>
-          </div>
-        </div>
-        <div class="cs-stat">
-          <div class="cs-stat__inner" data-gsap="card">
-            <p class="cs-stat__num">93%</p>
-            <p class="cs-stat__caption">validated our redesigned ARVO platform in the second round of user testing (12 of 13).</p>
-          </div>
-        </div>
-        <div class="cs-stat">
-          <div class="cs-stat__inner" data-gsap="card">
-            <p class="cs-stat__num">2 of 7</p>
-            <p class="cs-stat__caption">problems scoped → the remaining 5 were returned to our Client.</p>
-          </div>
-        </div>
-      </div>
-      <div class="cs-divider"></div>
-      <div class="cs-cols" data-gsap="stagger">
-        <div class="cs-col" data-gsap="card">
-          <h3 class="cs-col__title">Challenge</h3>
-          <p class="cs-col__body">Assessing all seven issues, most weren't things a redesign could fix on its own. The real challenge was figuring out how to rebuild ARVO around <strong>how managers actually work</strong>, not just how it looked, and knowing which problems were ours to solve and which belonged to the product itself.</p>
-        </div>
-        <div class="cs-col" data-gsap="card">
-          <h3 class="cs-col__title">Impact</h3>
-          <p class="cs-col__body">Two pressing issues, managers too time-poor to read the dashboard and too overloaded to spot what mattered, were <strong>solved with a clearer layout and a simple visual signal</strong>. Two deeper ones, around trust and powerlessness, went back to the founder with the design implications explained. Of the rest, confusing AI language was rewritten from workshop terms; accessibility and a redesigned task step await round-two results.</p>
-        </div>
-        <div class="cs-col" data-gsap="card">
-          <h3 class="cs-col__title">My Contribution</h3>
-          <p class="cs-col__body">I led the full six-week sprint from start to finish, covering <strong>scoping, recruitment, facilitation and synthesis</strong>. I designed and ran the workshop myself, bringing the founder in as a collaborator rather than someone we reported back to, so the decisions carried her ownership from day one. When research surfaced seven problems pulling in different directions, I took lead in deciding what ARVO should focus on first.</p>
-        </div>
-      </div>
-      </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- ── SHAKY BRIEF ── -->
-  <section class="section" id="cs-brief" aria-label="Shaky brief">
-    <div class="inner">
-      <span class="t-label">Shaky Brief</span>
-      <div class="cs-brief-stack">
-        <div class="cs-zigzag-media cs-zigzag-media--card" data-gsap="card">
-          <span class="cs-zigzag-media__label">The original ARVO interface</span>
-          <div class="cs-zigzag-media__stage"><img src="../Asset/arvo-brief-original.png" alt="The original ARVO interface, annotated: raw AI jargon, dense wall of text, equal-weight signals"></div>
-        </div>
-        <div class="cs-brief-text" data-gsap="card">
-          <h2 class="cs-h2">A working product that managers wouldn't open.</h2>
-          <p class="cs-body">When our Client presented ARVO, it was already live. However its target audience, primarily managers weren't using it, and assumed it must have been an interface issue. We were recruited to fix it. After conducting an initial round of interviews with 12 managers and tested ARVO's original interface. The screens weren't the deepest problem, we uncovered 5 issues then and not all were design-related.</p>
-        </div>
-        <div class="cs-role-list" data-gsap="stagger">
-          <div class="cs-role-card" data-gsap="card">
-            <span class="cs-role-card__label">Manager's personal dashboard</span>
-            <div class="cs-role-card__stage">
-              <div class="rc-tile rc-tile--c1-1"><div class="rc-tile__inner"><img src="../Asset/arvo-brief-role1-tile1.png" alt="Manager's personal dashboard screenshot"></div></div>
+      <div class="cs-specs-row" data-gsap="stagger">
+        <div class="cs-specs-stats" data-gsap="stagger">
+          <div class="cs-spec-card" data-gsap="card">
+            <div class="cs-spec-card__inner">
+              <p class="cs-spec-num">83%</p>
+              <p class="cs-spec-caption">rejected the original platform in our initial research round (10 of 12)</p>
             </div>
           </div>
-          <div class="cs-role-card" data-gsap="card">
-            <span class="cs-role-card__label">Team insights</span>
-            <div class="cs-role-card__stage">
-              <div class="rc-tile rc-tile--c2-1"><div class="rc-tile__inner"><img src="../Asset/arvo-brief-role2-tile1.png" alt="Team insights screenshot"></div></div>
+          <div class="cs-spec-card" data-gsap="card">
+            <div class="cs-spec-card__inner">
+              <p class="cs-spec-num">93%</p>
+              <p class="cs-spec-caption">validated our redesigned ARVO platform in the second round of user testing (12 of 13).</p>
             </div>
           </div>
-          <div class="cs-role-card" data-gsap="card">
-            <span class="cs-role-card__label">Team energy drivers, drainers &amp; actions</span>
-            <div class="cs-role-card__stage">
-              <div class="rc-tile rc-tile--c3-1"><div class="rc-tile__inner"><img src="../Asset/arvo-brief-role3-tile1.png" alt="Top drivers list screenshot"></div></div>
-              <div class="rc-tile rc-tile--c3-2"><div class="rc-tile__inner"><img src="../Asset/arvo-brief-role3-tile2.png" alt="Energisers and drainers screenshot"></div></div>
-              <div class="rc-tile rc-tile--c3-3"><div class="rc-tile__inner"><img src="../Asset/arvo-brief-role3-tile3.png" alt="Top drivers detail cards screenshot"></div></div>
+          <div class="cs-spec-card" data-gsap="card">
+            <div class="cs-spec-card__inner">
+              <p class="cs-spec-num">2 of 7</p>
+              <p class="cs-spec-caption">problems scoped → the remaining 5 were returned to our Client.</p>
             </div>
+          </div>
+        </div>
+        <div class="cs-cols">
+          <div class="cs-col" data-gsap="card">
+            <h3 class="cs-col__title">Challenge</h3>
+            <p class="cs-col__body">Assessing all seven issues, most weren't things a redesign could fix on its own. The real challenge was figuring out how to rebuild ARVO around <strong>how managers actually work</strong>, not just how it looked, and knowing which problems were ours to solve and which belonged to the product itself.</p>
+          </div>
+          <div class="cs-col" data-gsap="card">
+            <h3 class="cs-col__title">Impact</h3>
+            <p class="cs-col__body">Two issues where (1) managers were time-poor to read the dashboard and (2) too overloaded to spot what mattered, were <strong>solved with a clearer layout and a simple visual signal</strong>. Another two deeper ones, around trust and powerlessness, went back to the founder with the design implications explained. The remaining three, confusing AI language was rewritten from workshop terms; accessibility and a redesigned task step await round-two results.</p>
+          </div>
+          <div></div>
+          <div class="cs-col" data-gsap="card">
+            <h3 class="cs-col__title">My Contribution</h3>
+            <p class="cs-col__body">I led the full six-week sprint from start to finish, covering <strong>scoping, recruitment, facilitation and synthesis</strong>. I designed and ran the workshop myself, bringing the founder in as a collaborator rather than someone we reported back to, so the decisions carried her ownership from day one. When research surfaced seven problems pulling in different directions, I took lead in deciding what ARVO should focus on first.</p>
           </div>
         </div>
       </div>
@@ -710,7 +717,7 @@
           </div>
         </div>
         <div class="cs-zigzag-text" data-gsap="card">
-          <h2 class="cs-h2">Conducted 12 interviews across 8 industries. A pattern showed up fast.</h2>
+          <h2 class="cs-h2">We were expecting a UI problem. We found something harder.</h2>
           <p class="cs-body">Every session moderated by the team, we spoke with our managers and had them test out ARVO's original dashboard to better understand what worked and what didn't. Then I facilitated a co-design workshop, a working session where I bring the client into the room to make decisions together rather than just present findings. With our Client there, the direction carried their buy-in from day one.</p>
           <div class="cs-tagrow">
             <span class="cs-tag">Tech</span>
@@ -732,7 +739,7 @@
     <div class="inner">
       <span class="t-label">How I made the call</span>
       <div class="cs-decision-head">
-        <h2 class="cs-decision-head__title">Can it be fixed by design? Or does it need the product itself to change?</h2>
+        <h2 class="cs-decision-head__title">Before moving ahead, I had to decide which problems were mine to solve.</h2>
         <p class="cs-decision-head__body">It would have been easy to start redrawing screens. Instead we ran each problem through a single question first and decided if the problem could be solved by design.</p>
       </div>
       <div class="cs-decision-cards" data-gsap="stagger">
@@ -752,7 +759,7 @@
   <!-- ── THE SEVEN PROBLEMS ── -->
   <section class="section" id="cs-seven" aria-label="The seven problems">
     <div class="inner">
-      <span class="t-label">The seven problems</span>
+      <span class="t-label">What we actually uncovered</span>
       <div class="cs-seven-row" data-gsap="stagger">
         <div class="cs-carousel" data-gsap="card">
           <button class="cs-carousel__arrow cs-carousel__arrow--prev" type="button" aria-label="Previous problem">
@@ -766,7 +773,7 @@
           </button>
         </div>
         <div class="cs-seven-text" data-gsap="card">
-          <h2 class="cs-h2">Two had a design answer. Five didn't. One I protected.</h2>
+          <h2 class="cs-h2">And what we chose to do with each one.</h2>
           <p class="cs-body">Here's the full reveal. Two were fixable by design, one was protected since it was highly praised. The remaining five went back to our Client.</p>
         </div>
       </div>
@@ -819,7 +826,7 @@
   <section class="section" id="cs-redesign" aria-label="The redesign">
     <div class="inner">
       <span class="t-label">The Redesign</span>
-      <h2 class="cs-h2" style="margin-bottom:40px;">The two problems that we could solve.</h2>
+      <h2 class="cs-h2" style="margin-bottom:40px;">The two problems we could solve.</h2>
 
       <div class="cs-zigzag-row" style="margin-bottom:64px;">
         <div class="cs-zigzag-text" data-gsap="card">
@@ -890,28 +897,31 @@
     <div class="inner">
       <span class="t-label">Impact</span>
       <h2 class="cs-h2" style="margin-bottom:40px;">What changed across two rounds.</h2>
-      <div class="cs-impact" data-gsap="stagger">
-        <div class="cs-impact__item" data-gsap="card">
-          <div class="cs-impact__inner">
-            <p class="cs-impact__num">83% → 93%</p>
-            <span class="cs-impact__tag">Research → Testing</span>
-            <p class="cs-impact__body">rejected the original, then validated the redesign</p>
+      <div class="cs-impact-wrap" data-gsap="stagger">
+        <div class="cs-impact">
+          <div class="cs-impact__item" data-gsap="card">
+            <div class="cs-impact__inner">
+              <p class="cs-impact__num">83% → 93%</p>
+              <span class="cs-impact__tag">Research → Testing</span>
+              <p class="cs-impact__body">rejected the original, then validated the redesign</p>
+            </div>
+          </div>
+          <div class="cs-impact__item" data-gsap="card">
+            <div class="cs-impact__inner">
+              <p class="cs-impact__num">2</p>
+              <span class="cs-impact__tag">Solved by design</span>
+              <p class="cs-impact__body">single-page layout + traffic-light dials fixed what drove the rejection</p>
+            </div>
+          </div>
+          <div class="cs-impact__item" data-gsap="card">
+            <div class="cs-impact__inner">
+              <p class="cs-impact__num">5</p>
+              <span class="cs-impact__tag">The Handback</span>
+              <p class="cs-impact__body">problems returned to ARVO's Founder as an evidenced product brief</p>
+            </div>
           </div>
         </div>
-        <div class="cs-impact__item" data-gsap="card">
-          <div class="cs-impact__inner">
-            <p class="cs-impact__num">5</p>
-            <span class="cs-impact__tag">The Handback</span>
-            <p class="cs-impact__body">problems returned to ARVO's Founder as an evidenced product brief</p>
-          </div>
-        </div>
-        <div class="cs-impact__item" data-gsap="card">
-          <div class="cs-impact__inner">
-            <p class="cs-impact__num">2</p>
-            <span class="cs-impact__tag">Solved by design</span>
-            <p class="cs-impact__body">single-page layout + traffic-light dials fixed what drove the rejection</p>
-          </div>
-        </div>
+        <img class="cs-impact__peep" src="../Asset/arvo-peep-impact.svg" alt="" aria-hidden="true" data-gsap="card">
       </div>
     </div>
   </section>
@@ -1249,10 +1259,10 @@
           scrollTrigger: { trigger: row, start: 'top 80%' }
         });
       });
-      gsap.from('#cs-hero .cs-hero__col > *', {
+      gsap.from('#cs-hero .cs-hero__row > *', {
         y: 24, opacity: 0, duration: 0.7, stagger: 0.08, ease: 'power3.out', delay: 0.2
       });
-      gsap.from('#cs-hero .cs-hero__mockup', {
+      gsap.from('#cs-hero .cs-hero__mockup-wrap', {
         y: 24, opacity: 0, duration: 0.8, ease: 'power3.out', delay: 0.3
       });
 
