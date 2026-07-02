@@ -253,6 +253,28 @@
     .cs-zigzag-media { flex: 1.2; min-width: 0; }
     .cs-zigzag-media img { width: 100%; display: block; border-radius: 14px; box-shadow: 0 24px 48px rgba(0,0,0,0.35); }
 
+    /* ── Redesign — two-column layout ── */
+    .cs-redesign-intro { text-align: center; max-width: 760px; margin: 0 auto 48px; display: flex; flex-direction: column; gap: 16px; }
+    .cs-redesign-grid { display: flex; gap: 40px; align-items: flex-start; }
+    .cs-redesign-col { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 24px; }
+    .cs-redesign-panel { position: relative; background: #f4f4eb; border-radius: 16px; overflow: hidden; aspect-ratio: 572 / 407; }
+    .cs-redesign-panel__label {
+      position: absolute; top: 16px; left: 16px; z-index: 3;
+      font-family: var(--font-mono); font-weight: 700; font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--ink-dark);
+    }
+    .cs-redesign-panel--single img {
+      position: absolute; top: 4%; left: 40%; width: 60%; height: auto;
+    }
+    .cs-redesign-panel--loop img {
+      position: absolute; top: 22%; left: 0; width: 110%; height: 72%;
+      object-fit: cover; object-position: left top;
+      -webkit-mask-image: linear-gradient(to right, transparent 0%, white 8%);
+      mask-image: linear-gradient(to right, transparent 0%, white 8%);
+    }
+    .cs-redesign-col__title {
+      font-family: var(--font-hand); font-weight: 400; font-size: clamp(1.4rem, 2vw, 1.75rem); line-height: 1.2; color: var(--ink-light);
+    }
+
     /* ── Redesign — looping 4-screen walkthrough ── */
     .cs-redesign-loop { position: relative; width: 100%; aspect-ratio: 717 / 587; border-radius: 14px; overflow: hidden; box-shadow: 0 24px 48px rgba(0,0,0,0.35); }
     .cs-redesign-loop__frame { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; display: block; opacity: 0; animation: cs-redesign-fade 16s infinite; }
@@ -269,6 +291,10 @@
     }
     .cs-zigzag-text { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 16px; padding-top: 16px; }
     .cs-zigzag-text .cs-h2 { font-size: clamp(1.4rem, 2.2vw, 1.75rem); }
+    #cs-protect .cs-zigzag-text { padding-top: 0; gap: 20px; }
+    #cs-protect .cs-zigzag-text .cs-h2 { font-size: clamp(1.75rem, 3vw, 2.5rem); line-height: 1.2; }
+    #cs-protect .cs-zigzag-row { align-items: center; }
+    .cs-protect-caption { font-family: var(--font-mono); font-weight: 700; font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--ink-light); margin-top: 20px; display: block; line-height: 1.6; }
 
     /* ── Shaky Brief side list ── */
     .cs-tablist { display: flex; flex-direction: column; gap: 0; }
@@ -384,52 +410,71 @@
     }
 
     /* ── Before / After ── */
-    .cs-ba { display: flex; gap: 32px; margin-top: 16px; }
-    .cs-ba__col { flex: 1; min-width: 0; }
-    .cs-ba__label { display: block; font-family: var(--font-mono); font-size: 11px; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; color: rgba(244,244,235,0.6); margin-bottom: 16px; }
-    .cs-ba__col img { width: 100%; display: block; border-radius: 14px; box-shadow: 0 24px 48px rgba(0,0,0,0.35); }
+    .cs-ba { display: flex; gap: 40px; margin-top: 40px; align-items: flex-start; }
+    .cs-ba__col { flex: 1; min-width: 0; position: relative; background: #f4f4eb; overflow: hidden; height: 420px; padding: 16px; border-radius: 16px; }
+    .cs-ba__label { display: block; font-family: var(--font-body); font-size: 11px; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; color: var(--ink-dark); position: relative; z-index: 3; }
+    .cs-ba__col img { position: absolute; display: block; border-radius: 6px; }
+    .cs-ba__col--before img { width: calc(100% + 32px); left: -16px; top: 18%; }
+    .cs-ba__img--back  { width: 70%; left: 38%; top: 3%;  z-index: 1; box-shadow: -9px 37px 7px rgba(0,0,0,0.5); }
+    .cs-ba__img--front { width: 75%; left: -8%; top: 9%;  z-index: 2; box-shadow: -10px 43px 8px rgba(0,0,0,0.5); }
 
     /* ── Impact stats ── */
-    .cs-impact-wrap { display: flex; gap: 40px; align-items: flex-end; }
-    .cs-impact { display: flex; gap: 48px; flex: 1; min-width: 0; }
+    .cs-impact-wrap { position: relative; height: 310px; overflow: visible; margin-bottom: 48px; }
+    /* 896px = Figma frame inner width; centered so card coordinate system matches exactly */
+    .cs-impact { position: absolute; width: 100%; max-width: 896px; height: 100%; left: 50%; transform: translateX(-50%); }
     .cs-impact__item {
-      flex: 1; min-width: 0; box-sizing: border-box;
-      background: var(--bg-light); padding: 16px; border-radius: 30px;
-      box-shadow: -25px 32px 3px rgba(0,0,0,0.5);
+      position: absolute;
+      width: 41%;
+      height: 194px;
+      border-radius: 30px; border: 5px solid;
+      display: flex; align-items: center; justify-content: center; padding: 0 24px;
+      box-shadow: 8px 19px 2px rgba(0,0,0,0.5);
+      box-sizing: border-box; overflow: hidden;
     }
-    .cs-impact__item:nth-child(1) { transform: rotate(-6deg); }
-    .cs-impact__item:nth-child(2) { transform: rotate(6deg); }
-    .cs-impact__item:nth-child(3) { transform: rotate(-8deg); }
-    .cs-impact__inner { background: var(--bg-dark); border-radius: 14px; padding: 20px; display: flex; flex-direction: column; }
-    .cs-impact__num { font-family: var(--font-display); font-size: clamp(1.75rem, 3vw, 2.25rem); font-weight: 400; color: var(--ink-light); }
-    .cs-impact__tag { display: block; font-family: var(--font-mono); font-size: 11px; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; color: var(--lime); margin: 10px 0 8px; }
-    .cs-impact__body { font-family: var(--font-body); font-size: 14px; line-height: 1.6; color: rgba(244,244,235,0.65); }
-    .cs-impact__peep { flex: 0 0 auto; width: clamp(120px, 15vw, 220px); display: block; object-fit: contain; object-position: bottom; }
+    .cs-impact__item:nth-child(1) { background: #f4f4eb; border-color: var(--lime); transform: rotate(-7.87deg); left: -8.6%; top: 2px; }
+    .cs-impact__item:nth-child(2) { background: var(--lime); border-color: #f4f4eb; transform: rotate(8.7deg); left: 44.9%; top: -35px; z-index: 2; }
+    .cs-impact__item:nth-child(3) { background: #f4f4eb; border-color: var(--lime); transform: rotate(-9.79deg); left: 81.6%; top: 10px; }
+    .cs-impact__inner { display: flex; flex-direction: column; gap: 10px; align-items: center; text-align: center; width: 100%; padding: 32px 0; }
+    .cs-impact__num { font-family: var(--font-display); font-size: clamp(1.5rem, 5.5vw, 3.5rem); font-weight: 400; line-height: 1; letter-spacing: -0.04em; color: var(--ink-dark); }
+    .cs-impact__tag { display: block; font-family: var(--font-body); font-size: 11px; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; color: #6b7060; }
+    .cs-impact__body { font-family: var(--font-body); font-size: 15px; line-height: 20px; color: var(--ink-dark); }
+    .cs-impact__peep { position: absolute; width: clamp(140px, 26.8%, 240px); height: auto; left: 34%; top: 0; z-index: 3; pointer-events: none; }
+    .cs-impact-text { max-width: 505px; display: flex; flex-direction: column; gap: 20px; }
 
     /* ── Final Prototype (light showcase) ── */
     #cs-finalproto { background: var(--bg-light); }
-    #cs-finalproto .cs-shot-wrap { margin-bottom: 32px; }
-    .cs-finalproto__phones { display: flex; gap: 24px; }
-    .cs-finalproto__phones img { width: 100%; display: block; }
-    .cs-finalproto__phones-single { width: 100%; display: block; border-radius: 14px; }
+    .cs-finalproto__laptop { width: 100%; display: block; }
+    .cs-finalproto__phones-img { width: 100%; display: block; }
 
     /* ── Reflections ── */
-    .cs-cards-2x2 { display: grid; grid-template-columns: 1fr 1fr; gap: 32px 64px; }
-    .cs-card__title { font-family: var(--font-display); font-size: 19px; color: var(--ink-light); margin-bottom: 10px; }
-    .cs-card__body { font-family: var(--font-body); font-size: 14px; line-height: 1.65; color: rgba(244,244,235,0.65); }
+    .cs-reflections-row { display: flex; gap: 40px; align-items: flex-start; }
+    .cs-reflections-left { width: 325px; flex-shrink: 0; }
+    .cs-reflections-left .cs-h2 { font-size: 40px; line-height: 44px; letter-spacing: -0.025em; }
+    .cs-cards-2x2 { flex: 1; min-width: 0; display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+    .cs-cards-2x2 > div { display: flex; flex-direction: column; gap: 10px; padding: 16px; }
+    .cs-card__title { font-family: var(--font-hand); font-size: 32px; line-height: 30px; letter-spacing: -0.05em; color: var(--ink-light); }
+    .cs-card__body { font-family: var(--font-body); font-size: 15px; line-height: 20px; color: var(--ink-light); }
 
     /* ── Project Stack ── */
-    .cs-stack { display: flex; gap: 48px; }
-    .cs-stack__col { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 6px; }
-    .cs-stack__label { font-family: var(--font-mono); font-size: 11px; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; color: var(--lime); margin-bottom: 6px; }
-    .cs-stack__row { font-family: var(--font-body); font-size: 14px; color: rgba(244,244,235,0.75); line-height: 1.8; }
-    .cs-stack__row strong { display: block; font-family: var(--font-display); font-size: 16px; color: var(--ink-light); font-weight: 400; }
+    .cs-context { display: flex; flex-direction: column; gap: 40px; margin-bottom: 80px; }
+    .cs-context__divider { width: 100%; height: 1px; background: rgba(244,244,235,0.15); }
+    .cs-context__cols { display: flex; gap: 40px; align-items: flex-start; }
+    .cs-context__col { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 10px; }
+    .cs-context__label { font-family: var(--font-mono); font-size: 11px; font-weight: 700; letter-spacing: 0.6em; text-transform: uppercase; color: var(--lime); }
+    .cs-context__heading { font-family: var(--font-display); font-size: 18px; font-weight: 500; line-height: 24px; color: var(--ink-light); margin: 0; }
+    .cs-context__body-sm { font-family: var(--font-body); font-size: 13px; line-height: 15px; color: var(--ink-light); margin: 0; }
+    .cs-context__body { font-family: var(--font-body); font-size: 17px; line-height: 25px; color: var(--ink-light); margin: 0; }
+    .cs-stack-grid { display: flex; align-items: flex-start; padding: 16px; }
+    .cs-stack-col { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 10px; padding: 32px; }
+    .cs-stack-col__title { font-family: var(--font-hand); font-size: 32px; line-height: 30px; letter-spacing: -0.05em; color: var(--ink-light); padding-bottom: 8px; border-bottom: 1px solid var(--lime); margin: 0; }
+    .cs-stack-col__item { font-family: var(--font-body); font-size: 15px; line-height: 20px; color: var(--ink-light); padding: 8px 0; }
 
     /* ── Next case study ── */
-    .cs-next { display: flex; align-items: center; justify-content: space-between; gap: 24px; }
-    .cs-next__link { font-family: var(--font-display); font-size: clamp(1.25rem, 2vw, 1.6rem); color: rgba(244,244,235,0.6); text-decoration: none; transition: color var(--dur-fast); }
+    #cs-next-section .inner { display: flex; flex-direction: column; align-items: center; gap: 40px; }
+    #cs-next-section .t-label { color: var(--ink-light); text-align: center; margin-bottom: 0; }
+    .cs-next { display: flex; align-items: flex-start; justify-content: space-between; width: 100%; }
+    .cs-next__link { font-family: var(--font-hand); font-size: 55px; line-height: 50px; color: var(--ink-light); text-decoration: none; transition: color var(--dur-fast); }
     .cs-next__link:hover { color: var(--lime); }
-    .cs-next__link--next { text-align: right; }
 
     /* ================================================================
        CONTACT / FOOTER (shared)
@@ -481,11 +526,16 @@
       .cs-specs-row { flex-direction: column; gap: 40px; }
       .cs-specs-stats { position: static; width: 100%; height: auto; display: flex; flex-direction: column; gap: 16px; }
       .cs-spec-card { position: static; width: 100%; transform: none !important; box-shadow: none; }
-      .cs-cols, .cs-decision-cards, .cs-ba, .cs-impact, .cs-stack { flex-wrap: wrap; gap: 32px; }
-      .cs-cols .cs-col, .cs-impact .cs-impact__item, .cs-stack .cs-stack__col { flex: 1 1 45%; }
-      .cs-impact-wrap { flex-wrap: wrap; gap: 32px; }
-      .cs-impact__peep { width: clamp(100px, 20vw, 160px); }
+      .cs-cols, .cs-decision-cards, .cs-ba, .cs-context__cols, .cs-stack-grid { flex-wrap: wrap; gap: 32px; }
+      .cs-cols .cs-col, .cs-context__col { flex: 1 1 45%; }
+      .cs-impact-wrap { height: 260px; }
+      .cs-impact__item { width: clamp(180px, 30%, 280px); }
+      .cs-impact__num { font-size: clamp(1.5rem, 6vw, 2.5rem); }
+      .cs-impact__peep { width: 130px; left: 20%; }
       .cs-zigzag-row, .cs-zigzag-row--reverse { flex-direction: column; }
+      .cs-redesign-grid { flex-direction: column; }
+      .cs-redesign-panel--single img { left: 40%; width: 60%; }
+      .cs-redesign-panel--loop .cs-redesign-loop { left: 2%; top: 8%; right: -2%; bottom: -6%; }
       .cs-workshop-collage { width: 100%; }
       #cs-seven .inner { gap: 28px; }
       .cs-seven-left { top: 80px; }
@@ -517,10 +567,14 @@
       .cs-cols { grid-template-columns: 1fr; gap: 24px; }
       .cs-decision-cards { flex-direction: column; }
       .cs-ba { flex-direction: column; gap: 24px; }
-      .cs-impact-wrap { flex-direction: column; }
-      .cs-impact { flex-direction: column; gap: 48px; }
-      .cs-impact__peep { width: 140px; align-self: center; }
-      .cs-stack { flex-direction: column; gap: 24px; }
+      .cs-ba__col { height: 300px; }
+      .cs-ba__col--before img { width: 110%; }
+      .cs-ba__img--back  { width: 50%; }
+      .cs-ba__img--front { width: 57%; }
+      .cs-impact-wrap { height: 240px; }
+      .cs-impact__peep { width: 110px; }
+      .cs-context__cols, .cs-stack-grid { flex-direction: column; gap: 24px; }
+      .cs-stack-col { padding: 16px 0; }
       .cs-finalproto__phones { flex-direction: column; }
       .cs-finalproto__phones img { flex: 1 1 100%; }
       .cs-next { flex-direction: column; align-items: flex-start; gap: 12px; }
@@ -905,30 +959,26 @@
   <section class="section" id="cs-redesign" aria-label="The redesign">
     <div class="inner">
       <span class="t-label">The Redesign</span>
-      <h2 class="cs-h2" style="margin-bottom:40px;">The two problems we could solve.</h2>
-
-      <div class="cs-zigzag-row" style="margin-bottom:64px;">
-        <div class="cs-zigzag-text" data-gsap="card">
-          <h2 class="cs-h2" style="font-size:clamp(1.4rem,2.2vw,1.75rem);">A single page replaced a dense, multi-tab dashboard.</h2>
-          <p class="cs-body">Managers had no time to dig through multiple tabs to piece data together. We rebuilt ARVO as one screen where everything in a single glance, no navigation. This solved the Manager's Paradox: the tool now fits the ninety seconds a manager actually has.</p>
-        </div>
-        <div class="cs-zigzag-media" data-gsap="card">
-          <img src="../Asset/arvo-redesign-singlepage.png" alt="ARVO redesigned single-page dashboard labeled Single-Page Architecture">
-        </div>
+      <div class="cs-redesign-intro">
+        <h2 class="cs-h2">The two problems we could solve.</h2>
+        <p class="cs-body">Managers had no time to dig through multiple tabs to piece data together. We rebuilt ARVO as one screen where everything was visible in a single glance, no navigation needed.</p>
       </div>
-
-      <div class="cs-zigzag-row">
-        <div class="cs-zigzag-media" data-gsap="card">
-          <div class="cs-redesign-loop" role="img" aria-label="Team signals walkthrough: selecting a traffic-light signal, then drilling into recommended actions for Strengths-use fit">
-            <img class="cs-redesign-loop__frame" src="../Asset/arvo-redesign-loop-01.png" alt="" style="animation-delay: 0s;">
-            <img class="cs-redesign-loop__frame" src="../Asset/arvo-redesign-loop-02.png" alt="" style="animation-delay: -4s;">
-            <img class="cs-redesign-loop__frame" src="../Asset/arvo-redesign-loop-03.png" alt="" style="animation-delay: -8s;">
-            <img class="cs-redesign-loop__frame" src="../Asset/arvo-redesign-loop-04.png" alt="" style="animation-delay: -12s;">
+      <div class="cs-redesign-grid">
+        <div class="cs-redesign-col" data-gsap="card">
+          <div class="cs-redesign-panel cs-redesign-panel--single">
+            <span class="cs-redesign-panel__label">Single-page architecture</span>
+            <img src="../Asset/arvo-redesign-01.png" alt="ARVO redesigned single-page dashboard">
           </div>
+          <h3 class="cs-redesign-col__title">A single page replaced a dense, multi-tab dashboard.</h3>
+          <p class="cs-body">Managers had five minutes, not fifty. We collapsed ARVO into one screen where everything was in a single glance, no navigation. This solved the Manager's Paradox: the version that fits the time a manager actually has.</p>
         </div>
-        <div class="cs-zigzag-text" data-gsap="card">
-          <h2 class="cs-h2" style="font-size:clamp(1.4rem,2.2vw,1.75rem);">Traffic-light dials replaced a wall of equal-weight data.</h2>
-          <p class="cs-body">Cognitive overload is what happens when everything competes for attention at once. On the old screen every number and walls of text looked equally urgent, so nothing stood out. I added a simple red, amber, green system, so a manager sees at a glance what needs them and what's fine. The screen finally had a hierarchy.</p>
+        <div class="cs-redesign-col" data-gsap="card">
+          <div class="cs-redesign-panel cs-redesign-panel--loop">
+            <span class="cs-redesign-panel__label">Traffic-light dial system</span>
+            <img src="../Asset/arvo-redesign-02.png" alt="ARVO Team Signals with traffic-light dial scores">
+          </div>
+          <h3 class="cs-redesign-col__title">Traffic-light dials replaced a wall of equal-weight data.</h3>
+          <p class="cs-body">Cognitive overload is what happens when everything competes for attention at once. I added a simple red, amber, green system so a manager sees at a glance what needs action and what's fine. The screen finally had a hierarchy.</p>
         </div>
       </div>
     </div>
@@ -938,15 +988,15 @@
   <section class="section" id="cs-protect" aria-label="Knowing what not to touch">
     <div class="inner">
       <span class="t-label">Knowing what not to touch</span>
-      <h2 class="cs-h2" style="margin-bottom:40px;">The hardest call was leaving something alone.</h2>
       <div class="cs-zigzag-row">
         <div class="cs-zigzag-text" data-gsap="card">
-          <span class="cs-tag" style="align-self:flex-start;">The brightspot protected</span>
-          <h2 class="cs-h2" style="font-size:clamp(1.4rem,2.2vw,1.75rem); font-family:var(--font-hand); font-weight:400;">Energisers &amp; Drainers</h2>
-          <p class="cs-body">All 12 managers responded positively to this feature and it mirrored how they already think about their teams. The instinct on a redesign is to change everything. However, a principle we applied was if it ain't broke, don't change it. Protecting what works is as much a design decision as fixing what doesn't.</p>
+          <h2 class="cs-h2">The hardest call was leaving something alone.</h2>
+          <p class="cs-body">9/12 managers praised the Energisers &amp; Drainers feature immediately. It mirrored how they already thought about their teams.</p>
+          <p class="cs-body">We followed the simple design rule where <strong>"if it ain't broke, don't change it"</strong> and protected what already worked.</p>
         </div>
         <div class="cs-zigzag-media" data-gsap="card">
           <img src="../Asset/arvo-protected-feature.png" alt="Critical alerts panel and What energised the team panel, shown as two overlapping tablet screens">
+          <span class="cs-protect-caption">The brightspot protected<br>Energisers &amp; Drainers feature</span>
         </div>
       </div>
     </div>
@@ -958,14 +1008,15 @@
       <span class="t-label">Before &amp; after</span>
       <h2 class="cs-h2" style="margin-bottom:8px;">The redesign managers validated.</h2>
       <p class="cs-body" style="max-width:640px;">The same dashboard, before and after. On the left, the version managers rejected. On the right, the version they validated.</p>
-      <div class="cs-ba" data-gsap="stagger">
-        <div class="cs-ba__col" data-gsap="card">
+      <div class="cs-ba">
+        <div class="cs-ba__col cs-ba__col--before" data-gsap="card">
           <span class="cs-ba__label">Before — rejected</span>
           <img src="../Asset/arvo-before.png" alt="Stack of screenshots showing the original, dense ARVO dashboard pages">
         </div>
-        <div class="cs-ba__col" data-gsap="card">
+        <div class="cs-ba__col cs-ba__col--after" data-gsap="card">
           <span class="cs-ba__label">After — validated</span>
-          <img src="../Asset/arvo-after.png" alt="Stack of screenshots showing the redesigned, single-page ARVO dashboard">
+          <img class="cs-ba__img--back"  src="../Asset/arvo-after-right.png" alt="ARVO redesigned Team Summary dashboard with team signals">
+          <img class="cs-ba__img--front" src="../Asset/arvo-after-left.png"  alt="ARVO redesigned My team weekly dashboard">
         </div>
       </div>
     </div>
@@ -975,7 +1026,7 @@
   <section class="section" id="cs-impact" aria-label="Impact">
     <div class="inner">
       <span class="t-label">Impact</span>
-      <h2 class="cs-h2" style="margin-bottom:40px;">What changed across two rounds.</h2>
+      <h2 class="cs-h2" style="margin-bottom:80px;">What changed across two rounds.</h2>
       <div class="cs-impact-wrap" data-gsap="stagger">
         <div class="cs-impact">
           <div class="cs-impact__item" data-gsap="card">
@@ -999,45 +1050,47 @@
               <p class="cs-impact__body">problems returned to ARVO's Founder as an evidenced product brief</p>
             </div>
           </div>
+          <img class="cs-impact__peep" src="../Asset/arvo-peep-impact.svg" alt="" aria-hidden="true">
         </div>
-        <img class="cs-impact__peep" src="../Asset/arvo-peep-impact.svg" alt="" aria-hidden="true" data-gsap="card">
+      </div>
+      <div class="cs-impact-text">
+        <p class="cs-body">In our final round of testing, 93% of managers validated our redesign. More importantly, the Founder now has a clear view of what her product needs that isn't a design fix. That came from the workshop, the scoping call, and the decision to return five problems with evidence rather than absorb them into a redesign brief.</p>
+        <p class="cs-body">If the team had tried to solve all seven, the redesign might have looked busier and solved nothing. It was my call to recommend further testing, better paced than a rush job.</p>
       </div>
     </div>
   </section>
 
   <!-- ── FINAL PROTOTYPE (light showcase) ── -->
   <section class="section" id="cs-finalproto" aria-label="Final prototype">
-    <div class="inner">
-      <div class="cs-shot-wrap" data-gsap="card">
-        <img class="cs-finalproto__phones-single" src="../Asset/arvo-finalproto-laptop.png" alt="ARVO final redesigned dashboard shown on a laptop screen" style="border-radius:0;">
-      </div>
-      <div class="cs-finalproto__phones" data-gsap="card">
-        <img src="../Asset/arvo-finalproto-phones.png" alt="Three phone mockups of the ARVO redesign: team summary, critical alerts, and schedule action modal">
-      </div>
-    </div>
+    <img class="cs-finalproto__laptop" src="../Asset/arvo-finalproto-laptop.png" alt="ARVO final redesigned dashboard shown on a laptop screen" data-gsap="card">
+    <img class="cs-finalproto__phones-img" src="../Asset/arvo-finalproto-phones.png" alt="Three phone mockups of the ARVO redesign: team summary, critical alerts, and schedule action modal" data-gsap="card">
   </section>
 
   <!-- ── REFLECTIONS ── -->
   <section class="section" id="cs-reflections" aria-label="Reflections">
     <div class="inner">
       <span class="t-label">Reflections</span>
-      <h2 class="cs-h2" style="margin-bottom:40px;">What I learned as Lead while working on ARVO.</h2>
-      <div class="cs-cards-2x2" data-gsap="stagger">
-        <div data-gsap="card">
-          <h3 class="cs-card__title">Question the brief on day one.</h3>
-          <p class="cs-card__body">The most useful thing I did wasn't jumping straight into redesigning a screen with the team. It was asking whether the screens were even the problem. Next time that question comes first.</p>
+      <div class="cs-reflections-row">
+        <div class="cs-reflections-left">
+          <h2 class="cs-h2">What I learned as Lead while working on ARVO.</h2>
         </div>
-        <div data-gsap="card">
-          <h3 class="cs-card__title">Handing problems back is a deliverable.</h3>
-          <p class="cs-card__body">An eye-opening experience was getting used to the possibility that design can have its limitations while trying to solve issues users may have. Through ARVO, a written brief naming each returned problem, its owner, and suggesting next step was just as useful to ARVO's Founder than any feature built on a whim.</p>
-        </div>
-        <div data-gsap="card">
-          <h3 class="cs-card__title">Protecting what works is a decision.</h3>
-          <p class="cs-card__body">Considering whether to leave Energisers &amp; Drainers untouched took more conviction than redesigning it. Restraint is a skill I want to keep practising.</p>
-        </div>
-        <div data-gsap="card">
-          <h3 class="cs-card__title">Alignment before the client, every time.</h3>
-          <p class="cs-card__body">I've always believed that presenting a united front is key to giving a client peace of mind, so I made it a point to get my team fully aligned before every meeting with our Client. She actually called this out as a major strength in her feedback. Seeing the impact it had, I now do this intentionally with every project.</p>
+        <div class="cs-cards-2x2" data-gsap="stagger">
+          <div data-gsap="card">
+            <h3 class="cs-card__title">Question the brief on day one.</h3>
+            <p class="cs-card__body">The most useful thing I did wasn't jumping straight into redesigning a screen with the team. It was asking whether the screens were even the problem. Next time that question comes first.</p>
+          </div>
+          <div data-gsap="card">
+            <h3 class="cs-card__title">Handing problems back is a deliverable.</h3>
+            <p class="cs-card__body">An eye-opening experience was getting used to the possibility that design can have its limitations while trying to solve issues users may have. Through ARVO, a written brief naming each returned problem, its owner, and suggesting next step was just as useful to ARVO's Founder than any feature built on a whim.</p>
+          </div>
+          <div data-gsap="card">
+            <h3 class="cs-card__title">Protecting what works is a decision.</h3>
+            <p class="cs-card__body">Considering whether to leave Energisers &amp; Drainers untouched took more conviction than redesigning it. Restraint is a skill I want to keep practising.</p>
+          </div>
+          <div data-gsap="card">
+            <h3 class="cs-card__title">Alignment before the client, every time.</h3>
+            <p class="cs-card__body">I've always believed that presenting a united front is key to giving a client peace of mind, so I made it a point to get my team fully aligned before every meeting with our Client. She actually called this out as a major strength in her feedback. Seeing the impact it had, I now do this intentionally with every project.</p>
+          </div>
         </div>
       </div>
     </div>
@@ -1046,37 +1099,66 @@
   <!-- ── PROJECT STACK ── -->
   <section class="section" id="cs-stack-section" aria-label="Project stack">
     <div class="inner">
-      <span class="t-label">Project Stack</span>
-      <div class="cs-stack" data-gsap="stagger" style="margin-bottom:40px;">
-        <div class="cs-stack__col" data-gsap="card">
-          <span class="cs-stack__label">Role</span>
-          <p class="cs-stack__row"><strong>Project Lead</strong>Research, facilitation, synthesis, design direction</p>
+      <div class="cs-context" data-gsap="stagger">
+        <div class="cs-context__divider"></div>
+        <div class="cs-context__cols">
+          <div class="cs-context__col" data-gsap="card">
+            <span class="cs-context__label">Role</span>
+            <div>
+              <p class="cs-context__heading">Project Lead</p>
+              <p class="cs-context__body-sm">Research, facilitation, synthesis, design direction</p>
+            </div>
+          </div>
+          <div class="cs-context__col" data-gsap="card">
+            <span class="cs-context__label">Team</span>
+            <div>
+              <p class="cs-context__heading">6 people</p>
+              <p class="cs-context__body">3 UX Researchers · 2 UI Designers · 1 PM</p>
+            </div>
+          </div>
+          <div class="cs-context__col" data-gsap="card">
+            <span class="cs-context__label">Timeline</span>
+            <div>
+              <p class="cs-context__heading">6 weeks</p>
+              <p class="cs-context__body">Jan – Mar 2026 · Two research rounds, one workshop</p>
+            </div>
+          </div>
         </div>
-        <div class="cs-stack__col" data-gsap="card">
-          <span class="cs-stack__label">Team</span>
-          <p class="cs-stack__row">3 UX Researchers · 2 UI Designers · 1 PM</p>
-        </div>
-        <div class="cs-stack__col" data-gsap="card">
-          <span class="cs-stack__label">Timeline</span>
-          <p class="cs-stack__row"><strong>6 weeks</strong> (Jan – Mar 2026)<br>Two research rounds, one workshop</p>
-        </div>
+        <div class="cs-context__divider"></div>
       </div>
-      <div class="cs-stack" data-gsap="stagger">
-        <div class="cs-stack__col" data-gsap="card">
-          <span class="cs-stack__label">Research</span>
-          <p class="cs-stack__row">User Interviews<br>Usability Testing<br>Affinity Mapping<br>Competitive Analysis<br>Co-creation Workshop</p>
+      <span class="t-label">Project Stack</span>
+      <div class="cs-stack-grid" data-gsap="stagger">
+        <div class="cs-stack-col" data-gsap="card">
+          <h3 class="cs-stack-col__title">Research</h3>
+          <div class="cs-stack-col__item">User Interviews</div>
+          <div class="cs-stack-col__item">Usability Testing</div>
+          <div class="cs-stack-col__item">Affinity Mapping</div>
+          <div class="cs-stack-col__item">Competitive Analysis</div>
+          <div class="cs-stack-col__item">Co-creation Workshop</div>
         </div>
-        <div class="cs-stack__col" data-gsap="card">
-          <span class="cs-stack__label">Strategy</span>
-          <p class="cs-stack__row">Problem Scoping<br>Root Cause Classification<br>Stakeholder Alignment<br>Plain-English Taxonomy</p>
+        <div class="cs-stack-col" data-gsap="card">
+          <h3 class="cs-stack-col__title">Strategy</h3>
+          <div class="cs-stack-col__item">Problem Scoping</div>
+          <div class="cs-stack-col__item">Root Cause Classification</div>
+          <div class="cs-stack-col__item">Stakeholder Alignment</div>
+          <div class="cs-stack-col__item">Plain-English Taxonomy</div>
         </div>
-        <div class="cs-stack__col" data-gsap="card">
-          <span class="cs-stack__label">Design</span>
-          <p class="cs-stack__row">Information Architecture<br>Interaction Design<br>UI Design<br>Accessibility Audit (WCAG AA)<br>Prototyping</p>
+        <div class="cs-stack-col" data-gsap="card">
+          <h3 class="cs-stack-col__title">Design</h3>
+          <div class="cs-stack-col__item">Information Architecture</div>
+          <div class="cs-stack-col__item">Interaction Design</div>
+          <div class="cs-stack-col__item">UI Design</div>
+          <div class="cs-stack-col__item">Accessibility Audit (WCAG AA)</div>
+          <div class="cs-stack-col__item">Prototyping</div>
         </div>
-        <div class="cs-stack__col" data-gsap="card">
-          <span class="cs-stack__label">Deliverables</span>
-          <p class="cs-stack__row">Interactive Figma Prototype<br>React / HTML / CSS Components<br>Plain-English Taxonomy Doc<br>Competitive Analysis Report<br>UX Research Report<br>Final presentation</p>
+        <div class="cs-stack-col" data-gsap="card">
+          <h3 class="cs-stack-col__title">Deliverables</h3>
+          <div class="cs-stack-col__item">Interactive Figma Prototype</div>
+          <div class="cs-stack-col__item">React / HTML / CSS Components</div>
+          <div class="cs-stack-col__item">Plain-English Taxonomy Doc</div>
+          <div class="cs-stack-col__item">Competitive Analysis Report</div>
+          <div class="cs-stack-col__item">UX Research Report</div>
+          <div class="cs-stack-col__item">Final presentation</div>
         </div>
       </div>
     </div>
@@ -1085,7 +1167,7 @@
   <!-- ── NEXT CASE STUDY ── -->
   <section class="section" id="cs-next-section" aria-label="Next case study">
     <div class="inner">
-      <span class="t-label">Next case study</span>
+      <span class="t-label">Other Case Studies</span>
       <div class="cs-next">
         <a class="cs-next__link cs-next__link--prev" href="pethaus.html">← Paw Haus</a>
         <a class="cs-next__link cs-next__link--next" href="seletar.html">Seletar Airport →</a>
