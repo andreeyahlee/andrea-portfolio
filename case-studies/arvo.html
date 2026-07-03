@@ -188,15 +188,15 @@
     /* ── Hero ── */
     #cs-hero { padding-top: 104px; }
     .cs-hero__topbar { width: 100%; padding: 16px var(--pad); }
-    .cs-hero__body { display: flex; flex-direction: column; gap: 40px; padding: 32px var(--pad) 56px; }
-    .cs-hero__row { display: flex; align-items: flex-end; gap: 40px; width: 100%; }
+    .cs-hero__body { display: flex; flex-direction: column; gap: 80px; padding: 0 var(--pad); max-width: calc(var(--max-w) + var(--pad) * 2); margin-inline: auto; width: 100%; }
+    .cs-hero__row { display: flex; align-items: flex-end; gap: 40px; width: 100%; padding: 32px 0; }
     .cs-hero__col { flex: 1 1 761px; min-width: 0; display: flex; flex-direction: column; gap: 20px; }
     .cs-hero__tags { display: flex; flex-wrap: wrap; gap: 5px; }
     .cs-hero__tag { display: inline-flex; align-items: center; justify-content: center; padding: 4px 16px; background: #6b7060; color: var(--ink-light); font-family: var(--font-body); font-weight: 700; font-size: 11px; line-height: 1.5; letter-spacing: 0.14em; text-transform: uppercase; border-radius: 10px; white-space: nowrap; }
     .cs-hero__heading { display: flex; flex-direction: column; gap: 10px; }
     .cs-hero__title { font-family: var(--font-display); font-weight: 400; font-size: clamp(2rem, 4vw, 3.25rem); line-height: 1.08; letter-spacing: -0.03em; color: var(--ink-light); }
     .cs-hero__desc { font-family: var(--font-body); font-weight: 400; font-size: 17px; line-height: 1.47; color: var(--ink-light); }
-    .cs-hero__cta { flex: 1 1 300px; min-width: 0; display: flex; align-items: center; justify-content: center; padding: 16px 32px; background: var(--lime); border: 3px solid var(--lime); border-radius: 10px; box-shadow: -8px 7px 3.6px -3px rgba(0,0,0,0.25), inset 1px -2px 4px 2px rgba(0,0,0,0.25); text-decoration: none; transition: transform var(--dur-fast) var(--ease-bounce); }
+    .cs-hero__cta { flex: 0 0 auto; display: flex; align-items: center; justify-content: center; padding: 16px 32px; background: var(--lime); border: 3px solid var(--lime); border-radius: 10px; box-shadow: -8px 7px 3.6px -3px rgba(0,0,0,0.25), inset 1px -2px 4px 2px rgba(0,0,0,0.25); text-decoration: none; transition: transform var(--dur-fast) var(--ease-bounce); }
     .cs-hero__cta:hover { transform: translateY(-2px); }
     .cs-hero__cta-text { font-family: var(--font-body); font-weight: 600; font-size: 13px; color: var(--ink-dark); text-decoration: underline; white-space: nowrap; }
     .cs-hero__mockup-wrap { width: 100%; background: var(--bg-light); display: flex; flex-direction: column; align-items: center; overflow: hidden; }
@@ -351,9 +351,9 @@
     .cs-workshop-photo img { position: absolute; inset: 0; width: 100%; height: 100%; display: block; object-fit: cover; pointer-events: none; }
     /* left/top = centre of each card; translate(-50%,-50%) re-anchors so rotation is around card centre */
     .cs-workshop-photo--1 { left: 53.20%; top: 43.44%; width: 68.37%; height: 46.80%; transform: translate(-50%,-50%) rotate(-4.42deg); box-shadow: -9.332px 11.877px 3.393px rgba(0,0,0,0.5); z-index: 4; }
-    .cs-workshop-photo--2 { left: 26.73%; top: 71.57%; width: 44.40%; height: 30.63%; transform: translate(-50%,-50%) rotate(9.34deg);  box-shadow: -6.107px 7.772px 2.221px rgba(0,0,0,0.5); z-index: 1; }
-    .cs-workshop-photo--3 { left: 74.54%; top: 76.32%; width: 44.40%; height: 30.63%; transform: translate(-50%,-50%) rotate(-12.19deg); box-shadow: -6.107px 7.772px 2.221px rgba(0,0,0,0.5); z-index: 2; }
-    .cs-workshop-photo--4 { left: 43.49%; top: 86.74%; width: 33.93%; height: 19.54%; transform: translate(-50%,-50%) rotate(-15.26deg); box-shadow: -7.582px 9.65px 2.757px rgba(0,0,0,0.5); z-index: 3; }
+    .cs-workshop-photo--2 { left: 74.54%; top: 76.32%; width: 44.40%; height: 30.63%; transform: translate(-50%,-50%) rotate(-12.19deg); box-shadow: -6.107px 7.772px 2.221px rgba(0,0,0,0.5); z-index: 6; }
+    .cs-workshop-photo--3 { left: 26.73%; top: 71.57%; width: 44.40%; height: 30.63%; transform: translate(-50%,-50%) rotate(9.34deg);  box-shadow: -6.107px 7.772px 2.221px rgba(0,0,0,0.5); z-index: 5; }
+    .cs-workshop-photo--4 { left: 43.49%; top: 86.74%; width: 33.93%; height: 19.54%; transform: translate(-50%,-50%) rotate(-15.26deg); box-shadow: -7.582px 9.65px 2.757px rgba(0,0,0,0.5); z-index: 7; }
     .cs-workshop-photo__caption { position: absolute; top: 16px; left: 16px; right: 16px; z-index: 1; font-family: var(--font-body); font-weight: 700; font-size: 11.5px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--ink-light); }
 
     /* ── Workshop industries ── */
@@ -385,60 +385,157 @@
     .cs-seven-intro { display: flex; flex-direction: column; gap: 16px; }
     .cs-seven-stack { flex: 1; display: flex; flex-direction: column; gap: 10px; }
     .cs-seven-card {
-      position: relative; background: #f4f4eb; border-radius: 16px; overflow: hidden;
-      display: flex; align-items: stretch; min-height: 400px; flex-shrink: 0;
+      position: relative; background: #f4f4eb; border-radius: 10px; overflow: hidden;
+      display: flex; flex-direction: column; gap: 10px;
+      padding: 16px; height: 400px; flex-shrink: 0;
     }
+    .cs-seven-card--dark { background: #31332a; }
     .cs-seven-card__badge {
-      position: absolute; top: 16px; right: 16px; z-index: 2;
-      font-family: var(--font-mono); font-weight: 700; font-size: 11px; letter-spacing: 0.06em; text-transform: uppercase;
-      padding: 5px 16px; border-radius: 100px;
+      align-self: flex-end; flex-shrink: 0;
+      font-family: var(--font-mono); font-weight: 700; font-size: 10px; letter-spacing: 0.06em; text-transform: uppercase;
+      padding: 4px 16px; border-radius: 100px;
     }
-    .cs-badge--solved { background: var(--ink-dark); color: var(--lime); }
+    .cs-badge--solved { background: #374222; color: var(--lime); }
     .cs-badge--protected { background: var(--lime); color: var(--ink-dark); }
     .cs-badge--returned { background: #fdedd5; color: #a0622a; }
-    .cs-seven-card__left {
-      flex: 0 0 40%; padding: 32px 28px; display: flex; flex-direction: column; gap: 12px; position: relative; z-index: 1;
+    .cs-seven-card__title {
+      font-family: var(--font-display); font-weight: 700; font-size: 18px; line-height: 24px;
+      color: var(--ink-dark); flex-shrink: 0;
     }
-    .cs-seven-card__title { font-family: var(--font-display); font-weight: 700; font-size: 24px; line-height: 30px; letter-spacing: -0.01em; color: var(--ink-dark); }
-    .cs-seven-card__desc { font-family: var(--font-body); font-size: 15px; line-height: 23px; color: rgba(33,40,26,0.65); }
-    .cs-seven-card__stat { font-family: var(--font-body); font-size: 15px; line-height: 23px; color: rgba(33,40,26,0.9); margin-top: auto; }
-    .cs-seven-card__right { flex: 1; position: relative; overflow: hidden; }
-    .cs-seven-card__right img {
-      position: absolute; top: 5%; left: -5%; width: 118%; height: auto;
-      transform: perspective(1400px) rotateY(-10deg) rotateX(4deg);
-      transform-origin: top center;
+    .cs-seven-card--dark .cs-seven-card__title { color: var(--ink-light); }
+    .cs-seven-card__body { flex: 1; position: relative; min-height: 0; }
+    .cs-seven-card__text { width: 172px; display: flex; flex-direction: column; gap: 8px; }
+    .cs-seven-card__desc { font-family: var(--font-body); font-size: 13px; line-height: 15px; color: var(--ink-dark); }
+    .cs-seven-card--dark .cs-seven-card__desc { color: rgba(244,244,235,0.7); }
+    .cs-seven-card__stat { font-family: var(--font-body); font-size: 13px; line-height: 15px; color: var(--ink-dark); }
+    .cs-seven-card--dark .cs-seven-card__stat { color: rgba(244,244,235,0.9); }
+
+    /* Mobile-first: simple image fill on right side */
+    .cs-seven-card__img-wrap {
+      position: absolute; top: 0; left: 155px; right: 0; bottom: 0; overflow: hidden;
+    }
+    .cs-seven-card__img-wrap img { width: 100%; height: 100%; object-fit: cover; object-position: top left; display: block; }
+
+    /* Desktop: pixel-accurate per-card image placement from Figma */
+    @media (min-width: 768px) {
+      /* Card 1 — Manager's Paradox: rotated -23deg, upper-right of body */
+      .cs-seven-card:nth-child(1) .cs-seven-card__img-wrap {
+        left: 182px; top: 51px; right: auto; bottom: auto;
+        width: 481px; height: 497px; overflow: visible;
+        display: flex; align-items: center; justify-content: center;
+      }
+      .cs-seven-card:nth-child(1) .cs-seven-card__img-wrap img {
+        width: 358px; height: 388px; object-fit: unset; flex-shrink: 0;
+        transform: rotate(-23.14deg);
+        box-shadow: -9.132px 37.669px 6.849px rgba(0,0,0,0.5);
+      }
+      /* Card 2 — Cognitive Overload: wide dashboard, lower half, skewed */
+      .cs-seven-card:nth-child(2) .cs-seven-card__img-wrap {
+        left: 71px; top: 161px; right: auto; bottom: auto;
+        width: 849px; height: 239px; overflow: visible;
+        display: flex; align-items: center; justify-content: center;
+      }
+      .cs-seven-card:nth-child(2) .cs-seven-card__img-wrap img {
+        width: 822px; height: auto; object-fit: unset; flex-shrink: 0;
+        transform: rotate(3deg) skewX(-5deg);
+        box-shadow: -37px 28px 14px rgba(0,0,0,0.5);
+      }
+      /* Card 3 — Energisers & Drainers: slight angle, upper-right */
+      .cs-seven-card:nth-child(3) .cs-seven-card__img-wrap {
+        left: 190px; top: 10px; right: auto; bottom: auto;
+        width: 480px; height: 440px; overflow: visible;
+        display: flex; align-items: flex-start; justify-content: flex-start;
+      }
+      .cs-seven-card:nth-child(3) .cs-seven-card__img-wrap img {
+        width: 460px; height: auto; object-fit: unset; flex-shrink: 0;
+        transform: rotate(-3deg);
+        transform-origin: top left;
+        box-shadow: -6px 22px 6px rgba(0,0,0,0.4);
+      }
+      /* Card 4 — AI Jargons: flat document, no rotation */
+      .cs-seven-card:nth-child(4) .cs-seven-card__img-wrap {
+        left: 208px; top: 71px; right: auto; bottom: auto;
+        width: 461px; height: 323px; overflow: visible;
+        display: flex; align-items: flex-start; justify-content: flex-start;
+      }
+      .cs-seven-card:nth-child(4) .cs-seven-card__img-wrap img {
+        width: 461px; height: 323px; object-fit: cover; flex-shrink: 0;
+        box-shadow: -18px 26px 5px rgba(0,0,0,0.25);
+      }
+      /* Card 5 — Honesty Gap: dashboard composite */
+      .cs-seven-card:nth-child(5) .cs-seven-card__img-wrap {
+        left: 200px; top: 55px; right: auto; bottom: auto;
+        width: 460px; height: 350px; overflow: visible;
+      }
+      .cs-seven-card:nth-child(5) .cs-seven-card__img-wrap img {
+        width: 440px; height: auto; object-fit: unset; flex-shrink: 0;
+      }
+      /* Card 6 — Structural Resignation: team signals, rotated/skewed */
+      .cs-seven-card:nth-child(6) .cs-seven-card__img-wrap {
+        left: 221px; top: 81px; right: auto; bottom: auto;
+        width: 579px; height: 405px; overflow: visible;
+        display: flex; align-items: center; justify-content: center;
+      }
+      .cs-seven-card:nth-child(6) .cs-seven-card__img-wrap img {
+        width: 526px; height: auto; object-fit: unset; flex-shrink: 0;
+        transform: rotate(3deg) skewX(-5deg);
+      }
+      /* Card 7 — Homework Trap: calendar/scheduling, slight angle */
+      .cs-seven-card:nth-child(7) .cs-seven-card__img-wrap {
+        left: 200px; top: 50px; right: auto; bottom: auto;
+        width: 460px; height: 390px; overflow: visible;
+      }
+      .cs-seven-card:nth-child(7) .cs-seven-card__img-wrap img {
+        width: 440px; height: auto; object-fit: unset; flex-shrink: 0;
+        transform: rotate(3deg);
+        transform-origin: top left;
+      }
+      /* Card 8 — Accessibility: before/after comparison */
+      .cs-seven-card:nth-child(8) .cs-seven-card__img-wrap {
+        left: 200px; top: 50px; right: auto; bottom: auto;
+        width: 460px; height: 370px; overflow: visible;
+      }
+      .cs-seven-card:nth-child(8) .cs-seven-card__img-wrap img {
+        width: 440px; height: auto; object-fit: unset; flex-shrink: 0;
+      }
     }
 
     /* ── Before / After ── */
     .cs-ba { display: flex; gap: 40px; margin-top: 40px; align-items: flex-start; }
-    .cs-ba__col { flex: 1; min-width: 0; position: relative; background: #f4f4eb; overflow: hidden; height: 420px; padding: 16px; border-radius: 16px; }
-    .cs-ba__label { display: block; font-family: var(--font-body); font-size: 11px; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; color: var(--ink-dark); position: relative; z-index: 3; }
+    .cs-ba__col { flex: 1; min-width: 0; position: relative; background: #f4f4eb; overflow: hidden; height: 520px; padding: 16px; border-radius: 16px; }
+    .cs-ba__label { display: block; font-family: var(--font-body); font-size: 11px; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; color: var(--ink-dark); position: relative; z-index: 5; }
     .cs-ba__col img { position: absolute; display: block; border-radius: 6px; }
-    .cs-ba__col--before img { width: calc(100% + 32px); left: -16px; top: 18%; }
-    .cs-ba__img--back  { width: 70%; left: 38%; top: 3%;  z-index: 1; box-shadow: -9px 37px 7px rgba(0,0,0,0.5); }
-    .cs-ba__img--front { width: 75%; left: -8%; top: 9%;  z-index: 2; box-shadow: -10px 43px 8px rgba(0,0,0,0.5); }
+    /* Before card — 4 images at Figma-derived % positions (ref: 572×581px card) */
+    .cs-ba__b1 { width: 59.6%; left: -1.6%; top: 18.9%; z-index: 1; box-shadow: -22px 33px 6px rgba(0,0,0,0.5); }
+    .cs-ba__b2 { width: 66.9%; left: 17.7%; top: 27.9%; z-index: 2; box-shadow: none; }
+    .cs-ba__b3 { width: 69.2%; left: 42%;   top: 40.3%; z-index: 3; }
+    .cs-ba__b4 { width: 67.8%; left: 67.1%; top: 74.2%; z-index: 4; box-shadow: -22px 33px 6px rgba(0,0,0,0.5); }
+    /* After card — 2 images at Figma-derived % positions */
+    .cs-ba__img--back  { width: 103.5%; left: 47.4%; top: 2.8%;  z-index: 1; box-shadow: -18px 74px 13px rgba(0,0,0,0.5); }
+    .cs-ba__img--front { width: 116%;   left: -3.3%; top: 17.4%; z-index: 2; box-shadow: -21px 86px 16px rgba(0,0,0,0.5); }
 
     /* ── Impact stats ── */
-    .cs-impact-wrap { position: relative; height: 310px; overflow: visible; margin-bottom: 48px; }
-    /* 896px = Figma frame inner width; centered so card coordinate system matches exactly */
-    .cs-impact { position: absolute; width: 100%; max-width: 896px; height: 100%; left: 50%; transform: translateX(-50%); }
+    /* Metrics py-32 top + gap-80 from h2 = 112px above card zone; py-32 bottom + gap-40 = 72px below */
+    .cs-impact-wrap { position: relative; height: 310px; overflow: visible; margin-top: 32px; margin-bottom: 72px; }
+    /* 1184px = Figma card coordinate space (1440 frame − 2×64 section pad − 2×64 metrics pad) */
+    .cs-impact { position: absolute; width: 100%; max-width: 1184px; height: 100%; left: 50%; transform: translateX(-50%); }
     .cs-impact__item {
       position: absolute;
-      width: 41%;
-      height: 194px;
+      width: 31.1%;
+      min-height: 194px;
       border-radius: 30px; border: 5px solid;
-      display: flex; align-items: center; justify-content: center; padding: 0 24px;
+      display: flex; align-items: center; justify-content: center;
       box-shadow: 8px 19px 2px rgba(0,0,0,0.5);
-      box-sizing: border-box; overflow: hidden;
+      box-sizing: border-box;
     }
-    .cs-impact__item:nth-child(1) { background: #f4f4eb; border-color: var(--lime); transform: rotate(-7.87deg); left: -8.6%; top: 2px; }
-    .cs-impact__item:nth-child(2) { background: var(--lime); border-color: #f4f4eb; transform: rotate(8.7deg); left: 44.9%; top: -35px; z-index: 2; }
-    .cs-impact__item:nth-child(3) { background: #f4f4eb; border-color: var(--lime); transform: rotate(-9.79deg); left: 81.6%; top: 10px; }
+    .cs-impact__item:nth-child(1) { background: #f4f4eb; border-color: var(--lime); transform: rotate(-7.87deg); left: -6.5%; top: -22px; }
+    .cs-impact__item:nth-child(2) { background: var(--lime); border-color: #f4f4eb; transform: rotate(8.7deg); left: 33.9%; top: -62px; z-index: 2; }
+    .cs-impact__item:nth-child(3) { background: #f4f4eb; border-color: var(--lime); transform: rotate(-9.79deg); left: 61.7%; top: -20px; }
     .cs-impact__inner { display: flex; flex-direction: column; gap: 10px; align-items: center; text-align: center; width: 100%; padding: 32px 0; }
-    .cs-impact__num { font-family: var(--font-display); font-size: clamp(1.5rem, 5.5vw, 3.5rem); font-weight: 400; line-height: 1; letter-spacing: -0.04em; color: var(--ink-dark); }
+    .cs-impact__num { font-family: var(--font-display); font-size: 3.5rem; font-weight: 400; line-height: 1; letter-spacing: -0.04em; color: var(--ink-dark); }
     .cs-impact__tag { display: block; font-family: var(--font-body); font-size: 11px; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; color: #6b7060; }
     .cs-impact__body { font-family: var(--font-body); font-size: 15px; line-height: 20px; color: var(--ink-dark); }
-    .cs-impact__peep { position: absolute; width: clamp(140px, 26.8%, 240px); height: auto; left: 34%; top: 0; z-index: 3; pointer-events: none; }
+    .cs-impact__peep { position: absolute; width: clamp(120px, 20.3%, 240px); height: auto; left: 20.4%; top: -32px; z-index: 3; pointer-events: none; }
     .cs-impact-text { max-width: 505px; display: flex; flex-direction: column; gap: 20px; }
 
     /* ── Final Prototype (light showcase) ── */
@@ -522,16 +619,15 @@
 
       .cs-hero__row { flex-direction: column; align-items: stretch; gap: 24px; }
       .cs-hero__col { flex-basis: auto; }
-      .cs-hero__cta { flex-basis: auto; align-self: stretch; }
+      .cs-hero__cta { flex-basis: auto; align-self: flex-start; }
       .cs-specs-row { flex-direction: column; gap: 40px; }
       .cs-specs-stats { position: static; width: 100%; height: auto; display: flex; flex-direction: column; gap: 16px; }
       .cs-spec-card { position: static; width: 100%; transform: none !important; box-shadow: none; }
       .cs-cols, .cs-decision-cards, .cs-ba, .cs-context__cols, .cs-stack-grid { flex-wrap: wrap; gap: 32px; }
       .cs-cols .cs-col, .cs-context__col { flex: 1 1 45%; }
       .cs-impact-wrap { height: 260px; }
-      .cs-impact__item { width: clamp(180px, 30%, 280px); }
-      .cs-impact__num { font-size: clamp(1.5rem, 6vw, 2.5rem); }
-      .cs-impact__peep { width: 130px; left: 20%; }
+      .cs-impact__num { font-size: clamp(1.2rem, 4vw, 2.5rem); }
+      .cs-impact__peep { width: clamp(90px, 16%, 180px); }
       .cs-zigzag-row, .cs-zigzag-row--reverse { flex-direction: column; }
       .cs-redesign-grid { flex-direction: column; }
       .cs-redesign-panel--single img { left: 40%; width: 60%; }
@@ -539,24 +635,48 @@
       .cs-workshop-collage { width: 100%; }
       #cs-seven .inner { gap: 28px; }
       .cs-seven-left { top: 80px; }
-      .cs-seven-card { min-height: 360px; }
+      .cs-seven-card { height: 360px; }
       .cs-brief-text { max-width: 100%; }
       .cs-role-list { flex-wrap: wrap; gap: 24px; }
       .cs-role-card { flex: 1 1 45%; }
       .cs-finalproto__phones { flex-wrap: wrap; }
       .cs-finalproto__phones img { flex: 1 1 45%; }
       .cs-cards-2x2 { grid-template-columns: 1fr; }
+
+      /* Before/After — stack vertically */
+      /* flex: none overrides flex-basis: 0% so explicit height takes effect in column direction */
+      .cs-ba { flex-direction: column; }
+      .cs-ba__col { flex: none; width: 100%; height: 460px; }
+
+      /* Reflections — heading above card grid */
+      .cs-reflections-row { flex-direction: column; }
+      .cs-reflections-left { width: 100%; }
+      .cs-reflections-left .cs-h2 { font-size: clamp(1.5rem, 3.5vw, 2rem); line-height: 1.2; }
+      .cs-cards-2x2 { grid-template-columns: repeat(2, 1fr); }
+
+      /* Decision cards — stack */
+      .cs-decision-cards { flex-direction: column; gap: 24px; }
+      .cs-decision-or { width: 100%; font-size: 2.5rem; line-height: 1.1; padding: 4px 0; text-align: center; }
+
+      /* Font size scaling */
+      #cs-workshop .cs-h2 { font-size: clamp(1.5rem, 3.5vw, 2rem); line-height: 1.2; letter-spacing: -0.5px; }
+      .cs-decision-head__title { font-size: clamp(1.5rem, 3.5vw, 2rem); line-height: 1.2; }
+      .cs-next__link { font-size: clamp(2rem, 5vw, 3rem); line-height: 1.1; }
+
+      /* Section spacing */
+      .section + .section { margin-top: 80px; }
     }
 
     @media (max-width: 767px) {
-      :root { --pad: 24px; }
+      :root { --pad: 32px; }
+      .section + .section { margin-top: 80px; }
       .nav { min-height: 80px; padding: 20px var(--pad); }
       .nav__links { display: none; }
       .nav__hamburger { display: flex; }
 
       #cs-hero { padding-top: 80px; }
       .cs-hero__topbar { padding: 12px var(--pad); }
-      .cs-hero__body { padding: 24px var(--pad) 40px; gap: 32px; }
+      .cs-hero__body { padding: 0 var(--pad); gap: 32px; }
       .cs-hero__mockup-wrap { padding: 16px; }
       .cs-zigzag-media--card { aspect-ratio: auto; height: auto; }
       .cs-zigzag-media__stage { flex: none; }
@@ -566,27 +686,49 @@
       .cs-stats { flex-direction: column; gap: 48px; }
       .cs-cols { grid-template-columns: 1fr; gap: 24px; }
       .cs-decision-cards { flex-direction: column; }
+      /* Typography */
+      .cs-h2 { font-size: clamp(1.75rem, 7.5vw, 2.25rem); }
+      #cs-workshop .cs-h2, .cs-reflections-left .cs-h2 { font-size: clamp(1.5rem, 7.5vw, 2rem); line-height: 1.2; }
+      .cs-col__title { font-size: clamp(1.5rem, 7vw, 2rem); line-height: 1.15; }
+
+      /* Before/After */
       .cs-ba { flex-direction: column; gap: 24px; }
-      .cs-ba__col { height: 300px; }
-      .cs-ba__col--before img { width: 110%; }
-      .cs-ba__img--back  { width: 50%; }
-      .cs-ba__img--front { width: 57%; }
-      .cs-impact-wrap { height: 240px; }
-      .cs-impact__peep { width: 110px; }
+      .cs-ba__col { flex: none; width: 100%; height: 380px; }
+
+      /* Impact — stack vertically with slight rotation, overlapping */
+      .cs-impact-wrap { height: auto; overflow: visible; margin-top: 16px; margin-bottom: 64px; }
+      .cs-impact { position: relative; left: auto; transform: none; width: 100%; max-width: 100%; height: auto; display: flex; flex-direction: column; }
+      .cs-impact__item { position: static; width: 100%; min-height: 160px; margin-bottom: -24px; }
+      .cs-impact__item:nth-child(1) { transform: rotate(-3deg); z-index: 1; }
+      .cs-impact__item:nth-child(2) { transform: rotate(2.5deg); z-index: 2; }
+      .cs-impact__item:nth-child(3) { transform: rotate(-2deg); z-index: 1; margin-bottom: 0; }
+      .cs-impact__num { font-size: clamp(2.5rem, 9vw, 3.25rem); }
+      .cs-impact__peep { position: absolute; right: -12px; left: auto; top: 130px; bottom: auto; width: 110px; z-index: 10; }
+
+      /* Context + Stack — centered on mobile */
       .cs-context__cols, .cs-stack-grid { flex-direction: column; gap: 24px; }
-      .cs-stack-col { padding: 16px 0; }
-      .cs-finalproto__phones { flex-direction: column; }
-      .cs-finalproto__phones img { flex: 1 1 100%; }
-      .cs-next { flex-direction: column; align-items: flex-start; gap: 12px; }
-      .cs-next__link--next { text-align: left; }
+      .cs-context__col { align-items: center; text-align: center; }
+      .cs-stack-col { padding: 16px 0; align-items: center; text-align: center; }
+      .cs-stack-col__title { text-align: center; }
+      .cs-stack-col__item { text-align: center; }
+
+      /* Final prototype phones — side-by-side (Figma mobile) */
+      .cs-finalproto__phones { flex-wrap: nowrap; gap: 12px; }
+      .cs-finalproto__phones img { flex: 1 1 0; min-width: 0; }
+
+      /* Reflections — 1 column (override tablet 2-col rule) */
+      .cs-cards-2x2 { grid-template-columns: 1fr; }
+
+      /* Next case studies — side-by-side with smaller font */
+      .cs-next { align-items: flex-start; justify-content: space-between; gap: 8px; }
+      .cs-next__link { font-size: clamp(1.25rem, 5.5vw, 1.75rem); line-height: 1.2; }
       #cs-seven .inner { flex-direction: column; gap: 32px; }
       .cs-seven-left { position: static; flex: none; width: 100%; }
       .cs-seven-stack { gap: 10px; }
-      .cs-seven-card { flex-direction: column; min-height: auto; border-radius: 12px; }
-      .cs-seven-card__left { flex: none; width: 100%; padding: 24px 24px 16px; }
-      .cs-seven-card__title { font-size: 20px; line-height: 26px; }
-      .cs-seven-card__right { height: 220px; }
-      .cs-seven-card__right img { position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover; object-position: top left; transform: none; }
+      .cs-seven-card { height: 260px; border-radius: 12px; }
+      .cs-seven-card__title { font-size: 16px; line-height: 21px; }
+      .cs-seven-card__text { width: 110px; }
+      .cs-seven-card__desc, .cs-seven-card__stat { font-size: 11px; line-height: 14px; }
 
       #contact .inner { flex-direction: column; align-items: stretch; }
       .contact__copy { width: 100%; }
@@ -603,7 +745,7 @@
     }
 
     @media (max-width: 479px) {
-      :root { --pad: 20px; }
+      :root { --pad: 32px; }
       .contact__heading { font-size: clamp(1.75rem, 8vw, 2.25rem); }
     }
   </style>
@@ -702,7 +844,7 @@
             <p class="cs-hero__desc">ARVO is an AI tool that helps managers spot early signs of team burnout and suggests what to do next. Managers rejected the first version. I led the team that found out why and discovered most of the problems weren't ones design could fix.</p>
           </div>
         </div>
-        <a class="cs-hero__cta" href="#cs-finalproto">
+        <a class="cs-hero__cta" href="https://arvo-ai.figma.site" target="_blank" rel="noopener noreferrer">
           <span class="cs-hero__cta-text">View Demo →</span>
         </a>
       </div>
@@ -859,95 +1001,110 @@
 
         <div class="cs-seven-card">
           <span class="cs-seven-card__badge cs-badge--solved">Solved</span>
-          <div class="cs-seven-card__left">
-            <h3 class="cs-seven-card__title">Manager's Paradox</h3>
-            <p class="cs-seven-card__desc">no time to read a dense dashboard so we designed singular page architecture, clear role separation and no ambiguity on context of each page.</p>
-            <p class="cs-seven-card__stat">11 of 13 managers approved.</p>
-          </div>
-          <div class="cs-seven-card__right">
-            <img src="../Asset/arvo-problem-01.png" alt="Manager's Paradox solution — single-page architecture with clear role separation">
+          <h3 class="cs-seven-card__title">Manager's Paradox</h3>
+          <div class="cs-seven-card__body">
+            <div class="cs-seven-card__text">
+              <p class="cs-seven-card__desc">no time to read a dense dashboard so we designed singular page architecture, clear role separation and no ambiguity on context of each page.</p>
+              <p class="cs-seven-card__stat">11 of 13 managers approved.</p>
+            </div>
+            <div class="cs-seven-card__img-wrap">
+              <img src="../Asset/arvo-problem-01.png" alt="Manager's Paradox solution">
+            </div>
           </div>
         </div>
 
         <div class="cs-seven-card">
           <span class="cs-seven-card__badge cs-badge--solved">Solved</span>
-          <div class="cs-seven-card__left">
-            <h3 class="cs-seven-card__title">Cognitive Overload</h3>
-            <p class="cs-seven-card__desc">overwhelming wall of text and every signal looked equally urgent so we added clear signals for managers to easily scan for issues and prioritise key tasks faster.</p>
-            <p class="cs-seven-card__stat">12 of 13 managers approved.</p>
-          </div>
-          <div class="cs-seven-card__right">
-            <img src="../Asset/arvo-problem-02.png" alt="Cognitive Overload solution — priority signals for faster issue scanning">
+          <h3 class="cs-seven-card__title">Cognitive Overload</h3>
+          <div class="cs-seven-card__body">
+            <div class="cs-seven-card__text">
+              <p class="cs-seven-card__desc">overwhelming wall of text and every signal looked equally urgent so we added clear signals for managers to easily scan for issues and prioritise key tasks faster.</p>
+              <p class="cs-seven-card__stat">12 of 13 managers approved.</p>
+            </div>
+            <div class="cs-seven-card__img-wrap">
+              <img src="../Asset/arvo-problem-08.png" alt="Cognitive Overload solution">
+            </div>
           </div>
         </div>
 
         <div class="cs-seven-card">
           <span class="cs-seven-card__badge cs-badge--protected">Protected</span>
-          <div class="cs-seven-card__left">
-            <h3 class="cs-seven-card__title">Energisers &amp; Drainers</h3>
-            <p class="cs-seven-card__desc">managers consistently rated this as the most valuable feature in the product. we preserved it and built around it rather than rebuild it from scratch.</p>
-          </div>
-          <div class="cs-seven-card__right">
-            <img src="../Asset/arvo-problem-03.png" alt="Energisers & Drainers — preserved as-is">
-          </div>
-        </div>
-
-        <div class="cs-seven-card">
-          <span class="cs-seven-card__badge cs-badge--returned">Returned</span>
-          <div class="cs-seven-card__left">
-            <h3 class="cs-seven-card__title">AI Jargons &amp; Mgt 101</h3>
-            <p class="cs-seven-card__desc">The plain-English translation layer is just a temporary workaround; the AI model itself needs to be retrained with a proper language taxonomy.</p>
-            <p class="cs-seven-card__desc">Handed over the taxonomy documentation, but advised our Client to test it further to ensure the simple phrasing fits each specific industry.</p>
-          </div>
-          <div class="cs-seven-card__right">
-            <img src="../Asset/arvo-problem-04.png" alt="AI Jargons — returned to client">
+          <h3 class="cs-seven-card__title">Energisers &amp; Drainers</h3>
+          <div class="cs-seven-card__body">
+            <div class="cs-seven-card__text">
+              <p class="cs-seven-card__desc">managers consistently rated this as the most valuable feature in the product. we preserved it and built around it rather than rebuild it from scratch.</p>
+            </div>
+            <div class="cs-seven-card__img-wrap">
+              <img src="../Asset/arvo-problem-07.png" alt="Energisers and Drainers">
+            </div>
           </div>
         </div>
 
-        <div class="cs-seven-card">
+        <div class="cs-seven-card cs-seven-card--dark">
           <span class="cs-seven-card__badge cs-badge--returned">Returned</span>
-          <div class="cs-seven-card__left">
-            <h3 class="cs-seven-card__title">Honesty Gap</h3>
-            <p class="cs-seven-card__desc">Managers fear dishonest feedback because small team sizes destroy anonymity, and design alone can't fix fundamental privacy flaws.</p>
-            <p class="cs-seven-card__desc">Advised the client to set a minimum team size threshold for reporting to strictly protect employee identity.</p>
-          </div>
-          <div class="cs-seven-card__right">
-            <img src="../Asset/arvo-problem-05.png" alt="Honesty Gap — returned to client">
+          <h3 class="cs-seven-card__title">AI Jargons &amp; Mgt 101</h3>
+          <div class="cs-seven-card__body">
+            <div class="cs-seven-card__text">
+              <p class="cs-seven-card__desc">The plain-English translation layer is just a temporary workaround; the AI model itself needs to be retrained with a proper language taxonomy.</p>
+              <p class="cs-seven-card__desc">Handed over the taxonomy documentation, but advised our Client to test it further to ensure the simple phrasing fits each specific industry.</p>
+            </div>
+            <div class="cs-seven-card__img-wrap">
+              <img src="../Asset/arvo-problem-06.png" alt="AI Jargons">
+            </div>
           </div>
         </div>
 
-        <div class="cs-seven-card">
+        <div class="cs-seven-card cs-seven-card--dark">
           <span class="cs-seven-card__badge cs-badge--returned">Returned</span>
-          <div class="cs-seven-card__left">
-            <h3 class="cs-seven-card__title">Structural Resignation</h3>
-            <p class="cs-seven-card__desc">Problems raised like salary increment and more leaves are a culture issue, not a tool issue. Managers don't have the ability to influence such issues.</p>
-          </div>
-          <div class="cs-seven-card__right">
-            <img src="../Asset/arvo-problem-06.png" alt="Structural Resignation — returned to client">
+          <h3 class="cs-seven-card__title">Honesty Gap</h3>
+          <div class="cs-seven-card__body">
+            <div class="cs-seven-card__text">
+              <p class="cs-seven-card__desc">Managers fear dishonest feedback because small team sizes destroy anonymity, and design alone can't fix fundamental privacy flaws.</p>
+              <p class="cs-seven-card__desc">Advised the client to set a minimum team size threshold for reporting to strictly protect employee identity.</p>
+            </div>
+            <div class="cs-seven-card__img-wrap">
+              <img src="../Asset/arvo-problem-05.png" alt="Honesty Gap">
+            </div>
           </div>
         </div>
 
-        <div class="cs-seven-card">
+        <div class="cs-seven-card cs-seven-card--dark">
           <span class="cs-seven-card__badge cs-badge--returned">Returned</span>
-          <div class="cs-seven-card__left">
-            <h3 class="cs-seven-card__title">Homework Trap</h3>
-            <p class="cs-seven-card__desc">Weekly surveys feel like administrative busywork, while action checklists add friction by forcing managers off the platform to complete tasks.</p>
-            <p class="cs-seven-card__desc">We advised shifting to a bi-weekly or monthly cadence and building a native scheduling tool to streamline workflows. (Note: Discovered in round two testing; solution is pending validation.)</p>
-          </div>
-          <div class="cs-seven-card__right">
-            <img src="../Asset/arvo-problem-07.png" alt="Homework Trap — returned to client">
+          <h3 class="cs-seven-card__title">Structural Resignation</h3>
+          <div class="cs-seven-card__body">
+            <div class="cs-seven-card__text">
+              <p class="cs-seven-card__desc">Problems raised like salary increment and more leaves are a culture issue, not a tool issue. Managers don't have the ability to influence such issues.</p>
+            </div>
+            <div class="cs-seven-card__img-wrap">
+              <img src="../Asset/arvo-problem-04.png" alt="Structural Resignation">
+            </div>
           </div>
         </div>
 
-        <div class="cs-seven-card">
+        <div class="cs-seven-card cs-seven-card--dark">
           <span class="cs-seven-card__badge cs-badge--returned">Returned</span>
-          <div class="cs-seven-card__left">
-            <h3 class="cs-seven-card__title">Accessibility</h3>
-            <p class="cs-seven-card__desc">Managers reported that the platform's colors were too light, causing severe eye strain during use. We then fixed the colour contrast in the final iteration to improve readability.</p>
-            <p class="cs-seven-card__desc">(Note: Discovered in round two testing; solution is pending validation.)</p>
+          <h3 class="cs-seven-card__title">Homework Trap</h3>
+          <div class="cs-seven-card__body">
+            <div class="cs-seven-card__text">
+              <p class="cs-seven-card__desc">Weekly surveys feel like administrative busywork, while action checklists add friction by forcing managers off the platform to complete tasks.</p>
+              <p class="cs-seven-card__desc">We advised shifting to a bi-weekly or monthly cadence and building a native scheduling tool to streamline workflows.</p>
+            </div>
+            <div class="cs-seven-card__img-wrap">
+              <img src="../Asset/arvo-problem-03.png" alt="Homework Trap">
+            </div>
           </div>
-          <div class="cs-seven-card__right">
-            <img src="../Asset/arvo-problem-08.png" alt="Accessibility — returned to client">
+        </div>
+
+        <div class="cs-seven-card cs-seven-card--dark">
+          <span class="cs-seven-card__badge cs-badge--returned">Returned</span>
+          <h3 class="cs-seven-card__title">Accessibility</h3>
+          <div class="cs-seven-card__body">
+            <div class="cs-seven-card__text">
+              <p class="cs-seven-card__desc">Managers reported that the platform's colors were too light, causing severe eye strain. We fixed the colour contrast in the final iteration to improve readability.</p>
+            </div>
+            <div class="cs-seven-card__img-wrap">
+              <img src="../Asset/arvo-problem-02.png" alt="Accessibility">
+            </div>
           </div>
         </div>
 
@@ -1011,7 +1168,10 @@
       <div class="cs-ba">
         <div class="cs-ba__col cs-ba__col--before" data-gsap="card">
           <span class="cs-ba__label">Before — rejected</span>
-          <img src="../Asset/arvo-before.png" alt="Stack of screenshots showing the original, dense ARVO dashboard pages">
+          <img class="cs-ba__b1" src="../Asset/arvo-before-screenshot.png" alt="Original ARVO weekly check-in screenshot">
+          <img class="cs-ba__b2" src="../Asset/arvo-before-vector.png" alt="">
+          <img class="cs-ba__b3" src="../Asset/arvo-before-dashboard.png" alt="Original ARVO dashboard screenshot">
+          <img class="cs-ba__b4" src="../Asset/arvo-before-landing.png" alt="Original ARVO landing page screenshot">
         </div>
         <div class="cs-ba__col cs-ba__col--after" data-gsap="card">
           <span class="cs-ba__label">After — validated</span>
