@@ -418,20 +418,23 @@
 
     /* Desktop: pixel-accurate per-card image placement from Figma */
     @media (min-width: 768px) {
-      /* Card 1 — Manager's Paradox: rotated -23deg, upper-right of body */
+      /* Card 1 — Manager's Paradox (cream) */
+      /* Confirmed: outer_container at card(16,16); image body-rel (91,60); rotation+shadow on wrapper */
       .cs-seven-card:nth-child(1) .cs-seven-card__img-wrap {
-        left: 182px; top: 51px; right: auto; bottom: auto;
-        width: 481px; height: 497px; overflow: visible;
-        display: flex; align-items: center; justify-content: center;
-      }
-      .cs-seven-card:nth-child(1) .cs-seven-card__img-wrap img {
-        width: 358px; height: 388px; object-fit: unset; flex-shrink: 0;
+        left: 91px; top: 60px; right: auto; bottom: auto;
+        width: 358px; height: 388px; overflow: visible;
         transform: rotate(-23.14deg);
+        transform-origin: center;
         box-shadow: -9.132px 37.669px 6.849px rgba(0,0,0,0.5);
       }
-      /* Card 2 — Cognitive Overload: wide dashboard, lower half, skewed */
+      .cs-seven-card:nth-child(1) .cs-seven-card__img-wrap img {
+        width: 100%; height: 100%; object-fit: cover; display: block;
+      }
+
+      /* Card 2 — Cognitive Overload (cream) */
+      /* Confirmed: card-abs (71,161) → body-rel (55,80); wide dashboard skewed */
       .cs-seven-card:nth-child(2) .cs-seven-card__img-wrap {
-        left: 71px; top: 161px; right: auto; bottom: auto;
+        left: 55px; top: 80px; right: auto; bottom: auto;
         width: 849px; height: 239px; overflow: visible;
         display: flex; align-items: center; justify-content: center;
       }
@@ -440,39 +443,52 @@
         transform: rotate(3deg) skewX(-5deg);
         box-shadow: -37px 28px 14px rgba(0,0,0,0.5);
       }
-      /* Card 3 — Energisers & Drainers: slight angle, upper-right */
+
+      /* Card 3 — Energisers & Drainers (cream) */
+      /* Confirmed: flex-row body; equal cols (270px each); display:contents outer at (-60,-15); */
+      /* inner wrapper at (-4.63,-15) rel to outer → net body-rel (205,-30) */
+      .cs-seven-card:nth-child(3) .cs-seven-card__text { max-width: 228px; }
       .cs-seven-card:nth-child(3) .cs-seven-card__img-wrap {
-        left: 190px; top: 10px; right: auto; bottom: auto;
-        width: 480px; height: 440px; overflow: visible;
-        display: flex; align-items: flex-start; justify-content: flex-start;
+        left: 205px; top: -30px; right: auto; bottom: auto;
+        width: 348px; height: 427px; overflow: visible;
+        display: flex; align-items: center; justify-content: center;
       }
       .cs-seven-card:nth-child(3) .cs-seven-card__img-wrap img {
-        width: 460px; height: auto; object-fit: unset; flex-shrink: 0;
-        transform: rotate(-3deg);
-        transform-origin: top left;
-        box-shadow: -6px 22px 6px rgba(0,0,0,0.4);
+        width: 310px; height: auto; object-fit: unset; flex-shrink: 0;
+        transform: rotate(5deg) skewX(-10deg) scaleY(0.98);
       }
-      /* Card 4 — AI Jargons: flat document, no rotation */
+
+      /* Card 4 — AI Jargons & Mgt 101 (dark) */
+      /* Confirmed: text w=172px, gap=20px → body-rel (192,0); size 460.765×323px; no rotation */
+      .cs-seven-card:nth-child(4) .cs-seven-card__text { max-width: 172px; }
       .cs-seven-card:nth-child(4) .cs-seven-card__img-wrap {
-        left: 208px; top: 71px; right: auto; bottom: auto;
+        left: 192px; top: 0px; right: auto; bottom: auto;
         width: 461px; height: 323px; overflow: visible;
-        display: flex; align-items: flex-start; justify-content: flex-start;
       }
       .cs-seven-card:nth-child(4) .cs-seven-card__img-wrap img {
         width: 461px; height: 323px; object-fit: cover; flex-shrink: 0;
-        box-shadow: -18px 26px 5px rgba(0,0,0,0.25);
+        box-shadow: -17.59px 26.386px 4.797px rgba(0,0,0,0.25);
       }
-      /* Card 5 — Honesty Gap: dashboard composite */
+
+      /* Card 5 — Honesty Gap (dark) */
+      /* Confirmed: text w=210px; centering container 543.965×344.415px; inner 499.923px rotate3+skewX-5 */
+      .cs-seven-card:nth-child(5) .cs-seven-card__text { max-width: 210px; }
       .cs-seven-card:nth-child(5) .cs-seven-card__img-wrap {
-        left: 200px; top: 55px; right: auto; bottom: auto;
-        width: 460px; height: 350px; overflow: visible;
+        left: 210px; top: 0px; right: auto; bottom: auto;
+        width: 544px; height: 344px; overflow: visible;
+        display: flex; align-items: center; justify-content: center;
       }
       .cs-seven-card:nth-child(5) .cs-seven-card__img-wrap img {
-        width: 440px; height: auto; object-fit: unset; flex-shrink: 0;
+        width: 500px; height: auto; object-fit: unset; flex-shrink: 0;
+        transform: rotate(3deg) skewX(-5deg);
+        box-shadow: -4.642px 3.571px 1.428px rgba(0,0,0,0.25);
       }
-      /* Card 6 — Structural Resignation: team signals, rotated/skewed */
+
+      /* Card 6 — Structural Resignation (dark) */
+      /* Confirmed: text w=205px; centering container 578.732×405.32px; inner 526.361px rotate3+skewX-5 */
+      .cs-seven-card:nth-child(6) .cs-seven-card__text { max-width: 205px; }
       .cs-seven-card:nth-child(6) .cs-seven-card__img-wrap {
-        left: 221px; top: 81px; right: auto; bottom: auto;
+        left: 205px; top: 0px; right: auto; bottom: auto;
         width: 579px; height: 405px; overflow: visible;
         display: flex; align-items: center; justify-content: center;
       }
@@ -480,23 +496,29 @@
         width: 526px; height: auto; object-fit: unset; flex-shrink: 0;
         transform: rotate(3deg) skewX(-5deg);
       }
-      /* Card 7 — Homework Trap: calendar/scheduling, slight angle */
+
+      /* Card 7 — Homework Trap (dark) */
+      /* Confirmed: text w=230px; centering container 396×381.91px; rotate5+skewX-10+scaleY0.98 */
+      .cs-seven-card:nth-child(7) .cs-seven-card__text { max-width: 230px; }
       .cs-seven-card:nth-child(7) .cs-seven-card__img-wrap {
-        left: 200px; top: 50px; right: auto; bottom: auto;
-        width: 460px; height: 390px; overflow: visible;
+        left: 230px; top: 0px; right: auto; bottom: auto;
+        width: 396px; height: 382px; overflow: visible;
+        display: flex; align-items: center; justify-content: center;
       }
       .cs-seven-card:nth-child(7) .cs-seven-card__img-wrap img {
-        width: 440px; height: auto; object-fit: unset; flex-shrink: 0;
-        transform: rotate(3deg);
-        transform-origin: top left;
+        width: 360px; height: auto; object-fit: unset; flex-shrink: 0;
+        transform: rotate(5deg) skewX(-10deg) scaleY(0.98);
       }
-      /* Card 8 — Accessibility: before/after comparison */
+
+      /* Card 8 — Accessibility (dark) */
+      /* Estimated from screenshot: two overlapping flat ARVO panels, no rotation */
+      .cs-seven-card:nth-child(8) .cs-seven-card__text { max-width: 230px; }
       .cs-seven-card:nth-child(8) .cs-seven-card__img-wrap {
-        left: 200px; top: 50px; right: auto; bottom: auto;
-        width: 460px; height: 370px; overflow: visible;
+        left: 240px; top: -50px; right: auto; bottom: auto;
+        width: 360px; height: 450px; overflow: visible;
       }
       .cs-seven-card:nth-child(8) .cs-seven-card__img-wrap img {
-        width: 440px; height: auto; object-fit: unset; flex-shrink: 0;
+        width: 360px; height: auto; object-fit: unset; flex-shrink: 0;
       }
     }
 
@@ -1022,7 +1044,7 @@
               <p class="cs-seven-card__stat">12 of 13 managers approved.</p>
             </div>
             <div class="cs-seven-card__img-wrap">
-              <img src="../Asset/arvo-problem-08.png" alt="Cognitive Overload solution">
+              <img src="../Asset/arvo-problem-02.png" alt="Cognitive Overload solution">
             </div>
           </div>
         </div>
@@ -1035,7 +1057,7 @@
               <p class="cs-seven-card__desc">managers consistently rated this as the most valuable feature in the product. we preserved it and built around it rather than rebuild it from scratch.</p>
             </div>
             <div class="cs-seven-card__img-wrap">
-              <img src="../Asset/arvo-problem-07.png" alt="Energisers and Drainers">
+              <img src="../Asset/arvo-problem-03.png" alt="Energisers and Drainers">
             </div>
           </div>
         </div>
@@ -1049,7 +1071,7 @@
               <p class="cs-seven-card__desc">Handed over the taxonomy documentation, but advised our Client to test it further to ensure the simple phrasing fits each specific industry.</p>
             </div>
             <div class="cs-seven-card__img-wrap">
-              <img src="../Asset/arvo-problem-06.png" alt="AI Jargons">
+              <img src="../Asset/arvo-problem-04.png" alt="AI Jargons">
             </div>
           </div>
         </div>
@@ -1076,7 +1098,7 @@
               <p class="cs-seven-card__desc">Problems raised like salary increment and more leaves are a culture issue, not a tool issue. Managers don't have the ability to influence such issues.</p>
             </div>
             <div class="cs-seven-card__img-wrap">
-              <img src="../Asset/arvo-problem-04.png" alt="Structural Resignation">
+              <img src="../Asset/arvo-problem-06.png" alt="Structural Resignation">
             </div>
           </div>
         </div>
@@ -1090,7 +1112,7 @@
               <p class="cs-seven-card__desc">We advised shifting to a bi-weekly or monthly cadence and building a native scheduling tool to streamline workflows.</p>
             </div>
             <div class="cs-seven-card__img-wrap">
-              <img src="../Asset/arvo-problem-03.png" alt="Homework Trap">
+              <img src="../Asset/arvo-problem-07.png" alt="Homework Trap">
             </div>
           </div>
         </div>
@@ -1103,7 +1125,7 @@
               <p class="cs-seven-card__desc">Managers reported that the platform's colors were too light, causing severe eye strain. We fixed the colour contrast in the final iteration to improve readability.</p>
             </div>
             <div class="cs-seven-card__img-wrap">
-              <img src="../Asset/arvo-problem-02.png" alt="Accessibility">
+              <img src="../Asset/arvo-problem-08.png" alt="Accessibility">
             </div>
           </div>
         </div>
