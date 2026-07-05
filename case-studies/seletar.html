@@ -160,10 +160,28 @@
     #cursor-follower img { width: 100%; height: auto; display: block; transform-origin: center center; animation: cursor-spin 5s linear infinite; }
     @media (hover: none) { #cursor-follower { display: none !important; } body { cursor: auto; } }
 
-    #loader { position: fixed; inset: 0; z-index: 9999; background: var(--seletar); display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 10px; transition: opacity 0.7s ease, visibility 0.7s ease, background var(--dur-fast); }
+    #loader {
+      position: fixed; inset: 0; z-index: 9999; background: var(--seletar); display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 10px; transition: opacity 0.7s ease, visibility 0.7s ease, background var(--dur-fast);
+      /* desktop (default) */
+      --bike-track-w: 500px; --bike-size: 180px;
+    }
     #loader.loader--hidden { opacity: 0; visibility: hidden; pointer-events: none; }
     body.light-mode #loader { background: var(--bg-light); }
-    .loader__video { width: 347px; max-width: 80vw; height: auto; aspect-ratio: 1; }
+    @media (max-width: 1024px) { #loader { --bike-track-w: 380px; --bike-size: 140px; } }
+    @media (max-width: 767px)  { #loader { --bike-track-w: 260px; --bike-size: 96px; } }
+
+    .loader__bike-track { position: relative; width: var(--bike-track-w); max-width: 85vw; height: var(--bike-size); overflow: hidden; }
+    /* The actual Loading_bicycle.mp4 video (same source used on arvo.html/index.html/works.html) is
+       drawn to a canvas each frame so its white background can be keyed out to transparent, then that
+       canvas rides left-to-right across the track — real video motion, not a reconstructed sprite.
+       Character size and travel distance are both driven by --bike-size so they stay in sync at
+       every breakpoint instead of needing separate keyframes per size. */
+    .loader__video { position: absolute; top: 50%; width: var(--bike-size); height: var(--bike-size); transform: translateY(-50%); animation: bike-ride 3.5s linear infinite; }
+    @keyframes bike-ride {
+      from { left: calc(var(--bike-size) * -1 - 40px); transform: translateY(-50%); }
+      to   { left: calc(100% + var(--bike-size) + 40px); transform: translateY(-50%); }
+    }
+    @media (prefers-reduced-motion: reduce) { .loader__video { animation: none; left: 50%; margin-left: calc(var(--bike-size) / -2); transform: translateY(-50%); } }
     .loader__text { font-family: var(--font-display); font-size: 22px; font-weight: 400; line-height: 28px; letter-spacing: -0.01em; color: var(--ink-light); text-align: center; }
     body.light-mode .loader__text { color: var(--ink-dark); }
     .loader__dots span { opacity: 0; animation: loader-dot 1.5s ease-in-out infinite; }
@@ -187,8 +205,15 @@
     #cs-hero { padding-top: 104px; }
     .cs-hero__topbar { width: 100%; padding: 16px var(--pad); }
     .cs-hero__body { display: flex; flex-direction: column; gap: 80px; padding: 0 var(--pad); max-width: calc(var(--max-w) + var(--pad) * 2); margin-inline: auto; width: 100%; }
-    .cs-hero__mockup-wrap { width: 100%; background: var(--bg-light); display: flex; flex-direction: column; align-items: center; justify-content: center; overflow: hidden; padding: 48px; }
-    .cs-hero__mockup-wrap img { width: 100%; max-width: 1100px; aspect-ratio: 1775 / 935; display: block; }
+    /* Figma "Frame 924": 1184x495 cream card; the device image is a fixed 868x551 box positioned
+       at left:158/top:39 that bleeds past the card's bottom edge and gets clipped there. */
+    .cs-hero__mockup-wrap { width: 100%; aspect-ratio: 1184 / 495; background: var(--bg-light); position: relative; overflow: hidden; isolation: isolate; }
+    /* Figma reveals only the top of a much taller device-mockup image via a nested clip,
+       not object-fit:cover — the box bleeds past the card bottom (111.31% height) and the
+       image itself is oversized within that box (165.53% height) and clipped again. */
+    .cs-hero__device-box { position: absolute; left: 13.34%; top: 7.88%; width: 73.31%; height: 111.31%; filter: drop-shadow(-15.2426px -6.77447px 4.23404px rgba(0,0,0,0.25)); }
+    .cs-hero__device-clip { position: absolute; inset: 0; overflow: hidden; }
+    .cs-hero__device-clip img { position: absolute; left: 0; top: -0.02%; width: 100%; height: 165.53%; max-width: none; display: block; }
     .cs-hero__row { display: flex; align-items: flex-end; gap: 40px; width: 100%; padding: 32px 0; }
     .cs-hero__col { flex: 1 1 761px; min-width: 0; display: flex; flex-direction: column; gap: 20px; }
     .cs-hero__tags { display: flex; flex-wrap: wrap; gap: 5px; }
@@ -320,9 +345,11 @@
   </script>
 
   <div id="loader" role="status" aria-label="Loading">
-    <video class="loader__video" autoplay muted loop playsinline>
-      <source src="../Asset/Loading_bicycle.mp4" type="video/mp4">
-    </video>
+    <div class="loader__bike-track">
+      <video class="loader__video" autoplay muted loop playsinline>
+        <source src="../Asset/Loading_bicycle.mp4" type="video/mp4">
+      </video>
+    </div>
     <p class="loader__text">loading<span class="loader__dots"><span>.</span><span>.</span><span>.</span></span></p>
   </div>
 
@@ -394,7 +421,11 @@
     </div>
     <div class="cs-hero__body">
       <div class="cs-hero__mockup-wrap" data-gsap="hero">
-        <img src="../Asset/seletar-01-hero.png" alt="Seletar Airport website shown on a tablet and phone, with the redesigned homepage and flight status screen">
+        <div class="cs-hero__device-box">
+          <div class="cs-hero__device-clip">
+            <img src="../Asset/seletar-01-hero.png" alt="Seletar Airport website shown on a tablet and phone, with the redesigned homepage and flight status screen">
+          </div>
+        </div>
       </div>
       <div class="cs-hero__row">
         <div class="cs-hero__col" data-gsap="hero">
@@ -583,9 +614,103 @@
   <script>
     gsap.registerPlugin(ScrollTrigger);
 
-    window.addEventListener('load', () => {
-      document.getElementById('loader').classList.add('loader--hidden');
-    });
+    (function () {
+      const loaderEl = document.getElementById('loader');
+      const MIN_MS   = 1200;
+      const startTs  = Date.now();
+      let   hidden   = false;
+
+      function hideLoader() {
+        if (hidden) return;
+        hidden = true;
+        loaderEl.classList.add('loader--hidden');
+      }
+
+      window.addEventListener('load', function () {
+        const elapsed   = Date.now() - startTs;
+        const remaining = Math.max(0, MIN_MS - elapsed);
+        setTimeout(hideLoader, remaining);
+      });
+
+      /* When transiting to another case study, match the loader's background to that page's
+         own background so the handoff doesn't flash the wrong color. */
+      const CASE_STUDY_BG = { 'seletar.html': '#304c95', 'arvo.html': '#1a1c16', 'pethaus.html': '#1e1219' };
+
+      document.querySelectorAll('a[href]').forEach(function (link) {
+        const href = link.getAttribute('href');
+        if (href && href.endsWith('.html') && !href.startsWith('http') && !href.startsWith('//')) {
+          link.addEventListener('click', function (e) {
+            e.preventDefault();
+            hidden = false;
+            const dest = href.split('/').pop();
+            if (CASE_STUDY_BG[dest]) loaderEl.style.background = CASE_STUDY_BG[dest];
+            loaderEl.classList.remove('loader--hidden');
+            setTimeout(function () { window.location.href = href; }, 600);
+          });
+        }
+      });
+
+      var video  = loaderEl.querySelector('video');
+      var canvas = document.createElement('canvas');
+      canvas.className = 'loader__video';
+      video.parentNode.insertBefore(canvas, video);
+      video.style.display = 'none';
+
+      var ctx = canvas.getContext('2d', { willReadFrequently: true });
+      var rafId;
+
+      function removeBg(data, w, h) {
+        var n       = w * h;
+        var visited = new Uint8Array(n);
+        var stack   = [];
+
+        function tryPush(i) {
+          if (i >= 0 && i < n && !visited[i] &&
+              data[i * 4]     > 220 &&
+              data[i * 4 + 1] > 220 &&
+              data[i * 4 + 2] > 220) {
+            visited[i] = 1;
+            stack.push(i);
+          }
+        }
+
+        for (var x = 0; x < w; x++) { tryPush(x); tryPush((h - 1) * w + x); }
+        for (var y = 1; y < h - 1; y++) { tryPush(y * w); tryPush(y * w + w - 1); }
+
+        while (stack.length) {
+          var i = stack.pop();
+          data[i * 4 + 3] = 0;
+          var px = i % w, py = (i / w) | 0;
+          if (px > 0)     tryPush(i - 1);
+          if (px < w - 1) tryPush(i + 1);
+          if (py > 0)     tryPush(i - w);
+          if (py < h - 1) tryPush(i + w);
+        }
+      }
+
+      function renderFrame() {
+        if (video.readyState >= 2 && canvas.width > 0) {
+          ctx.clearRect(0, 0, canvas.width, canvas.height);
+          ctx.drawImage(video, 0, 0);
+          var imgData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+          removeBg(imgData.data, canvas.width, canvas.height);
+          ctx.putImageData(imgData, 0, 0);
+        }
+        rafId = requestAnimationFrame(renderFrame);
+      }
+
+      video.addEventListener('loadedmetadata', function () {
+        canvas.width  = video.videoWidth;
+        canvas.height = video.videoHeight;
+      });
+
+      video.addEventListener('play', function () {
+        cancelAnimationFrame(rafId);
+        renderFrame();
+      });
+
+      video.play().catch(function () {});
+    })();
 
     const cursorEl  = document.getElementById('cursor-follower');
     const cursorImg = document.getElementById('cursor-img');
