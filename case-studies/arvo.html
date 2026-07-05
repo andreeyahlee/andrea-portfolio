@@ -383,11 +383,11 @@
     #cs-seven .inner { display: flex; gap: 40px; align-items: flex-start; }
     .cs-seven-left { flex: 0 0 calc(50% - 20px); position: sticky; top: 100px; display: flex; flex-direction: column; gap: 20px; }
     .cs-seven-intro { display: flex; flex-direction: column; gap: 16px; }
-    .cs-seven-stack { flex: 1; display: flex; flex-direction: column; gap: 10px; }
+    .cs-seven-stack { flex: 1 0 0; align-self: stretch; display: flex; flex-direction: column; gap: 10px; padding: 32px 0; align-items: center; }
     .cs-seven-card {
       position: relative; background: #f4f4eb; border-radius: 10px; overflow: hidden;
       display: flex; flex-direction: column; gap: 10px;
-      padding: 16px; height: 400px; flex-shrink: 0;
+      padding: 16px; height: 400px; flex-shrink: 0; width: 572px;
     }
     .cs-seven-card--dark { background: #31332a; }
     .cs-seven-card__badge {
@@ -410,116 +410,72 @@
     .cs-seven-card__stat { font-family: var(--font-body); font-size: 13px; line-height: 15px; color: var(--ink-dark); }
     .cs-seven-card--dark .cs-seven-card__stat { color: rgba(244,244,235,0.9); }
 
-    /* Mobile-first: simple image fill on right side */
-    .cs-seven-card__img-wrap {
-      position: absolute; top: 0; left: 155px; right: 0; bottom: 0; overflow: hidden;
+    /* Mobile-first: image fills right side of card body */
+    .cs-seven-card__body > img {
+      position: absolute; top: 0; left: 155px; right: 0; bottom: 0;
+      object-fit: cover; object-position: top left; display: block;
     }
-    .cs-seven-card__img-wrap img { width: 100%; height: 100%; object-fit: cover; object-position: top left; display: block; }
 
-    /* Desktop: pixel-accurate per-card image placement from Figma */
+    /* Desktop: Figma-accurate flex layout per card */
     @media (min-width: 768px) {
-      /* Card 1 — Manager's Paradox (cream) */
-      /* Confirmed: outer_container at card(16,16); image body-rel (91,60); rotation+shadow on wrapper */
+      .cs-seven-card__body {
+        position: static;
+        display: flex; flex-direction: row; gap: 10px;
+        align-items: flex-start; overflow: visible;
+      }
+      .cs-seven-card__body > img {
+        position: static;
+        width: 100%; height: auto; flex-shrink: 1; min-width: 0;
+        object-fit: initial; object-position: initial; display: block;
+      }
+
+      /* Card 1 — Manager's Paradox */
+      .cs-seven-card:nth-child(1) .cs-seven-card__body { min-height: 1px; position: relative; }
+      .cs-seven-card:nth-child(1) .cs-seven-card__text {
+        display: flex; flex: 1 0 0; align-items: flex-start; min-width: 1px; position: relative; width: auto;
+      }
+      .cs-seven-card:nth-child(1) .cs-seven-card__img-col {
+        display: flex; flex-direction: column; align-items: flex-start;
+        flex: 1 0 0; height: 100%; min-width: 1px; position: relative;
+        isolation: isolate; overflow: visible;
+      }
       .cs-seven-card:nth-child(1) .cs-seven-card__img-wrap {
-        left: 91px; top: 60px; right: auto; bottom: auto;
-        width: 358px; height: 388px; overflow: visible;
-        transform: rotate(-23.14deg);
-        transform-origin: center;
-        box-shadow: -9.132px 37.669px 6.849px rgba(0,0,0,0.5);
-      }
-      .cs-seven-card:nth-child(1) .cs-seven-card__img-wrap img {
-        width: 100%; height: 100%; object-fit: cover; display: block;
+        position: absolute; left: -24px; top: -15.86px;
+        width: 341px; height: 369.501px;
+        background: url('../Asset/arvo-problem-01.png') center / cover no-repeat;
+        filter: drop-shadow(-8.70432px 35.9053px 6.52824px rgba(0,0,0,0.5));
       }
 
-      /* Card 2 — Cognitive Overload (cream) */
-      /* Confirmed: card-abs (71,161) → body-rel (55,80); wide dashboard skewed */
-      .cs-seven-card:nth-child(2) .cs-seven-card__img-wrap {
-        left: 55px; top: 80px; right: auto; bottom: auto;
-        width: 849px; height: 239px; overflow: visible;
-        display: flex; align-items: center; justify-content: center;
-      }
-      .cs-seven-card:nth-child(2) .cs-seven-card__img-wrap img {
-        width: 822px; height: auto; object-fit: unset; flex-shrink: 0;
-        transform: rotate(3deg) skewX(-5deg);
-        box-shadow: -37px 28px 14px rgba(0,0,0,0.5);
-      }
+      /* Card 2 — Cognitive Overload */
+      .cs-seven-card:nth-child(2) .cs-seven-card__body { flex-direction: column; }
+      .cs-seven-card:nth-child(2) .cs-seven-card__text { width: auto; flex-shrink: 0; }
+      .cs-seven-card:nth-child(2) .cs-seven-card__body > img { width: 100%; height: 239px; object-fit: cover; }
 
-      /* Card 3 — Energisers & Drainers (cream) */
-      /* Confirmed: flex-row body; equal cols (270px each); display:contents outer at (-60,-15); */
-      /* inner wrapper at (-4.63,-15) rel to outer → net body-rel (205,-30) */
-      .cs-seven-card:nth-child(3) .cs-seven-card__text { max-width: 228px; }
-      .cs-seven-card:nth-child(3) .cs-seven-card__img-wrap {
-        left: 205px; top: -30px; right: auto; bottom: auto;
-        width: 348px; height: 427px; overflow: visible;
-        display: flex; align-items: center; justify-content: center;
-      }
-      .cs-seven-card:nth-child(3) .cs-seven-card__img-wrap img {
-        width: 310px; height: auto; object-fit: unset; flex-shrink: 0;
-        transform: rotate(5deg) skewX(-10deg) scaleY(0.98);
-      }
+      /* Card 3 — Energisers & Drainers */
+      .cs-seven-card:nth-child(3) .cs-seven-card__body { align-items: flex-end; }
+      .cs-seven-card:nth-child(3) .cs-seven-card__text { width: 210px; flex-shrink: 0; height: 100%; }
+      .cs-seven-card:nth-child(3) .cs-seven-card__body > img { flex: 1 1 0; height: 100%; object-fit: cover; }
 
-      /* Card 4 — AI Jargons & Mgt 101 (dark) */
-      /* Confirmed: text w=172px, gap=20px → body-rel (192,0); size 460.765×323px; no rotation */
-      .cs-seven-card:nth-child(4) .cs-seven-card__text { max-width: 172px; }
-      .cs-seven-card:nth-child(4) .cs-seven-card__img-wrap {
-        left: 192px; top: 0px; right: auto; bottom: auto;
-        width: 461px; height: 323px; overflow: visible;
-      }
-      .cs-seven-card:nth-child(4) .cs-seven-card__img-wrap img {
-        width: 461px; height: 323px; object-fit: cover; flex-shrink: 0;
-        box-shadow: -17.59px 26.386px 4.797px rgba(0,0,0,0.25);
-      }
+      /* Card 4 — AI Jargons */
+      .cs-seven-card:nth-child(4) .cs-seven-card__body { align-items: center; gap: 20px; }
+      .cs-seven-card:nth-child(4) .cs-seven-card__text { width: 172px; flex-shrink: 0; height: 100%; }
+      .cs-seven-card:nth-child(4) .cs-seven-card__body > img { flex: 1 1 0; height: 100%; object-fit: cover; }
 
-      /* Card 5 — Honesty Gap (dark) */
-      /* Confirmed: text w=210px; centering container 543.965×344.415px; inner 499.923px rotate3+skewX-5 */
-      .cs-seven-card:nth-child(5) .cs-seven-card__text { max-width: 210px; }
-      .cs-seven-card:nth-child(5) .cs-seven-card__img-wrap {
-        left: 210px; top: 0px; right: auto; bottom: auto;
-        width: 544px; height: 344px; overflow: visible;
-        display: flex; align-items: center; justify-content: center;
-      }
-      .cs-seven-card:nth-child(5) .cs-seven-card__img-wrap img {
-        width: 500px; height: auto; object-fit: unset; flex-shrink: 0;
-        transform: rotate(3deg) skewX(-5deg);
-        box-shadow: -4.642px 3.571px 1.428px rgba(0,0,0,0.25);
-      }
+      /* Card 5 — Honesty Gap */
+      .cs-seven-card:nth-child(5) .cs-seven-card__text { width: 185px; flex-shrink: 0; height: 100%; }
+      .cs-seven-card:nth-child(5) .cs-seven-card__body > img { flex: 1 1 0; height: 100%; object-fit: cover; }
 
-      /* Card 6 — Structural Resignation (dark) */
-      /* Confirmed: text w=205px; centering container 578.732×405.32px; inner 526.361px rotate3+skewX-5 */
-      .cs-seven-card:nth-child(6) .cs-seven-card__text { max-width: 205px; }
-      .cs-seven-card:nth-child(6) .cs-seven-card__img-wrap {
-        left: 205px; top: 0px; right: auto; bottom: auto;
-        width: 579px; height: 405px; overflow: visible;
-        display: flex; align-items: center; justify-content: center;
-      }
-      .cs-seven-card:nth-child(6) .cs-seven-card__img-wrap img {
-        width: 526px; height: auto; object-fit: unset; flex-shrink: 0;
-        transform: rotate(3deg) skewX(-5deg);
-      }
+      /* Card 6 — Structural Resignation */
+      .cs-seven-card:nth-child(6) .cs-seven-card__text { width: 179px; flex-shrink: 0; height: 100%; }
+      .cs-seven-card:nth-child(6) .cs-seven-card__body > img { flex: 1 1 0; height: 100%; object-fit: cover; }
 
-      /* Card 7 — Homework Trap (dark) */
-      /* Confirmed: text w=230px; centering container 396×381.91px; rotate5+skewX-10+scaleY0.98 */
-      .cs-seven-card:nth-child(7) .cs-seven-card__text { max-width: 230px; }
-      .cs-seven-card:nth-child(7) .cs-seven-card__img-wrap {
-        left: 230px; top: 0px; right: auto; bottom: auto;
-        width: 396px; height: 382px; overflow: visible;
-        display: flex; align-items: center; justify-content: center;
-      }
-      .cs-seven-card:nth-child(7) .cs-seven-card__img-wrap img {
-        width: 360px; height: auto; object-fit: unset; flex-shrink: 0;
-        transform: rotate(5deg) skewX(-10deg) scaleY(0.98);
-      }
+      /* Card 7 — Homework Trap */
+      .cs-seven-card:nth-child(7) .cs-seven-card__text { width: 155px; flex-shrink: 0; height: 100%; }
+      .cs-seven-card:nth-child(7) .cs-seven-card__body > img { flex: 1 1 0; height: 100%; object-fit: cover; }
 
-      /* Card 8 — Accessibility (dark) */
-      /* Estimated from screenshot: two overlapping flat ARVO panels, no rotation */
-      .cs-seven-card:nth-child(8) .cs-seven-card__text { max-width: 230px; }
-      .cs-seven-card:nth-child(8) .cs-seven-card__img-wrap {
-        left: 240px; top: -50px; right: auto; bottom: auto;
-        width: 360px; height: 450px; overflow: visible;
-      }
-      .cs-seven-card:nth-child(8) .cs-seven-card__img-wrap img {
-        width: 360px; height: auto; object-fit: unset; flex-shrink: 0;
-      }
+      /* Card 8 — Accessibility */
+      .cs-seven-card:nth-child(8) .cs-seven-card__text { width: 230px; flex-shrink: 0; height: 100%; }
+      .cs-seven-card:nth-child(8) .cs-seven-card__body > img { flex: 1 1 0; height: 100%; object-fit: cover; }
     }
 
     /* ── Before / After ── */
@@ -1029,8 +985,8 @@
               <p class="cs-seven-card__desc">no time to read a dense dashboard so we designed singular page architecture, clear role separation and no ambiguity on context of each page.</p>
               <p class="cs-seven-card__stat">11 of 13 managers approved.</p>
             </div>
-            <div class="cs-seven-card__img-wrap">
-              <img src="../Asset/arvo-problem-01.png" alt="Manager's Paradox solution">
+            <div class="cs-seven-card__img-col">
+              <div class="cs-seven-card__img-wrap"></div>
             </div>
           </div>
         </div>
@@ -1043,9 +999,7 @@
               <p class="cs-seven-card__desc">overwhelming wall of text and every signal looked equally urgent so we added clear signals for managers to easily scan for issues and prioritise key tasks faster.</p>
               <p class="cs-seven-card__stat">12 of 13 managers approved.</p>
             </div>
-            <div class="cs-seven-card__img-wrap">
-              <img src="../Asset/arvo-problem-02.png" alt="Cognitive Overload solution">
-            </div>
+            <img src="../Asset/arvo-problem-02.png" alt="Cognitive Overload solution">
           </div>
         </div>
 
@@ -1056,9 +1010,7 @@
             <div class="cs-seven-card__text">
               <p class="cs-seven-card__desc">managers consistently rated this as the most valuable feature in the product. we preserved it and built around it rather than rebuild it from scratch.</p>
             </div>
-            <div class="cs-seven-card__img-wrap">
-              <img src="../Asset/arvo-problem-03.png" alt="Energisers and Drainers">
-            </div>
+            <img src="../Asset/arvo-problem-03.png" alt="Energisers and Drainers">
           </div>
         </div>
 
@@ -1070,9 +1022,7 @@
               <p class="cs-seven-card__desc">The plain-English translation layer is just a temporary workaround; the AI model itself needs to be retrained with a proper language taxonomy.</p>
               <p class="cs-seven-card__desc">Handed over the taxonomy documentation, but advised our Client to test it further to ensure the simple phrasing fits each specific industry.</p>
             </div>
-            <div class="cs-seven-card__img-wrap">
-              <img src="../Asset/arvo-problem-04.png" alt="AI Jargons">
-            </div>
+            <img src="../Asset/arvo-problem-04.png" alt="AI Jargons">
           </div>
         </div>
 
@@ -1084,9 +1034,7 @@
               <p class="cs-seven-card__desc">Managers fear dishonest feedback because small team sizes destroy anonymity, and design alone can't fix fundamental privacy flaws.</p>
               <p class="cs-seven-card__desc">Advised the client to set a minimum team size threshold for reporting to strictly protect employee identity.</p>
             </div>
-            <div class="cs-seven-card__img-wrap">
-              <img src="../Asset/arvo-problem-05.png" alt="Honesty Gap">
-            </div>
+            <img src="../Asset/arvo-problem-05.png" alt="Honesty Gap">
           </div>
         </div>
 
@@ -1097,9 +1045,7 @@
             <div class="cs-seven-card__text">
               <p class="cs-seven-card__desc">Problems raised like salary increment and more leaves are a culture issue, not a tool issue. Managers don't have the ability to influence such issues.</p>
             </div>
-            <div class="cs-seven-card__img-wrap">
-              <img src="../Asset/arvo-problem-06.png" alt="Structural Resignation">
-            </div>
+            <img src="../Asset/arvo-problem-06.png" alt="Structural Resignation">
           </div>
         </div>
 
@@ -1111,9 +1057,7 @@
               <p class="cs-seven-card__desc">Weekly surveys feel like administrative busywork, while action checklists add friction by forcing managers off the platform to complete tasks.</p>
               <p class="cs-seven-card__desc">We advised shifting to a bi-weekly or monthly cadence and building a native scheduling tool to streamline workflows.</p>
             </div>
-            <div class="cs-seven-card__img-wrap">
-              <img src="../Asset/arvo-problem-07.png" alt="Homework Trap">
-            </div>
+            <img src="../Asset/arvo-problem-07.png" alt="Homework Trap">
           </div>
         </div>
 
@@ -1124,9 +1068,7 @@
             <div class="cs-seven-card__text">
               <p class="cs-seven-card__desc">Managers reported that the platform's colors were too light, causing severe eye strain. We fixed the colour contrast in the final iteration to improve readability.</p>
             </div>
-            <div class="cs-seven-card__img-wrap">
-              <img src="../Asset/arvo-problem-08.png" alt="Accessibility">
-            </div>
+            <img src="../Asset/arvo-problem-08.png" alt="Accessibility">
           </div>
         </div>
 
