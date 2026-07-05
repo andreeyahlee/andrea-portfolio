@@ -162,7 +162,7 @@
 
     #loader { position: fixed; inset: 0; z-index: 9999; background: var(--bg-dark); display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 10px; transition: opacity 0.7s ease, visibility 0.7s ease; }
     #loader.loader--hidden { opacity: 0; visibility: hidden; pointer-events: none; }
-    .loader__video { width: 347px; max-width: 80vw; }
+    .loader__video { width: 347px; max-width: 80vw; height: auto; aspect-ratio: 1; }
     .loader__text { font-family: var(--font-display); font-size: 22px; font-weight: 400; line-height: 28px; letter-spacing: -0.01em; color: var(--ink-light); text-align: center; }
     .loader__dots span { opacity: 0; animation: loader-dot 1.5s ease-in-out infinite; }
     .loader__dots span:nth-child(1) { animation-delay: 0s; }
@@ -447,9 +447,11 @@
       }
 
       /* Card 2 — Cognitive Overload */
-      .cs-seven-card:nth-child(2) .cs-seven-card__body { flex-direction: column; }
       .cs-seven-card:nth-child(2) .cs-seven-card__text { width: auto; flex-shrink: 0; }
-      .cs-seven-card:nth-child(2) .cs-seven-card__body > img { width: 100%; height: 239px; object-fit: cover; }
+      .cs-seven-card:nth-child(2) .cs-seven-card__body { flex-direction: column; padding: 0; margin: 0; }
+      .cs-seven-card:nth-child(2) .cs-seven-card__body > img {
+        flex: 1; width: 100%; height: 100%; object-fit: cover; display: block; max-width: none; pointer-events: none;
+      }
 
       /* Card 3 — Energisers & Drainers */
       .cs-seven-card:nth-child(3) .cs-seven-card__body { align-items: flex-end; }
@@ -507,7 +509,7 @@
       box-sizing: border-box;
     }
     .cs-impact__item:nth-child(1) { background: #f4f4eb; border-color: var(--lime); transform: rotate(-7.87deg); left: -6.5%; top: -22px; }
-    .cs-impact__item:nth-child(2) { background: var(--lime); border-color: #f4f4eb; transform: rotate(8.7deg); left: 33.9%; top: -62px; z-index: 2; }
+    .cs-impact__item:nth-child(2) { background: var(--lime); border-color: #f4f4eb; transform: rotate(8.7deg); left: calc(50% - 15.55%); top: -62px; z-index: 2; }
     .cs-impact__item:nth-child(3) { background: #f4f4eb; border-color: var(--lime); transform: rotate(-9.79deg); left: 61.7%; top: -20px; }
     .cs-impact__inner { display: flex; flex-direction: column; gap: 10px; align-items: center; text-align: center; width: 100%; padding: 32px 0; }
     .cs-impact__num { font-family: var(--font-display); font-size: 3.5rem; font-weight: 400; line-height: 1; letter-spacing: -0.04em; color: var(--ink-dark); }
@@ -582,7 +584,8 @@
        RESPONSIVE
     ================================================================ */
     @media (max-width: 1024px) {
-      :root { --pad: 40px; }
+      :root { --pad: 32px; }
+      .section + .section { margin-top: 80px; }
       .nav__logo-text--full  { display: none; }
       .nav__logo-text--short { display: inline; }
       .nav__links { display: none; }
@@ -599,8 +602,9 @@
       .cs-hero__col { flex-basis: auto; }
       .cs-hero__cta { flex-basis: auto; align-self: flex-start; }
       .cs-specs-row { flex-direction: column; gap: 40px; }
-      .cs-specs-stats { position: static; width: 100%; height: auto; display: flex; flex-direction: column; gap: 16px; }
-      .cs-spec-card { position: static; width: 100%; transform: none !important; box-shadow: none; }
+      .cs-specs-stats { width: min(420px, 100%); height: 500px; }
+      .cs-spec-card { width: calc(100% - 44px); }
+      .cs-spec-num { font-size: clamp(32px, 6vw, 48px); line-height: 1; }
       .cs-cols, .cs-decision-cards, .cs-ba, .cs-context__cols, .cs-stack-grid { flex-wrap: wrap; gap: 32px; }
       .cs-cols .cs-col, .cs-context__col { flex: 1 1 45%; }
       .cs-impact-wrap { height: 260px; }
@@ -994,11 +998,11 @@
         <div class="cs-seven-card">
           <span class="cs-seven-card__badge cs-badge--solved">Solved</span>
           <h3 class="cs-seven-card__title">Cognitive Overload</h3>
+          <div class="cs-seven-card__text">
+            <p class="cs-seven-card__desc">overwhelming wall of text and every signal looked equally urgent so we added clear signals for managers to easily scan for issues and prioritise key tasks faster.</p>
+            <p class="cs-seven-card__stat">12 of 13 managers approved.</p>
+          </div>
           <div class="cs-seven-card__body">
-            <div class="cs-seven-card__text">
-              <p class="cs-seven-card__desc">overwhelming wall of text and every signal looked equally urgent so we added clear signals for managers to easily scan for issues and prioritise key tasks faster.</p>
-              <p class="cs-seven-card__stat">12 of 13 managers approved.</p>
-            </div>
             <img src="../Asset/arvo-problem-02.png" alt="Cognitive Overload solution">
           </div>
         </div>

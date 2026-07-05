@@ -29,6 +29,14 @@
 - **Labels / mono**: `var(--font-mono)` / DM Mono
 - **DO NOT use DM Sans for card headlines** — they are always Lora
 
+## Dark / Light mode on case study pages
+- **Dark mode** (default) = the case study's own `project/*` accent color as the page background (`project/seletar` #304c95 for seletar.html, etc.) — NOT the generic `--bg-dark`.
+- **Light mode** = the shared site-wide light preset used on every other page: `--bg-light` (#f4f4eb) background, `--ink-dark` text, `#6b7a00` accent color for section labels/eyebrows, same nav/toggle treatment as index.html/about.html.
+- The toggle button, cursor-flower swap, and compact tablet/mobile nav collapse (see below) are a locked cross-page component — copy the exact CSS/HTML/JS from `index.html` (source of truth), don't re-derive it. Every case study page must include the `.nav__toggle` button and a full `body.light-mode` override block; don't skip it when rebuilding a page from Figma.
+
+## Nav bar standard (locked, all pages)
+At `@media (max-width: 1024px)`: short logo (`nav__logo-text--short` "Andrea L.") replaces full logo, `.nav__links` hides in favor of the hamburger menu, and `.nav__toggle` shrinks from an 83×30 pill to a plain 40×40 circular icon-only button (`.toggle__thumb` hidden, `.toggle__icon` sized 20×20 / 27×20 in light mode). `index.html` is the reference source of truth for exact values.
+
 ## Architecture
 - Single-file static site: `index.html` (all CSS + HTML + JS inline)
 - Assets in `Asset/` folder
