@@ -32,6 +32,7 @@
       --ink-light:    #f4f4eb;
       --ink-dark:     #21281a;
       --seletar:      #304c95;
+      --rule-light:   #dfe0de;
 
       --font-display: 'Lora', Georgia, serif;
       --font-body:    'DM Sans', Arial, sans-serif;
@@ -63,7 +64,8 @@
     body.light-mode                     { background: var(--bg-light); color: var(--ink-dark); }
     body.light-mode .section            { background: var(--bg-light); }
     body.light-mode .t-label,
-    body.light-mode .cs-eyebrow         { color: #6b7a00; }
+    body.light-mode .cs-eyebrow,
+    body.light-mode .contact__tag       { color: #6b7a00; }
     body.light-mode .nav                { background: var(--bg-light); }
     body.light-mode .nav__links a       { color: var(--ink-dark); }
     body.light-mode .nav__links a:hover,
@@ -89,6 +91,35 @@
     body.light-mode .cs-spec-caption,
     body.light-mode .cs-col__title,
     body.light-mode .cs-col__body,
+    body.light-mode .cs-findings-heading,
+    body.light-mode .cs-findings-mycall__title,
+    body.light-mode .cs-findings-mycall__body,
+    body.light-mode .cs-redesign-heading h2,
+    body.light-mode .cs-redesign-heading p,
+    body.light-mode .cs-redesign-qa__q,
+    body.light-mode .cs-redesign-qa__a-title,
+    body.light-mode .cs-redesign-qa__a-body,
+    body.light-mode .cs-testing-intro h2,
+    body.light-mode .cs-testing-intro p,
+    body.light-mode .cs-testing-title,
+    body.light-mode .cs-testing-quote,
+    body.light-mode .cs-testing-body,
+    body.light-mode .cs-testing-grid__title,
+    body.light-mode .cs-testing-grid__body,
+    body.light-mode .cs-impact-heading__title,
+    body.light-mode .cs-impact-heading__desc,
+    body.light-mode .cs-result-heading,
+    body.light-mode .cs-result-body,
+    body.light-mode .cs-result-proto__label,
+    body.light-mode .cs-result-proto__desc,
+    body.light-mode .cs-result-fix__label,
+    body.light-mode .cs-result-fix__desc,
+    body.light-mode .cs-reflections-heading h2,
+    body.light-mode .cs-reflect-card__num,
+    body.light-mode .cs-reflect-card__title,
+    body.light-mode .cs-reflect-card__desc,
+    body.light-mode .cs-stack-col__title,
+    body.light-mode .cs-stack-col__item,
     body.light-mode .cs-next__link,
     body.light-mode .contact__heading,
     body.light-mode .contact__desc,
@@ -282,9 +313,173 @@
     .cs-finding__count { font-family: var(--font-body); font-weight: 600; font-size: 13px; color: var(--ink-dark); position: relative; z-index: 2; }
     .cs-finding__photo { position: absolute; transform: translate(-50%,-50%) skewX(-5deg) rotate(3deg); }
     .cs-finding__photo img { width: 100%; height: 100%; object-fit: cover; display: block; }
-    .cs-finding-card--p1 .cs-finding__photo { left: 42.28%; top: 277.24px; width: 137.08%; height: 284.5px; box-shadow: -6.774px 10.161px 1.847px rgba(0,0,0,0.5); }
-    .cs-finding-card--p2 .cs-finding__photo { left: 56.99%; top: 93.11px; width: 47.07%; height: 202.6px; box-shadow: -15.742px 23.614px 4.293px rgba(0,0,0,0.5); }
+    /* shifted right so the plane's nose and the propeller are both visible in the crop, not just the propeller */
+    .cs-finding-card--p3 .cs-finding__photo img { object-position: 65% center; }
+    /* top raised from the original Figma 277.24px so the photo clears the text with a 20px gap
+       even at narrower desktop widths, where the description wraps to more lines than the design width assumed */
+    .cs-finding-card--p1 .cs-finding__photo { left: 42.28%; top: 327px; width: 137.08%; height: 284.5px; box-shadow: -6.774px 10.161px 1.847px rgba(0,0,0,0.5); }
+    /* shifted right + down from the original Figma position so it clears the left-column text with a
+       20px gap and doesn't bleed above the card top; the "High" badge is allowed to sit on top of it (z-index) */
+    .cs-finding-card--p2 .cs-finding__photo { left: 64.43%; top: 132px; width: 47.07%; height: 202.6px; box-shadow: -15.742px 23.614px 4.293px rgba(0,0,0,0.5); }
     .cs-finding-card--p3 .cs-finding__photo { left: 59.31%; top: 469.93px; width: 137.05%; height: 501.4px; box-shadow: -15.421px 23.131px 4.206px rgba(0,0,0,0.5); }
+
+    /* ── The Redesign ── */
+    .cs-redesign-intro { display: flex; flex-direction: column; gap: 40px; width: 100%; }
+    .cs-redesign-heading { display: flex; flex-direction: column; gap: 10px; }
+    .cs-redesign-heading h2 { font-family: var(--font-display); font-weight: 400; font-size: 40px; line-height: 44px; letter-spacing: -0.025em; color: var(--ink-light); max-width: 635px; }
+    .cs-redesign-heading p { font-family: var(--font-body); font-size: 17px; line-height: 25px; color: var(--ink-light); max-width: 635px; }
+
+    .cs-redesign-feature { display: flex; flex-direction: column; gap: 80px; width: 100%; }
+    /* 80px between intro and each feature block, matching the redlined spec (64px side padding
+       already comes from .inner and needs no change) */
+    #cs-redesign .inner { display: flex; flex-direction: column; gap: 80px; }
+    .cs-redesign-card { background: var(--bg-light); padding: 16px; display: flex; flex-direction: column; gap: 40px; box-sizing: border-box; }
+    .cs-redesign-card--tight { gap: 10px; }
+    .cs-redesign-card__label { font-family: var(--font-body); font-weight: 700; font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--ink-dark); }
+    .cs-redesign-card__caption { font-family: var(--font-body); font-weight: 400; font-style: italic; font-size: 11px; line-height: 17px; color: var(--ink-dark); }
+    .cs-redesign-card__caption--center { text-align: center; }
+    .cs-redesign-card img { width: 100%; display: block; }
+    .cs-redesign-pair { display: flex; gap: 20px; width: 100%; }
+    .cs-redesign-pair .cs-redesign-card { flex: 1; min-width: 0; }
+
+    .cs-redesign-qa { display: flex; gap: 40px; align-items: flex-start; width: 100%; }
+    .cs-redesign-qa__q { flex: 1; min-width: 0; font-family: var(--font-display); font-weight: 700; font-size: 22px; line-height: 28px; letter-spacing: -0.01em; color: var(--ink-light); }
+    .cs-redesign-qa__a { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 20px; }
+    .cs-redesign-qa__a-title { font-family: var(--font-hand); font-weight: 400; font-size: 32px; line-height: 30px; letter-spacing: -0.05em; color: var(--ink-light); }
+    .cs-redesign-qa__a-body { font-family: var(--font-body); font-size: 15px; line-height: 20px; color: var(--ink-light); display: flex; flex-direction: column; gap: 20px; }
+
+    @media (max-width: 1024px) {
+      .cs-redesign-pair { flex-direction: column; }
+      .cs-redesign-qa { flex-direction: column; gap: 24px; }
+    }
+
+    /* ── User Testing ── */
+    .cs-testing-wrap { display: flex; flex-direction: column; gap: 80px; width: 100%; }
+    .cs-testing-intro { display: flex; flex-direction: column; gap: 20px; align-items: center; text-align: center; max-width: 818px; margin: 0 auto; }
+    .cs-testing-intro h2 { font-family: var(--font-display); font-weight: 400; font-size: 40px; line-height: 44px; letter-spacing: -0.025em; color: var(--ink-light); }
+    .cs-testing-intro p { font-family: var(--font-body); font-size: 17px; line-height: 25px; color: var(--ink-light); }
+    .cs-testing-intro p strong { font-weight: 700; }
+
+    .cs-testing-block { display: flex; flex-direction: column; align-items: center; width: 100%; }
+    .cs-testing-block__inner { display: flex; flex-direction: column; gap: 40px; width: 626px; max-width: 100%; }
+    .cs-testing-block__inner--wide { width: 1064px; }
+    .cs-testing-title { font-family: var(--font-hand); font-weight: 400; font-size: 32px; line-height: 30px; letter-spacing: -0.05em; color: var(--ink-light); }
+    .cs-testing-title--center { text-align: center; }
+    .cs-testing-quote { font-family: var(--font-display); font-style: italic; font-weight: 400; font-size: 20px; line-height: 29px; letter-spacing: -0.01em; color: var(--ink-light); }
+    .cs-testing-quote--center { text-align: center; }
+    .cs-testing-body { font-family: var(--font-body); font-size: 17px; line-height: 25px; color: var(--ink-light); }
+    .cs-testing-body strong { font-weight: 700; }
+
+    .cs-testing-grid { display: flex; gap: 20px; width: 100%; }
+    .cs-testing-grid__col { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 10px; }
+    .cs-testing-grid__title { font-family: var(--font-display); font-weight: 700; font-size: 18px; line-height: 24px; color: var(--ink-light); }
+    .cs-testing-grid__body { font-family: var(--font-body); font-size: 17px; line-height: 25px; color: var(--ink-light); }
+
+    @media (max-width: 1024px) {
+      .cs-testing-grid { flex-direction: column; gap: 24px; }
+    }
+
+    /* ── Homepage then and now ── */
+    .cs-compare-grid { display: flex; gap: 20px; width: 100%; }
+    .cs-compare-card { background: var(--bg-light); padding: 16px; box-sizing: border-box; flex: 1; min-width: 0; }
+    .cs-compare-card img { width: 100%; display: block; }
+    @media (max-width: 1024px) {
+      .cs-compare-grid { flex-direction: column; }
+    }
+
+    /* ── Impact ── */
+    .cs-impact-heading { display: flex; flex-direction: column; gap: 20px; align-items: center; text-align: center; margin-bottom: 16px; }
+    .cs-impact-heading__title { font-family: var(--font-display); font-weight: 400; font-size: 40px; line-height: 44px; letter-spacing: -0.025em; color: var(--ink-light); }
+    .cs-impact-heading__desc { font-family: var(--font-body); font-size: 17px; line-height: 25px; color: var(--ink-light); }
+    .cs-impact-heading__desc strong { font-weight: 700; }
+
+    .cs-impact-metrics { width: 1184px; max-width: 100%; margin: 0 auto; padding: 32px 64px; box-sizing: border-box; }
+    .cs-impact-row { position: relative; width: 1056px; max-width: 100%; height: 236px; margin: 0 auto; transform-origin: top center; }
+
+    .cs-impact-card { position: absolute; width: 368px; height: 204px; box-sizing: border-box; border: 5px solid var(--ink-light); border-radius: 10px; box-shadow: -13px 17px 4px rgba(0,0,0,0.5); }
+    .cs-impact-card--1 { left: -25px; top: -5px; transform: rotate(-9.87deg); z-index: 0; }
+    .cs-impact-card--2 { left: calc(50% - 184px); top: calc(50% - 102px); z-index: 1; }
+    .cs-impact-card--3 { left: 685px; top: -20px; transform: rotate(12.52deg); z-index: 2; }
+
+    .cs-impact-card__inner { background: var(--bg-dark); border-radius: 14px; width: 100%; height: 100%; padding: 16px; box-sizing: border-box; display: flex; flex-direction: column; justify-content: center; align-items: flex-end; gap: 20px; }
+    .cs-impact-card__body { display: flex; flex-direction: column; gap: 10px; width: 100%; }
+
+    .cs-impact-pill { display: inline-flex; align-items: center; padding: 4px 16px; border-radius: 10px; font-family: var(--font-body); font-weight: 700; font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--ink-light); white-space: nowrap; }
+    .cs-impact-pill--success { background: #4a9b6f; }
+    .cs-impact-pill--risk    { background: #d6a36a; }
+    .cs-impact-pill--miss    { background: #e03b3b; }
+
+    .cs-impact-stat { text-align: center; }
+    .cs-impact-stat__before { font-family: var(--font-display); font-weight: 400; font-size: 40px; line-height: 40px; letter-spacing: -0.03em; color: #6b7060; }
+    .cs-impact-stat__after  { font-family: var(--font-display); font-weight: 400; font-size: 56px; line-height: 56px; letter-spacing: -0.07em; color: var(--ink-light); }
+    .cs-impact-label { font-family: var(--font-body); font-weight: 700; font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase; color: #6b7060; text-align: center; }
+    .cs-impact-desc { font-family: var(--font-body); font-size: 15px; line-height: 20px; color: var(--ink-light); text-align: center; }
+
+    @media (max-width: 1024px) {
+      .cs-impact-metrics { width: 100%; padding: 32px 0; }
+      .cs-impact-row { width: 100%; height: auto; position: static; transform: none; display: flex; flex-direction: column; align-items: center; gap: 32px; }
+      .cs-impact-card { position: static; height: auto; transform: none; width: 100%; max-width: 368px; }
+      .cs-impact-card__inner { height: auto; }
+    }
+
+    /* ── The Result ── */
+    .cs-result-wrap { display: flex; flex-direction: column; align-items: center; width: 100%; }
+    .cs-result-heading { width: 100%; max-width: 674px; font-family: var(--font-display); font-weight: 400; font-size: 40px; line-height: 44px; letter-spacing: -0.025em; color: var(--ink-light); margin-bottom: 20px; }
+    .cs-result-body { width: 100%; max-width: 674px; font-family: var(--font-body); font-size: 17px; line-height: 25px; color: var(--ink-light); }
+    .cs-result-body p { margin-bottom: 16px; }
+    .cs-result-body p:last-child { margin-bottom: 0; }
+
+    .cs-result-proto { width: 100%; margin-top: 100px; display: flex; flex-direction: column; gap: 20px; }
+    .cs-result-proto__frame { position: relative; width: 100%; aspect-ratio: 1312 / 482; background: var(--bg-light); overflow: hidden; box-sizing: border-box; }
+    .cs-result-proto__frame img { position: absolute; left: 14.63%; top: 9.34%; width: 70.75%; height: 120.76%; object-fit: cover; filter: drop-shadow(-26.499px 39.749px 7.227px rgba(0,0,0,0.5)); }
+    .cs-result-proto__caption { display: flex; flex-direction: column; width: 411px; max-width: 100%; }
+    .cs-result-proto__label { font-family: var(--font-body); font-weight: 700; font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--ink-light); }
+    .cs-result-proto__desc { font-family: var(--font-body); font-weight: 400; font-size: 11px; color: var(--ink-light); margin-top: 6px; }
+
+    .cs-result-fixes { width: 100%; margin-top: 100px; display: flex; gap: 20px; }
+    .cs-result-fix { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 20px; }
+    .cs-result-fix__frame { width: 100%; aspect-ratio: 646 / 402; background: var(--bg-light); box-sizing: border-box; overflow: hidden; display: flex; align-items: center; justify-content: center; }
+    .cs-result-fix__frame img { width: 100%; height: 100%; object-fit: contain; }
+    .cs-result-fix__caption { display: flex; flex-direction: column; }
+    .cs-result-fix__label { font-family: var(--font-body); font-weight: 700; font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--ink-light); }
+    .cs-result-fix__desc { font-family: var(--font-body); font-weight: 400; font-size: 11px; color: var(--ink-light); margin-top: 6px; }
+
+    @media (max-width: 767px) {
+      .cs-result-fixes { flex-direction: column; }
+    }
+
+    /* ── Reflections ── */
+    .cs-reflections-grid { display: flex; gap: 40px; align-items: flex-start; width: 100%; }
+    .cs-reflections-heading { width: 325px; flex-shrink: 0; padding-bottom: 32px; }
+    .cs-reflections-heading h2 { font-family: var(--font-display); font-weight: 400; font-size: 40px; line-height: 44px; letter-spacing: -0.025em; color: var(--ink-light); }
+    .cs-reflections-cards { flex: 1; min-width: 0; display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; }
+    .cs-reflect-card { display: flex; flex-direction: column; gap: 20px; padding: 16px; }
+    .cs-reflect-card__num { font-family: var(--font-body); font-weight: 700; font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--ink-light); }
+    .cs-reflect-card__body { display: flex; flex-direction: column; gap: 10px; }
+    .cs-reflect-card__title { font-family: var(--font-hand); font-size: 32px; line-height: 30px; letter-spacing: -0.05em; color: var(--ink-light); }
+    .cs-reflect-card__desc { font-family: var(--font-body); font-size: 15px; line-height: 20px; color: var(--ink-light); }
+    .cs-reflect-card__desc strong { font-weight: 700; }
+
+    @media (max-width: 1024px) {
+      .cs-reflections-grid { flex-direction: column; gap: 40px; }
+      .cs-reflections-heading { width: 100%; padding-bottom: 0; }
+      .cs-reflections-cards { grid-template-columns: 1fr; }
+    }
+
+    /* ── Project Stack ── */
+    .cs-stack-row { display: flex; gap: 16px; padding: 16px; width: 100%; box-sizing: border-box; }
+    .cs-stack-col { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 10px; padding: 32px; box-sizing: border-box; }
+    .cs-stack-col__title { font-family: var(--font-hand); font-size: 32px; line-height: 30px; letter-spacing: -0.05em; color: var(--ink-light); border-bottom: 1px solid var(--lime); padding: 8px 0; }
+    .cs-stack-col__item { font-family: var(--font-body); font-size: 15px; line-height: 20px; color: var(--ink-light); padding: 8px 0; }
+
+    @media (max-width: 1024px) {
+      .cs-stack-row { flex-wrap: wrap; padding: 16px 0; }
+      .cs-stack-col { flex: 1 1 45%; min-width: 240px; padding: 16px; }
+    }
+    @media (max-width: 600px) {
+      .cs-stack-row { flex-direction: column; }
+      .cs-stack-col { flex: 1 1 auto; padding: 16px 0; }
+    }
 
     /* ── Next case study / footer ── */
     #cs-next-section .inner { display: flex; flex-direction: column; align-items: center; gap: 40px; }
@@ -294,16 +489,57 @@
     .cs-next__link:hover { color: var(--lime); }
 
     #contact { padding-bottom: 60px; }
-    .contact__copy { display: flex; flex-direction: column; gap: 24px; }
-    .contact__copy-inner { display: flex; justify-content: space-between; align-items: flex-end; gap: 40px; flex-wrap: wrap; }
-    .contact__heading { font-family: var(--font-display); font-weight: 400; font-size: clamp(1.75rem, 3vw, 2.5rem); letter-spacing: -0.02em; color: var(--ink-light); }
-    .contact__email { font-family: var(--font-body); font-size: 17px; color: var(--lime); text-decoration: underline; display: block; margin-top: 12px; }
-    .contact__desc { font-family: var(--font-body); font-size: 15px; line-height: 1.6; color: rgba(244,244,235,0.75); max-width: 480px; margin-top: 12px; }
-    .contact__socials { display: flex; gap: 16px; }
+    .contact__row { display: flex; gap: 40px; align-items: flex-end; width: 100%; }
+    .contact__col { align-self: stretch; flex: 1 0 0; min-width: 0; display: flex; flex-direction: column; gap: 40px; }
+    .contact__tag { font-family: var(--font-mono); font-weight: 500; font-size: 11px; letter-spacing: 0.02em; text-transform: uppercase; color: var(--lime); display: block; }
+    .contact__body { display: flex; flex-direction: column; gap: 40px; }
+    .contact__heading { font-family: var(--font-display); font-weight: 400; font-size: clamp(2rem, 4vw, 52px); line-height: 1.08; letter-spacing: -0.03em; color: var(--ink-light); }
+    .contact__email { font-family: var(--font-hand); font-size: 32px; line-height: 30px; letter-spacing: -0.05em; color: var(--ink-light); display: block; text-decoration: none; transition: color var(--dur-fast); }
+    .contact__email:hover { color: var(--lime); }
+    .contact__desc { font-family: var(--font-body); font-size: 17px; line-height: 25px; color: var(--ink-light); max-width: 560px; }
+    .contact__socials { display: flex; gap: 40px; }
     .social-link { color: var(--ink-light); }
-    .social-link svg { width: 24px; height: 24px; fill: currentColor; }
+    .social-link svg { width: 30px; height: 30px; fill: currentColor; }
     .social-link:hover { color: var(--lime); }
-    .contact__copyright { font-family: var(--font-body); font-size: 12px; color: rgba(244,244,235,0.5); display: block; margin-top: 40px; }
+    .contact__copyright { font-family: var(--font-mono); font-weight: 500; font-size: 11px; letter-spacing: 0.02em; text-transform: uppercase; color: var(--rule-light); display: block; margin-top: auto; line-height: 1.6; }
+    .contact__illustration { flex-shrink: 0; width: 817px; max-width: 45%; }
+
+    .footer-peeps-crowd { position: relative; width: 100%; aspect-ratio: 817 / 542; overflow: visible; }
+    .footer-peep { position: absolute; display: inline-block; width: 22.53%; height: 47.72%; object-fit: contain; object-position: bottom center; transform-origin: center bottom; transition: filter 0.3s ease; will-change: transform; cursor: default; }
+    .footer-peep:hover { filter: drop-shadow(0 18px 36px rgba(0,0,0,0.3)); }
+
+    /* Per-peep positions (Figma Frame 1232:44034, 817x542 basis) */
+    .fp01 { left: 8.90%;  top: 52.31%; }
+    .fp02 { left: 77.44%; top: 52.29%; }
+    .fp03 { left: 31.72%; top: 52.29%; }
+    .fp04 { left: 54.62%; top: 52.29%; }
+    .fp05 { left: -0.39%; top: 41.83%; }
+    .fp06 { left: 66.08%; top: 41.83%; }
+    .fp07 { left: 43.92%; top: 41.83%; }
+    .fp08 { left: 21.76%; top: 41.83%; }
+    .fp09 { left: 31.76%; top: 31.37%; }
+    .fp10 { left: 54.61%; top: 31.37%; }
+    .fp11 { left: 8.90%;  top: 31.37%; }
+    .fp12 { left: 77.46%; top: 31.37%; }
+    .fp13 { left: 66.82%; top: 20.91%; }
+    .fp14 { left: -1.71%; top: 20.91%; }
+    .fp15 { left: 21.12%; top: 20.91%; }
+    .fp16 { left: 43.97%; top: 20.91%; }
+    .fp17 { left: 77.46%; top: 10.46%; }
+    .fp18 { left: 31.76%; top: 10.46%; }
+    .fp19 { left: 54.61%; top: 10.46%; }
+    .fp20 { left: 8.91%;  top: 10.46%; }
+    .fp21 { left: 65.47%; top: -2.77%; }
+    .fp22 { left: -1.64%; top: 0%; }
+    .fp23 { left: 21.21%; top: 0%; }
+    .fp24 { left: 44.06%; top: 0%; }
+
+    @media (max-width: 1024px) {
+      .contact__row { flex-direction: column-reverse; align-items: flex-start; gap: 32px; }
+      .contact__col { align-self: auto; width: 100%; }
+      .contact__illustration { width: 100%; max-width: 480px; }
+      .contact__copyright { margin-top: 0; }
+    }
 
     @media (max-width: 1024px) {
       :root { --pad: 40px; }
@@ -564,7 +800,299 @@
     </div>
   </section>
 
-  <!-- ── SECTIONS 5–11 TO COME ── -->
+  <!-- ── THE REDESIGN ── -->
+  <section class="section" id="cs-redesign" aria-label="The redesign">
+    <div class="inner">
+      <div class="cs-redesign-intro">
+        <span class="cs-eyebrow">The Redesign</span>
+        <div class="cs-redesign-heading">
+          <h2>From a static brochure to a tool people actually use</h2>
+          <p>We turned each problem into a question, and used the answer to guide what each part of the site needed to do.</p>
+        </div>
+      </div>
+
+      <!-- Feature 1: New homepage -->
+      <div class="cs-redesign-feature">
+        <div class="cs-redesign-card">
+          <p class="cs-redesign-card__label">New homepage</p>
+          <img src="../Asset/seletar-03-redesign_01.png" alt="New Seletar Airport homepage shown on a laptop">
+          <p class="cs-redesign-card__caption cs-redesign-card__caption--center">Homepage with the three primary actions (Flights / Getting Here / Facilities) visible near the top, no scrolling required.</p>
+        </div>
+        <div class="cs-redesign-qa">
+          <p class="cs-redesign-qa__q">How might we turn the website into a tool that helps people plan, decide, and trust Seletar?</p>
+          <div class="cs-redesign-qa__a">
+            <p class="cs-redesign-qa__a-title">A homepage that gets to the point</p>
+            <div class="cs-redesign-qa__a-body">
+              <p>Flights, transport, and passenger guide now sit on the homepage itself — what used to take 4–5 clicks now takes 1-2.</p>
+              <p>Navigation labels changed from brochure-speak ("Airport Guide", "E-Resources") to words people actually look for: "Flights", "Getting Here", "Passenger Guide".</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Feature 2: Getting home / transport -->
+      <div class="cs-redesign-feature">
+        <div class="cs-redesign-card cs-redesign-card--tight">
+          <p class="cs-redesign-card__label">"Getting home" screen + wayfinding map</p>
+          <p class="cs-redesign-card__caption">Transport options screen alongside the simple arrivals-to-pickup walking map.</p>
+          <img src="../Asset/seletar-03-redesign_02.png" alt="Transport screen with wayfinding map from arrivals to pickup point">
+        </div>
+        <div class="cs-redesign-qa">
+          <p class="cs-redesign-qa__q">How might we make every traveller's exit predictable, guided, and stress-free?</p>
+          <div class="cs-redesign-qa__a">
+            <p class="cs-redesign-qa__a-title">A clear way home</p>
+            <div class="cs-redesign-qa__a-body">
+              <p>A one-tap "Transport" options the moment someone lands — Grab, taxi, and bus, plus what to do if Grab isn't available.</p>
+              <p>We mapped the walk from arrivals to the pickup point, so the way out is as obvious as the way in.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Feature 3: Label rewrite + journey timeline -->
+      <div class="cs-redesign-feature">
+        <div class="cs-redesign-pair">
+          <div class="cs-redesign-card cs-redesign-card--tight">
+            <p class="cs-redesign-card__label">Label rewrite — before / after</p>
+            <p class="cs-redesign-card__caption">Side-by-side of the old "Check Status" label vs the new "View Flight Schedule"</p>
+            <img src="../Asset/seletar-03-redesign_03a.png" alt="Before and after comparison of the flight status label wording">
+          </div>
+          <div class="cs-redesign-card cs-redesign-card--tight">
+            <p class="cs-redesign-card__label">Journey timeline</p>
+            <p class="cs-redesign-card__caption">"What to Expect" timeline graphic below.</p>
+            <img src="../Asset/seletar-03-redesign_03b.png" alt="Passenger Guide journey timeline showing disembark, immigration, baggage, and transport steps">
+          </div>
+        </div>
+        <div class="cs-redesign-qa">
+          <p class="cs-redesign-qa__q">How might we reduce uncertainty with clear, reassuring information?</p>
+          <div class="cs-redesign-qa__a">
+            <p class="cs-redesign-qa__a-title">Wording that matches what people expect</p>
+            <div class="cs-redesign-qa__a-body">
+              <p>"Check Status" became "View Flight Schedule" — a small change that removed confusion with buying a ticket, and was one of the clearest wins in testing.</p>
+              <p>For first-time flyers, a simple visual timeline — check-in, security, boarding, arrival — shows what to expect, in plain language rather than technical detail.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── USER TESTING ── -->
+  <section class="section" id="cs-testing" aria-label="User testing">
+    <div class="inner">
+      <span class="cs-eyebrow">User Testing</span>
+      <div class="cs-testing-wrap">
+        <div class="cs-testing-intro">
+          <h2>Two rounds of testing our prototype, real travellers, honest scores</h2>
+          <p>Round 1 put the new design <strong>in front of 5 people in person</strong>. Round 2 tested the <strong>updated version with 6 people remotely,</strong> including one goal that quietly changed shape along the way.</p>
+        </div>
+
+        <div class="cs-testing-block">
+          <div class="cs-testing-block__inner">
+            <p class="cs-testing-title">The win</p>
+            <p class="cs-testing-quote">"I appreciate the lack of clutter… it presents the user with what's most likely to be the most important thing."</p>
+            <p class="cs-testing-body">Without logging in, people found their flight status immediately. "View Flight Schedule". We replaced the wording from Round 1 and it worked exactly as intended.</p>
+          </div>
+        </div>
+
+        <div class="cs-testing-block">
+          <div class="cs-testing-block__inner cs-testing-block__inner--wide">
+            <p class="cs-testing-title cs-testing-title--center">what still slowed people down, particularly tourists arriving in Singapore</p>
+            <p class="cs-testing-quote cs-testing-quote--center">"I don't know what an EZ-Link card is… I would appreciate more information."</p>
+            <div class="cs-testing-grid">
+              <div class="cs-testing-grid__col">
+                <p class="cs-testing-grid__title">#1 Confusing local payment methods</p>
+                <p class="cs-testing-grid__body">We added payment icons to ease uncertainty but "EZ-Link" (Singapore's local transit card) still confused first-time visitors. The fix for our third iteration was to <strong>show familiar, global payment methods first</strong>, with local options as a secondary detail.</p>
+              </div>
+              <div class="cs-testing-grid__col">
+                <p class="cs-testing-grid__title">#2 Food and facilities were hard to find</p>
+                <p class="cs-testing-grid__body">tucked inside the "Passenger Guide" rather than under an obvious "Facilities" section.</p>
+              </div>
+              <div class="cs-testing-grid__col">
+                <p class="cs-testing-grid__title">#3 Transport defaulted to "Public Bus" first</p>
+                <p class="cs-testing-grid__body">fine for some, but jarring for the majority who wanted a taxi or Grab option shown first.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── HOMEPAGE THEN AND NOW ── -->
+  <section class="section" id="cs-compare" aria-label="Homepage before and after">
+    <div class="inner">
+      <span class="cs-eyebrow">Before &amp; after</span>
+      <div class="cs-compare-grid">
+        <div class="cs-compare-card">
+          <img src="../Asset/seletar-07-before-homepage.png" alt="Before — original Seletar Airport homepage with generic stock photography and featured information tiles">
+        </div>
+        <div class="cs-compare-card">
+          <img src="../Asset/seletar-07-after-homepage.png" alt="After — redesigned homepage version 2 with flight status, transport actions, and passenger guide visible at a glance">
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── IMPACT ── -->
+  <section class="section" id="cs-impact" aria-label="Impact">
+    <div class="inner">
+      <span class="cs-eyebrow">Impact</span>
+      <div class="cs-impact-heading">
+        <h2 class="cs-impact-heading__title">What changed, in numbers</h2>
+        <p class="cs-impact-heading__desc">Scores out of 5, from people actually using the redesign.<br>Round 1 (in person) <strong>vs</strong> Round 2 (remote).</p>
+      </div>
+      <div class="cs-impact-metrics">
+        <div class="cs-impact-row">
+          <div class="cs-impact-card cs-impact-card--1">
+            <div class="cs-impact-card__inner">
+              <span class="cs-impact-pill cs-impact-pill--success">Success</span>
+              <div class="cs-impact-card__body">
+                <p class="cs-impact-stat"><span class="cs-impact-stat__before">4.3</span><span class="cs-impact-stat__after">→4.8/5</span></p>
+                <p class="cs-impact-label">Speed &amp; Planning</p>
+                <p class="cs-impact-desc">Finding flight info and getting around the site became noticeably easier.</p>
+              </div>
+            </div>
+          </div>
+          <div class="cs-impact-card cs-impact-card--2">
+            <div class="cs-impact-card__inner">
+              <span class="cs-impact-pill cs-impact-pill--risk">Still at risk</span>
+              <div class="cs-impact-card__body">
+                <p class="cs-impact-stat"><span class="cs-impact-stat__before">3.8</span><span class="cs-impact-stat__after">→3.7/5</span></p>
+                <p class="cs-impact-label">Getting Home</p>
+                <p class="cs-impact-desc">Clearer than before, but the default transport option still tripped people up.</p>
+              </div>
+            </div>
+          </div>
+          <div class="cs-impact-card cs-impact-card--3">
+            <div class="cs-impact-card__inner">
+              <span class="cs-impact-pill cs-impact-pill--miss">Didn&rsquo;t land</span>
+              <div class="cs-impact-card__body">
+                <p class="cs-impact-stat"><span class="cs-impact-stat__before">3.0</span><span class="cs-impact-stat__after">→3.0/5</span></p>
+                <p class="cs-impact-label">Feeling Confident</p>
+                <p class="cs-impact-desc">We solved one worry (the aircraft) and uncovered another (paying for transport).</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── THE RESULT ── -->
+  <section class="section" id="cs-result" aria-label="The result">
+    <div class="inner">
+      <span class="cs-eyebrow">The result</span>
+      <div class="cs-result-wrap">
+        <h2 class="cs-result-heading">Where the design landed and what&rsquo;s next</h2>
+        <div class="cs-result-body">
+          <p>Round 2 pointed at four contained fixes for Version 3: a clearer &ldquo;Facilities&rdquo; section, removing the &ldquo;Public Bus&rdquo; default, explicit tap-to-pay reassurance for tourists, and small interaction polish on desktop. Version 3 hasn&rsquo;t been tested yet, but the direction is clear and both rounds showed real, measurable improvement in how quickly people could plan a trip through Seletar Airport.</p>
+          <p>We shared these findings directly with Seletar Airport, and are still waiting to hear back.</p>
+        </div>
+      </div>
+      <div class="cs-result-proto">
+        <div class="cs-result-proto__frame">
+          <img src="../Asset/seletar-09-result-v3-prototype.png" alt="Version 3 prototype homepage — full preview, untested">
+        </div>
+        <div class="cs-result-proto__caption">
+          <p class="cs-result-proto__label">Version 3 prototype &mdash; full preview (untested)</p>
+          <p class="cs-result-proto__desc">A navigational bar that surfaces key services users need and relabelling of navigational labels aligned with users&rsquo; existing mental models and reduced cognitive load during scanning, &ldquo;getting to &amp; from&rdquo; to &ldquo;transport&rdquo;.</p>
+        </div>
+      </div>
+      <div class="cs-result-fixes">
+        <div class="cs-result-fix">
+          <div class="cs-result-fix__frame">
+            <img src="../Asset/seletar-09-redesign_02.png" alt="Facilities navigation before and after — Version 3 surfaces all facility cards above the fold">
+          </div>
+          <div class="cs-result-fix__caption">
+            <p class="cs-result-fix__label">Fix 1 &mdash; Facilities nav, before / after</p>
+            <p class="cs-result-fix__desc">Redesigned the layout to optimise viewport real estate, moving critical information above the fold. By consolidating data that previously required extensive scrolling, we drastically reduced the user&rsquo;s interaction cost and improved immediate data scannability</p>
+          </div>
+        </div>
+        <div class="cs-result-fix">
+          <div class="cs-result-fix__frame">
+            <img src="../Asset/seletar-09-redesign_03.png" alt="Transport default before and after — Version 3 defaults to Taxi instead of Public Bus">
+          </div>
+          <div class="cs-result-fix__caption">
+            <p class="cs-result-fix__label">Fix 2 &mdash; Transport default, before / after</p>
+            <p class="cs-result-fix__desc">Given that most passengers arrive and depart via a ride-hailing service, it now appears first, instead of car/public transport.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── REFLECTIONS ── -->
+  <section class="section" id="cs-reflections" aria-label="Reflections">
+    <div class="inner">
+      <span class="cs-eyebrow">Reflections</span>
+      <div class="cs-reflections-grid">
+        <div class="cs-reflections-heading">
+          <h2>What this project taught me</h2>
+        </div>
+        <div class="cs-reflections-cards">
+          <div class="cs-reflect-card">
+            <p class="cs-reflect-card__num">01 Research as the anchor</p>
+            <div class="cs-reflect-card__body">
+              <p class="cs-reflect-card__title">Wording is a UI element</p>
+              <p class="cs-reflect-card__desc">Good copy carries as much weight as any button. &ldquo;Easy to use&rdquo; for a global traveller means bridging local terms like &ldquo;EZ-Link&rdquo; with what visitors already understand. I learned to prioritise what people <strong>need</strong> to know over what&rsquo;s merely <strong>nice</strong> to know. Solid research is what let a three-person team move fast and stay aligned for six weeks.</p>
+            </div>
+          </div>
+          <div class="cs-reflect-card">
+            <p class="cs-reflect-card__num">02 Defining the audience</p>
+            <div class="cs-reflect-card__body">
+              <p class="cs-reflect-card__title">Who is &ldquo;the traveller&rdquo;, really?</p>
+              <p class="cs-reflect-card__desc">I started by framing our audience broadly &ldquo;commercial passengers who want speed.&rdquo; Through research and testing, it became clear the people who needed the most help were specifically <strong>first-time travellers</strong> navigating an unfamiliar airport. A returning regular and a first-timer have very different needs, and the redesign only worked once we designed for the right one.</p>
+            </div>
+          </div>
+          <div class="cs-reflect-card">
+            <p class="cs-reflect-card__num">03 Scoping the research</p>
+            <div class="cs-reflect-card__body">
+              <p class="cs-reflect-card__title">Two journeys, one terminal</p>
+              <p class="cs-reflect-card__desc">Seletar Airport and Firefly are two separate organisations sharing one terminal experience. Early on, I drew a deliberate line: this research would cover what <strong>Seletar Airport&rsquo;s</strong> website could own and fix (not Firefly&rsquo;s booking or flight systems) even though Firefly&rsquo;s Subang route is the entire reason travellers are there. Keeping that line clear from day one kept a small team focused on what we could ship in six weeks.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── PROJECT STACK ── -->
+  <section class="section" id="cs-stack" aria-label="Project stack">
+    <div class="inner">
+      <span class="cs-eyebrow">Project Stack</span>
+      <div class="cs-stack-row">
+        <div class="cs-stack-col">
+          <p class="cs-stack-col__title">Research</p>
+          <p class="cs-stack-col__item">9 discovery interviews</p>
+          <p class="cs-stack-col__item">2 rounds of usability testing (11 participants)</p>
+          <p class="cs-stack-col__item">Affinity Mapping</p>
+          <p class="cs-stack-col__item">Context research &mdash; The Subang Advantage</p>
+        </div>
+        <div class="cs-stack-col">
+          <p class="cs-stack-col__title">Strategy</p>
+          <p class="cs-stack-col__item">Problem Scoping</p>
+          <p class="cs-stack-col__item">&ldquo;How might we&rdquo; framing</p>
+          <p class="cs-stack-col__item">Iteration planning &mdash; V1 &rarr; V2 &rarr; V3</p>
+        </div>
+        <div class="cs-stack-col">
+          <p class="cs-stack-col__title">Design</p>
+          <p class="cs-stack-col__item">Information Architecture</p>
+          <p class="cs-stack-col__item">Navigation relabelling</p>
+          <p class="cs-stack-col__item">Journey timeline &amp; wayfinding</p>
+          <p class="cs-stack-col__item">Prototyping</p>
+        </div>
+        <div class="cs-stack-col">
+          <p class="cs-stack-col__title">Deliverables</p>
+          <p class="cs-stack-col__item">Figma prototypes &mdash; V1 / V2 / V3</p>
+          <p class="cs-stack-col__item">Usability test reports</p>
+          <p class="cs-stack-col__item">UX research report</p>
+          <p class="cs-stack-col__item">Final presentation</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
 
   <!-- ── NEXT CASE STUDY ── -->
   <section class="section" id="cs-next-section" aria-label="Next case study">
@@ -580,31 +1108,60 @@
   <!-- ── CONTACT ── -->
   <section class="section" id="contact">
     <div class="inner">
-      <div class="contact__copy">
-        <span class="t-label">Product Designer · UX Researcher · Singapore · Open to opportunities</span>
-        <div class="contact__copy-inner">
-          <div class="contact__text">
+      <div class="contact__row">
+        <div class="contact__col">
+          <span class="contact__tag">Product Designer &middot; UX Researcher &middot; Singapore &middot; Open to opportunities</span>
+          <div class="contact__body">
             <h2 class="contact__heading">Let&rsquo;s work together or chat!</h2>
             <a class="contact__email" href="mailto:andreeyahlee@gmail.com">andreeyahlee@gmail.com</a>
-            <p class="contact__desc">
-              Open to UX design and research roles or freelancing service.
-              If you&rsquo;re building something complex that needs to feel simple
-              particularly for social good &mdash; let&rsquo;s talk!
-            </p>
+            <p class="contact__desc">Open to UX design and research roles or freelancing service. If you&rsquo;re building something complex that needs to feel simple particularly for social good &mdash; let&rsquo;s talk!</p>
+            <div class="contact__socials">
+              <a class="social-link" href="https://www.linkedin.com/in/andrealee-" target="_blank" rel="noopener" aria-label="LinkedIn">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>
+              </a>
+              <a class="social-link" href="https://www.instagram.com/lee.andrea/" target="_blank" rel="noopener" aria-label="Instagram">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 1 0 0 12.324 6.162 6.162 0 0 0 0-12.324zM12 16a4 4 0 1 1 0-8 4 4 0 0 1 0 8zm6.406-11.845a1.44 1.44 0 1 0 0 2.881 1.44 1.44 0 0 0 0-2.881z"/></svg>
+              </a>
+              <a class="social-link" href="https://drive.google.com/file/d/1bMgT6sMRa9Tbtc2sUFGb11WrcM488deY/view?usp=drive_link" target="_blank" rel="noopener" aria-label="Resume">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M14 2H6c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V8l-6-6zm2 16H8v-2h8v2zm0-4H8v-2h8v2zm-3-5V3.5L18.5 9H13z"/></svg>
+              </a>
+            </div>
           </div>
-          <div class="contact__socials">
-            <a class="social-link" href="https://www.linkedin.com/in/andrealee-" target="_blank" rel="noopener" aria-label="LinkedIn">
-              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>
-            </a>
-            <a class="social-link" href="https://www.instagram.com/lee.andrea/" target="_blank" rel="noopener" aria-label="Instagram">
-              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 1 0 0 12.324 6.162 6.162 0 0 0 0-12.324zM12 16a4 4 0 1 1 0-8 4 4 0 0 1 0 8zm6.406-11.845a1.44 1.44 0 1 0 0 2.881 1.44 1.44 0 0 0 0-2.881z"/></svg>
-            </a>
-            <a class="social-link" href="https://drive.google.com/file/d/1bMgT6sMRa9Tbtc2sUFGb11WrcM488deY/view?usp=drive_link" target="_blank" rel="noopener" aria-label="Resume">
-              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M14 2H6c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V8l-6-6zm2 16H8v-2h8v2zm0-4H8v-2h8v2zm-3-5V3.5L18.5 9H13z"/></svg>
-            </a>
+          <span class="contact__copyright">PORTFOLIO BUILT FROM SCRATCH BY ANDREA L.<br>&copy;All rights reserved 2026</span>
+        </div>
+        <div class="contact__illustration">
+          <div class="footer-peeps-crowd" role="img" aria-label="A diverse crowd of illustrated people">
+            <img class="footer-peep fp22" src="../Asset/footer_peep22.png" alt="" aria-hidden="true">
+            <img class="footer-peep fp23" src="../Asset/footer_peep23.png" alt="" aria-hidden="true">
+            <img class="footer-peep fp24" src="../Asset/footer_peep24.png" alt="" aria-hidden="true">
+            <img class="footer-peep fp21" src="../Asset/footer_peep21.png" alt="" aria-hidden="true">
+
+            <img class="footer-peep fp20" src="../Asset/footer_peep20.png" alt="" aria-hidden="true">
+            <img class="footer-peep fp18" src="../Asset/footer_peep18.png" alt="" aria-hidden="true">
+            <img class="footer-peep fp19" src="../Asset/footer_peep19.png" alt="" aria-hidden="true">
+            <img class="footer-peep fp17" src="../Asset/footer_peep17.png" alt="" aria-hidden="true">
+
+            <img class="footer-peep fp14" src="../Asset/footer_peep14.png" alt="" aria-hidden="true">
+            <img class="footer-peep fp15" src="../Asset/footer_peep15.png" alt="" aria-hidden="true">
+            <img class="footer-peep fp16" src="../Asset/footer_peep16.png" alt="" aria-hidden="true">
+            <img class="footer-peep fp13" src="../Asset/footer_peep13.png" alt="" aria-hidden="true">
+
+            <img class="footer-peep fp11" src="../Asset/footer_peep11.png" alt="" aria-hidden="true">
+            <img class="footer-peep fp09" src="../Asset/footer_peep09.png" alt="" aria-hidden="true">
+            <img class="footer-peep fp10" src="../Asset/footer_peep10.png" alt="" aria-hidden="true">
+            <img class="footer-peep fp12" src="../Asset/footer_peep12.png" alt="" aria-hidden="true">
+
+            <img class="footer-peep fp05" src="../Asset/footer_peep05.png" alt="" aria-hidden="true">
+            <img class="footer-peep fp08" src="../Asset/footer_peep08.png" alt="" aria-hidden="true">
+            <img class="footer-peep fp07" src="../Asset/footer_peep07.png" alt="" aria-hidden="true">
+            <img class="footer-peep fp06" src="../Asset/footer_peep06.png" alt="" aria-hidden="true">
+
+            <img class="footer-peep fp01" src="../Asset/footer_peep01.png" alt="" aria-hidden="true">
+            <img class="footer-peep fp03" src="../Asset/footer_peep03.png" alt="" aria-hidden="true">
+            <img class="footer-peep fp04" src="../Asset/footer_peep04.png" alt="" aria-hidden="true">
+            <img class="footer-peep fp02" src="../Asset/footer_peep02.png" alt="" aria-hidden="true">
           </div>
         </div>
-        <span class="contact__copyright">PORTFOLIO BUILT FROM SCRATCH BY ANDREA L. &copy;All rights reserved 2026</span>
       </div>
     </div>
   </section>
@@ -634,7 +1191,7 @@
 
       /* When transiting to another case study, match the loader's background to that page's
          own background so the handoff doesn't flash the wrong color. */
-      const CASE_STUDY_BG = { 'seletar.html': '#304c95', 'arvo.html': '#1a1c16', 'pethaus.html': '#1e1219' };
+      const CASE_STUDY_BG = { 'seletar.html': '#304c95', 'arvo.html': '#1a1c16', 'pethaus.html': '#ebeae0' };
 
       document.querySelectorAll('a[href]').forEach(function (link) {
         const href = link.getAttribute('href');
@@ -774,11 +1331,69 @@
         y: 60, opacity: 0, duration: 1, ease: 'power3.out',
         scrollTrigger: { trigger: '#contact', start: 'top 80%' }
       });
-      gsap.from(['.contact__email', '.contact__desc', '.contact__socials', '#contact .t-label'], {
+      gsap.from(['.contact__email', '.contact__desc', '.contact__socials', '.contact__tag'], {
         y: 25, opacity: 0, duration: 0.7, stagger: 0.12, ease: 'power3.out',
         scrollTrigger: { trigger: '#contact', start: 'top 75%' }
       });
+      gsap.from('.footer-peep', {
+        y: 62, opacity: 0, duration: 0.48,
+        stagger: { each: 0.038, from: 'start' },
+        ease: 'back.out(1.85)',
+        scrollTrigger: { trigger: '#contact', start: 'top 90%' }
+      });
+
+      const peepBobs = new Map();
+      document.querySelectorAll('.footer-peep').forEach((peep, i) => {
+        const bob = gsap.to(peep, {
+          y: '-=6', duration: 1.0 + (i % 5) * 0.22,
+          ease: 'sine.inOut', yoyo: true, repeat: -1, delay: i * 0.06
+        });
+        peepBobs.set(peep, bob);
+      });
+
+      let facingPaused = false;
+      document.addEventListener('mousemove', e => {
+        if (facingPaused) return;
+        document.querySelectorAll('.footer-peep').forEach(p => {
+          const r = p.getBoundingClientRect();
+          const dx = e.clientX - (r.left + r.width / 2);
+          if (Math.abs(dx) < 260) {
+            gsap.to(p, { scaleX: dx > 0 ? 1 : -1, duration: 0.32, ease: 'power2.out' });
+          }
+        });
+      });
+
+      document.querySelectorAll('.footer-peep').forEach(peep => {
+        peep.addEventListener('mouseenter', function () {
+          facingPaused = true;
+          const bob = peepBobs.get(this);
+          if (bob) bob.pause();
+          gsap.killTweensOf(this);
+          gsap.timeline({ onComplete: () => { facingPaused = false; if (bob) bob.resume(); } })
+            .to(this, { y: '-12%', scaleX: 1, scaleY: 1.04, duration: 0.32, ease: 'back.out(1.6)' })
+            .to(this, { y: '-7%', duration: 0.38, ease: 'sine.inOut' })
+            .to(this, { y: '-13%', duration: 0.42, ease: 'sine.inOut' })
+            .to(this, { y: 0, scaleY: 1, duration: 0.5, ease: 'power2.inOut' });
+        });
+      });
     }
+
+    /* Impact cards fan (1056px fixed-position layout matching Figma exactly) —
+       scale it to fit between the 1024px mobile-stack breakpoint and its native 1440px width,
+       instead of switching to the stacked layout early on common laptop widths (1280/1366px). */
+    (function () {
+      var metricsEl = document.querySelector('.cs-impact-metrics');
+      var rowEl = document.querySelector('.cs-impact-row');
+      if (!metricsEl || !rowEl) return;
+      function applyScale() {
+        if (window.innerWidth <= 1024) { rowEl.style.transform = ''; return; }
+        var available = metricsEl.clientWidth - 128;
+        var scale = Math.min(1, available / 1056);
+        rowEl.style.transform = 'scale(' + scale + ')';
+      }
+      applyScale();
+      window.addEventListener('resize', applyScale);
+    })();
   </script>
 </body>
 </html>
