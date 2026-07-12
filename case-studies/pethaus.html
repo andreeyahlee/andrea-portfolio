@@ -381,7 +381,7 @@
     .ph-solution-fan { position: relative; width: 100%; max-width: 1000px; height: 380px; margin: 0 auto; }
     .ph-solution-fan__card {
       position: absolute; top: 50%; width: 19%; aspect-ratio: 0.82;
-      border-radius: 10px; overflow: hidden; box-shadow: 0 20px 40px rgba(33,40,26,0.28);
+      border-radius: 0; overflow: hidden; box-shadow: 0 20px 40px rgba(33,40,26,0.28);
       cursor: pointer; transition: transform 0.45s cubic-bezier(0.22,1,0.36,1), box-shadow 0.45s ease;
     }
     .ph-solution-fan__card img { width: 100%; height: 100%; object-fit: cover; object-position: top; display: block; }
@@ -392,6 +392,12 @@
     .ph-solution-fan__card:nth-child(5) { left: 76%; transform: translate(-50%,-50%) rotate(11deg);  z-index: 5; }
     .ph-solution-fan__card:nth-child(6) { left: 92%; transform: translate(-50%,-50%) rotate(18deg);  z-index: 6; }
     .ph-solution-fan__card:hover { transform: translate(-50%,-50%) rotate(0deg) scale(1.15) translateY(-16px); z-index: 10; box-shadow: 0 30px 55px rgba(33,40,26,0.4); }
+    /* The mobile carousel's JS clones each card (aria-hidden, for a seamless auto-loop) and
+       appends them into this same container — only the first 6 (:nth-child(1..6)) have a
+       desktop left/rotate rule above, so on desktop the clones fell back to unstyled default
+       positioning and showed up as a stray stack. Hidden here; the mobile media query below
+       turns them back on for the carousel. */
+    .ph-solution-fan__card[aria-hidden="true"] { display: none; }
 
     /* Each "move" repeats: left-aligned tag pill, centered title + hand-written quote,
        left-aligned body copy, then a dark mockup card exported as a flat image (label and
@@ -478,18 +484,36 @@
       .ph-comp-card__inner, .ph-pattern-card__inner { box-shadow: 0 12px 24px rgba(0,0,0,0.25); }
 
       /* Screen fan: the hover-to-front interaction needs a mouse, and the rotated deck
-         reads as clutter at narrow widths — drop it to a plain static row the same way
-         the pattern/comp cards do. */
-      .ph-solution-fan { height: auto; display: flex; flex-wrap: wrap; justify-content: center; gap: 16px; max-width: 100%; }
-      /* Prefixed with .ph-solution-fan (raising specificity above the bare
-         .ph-solution-fan__card:nth-child(n) desktop rules) so this reliably wins
-         regardless of source order or how the browser scores a comma-separated list. */
+         reads as clutter at narrow widths — swap to a continuously auto-scrolling
+         filmstrip instead (JS drives scrollLeft directly every frame, so no scroll-snap —
+         snapping would fight the continuous motion). Scrollbar hidden since position is
+         fully driven by the auto-loop, not manual scrolling, though the strip can still
+         be dragged (auto-loop pauses on touch — see the script block). The centered card
+         is tracked in JS (touch has no :hover) and scaled up via .is-active, and its
+         matching caption word gets the same treatment. Prefixed with .ph-solution-fan to
+         reliably outrank the bare desktop nth-child rules. */
+      .ph-solution-fan {
+        height: auto; display: flex; flex-wrap: nowrap; align-items: center;
+        overflow-x: auto; gap: 16px; scrollbar-width: none; -ms-overflow-style: none;
+        max-width: 100%; padding: 20px calc(50% - 65px); -webkit-overflow-scrolling: touch;
+      }
+      .ph-solution-fan::-webkit-scrollbar { display: none; }
       .ph-solution .ph-solution-fan .ph-solution-fan__card {
-        position: static; width: 130px; transform: none; box-shadow: 0 8px 16px rgba(33,40,26,0.2);
+        position: static; flex: 0 0 130px; width: 130px; transform: scale(0.85); opacity: 0.55;
+        box-shadow: 0 8px 16px rgba(33,40,26,0.2);
+        transition: transform 0.3s ease, opacity 0.3s ease, box-shadow 0.3s ease;
       }
-      .ph-solution .ph-solution-fan .ph-solution-fan__card:hover {
-        transform: translateY(-6px); box-shadow: 0 14px 26px rgba(33,40,26,0.28);
+      /* Turn the cloned cards (hidden by default, see the desktop rule) back on here —
+         the carousel's seamless loop needs them. */
+      .ph-solution-fan__card[aria-hidden="true"] { display: block; }
+      /* !important here: this state class needs to unconditionally win regardless of the
+         unconditional desktop :nth-child(n) rotate rules still technically in scope at this
+         viewport (they lose the cascade to the mobile base rule already, but not reliably to
+         this even-higher-specificity .is-active rule — !important removes any ambiguity). */
+      .ph-solution .ph-solution-fan .ph-solution-fan__card.is-active {
+        transform: scale(1.1) !important; opacity: 1 !important; box-shadow: 0 14px 28px rgba(33,40,26,0.32) !important;
       }
+      .ph-solution-flow__stage.is-active { font-weight: 700 !important; color: var(--ink-dark) !important; transform: scale(1.15) !important; }
 
       /* Persona rows: photo-beside-text only works with room to breathe — stack photo
          above the text column instead of squeezing both into a shared row. The desktop
@@ -963,7 +987,7 @@
               <div class="ph-solution-fan__card"><img src="../Asset/pethaus-solution-screen-productdetail.png" alt="Product Detail"></div>
               <div class="ph-solution-fan__card"><img src="../Asset/pethaus-solution-screen-checkout.png" alt="Checkout"></div>
             </div>
-            <p class="ph-solution-flow__caption"><span class="ph-solution-flow__stage" data-stage="1">Homepage</span> &rarr; <span class="ph-solution-flow__stage" data-stage="2">Build Pet Profile</span> &rarr; <span class="ph-solution-flow__stage" data-stage="3">Filtered Product List</span> &rarr; <span class="ph-solution-flow__stage" data-stage="4">Product Tag</span> &rarr; <span class="ph-solution-flow__stage" data-stage="5">Product Detail (trust tags + ingredient breakdown)</span> &rarr; <span class="ph-solution-flow__stage" data-stage="6">Checkout with reorder reminder</span>. Hover a screen to bring it forward.</p>
+            <p class="ph-solution-flow__caption"><span class="ph-solution-flow__stage" data-stage="1">Homepage</span> &rarr; <span class="ph-solution-flow__stage" data-stage="2">Build Pet Profile</span> &rarr; <span class="ph-solution-flow__stage" data-stage="3">Filtered Product List</span> &rarr; <span class="ph-solution-flow__stage" data-stage="4">Product Tag</span> &rarr; <span class="ph-solution-flow__stage" data-stage="5">Product Detail (trust tags + ingredient breakdown)</span> &rarr; <span class="ph-solution-flow__stage" data-stage="6">Checkout with reorder reminder</span>.<br>Hover a screen to bring it forward.</p>
           </div>
         </div>
 
@@ -1227,6 +1251,78 @@
         hamburger.setAttribute('aria-expanded', 'false');
       });
     });
+
+    // Solution screen fan → mobile/tablet carousel: a continuously auto-scrolling
+    // filmstrip (left to right, one full pass through all 6 screens every 10s) that
+    // wraps seamlessly by scrolling into a cloned second copy of the deck and never
+    // visibly resetting. Whichever card is nearest the center gets .is-active — same
+    // class the desktop hover version uses — so its matching caption word bolds and
+    // scales up too. Pauses on touch (so a manual swipe isn't fought by the loop) and
+    // while the tab or section is out of view; respects prefers-reduced-motion.
+    (function () {
+      const fan = document.querySelector('.ph-solution-fan');
+      if (!fan) return;
+      const originalCards = Array.from(fan.querySelectorAll('.ph-solution-fan__card'));
+      const stages = Array.from(document.querySelectorAll('.ph-solution-flow__stage'));
+      const carouselQuery = window.matchMedia('(max-width: 1024px)');
+      const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
+      const LOOP_DURATION = 10000;
+
+      originalCards.forEach(card => {
+        const clone = card.cloneNode(true);
+        clone.setAttribute('aria-hidden', 'true');
+        fan.appendChild(clone);
+      });
+      const allCards = Array.from(fan.querySelectorAll('.ph-solution-fan__card'));
+
+      function updateActiveCard() {
+        const fanRect = fan.getBoundingClientRect();
+        const center = fanRect.left + fanRect.width / 2;
+        let closestIndex = 0, closestDist = Infinity;
+        allCards.forEach((card, i) => {
+          const r = card.getBoundingClientRect();
+          const dist = Math.abs((r.left + r.width / 2) - center);
+          if (dist < closestDist) { closestDist = dist; closestIndex = i; }
+        });
+        allCards.forEach((card, i) => card.classList.toggle('is-active', i === closestIndex));
+        const stageIndex = closestIndex % originalCards.length;
+        stages.forEach((span, i) => span.classList.toggle('is-active', i === stageIndex));
+      }
+
+      let loopWidth = 0;
+      function measure() {
+        const firstRect = originalCards[0].getBoundingClientRect();
+        const cloneRect = allCards[originalCards.length].getBoundingClientRect();
+        loopWidth = cloneRect.left - firstRect.left;
+      }
+
+      let rafId = null, startTime = null, pausedTotal = 0, pausedAt = null, paused = false;
+
+      function pause() { if (!paused) { paused = true; pausedAt = performance.now(); } }
+      function resume() { if (paused) { pausedTotal += performance.now() - pausedAt; paused = false; } }
+
+      function tick(now) {
+        if (!paused && !reducedMotion.matches) {
+          if (startTime === null) startTime = now;
+          const elapsed = (now - startTime - pausedTotal) % LOOP_DURATION;
+          fan.scrollLeft = (elapsed / LOOP_DURATION) * loopWidth;
+          updateActiveCard();
+        }
+        rafId = requestAnimationFrame(tick);
+      }
+
+      function start() { if (rafId === null) { startTime = null; pausedTotal = 0; measure(); updateActiveCard(); rafId = requestAnimationFrame(tick); } }
+      function stop() { if (rafId !== null) { cancelAnimationFrame(rafId); rafId = null; } }
+
+      fan.addEventListener('pointerdown', pause);
+      fan.addEventListener('pointerup', () => setTimeout(resume, 2000));
+      fan.addEventListener('pointercancel', () => setTimeout(resume, 2000));
+      document.addEventListener('visibilitychange', () => { document.hidden ? pause() : resume(); });
+      window.addEventListener('resize', measure);
+      carouselQuery.addEventListener('change', () => { carouselQuery.matches ? start() : stop(); });
+
+      if (carouselQuery.matches) start();
+    })();
 
     if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
       gsap.from('#cs-hero .ph-hero__col > *', {
