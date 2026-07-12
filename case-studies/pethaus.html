@@ -284,9 +284,15 @@
     /* Affinity map: Figma sizes this image as a fixed 916:598 graphic that's narrower than
        the card (~82% of the content width) and deliberately bleeds past the card's fixed
        435px height, clipped by the card's own overflow — not a full-width, full-height fit. */
-    .ph-dark-card--bleed { height: 435px; overflow: hidden; }
-    .ph-dark-card__map { flex: 1 1 0; min-height: 0; display: flex; align-items: flex-start; justify-content: center; }
-    .ph-dark-card__map img { width: 82%; height: auto; flex-shrink: 0; }
+    /* Figma's own "Copy as CSS" for this node: the card sits 3 nested px-64 levels deep
+       (928px content width at the 1440 reference frame, not this section's usual 1184px),
+       and image47 is absolutely positioned within its 864×317 frame at left:35px top:-9.82px
+       width:916px height:598px — i.e. it overflows its own frame on every side, not just a
+       simple centered/oversized graphic. Percentages below are those exact figures converted
+       to %, so the bleed scales correctly if the card itself ever renders narrower than 928px. */
+    .ph-dark-card--bleed { max-width: 928px; margin: 0 auto; height: 435px; overflow: hidden; }
+    .ph-dark-card__map { position: relative; flex: 1 1 0; min-height: 0; }
+    .ph-dark-card__map img { position: absolute; left: 4.05%; top: -3.1%; width: 106.02%; max-width: none; height: auto; }
     /* The participant snapshot is 3 separate exported columns (not one flattened image)
        specifically so it can reflow to a vertical stack below the mobile breakpoint —
        a single flattened graphic can't restack itself with CSS alone. */
@@ -310,8 +316,10 @@
     .ph-pattern-card--4 { left: 88.4%; top: 47.5%; transform: translate(-50%, -50%) rotate(8.23deg); }
 
     /* ── Synthesis (personas) ── */
-    .ph-persona { display: flex; flex-direction: column; gap: 40px; width: 100%; }
-    .ph-persona__row { display: flex; gap: 40px; align-items: stretch; width: 100%; }
+    /* Figma's "Frame 844" (this whole persona block) caps at 1056px with its own 64px side
+       padding — one nesting level narrower than the 1184px .ph-brief__stack column around it. */
+    .ph-persona { display: flex; flex-direction: column; align-items: flex-start; gap: 40px; width: 100%; max-width: 1056px; padding: 0 64px; margin: 0 auto; box-sizing: border-box; }
+    .ph-persona__row { display: flex; gap: 40px; align-items: stretch; width: 100%; position: relative; overflow: hidden; }
     .ph-persona__text { flex: 1 1 0; min-width: 0; display: flex; flex-direction: column; gap: 20px; justify-content: center; padding: 32px; box-sizing: border-box; }
     .ph-persona__quote { font-family: var(--font-display); font-weight: 400; font-size: 32px; line-height: 37px; letter-spacing: -0.02em; color: var(--ink-dark); margin: 0; text-align: center; }
     .ph-persona__question { background: var(--bg-dark); color: var(--ink-light); padding: 32px; display: flex; flex-direction: column; gap: 20px; width: 100%; box-sizing: border-box; text-align: center; }
@@ -320,11 +328,81 @@
     .ph-persona__question-body strong { font-weight: 700; }
     .ph-persona__body { font-family: var(--font-body); font-size: 17px; line-height: 25px; color: var(--ink-dark); margin: 0; }
     .ph-persona__divider { width: 100%; height: 1px; background: rgba(33,40,26,0.15); border: none; margin: 0; }
+    /* Figma's "Frame 813" gaps the "She Needs" title from the list by 18px; the 3 bullets
+       inside the list use a tighter gap of their own — these were previously conflated into
+       one 18px gap directly on the <ul>, leaving the title touching the list above it. */
+    .ph-persona__needs { display: flex; flex-direction: column; gap: 18px; }
     .ph-persona__needs-title { font-family: var(--font-display); font-weight: 500; font-size: 18px; line-height: 24px; color: var(--ink-dark); margin: 0; }
-    .ph-persona__needs-list { margin: 0; padding-left: 19.5px; display: flex; flex-direction: column; gap: 18px; }
+    .ph-persona__needs-list { margin: 0; padding-left: 19.5px; display: flex; flex-direction: column; gap: 15px; }
     .ph-persona__needs-list li { font-family: var(--font-body); font-size: 13px; line-height: 15px; color: var(--ink-dark); }
-    .ph-persona__photo { flex: 0 0 240px; align-self: stretch; display: flex; align-items: flex-end; justify-content: center; overflow: hidden; }
-    .ph-persona__photo img { width: 100%; max-width: 280px; height: auto; display: block; }
+    /* Photo column reserves its 240px flex slot in normal flow, but the photo itself is
+       absolutely positioned against .ph-persona__row (928px reference) per Figma's exact
+       image47-style bleed — it's meant to overflow its own column, not sit centered inside it. */
+    .ph-persona__photo { flex: 0 0 240px; align-self: stretch; }
+    .ph-persona__photo img { position: absolute; width: 35.67%; height: auto; display: block; }
+    /* Figma's image19 (972:6147) is positioned left:-113px top:11.176px relative to its OWN
+       240px-wide Frame818 column — since Amy's Frame818 sits at row-relative x:670, the
+       row-relative position is 670-113=557 (=60.02% of the 928px row), not a value derived
+       from the row's own 0-origin directly. */
+    .ph-persona__photo--amy img { left: 60.02%; top: 1.64%; }
+    .ph-persona__photo--victor img { left: 9.91%; top: -1.85%; width: 31.8%; transform: scaleX(-1); }
+
+    /* ── The Solution ── */
+    /* Figma's header block (title/body/flow shot) sits inside the normal 1184px
+       .ph-brief__stack column, but the 4 "move" blocks below it are indented 228px each
+       side within the full 1312px .inner width instead — a different, narrower (856px)
+       centered column that doesn't come from the usual nested px-64 padding math. So the
+       whole section escapes .ph-brief__stack and manages its own two column widths. */
+    .ph-solution { display: flex; flex-direction: column; gap: 80px; width: 100%; }
+    .ph-solution-header { display: flex; flex-direction: column; gap: 40px; width: 100%; padding: 0 var(--pad); box-sizing: border-box; }
+    .ph-intro--wide { max-width: 1184px; }
+    .ph-solution-flow { display: flex; flex-direction: column; gap: 16px; width: 100%; }
+    /* Dimming via color-alpha (not opacity) so a highlighted stage span can override back to
+       full ink-dark — opacity on the parent would cap descendants at the same alpha no matter
+       what they set locally, since it composites the whole subtree as one semi-transparent layer. */
+    .ph-solution-flow__caption { font-family: var(--font-body); font-style: italic; font-size: 13px; line-height: 1.4; color: rgba(33,40,26,0.6); text-align: center; margin: 0; }
+    .ph-solution-flow__stage { display: inline-block; font-weight: 400; font-style: normal; transform: scale(1); transition: transform 0.25s ease, font-weight 0.25s ease, color 0.25s ease; }
+    /* Pairs each fan card's hover state with its matching word in the caption below —
+       pure CSS via :has(), no JS needed, same mechanism as the card's own hover-to-front. */
+    .ph-solution-flow:has(.ph-solution-fan__card:nth-child(1):hover) [data-stage="1"],
+    .ph-solution-flow:has(.ph-solution-fan__card:nth-child(2):hover) [data-stage="2"],
+    .ph-solution-flow:has(.ph-solution-fan__card:nth-child(3):hover) [data-stage="3"],
+    .ph-solution-flow:has(.ph-solution-fan__card:nth-child(4):hover) [data-stage="4"],
+    .ph-solution-flow:has(.ph-solution-fan__card:nth-child(5):hover) [data-stage="5"],
+    .ph-solution-flow:has(.ph-solution-fan__card:nth-child(6):hover) [data-stage="6"] {
+      font-weight: 700; color: var(--ink-dark); transform: scale(1.15);
+    }
+
+    /* Fanned screen deck: each card is center-anchored (left/top % + translate(-50%,-50%)
+       rotate()) like .ph-pattern-card, so the rotation pivots around the card's own center
+       instead of its top-left corner. Hovering rotates that one card back to 0deg (facing
+       the viewer) and lifts it above its neighbors; leaving reverts it via the same
+       transition, no JS needed. */
+    .ph-solution-fan { position: relative; width: 100%; max-width: 1000px; height: 380px; margin: 0 auto; }
+    .ph-solution-fan__card {
+      position: absolute; top: 50%; width: 19%; aspect-ratio: 0.82;
+      border-radius: 10px; overflow: hidden; box-shadow: 0 20px 40px rgba(33,40,26,0.28);
+      cursor: pointer; transition: transform 0.45s cubic-bezier(0.22,1,0.36,1), box-shadow 0.45s ease;
+    }
+    .ph-solution-fan__card img { width: 100%; height: 100%; object-fit: cover; object-position: top; display: block; }
+    .ph-solution-fan__card:nth-child(1) { left: 8%;  transform: translate(-50%,-50%) rotate(-18deg); z-index: 1; }
+    .ph-solution-fan__card:nth-child(2) { left: 24%; transform: translate(-50%,-50%) rotate(-11deg); z-index: 2; }
+    .ph-solution-fan__card:nth-child(3) { left: 40%; transform: translate(-50%,-50%) rotate(-4deg);  z-index: 3; }
+    .ph-solution-fan__card:nth-child(4) { left: 60%; transform: translate(-50%,-50%) rotate(4deg);   z-index: 4; }
+    .ph-solution-fan__card:nth-child(5) { left: 76%; transform: translate(-50%,-50%) rotate(11deg);  z-index: 5; }
+    .ph-solution-fan__card:nth-child(6) { left: 92%; transform: translate(-50%,-50%) rotate(18deg);  z-index: 6; }
+    .ph-solution-fan__card:hover { transform: translate(-50%,-50%) rotate(0deg) scale(1.15) translateY(-16px); z-index: 10; box-shadow: 0 30px 55px rgba(33,40,26,0.4); }
+
+    /* Each "move" repeats: left-aligned tag pill, centered title + hand-written quote,
+       left-aligned body copy, then a dark mockup card exported as a flat image (label and
+       caption are baked into the export — same complex-native-component reasoning already
+       used for the affinity map / dendrogram / card-sort snapshots). */
+    .ph-solution-move { display: flex; flex-direction: column; align-items: flex-start; gap: 20px; width: 100%; max-width: 856px; margin: 0 auto; }
+    .ph-solution-move__title { font-family: var(--font-display); font-weight: 400; font-size: clamp(1.75rem, 4vw, 2.5rem); line-height: 1.1; letter-spacing: -0.025em; color: var(--ink-dark); margin: 0; width: 100%; text-align: center; }
+    .ph-solution-move__quote-wrap { width: 100%; padding: 32px var(--pad); box-sizing: border-box; }
+    .ph-solution-move__quote { font-family: var(--font-hand); font-size: 28px; line-height: 1.25; color: var(--ink-dark); margin: 0 auto; text-align: center; max-width: 728px; }
+    .ph-solution-move__body { width: 100%; }
+    .ph-solution-move__card { width: 100%; height: auto; display: block; }
 
     /* ── Next case study ── */
     #cs-next-section .inner { display: flex; flex-direction: column; align-items: center; gap: 40px; }
@@ -399,12 +477,28 @@
       }
       .ph-comp-card__inner, .ph-pattern-card__inner { box-shadow: 0 12px 24px rgba(0,0,0,0.25); }
 
+      /* Screen fan: the hover-to-front interaction needs a mouse, and the rotated deck
+         reads as clutter at narrow widths — drop it to a plain static row the same way
+         the pattern/comp cards do. */
+      .ph-solution-fan { height: auto; display: flex; flex-wrap: wrap; justify-content: center; gap: 16px; max-width: 100%; }
+      /* Prefixed with .ph-solution-fan (raising specificity above the bare
+         .ph-solution-fan__card:nth-child(n) desktop rules) so this reliably wins
+         regardless of source order or how the browser scores a comma-separated list. */
+      .ph-solution .ph-solution-fan .ph-solution-fan__card {
+        position: static; width: 130px; transform: none; box-shadow: 0 8px 16px rgba(33,40,26,0.2);
+      }
+      .ph-solution .ph-solution-fan .ph-solution-fan__card:hover {
+        transform: translateY(-6px); box-shadow: 0 14px 26px rgba(33,40,26,0.28);
+      }
+
       /* Persona rows: photo-beside-text only works with room to breathe — stack photo
-         above the text column instead of squeezing both into a shared row. */
+         above the text column instead of squeezing both into a shared row. The desktop
+         bleed is an absolute-position percentage of the (now stacked, much narrower) row,
+         so it has to be dropped back to normal static centered flow here too. */
       .ph-persona__row { flex-direction: column; }
       .ph-persona__text { padding: 0; }
-      .ph-persona__photo { flex: 0 0 auto; width: 100%; max-height: 280px; }
-      .ph-persona__photo img { max-width: 220px; }
+      .ph-persona__photo, .ph-persona__photo--amy, .ph-persona__photo--victor { flex: 0 0 auto; width: 100%; max-height: 280px; display: flex; justify-content: center; }
+      .ph-persona__photo img, .ph-persona__photo--amy img, .ph-persona__photo--victor img { position: static; width: auto; max-width: 220px; height: auto; }
     }
 
     @media (max-width: 767px) {
@@ -806,7 +900,7 @@
               </div>
               <p class="ph-persona__body">Amy&rsquo;s dog Teddy was recently diagnosed with a beef allergy. Every purchase now means manually reading every label — exhausting, but non-negotiable. She shops on KohePets and Floof because they at least show ingredient lists, but still manually verifies every product before buying.</p>
               <hr class="ph-persona__divider">
-              <div>
+              <div class="ph-persona__needs">
                 <p class="ph-persona__needs-title">She Needs</p>
                 <ul class="ph-persona__needs-list">
                   <li>Allergen filtering without manual label-reading</li>
@@ -815,7 +909,7 @@
                 </ul>
               </div>
             </div>
-            <div class="ph-persona__photo">
+            <div class="ph-persona__photo ph-persona__photo--amy">
               <img src="../Asset/pethaus-persona-amy.png" alt="Amy, a young woman, sitting with her fluffy dog Teddy">
             </div>
           </div>
@@ -824,7 +918,7 @@
         <div class="ph-persona">
           <span class="ph-tag">Victor &amp; Princess - The First-Timer Value Seeker</span>
           <div class="ph-persona__row">
-            <div class="ph-persona__photo">
+            <div class="ph-persona__photo ph-persona__photo--victor">
               <img src="../Asset/pethaus-persona-victor.png" alt="Victor, a young man, holding his kitten Princess">
             </div>
             <div class="ph-persona__text">
@@ -835,7 +929,7 @@
               </div>
               <p class="ph-persona__body">Victor just brought home Princess, an 8-week-old kitten. He has no idea what a new cat actually needs and trusts community reviews far more than any store recommendation — his fear is wasting money on things she&rsquo;ll reject.</p>
               <hr class="ph-persona__divider">
-              <div>
+              <div class="ph-persona__needs">
                 <p class="ph-persona__needs-title">He Needs</p>
                 <ul class="ph-persona__needs-list">
                   <li>Guidance on what to actually buy first</li>
@@ -845,6 +939,72 @@
               </div>
             </div>
           </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── THE SOLUTION ── -->
+  <section class="section" id="cs-solution" aria-label="The solution">
+    <div class="inner ph-brief">
+      <span class="ph-eyebrow">The Solution</span>
+      <div class="ph-solution">
+        <div class="ph-solution-header">
+          <div class="ph-intro ph-intro--wide">
+            <h2 class="ph-brief__title">Four moves that turned browsing into checking.</h2>
+            <p class="ph-brief__body">The 12 interviews clustered into three themes: Ingredient Anxiety, Navigation Friction, and Brand Trust. Two personas were created to embody those tensions and letting their situations anchor every design decision.</p>
+          </div>
+          <div class="ph-solution-flow">
+            <div class="ph-solution-fan">
+              <div class="ph-solution-fan__card"><img src="../Asset/pethaus-solution-screen-homepage.png" alt="Homepage"></div>
+              <div class="ph-solution-fan__card"><img src="../Asset/pethaus-solution-screen-petprofile.png" alt="Pet profile"></div>
+              <div class="ph-solution-fan__card"><img src="../Asset/pethaus-solution-screen-productlist.png" alt="Product List"></div>
+              <div class="ph-solution-fan__card"><img src="../Asset/pethaus-solution-screen-productbox.png" alt="Product Tag"></div>
+              <div class="ph-solution-fan__card"><img src="../Asset/pethaus-solution-screen-productdetail.png" alt="Product Detail"></div>
+              <div class="ph-solution-fan__card"><img src="../Asset/pethaus-solution-screen-checkout.png" alt="Checkout"></div>
+            </div>
+            <p class="ph-solution-flow__caption"><span class="ph-solution-flow__stage" data-stage="1">Homepage</span> &rarr; <span class="ph-solution-flow__stage" data-stage="2">Build Pet Profile</span> &rarr; <span class="ph-solution-flow__stage" data-stage="3">Filtered Product List</span> &rarr; <span class="ph-solution-flow__stage" data-stage="4">Product Tag</span> &rarr; <span class="ph-solution-flow__stage" data-stage="5">Product Detail (trust tags + ingredient breakdown)</span> &rarr; <span class="ph-solution-flow__stage" data-stage="6">Checkout with reorder reminder</span>. Hover a screen to bring it forward.</p>
+          </div>
+        </div>
+
+        <div class="ph-solution-move">
+          <span class="ph-tag">onboarding</span>
+          <h3 class="ph-solution-move__title">Pet Profile &amp; Smart Filtering</h3>
+          <div class="ph-solution-move__quote-wrap">
+            <p class="ph-solution-move__quote">&ldquo;How might we identify the right products based on a pet&rsquo;s actual needs?&rdquo;</p>
+          </div>
+          <p class="ph-brief__body ph-solution-move__body">On the initial visit, users create a profile for their pet (breed, age, and health conditions like a beef allergy). The entire catalogue is then automatically pre-filtered for that pet. As a returning user, you never have to re-enter your pet&rsquo;s allergy. Every product listing has already been checked. The underlying structure follows the card sort finding directly: products are organised by pet type and function first, never by brand.</p>
+          <img class="ph-solution-move__card" src="../Asset/pethaus-solution-card-onboarding.png" alt="Pet profile onboarding: creating a pet profile (name, health considerations, breed), followed by the product catalogue automatically filtered to beef-free, dog-safe options">
+        </div>
+
+        <div class="ph-solution-move">
+          <span class="ph-tag">trust at a glance</span>
+          <h3 class="ph-solution-move__title">Transparency &amp; endorsement</h3>
+          <div class="ph-solution-move__quote-wrap">
+            <p class="ph-solution-move__quote">&ldquo;How might we convey a product&rsquo;s reliability without the user having to dig for it?&rdquo;</p>
+          </div>
+          <p class="ph-brief__body ph-solution-move__body">Every product card carries a one-line verdict: &ldquo;Perfect for Teddy&rdquo; or &ldquo;&#9888; Not suitable, contains allergen: beef.&rdquo; The homepage opens with expert endorsements and trust badges. The product page surfaces a full ingredient breakdown and a personalised allergen warning &mdash; no guesswork.</p>
+          <img class="ph-solution-move__card" src="../Asset/pethaus-solution-card-trust.png" alt="Transparency on trust tags: expert endorsement strip, Perfect for Teddy / Not suitable smart tags on product cards, and the product page's full ingredient breakdown with allergen warning">
+        </div>
+
+        <div class="ph-solution-move">
+          <span class="ph-tag">restock watchdog</span>
+          <h3 class="ph-solution-move__title">Restock automation &amp; watchdog alerts</h3>
+          <div class="ph-solution-move__quote-wrap">
+            <p class="ph-solution-move__quote">&ldquo;How might we remove Amy&rsquo;s need to re-check safe products every time she reorders?&rdquo;</p>
+          </div>
+          <p class="ph-brief__body ph-solution-move__body">A &ldquo;Time to Restock&rdquo; module on the homepage predicts what&rsquo;s running low based on past orders. Owners set a personalised reminder schedule at checkout. If a product Teddy already eats updates its recipe, a watchdog alert flags it immediately &mdash; so a previously-safe staple never quietly becomes a risk.</p>
+          <img class="ph-solution-move__card" src="../Asset/pethaus-solution-card-restock.png" alt="Restock watchdog: Restock today module showing items predicted to run low, with a recipe-change watchdog badge and the checkout screen where owners set a monthly or custom reorder reminder">
+        </div>
+
+        <div class="ph-solution-move">
+          <span class="ph-tag">for first-time pet owners</span>
+          <h3 class="ph-solution-move__title">New pet parent guide &amp; community ratings</h3>
+          <div class="ph-solution-move__quote-wrap">
+            <p class="ph-solution-move__quote">&ldquo;How might we give Victor a structured, community-backed starting point?&rdquo;</p>
+          </div>
+          <p class="ph-brief__body ph-solution-move__body">A dedicated &ldquo;New Pet Parent&rdquo; page in the nav offers a community-vetted Starter Kit &mdash; pre-selected essentials Victor can add to his cart in one go. Across the site, visible star ratings, review counts, and a &ldquo;Community Pick&rdquo; badge give him the social proof he trusts more than any store recommendation.</p>
+          <img class="ph-solution-move__card" src="../Asset/pethaus-solution-card-community.png" alt="Starter kit ratings: Kitten Starter Kit with pre-selected essentials and a first-month ownership timeline; product page showing a 4.7 Community Pick rated item with filtered reviews from similar pet owners">
         </div>
       </div>
     </div>
@@ -1100,7 +1260,11 @@
         y: 28, opacity: 0, duration: 0.7, ease: 'power3.out',
         scrollTrigger: { trigger: '.ph-landscape', start: 'top 80%' }
       });
-      document.querySelectorAll('.ph-intro, .ph-dark-card, .ph-persona__row').forEach(el => {
+      gsap.from('.ph-solution-flow', {
+        y: 28, opacity: 0, duration: 0.7, ease: 'power3.out',
+        scrollTrigger: { trigger: '.ph-solution-flow', start: 'top 80%' }
+      });
+      document.querySelectorAll('.ph-intro, .ph-dark-card, .ph-persona__row, .ph-solution-move').forEach(el => {
         gsap.from(el, {
           y: 28, opacity: 0, duration: 0.7, ease: 'power3.out',
           scrollTrigger: { trigger: el, start: 'top 80%' }
