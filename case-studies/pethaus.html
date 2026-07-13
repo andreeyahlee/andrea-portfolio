@@ -400,15 +400,62 @@
     .ph-solution-fan__card[aria-hidden="true"] { display: none; }
 
     /* Each "move" repeats: left-aligned tag pill, centered title + hand-written quote,
-       left-aligned body copy, then a dark mockup card exported as a flat image (label and
-       caption are baked into the export — same complex-native-component reasoning already
-       used for the affinity map / dendrogram / card-sort snapshots). */
+       left-aligned body copy, then a dark mockup card. Restock and community cards remain
+       flat exported images (label + caption baked in — same complex-native-component
+       reasoning already used for the affinity map / dendrogram / card-sort snapshots).
+       Onboarding and trust are rebuilt live (dark card + label + caption as real DOM),
+       since their inner media are individually-exported mockups, not one flattened frame. */
     .ph-solution-move { display: flex; flex-direction: column; align-items: flex-start; gap: 20px; width: 100%; max-width: 856px; margin: 0 auto; }
     .ph-solution-move__title { font-family: var(--font-display); font-weight: 400; font-size: clamp(1.75rem, 4vw, 2.5rem); line-height: 1.1; letter-spacing: -0.025em; color: var(--ink-dark); margin: 0; width: 100%; text-align: center; }
     .ph-solution-move__quote-wrap { width: 100%; padding: 32px var(--pad); box-sizing: border-box; }
     .ph-solution-move__quote { font-family: var(--font-hand); font-size: 28px; line-height: 1.25; color: var(--ink-dark); margin: 0 auto; text-align: center; max-width: 728px; }
     .ph-solution-move__body { width: 100%; }
     .ph-solution-move__card { width: 100%; height: auto; display: block; }
+    /* Onboarding card is the one exception to the flattened-PNG pattern above: its mockup
+       is a raw animated GIF (no dark background/label baked in), so it needs the dark-card
+       wrapper + caption built live here, matching Figma's exact "Frame 816" structure:
+       an outer transparent frame (856×327, padding 0 32px, gap 10px) holding the dark
+       "ARVO OG" box (792×300, its own 32px padding all around) and — as a SEPARATE
+       sibling below it, sitting on the page's light background rather than inside the
+       dark card — the caption, in ink-dark (not light) text, centered. */
+    .ph-solution-move__card-wrap { width: 100%; height: 327px; padding: 0 32px; box-sizing: border-box; display: flex; flex-direction: column; align-items: center; gap: 10px; }
+    .ph-solution-move__card--dark { background: var(--bg-dark); width: 100%; flex: 1 1 0; min-height: 0; padding: 32px; box-sizing: border-box; display: flex; flex-direction: column; gap: 20px; overflow: hidden; }
+    .ph-solution-move__card-label { font-family: var(--font-body); font-weight: 700; font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--ink-light); margin: 0; flex-shrink: 0; }
+    .ph-solution-move__card-caption { font-family: var(--font-body); font-style: italic; font-weight: 400; font-size: 11px; line-height: 17px; text-align: center; color: var(--ink-dark); margin: 0; flex-shrink: 0; }
+
+    /* Trust card ("ARVO OG - Annotated", Figma node 973:6225 — pulled directly via dev-mode
+       after the user's own edits to that frame): a live label column (16.58% = 126/760)
+       beside a media row that's now built as one position:relative box with everything
+       inside placed by exact percentage (converted 1:1 from Figma's px offsets against its
+       634×251 reference), matching the four dev callouts' precise leader-line/text
+       positions rather than an approximated flex layout:
+       - product01 (list mockup): object-fit:contain, FULL row height — Figma intentionally
+         lets this letterbox since the box is taller than the image's own aspect ratio.
+       - product02 (product page): object-fit:cover, only 91.4% of row height, top-aligned —
+         it does not reach the bottom of the row.
+       - "Tags on product card…" sits in the gap between them, pointing left.
+       - "Endorsement Strip" / "Allergen tags" / "Vet Verification" sit right of product02,
+         each right-aligned to its own box edge, pointing left back into it. */
+    .ph-solution-move__card--split { padding: 16px; }
+    .ph-solution-move__split-row { display: flex; flex-direction: row; align-items: flex-start; width: 100%; flex: 1 1 0; min-height: 0; }
+    .ph-solution-move__split-label { flex: 0 0 16.58%; margin: 0; }
+    .ph-solution-move__split-media { flex: 1 1 auto; min-width: 0; height: 100%; position: relative; }
+    .ph-solution-move__split-img { position: absolute; top: 0; display: block; }
+    .ph-solution-move__split-img--1 { left: 2.087%; width: 28.233%; height: 100%; object-fit: contain; }
+    .ph-solution-move__split-img--2 { left: 48.961%; width: 32.383%; height: 91.409%; object-fit: cover; }
+    .ph-solution-move__split-annot-line { position: absolute; height: 0; border-top: 1px dashed var(--ink-light); }
+    .ph-solution-move__split-annot-item { position: absolute; margin: 0; font-family: 'DM Mono', monospace; font-size: 9px; line-height: 12px; letter-spacing: 0.14em; color: var(--ink-light); }
+    .ph-solution-move__split-annot-item--tags { letter-spacing: normal; }
+    .ph-solution-move__split-annot-line { position: absolute; left: 0; width: 38%; height: 0; border-top: 1px dashed var(--ink-light); }
+    /* The gif itself isn't stretched to fill this row — Figma places it as a fixed
+       393.485×262 element bleeding out the top (top:-42.777px) and inset from the right
+       (right:100.617px) of the 728px-wide row, i.e. left:32.13%, top:-21.18%, width:54.05%,
+       height:129.7% of this container once converted to percentages so it scales with it. */
+    /* No overflow:hidden here — the image's negative top offset needs to bleed freely
+       up into the label row above (that's what makes it read as sitting beside the label
+       rather than stacked below it). The outer card clips the overall bleed instead. */
+    .ph-solution-move__media { position: relative; flex: 1 1 0; min-height: 0; }
+    .ph-solution-move__media img { position: absolute; left: 32.13%; top: -21.18%; width: 54.05%; height: 129.7%; max-width: none; object-fit: cover; display: block; }
 
     /* ── Next case study ── */
     #cs-next-section .inner { display: flex; flex-direction: column; align-items: center; gap: 40px; }
@@ -998,7 +1045,15 @@
             <p class="ph-solution-move__quote">&ldquo;How might we identify the right products based on a pet&rsquo;s actual needs?&rdquo;</p>
           </div>
           <p class="ph-brief__body ph-solution-move__body">On the initial visit, users create a profile for their pet (breed, age, and health conditions like a beef allergy). The entire catalogue is then automatically pre-filtered for that pet. As a returning user, you never have to re-enter your pet&rsquo;s allergy. Every product listing has already been checked. The underlying structure follows the card sort finding directly: products are organised by pet type and function first, never by brand.</p>
-          <img class="ph-solution-move__card" src="../Asset/pethaus-solution-card-onboarding.png" alt="Pet profile onboarding: creating a pet profile (name, health considerations, breed), followed by the product catalogue automatically filtered to beef-free, dog-safe options">
+          <div class="ph-solution-move__card-wrap">
+            <div class="ph-solution-move__card ph-solution-move__card--dark">
+              <p class="ph-solution-move__card-label">Pet profile onboarding</p>
+              <div class="ph-solution-move__media">
+                <img src="../Asset/pethaus-solution-card-onboarding.gif" alt="Pet profile onboarding: creating a pet profile (name, health considerations, breed), followed by the product catalogue automatically filtered to beef-free, dog-safe options">
+              </div>
+            </div>
+            <p class="ph-solution-move__card-caption">Creating pet profile (name &rarr; health considerations &rarr; breed), followed by the product catalogue automatically filtered to beef-free, dog-safe options.</p>
+          </div>
         </div>
 
         <div class="ph-solution-move">
@@ -1008,7 +1063,26 @@
             <p class="ph-solution-move__quote">&ldquo;How might we convey a product&rsquo;s reliability without the user having to dig for it?&rdquo;</p>
           </div>
           <p class="ph-brief__body ph-solution-move__body">Every product card carries a one-line verdict: &ldquo;Perfect for Teddy&rdquo; or &ldquo;&#9888; Not suitable, contains allergen: beef.&rdquo; The homepage opens with expert endorsements and trust badges. The product page surfaces a full ingredient breakdown and a personalised allergen warning &mdash; no guesswork.</p>
-          <img class="ph-solution-move__card" src="../Asset/pethaus-solution-card-trust.png" alt="Transparency on trust tags: expert endorsement strip, Perfect for Teddy / Not suitable smart tags on product cards, and the product page's full ingredient breakdown with allergen warning">
+          <div class="ph-solution-move__card-wrap">
+            <div class="ph-solution-move__card ph-solution-move__card--dark ph-solution-move__card--split">
+              <div class="ph-solution-move__split-row">
+                <p class="ph-solution-move__card-label ph-solution-move__split-label">Transparency on trust tags</p>
+                <div class="ph-solution-move__split-media">
+                  <img class="ph-solution-move__split-img ph-solution-move__split-img--1" src="../Asset/pethaus-solution-trust-product01.png" alt="Curated products list for Teddy with a floating product card showing a 100% match and Perfect for Teddy tag">
+                  <span class="ph-solution-move__split-annot-line" aria-hidden="true" style="left: 25.675%; width: 21.708%; top: 17.13%;"></span>
+                  <p class="ph-solution-move__split-annot-item ph-solution-move__split-annot-item--tags" aria-hidden="true" style="left: 31.983%; width: 15.4%; top: 19.52%;">Tags on product card to quickly distinct suitable products</p>
+                  <img class="ph-solution-move__split-img ph-solution-move__split-img--2" src="../Asset/pethaus-solution-trust-product02.png" alt="Product detail page with full ingredient breakdown, allergen warning, and veterinary verification">
+                  <span class="ph-solution-move__split-annot-line" aria-hidden="true" style="left: 78.355%; width: 16.246%; top: 8.367%;"></span>
+                  <p class="ph-solution-move__split-annot-item" aria-hidden="true" style="left: 82.456%; width: 12.145%; top: 10.757%;">Endorsement Strip</p>
+                  <span class="ph-solution-move__split-annot-line" aria-hidden="true" style="left: 75.989%; width: 16.404%; top: 28.992%;"></span>
+                  <p class="ph-solution-move__split-annot-item" aria-hidden="true" style="left: 83.087%; width: 9.306%; top: 31.382%;">Allergen tags</p>
+                  <span class="ph-solution-move__split-annot-line" aria-hidden="true" style="left: 74.886%; width: 23.028%; top: 53.293%;"></span>
+                  <p class="ph-solution-move__split-annot-item" aria-hidden="true" style="left: 84.665%; width: 13.249%; top: 55.685%;">Vet Verification</p>
+                </div>
+              </div>
+            </div>
+            <p class="ph-solution-move__card-caption">Expert endorsement strip, &ldquo;Perfect for Teddy&rdquo; / &ldquo;Not suitable&rdquo; smart tags on product cards,<br>and the product page&rsquo;s full ingredient breakdown with allergen warning.</p>
+          </div>
         </div>
 
         <div class="ph-solution-move">
@@ -1018,7 +1092,10 @@
             <p class="ph-solution-move__quote">&ldquo;How might we remove Amy&rsquo;s need to re-check safe products every time she reorders?&rdquo;</p>
           </div>
           <p class="ph-brief__body ph-solution-move__body">A &ldquo;Time to Restock&rdquo; module on the homepage predicts what&rsquo;s running low based on past orders. Owners set a personalised reminder schedule at checkout. If a product Teddy already eats updates its recipe, a watchdog alert flags it immediately &mdash; so a previously-safe staple never quietly becomes a risk.</p>
-          <img class="ph-solution-move__card" src="../Asset/pethaus-solution-card-restock.png" alt="Restock watchdog: Restock today module showing items predicted to run low, with a recipe-change watchdog badge and the checkout screen where owners set a monthly or custom reorder reminder">
+          <div class="ph-solution-move__card-wrap">
+            <img class="ph-solution-move__card" src="../Asset/pethaus-solution-card-restock.png" alt="Restock watchdog: Restock today module showing items predicted to run low, with a recipe-change watchdog badge and the checkout screen where owners set a monthly or custom reorder reminder">
+            <p class="ph-solution-move__card-caption">&ldquo;Restock today&rdquo; module showing items predicted to run low, with a recipe-change watchdog badge and<br>the checkout screen where owners set a monthly or custom reorder reminder.</p>
+          </div>
         </div>
 
         <div class="ph-solution-move">
