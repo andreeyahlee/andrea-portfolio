@@ -8,7 +8,7 @@
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Gochi+Hand&family=Lora:ital,wght@0,400;1,400&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Gochi+Hand&family=Lora:ital,wght@0,400;1,400&family=Playfair+Display&family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
 
   <style>
     @font-face { font-family:'DM Mono'; font-style:normal; font-weight:300; font-display:swap; src:url('../Asset/fonts/dm-mono-300.woff2') format('woff2'); }
@@ -477,6 +477,57 @@
        rather than stacked below it). The outer card clips the overall bleed instead. */
     .ph-solution-move__media { position: relative; flex: 1 1 0; min-height: 0; }
     .ph-solution-move__media img { position: absolute; left: 32.13%; top: -21.18%; width: 54.05%; height: 129.7%; max-width: none; object-fit: cover; display: block; }
+
+    /* ================================================================
+       VISUAL DESIGN (Figma node 949:16929): a design-system showcase —
+       typography specimens, brand palette swatches, and a live UI
+       component kit (buttons + status/category tags). The intro reuses
+       .ph-eyebrow / .ph-brief__title / .ph-brief__body since those
+       already match Figma's UI/Tag, Display/XL (clamped to 40px) and
+       Body/Lead specs exactly.
+    ================================================================ */
+    .ph-visual { display: flex; flex-direction: column; gap: 40px; width: 100%; }
+    .ph-visual-intro { display: flex; flex-direction: column; gap: 20px; max-width: 760px; }
+    .ph-visual-label { font-family: var(--font-body); font-weight: 700; font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--ink-dark); margin: 0; }
+    .ph-visual-block { display: flex; flex-direction: column; gap: 20px; width: 100%; }
+
+    .ph-visual-type { display: flex; gap: 40px; width: 100%; }
+    .ph-visual-type__card { flex: 1 1 0; min-width: 0; height: 149.5px; background: var(--bg-light); padding: 32px; box-sizing: border-box; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 10px; }
+    .ph-visual-type__sample { margin: 0; font-size: 52px; line-height: 56px; letter-spacing: -0.03em; color: var(--ink-dark); }
+    .ph-visual-type__sample--serif { font-family: 'Playfair Display', serif; }
+    .ph-visual-type__sample--sans { font-family: 'Inter', sans-serif; }
+
+    .ph-visual-palette { display: flex; gap: 20px; width: 100%; }
+    .ph-visual-swatch { flex: 1 1 0; min-width: 0; height: 149.5px; background: var(--bg-light); padding: 16px; box-sizing: border-box; display: flex; flex-direction: column; gap: 10px; }
+    .ph-visual-swatch__color { flex: 1 1 0; min-height: 0; width: 100%; display: block; }
+    .ph-visual-swatch__name { font-family: var(--font-body); font-weight: 700; font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--ink-dark); margin: 0; }
+    .ph-visual-swatch__desc { font-family: var(--font-mono); font-size: 9px; color: var(--ink-dark); margin: 0; }
+    .ph-visual-swatch__hex { font-family: var(--font-body); font-size: 11px; color: var(--ink-dark); margin: 0; }
+
+    .ph-visual-kit__inner { background: var(--bg-light); border: 1px solid #eaddc9; border-radius: 10px; padding: 32px; box-sizing: border-box; display: flex; flex-direction: column; gap: 20px; width: 100%; }
+    .ph-visual-kit__group { display: flex; flex-direction: column; gap: 20px; width: 100%; }
+
+    .ph-visual-buttons { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 12px; width: 100%; }
+    .ph-vbtn { font-family: 'Inter', sans-serif; font-weight: 700; font-size: 20px; line-height: 30px; padding: 8px 32px; border-radius: 10px; border: none; }
+    .ph-vbtn--primary { background: #233c2b; color: #fff; }
+    .ph-vbtn--secondary { background: #dccab1; color: #1e1b18; }
+    .ph-vbtn--outline { background: #fff; color: #1e1b18; border: 1px solid #eaddc9; }
+    .ph-vbtn--accent { background: #c0895b; color: #fff; }
+    .ph-vbtn--destructive { background: #b84e38; color: #fff; }
+    .ph-vbtn--ghost { background: #f4f4eb; color: #233c2a; }
+
+    .ph-visual-tags { display: flex; flex-wrap: wrap; gap: 20px; }
+    .ph-vtag { display: inline-flex; align-items: center; gap: 6px; font-family: 'Inter', sans-serif; font-weight: 600; font-size: 11px; letter-spacing: 0.04em; padding: 4.625px 16.625px; border-radius: 999px; white-space: nowrap; }
+    .ph-vtag--instock { background: rgba(63,104,69,0.1); border: 0.625px solid rgba(63,104,69,0.3); color: #3f6845; }
+    .ph-vtag--lowstock { background: rgba(192,138,92,0.15); border: 0.625px solid rgba(192,138,92,0.4); color: #8b5e3c; }
+    .ph-vtag--outstock { background: rgba(185,80,56,0.1); border: 0.625px solid rgba(185,80,56,0.3); color: #b95038; }
+    .ph-vtag--newarrival { background: #233c2b; color: #f8f6f3; padding: 4px 16px; }
+    .ph-vtag--sale { background: #b95038; color: #fff; padding: 4px 16px; }
+    .ph-vtag--bestseller { background: #c9a227; color: #1e1c19; padding: 4px 16px; }
+    .ph-vtag--vetapproved { background: #3f6845; color: #fff; padding: 4px 16px; }
+    .ph-vtag--grainfree { background: #dccbb1; border: 0.625px solid #b8afa1; color: #1e1c19; }
+    .ph-vtag--beeffree { background: #f8f6f3; border: 0.625px solid #b8afa1; color: #4c4b47; }
+    .ph-vtag--aafco { background: rgba(35,60,43,0.1); border: 0.625px solid rgba(35,60,43,0.3); color: #233c2b; }
 
     /* ── Next case study ── */
     #cs-next-section .inner { display: flex; flex-direction: column; align-items: center; gap: 40px; }
@@ -1144,6 +1195,95 @@
               </div>
             </div>
             <p class="ph-solution-move__card-caption">Kitten Starter Kit with pre-selected essentials and a first-month ownership timeline;<br>product page showing a 4.7 &ldquo;Community Pick&rdquo; rated item with filtered reviews from similar pet owners.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── VISUAL DESIGN ── -->
+  <section class="section" id="cs-visual-design" aria-label="Visual design">
+    <div class="inner">
+      <span class="ph-eyebrow">Visual Design</span>
+      <div class="ph-visual">
+        <div class="ph-visual-intro">
+          <h2 class="ph-brief__title">Brutalist structure. Earthy warmth.</h2>
+          <p class="ph-brief__body">Most pet e-commerce looks clinical and identical. Paw Haus needed to feel like a local boutique you actually trust &mdash; so I paired a bold structural grid with an earth-tone palette.</p>
+        </div>
+
+        <div class="ph-visual-block">
+          <p class="ph-visual-label">Typography</p>
+          <div class="ph-visual-type">
+            <div class="ph-visual-type__card">
+              <p class="ph-visual-label">Playfair Display</p>
+              <p class="ph-visual-type__sample ph-visual-type__sample--serif">Aa</p>
+            </div>
+            <div class="ph-visual-type__card">
+              <p class="ph-visual-label">Body, Labels &amp; data &mdash; Inter</p>
+              <p class="ph-visual-type__sample ph-visual-type__sample--sans">Aa</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="ph-visual-block">
+          <p class="ph-visual-label">Brand Palette</p>
+          <div class="ph-visual-palette">
+            <div class="ph-visual-swatch">
+              <span class="ph-visual-swatch__color" style="background:#233c2b;"></span>
+              <p class="ph-visual-swatch__name">Forest Green</p>
+              <p class="ph-visual-swatch__desc">Primary CTA, Nav active, Badges</p>
+              <p class="ph-visual-swatch__hex">#233C2B</p>
+            </div>
+            <div class="ph-visual-swatch">
+              <span class="ph-visual-swatch__color" style="background:#dccbb1;"></span>
+              <p class="ph-visual-swatch__name">Clay Beige</p>
+              <p class="ph-visual-swatch__desc">Hover states, Tags, Borders</p>
+              <p class="ph-visual-swatch__hex">#DCCBB1</p>
+            </div>
+            <div class="ph-visual-swatch">
+              <span class="ph-visual-swatch__color" style="background:#c08a5c;"></span>
+              <p class="ph-visual-swatch__name">Warm Terracotta</p>
+              <p class="ph-visual-swatch__desc">Loyalty, Prices, Highlights</p>
+              <p class="ph-visual-swatch__hex">#C08A5C</p>
+            </div>
+            <div class="ph-visual-swatch">
+              <span class="ph-visual-swatch__color" style="background:#f8f6f3;"></span>
+              <p class="ph-visual-swatch__name">Bone White</p>
+              <p class="ph-visual-swatch__desc">Page background</p>
+              <p class="ph-visual-swatch__hex">#F8F6F3</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="ph-visual-block">
+          <p class="ph-visual-label">UI Component Kit</p>
+          <div class="ph-visual-kit__inner">
+            <div class="ph-visual-kit__group">
+              <p class="ph-visual-label">Body, Labels &amp; data &mdash; Inter</p>
+              <div class="ph-visual-buttons">
+                <button class="ph-vbtn ph-vbtn--primary" type="button">Primary</button>
+                <button class="ph-vbtn ph-vbtn--secondary" type="button">Secondary</button>
+                <button class="ph-vbtn ph-vbtn--outline" type="button">Outline</button>
+                <button class="ph-vbtn ph-vbtn--accent" type="button">Accent</button>
+                <button class="ph-vbtn ph-vbtn--destructive" type="button">Destructive</button>
+                <button class="ph-vbtn ph-vbtn--ghost" type="button">Ghost</button>
+              </div>
+            </div>
+            <div class="ph-visual-kit__group">
+              <p class="ph-visual-label">Body, Labels &amp; data &mdash; Inter</p>
+              <div class="ph-visual-tags">
+                <span class="ph-vtag ph-vtag--instock">&#9679; In Stock</span>
+                <span class="ph-vtag ph-vtag--lowstock">&#9650; Low Stock</span>
+                <span class="ph-vtag ph-vtag--outstock">&#9675; Out of Stock</span>
+                <span class="ph-vtag ph-vtag--newarrival">&#10022; New Arrival</span>
+                <span class="ph-vtag ph-vtag--sale">% Sale</span>
+                <span class="ph-vtag ph-vtag--bestseller">&#9733; Bestseller</span>
+                <span class="ph-vtag ph-vtag--vetapproved">&#10003; Vet Approved</span>
+                <span class="ph-vtag ph-vtag--grainfree">&#127806; Grain-Free</span>
+                <span class="ph-vtag ph-vtag--beeffree">&#128683; Beef-Free</span>
+                <span class="ph-vtag ph-vtag--aafco">&#9670; AAFCO</span>
+              </div>
+            </div>
           </div>
         </div>
       </div>
