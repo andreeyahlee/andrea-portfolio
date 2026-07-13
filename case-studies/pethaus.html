@@ -447,6 +447,27 @@
     .ph-solution-move__split-annot-item { position: absolute; margin: 0; font-family: 'DM Mono', monospace; font-size: 9px; line-height: 12px; letter-spacing: 0.14em; color: var(--ink-light); }
     .ph-solution-move__split-annot-item--tags { letter-spacing: normal; }
     .ph-solution-move__split-annot-line { position: absolute; left: 0; width: 38%; height: 0; border-top: 1px dashed var(--ink-light); }
+
+    /* Restock card ("Restock 01" / "Restock 02", Figma nodes 1296:25777 / 1296:25778): same
+       label + split-row pattern as trust, but the label column is wider (28.434% = 207/728,
+       vs trust's 16.58%) and the card keeps the default 32px padding (no --split modifier).
+       Both mockups are pre-composited flattened exports (base screen + its own floating
+       card); shown at full height (not clipped to the row) so the whole image is visible. */
+    .ph-solution-move__split-label--restock { flex: 0 0 28.434%; }
+    .ph-solution-move__restock-media { flex: 1 1 auto; min-width: 0; height: 100%; position: relative; }
+    .ph-solution-move__restock-img { position: absolute; top: 0; display: block; height: 100%; object-fit: contain; }
+    .ph-solution-move__restock-img--1 { left: 5.1448%; width: 45.3762%; }
+    .ph-solution-move__restock-img--2 { left: 50.9109%; width: 43.9443%; }
+
+    /* New pet parent / community card ("ARVO OG - Annotated", Figma node 973:6241): label
+       column is 144/728 = 19.78% here (vs restock's 28.434%), and Figma's row has an
+       explicit 20px gap (2.747% of 728) between label and media that trust/restock didn't
+       have. Media is a single pre-composited flattened image (1464×566, ratio 2.587 — almost
+       an exact match for the 564×219 media box's own 2.575 ratio), so it simply fills the box. */
+    .ph-solution-move__split-row--parent { gap: 2.7473%; }
+    .ph-solution-move__split-label--parent { flex: 0 0 19.7802%; }
+    .ph-solution-move__parent-media { flex: 1 1 auto; min-width: 0; height: 100%; position: relative; }
+    .ph-solution-move__parent-img { width: 100%; height: 100%; display: block; object-fit: contain; }
     /* The gif itself isn't stretched to fill this row — Figma places it as a fixed
        393.485×262 element bleeding out the top (top:-42.777px) and inset from the right
        (right:100.617px) of the 728px-wide row, i.e. left:32.13%, top:-21.18%, width:54.05%,
@@ -1093,7 +1114,15 @@
           </div>
           <p class="ph-brief__body ph-solution-move__body">A &ldquo;Time to Restock&rdquo; module on the homepage predicts what&rsquo;s running low based on past orders. Owners set a personalised reminder schedule at checkout. If a product Teddy already eats updates its recipe, a watchdog alert flags it immediately &mdash; so a previously-safe staple never quietly becomes a risk.</p>
           <div class="ph-solution-move__card-wrap">
-            <img class="ph-solution-move__card" src="../Asset/pethaus-solution-card-restock.png" alt="Restock watchdog: Restock today module showing items predicted to run low, with a recipe-change watchdog badge and the checkout screen where owners set a monthly or custom reorder reminder">
+            <div class="ph-solution-move__card ph-solution-move__card--dark">
+              <div class="ph-solution-move__split-row">
+                <p class="ph-solution-move__card-label ph-solution-move__split-label ph-solution-move__split-label--restock">Restock watchdog</p>
+                <div class="ph-solution-move__restock-media">
+                  <img class="ph-solution-move__restock-img ph-solution-move__restock-img--1" src="../Asset/pethaus-solution-restock01.png" alt="Homepage with a Time to Restock module predicting a low-stock item, and a floating card flagging a recipe update">
+                  <img class="ph-solution-move__restock-img ph-solution-move__restock-img--2" src="../Asset/pethaus-solution-restock02.png" alt="Product list and checkout screen with a floating card for setting the reorder reminder schedule">
+                </div>
+              </div>
+            </div>
             <p class="ph-solution-move__card-caption">&ldquo;Restock today&rdquo; module showing items predicted to run low, with a recipe-change watchdog badge and<br>the checkout screen where owners set a monthly or custom reorder reminder.</p>
           </div>
         </div>
@@ -1105,7 +1134,17 @@
             <p class="ph-solution-move__quote">&ldquo;How might we give Victor a structured, community-backed starting point?&rdquo;</p>
           </div>
           <p class="ph-brief__body ph-solution-move__body">A dedicated &ldquo;New Pet Parent&rdquo; page in the nav offers a community-vetted Starter Kit &mdash; pre-selected essentials Victor can add to his cart in one go. Across the site, visible star ratings, review counts, and a &ldquo;Community Pick&rdquo; badge give him the social proof he trusts more than any store recommendation.</p>
-          <img class="ph-solution-move__card" src="../Asset/pethaus-solution-card-community.png" alt="Starter kit ratings: Kitten Starter Kit with pre-selected essentials and a first-month ownership timeline; product page showing a 4.7 Community Pick rated item with filtered reviews from similar pet owners">
+          <div class="ph-solution-move__card-wrap">
+            <div class="ph-solution-move__card ph-solution-move__card--dark">
+              <div class="ph-solution-move__split-row ph-solution-move__split-row--parent">
+                <p class="ph-solution-move__card-label ph-solution-move__split-label ph-solution-move__split-label--parent">Starter kit ratings</p>
+                <div class="ph-solution-move__parent-media">
+                  <img class="ph-solution-move__parent-img" src="../Asset/pethaus-solution-new-pet-parent.png" alt="New Pet Parent guide page showing a week-by-week first-month timeline with a floating First 24 Hours card, alongside a product page showing a 4.8 rating with 1,247 reviews, a Top-rated by new kitten parents badge, and a Community-Vetted 10,000+ reviews tag">
+                </div>
+              </div>
+            </div>
+            <p class="ph-solution-move__card-caption">Kitten Starter Kit with pre-selected essentials and a first-month ownership timeline;<br>product page showing a 4.7 &ldquo;Community Pick&rdquo; rated item with filtered reviews from similar pet owners.</p>
+          </div>
         </div>
       </div>
     </div>
