@@ -529,6 +529,71 @@
     .ph-vtag--beeffree { background: #f8f6f3; border: 0.625px solid #b8afa1; color: #4c4b47; }
     .ph-vtag--aafco { background: rgba(35,60,43,0.1); border: 0.625px solid rgba(35,60,43,0.3); color: #233c2b; }
 
+    /* ================================================================
+       TESTING & ITERATION (Figma node 963:17729): usability test
+       results (3 dark stat cards), a before/after homepage comparison,
+       and 4 smaller iteration cards. All cards reuse the file's shared
+       "ARVO OG - Annotated" dark-card component (bg-dark, 1px ink-light
+       border, 30px radius, drop shadow) — only the padding changes per
+       instance (32px for the stat cards, 16px for the rest), exactly
+       as in Figma.
+    ================================================================ */
+    /* Figma's "Context" frame (963:17729) is itself flex-col, gap:80px, padding:64px
+       (matching .inner's own --pad) — so the eyebrow sits 80px above the first group too,
+       not flush against it. The two GROUPS (intro+stats, pivot+compare+iters) share that
+       same 80px gap between them, but have their own tighter 40px gap internally. */
+    #cs-testing .inner { display: flex; flex-direction: column; align-items: flex-start; gap: 80px; }
+    .ph-test { display: flex; flex-direction: column; align-items: flex-start; gap: 80px; width: 100%; }
+    .ph-test-group { display: flex; flex-direction: column; gap: 40px; width: 100%; }
+    .ph-test-card-base { background: var(--bg-dark); border: 1px solid var(--ink-light); border-radius: 30px; box-sizing: border-box; overflow: hidden; }
+
+    .ph-test-intro { display: flex; flex-direction: column; gap: 20px; max-width: 900px; margin: 0 auto; width: 100%; }
+    .ph-test-intro .ph-brief__title, .ph-test-intro .ph-brief__body { text-align: center; }
+
+    /* Three usability-test result cards, fanned per Figma (963:17825): task 1 & 3 are
+       identical dark cards rotated ±~7–11deg and centered via translate(-50%,-50%) at the
+       same point Figma's own bounding-box math implies; task 2 (the miss — 20%) sits flat,
+       unrotated, and in red so the failure reads immediately against its two 100% siblings. */
+    .ph-test-stats { position: relative; width: 100%; aspect-ratio: 1312 / 320; }
+    .ph-test-stat { position: absolute; width: 31.2999%; padding: 32px; display: flex; flex-direction: column; gap: 20px; box-sizing: border-box; }
+    .ph-test-stat--1 { left: 21.3305%; top: 50.6677%; transform: translate(-50%, -50%) rotate(6.76deg); z-index: 1; }
+    .ph-test-stat--2 { left: 33.3079%; top: 0%; z-index: 2; background: #b91c1c; }
+    .ph-test-stat--3 { left: 78.2349%; top: 59.9906%; transform: translate(-50%, -50%) rotate(10.77deg); z-index: 3; }
+    .ph-test-stat__label { font-family: var(--font-body); font-weight: 700; font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--ink-light); margin: 0; }
+    .ph-test-stat__num { font-family: var(--font-display); font-weight: 400; font-size: 56px; line-height: 56px; letter-spacing: -0.04em; color: var(--ink-light); margin: 0; }
+    .ph-test-stat__sub { font-family: var(--font-mono); font-size: 12px; color: var(--ink-light); margin: 0; }
+    .ph-test-stat__desc { font-family: var(--font-body); font-size: 13px; line-height: 15px; color: var(--ink-light); margin: 0; }
+
+    .ph-test-pivot-intro { display: flex; flex-direction: column; gap: 20px; max-width: 856px; margin: 0 auto; width: 100%; }
+
+    .ph-test-compare { display: flex; gap: 10px; width: 100%; padding: 0 32px; box-sizing: border-box; }
+    .ph-test-compare__col { flex: 1 1 0; min-width: 0; display: flex; flex-direction: column; gap: 10px; }
+    .ph-test-compare__card { padding: 16px; display: flex; flex-direction: row; align-items: flex-start; gap: 20px; height: 300px; border-radius: 0; }
+    .ph-test-compare__label { font-family: var(--font-body); font-weight: 700; font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--ink-light); margin: 0; flex: 0 0 auto; white-space: nowrap; }
+    /* Figma (963:17881 "Before" / 963:17904 "After") deliberately makes the screenshot
+       taller than the visible card: Frame893 (the padded content area) is 587×528, but the
+       card itself only shows 268px of that (300px card − 32px padding) before the outer
+       card's own overflow:hidden clips it — so the media bleeds to 197.015% of its own box
+       (528/268) and the image sits inset/centered within it (left 14.5068%, width 70.9865%,
+       matching Figma's own 75px/367px offsets against Frame894's 517px width) rather than
+       being fully visible. This intentionally shows only the top ~51% of the screenshot. */
+    .ph-test-compare__media { flex: 1 1 auto; min-width: 0; position: relative; height: 197.015%; }
+    .ph-test-compare__media img { position: absolute; left: 14.5068%; top: 0; width: 70.9865%; height: 100%; object-fit: cover; display: block; }
+    .ph-test-compare__caption { font-family: var(--font-body); font-style: italic; font-size: 13px; line-height: 1.3; color: var(--ink-dark); margin: 0; }
+
+    .ph-test-iters { display: flex; height: 327px; padding: 0 32px; justify-content: center; align-items: center; align-self: stretch; gap: 10px; width: 100%; box-sizing: border-box; }
+    .ph-test-iter { flex: 1 1 0; min-width: 0; display: flex; flex-direction: column; gap: 10px; }
+    .ph-test-iter__card { padding: 16px; display: flex; flex-direction: column; gap: 10px; border-radius: 0; }
+    .ph-test-iter__head { display: flex; align-items: center; justify-content: space-between; gap: 8px; }
+    .ph-test-iter__label { font-family: var(--font-body); font-weight: 700; font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--ink-light); margin: 0; }
+    .ph-test-iter__severity { flex-shrink: 0; display: inline-flex; align-items: center; justify-content: center; padding: 4px 12px; border-radius: 999px; font-family: var(--font-body); font-weight: 600; font-size: 10px; text-transform: uppercase; letter-spacing: 0.05em; color: #fff; }
+    .ph-test-iter__severity--high { background: #b84e38; }
+    .ph-test-iter__severity--medium { background: #c08a5c; }
+    .ph-test-iter__severity--low { background: #3f6845; }
+    .ph-test-iter__media { width: 100%; height: 206px; position: relative; }
+    .ph-test-iter__media img { width: 100%; height: 100%; object-fit: contain; display: block; }
+    .ph-test-iter__caption { font-family: var(--font-body); font-style: italic; font-size: 12px; line-height: 1.3; color: var(--ink-dark); margin: 0; }
+
     /* ── Next case study ── */
     #cs-next-section .inner { display: flex; flex-direction: column; align-items: center; gap: 40px; }
     #cs-next-section .t-label { color: var(--ink-dark); text-align: center; margin-bottom: 0; }
@@ -1285,6 +1350,122 @@
               </div>
             </div>
           </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── TESTING & ITERATION ── -->
+  <section class="section" id="cs-testing" aria-label="Testing and iteration">
+    <div class="inner">
+      <span class="ph-eyebrow">Testing &amp; Iteration</span>
+      <div class="ph-test">
+        <div class="ph-test-group">
+        <div class="ph-test-intro">
+          <h2 class="ph-brief__title">5 owners. 3 tasks. One clear miss.</h2>
+          <p class="ph-brief__body">I tested the prototype with 5 pet owners across three tasks that mapped directly to the design&rsquo;s goals.</p>
+        </div>
+
+        <div class="ph-test-stats">
+          <div class="ph-test-stat ph-test-card-base ph-test-stat--1">
+            <p class="ph-test-stat__label">Task 1: Create a pet profile and find safe food</p>
+            <p class="ph-test-stat__num">100%</p>
+            <p class="ph-test-stat__sub">4.2 / 5 efficiency</p>
+            <p class="ph-test-stat__desc">Clear and intuitive. One friction point: the medical conditions list felt too long during setup.</p>
+          </div>
+          <div class="ph-test-stat ph-test-card-base ph-test-stat--2">
+            <p class="ph-test-stat__label">Task 2: Reorder a past purchase from the homepage</p>
+            <p class="ph-test-stat__num">20%</p>
+            <p class="ph-test-stat__sub">4.4 / 5 efficiency &middot; 3.5 / 5 confidence</p>
+            <p class="ph-test-stat__desc">4 of 5 users missed the restock section entirely and they looked for it under Order History instead.</p>
+          </div>
+          <div class="ph-test-stat ph-test-card-base ph-test-stat--3">
+            <p class="ph-test-stat__label">Task 3: Find the starter kit for a new kitten (Starter guide)</p>
+            <p class="ph-test-stat__num">100%</p>
+            <p class="ph-test-stat__sub">4.8 / 5 trust &middot; 4.2 / 5 guidance &middot; 3.9 / 5 value</p>
+            <p class="ph-test-stat__desc">Highly effective &mdash; all participants used it and trusted the community-vetted recommendations.</p>
+          </div>
+        </div>
+        </div>
+
+        <div class="ph-test-group">
+        <div class="ph-test-pivot-intro">
+          <span class="ph-tag">the pivot &mdash; fixing the biggest miss</span>
+          <h2 class="ph-brief__title">A tall banner buried the reorder feature</h2>
+          <p class="ph-brief__body">The welcome banner occupied too much prime space, pushing &ldquo;Time to Restock&rdquo; below the fold. 4 of 5 users never found it. The fix: reduce the banner height and move the restock section to immediate view.</p>
+        </div>
+
+        <div class="ph-test-compare">
+          <div class="ph-test-compare__col">
+            <div class="ph-test-compare__card ph-test-card-base">
+              <p class="ph-test-compare__label">Before</p>
+              <div class="ph-test-compare__media">
+                <img src="../Asset/Pawhaus%20-%20Testing%20%26%20Iteration%20-%20before.png?v=2" alt="Before: homepage with a tall lifestyle banner pushing the Time to Restock module below the fold">
+              </div>
+            </div>
+            <p class="ph-test-compare__caption">A tall lifestyle banner takes up the entire viewport, &ldquo;Time to Restock&rdquo; doesn&rsquo;t appear until users scroll.</p>
+          </div>
+          <div class="ph-test-compare__col">
+            <div class="ph-test-compare__card ph-test-card-base">
+              <p class="ph-test-compare__label">After</p>
+              <div class="ph-test-compare__media">
+                <img src="../Asset/Pawhaus%20-%20Testing%20%26%20Iteration%20-%20after.png" alt="After: homepage with a shorter banner and the Time to Restock module visible immediately below the hero">
+              </div>
+            </div>
+            <p class="ph-test-compare__caption">Banner height reduced and &ldquo;Time to Restock&rdquo; is now the first thing returning owners see after the hero.</p>
+          </div>
+        </div>
+
+        <div class="ph-test-iters">
+          <div class="ph-test-iter">
+            <div class="ph-test-iter__card ph-test-card-base">
+              <div class="ph-test-iter__head">
+                <p class="ph-test-iter__label">Re-order placement</p>
+                <span class="ph-test-iter__severity ph-test-iter__severity--high">High</span>
+              </div>
+              <div class="ph-test-iter__media">
+                <img src="../Asset/Pawhaus%20-%20Testing%20%26%20Iteration%20-%20reorder.png" alt="Re-order placement iteration: reorder module duplicated to the Order History page">
+              </div>
+            </div>
+            <p class="ph-test-iter__caption">Reorder module duplicated to Order History &mdash; pattern users expect, not just a homepage module.</p>
+          </div>
+          <div class="ph-test-iter">
+            <div class="ph-test-iter__card ph-test-card-base">
+              <div class="ph-test-iter__head">
+                <p class="ph-test-iter__label">Warning tag noise</p>
+                <span class="ph-test-iter__severity ph-test-iter__severity--medium">Medium</span>
+              </div>
+              <div class="ph-test-iter__media">
+                <img src="../Asset/Pawhaus%20-%20Testing%20%26%20Iteration%20-%20warningtag.png" alt="Warning tag noise iteration: too many not-suitable tags competing with best-match tags">
+              </div>
+            </div>
+            <p class="ph-test-iter__caption">Too many &ldquo;less suitable&rdquo; tags showing up at first &mdash; best matches should lead; warnings follow.</p>
+          </div>
+          <div class="ph-test-iter">
+            <div class="ph-test-iter__card ph-test-card-base">
+              <div class="ph-test-iter__head">
+                <p class="ph-test-iter__label">Profile friction</p>
+                <span class="ph-test-iter__severity ph-test-iter__severity--medium">Medium</span>
+              </div>
+              <div class="ph-test-iter__media">
+                <img src="../Asset/Pawhaus%20-%20Testing%20%26%20Iteration%20-%20profile%20friction.png" alt="Profile friction iteration: long, ungrouped medical conditions list during pet profile setup">
+              </div>
+            </div>
+            <p class="ph-test-iter__caption">Conditions list needs grouping or search &mdash; too long to scroll through.</p>
+          </div>
+          <div class="ph-test-iter">
+            <div class="ph-test-iter__card ph-test-card-base">
+              <div class="ph-test-iter__head">
+                <p class="ph-test-iter__label">Reorder reminder visibility</p>
+                <span class="ph-test-iter__severity ph-test-iter__severity--low">Low</span>
+              </div>
+              <div class="ph-test-iter__media">
+                <img src="../Asset/Pawhaus%20-%20Testing%20%26%20Iteration%20-%20reorderreminder.png" alt="Reorder reminder visibility iteration: reminder toggle at checkout easy to overlook">
+              </div>
+            </div>
+            <p class="ph-test-iter__caption">Needs more colour or placement weight &mdash; easy to overlook at checkout.</p>
+          </div>
+        </div>
         </div>
       </div>
     </div>
