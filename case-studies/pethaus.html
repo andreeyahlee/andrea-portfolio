@@ -564,7 +564,10 @@
     .ph-test-stat__sub { font-family: var(--font-mono); font-size: 12px; color: var(--ink-light); margin: 0; }
     .ph-test-stat__desc { font-family: var(--font-body); font-size: 13px; line-height: 15px; color: var(--ink-light); margin: 0; }
 
-    .ph-test-pivot-intro { display: flex; flex-direction: column; gap: 20px; max-width: 856px; margin: 0 auto; width: 100%; }
+    .ph-test-pivot-intro { display: flex; flex-direction: column; align-items: flex-start; gap: 20px; max-width: 856px; margin: 0 auto; width: 100%; }
+    .ph-test-pivot-intro .ph-tag { align-self: flex-start; flex-shrink: 0; }
+    .ph-test-pivot-intro .ph-brief__title { align-self: stretch; text-align: center; }
+    .ph-test-pivot-intro .ph-brief__body { align-self: stretch; }
 
     .ph-test-compare { display: flex; gap: 10px; width: 100%; padding: 0 32px; box-sizing: border-box; }
     .ph-test-compare__col { flex: 1 1 0; min-width: 0; display: flex; flex-direction: column; gap: 10px; }
@@ -583,12 +586,12 @@
 
     .ph-test-iters { display: flex; height: 327px; padding: 0 32px; justify-content: center; align-items: flex-start; align-self: stretch; gap: 10px; width: 100%; box-sizing: border-box; }
     .ph-test-iter { flex: 1 1 0; min-width: 0; display: flex; flex-direction: column; gap: 10px; }
-    .ph-test-iter__card { padding: 16px; display: flex; flex-direction: column; gap: 10px; border-radius: 0; }
-    .ph-test-iter__head { display: flex; align-items: center; justify-content: space-between; gap: 8px; min-height: 29px; }
+    .ph-test-iter__card { padding: 16px; display: flex; flex-direction: column; gap: 20px; height: 283px; box-sizing: border-box; border-radius: 0; }
+    .ph-test-iter__head { display: flex; align-items: center; justify-content: space-between; gap: 10px; height: 25px; flex-shrink: 0; }
     .ph-test-iter__label { font-family: var(--font-body); font-weight: 700; font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--ink-light); margin: 0; }
     .ph-test-iter__severity { flex-shrink: 0; display: inline-flex; align-items: center; justify-content: center; padding: 4px 12px; border-radius: 999px; font-family: var(--font-body); font-weight: 600; font-size: 10px; text-transform: uppercase; letter-spacing: 0.05em; color: #fff; }
     .ph-test-iter__severity--high { background: #b84e38; }
-    .ph-test-iter__severity--medium { background: #c08a5c; }
+    .ph-test-iter__severity--medium { background: #EADDC9; color: #92400E; }
     .ph-test-iter__severity--low { background: #3f6845; }
     .ph-test-iter__media { width: 100%; height: 206px; position: relative; }
     .ph-test-iter__media img { width: 100%; height: 100%; object-fit: contain; display: block; }
@@ -643,13 +646,883 @@
        background-image. */
     .ph-warningtag-media { position: relative; }
     .ph-warningtag__frame {
-      position: absolute; right: 0.2052%; top: 0.466%;
+      position: absolute; left: 46.26px; top: -15.47px;
       width: 159.472px; height: 273.438px;
       transform: rotate(7.046deg);
       overflow: hidden;
-      box-shadow: -11px 22px 4px rgba(0,0,0,0.5);
+      filter: drop-shadow(-11px 22px 4px rgba(0, 0, 0, 0.50));
     }
-    .ph-warningtag__frame .ph-warningtag__img { position: absolute; left: -15.5%; top: -9.45%; width: 131%; height: 109.43%; display: block; }
+    .ph-warningtag__frame .ph-warningtag__img { position: absolute; left: -31.03%; top: -9.45%; width: 131%; height: 109.43%; display: block; }
+
+    /* ================================================================
+       REFLECTION (Figma node 963:17963): closing retro — a MacBook
+       mockup of the finished site, 3 hand-written lessons, and a
+       "what's next" block with 3 more device-mockup cards. The MacBook/
+       iPhone hardware bezels in Figma are built from ~10 tiny casing/
+       edging/camera assets each — reproduced here as simplified CSS
+       device frames instead (matching how every other complex mockup
+       in this file uses a flattened screenshot/video rather than
+       hand-built chrome), pending real screen-recording assets.
+    ================================================================ */
+    #cs-reflection .inner { display: flex; flex-direction: column; gap: 80px; }
+    .ph-reflection { display: flex; flex-direction: column; gap: 80px; width: 100%; }
+    .ph-reflection-hero { display: flex; flex-direction: column; gap: 40px; width: 100%; }
+    .ph-reflection-hero__title-wrap { display: flex; flex-direction: column; align-items: center; width: 100%; }
+    .ph-reflection-hero__title { max-width: 856px; }
+    .ph-reflection-hero__device-wrap { display: flex; justify-content: center; width: 100%; padding: 0 32px; box-sizing: border-box; }
+    .ph-reflection-hero__device-col { display: flex; flex-direction: column; gap: 10px; width: 100%; }
+
+    .ph-macbook { background: var(--bg-dark); padding: 32px; box-sizing: border-box; display: flex; flex-direction: column; gap: 20px; width: 100%; }
+    .ph-macbook__label { font-family: var(--font-body); font-weight: 700; font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--ink-light); margin: 0; }
+    .ph-macbook__frame { position: relative; width: 100%; max-width: 760px; margin: 0 auto; }
+    .ph-macbook__png { display: block; width: 100%; height: auto; position: relative; z-index: 1; pointer-events: none; }
+    .ph-macbook__video {
+      position: absolute; z-index: 2;
+      left: 11.57%; top: 5.8%; width: 76.82%; height: 82.3%;
+      object-fit: cover; display: block;
+    }
+    .ph-reflection-hero__caption { font-family: var(--font-body); font-style: italic; font-weight: 400; font-size: 11px; line-height: 17px; text-align: center; color: var(--ink-dark); margin: 0; }
+
+    .ph-reflection-lessons { display: flex; gap: 40px; padding: 0 32px; box-sizing: border-box; width: 100%; }
+    .ph-reflection-lesson { flex: 1 1 0; min-width: 0; display: flex; flex-direction: column; gap: 10px; align-items: center; justify-content: center; text-align: center; }
+    .ph-reflection-lesson__heading { font-family: var(--font-hand); font-weight: 400; font-size: 35px; line-height: 35px; color: var(--ink-dark); margin: 0; width: 100%; }
+    .ph-reflection-lesson__body { font-family: var(--font-body); font-weight: 400; font-size: 17px; line-height: 25px; color: var(--ink-dark); margin: 0; width: 100%; }
+
+    .ph-reflection-next { display: flex; flex-direction: column; gap: 40px; width: 100%; }
+    .ph-reflection-next__head { display: flex; flex-direction: column; align-items: flex-start; gap: 20px; width: 100%; }
+    .ph-reflection-next__head .ph-tag { align-self: flex-start; flex-shrink: 0; }
+    .ph-reflection-next__head .ph-reflection-next__title { align-self: stretch; text-align: center; }
+    .ph-reflection-next__title { max-width: 856px; margin: 0 auto; }
+    .ph-reflection-next__cards { display: flex; height: 327px; padding: 0 32px; gap: 10px; width: 100%; box-sizing: border-box; }
+    .ph-reflection-next__card { flex: 1 1 0; min-width: 0; background: var(--bg-dark); padding: 16px; box-sizing: border-box; display: flex; flex-direction: column; gap: 10px; }
+    .ph-reflection-next__card-label { font-family: var(--font-body); font-weight: 700; font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--ink-light); margin: 0; flex-shrink: 0; }
+    .ph-reflection-next__card-media { flex: 1 1 auto; min-height: 0; display: flex; align-items: center; justify-content: center; gap: 5px; }
+    .ph-reflection-next__card-desc { font-family: var(--font-body); font-weight: 400; font-size: 13px; line-height: 15px; color: var(--ink-light); margin: 0; flex-shrink: 0; }
+    .ph-reflection-next__card-video { max-width: 100%; max-height: 100%; width: auto; height: auto; object-fit: contain; border-radius: 8px; box-shadow: 0 0 20px rgba(0, 0, 0, 0.5); }
+
+    /* iPhone 14 Pro device mockup (Figma node 1029:46722): real bezel PNG
+       (transparent screen cutout) layered over a video, with a CSS-drawn
+       dynamic island + lens dot on top, matching the "Mobile-first
+       prototype" reflection card. */
+    .ph-phone { position: relative; width: 108.028px; height: 221.104px; flex-shrink: 0; filter: drop-shadow(0 0 9px rgba(0, 0, 0, 0.8)); }
+    .ph-phone__screen { position: absolute; left: 0; top: 0; width: 105.867px; height: 216.776px; border-radius: 15.484px; overflow: hidden; background: #000; }
+    .ph-phone__screen video, .ph-phone__screen img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; display: block; }
+    .ph-phone__frame { position: absolute; left: -0.34%; top: 0; width: 100.69%; height: 100%; display: block; pointer-events: none; }
+    .ph-phone__island { position: absolute; left: 50%; top: 7.2px; width: 28.807px; height: 8.642px; transform: translateX(-50%); background: #000; border-radius: 50px; z-index: 2; display: flex; align-items: center; justify-content: flex-end; padding-right: 3px; box-sizing: border-box; }
+    .ph-phone__lens { width: 4.3px; height: 4.3px; border-radius: 50%; background: radial-gradient(circle at 35% 35%, #4a4a6e, #16161f 70%); }
+    .ph-reflection-next__card--wide .ph-reflection-next__card-media { flex-direction: column; align-items: flex-start; padding: 6.6px 13.201px; gap: 8.25px; align-self: stretch; box-sizing: border-box; overflow: hidden; }
+    /* "Customisable starter kits" animated demo (Figma node 1039:20726 +
+       motion data): a live recreation of the Welcome Bundle mockup at its
+       native small-instance scale (291x467), scaled down uniformly to fit
+       the card via an outer wrapper. Only the filter buttons + product rows
+       are animated (matching the fetched motion data) — everything else
+       (nav, hero, price box, trust badges, review banner) is static, using
+       Figma's own placeholder bars where Figma itself uses placeholder bars. */
+    .ph-bundle-wrap { position: relative; width: 337.6px; height: 541.5px; flex-shrink: 0; }
+    .ph-bundle-demo { position: absolute; left: 0; top: 0; width: 291.145px; height: 467.016px; transform: scale(1.1595); transform-origin: top left; background: #f7f5f1; box-shadow: -11px 8px 1px rgba(0, 0, 0, 0.5); overflow: hidden; font-family: 'DM Sans', sans-serif; }
+
+    .bd-nav { display: flex; align-items: center; justify-content: space-between; height: 14px; padding: 3px 16px; background: #1f2b1f; box-sizing: border-box; }
+    .bd-nav__items { display: flex; gap: 6px; }
+    .bd-nav__items span { width: 14px; height: 3px; background: rgba(255, 255, 255, 0.5); border-radius: 1px; display: block; }
+    .bd-nav__icons { display: flex; gap: 6px; align-items: center; }
+    .bd-nav__icons span { width: 5px; height: 5px; border-radius: 50%; background: rgba(255, 255, 255, 0.6); display: block; }
+    .bd-nav__icons span.bd-nav__avatar { background: #f2f4f8; }
+
+    .bd-hero { background: #3e5344; padding: 13px; display: flex; flex-direction: column; align-items: center; gap: 8px; box-sizing: border-box; }
+    .bd-hero__badge { background: #c08a5c; color: #fff; font-size: 2.5px; font-weight: 500; padding: 1px 5px; border-radius: 1px; white-space: nowrap; }
+    .bd-hero__title { font-weight: 700; font-size: 13px; line-height: 1; color: #f4f4eb; text-align: center; margin: 0; }
+    .bd-hero__bar { width: 81px; height: 6px; background: #ddd; border-radius: 20px; }
+
+    .bd-body { padding: 6.6px 13.2px; display: flex; flex-direction: column; align-items: center; gap: 4.1px; box-sizing: border-box; }
+
+    .bd-filter { display: flex; flex-direction: column; gap: 2.5px; width: 171.6px; }
+    .bd-filter__label { font-size: 2.9px; color: #233c2b; font-weight: 500; }
+    .bd-filter__row { position: relative; height: 10.41px; width: 100%; }
+    .bd-filter__btn { position: absolute; left: 0; top: 0; width: 41px; height: 10.41px; border-radius: 1.65px; box-sizing: border-box; display: flex; align-items: center; justify-content: center; font-size: 3.3px; }
+    .bd-filter__btn--active { background: #233c2b; border: 0.26px solid #233c2b; color: #fff; }
+    .bd-filter__btn--ghost { background: #fff; border: 0.26px solid #dccbb1; }
+
+    .bd-trust { display: flex; gap: 1.2px; width: 171.6px; }
+    .bd-trust__card { flex: 1; background: #fff; border: 0.26px solid #dccbb1; border-radius: 1.65px; box-shadow: -1.86px 2.27px 0.41px rgba(0, 0, 0, 0.5); padding: 3.5px; box-sizing: border-box; display: flex; flex-direction: column; align-items: center; gap: 0.6px; }
+    .bd-trust__icon { width: 4.5px; height: 4.5px; border-radius: 50%; background: rgba(192, 138, 92, 0.4); }
+    .bd-trust__title { font-size: 2.9px; color: #233c2b; font-weight: 500; text-align: center; }
+    .bd-trust__sub { font-size: 2.475px; color: #4c4b47; text-align: center; }
+
+    .bd-card { width: 171.6px; background: #fff; border: 0.26px solid #c08a5c; border-radius: 3.3px; overflow: hidden; box-sizing: border-box; }
+    .bd-card__header { background: linear-gradient(to right, rgba(220, 203, 177, 0.3), rgba(192, 138, 92, 0.2)); border-bottom: 0.26px solid #c08a5c; padding: 4.9px; box-sizing: border-box; display: flex; align-items: center; justify-content: space-between; }
+    .bd-card__header-left { display: flex; align-items: center; gap: 1.6px; }
+    .bd-card__icon { width: 4.9px; height: 4.9px; border-radius: 50%; background: #c08a5c; }
+    .bd-card__title { font-size: 4.95px; color: #1e1c19; }
+    .bd-card__badge { width: 12.5px; height: 4.6px; border-radius: 1.2px; background: #233c2b; }
+
+    .bd-price { margin: 4.9px; margin-top: 0; background: #fff; border: 0.26px solid #dccbb1; border-radius: 1.65px; padding: 5.2px; box-sizing: border-box; display: flex; align-items: flex-end; justify-content: space-between; }
+    .bd-price__label { display: block; font-size: 2.9px; color: #4c4b47; }
+    .bd-price__was { display: block; font-size: 2.9px; color: #4c4b47; text-decoration: line-through; }
+    .bd-price__now-row { display: flex; align-items: center; gap: 1.6px; margin-top: 0.8px; }
+    .bd-price__now { font-family: 'Libre Baskerville', serif; font-size: 7.4px; color: #233c2b; }
+    .bd-price__save { font-size: 2.475px; color: #fff; background: #c08a5c; border-radius: 1.2px; padding: 0.7px 1.9px; }
+    .bd-price__right { text-align: right; }
+    .bd-price__yousave-label { display: block; font-size: 2.9px; color: #4c4b47; }
+    .bd-price__yousave-val { display: block; font-family: 'Libre Baskerville', serif; font-size: 6.2px; color: #c08a5c; }
+
+    .bd-included { padding: 0 4.9px; box-sizing: border-box; width: 100%; }
+    .bd-included__heading { font-size: 3.3px; color: #233c2b; font-weight: 500; margin: 0; }
+    .bd-included__sub { font-size: 2.9px; color: #4c4b47; margin: 3px 0 0; }
+
+    .bd-rows { position: relative; height: 129px; margin: 3.3px 4.9px 0; }
+    .bd-row { position: absolute; left: 0; top: 0; width: 161.7px; background: #f8f6f3; border-radius: 1.65px; padding: 3.3px; box-sizing: border-box; display: flex; gap: 3.3px; height: 23.1px; }
+    .bd-row__img { width: 16.5px; height: 16.5px; border-radius: 1.65px; overflow: hidden; position: relative; flex-shrink: 0; border: 0.26px solid #dccbb1; box-sizing: border-box; }
+    .bd-row__img img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; display: block; }
+    .bd-row__img--gray { background: #c2c7cc; border: none; }
+    .bd-row__body { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 1.6px; }
+    .bd-row__top { display: flex; align-items: flex-start; justify-content: space-between; gap: 2px; }
+    .bd-row__name { font-size: 2.9px; color: #233c2b; line-height: 1.3; }
+    .bd-row__was { font-size: 2.9px; color: #4c4b47; text-decoration: line-through; flex-shrink: 0; }
+    .bd-row__rating { display: flex; align-items: center; gap: 1.6px; }
+    .bd-row__star { color: #c08a5c; font-size: 3.3px; }
+    .bd-row__ratingval { font-size: 3.3px; color: #233c2b; }
+    .bd-row__reviews { font-size: 2.9px; color: #4c4b47; }
+    .bd-row__tag { font-size: 2.475px; color: #c08a5c; }
+    .bd-row__bar { display: block; background: #314839; height: 4.1px; border-radius: 2px; width: 100%; }
+    .bd-row__bar--rating { background: #ddd; height: 4.1px; width: 81px; border-radius: 20px; flex-shrink: 0; }
+    .bd-row__tag-bar { background: #c49166; height: 2px; width: 81px; border-radius: 20px; }
+
+    .bd-footer { background: #f8f6f3; border-top: 0.26px solid #dccbb1; padding: 5.2px 4.9px; box-sizing: border-box; display: flex; align-items: center; justify-content: space-between; width: 100%; }
+    .bd-footer__bar { width: 81px; height: 4.1px; background: #ddd; border-radius: 20px; }
+    .bd-footer__btn { background: #233c2b; color: #fff; font-size: 3.7px; padding: 2px 6px; border-radius: 1.2px; white-space: nowrap; }
+
+    .bd-badges { width: 171.6px; background: #fff; border: 0.26px solid #dccbb1; border-radius: 1.65px; padding: 6.9px; box-sizing: border-box; display: flex; flex-direction: column; align-items: center; gap: 4.9px; }
+    .bd-badges__title-bar { width: 81px; height: 4.1px; background: #484744; border-radius: 20px; }
+    .bd-badges__row { display: flex; gap: 5.3px; }
+    .bd-badges__item { flex: 1; display: flex; flex-direction: column; align-items: center; gap: 1.7px; }
+    .bd-badges__icon { width: 9.9px; height: 9.9px; border-radius: 50%; background: rgba(192, 138, 92, 0.1); }
+    .bd-badges__title { font-size: 3.3px; color: #233c2b; font-weight: 500; text-align: center; }
+    .bd-badges__sub { font-size: 2.9px; color: #4c4b47; text-align: center; margin: 0; }
+
+    .bd-review { width: 171.6px; background: linear-gradient(to right, #233c2b, rgba(35, 60, 43, 0.9)); border-radius: 1.65px; padding: 6.6px; box-sizing: border-box; display: flex; flex-direction: column; align-items: center; gap: 4.1px; }
+    .bd-review__stars { color: #c08a5c; font-size: 4.1px; letter-spacing: 0.8px; }
+    .bd-review__title { font-family: 'Libre Baskerville', serif; font-size: 4.1px; color: #fff; text-align: center; margin: 0; }
+    .bd-review__quote { font-size: 3.3px; color: rgba(255, 255, 255, 0.8); text-align: center; margin: 0; }
+@keyframes bd-label {
+  0.0000% { transform: translate(0.000px, -12.000px); opacity: 0.0000; }
+  0.5714% { transform: translate(0.000px, -10.605px); opacity: 0.1162; }
+  1.1429% { transform: translate(0.000px, -9.297px); opacity: 0.2253; }
+  1.7143% { transform: translate(0.000px, -8.057px); opacity: 0.3286; }
+  2.2857% { transform: translate(0.000px, -6.884px); opacity: 0.4263; }
+  2.8571% { transform: translate(0.000px, -5.779px); opacity: 0.5184; }
+  3.4286% { transform: translate(0.000px, -4.744px); opacity: 0.6046; }
+  4.0000% { transform: translate(0.000px, -3.784px); opacity: 0.6846; }
+  4.5714% { transform: translate(0.000px, -2.905px); opacity: 0.7579; }
+  5.1429% { transform: translate(0.000px, -2.116px); opacity: 0.8237; }
+  5.7143% { transform: translate(0.000px, -1.425px); opacity: 0.8812; }
+  6.2857% { transform: translate(0.000px, -0.848px); opacity: 0.9293; }
+  6.8571% { transform: translate(0.000px, -0.401px); opacity: 0.9666; }
+  7.4286% { transform: translate(0.000px, -0.107px); opacity: 0.9911; }
+  8.0000% { transform: translate(0.000px, 0.000px); opacity: 1.0000; }
+  100.0000% { transform: translate(0.000px, 0.000px); opacity: 1.0000; }
+}
+
+.bd-label { animation: bd-label 4.75s linear infinite; }
+
+@keyframes bd-btn1 {
+  0.0000% { transform: translate(-0.000px, 14.000px); opacity: 0.0000; }
+  2.5263% { transform: translate(-0.000px, 14.000px); opacity: 0.0000; }
+  3.0526% { transform: translate(-0.000px, 12.373px); opacity: 0.1162; }
+  3.5789% { transform: translate(-0.000px, 10.846px); opacity: 0.2253; }
+  4.1053% { transform: translate(-0.000px, 9.400px); opacity: 0.3286; }
+  4.6316% { transform: translate(-0.000px, 8.031px); opacity: 0.4263; }
+  5.1579% { transform: translate(-0.000px, 6.742px); opacity: 0.5184; }
+  5.6842% { transform: translate(-0.000px, 5.535px); opacity: 0.6046; }
+  6.2105% { transform: translate(-0.000px, 4.415px); opacity: 0.6846; }
+  6.7368% { transform: translate(-0.000px, 3.389px); opacity: 0.7579; }
+  7.2632% { transform: translate(-0.000px, 2.468px); opacity: 0.8237; }
+  7.7895% { transform: translate(-0.000px, 1.663px); opacity: 0.8812; }
+  8.3158% { transform: translate(-0.000px, 0.989px); opacity: 0.9293; }
+  8.8421% { transform: translate(-0.000px, 0.467px); opacity: 0.9666; }
+  9.3684% { transform: translate(-0.000px, 0.125px); opacity: 0.9911; }
+  9.8947% { transform: translate(-0.000px, -0.000px); opacity: 1.0000; }
+  100.0000% { transform: translate(-0.000px, -0.000px); opacity: 1.0000; }
+}
+
+.bd-btn1 { animation: bd-btn1 4.75s linear infinite; }
+
+@keyframes bd-btn2 {
+  0.0000% { transform: translate(43.520px, 14.000px); opacity: 0.0000; }
+  5.0526% { transform: translate(43.520px, 14.000px); opacity: 0.0000; }
+  5.5789% { transform: translate(43.520px, 12.373px); opacity: 0.1162; }
+  6.1053% { transform: translate(43.520px, 10.846px); opacity: 0.2253; }
+  6.6316% { transform: translate(43.520px, 9.400px); opacity: 0.3286; }
+  7.1579% { transform: translate(43.520px, 8.032px); opacity: 0.4263; }
+  7.6842% { transform: translate(43.520px, 6.742px); opacity: 0.5184; }
+  8.2105% { transform: translate(43.520px, 5.535px); opacity: 0.6046; }
+  8.7368% { transform: translate(43.520px, 4.415px); opacity: 0.6846; }
+  9.2632% { transform: translate(43.520px, 3.390px); opacity: 0.7579; }
+  9.7895% { transform: translate(43.520px, 2.468px); opacity: 0.8237; }
+  10.3158% { transform: translate(43.520px, 1.663px); opacity: 0.8812; }
+  10.8421% { transform: translate(43.520px, 0.989px); opacity: 0.9293; }
+  11.3684% { transform: translate(43.520px, 0.467px); opacity: 0.9666; }
+  11.8947% { transform: translate(43.520px, 0.125px); opacity: 0.9911; }
+  12.4211% { transform: translate(43.520px, -0.000px); opacity: 1.0000; }
+  37.8947% { transform: translate(43.520px, -0.000px); opacity: 1.0000; }
+  38.0752% { transform: translate(43.520px, -0.000px) scale(0.9992, 0.9992); opacity: 1.0000; }
+  38.2556% { transform: translate(43.520px, -0.000px) scale(0.9970, 0.9970); opacity: 1.0000; }
+  38.4361% { transform: translate(43.520px, -0.000px) scale(0.9936, 0.9936); opacity: 1.0000; }
+  38.6165% { transform: translate(43.520px, -0.000px) scale(0.9893, 0.9893); opacity: 1.0000; }
+  38.7970% { transform: translate(43.520px, -0.000px) scale(0.9841, 0.9841); opacity: 1.0000; }
+  38.9774% { transform: translate(43.520px, -0.000px) scale(0.9782, 0.9782); opacity: 1.0000; }
+  39.1579% { transform: translate(43.520px, -0.000px) scale(0.9716, 0.9716); opacity: 1.0000; }
+  39.3383% { transform: translate(43.520px, -0.000px) scale(0.9644, 0.9644); opacity: 1.0000; }
+  39.5188% { transform: translate(43.520px, -0.000px) scale(0.9567, 0.9567); opacity: 1.0000; }
+  39.6992% { transform: translate(43.520px, -0.000px) scale(0.9484, 0.9484); opacity: 1.0000; }
+  39.8797% { transform: translate(43.520px, -0.000px) scale(0.9396, 0.9396); opacity: 1.0000; }
+  40.0602% { transform: translate(43.520px, -0.000px) scale(0.9303, 0.9303); opacity: 1.0000; }
+  40.2406% { transform: translate(43.520px, -0.000px) scale(0.9205, 0.9205); opacity: 1.0000; }
+  40.4211% { transform: translate(43.520px, -0.000px) scale(0.9100, 0.9100); opacity: 1.0000; }
+  40.6466% { transform: translate(43.520px, -0.000px) scale(0.9263, 0.9263); opacity: 1.0000; }
+  40.8722% { transform: translate(43.520px, -0.000px) scale(0.9415, 0.9415); opacity: 1.0000; }
+  41.0977% { transform: translate(43.520px, -0.000px) scale(0.9560, 0.9560); opacity: 1.0000; }
+  41.3233% { transform: translate(43.520px, -0.000px) scale(0.9697, 0.9697); opacity: 1.0000; }
+  41.5489% { transform: translate(43.520px, -0.000px) scale(0.9826, 0.9826); opacity: 1.0000; }
+  41.7744% { transform: translate(43.520px, -0.000px) scale(0.9947, 0.9947); opacity: 1.0000; }
+  42.0000% { transform: translate(43.520px, -0.000px) scale(1.0059, 1.0059); opacity: 1.0000; }
+  42.2256% { transform: translate(43.520px, -0.000px) scale(1.0161, 1.0161); opacity: 1.0000; }
+  42.4511% { transform: translate(43.520px, -0.000px) scale(1.0253, 1.0253); opacity: 1.0000; }
+  42.6767% { transform: translate(43.520px, -0.000px) scale(1.0334, 1.0334); opacity: 1.0000; }
+  42.9023% { transform: translate(43.520px, -0.000px) scale(1.0401, 1.0401); opacity: 1.0000; }
+  43.1278% { transform: translate(43.520px, -0.000px) scale(1.0453, 1.0453); opacity: 1.0000; }
+  43.3534% { transform: translate(43.520px, -0.000px) scale(1.0487, 1.0487); opacity: 1.0000; }
+  43.5789% { transform: translate(43.520px, -0.000px) scale(1.0500, 1.0500); opacity: 1.0000; }
+  43.7444% { transform: translate(43.520px, -0.000px) scale(1.0442, 1.0442); opacity: 1.0000; }
+  43.9098% { transform: translate(43.520px, -0.000px) scale(1.0387, 1.0387); opacity: 1.0000; }
+  44.0752% { transform: translate(43.520px, -0.000px) scale(1.0336, 1.0336); opacity: 1.0000; }
+  44.2406% { transform: translate(43.520px, -0.000px) scale(1.0287, 1.0287); opacity: 1.0000; }
+  44.4060% { transform: translate(43.520px, -0.000px) scale(1.0241, 1.0241); opacity: 1.0000; }
+  44.5714% { transform: translate(43.520px, -0.000px) scale(1.0198, 1.0198); opacity: 1.0000; }
+  44.7368% { transform: translate(43.520px, -0.000px) scale(1.0158, 1.0158); opacity: 1.0000; }
+  44.9023% { transform: translate(43.520px, -0.000px) scale(1.0121, 1.0121); opacity: 1.0000; }
+  45.0677% { transform: translate(43.520px, -0.000px) scale(1.0088, 1.0088); opacity: 1.0000; }
+  45.2331% { transform: translate(43.520px, -0.000px) scale(1.0059, 1.0059); opacity: 1.0000; }
+  45.3985% { transform: translate(43.520px, -0.000px) scale(1.0035, 1.0035); opacity: 1.0000; }
+  45.5639% { transform: translate(43.520px, -0.000px) scale(1.0017, 1.0017); opacity: 1.0000; }
+  45.7293% { transform: translate(43.520px, -0.000px) scale(1.0004, 1.0004); opacity: 1.0000; }
+  45.8947% { transform: translate(43.520px, -0.000px); opacity: 1.0000; }
+  100.0000% { transform: translate(43.520px, -0.000px); opacity: 1.0000; }
+}
+
+.bd-btn2 { animation: bd-btn2 4.75s linear infinite; }
+
+@keyframes bd-btn3 {
+  0.0000% { transform: translate(87.041px, 14.000px); opacity: 0.0000; }
+  7.5789% { transform: translate(87.041px, 14.000px); opacity: 0.0000; }
+  8.1053% { transform: translate(87.041px, 12.373px); opacity: 0.1162; }
+  8.6316% { transform: translate(87.041px, 10.846px); opacity: 0.2253; }
+  9.1579% { transform: translate(87.041px, 9.400px); opacity: 0.3286; }
+  9.6842% { transform: translate(87.041px, 8.032px); opacity: 0.4263; }
+  10.2105% { transform: translate(87.041px, 6.742px); opacity: 0.5184; }
+  10.7368% { transform: translate(87.041px, 5.535px); opacity: 0.6046; }
+  11.2632% { transform: translate(87.041px, 4.415px); opacity: 0.6846; }
+  11.7895% { transform: translate(87.041px, 3.390px); opacity: 0.7579; }
+  12.3158% { transform: translate(87.041px, 2.468px); opacity: 0.8237; }
+  12.8421% { transform: translate(87.041px, 1.663px); opacity: 0.8812; }
+  13.3684% { transform: translate(87.041px, 0.989px); opacity: 0.9293; }
+  13.8947% { transform: translate(87.041px, 0.467px); opacity: 0.9666; }
+  14.4211% { transform: translate(87.041px, 0.125px); opacity: 0.9911; }
+  14.9474% { transform: translate(87.041px, -0.000px); opacity: 1.0000; }
+  100.0000% { transform: translate(87.041px, -0.000px); opacity: 1.0000; }
+}
+
+.bd-btn3 { animation: bd-btn3 4.75s linear infinite; }
+
+@keyframes bd-btn4 {
+  0.0000% { transform: translate(130.560px, 14.000px); opacity: 0.0000; }
+  10.1053% { transform: translate(130.560px, 14.000px); opacity: 0.0000; }
+  10.6316% { transform: translate(130.560px, 12.373px); opacity: 0.1162; }
+  11.1579% { transform: translate(130.560px, 10.846px); opacity: 0.2253; }
+  11.6842% { transform: translate(130.560px, 9.400px); opacity: 0.3286; }
+  12.2105% { transform: translate(130.560px, 8.032px); opacity: 0.4263; }
+  12.7368% { transform: translate(130.560px, 6.742px); opacity: 0.5184; }
+  13.2632% { transform: translate(130.560px, 5.535px); opacity: 0.6046; }
+  13.7895% { transform: translate(130.560px, 4.415px); opacity: 0.6846; }
+  14.3158% { transform: translate(130.560px, 3.390px); opacity: 0.7579; }
+  14.8421% { transform: translate(130.560px, 2.468px); opacity: 0.8237; }
+  15.3684% { transform: translate(130.560px, 1.663px); opacity: 0.8812; }
+  15.8947% { transform: translate(130.560px, 0.989px); opacity: 0.9293; }
+  16.4211% { transform: translate(130.560px, 0.467px); opacity: 0.9666; }
+  16.9474% { transform: translate(130.560px, 0.125px); opacity: 0.9911; }
+  17.4737% { transform: translate(130.560px, -0.000px); opacity: 1.0000; }
+  100.0000% { transform: translate(130.560px, -0.000px); opacity: 1.0000; }
+}
+
+.bd-btn4 { animation: bd-btn4 4.75s linear infinite; }
+
+@keyframes bd-heading {
+  0.0000% { transform: translate(0.000px, -10.000px); opacity: 0.0000; }
+  10.9474% { transform: translate(0.000px, -10.000px); opacity: 0.0000; }
+  11.3985% { transform: translate(0.000px, -8.838px); opacity: 0.1162; }
+  11.8496% { transform: translate(0.000px, -7.747px); opacity: 0.2253; }
+  12.3008% { transform: translate(0.000px, -6.714px); opacity: 0.3286; }
+  12.7519% { transform: translate(0.000px, -5.737px); opacity: 0.4263; }
+  13.2030% { transform: translate(0.000px, -4.816px); opacity: 0.5184; }
+  13.6541% { transform: translate(0.000px, -3.954px); opacity: 0.6046; }
+  14.1053% { transform: translate(0.000px, -3.154px); opacity: 0.6846; }
+  14.5564% { transform: translate(0.000px, -2.421px); opacity: 0.7579; }
+  15.0075% { transform: translate(0.000px, -1.763px); opacity: 0.8237; }
+  15.4586% { transform: translate(0.000px, -1.188px); opacity: 0.8812; }
+  15.9098% { transform: translate(0.000px, -0.707px); opacity: 0.9293; }
+  16.3609% { transform: translate(0.000px, -0.334px); opacity: 0.9666; }
+  16.8120% { transform: translate(0.000px, -0.089px); opacity: 0.9911; }
+  17.2632% { transform: translate(0.000px, 0.000px); opacity: 1.0000; }
+  100.0000% { transform: translate(0.000px, 0.000px); opacity: 1.0000; }
+}
+
+.bd-heading { animation: bd-heading 4.75s linear infinite; }
+
+@keyframes bd-para {
+  0.0000% { transform: translate(0.000px, -4.231px); opacity: 0.0000; }
+  13.0526% { transform: translate(0.000px, -4.231px); opacity: 0.0000; }
+  13.5038% { transform: translate(0.000px, -3.069px); opacity: 0.1162; }
+  13.9549% { transform: translate(0.000px, -1.978px); opacity: 0.2253; }
+  14.4060% { transform: translate(0.000px, -0.945px); opacity: 0.3286; }
+  14.8571% { transform: translate(0.000px, 0.032px); opacity: 0.4263; }
+  15.3083% { transform: translate(0.000px, 0.953px); opacity: 0.5184; }
+  15.7594% { transform: translate(0.000px, 1.815px); opacity: 0.6046; }
+  16.2105% { transform: translate(0.000px, 2.615px); opacity: 0.6846; }
+  16.6617% { transform: translate(0.000px, 3.348px); opacity: 0.7579; }
+  17.1128% { transform: translate(0.000px, 4.006px); opacity: 0.8237; }
+  17.5639% { transform: translate(0.000px, 4.581px); opacity: 0.8812; }
+  18.0150% { transform: translate(0.000px, 5.062px); opacity: 0.9293; }
+  18.4662% { transform: translate(0.000px, 5.435px); opacity: 0.9666; }
+  18.9173% { transform: translate(0.000px, 5.680px); opacity: 0.9911; }
+  19.3684% { transform: translate(0.000px, 5.769px); opacity: 1.0000; }
+  100.0000% { transform: translate(0.000px, 5.769px); opacity: 1.0000; }
+}
+
+.bd-para { animation: bd-para 4.75s linear infinite; }
+
+@keyframes bd-row1 {
+  0.0000% { transform: translate(0.000px, 18.000px); opacity: 0.0000; }
+  15.1579% { transform: translate(0.000px, 18.000px); opacity: 0.0000; }
+  15.6992% { transform: translate(0.000px, 15.908px); opacity: 0.1162; }
+  16.2406% { transform: translate(0.000px, 13.945px); opacity: 0.2253; }
+  16.7820% { transform: translate(0.000px, 12.086px); opacity: 0.3286; }
+  17.3233% { transform: translate(0.000px, 10.326px); opacity: 0.4263; }
+  17.8647% { transform: translate(0.000px, 8.669px); opacity: 0.5184; }
+  18.4060% { transform: translate(0.000px, 7.116px); opacity: 0.6046; }
+  18.9474% { transform: translate(0.000px, 5.676px); opacity: 0.6846; }
+  19.4887% { transform: translate(0.000px, 4.358px); opacity: 0.7579; }
+  20.0301% { transform: translate(0.000px, 3.174px); opacity: 0.8237; }
+  20.5714% { transform: translate(0.000px, 2.138px); opacity: 0.8812; }
+  21.1128% { transform: translate(0.000px, 1.272px); opacity: 0.9293; }
+  21.6541% { transform: translate(0.000px, 0.601px); opacity: 0.9666; }
+  22.1955% { transform: translate(0.000px, 0.161px); opacity: 0.9911; }
+  22.7368% { transform: translate(0.000px, 0.000px); opacity: 1.0000; }
+  100.0000% { transform: translate(0.000px, 0.000px); opacity: 1.0000; }
+}
+
+.bd-row1 { animation: bd-row1 4.75s linear infinite; }
+
+@keyframes bd-row2 {
+  0.0000% { transform: translate(0.000px, 44.399px); opacity: 0.0000; }
+  18.7368% { transform: translate(0.000px, 44.399px); opacity: 0.0000; }
+  19.2782% { transform: translate(0.000px, 42.307px); opacity: 0.1162; }
+  19.8195% { transform: translate(0.000px, 40.344px); opacity: 0.2253; }
+  20.3609% { transform: translate(0.000px, 38.485px); opacity: 0.3286; }
+  20.9023% { transform: translate(0.000px, 36.725px); opacity: 0.4263; }
+  21.4436% { transform: translate(0.000px, 35.068px); opacity: 0.5184; }
+  21.9850% { transform: translate(0.000px, 33.515px); opacity: 0.6046; }
+  22.5263% { transform: translate(0.000px, 32.075px); opacity: 0.6846; }
+  23.0677% { transform: translate(0.000px, 30.757px); opacity: 0.7579; }
+  23.6090% { transform: translate(0.000px, 29.573px); opacity: 0.8237; }
+  24.1504% { transform: translate(0.000px, 28.537px); opacity: 0.8812; }
+  24.6917% { transform: translate(0.000px, 27.671px); opacity: 0.9293; }
+  25.2331% { transform: translate(0.000px, 27.000px); opacity: 0.9666; }
+  25.7744% { transform: translate(0.000px, 26.560px); opacity: 0.9911; }
+  26.3158% { transform: translate(0.000px, 26.399px); opacity: 1.0000; }
+  75.7895% { transform: translate(0.000px, 26.399px); opacity: 1.0000; }
+  76.1654% { transform: translate(-0.179px, 26.399px); opacity: 0.9911; }
+  76.5414% { transform: translate(-0.668px, 26.399px); opacity: 0.9666; }
+  76.9173% { transform: translate(-1.413px, 26.399px); opacity: 0.9293; }
+  77.2932% { transform: translate(-2.376px, 26.399px); opacity: 0.8812; }
+  77.6692% { transform: translate(-3.526px, 26.399px); opacity: 0.8237; }
+  78.0451% { transform: translate(-4.842px, 26.399px); opacity: 0.7579; }
+  78.4211% { transform: translate(-6.307px, 26.399px); opacity: 0.6846; }
+  78.7970% { transform: translate(-7.907px, 26.399px); opacity: 0.6046; }
+  79.1729% { transform: translate(-9.632px, 26.399px); opacity: 0.5184; }
+  79.5489% { transform: translate(-11.474px, 26.399px); opacity: 0.4263; }
+  79.9248% { transform: translate(-13.428px, 26.399px); opacity: 0.3286; }
+  80.3008% { transform: translate(-15.494px, 26.399px); opacity: 0.2253; }
+  80.6767% { transform: translate(-17.676px, 26.399px); opacity: 0.1162; }
+  81.0526% { transform: translate(-20.000px, 26.399px); opacity: 0.0000; }
+  81.4286% { transform: translate(-19.855px, 26.399px); opacity: 0.0000; }
+  81.8045% { transform: translate(-19.378px, 26.399px); opacity: 0.0000; }
+  82.1805% { transform: translate(-18.498px, 26.399px); opacity: 0.0000; }
+  82.5564% { transform: translate(-17.136px, 26.399px); opacity: 0.0000; }
+  82.9323% { transform: translate(-15.229px, 26.399px); opacity: 0.0000; }
+  83.3083% { transform: translate(-12.790px, 26.399px); opacity: 0.0000; }
+  83.6842% { transform: translate(-10.000px, 26.399px); opacity: 0.0000; }
+  84.0602% { transform: translate(-7.210px, 26.399px); opacity: 0.0000; }
+  84.4361% { transform: translate(-4.771px, 26.399px); opacity: 0.0000; }
+  84.8120% { transform: translate(-2.864px, 26.399px); opacity: 0.0000; }
+  85.1880% { transform: translate(-1.502px, 26.399px); opacity: 0.0000; }
+  85.5639% { transform: translate(-0.622px, 26.399px); opacity: 0.0000; }
+  85.9398% { transform: translate(-0.145px, 26.399px); opacity: 0.0000; }
+  86.1053% { transform: translate(-0.044px, 26.399px); opacity: 0.0000; }
+  86.1203% { transform: translate(-0.038px, 26.501px); opacity: 0.0000; }
+  86.1353% { transform: translate(-0.032px, 26.834px); opacity: 0.0000; }
+  86.1504% { transform: translate(-0.027px, 27.450px); opacity: 0.0000; }
+  86.1654% { transform: translate(-0.022px, 28.404px); opacity: 0.0000; }
+  86.1805% { transform: translate(-0.018px, 29.739px); opacity: 0.0000; }
+  86.1955% { transform: translate(-0.014px, 31.446px); opacity: 0.0000; }
+  86.2105% { transform: translate(-0.011px, 33.399px); opacity: 0.0000; }
+  86.2256% { transform: translate(-0.008px, 35.352px); opacity: 0.0000; }
+  86.2406% { transform: translate(-0.006px, 37.059px); opacity: 0.0000; }
+  86.2556% { transform: translate(-0.004px, 38.394px); opacity: 0.0000; }
+  86.2707% { transform: translate(-0.002px, 39.348px); opacity: 0.0000; }
+  86.2857% { transform: translate(-0.001px, 39.964px); opacity: 0.0000; }
+  86.3008% { transform: translate(-0.000px, 40.297px); opacity: 0.0000; }
+  86.3158% { transform: translate(0.000px, 40.399px); opacity: 0.0000; }
+  86.8421% { transform: translate(0.000px, 38.772px); opacity: 0.1162; }
+  87.3684% { transform: translate(0.000px, 37.245px); opacity: 0.2253; }
+  87.8947% { transform: translate(0.000px, 35.799px); opacity: 0.3286; }
+  88.4211% { transform: translate(0.000px, 34.431px); opacity: 0.4263; }
+  88.9474% { transform: translate(0.000px, 33.141px); opacity: 0.5184; }
+  89.4737% { transform: translate(0.000px, 31.934px); opacity: 0.6046; }
+  90.0000% { transform: translate(0.000px, 30.814px); opacity: 0.6846; }
+  90.5263% { transform: translate(0.000px, 29.789px); opacity: 0.7579; }
+  91.0526% { transform: translate(0.000px, 28.867px); opacity: 0.8237; }
+  91.5789% { transform: translate(0.000px, 28.062px); opacity: 0.8812; }
+  92.1053% { transform: translate(0.000px, 27.388px); opacity: 0.9293; }
+  92.6316% { transform: translate(0.000px, 26.866px); opacity: 0.9666; }
+  93.1579% { transform: translate(0.000px, 26.524px); opacity: 0.9911; }
+  93.6842% { transform: translate(0.000px, 26.399px); opacity: 1.0000; }
+  100.0000% { transform: translate(0.000px, 26.399px); opacity: 1.0000; }
+}
+
+.bd-row2 { animation: bd-row2 4.75s linear infinite; }
+
+@keyframes bd-row3 {
+  0.0000% { transform: translate(-753.808px, 70.798px); opacity: 0.0000; }
+  22.3158% { transform: translate(-753.808px, 70.798px); opacity: 0.0000; }
+  22.8271% { transform: translate(-753.808px, 68.179px); opacity: 0.1162; }
+  23.3383% { transform: translate(-753.808px, 65.720px); opacity: 0.2253; }
+  23.8496% { transform: translate(-753.808px, 63.392px); opacity: 0.3286; }
+  24.3609% { transform: translate(-753.808px, 61.189px); opacity: 0.4263; }
+  24.8722% { transform: translate(-753.808px, 59.112px); opacity: 0.5184; }
+  25.3835% { transform: translate(-753.808px, 57.169px); opacity: 0.6046; }
+  25.8947% { transform: translate(-753.808px, 55.365px); opacity: 0.6846; }
+  26.4060% { transform: translate(-753.808px, 53.715px); opacity: 0.7579; }
+  26.9173% { transform: translate(-753.808px, 52.231px); opacity: 0.8237; }
+  27.4286% { transform: translate(-753.808px, 50.935px); opacity: 0.8812; }
+  27.9398% { transform: translate(-753.808px, 49.850px); opacity: 0.9293; }
+  28.4511% { transform: translate(-753.808px, 49.010px); opacity: 0.9666; }
+  28.9624% { transform: translate(-753.808px, 48.458px); opacity: 0.9911; }
+  29.4737% { transform: translate(-753.808px, 48.257px); opacity: 1.0000; }
+  30.6015% { transform: translate(-748.335px, 48.272px); opacity: 1.0000; }
+  31.1128% { transform: translate(-741.887px, 48.290px); opacity: 1.0000; }
+  31.7293% { transform: translate(-730.363px, 48.321px); opacity: 1.0000; }
+  32.7519% { transform: translate(-701.019px, 48.398px); opacity: 1.0000; }
+  32.8571% { transform: translate(-697.200px, 48.408px); opacity: 1.0000; }
+  33.9850% { transform: translate(-645.866px, 48.539px); opacity: 1.0000; }
+  34.3910% { transform: translate(-622.423px, 48.598px); opacity: 1.0000; }
+  35.1128% { transform: translate(-573.984px, 48.720px); opacity: 1.0000; }
+  36.0301% { transform: translate(-500.548px, 48.907px); opacity: 1.0000; }
+  36.2406% { transform: translate(-482.076px, 48.956px); opacity: 1.0000; }
+  37.3684% { transform: translate(-376.904px, 49.251px); opacity: 1.0000; }
+  37.6692% { transform: translate(-348.237px, 49.340px); opacity: 1.0000; }
+  38.4962% { transform: translate(-271.732px, 49.606px); opacity: 1.0000; }
+  39.3083% { transform: translate(-203.689px, 49.894px); opacity: 1.0000; }
+  39.6241% { transform: translate(-179.824px, 50.012px); opacity: 1.0000; }
+  40.7519% { transform: translate(-107.942px, 50.450px); opacity: 1.0000; }
+  40.9474% { transform: translate(-97.619px, 50.528px); opacity: 1.0000; }
+  41.8797% { transform: translate(-56.608px, 50.894px); opacity: 1.0000; }
+  42.5865% { transform: translate(-33.891px, 51.161px); opacity: 1.0000; }
+  43.0075% { transform: translate(-23.445px, 51.313px); opacity: 1.0000; }
+  44.1353% { transform: translate(-5.474px, 51.687px); opacity: 1.0000; }
+  44.2256% { transform: translate(-4.608px, 51.715px); opacity: 1.0000; }
+  45.2632% { transform: translate(0.000px, 52.004px); opacity: 1.0000; }
+  45.5338% { transform: translate(-0.125px, 52.071px); opacity: 0.9911; }
+  45.8045% { transform: translate(-0.467px, 52.134px); opacity: 0.9666; }
+  45.8647% { transform: translate(-0.569px, 52.148px); opacity: 0.9594; }
+  46.0752% { transform: translate(-0.989px, 52.194px); opacity: 0.9293; }
+  46.3459% { transform: translate(-1.663px, 52.251px); opacity: 0.8812; }
+  46.6165% { transform: translate(-2.468px, 52.304px); opacity: 0.8237; }
+  46.8872% { transform: translate(-3.390px, 52.354px); opacity: 0.7579; }
+  47.1579% { transform: translate(-4.415px, 52.401px); opacity: 0.6846; }
+  47.4286% { transform: translate(-5.535px, 52.445px); opacity: 0.6046; }
+  47.5038% { transform: translate(-5.862px, 52.457px); opacity: 0.5813; }
+  47.6992% { transform: translate(-6.742px, 52.486px); opacity: 0.5184; }
+  47.9699% { transform: translate(-8.032px, 52.524px); opacity: 0.4263; }
+  48.2406% { transform: translate(-9.400px, 52.559px); opacity: 0.3286; }
+  48.5113% { transform: translate(-10.846px, 52.592px); opacity: 0.2253; }
+  48.7820% { transform: translate(-12.373px, 52.621px); opacity: 0.1162; }
+  49.0526% { transform: translate(-14.000px, 52.648px); opacity: 0.0000; }
+  49.1429% { transform: translate(-13.988px, 52.657px); opacity: 0.0000; }
+  49.3083% { transform: translate(-13.898px, 52.672px); opacity: 0.0000; }
+  49.5639% { transform: translate(-13.565px, 52.693px); opacity: 0.0000; }
+  49.8195% { transform: translate(-12.949px, 52.712px); opacity: 0.0000; }
+  50.0752% { transform: translate(-11.995px, 52.728px); opacity: 0.0000; }
+  50.3308% { transform: translate(-10.660px, 52.743px); opacity: 0.0000; }
+  50.5865% { transform: translate(-8.953px, 52.756px); opacity: 0.0000; }
+  50.7820% { transform: translate(-7.470px, 52.765px); opacity: 0.0000; }
+  50.8421% { transform: translate(-7.000px, 52.768px); opacity: 0.0000; }
+  51.0977% { transform: translate(-5.047px, 52.777px); opacity: 0.0000; }
+  51.3534% { transform: translate(-3.340px, 52.784px); opacity: 0.0000; }
+  51.6090% { transform: translate(-2.005px, 52.790px); opacity: 0.0000; }
+  51.8647% { transform: translate(-1.051px, 52.794px); opacity: 0.0000; }
+  52.1203% { transform: translate(-0.435px, 52.797px); opacity: 0.0000; }
+  52.3759% { transform: translate(-0.102px, 52.798px); opacity: 0.0000; }
+  52.4211% { transform: translate(-0.068px, 52.798px); opacity: 0.0000; }
+  52.4361% { transform: translate(-0.059px, 52.900px); opacity: 0.0000; }
+  52.4511% { transform: translate(-0.050px, 53.233px); opacity: 0.0000; }
+  52.4662% { transform: translate(-0.042px, 53.849px); opacity: 0.0000; }
+  52.4812% { transform: translate(-0.034px, 54.803px); opacity: 0.0000; }
+  52.4962% { transform: translate(-0.028px, 56.138px); opacity: 0.0000; }
+  52.5113% { transform: translate(-0.022px, 57.845px); opacity: 0.0000; }
+  52.5263% { transform: translate(-0.017px, 59.798px); opacity: 0.0000; }
+  52.5414% { transform: translate(-0.012px, 61.751px); opacity: 0.0000; }
+  52.5564% { transform: translate(-0.008px, 63.458px); opacity: 0.0000; }
+  52.5714% { transform: translate(-0.005px, 64.793px); opacity: 0.0000; }
+  52.5865% { transform: translate(-0.003px, 65.747px); opacity: 0.0000; }
+  52.6015% { transform: translate(-0.001px, 66.363px); opacity: 0.0000; }
+  52.6165% { transform: translate(-0.000px, 66.696px); opacity: 0.0000; }
+  52.6316% { transform: translate(0.000px, 66.798px); opacity: 0.0000; }
+  53.1128% { transform: translate(0.000px, 65.171px); opacity: 0.1162; }
+  53.5940% { transform: translate(0.000px, 63.644px); opacity: 0.2253; }
+  54.0752% { transform: translate(0.000px, 62.198px); opacity: 0.3286; }
+  54.5564% { transform: translate(0.000px, 60.830px); opacity: 0.4263; }
+  55.0376% { transform: translate(0.000px, 59.540px); opacity: 0.5184; }
+  55.5188% { transform: translate(0.000px, 58.333px); opacity: 0.6046; }
+  56.0000% { transform: translate(0.000px, 57.213px); opacity: 0.6846; }
+  56.4812% { transform: translate(0.000px, 56.188px); opacity: 0.7579; }
+  56.9624% { transform: translate(0.000px, 55.266px); opacity: 0.8237; }
+  57.4436% { transform: translate(0.000px, 54.461px); opacity: 0.8812; }
+  57.9248% { transform: translate(0.000px, 53.787px); opacity: 0.9293; }
+  58.4060% { transform: translate(0.000px, 53.265px); opacity: 0.9666; }
+  58.8872% { transform: translate(0.000px, 52.923px); opacity: 0.9911; }
+  59.3684% { transform: translate(0.000px, 52.798px); opacity: 1.0000; }
+  69.4737% { transform: translate(0.000px, 52.798px); opacity: 1.0000; }
+  69.8496% { transform: translate(-0.179px, 52.798px); opacity: 0.9911; }
+  70.2256% { transform: translate(-0.668px, 52.798px); opacity: 0.9666; }
+  70.6015% { transform: translate(-1.413px, 52.798px); opacity: 0.9293; }
+  70.9774% { transform: translate(-2.376px, 52.798px); opacity: 0.8812; }
+  71.3534% { transform: translate(-3.526px, 52.798px); opacity: 0.8237; }
+  71.7293% { transform: translate(-4.842px, 52.798px); opacity: 0.7579; }
+  72.1053% { transform: translate(-6.307px, 52.798px); opacity: 0.6846; }
+  72.4812% { transform: translate(-7.907px, 52.798px); opacity: 0.6046; }
+  72.8571% { transform: translate(-9.632px, 52.798px); opacity: 0.5184; }
+  73.2331% { transform: translate(-11.474px, 52.798px); opacity: 0.4263; }
+  73.6090% { transform: translate(-13.428px, 52.798px); opacity: 0.3286; }
+  73.9850% { transform: translate(-15.494px, 52.798px); opacity: 0.2253; }
+  74.3609% { transform: translate(-17.676px, 52.798px); opacity: 0.1162; }
+  74.7368% { transform: translate(-20.000px, 52.798px); opacity: 0.0000; }
+  76.0150% { transform: translate(-19.855px, 52.798px); opacity: 0.0000; }
+  77.2932% { transform: translate(-19.378px, 52.798px); opacity: 0.0000; }
+  78.5714% { transform: translate(-18.498px, 52.798px); opacity: 0.0000; }
+  79.8496% { transform: translate(-17.136px, 52.798px); opacity: 0.0000; }
+  81.1278% { transform: translate(-15.229px, 52.798px); opacity: 0.0000; }
+  82.4060% { transform: translate(-12.790px, 52.798px); opacity: 0.0000; }
+  83.6842% { transform: translate(-10.000px, 52.798px); opacity: 0.0000; }
+  84.9624% { transform: translate(-7.210px, 52.798px); opacity: 0.0000; }
+  86.2406% { transform: translate(-4.771px, 52.798px); opacity: 0.0000; }
+  87.5188% { transform: translate(-2.864px, 52.798px); opacity: 0.0000; }
+  88.7970% { transform: translate(-1.502px, 52.798px); opacity: 0.0000; }
+  90.0752% { transform: translate(-0.622px, 52.798px); opacity: 0.0000; }
+  91.3534% { transform: translate(-0.145px, 52.798px); opacity: 0.0000; }
+  92.4211% { transform: translate(-0.004px, 52.798px); opacity: 0.0000; }
+  92.4361% { transform: translate(-0.003px, 52.900px); opacity: 0.0000; }
+  92.4511% { transform: translate(-0.003px, 53.233px); opacity: 0.0000; }
+  92.4662% { transform: translate(-0.002px, 53.849px); opacity: 0.0000; }
+  92.4812% { transform: translate(-0.002px, 54.803px); opacity: 0.0000; }
+  92.4962% { transform: translate(-0.002px, 56.138px); opacity: 0.0000; }
+  92.5113% { transform: translate(-0.001px, 57.845px); opacity: 0.0000; }
+  92.5263% { transform: translate(-0.001px, 59.798px); opacity: 0.0000; }
+  92.5414% { transform: translate(-0.001px, 61.751px); opacity: 0.0000; }
+  92.5564% { transform: translate(-0.000px, 63.458px); opacity: 0.0000; }
+  92.5714% { transform: translate(-0.000px, 64.793px); opacity: 0.0000; }
+  92.5865% { transform: translate(-0.000px, 65.747px); opacity: 0.0000; }
+  92.6015% { transform: translate(-0.000px, 66.363px); opacity: 0.0000; }
+  92.6165% { transform: translate(-0.000px, 66.696px); opacity: 0.0000; }
+  92.6316% { transform: translate(0.000px, 66.798px); opacity: 0.0000; }
+  93.1579% { transform: translate(0.000px, 65.171px); opacity: 0.1162; }
+  93.6842% { transform: translate(0.000px, 63.644px); opacity: 0.2253; }
+  94.2105% { transform: translate(0.000px, 62.198px); opacity: 0.3286; }
+  94.7368% { transform: translate(0.000px, 60.830px); opacity: 0.4263; }
+  95.2632% { transform: translate(0.000px, 59.540px); opacity: 0.5184; }
+  95.7895% { transform: translate(0.000px, 58.333px); opacity: 0.6046; }
+  96.3158% { transform: translate(0.000px, 57.213px); opacity: 0.6846; }
+  96.8421% { transform: translate(0.000px, 56.188px); opacity: 0.7579; }
+  97.3684% { transform: translate(0.000px, 55.266px); opacity: 0.8237; }
+  97.8947% { transform: translate(0.000px, 54.461px); opacity: 0.8812; }
+  98.4211% { transform: translate(0.000px, 53.787px); opacity: 0.9293; }
+  98.9474% { transform: translate(0.000px, 53.265px); opacity: 0.9666; }
+  99.4737% { transform: translate(0.000px, 52.923px); opacity: 0.9911; }
+  100.0000% { transform: translate(0.000px, 52.798px); opacity: 1.0000; }
+}
+
+.bd-row3 { animation: bd-row3 4.75s linear infinite; }
+
+@keyframes bd-row4 {
+  0.0000% { transform: translate(0.000px, 97.197px); opacity: 0.0000; }
+  25.6842% { transform: translate(0.000px, 97.197px); opacity: 0.0000; }
+  26.1955% { transform: translate(0.000px, 95.105px); opacity: 0.1162; }
+  26.7068% { transform: translate(0.000px, 93.142px); opacity: 0.2253; }
+  27.2180% { transform: translate(0.000px, 91.283px); opacity: 0.3286; }
+  27.7293% { transform: translate(0.000px, 89.524px); opacity: 0.4263; }
+  28.2406% { transform: translate(0.000px, 87.866px); opacity: 0.5184; }
+  28.7519% { transform: translate(0.000px, 86.313px); opacity: 0.6046; }
+  29.2632% { transform: translate(0.000px, 84.874px); opacity: 0.6846; }
+  29.7744% { transform: translate(0.000px, 83.555px); opacity: 0.7579; }
+  30.2857% { transform: translate(0.000px, 82.371px); opacity: 0.8237; }
+  30.7970% { transform: translate(0.000px, 81.335px); opacity: 0.8812; }
+  31.3083% { transform: translate(0.000px, 80.469px); opacity: 0.9293; }
+  31.8195% { transform: translate(0.000px, 79.798px); opacity: 0.9666; }
+  32.3308% { transform: translate(0.000px, 79.358px); opacity: 0.9911; }
+  32.8421% { transform: translate(0.000px, 79.197px); opacity: 1.0000; }
+  46.9474% { transform: translate(0.000px, 79.197px); opacity: 1.0000; }
+  47.2180% { transform: translate(-0.125px, 79.197px); opacity: 0.9911; }
+  47.4887% { transform: translate(-0.467px, 79.197px); opacity: 0.9666; }
+  47.7594% { transform: translate(-0.989px, 79.197px); opacity: 0.9293; }
+  48.0301% { transform: translate(-1.663px, 79.197px); opacity: 0.8812; }
+  48.3008% { transform: translate(-2.468px, 79.197px); opacity: 0.8237; }
+  48.5714% { transform: translate(-3.390px, 79.197px); opacity: 0.7579; }
+  48.8421% { transform: translate(-4.415px, 79.197px); opacity: 0.6846; }
+  49.1128% { transform: translate(-5.535px, 79.197px); opacity: 0.6046; }
+  49.3835% { transform: translate(-6.742px, 79.197px); opacity: 0.5184; }
+  49.6541% { transform: translate(-8.032px, 79.197px); opacity: 0.4263; }
+  49.9248% { transform: translate(-9.400px, 79.197px); opacity: 0.3286; }
+  50.1955% { transform: translate(-10.846px, 79.197px); opacity: 0.2253; }
+  50.4662% { transform: translate(-12.373px, 79.197px); opacity: 0.1162; }
+  50.7368% { transform: translate(-14.000px, 79.197px); opacity: 0.0000; }
+  51.1128% { transform: translate(-13.898px, 79.197px); opacity: 0.0000; }
+  51.4887% { transform: translate(-13.564px, 79.197px); opacity: 0.0000; }
+  51.8647% { transform: translate(-12.949px, 79.197px); opacity: 0.0000; }
+  52.2406% { transform: translate(-11.995px, 79.197px); opacity: 0.0000; }
+  52.6165% { transform: translate(-10.660px, 79.197px); opacity: 0.0000; }
+  52.9925% { transform: translate(-8.953px, 79.197px); opacity: 0.0000; }
+  53.3684% { transform: translate(-7.000px, 79.197px); opacity: 0.0000; }
+  53.7444% { transform: translate(-5.047px, 79.197px); opacity: 0.0000; }
+  54.1203% { transform: translate(-3.340px, 79.197px); opacity: 0.0000; }
+  54.4962% { transform: translate(-2.005px, 79.197px); opacity: 0.0000; }
+  54.8722% { transform: translate(-1.051px, 79.197px); opacity: 0.0000; }
+  55.2481% { transform: translate(-0.435px, 79.197px); opacity: 0.0000; }
+  55.6241% { transform: translate(-0.102px, 79.197px); opacity: 0.0000; }
+  55.7895% { transform: translate(-0.031px, 79.197px); opacity: 0.0000; }
+  55.8045% { transform: translate(-0.027px, 79.299px); opacity: 0.0000; }
+  55.8195% { transform: translate(-0.023px, 79.633px); opacity: 0.0000; }
+  55.8346% { transform: translate(-0.019px, 80.248px); opacity: 0.0000; }
+  55.8496% { transform: translate(-0.016px, 81.202px); opacity: 0.0000; }
+  55.8647% { transform: translate(-0.013px, 82.537px); opacity: 0.0000; }
+  55.8797% { transform: translate(-0.010px, 84.244px); opacity: 0.0000; }
+  55.8947% { transform: translate(-0.007px, 86.197px); opacity: 0.0000; }
+  55.9098% { transform: translate(-0.005px, 88.150px); opacity: 0.0000; }
+  55.9248% { transform: translate(-0.004px, 89.857px); opacity: 0.0000; }
+  55.9398% { transform: translate(-0.002px, 91.192px); opacity: 0.0000; }
+  55.9549% { transform: translate(-0.001px, 92.146px); opacity: 0.0000; }
+  55.9699% { transform: translate(-0.000px, 92.762px); opacity: 0.0000; }
+  55.9850% { transform: translate(-0.000px, 93.095px); opacity: 0.0000; }
+  56.0000% { transform: translate(0.000px, 93.197px); opacity: 0.0000; }
+  56.4812% { transform: translate(0.000px, 91.570px); opacity: 0.1162; }
+  56.9624% { transform: translate(0.000px, 90.043px); opacity: 0.2253; }
+  57.4436% { transform: translate(0.000px, 88.597px); opacity: 0.3286; }
+  57.9248% { transform: translate(0.000px, 87.229px); opacity: 0.4263; }
+  58.4060% { transform: translate(0.000px, 85.939px); opacity: 0.5184; }
+  58.8872% { transform: translate(0.000px, 84.732px); opacity: 0.6046; }
+  59.3684% { transform: translate(0.000px, 83.612px); opacity: 0.6846; }
+  59.8496% { transform: translate(0.000px, 82.587px); opacity: 0.7579; }
+  60.3308% { transform: translate(0.000px, 81.665px); opacity: 0.8237; }
+  60.8120% { transform: translate(0.000px, 80.860px); opacity: 0.8812; }
+  61.2932% { transform: translate(0.000px, 80.186px); opacity: 0.9293; }
+  61.7744% { transform: translate(0.000px, 79.665px); opacity: 0.9666; }
+  62.2556% { transform: translate(0.000px, 79.322px); opacity: 0.9911; }
+  62.7368% { transform: translate(0.000px, 79.197px); opacity: 1.0000; }
+  72.6316% { transform: translate(0.000px, 79.197px); opacity: 1.0000; }
+  73.0075% { transform: translate(-0.179px, 79.197px); opacity: 0.9911; }
+  73.3835% { transform: translate(-0.668px, 79.197px); opacity: 0.9666; }
+  73.7594% { transform: translate(-1.413px, 79.197px); opacity: 0.9293; }
+  74.1353% { transform: translate(-2.376px, 79.197px); opacity: 0.8812; }
+  74.5113% { transform: translate(-3.526px, 79.197px); opacity: 0.8237; }
+  74.8872% { transform: translate(-4.842px, 79.197px); opacity: 0.7579; }
+  75.2632% { transform: translate(-6.307px, 79.197px); opacity: 0.6846; }
+  75.6391% { transform: translate(-7.907px, 79.197px); opacity: 0.6046; }
+  76.0150% { transform: translate(-9.632px, 79.197px); opacity: 0.5184; }
+  76.3910% { transform: translate(-11.474px, 79.197px); opacity: 0.4263; }
+  76.7669% { transform: translate(-13.428px, 79.197px); opacity: 0.3286; }
+  77.1429% { transform: translate(-15.494px, 79.197px); opacity: 0.2253; }
+  77.5188% { transform: translate(-17.676px, 79.197px); opacity: 0.1162; }
+  77.8947% { transform: translate(-20.000px, 79.197px); opacity: 0.0000; }
+  78.7218% { transform: translate(-19.855px, 79.197px); opacity: 0.0000; }
+  79.5489% { transform: translate(-19.378px, 79.197px); opacity: 0.0000; }
+  80.3759% { transform: translate(-18.498px, 79.197px); opacity: 0.0000; }
+  81.2030% { transform: translate(-17.136px, 79.197px); opacity: 0.0000; }
+  82.0301% { transform: translate(-15.229px, 79.197px); opacity: 0.0000; }
+  82.8571% { transform: translate(-12.790px, 79.197px); opacity: 0.0000; }
+  83.6842% { transform: translate(-10.000px, 79.197px); opacity: 0.0000; }
+  84.5113% { transform: translate(-7.209px, 79.197px); opacity: 0.0000; }
+  85.3383% { transform: translate(-4.771px, 79.197px); opacity: 0.0000; }
+  86.1654% { transform: translate(-2.864px, 79.197px); opacity: 0.0000; }
+  86.9925% { transform: translate(-1.502px, 79.197px); opacity: 0.0000; }
+  87.8195% { transform: translate(-0.622px, 79.197px); opacity: 0.0000; }
+  88.6466% { transform: translate(-0.145px, 79.197px); opacity: 0.0000; }
+  89.2632% { transform: translate(-0.009px, 79.197px); opacity: 0.0000; }
+  89.2782% { transform: translate(-0.008px, 79.299px); opacity: 0.0000; }
+  89.2932% { transform: translate(-0.006px, 79.633px); opacity: 0.0000; }
+  89.3083% { transform: translate(-0.005px, 80.248px); opacity: 0.0000; }
+  89.3233% { transform: translate(-0.004px, 81.202px); opacity: 0.0000; }
+  89.3383% { transform: translate(-0.004px, 82.537px); opacity: 0.0000; }
+  89.3534% { transform: translate(-0.003px, 84.244px); opacity: 0.0000; }
+  89.3684% { transform: translate(-0.002px, 86.197px); opacity: 0.0000; }
+  89.3835% { transform: translate(-0.002px, 88.150px); opacity: 0.0000; }
+  89.3985% { transform: translate(-0.001px, 89.857px); opacity: 0.0000; }
+  89.4135% { transform: translate(-0.001px, 91.192px); opacity: 0.0000; }
+  89.4286% { transform: translate(-0.000px, 92.146px); opacity: 0.0000; }
+  89.4436% { transform: translate(-0.000px, 92.762px); opacity: 0.0000; }
+  89.4586% { transform: translate(0.000px, 93.095px); opacity: 0.0000; }
+  89.4737% { transform: translate(0.000px, 93.197px); opacity: 0.0000; }
+  90.0000% { transform: translate(0.000px, 91.570px); opacity: 0.1162; }
+  90.5263% { transform: translate(0.000px, 90.043px); opacity: 0.2253; }
+  91.0526% { transform: translate(0.000px, 88.597px); opacity: 0.3286; }
+  91.5789% { transform: translate(0.000px, 87.229px); opacity: 0.4263; }
+  92.1053% { transform: translate(0.000px, 85.939px); opacity: 0.5184; }
+  92.6316% { transform: translate(0.000px, 84.732px); opacity: 0.6046; }
+  93.1579% { transform: translate(0.000px, 83.612px); opacity: 0.6846; }
+  93.6842% { transform: translate(0.000px, 82.587px); opacity: 0.7579; }
+  94.2105% { transform: translate(0.000px, 81.665px); opacity: 0.8237; }
+  94.7368% { transform: translate(0.000px, 80.860px); opacity: 0.8812; }
+  95.2632% { transform: translate(0.000px, 80.186px); opacity: 0.9293; }
+  95.7895% { transform: translate(0.000px, 79.665px); opacity: 0.9666; }
+  96.3158% { transform: translate(0.000px, 79.322px); opacity: 0.9911; }
+  96.8421% { transform: translate(0.000px, 79.197px); opacity: 1.0000; }
+  100.0000% { transform: translate(0.000px, 79.197px); opacity: 1.0000; }
+}
+
+.bd-row4 { animation: bd-row4 4.75s linear infinite; }
+
+@keyframes bd-row5 {
+  0.0000% { transform: translate(849.002px, 107.133px); opacity: 0.0000; }
+  5.1486% { transform: translate(849.002px, 107.133px) scale(0.9999, 0.9999); opacity: 0.0000; }
+  10.2971% { transform: translate(849.002px, 107.133px) scale(0.9995, 0.9995); opacity: 0.0000; }
+  15.4457% { transform: translate(849.002px, 107.133px) scale(0.9989, 0.9989); opacity: 0.0000; }
+  17.0021% { transform: translate(849.002px, 107.133px) scale(0.9986, 0.9986); opacity: 0.0000; }
+  17.8629% { transform: translate(848.143px, 107.253px) scale(0.9985, 0.9985); opacity: 0.0000; }
+  18.7236% { transform: translate(845.479px, 107.645px) scale(0.9983, 0.9983); opacity: 0.0000; }
+  19.2614% { transform: translate(842.838px, 108.055px) scale(0.9982, 0.9982); opacity: 0.0000; }
+  19.5844% { transform: translate(840.871px, 108.369px) scale(0.9981, 0.9981); opacity: 0.0000; }
+  20.4451% { transform: translate(834.168px, 109.491px) scale(0.9979, 0.9979); opacity: 0.0000; }
+  20.5943% { transform: translate(832.781px, 109.730px) scale(0.9979, 0.9979); opacity: 0.0000; }
+  21.3059% { transform: translate(825.205px, 111.060px) scale(0.9977, 0.9977); opacity: 0.0000; }
+  21.5206% { transform: translate(822.597px, 111.523px) scale(0.9976, 0.9976); opacity: 0.0000; }
+  22.1666% { transform: translate(813.808px, 113.068px) scale(0.9975, 0.9975); opacity: 0.0000; }
+  23.0274% { transform: translate(799.793px, 115.365px) scale(0.9972, 0.9972); opacity: 0.0000; }
+  23.7798% { transform: translate(785.246px, 117.384px) scale(0.9970, 0.9970); opacity: 0.0000; }
+  23.8881% { transform: translate(782.969px, 117.662px) scale(0.9970, 0.9970); opacity: 0.0000; }
+  24.7489% { transform: translate(763.145px, 119.669px) scale(0.9968, 0.9968); opacity: 0.0000; }
+  25.6096% { transform: translate(740.143px, 121.239px) scale(0.9965, 0.9965); opacity: 0.0000; }
+  25.7428% { transform: translate(736.289px, 121.441px) scale(0.9964, 0.9964); opacity: 0.0000; }
+  26.0391% { transform: translate(727.429px, 121.852px) scale(0.9964, 0.9964); opacity: 0.0000; }
+  26.4704% { transform: translate(713.810px, 122.360px) scale(0.9962, 0.9962); opacity: 0.0000; }
+  27.3311% { transform: translate(684.044px, 123.084px) scale(0.9959, 0.9959); opacity: 0.0000; }
+  28.1919% { transform: translate(650.817px, 123.477px) scale(0.9956, 0.9956); opacity: 0.0000; }
+  28.2983% { transform: translate(646.469px, 123.505px) scale(0.9956, 0.9956); opacity: 0.0000; }
+  29.0526% { transform: translate(614.219px, 123.596px) scale(0.9953, 0.9953); opacity: 0.0000; }
+  29.5639% { transform: translate(590.975px, 121.504px) scale(0.9951, 0.9951); opacity: 0.1162; }
+  30.0752% { transform: translate(566.704px, 119.541px) scale(0.9949, 0.9949); opacity: 0.2253; }
+  30.5576% { transform: translate(542.955px, 117.784px) scale(0.9948, 0.9948); opacity: 0.3229; }
+  30.5865% { transform: translate(541.510px, 117.682px) scale(0.9948, 0.9948); opacity: 0.3286; }
+  30.8914% { transform: translate(526.097px, 116.620px) scale(0.9946, 0.9946); opacity: 0.3875; }
+  31.0977% { transform: translate(515.524px, 115.922px) scale(0.9946, 0.9946); opacity: 0.4263; }
+  31.6090% { transform: translate(488.898px, 114.265px) scale(0.9944, 0.9944); opacity: 0.5184; }
+  32.1203% { transform: translate(461.809px, 112.712px) scale(0.9942, 0.9942); opacity: 0.6046; }
+  32.6316% { transform: translate(434.445px, 111.272px) scale(0.9939, 0.9939); opacity: 0.6846; }
+  32.8168% { transform: translate(424.501px, 110.780px) scale(0.9939, 0.9939); opacity: 0.7120; }
+  33.1429% { transform: translate(407.008px, 109.954px) scale(0.9937, 0.9937); opacity: 0.7579; }
+  33.6541% { transform: translate(379.700px, 108.770px) scale(0.9935, 0.9935); opacity: 0.8237; }
+  34.1654% { transform: translate(352.720px, 107.734px) scale(0.9933, 0.9933); opacity: 0.8812; }
+  34.6767% { transform: translate(326.254px, 106.868px) scale(0.9931, 0.9931); opacity: 0.9293; }
+  35.0761% { transform: translate(306.047px, 106.326px) scale(0.9930, 0.9930); opacity: 0.9595; }
+  35.1880% { transform: translate(300.472px, 106.197px) scale(0.9929, 0.9929); opacity: 0.9666; }
+  35.6992% { transform: translate(275.520px, 105.757px) scale(0.9927, 0.9927); opacity: 0.9911; }
+  36.0400% { transform: translate(259.414px, 105.615px) scale(0.9926, 0.9926); opacity: 0.9990; }
+  36.2105% { transform: translate(251.522px, 105.596px) scale(0.9925, 0.9925); opacity: 1.0000; }
+  37.3353% { transform: translate(202.533px, 105.596px) scale(0.9920, 0.9920); opacity: 1.0000; }
+  39.5946% { transform: translate(121.574px, 105.596px) scale(0.9911, 0.9911); opacity: 1.0000; }
+  41.1885% { transform: translate(78.508px, 105.596px) scale(0.9905, 0.9905); opacity: 1.0000; }
+  41.8538% { transform: translate(63.756px, 105.596px) scale(0.9902, 0.9902); opacity: 1.0000; }
+  44.1131% { transform: translate(26.406px, 105.596px) scale(0.9894, 0.9894); opacity: 1.0000; }
+  46.3371% { transform: translate(6.365px, 105.596px) scale(0.9887, 0.9887); opacity: 1.0000; }
+  46.3723% { transform: translate(6.165px, 105.596px) scale(0.9887, 0.9887); opacity: 1.0000; }
+  48.6316% { transform: translate(0.000px, 105.596px) scale(0.9880, 0.9880); opacity: 1.0000; }
+  48.9023% { transform: translate(-0.125px, 105.596px) scale(0.9879, 0.9879); opacity: 0.9911; }
+  49.1729% { transform: translate(-0.467px, 105.596px) scale(0.9878, 0.9878); opacity: 0.9666; }
+  49.4436% { transform: translate(-0.989px, 105.596px) scale(0.9878, 0.9878); opacity: 0.9293; }
+  49.7143% { transform: translate(-1.663px, 105.596px) scale(0.9877, 0.9877); opacity: 0.8812; }
+  49.9850% { transform: translate(-2.468px, 105.596px) scale(0.9876, 0.9876); opacity: 0.8237; }
+  50.2556% { transform: translate(-3.390px, 105.596px) scale(0.9875, 0.9875); opacity: 0.7579; }
+  50.5263% { transform: translate(-4.415px, 105.596px) scale(0.9875, 0.9875); opacity: 0.6846; }
+  50.7970% { transform: translate(-5.535px, 105.596px) scale(0.9874, 0.9874); opacity: 0.6046; }
+  51.0677% { transform: translate(-6.742px, 105.596px) scale(0.9873, 0.9873); opacity: 0.5184; }
+  51.3383% { transform: translate(-8.032px, 105.596px) scale(0.9873, 0.9873); opacity: 0.4263; }
+  51.4857% { transform: translate(-8.767px, 105.596px) scale(0.9872, 0.9872); opacity: 0.3738; }
+  51.6090% { transform: translate(-9.400px, 105.596px) scale(0.9872, 0.9872); opacity: 0.3286; }
+  51.8797% { transform: translate(-10.846px, 105.596px) scale(0.9872, 0.9872); opacity: 0.2253; }
+  52.1504% { transform: translate(-12.373px, 105.596px) scale(0.9871, 0.9871); opacity: 0.1162; }
+  52.4211% { transform: translate(-14.000px, 105.596px) scale(0.9870, 0.9870); opacity: 0.0000; }
+  52.9173% { transform: translate(-13.898px, 105.596px) scale(0.9869, 0.9869); opacity: 0.0000; }
+  53.4135% { transform: translate(-13.565px, 105.596px) scale(0.9868, 0.9868); opacity: 0.0000; }
+  53.9098% { transform: translate(-12.949px, 105.596px) scale(0.9867, 0.9867); opacity: 0.0000; }
+  54.4060% { transform: translate(-11.995px, 105.596px) scale(0.9866, 0.9866); opacity: 0.0000; }
+  54.9023% { transform: translate(-10.660px, 105.596px) scale(0.9865, 0.9865); opacity: 0.0000; }
+  55.3985% { transform: translate(-8.953px, 105.596px) scale(0.9864, 0.9864); opacity: 0.0000; }
+  55.8947% { transform: translate(-7.000px, 105.596px) scale(0.9864, 0.9864); opacity: 0.0000; }
+  56.3910% { transform: translate(-5.047px, 105.596px) scale(0.9863, 0.9863); opacity: 0.0000; }
+  56.6343% { transform: translate(-4.168px, 105.596px) scale(0.9862, 0.9862); opacity: 0.0000; }
+  56.8872% { transform: translate(-3.340px, 105.596px) scale(0.9862, 0.9862); opacity: 0.0000; }
+  57.3835% { transform: translate(-2.005px, 105.596px) scale(0.9861, 0.9861); opacity: 0.0000; }
+  57.8797% { transform: translate(-1.051px, 105.596px) scale(0.9860, 0.9860); opacity: 0.0000; }
+  58.3759% { transform: translate(-0.435px, 105.596px) scale(0.9860, 0.9860); opacity: 0.0000; }
+  58.8722% { transform: translate(-0.102px, 105.596px) scale(0.9859, 0.9859); opacity: 0.0000; }
+  59.1579% { transform: translate(-0.018px, 105.596px) scale(0.9859, 0.9859); opacity: 0.0000; }
+  59.1729% { transform: translate(-0.015px, 105.698px) scale(0.9859, 0.9859); opacity: 0.0000; }
+  59.1880% { transform: translate(-0.013px, 106.031px) scale(0.9859, 0.9859); opacity: 0.0000; }
+  59.2030% { transform: translate(-0.011px, 106.647px) scale(0.9859, 0.9859); opacity: 0.0000; }
+  59.2180% { transform: translate(-0.009px, 107.601px) scale(0.9859, 0.9859); opacity: 0.0000; }
+  59.2331% { transform: translate(-0.007px, 108.936px) scale(0.9859, 0.9859); opacity: 0.0000; }
+  59.2481% { transform: translate(-0.006px, 110.643px) scale(0.9859, 0.9859); opacity: 0.0000; }
+  59.2632% { transform: translate(-0.004px, 112.596px) scale(0.9859, 0.9859); opacity: 0.0000; }
+  59.2782% { transform: translate(-0.003px, 114.549px) scale(0.9859, 0.9859); opacity: 0.0000; }
+  59.2932% { transform: translate(-0.002px, 116.256px) scale(0.9859, 0.9859); opacity: 0.0000; }
+  59.3083% { transform: translate(-0.001px, 117.591px) scale(0.9859, 0.9859); opacity: 0.0000; }
+  59.3233% { transform: translate(-0.001px, 118.545px) scale(0.9858, 0.9858); opacity: 0.0000; }
+  59.3383% { transform: translate(-0.000px, 119.161px) scale(0.9858, 0.9858); opacity: 0.0000; }
+  59.3534% { transform: translate(-0.000px, 119.494px) scale(0.9858, 0.9858); opacity: 0.0000; }
+  59.3684% { transform: translate(0.000px, 119.596px) scale(0.9858, 0.9858); opacity: 0.0000; }
+  59.8496% { transform: translate(0.000px, 117.969px) scale(0.9858, 0.9858); opacity: 0.1162; }
+  60.3308% { transform: translate(0.000px, 116.442px) scale(0.9857, 0.9857); opacity: 0.2253; }
+  60.8120% { transform: translate(0.000px, 114.996px) scale(0.9857, 0.9857); opacity: 0.3286; }
+  61.2932% { transform: translate(0.000px, 113.628px) scale(0.9856, 0.9856); opacity: 0.4263; }
+  61.7744% { transform: translate(0.000px, 112.338px) scale(0.9856, 0.9856); opacity: 0.5184; }
+  61.7828% { transform: translate(0.000px, 112.317px) scale(0.9856, 0.9856); opacity: 0.5200; }
+  62.2556% { transform: translate(0.000px, 111.131px) scale(0.9855, 0.9855); opacity: 0.6046; }
+  62.7368% { transform: translate(0.000px, 110.011px) scale(0.9855, 0.9855); opacity: 0.6846; }
+  63.2180% { transform: translate(0.000px, 108.986px) scale(0.9854, 0.9854); opacity: 0.7579; }
+  63.6992% { transform: translate(0.000px, 108.064px) scale(0.9854, 0.9854); opacity: 0.8237; }
+  64.1805% { transform: translate(0.000px, 107.259px) scale(0.9854, 0.9854); opacity: 0.8812; }
+  64.6617% { transform: translate(0.000px, 106.585px) scale(0.9853, 0.9853); opacity: 0.9293; }
+  65.1429% { transform: translate(0.000px, 106.064px) scale(0.9853, 0.9853); opacity: 0.9666; }
+  65.6241% { transform: translate(0.000px, 105.721px) scale(0.9853, 0.9853); opacity: 0.9911; }
+  66.1053% { transform: translate(0.000px, 105.596px) scale(0.9853, 0.9853); opacity: 1.0000; }
+  66.9314% { transform: translate(0.000px, 105.596px) scale(0.9852, 0.9852); opacity: 1.0000; }
+  72.0800% { transform: translate(0.000px, 105.596px) scale(0.9851, 0.9851); opacity: 1.0000; }
+  100.0000% { transform: translate(0.002px, 105.133px) scale(0.9851, 0.9851); opacity: 1.0000; }
+}
+
+.bd-row5 { animation: bd-row5 4.75s linear infinite; }
+
+    /* ── Project Stack (Figma node 815:11220) ── */
+    .cs-stack-grid { display: flex; align-items: flex-start; padding: 16px; }
+    .cs-stack-col { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 10px; padding: 32px; box-sizing: border-box; }
+    .cs-stack-col__title { font-family: var(--font-hand); font-size: 32px; line-height: 30px; letter-spacing: -0.05em; color: var(--ink-dark); padding-bottom: 8px; border-bottom: 1px solid var(--lime); margin: 0; }
+    .cs-stack-col__item { font-family: var(--font-body); font-size: 15px; line-height: 20px; color: var(--ink-dark); padding: 8px 0; border-bottom: 1px solid rgba(33, 40, 26, 0.15); }
+    .cs-stack-col__item:last-child { border-bottom: none; }
 
     /* ── Next case study ── */
     #cs-next-section .inner { display: flex; flex-direction: column; align-items: center; gap: 40px; }
@@ -1534,6 +2407,241 @@
             <p class="ph-test-iter__caption">Needs more colour or placement weight &mdash; easy to overlook at checkout.</p>
           </div>
         </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" id="cs-reflection" aria-label="Reflection">
+    <div class="inner">
+      <span class="ph-eyebrow">Reflection</span>
+      <div class="ph-reflection">
+        <div class="ph-reflection-hero">
+          <div class="ph-reflection-hero__title-wrap">
+            <h2 class="ph-brief__title ph-reflection-hero__title">What working alone taught me</h2>
+          </div>
+          <div class="ph-reflection-hero__device-wrap">
+            <div class="ph-reflection-hero__device-col">
+              <div class="ph-macbook">
+                <p class="ph-macbook__label">Paw Haus</p>
+                <div class="ph-macbook__frame">
+                  <img class="ph-macbook__png" src="../Asset/solution-laptop-01a.png" alt="MacBook mockup">
+                  <video class="ph-macbook__video" src="../Asset/solution-laptop-01b.mp4" autoplay loop muted playsinline aria-label="Paw Haus homepage walkthrough"></video>
+                </div>
+              </div>
+              <p class="ph-reflection-hero__caption">The finished Paw Haus experience: homepage on laptop, with the pet profile, filtered product listing, and trust-tagged product detail page on phone.</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="ph-reflection-lessons">
+          <div class="ph-reflection-lesson">
+            <h3 class="ph-reflection-lesson__heading">Don&rsquo;t improve what isn&rsquo;t broken</h3>
+            <p class="ph-reflection-lesson__body">Users expected to reorder under Order History &mdash; not a homepage module. Familiar patterns beat clever ones.</p>
+          </div>
+          <div class="ph-reflection-lesson">
+            <h3 class="ph-reflection-lesson__heading">Research is the only check on your assumptions</h3>
+            <p class="ph-reflection-lesson__body">Going back to the feedback and comments from all the pet owners I&rsquo;ve interviewed stopped me adding features that felt smart but solved problems neither of them had.</p>
+          </div>
+          <div class="ph-reflection-lesson">
+            <h3 class="ph-reflection-lesson__heading">Positive tags, not just warnings</h3>
+            <p class="ph-reflection-lesson__body">Anxiety goes up when &ldquo;not suitable&rdquo; tags dominate. Leading with what works for the pet reduces stress, then warnings can follow.</p>
+          </div>
+        </div>
+
+        <div class="ph-reflection-next">
+          <div class="ph-reflection-next__head">
+            <span class="ph-tag">if I had another 3 months</span>
+            <h2 class="ph-brief__title ph-reflection-next__title">What&rsquo;s next?</h2>
+          </div>
+          <div class="ph-reflection-next__cards">
+            <div class="ph-reflection-next__card">
+              <p class="ph-reflection-next__card-label">Mobile-first prototype</p>
+              <div class="ph-reflection-next__card-media">
+                <div class="ph-phone">
+                  <div class="ph-phone__screen">
+                    <video src="../Asset/ph-solution-mobile-01b.mp4" autoplay loop muted playsinline aria-label="Mobile-first prototype: homepage"></video>
+                  </div>
+                  <img class="ph-phone__frame" src="../Asset/ph-iphone14pro-frame.png" alt="">
+                  <div class="ph-phone__island"><div class="ph-phone__lens"></div></div>
+                </div>
+                <div class="ph-phone">
+                  <div class="ph-phone__screen">
+                    <video src="../Asset/ph-solution-mobile-02b.mp4" autoplay loop muted playsinline aria-label="Mobile-first prototype: product detail page"></video>
+                  </div>
+                  <img class="ph-phone__frame" src="../Asset/ph-iphone14pro-frame.png" alt="">
+                  <div class="ph-phone__island"><div class="ph-phone__lens"></div></div>
+                </div>
+                <div class="ph-phone">
+                  <div class="ph-phone__screen">
+                    <video src="../Asset/ph-solution-mobile-03b.mp4" autoplay loop muted playsinline aria-label="Mobile-first prototype: create account page"></video>
+                  </div>
+                  <img class="ph-phone__frame" src="../Asset/ph-iphone14pro-frame.png" alt="">
+                  <div class="ph-phone__island"><div class="ph-phone__lens"></div></div>
+                </div>
+              </div>
+              <p class="ph-reflection-next__card-desc">~60% of pet supply purchases happen on mobile &mdash; the next version should be designed there first.</p>
+            </div>
+            <div class="ph-reflection-next__card">
+              <p class="ph-reflection-next__card-label">Subscription model</p>
+              <div class="ph-reflection-next__card-media">
+                <video class="ph-reflection-next__card-video" src="../Asset/ph-solution-subscription.mp4" autoplay loop muted playsinline aria-label="Subscription model prototype: checkout page with subscribe-and-save toggle"></video>
+              </div>
+              <p class="ph-reflection-next__card-desc">For owners like Amy who reorder the same safe staples, an opt-in subscription removes the manual reminder entirely.</p>
+            </div>
+            <div class="ph-reflection-next__card ph-reflection-next__card--wide">
+              <p class="ph-reflection-next__card-label">Customisable starter kits</p>
+              <div class="ph-reflection-next__card-media">
+                <div class="ph-bundle-wrap">
+                  <div class="ph-bundle-demo">
+                    <div class="bd-nav">
+                      <div class="bd-nav__items"><span></span><span></span><span></span><span></span><span></span></div>
+                      <div class="bd-nav__icons"><span></span><span></span><span class="bd-nav__avatar"></span></div>
+                    </div>
+                    <div class="bd-hero">
+                      <span class="bd-hero__badge">New Pet Parent Essential</span>
+                      <h4 class="bd-hero__title">The Perfect Welcome Home Bundle</h4>
+                      <span class="bd-hero__bar"></span>
+                    </div>
+                    <div class="bd-body">
+                      <div class="bd-filter">
+                        <p class="bd-filter__label bd-label">I&rsquo;m welcoming a&hellip;</p>
+                        <div class="bd-filter__row">
+                          <div class="bd-filter__btn bd-filter__btn--active bd-btn1">Kitten</div>
+                          <div class="bd-filter__btn bd-filter__btn--ghost bd-btn2"></div>
+                          <div class="bd-filter__btn bd-filter__btn--ghost bd-btn3"></div>
+                          <div class="bd-filter__btn bd-filter__btn--ghost bd-btn4"></div>
+                        </div>
+                      </div>
+                      <div class="bd-trust">
+                        <div class="bd-trust__card"><span class="bd-trust__icon"></span><span class="bd-trust__title">Community-Vetted</span><span class="bd-trust__sub">10,000+ reviews</span></div>
+                        <div class="bd-trust__card"><span class="bd-trust__icon"></span><span class="bd-trust__title">Safe Choice</span><span class="bd-trust__sub">No-waste essentials</span></div>
+                        <div class="bd-trust__card"><span class="bd-trust__icon"></span><span class="bd-trust__title">Save 20%</span><span class="bd-trust__sub">Bundle discount</span></div>
+                      </div>
+                      <div class="bd-card">
+                        <div class="bd-card__header">
+                          <div class="bd-card__header-left"><span class="bd-card__icon"></span><span class="bd-card__title">Welcome Bundle</span></div>
+                          <span class="bd-card__badge"></span>
+                        </div>
+                        <div class="bd-price">
+                          <div class="bd-price__left">
+                            <span class="bd-price__label">Bundle &amp; Save</span>
+                            <span class="bd-price__was">Total Value: $124</span>
+                            <div class="bd-price__now-row"><span class="bd-price__now">$Xx</span><span class="bd-price__save">Save $25</span></div>
+                          </div>
+                          <div class="bd-price__right">
+                            <span class="bd-price__yousave-label">You Save</span>
+                            <span class="bd-price__yousave-val">Xx%</span>
+                          </div>
+                        </div>
+                        <div class="bd-included">
+                          <h5 class="bd-included__heading bd-heading">What&rsquo;s Included:</h5>
+                          <p class="bd-included__sub bd-para">Every item rated 4.5+ stars by thousands of new pet parents</p>
+                        </div>
+                        <div class="bd-rows">
+                          <div class="bd-row bd-row1">
+                            <div class="bd-row__img">
+                              <img src="../Asset/ph-bundle-row1-bg.png" alt="">
+                              <img src="../Asset/ph-bundle-row1-fg.png" alt="" style="mix-blend-mode:normal;">
+                            </div>
+                            <div class="bd-row__body">
+                              <div class="bd-row__top"><span class="bd-row__name">1. Premium Kitten Wet Food Variety Pack (12 cans)</span><span class="bd-row__was">$32</span></div>
+                              <div class="bd-row__rating"><span class="bd-row__star">&#9733;</span><span class="bd-row__ratingval">4.8</span><span class="bd-row__reviews">(1,247 reviews)</span></div>
+                              <div class="bd-row__tag">&#10003; Top-rated by new kitten parents</div>
+                            </div>
+                          </div>
+                          <div class="bd-row bd-row2">
+                            <div class="bd-row__img bd-row__img--gray"></div>
+                            <div class="bd-row__body">
+                              <span class="bd-row__bar"></span>
+                              <div class="bd-row__rating"><span class="bd-row__bar--rating"></span></div>
+                              <div class="bd-row__tag-bar"></div>
+                            </div>
+                          </div>
+                          <div class="bd-row bd-row3">
+                            <div class="bd-row__img bd-row__img--gray"></div>
+                            <div class="bd-row__body">
+                              <span class="bd-row__bar"></span>
+                              <div class="bd-row__rating"><span class="bd-row__bar--rating"></span></div>
+                              <div class="bd-row__tag-bar"></div>
+                            </div>
+                          </div>
+                          <div class="bd-row bd-row4">
+                            <div class="bd-row__img bd-row__img--gray"></div>
+                            <div class="bd-row__body">
+                              <span class="bd-row__bar"></span>
+                              <div class="bd-row__rating"><span class="bd-row__bar--rating"></span></div>
+                              <div class="bd-row__tag-bar"></div>
+                            </div>
+                          </div>
+                          <div class="bd-row bd-row5">
+                            <div class="bd-row__img bd-row__img--gray"></div>
+                            <div class="bd-row__body">
+                              <span class="bd-row__bar"></span>
+                              <div class="bd-row__rating"><span class="bd-row__bar--rating"></span></div>
+                              <div class="bd-row__tag-bar"></div>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="bd-footer">
+                          <span class="bd-footer__bar"></span>
+                          <span class="bd-footer__btn">Add Bundle to Cart</span>
+                        </div>
+                      </div>
+                      <div class="bd-badges">
+                        <span class="bd-badges__title-bar"></span>
+                        <div class="bd-badges__row">
+                          <div class="bd-badges__item"><span class="bd-badges__icon"></span><span class="bd-badges__title">No Guesswork</span><p class="bd-badges__sub">Each item tested and approved by thousands of pet parents just like you</p></div>
+                          <div class="bd-badges__item"><span class="bd-badges__icon"></span><span class="bd-badges__title">Safe &amp; Trusted</span><p class="bd-badges__sub">Only products with 4.5+ stars and verified quality standards</p></div>
+                          <div class="bd-badges__item"><span class="bd-badges__icon"></span><span class="bd-badges__title">Better Value</span><p class="bd-badges__sub">Save up to 20% compared to buying separately</p></div>
+                        </div>
+                      </div>
+                      <div class="bd-review">
+                        <div class="bd-review__stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
+                        <p class="bd-review__title">Trusted by 10,000+ New Pet Parents</p>
+                        <p class="bd-review__quote">&ldquo;This bundle had everything I needed for my new kitten. No overwhelming choices, just quality products that work.&rdquo; &mdash; Real PawHaus Customer</p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <p class="ph-reflection-next__card-desc">Testing showed strong trust in the kit concept &mdash; but users wanted to swap items. Vetted bundles with swap options balance guidance with control.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" id="cs-stack-section" aria-label="Project stack">
+    <div class="inner">
+      <span class="t-label">Project Stack</span>
+      <div class="cs-stack-grid" data-gsap="stagger">
+        <div class="cs-stack-col" data-gsap="card">
+          <h3 class="cs-stack-col__title">Research</h3>
+          <div class="cs-stack-col__item">Landscape study</div>
+          <div class="cs-stack-col__item">Competitor analysis</div>
+          <div class="cs-stack-col__item">12 user interviews</div>
+          <div class="cs-stack-col__item">Card sort (15 product cards, separate participant pool)</div>
+          <div class="cs-stack-col__item">Affinity mapping</div>
+        </div>
+        <div class="cs-stack-col" data-gsap="card">
+          <h3 class="cs-stack-col__title">Strategy</h3>
+          <div class="cs-stack-col__item">Problem statements &amp; HMW questions</div>
+          <div class="cs-stack-col__item">Information architecture</div>
+          <div class="cs-stack-col__item">User flows</div>
+          <div class="cs-stack-col__item">Ideation (feature mapping across 5 design goals)</div>
+        </div>
+        <div class="cs-stack-col" data-gsap="card">
+          <h3 class="cs-stack-col__title">Design</h3>
+          <div class="cs-stack-col__item">Figma</div>
+        </div>
+        <div class="cs-stack-col" data-gsap="card">
+          <h3 class="cs-stack-col__title">Deliverables</h3>
+          <div class="cs-stack-col__item">Research report (interviews + card sort findings)</div>
+          <div class="cs-stack-col__item">High-fidelity responsive prototype (desktop + mobile)</div>
+          <div class="cs-stack-col__item">Usability test report (3 tasks, 5 participants)</div>
+          <div class="cs-stack-col__item">Iterated prototype (3 rounds of changes post-testing)</div>
         </div>
       </div>
     </div>
