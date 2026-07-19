@@ -8,7 +8,7 @@
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Gochi+Hand&family=Lora:ital,wght@0,400;1,400&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Gochi+Hand&family=Lora:ital,wght@0,400;1,400&family=Poiret+One&display=swap" rel="stylesheet">
 
   <style>
     @font-face { font-family:'DM Mono'; font-style:normal; font-weight:300; font-display:swap; src:url('../Asset/fonts/dm-mono-300.woff2') format('woff2'); }
@@ -67,9 +67,13 @@
     body.light-mode .cs-eyebrow,
     body.light-mode .contact__tag       { color: #6b7a00; }
     body.light-mode .nav                { background: var(--bg-light); }
-    body.light-mode .nav__links a       { color: var(--ink-dark); }
+    body.light-mode .nav__links a,
+    body.light-mode .nav__work-trigger { color: var(--ink-dark); }
     body.light-mode .nav__links a:hover,
-    body.light-mode .nav__links a[aria-current="page"] { color: #6b7a00; }
+    body.light-mode .nav__links a[aria-current="page"],
+    body.light-mode .nav__work-trigger:hover,
+    body.light-mode .nav__work-menu a:hover { color: #6b7a00; }
+    body.light-mode .nav__work-menu a { color: var(--ink-dark); }
     body.light-mode .nav__logo-text     { color: var(--ink-dark); }
     body.light-mode .nav__ham-line      { background: var(--ink-dark); }
     body.light-mode .nav__mobile-menu   { background: var(--bg-light); border-color: rgba(26,28,22,0.15); }
@@ -138,13 +142,25 @@
       transition: background var(--dur-fast);
     }
     .nav__logo { display: flex; align-items: center; gap: 10px; text-decoration: none; flex-shrink: 0; }
-    .nav__logo-text { font-family: var(--font-hand); font-weight: 700; font-size: 26px; line-height: 1; letter-spacing: -0.04em; text-transform: uppercase; color: var(--ink-light); white-space: nowrap; }
+    .nav__logo-text { font-family: var(--font-hand); font-weight: 400; font-size: 36px; line-height: 40px; letter-spacing: normal; text-transform: uppercase; color: var(--ink-light); white-space: nowrap; }
     .nav__logo-text--short { display: none; }
     .nav__logo-flower { width: 40px; height: 40px; display: block; flex-shrink: 0; object-fit: contain; }
     .nav__right { display: flex; align-items: center; gap: 40px; }
     .nav__links { display: flex; gap: 40px; list-style: none; align-items: center; }
-    .nav__links a { font-family: var(--font-hand); font-weight: 400; font-size: 24px; line-height: 33px; letter-spacing: -0.02em; color: var(--ink-light); text-decoration: none; transition: color var(--dur-fast); white-space: nowrap; }
+    .nav__links a { font-family: var(--font-hand); font-weight: 400; font-size: 32px; line-height: 36px; letter-spacing: 0; color: var(--ink-light); text-decoration: none; transition: color var(--dur-fast); white-space: nowrap; }
     .nav__links a:hover, .nav__links a[aria-current="page"] { color: var(--lime); }
+
+    /* Work — dropdown trigger + menu (Figma node 784:30853 / 1394:58596) */
+    .nav__links-item--work { position: relative; }
+    .nav__work-trigger { display: flex; align-items: center; gap: 4px; background: none; border: none; padding: 0; cursor: pointer; font-family: var(--font-hand); font-weight: 400; font-size: 32px; line-height: 36px; color: var(--ink-light); transition: color var(--dur-fast); }
+    .nav__work-trigger:hover { color: var(--lime); }
+    .nav__work-chevron { width: 24px; height: 24px; flex-shrink: 0; transition: transform 0.25s ease; }
+    .nav__links-item--work.is-open .nav__work-chevron { transform: rotate(180deg); }
+    .nav__work-menu { position: absolute; top: calc(100% + 12px); left: 0; min-width: 167px; display: flex; flex-direction: column; gap: 10px; padding: 16px; background: var(--bg-dark); border: 1px solid rgba(222,232,149,0.18); border-radius: 16px; box-shadow: 0 4px 24px rgba(0,0,0,0.25); opacity: 0; visibility: hidden; transform: translateY(-8px); transition: opacity 0.2s ease, transform 0.2s ease, visibility 0.2s; z-index: 10; }
+    .nav__links-item--work.is-open .nav__work-menu { opacity: 1; visibility: visible; transform: translateY(0); }
+    .nav__work-menu a { font-family: 'Poiret One', Georgia, serif; font-weight: 400; font-size: 22px; line-height: 28px; color: var(--ink-light); text-decoration: none; white-space: nowrap; transition: color var(--dur-fast); }
+    .nav__work-menu a:hover { color: var(--lime); }
+    body.light-mode .nav__work-menu { background: var(--bg-light); border-color: rgba(26,28,22,0.15); }
 
     .nav__hamburger { display: none; flex-direction: column; justify-content: center; align-items: center; gap: 4.5px; background: none; border: none; cursor: pointer; padding: 3px; flex-shrink: 0; width: 28px; height: 28px; }
     .nav__ham-line { display: block; width: 18px; height: 1.5px; background: var(--ink-light); border-radius: 2px; transition: transform 0.25s ease, opacity 0.2s ease, width 0.2s ease; transform-origin: center; }
@@ -547,6 +563,7 @@
       /* Nav — compact tablet/mobile nav (Figma Nav_bar_dark / Nav_bar_light), locked standard across all pages */
       .nav__logo-text--full  { display: none; }
       .nav__logo-text--short { display: inline; }
+      .nav__logo-text { font-size: 26px; line-height: 1; font-weight: 700; letter-spacing: -0.04em; }
       .nav__links { display: none; }
       .nav__hamburger { display: flex; width: 40px; height: 40px; }
       .nav__ham-line { width: 22px; height: 2px; }
@@ -605,10 +622,21 @@
     </a>
     <div class="nav__right">
       <ul class="nav__links">
-        <li><a href="../works.html">Work</a></li>
-        <li><a href="../index.html#testimonials">Testimonials</a></li>
+        <li class="nav__links-item nav__links-item--work" id="nav-work-item">
+          <button class="nav__work-trigger" id="nav-work-trigger" aria-haspopup="true" aria-expanded="false" aria-current="page">
+            Work
+            <svg class="nav__work-chevron" width="24" height="24" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+              <path d="M6 9l6 6 6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </button>
+          <div class="nav__work-menu" id="nav-work-menu">
+            <a href="arvo.html">ARVO</a>
+            <a href="seletar.html">Seletar Airport</a>
+            <a href="pethaus.html">Paw Haus</a>
+          </div>
+        </li>
         <li><a href="../about.html">About</a></li>
-        <li><a href="#contact">Contact Me</a></li>
+        <li><a href="#contact">Contact</a></li>
       </ul>
       <button class="nav__hamburger" id="nav-hamburger" aria-label="Toggle menu" aria-expanded="false">
         <span class="nav__ham-line"></span>
@@ -640,9 +668,8 @@
     <div class="nav__mobile-menu" id="nav-mobile-menu">
       <ul>
         <li><a href="../works.html">Work</a></li>
-        <li><a href="../index.html#testimonials">Testimonials</a></li>
         <li><a href="../about.html">About</a></li>
-        <li><a href="#contact">Contact Me</a></li>
+        <li><a href="#contact">Contact</a></li>
       </ul>
     </div>
   </nav>
@@ -1183,11 +1210,13 @@
         loaderEl.classList.add('loader--hidden');
       }
 
-      window.addEventListener('load', function () {
+      function onPageLoad() {
         const elapsed   = Date.now() - startTs;
         const remaining = Math.max(0, MIN_MS - elapsed);
         setTimeout(hideLoader, remaining);
-      });
+      }
+      if (document.readyState === 'complete') { onPageLoad(); }
+      else { window.addEventListener('load', onPageLoad); }
 
       /* When transiting to another case study, match the loader's background to that page's
          own background so the handoff doesn't flash the wrong color. */
@@ -1318,6 +1347,29 @@
         mainNavEl.classList.remove('is-open');
         hamburger.setAttribute('aria-expanded', 'false');
       });
+    });
+
+    /* ── Work dropdown ── */
+    const workItem    = document.getElementById('nav-work-item');
+    const workTrigger = document.getElementById('nav-work-trigger');
+
+    function closeWorkMenu() {
+      workItem.classList.remove('is-open');
+      workTrigger.setAttribute('aria-expanded', 'false');
+    }
+
+    workTrigger.addEventListener('click', (e) => {
+      e.stopPropagation();
+      const isOpen = workItem.classList.toggle('is-open');
+      workTrigger.setAttribute('aria-expanded', String(isOpen));
+    });
+
+    document.addEventListener('click', (e) => {
+      if (!workItem.contains(e.target)) closeWorkMenu();
+    });
+
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') closeWorkMenu();
     });
 
     if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
