@@ -1755,6 +1755,18 @@
             <a href="pethaus.html">Paw Haus</a>
           </div>
         </li>
+        <li class="nav__links-item nav__links-item--work" id="nav-play-item">
+          <button class="nav__work-trigger" id="nav-play-trigger" aria-haspopup="true" aria-expanded="false">
+            Play
+            <svg class="nav__work-chevron" width="24" height="24" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+              <path d="M6 9l6 6 6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </button>
+          <div class="nav__work-menu" id="nav-play-menu">
+            <a href="../works.html#other-works">Side quests</a>
+            <a href="../works.html#event-styling">Event Stylings</a>
+          </div>
+        </li>
         <li><a href="../about.html">About</a></li>
         <li><a href="#contact">Contact</a></li>
       </ul>
@@ -1788,6 +1800,7 @@
     <div class="nav__mobile-menu" id="nav-mobile-menu">
       <ul>
         <li><a href="../works.html">Work</a></li>
+        <li><a href="../works.html#other-works">Play</a></li>
         <li><a href="../about.html">About</a></li>
         <li><a href="#contact">Contact</a></li>
       </ul>
@@ -2916,27 +2929,38 @@
       });
     });
 
-    /* ── Work dropdown ── */
-    const workItem    = document.getElementById('nav-work-item');
-    const workTrigger = document.getElementById('nav-work-trigger');
+    /* ── Nav dropdowns (Work, Play) ── */
+    const navDropdowns = [
+      { item: document.getElementById('nav-work-item'), trigger: document.getElementById('nav-work-trigger') },
+      { item: document.getElementById('nav-play-item'), trigger: document.getElementById('nav-play-trigger') },
+    ].filter(d => d.item && d.trigger);
 
-    function closeWorkMenu() {
-      workItem.classList.remove('is-open');
-      workTrigger.setAttribute('aria-expanded', 'false');
+    function closeAllNavDropdowns() {
+      navDropdowns.forEach(({ item, trigger }) => {
+        item.classList.remove('is-open');
+        trigger.setAttribute('aria-expanded', 'false');
+      });
     }
 
-    workTrigger.addEventListener('click', (e) => {
-      e.stopPropagation();
-      const isOpen = workItem.classList.toggle('is-open');
-      workTrigger.setAttribute('aria-expanded', String(isOpen));
+    navDropdowns.forEach(({ item, trigger }) => {
+      trigger.addEventListener('click', (e) => {
+        e.stopPropagation();
+        const willOpen = !item.classList.contains('is-open');
+        closeAllNavDropdowns();
+        if (willOpen) {
+          item.classList.add('is-open');
+          trigger.setAttribute('aria-expanded', 'true');
+        }
+      });
     });
 
     document.addEventListener('click', (e) => {
-      if (!workItem.contains(e.target)) closeWorkMenu();
+      const openInside = navDropdowns.some(({ item }) => item.contains(e.target));
+      if (!openInside) closeAllNavDropdowns();
     });
 
     document.addEventListener('keydown', (e) => {
-      if (e.key === 'Escape') closeWorkMenu();
+      if (e.key === 'Escape') closeAllNavDropdowns();
     });
 
     // Solution screen fan → mobile/tablet carousel: a continuously auto-scrolling
