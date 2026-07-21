@@ -670,6 +670,74 @@
       filter: drop-shadow(-14px 20px 4px rgba(0,0,0,0.35));
     }
 
+    /* ARVO mockup — the img sizes the wrapper (.card__mockup--arvo becomes the
+       positioned frame instead of the img itself); animated UI pieces (Figma
+       node 1396:71904 "smart animate" prototype) are absolutely positioned on
+       top, percentages matching their exact position within the 472×615 source frame. */
+    .card__mockup-img { width: 100%; height: auto; display: block; pointer-events: none; }
+
+    .arvo-anim {
+      position: absolute;
+      box-sizing: border-box;
+      pointer-events: none;
+      opacity: 0;
+    }
+    .arvo-anim--badge {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 3%;
+      background: #faf9f6;
+      border-radius: 14%;
+      padding: 6%;
+    }
+    .arvo-anim__num {
+      font-family: var(--font-body);
+      font-weight: 700;
+      font-size: clamp(6px, 1.5vw, 13px);
+      line-height: 1;
+    }
+    .arvo-anim__label {
+      font-family: var(--font-body);
+      font-weight: 700;
+      font-size: clamp(4px, 0.9vw, 8px);
+      line-height: 1.15;
+      color: #1c1c1c;
+      text-align: center;
+    }
+
+    .arvo-anim--summary {
+      background: #faf9f6;
+      border: 1px solid #eaddc9;
+      border-radius: 6%;
+      padding: 8% 5%;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      gap: 10%;
+    }
+    .arvo-anim__summary-top { display: flex; align-items: baseline; justify-content: space-between; }
+    .arvo-anim__summary-title { font-family: var(--font-body); font-weight: 700; font-size: clamp(5px, 1.1vw, 9px); color: #1c1c1c; }
+    .arvo-anim__summary-score { font-family: var(--font-body); font-weight: 700; font-size: clamp(7px, 1.7vw, 15px); color: #e09b3b; }
+    .arvo-anim__summary-bar {
+      height: 18%;
+      border-radius: 999px;
+      background: linear-gradient(90deg, #e03b3b, #e09b3b 50%, #4a9b6f);
+    }
+
+    .arvo-anim--panel {
+      background: #faf9f6;
+      border: 1px solid #eaddc9;
+      border-radius: 4%;
+      padding: 6%;
+      display: flex;
+      flex-direction: column;
+      gap: 8%;
+    }
+    .arvo-anim__panel-title { font-family: var(--font-body); font-weight: 700; font-size: clamp(5px, 1.1vw, 9px); color: #1c1c1c; }
+    .arvo-anim__panel-row { flex: 1; background: #fffdf9; border: 1px solid #eaddc9; border-radius: 12%; }
+
     /* "View all works" CTA — right-aligned */
     .card__cta-btn {
       display: inline-flex;
@@ -1535,7 +1603,60 @@
                 <p class="card__case-sub">Redesigning AI support so managers can lead.</p>
               </div>
             </div>
-            <img class="card__mockup card__mockup--arvo" src="Asset/Card 1 - ARVO - Default (clean).png?v=2" alt="ARVO product interface" />
+            <div class="card__mockup card__mockup--arvo" id="arvo-mockup">
+              <img class="card__mockup-img" src="Asset/Card 1 - ARVO - Default (clean).png?v=2" alt="ARVO product interface" />
+
+              <!-- Team signals — 7 mood badges, populate in staggered -->
+              <div class="arvo-anim arvo-anim--badge" style="left:3.84%;top:17.3%;width:11.13%;height:9.53%;">
+                <span class="arvo-anim__num" style="color:#e03b3b">2.2</span>
+                <span class="arvo-anim__label">Strengths-use fit</span>
+              </div>
+              <div class="arvo-anim arvo-anim--badge" style="left:14.72%;top:17.3%;width:11.13%;height:9.53%;">
+                <span class="arvo-anim__num" style="color:#e03b3b">2.4</span>
+                <span class="arvo-anim__label">Energy</span>
+              </div>
+              <div class="arvo-anim arvo-anim--badge" style="left:25.59%;top:17.3%;width:11.13%;height:9.53%;">
+                <span class="arvo-anim__num" style="color:#e09b3b">2.5</span>
+                <span class="arvo-anim__label">Role clarity</span>
+              </div>
+              <div class="arvo-anim arvo-anim--badge" style="left:36.47%;top:17.3%;width:11.13%;height:9.53%;">
+                <span class="arvo-anim__num" style="color:#e09b3b">2.8</span>
+                <span class="arvo-anim__label">Autonomy</span>
+              </div>
+              <div class="arvo-anim arvo-anim--badge" style="left:47.35%;top:17.3%;width:11.13%;height:9.53%;">
+                <span class="arvo-anim__num" style="color:#e09b3b">3.0</span>
+                <span class="arvo-anim__label">Meaning at work</span>
+              </div>
+              <div class="arvo-anim arvo-anim--badge" style="left:58.22%;top:17.3%;width:11.13%;height:9.53%;">
+                <span class="arvo-anim__num" style="color:#e09b3b">3.4</span>
+                <span class="arvo-anim__label">Manager support</span>
+              </div>
+              <div class="arvo-anim arvo-anim--badge" style="left:69.1%;top:17.3%;width:11.13%;height:9.53%;">
+                <span class="arvo-anim__num" style="color:#4a9b6f">3.6</span>
+                <span class="arvo-anim__label">Psychological safety</span>
+              </div>
+
+              <!-- Overall team health summary -->
+              <div class="arvo-anim arvo-anim--summary" style="left:3.84%;top:27.26%;width:76.93%;height:15.57%;">
+                <div class="arvo-anim__summary-top">
+                  <span class="arvo-anim__summary-title">Overall team health</span>
+                  <span class="arvo-anim__summary-score">2.8</span>
+                </div>
+                <div class="arvo-anim__summary-bar"></div>
+              </div>
+
+              <!-- Critical alerts / Top priority actions panels -->
+              <div class="arvo-anim arvo-anim--panel" style="left:3.84%;top:40.68%;width:43.21%;height:36.24%;">
+                <span class="arvo-anim__panel-title">Critical alerts</span>
+                <div class="arvo-anim__panel-row"></div>
+                <div class="arvo-anim__panel-row"></div>
+              </div>
+              <div class="arvo-anim arvo-anim--panel" style="left:41.68%;top:40.68%;width:43.21%;height:36.24%;">
+                <span class="arvo-anim__panel-title">Top priority actions</span>
+                <div class="arvo-anim__panel-row"></div>
+                <div class="arvo-anim__panel-row"></div>
+              </div>
+            </div>
           </article>
         </div>
 
@@ -2136,6 +2257,24 @@
       clipPath: 'inset(100% 0 0 0)', duration: 1.05, stagger: 0.13, ease: 'power4.out',
       scrollTrigger: { trigger: '.works__grid', start: 'top 74%' }
     });
+
+    /* ARVO mockup — signals/summary/panels populate in on a loop (Figma smart-animate, node 1396:71904) */
+    (function () {
+      const frame = document.getElementById('arvo-mockup');
+      if (!frame) return;
+      const badges  = frame.querySelectorAll('.arvo-anim--badge');
+      const summary = frame.querySelector('.arvo-anim--summary');
+      const panels  = frame.querySelectorAll('.arvo-anim--panel');
+      const all     = frame.querySelectorAll('.arvo-anim');
+
+      gsap.set(all, { y: '20%', scale: 0.8 });
+
+      const tl = gsap.timeline({ repeat: -1, repeatDelay: 6.5, scrollTrigger: { trigger: frame, start: 'top 85%' } });
+      tl.to(badges,  { opacity: 1, y: 0, scale: 1, duration: 0.3, ease: 'back.out(1.7)', stagger: 0.05 }, 0.4)
+        .to(summary, { opacity: 1, y: 0, scale: 1, duration: 0.3, ease: 'back.out(1.7)' }, 1.4)
+        .to(panels,  { opacity: 1, y: 0, scale: 1, duration: 0.5, ease: 'power2.out', stagger: 0.1 }, 1.7)
+        .to(all,     { opacity: 0, y: '20%', scale: 0.8, duration: 0.4, ease: 'power1.in' }, 3.2);
+    })();
 
     /* Testimonials */
     gsap.from('.test__headline', {
