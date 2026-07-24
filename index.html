@@ -571,7 +571,7 @@
       display: flex;
       flex-direction: column;
       padding: 5px;
-      border-radius: 1.6rem;
+      border-radius: 0;
       border: 1px solid rgba(255, 255, 255, 0.07);
       background: rgba(255, 255, 255, 0.02);
       box-sizing: border-box;
@@ -589,7 +589,7 @@
       isolation: isolate;
       width: 100%;
       height: 400px;
-      border-radius: calc(1.6rem - 5px);
+      border-radius: 0;
       box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.07);
       cursor: pointer;
       will-change: transform;
@@ -638,14 +638,17 @@
       max-width: 100%;
     }
 
-    /* Mockup images — absolutely positioned, bleeding off the left edge, vertically centered */
+    /* Mockup frames — one independent, absolutely-positioned wrapper per project
+       (#arvo-mockup / #seletar-mockup / #pawhaus-mockup), each holding its own
+       .card__mockup-img plus whatever per-card animated pieces get added on top.
+       Keeping these as separate elements from .card__body means each card's
+       mockup animation can be targeted and updated independently. */
     .card__mockup {
       position: absolute;
       left: 0;
       top: 50%;
       transform: translateY(-50%);
       pointer-events: none;
-      object-fit: contain;
       z-index: 1;
     }
 
@@ -670,11 +673,21 @@
       filter: drop-shadow(-14px 20px 4px rgba(0,0,0,0.35));
     }
 
-    /* ARVO mockup — the img sizes the wrapper (.card__mockup--arvo becomes the
-       positioned frame instead of the img itself); animated UI pieces (Figma
-       node 1396:71904 "smart animate" prototype) are absolutely positioned on
-       top, percentages matching their exact position within the 472×615 source frame. */
-    .card__mockup-img { width: 100%; height: auto; display: block; pointer-events: none; }
+    /* The base screenshot inside each mockup frame. ARVO's frame additionally holds
+       .arvo-anim pieces (Figma node 1396:71904 "smart animate" prototype) absolutely
+       positioned on top, percentages matching their position within the 472×615 source
+       frame — Seletar/PawHaus have the same #<project>-mockup wrapper ready for the
+       same treatment whenever their own animated pieces get added.
+       Fades the mockup's right edge into the card background instead of a hard cutoff —
+       keeps the image reading as bleeding into the composition rather than a rigid column. */
+    .card__mockup-img {
+      width: 100%;
+      height: auto;
+      display: block;
+      pointer-events: none;
+      -webkit-mask-image: linear-gradient(to right, black 62%, transparent 90%);
+      mask-image: linear-gradient(to right, black 62%, transparent 90%);
+    }
 
     .arvo-anim {
       position: absolute;
@@ -1669,7 +1682,9 @@
                 <p class="card__case-sub">Redesigning a website to match an efficient airport.</p>
               </div>
             </div>
-            <img class="card__mockup card__mockup--seletar" src="Asset/Card 2 - Seletar - Default (clean).png?v=2" alt="Seletar Airport on phone and tablet" />
+            <div class="card__mockup card__mockup--seletar" id="seletar-mockup">
+              <img class="card__mockup-img" src="Asset/Card 2 - Seletar - Default (clean).png?v=2" alt="Seletar Airport on phone and tablet" />
+            </div>
           </article>
         </div>
 
@@ -1682,7 +1697,9 @@
                 <p class="card__case-sub">An e-comm brand built around reading the label.</p>
               </div>
             </div>
-            <img class="card__mockup card__mockup--pawhaus" src="Asset/Card 3 - Paw Haus - Default (clean).png?v=2" alt="Paw Haus app" />
+            <div class="card__mockup card__mockup--pawhaus" id="pawhaus-mockup">
+              <img class="card__mockup-img" src="Asset/Card 3 - Paw Haus - Default (clean).png?v=2" alt="Paw Haus app" />
+            </div>
           </article>
         </div>
 
@@ -2258,22 +2275,37 @@
       scrollTrigger: { trigger: '.works__grid', start: 'top 74%' }
     });
 
-    /* ARVO mockup — signals/summary/panels populate in on a loop (Figma smart-animate, node 1396:71904) */
+    /* ARVO mockup — signals/summary/panels populate in on a loop.
+       Exact keyframe data pulled from Figma's own smart-animate prototype (node 1396:71906
+       "ManagerBoardPage", via get_motion_context) rather than hand-approximated: all 7 signal
+       badges animate in together (not staggered), the panels do a two-phase entrance
+       (scale settles first, then they slide in from the right), and the health-summary bar
+       is a plain fade that lands last. Offsets are Figma px (116/200) converted to % of this
+       frame's own rendered size so they scale with the card responsively. */
     (function () {
       const frame = document.getElementById('arvo-mockup');
       if (!frame) return;
       const badges  = frame.querySelectorAll('.arvo-anim--badge');
       const summary = frame.querySelector('.arvo-anim--summary');
       const panels  = frame.querySelectorAll('.arvo-anim--panel');
-      const all     = frame.querySelectorAll('.arvo-anim');
 
-      gsap.set(all, { y: '20%', scale: 0.8 });
+      const rect = frame.getBoundingClientRect();
+      const badgeOffsetY = rect.height * (116 / 615.143); // Figma: translateY 116px in a 615.143px-tall source frame
+      const panelOffsetX = rect.width  * (200 / 472.288); // Figma: translateX 200px in a 472.288px-wide source frame
 
-      const tl = gsap.timeline({ repeat: -1, repeatDelay: 6.5, scrollTrigger: { trigger: frame, start: 'top 85%' } });
-      tl.to(badges,  { opacity: 1, y: 0, scale: 1, duration: 0.3, ease: 'back.out(1.7)', stagger: 0.05 }, 0.4)
-        .to(summary, { opacity: 1, y: 0, scale: 1, duration: 0.3, ease: 'back.out(1.7)' }, 1.4)
-        .to(panels,  { opacity: 1, y: 0, scale: 1, duration: 0.5, ease: 'power2.out', stagger: 0.1 }, 1.7)
-        .to(all,     { opacity: 0, y: '20%', scale: 0.8, duration: 0.4, ease: 'power1.in' }, 3.2);
+      gsap.set(badges,  { opacity: 0, y: badgeOffsetY, scale: 0.8 });
+      gsap.set(summary, { opacity: 0 });
+      gsap.set(panels,  { x: panelOffsetX, scale: 1.2 });
+
+      const tl = gsap.timeline({ repeat: -1, scrollTrigger: { trigger: frame, start: 'top 85%' } });
+      tl.to(badges,  { opacity: 1, duration: 0.03, ease: 'none' }, 0.850)
+        .to(badges,  { y: 0, scale: 1, duration: 0.3, ease: 'back.out(1.4)' }, 0.850)
+        .to(panels,  { scale: 1, duration: 0.5, ease: 'power2.out' }, 0.736)
+        .to(panels,  { x: 0, duration: 0.5, ease: 'power2.out' }, 1.383)
+        .to(summary, { opacity: 1, duration: 0.5, ease: 'power2.out' }, 1.570)
+        .to([badges, summary, panels], { opacity: 0, duration: 0.4, ease: 'power1.in' }, 9.3)
+        .set(panels, { x: panelOffsetX, scale: 1.2 }, 9.7)
+        .set(badges, { y: badgeOffsetY, scale: 0.8 }, 9.7);
     })();
 
     /* Testimonials */
