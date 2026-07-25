@@ -558,221 +558,166 @@
       gap: 20px;
     }
 
-    /* Selected Works — single-column stack of full-width cards (Figma node 52:124) */
+    /* Selected Works — fanned/overlapping deck of 3 portrait cards (Figma node 52:124,
+       redesigned 2026-07-24: supersedes the earlier single-column full-width stack).
+       Percentages below are each card's own Figma bounding box read as a fraction of the
+       shared 1184×615 "Frame 468/488" canvas, so the whole composition scales as one unit
+       regardless of the container's actual rendered width. None of the 3 outer cards carry
+       a rotation transform themselves (confirmed via get_design_context — no rotate-N class
+       on any of the three `rounded-[20px]` card divs) — the fan look comes purely from the
+       overlap of these absolute positions plus z-index paint order (ARVO front, Seletar
+       middle, PawHaus back), not from tilting the card containers. */
     .works__grid {
-      display: flex;
-      flex-direction: column;
-      gap: 20px;
+      position: relative;
       width: 100%;
+      aspect-ratio: 1184 / 615;
     }
 
-    /* Double-bezel shell — wraps the existing .card */
     .card-shell {
-      display: flex;
-      flex-direction: column;
-      padding: 5px;
-      border-radius: 0;
-      border: 1px solid rgba(255, 255, 255, 0.07);
-      background: rgba(255, 255, 255, 0.02);
-      box-sizing: border-box;
-      transform-style: preserve-3d;
-      will-change: transform;
-      transition: border-color 0.4s ease;
-      clip-path: inset(0% 0 0 0);
+      position: absolute;
+      top: 0;
+      left: 0;
+      transition: transform 0.4s ease;
     }
-    .card-shell:hover { border-color: rgba(255, 255, 255, 0.15); }
+    .card-shell:hover { transform: translateY(-8px); }
 
-    /* Card base (acts as the "card-inner" bezel layer) */
+    .card-shell--arvo    { left: 6.45%;  top: 5.88%; width: 36.76%; height: 85.80%; z-index: 3; }
+    .card-shell--seletar { left: 35.56%; top: 8.78%; width: 37.60%; height: 87.06%; z-index: 2; }
+    .card-shell--pawhaus { left: 52.70%; top: 7.30%; width: 34.19%; height: 81.93%; z-index: 1; }
+
+    /* Bring-to-front: desktop hovers a card, it lifts above its neighbors in the fanned deck;
+       touch devices tap to the same effect (JS toggles .is-front, see below) since there's no
+       hover state to key off of there. Must come after the --arvo/--seletar/--pawhaus rules
+       above so the z-index bump actually wins the cascade (same specificity, source order). */
+    .card-shell:hover,
+    .card-shell.is-front { z-index: 10; }
+
+    /* Card base — rounded-[20px] per Figma, fills its .card-shell position */
     .card {
       position: relative;
       overflow: hidden;
       isolation: isolate;
       width: 100%;
-      height: 400px;
-      border-radius: 0;
-      box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.07);
+      height: 100%;
+      border-radius: 20px;
       cursor: pointer;
       will-change: transform;
-      transition: box-shadow 0.3s ease;
     }
 
     .card--arvo    { background: #31332a; }
     .card--seletar { background: #304c95; }
     .card--pawhaus { background: #8c4d00; }
 
-    /* Inner body — text sits in the right half, vertically centered; mockup is a separate absolutely-positioned sibling bleeding from the left edge */
-    .card__body {
+    /* Photo window — fixed-height, overflow-clipped top band (Figma: 32px inset left/right/top,
+       height varies per card since each card's own crop window differs). The mockup image is
+       set wider than the window and centered, so it intentionally overflows top/bottom and gets
+       cropped — matching Figma's own overflow-clip behavior rather than fitting the whole image. */
+    .card__photo {
       position: absolute;
-      inset: 0;
-      padding: clamp(20px, 2.44vw, 32px);
+      left: 7.35%; right: 7.35%; top: 6.07%;
+      height: 57.24%;
+      overflow: hidden;
       display: flex;
       align-items: center;
-      justify-content: flex-end;
-      z-index: 2;
+      justify-content: center;
+      z-index: 1;
     }
+    .card--seletar .card__photo { left: 7.19%; right: 7.19%; top: 5.98%; height: 56.41%; }
+    .card--pawhaus .card__photo { left: 7.91%; right: 7.91%; top: 6.35%; height: 67.28%; }
 
-    /* Card headline + subtitle */
-    .card__case-text {
+    /* Text block below the photo window (Figma: left/right 32px inset, gap 10px) */
+    .card__text {
+      position: absolute;
+      left: 7.35%; right: 7.35%; top: 65.19%;
       display: flex;
       flex-direction: column;
-      gap: 6px;
-      max-width: 50%;
-      text-align: left;
+      gap: 10px;
+      z-index: 2;
     }
+    .card--seletar .card__text { left: 7.19%; right: 7.19%; top: 64.27%; }
+    .card--pawhaus .card__text { left: 7.91%; right: 7.91%; top: 75.61%; }
+
     .card__case-headline {
       font-family: var(--font-display);
       font-weight: 400;
-      font-size: clamp(20px, 2.6vw, 40px);
-      line-height: 1.1;
+      font-size: clamp(18px, 2.2vw, 32px);
+      line-height: 1.156; /* 37/32 per Figma Display/LG */
       letter-spacing: normal;
       color: var(--ink-light);
-      max-width: 100%;
     }
     .card__case-sub {
       font-family: var(--font-body);
       font-weight: 400;
-      font-size: clamp(16px, 1.8vw, 26px);
-      line-height: 1.231;
-      letter-spacing: -0.058em;
+      font-size: clamp(12px, 1.1vw, 16px);
+      line-height: 1.25; /* 20/16 */
+      letter-spacing: 0;
       color: var(--ink-light);
-      max-width: 100%;
     }
 
-    /* Mockup frames — one independent, absolutely-positioned wrapper per project
-       (#arvo-mockup / #seletar-mockup / #pawhaus-mockup), each holding its own
-       .card__mockup-img plus whatever per-card animated pieces get added on top.
-       Keeping these as separate elements from .card__body means each card's
-       mockup animation can be targeted and updated independently. */
+    .card__readmore {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      margin-top: 4px;
+      width: fit-content;
+      font-family: var(--font-body);
+      font-weight: 600;
+      font-size: clamp(11px, 1vw, 13px);
+      color: var(--lime);
+      text-decoration: none;
+      border-bottom: 1px solid transparent;
+      transition: border-color var(--dur-fast);
+    }
+    .card__readmore:hover { border-color: var(--lime); }
+
+    /* Mockup frames — one independent wrapper per project (#arvo-mockup / #seletar-mockup /
+       #pawhaus-mockup), each holding its own .card__mockup-img plus (ARVO only) the animated
+       overlay pieces. Kept as separate elements so each card's mockup animation can be
+       targeted/updated independently. */
     .card__mockup {
-      position: absolute;
-      left: 0;
-      top: 50%;
-      transform: translateY(-50%);
+      position: relative;
+      width: 100%;
       pointer-events: none;
-      z-index: 1;
     }
 
+    /* ARVO (node 841:5171 "Card - Case Study - ARVO", get_design_context): the mockup is kept
+       FLAT (base image + data-populate fragments, see .arvo-frag below) and the whole group is
+       tilted together as one rigid unit via `-skew-x-5 rotate-3` (Figma's own Tailwind classes
+       on the wrapper around the flat "Body" node) — this is why the fragments stay pixel-aligned
+       at any angle: they're positioned in flat % coordinates, then rotated as a group, rather
+       than each needing its own rotated position. Width 80.4% = the flat content's own natural
+       298.51px width as a fraction of its 371.2px photo-window (435.211-2*32px inset), both from
+       the same get_design_context call. Drop-shadow value is Figma's own (-9.101/4.854/0.607/50%),
+       rounded — filter shadows aren't responsive, matching how Seletar/PawHaus's are already fixed-px. */
     .card__mockup--arvo {
-      left: -8%;
-      width: 48%;
-      height: auto;
-      filter: drop-shadow(-25.175px 31.839px 1.851px black);
+      width: 80.4%;
+      transform: skewX(-5deg) rotate(3deg);
+      filter: drop-shadow(-9px 5px 1px rgba(0,0,0,0.5));
     }
+    .card__mockup--seletar { filter: drop-shadow(-14px 20px 3px rgba(0,0,0,0.4)); }
+    .card__mockup--pawhaus { filter: drop-shadow(-14px 20px 4px rgba(0,0,0,0.35)); }
 
-    .card__mockup--seletar {
-      left: -6%;
-      width: 50%;
-      height: auto;
-      filter: drop-shadow(-14px 20px 3px rgba(0,0,0,0.4));
-    }
-
-    .card__mockup--pawhaus {
-      left: -4%;
-      width: 46%;
-      height: auto;
-      filter: drop-shadow(-14px 20px 4px rgba(0,0,0,0.35));
-    }
-
-    /* The base screenshot inside each mockup frame. ARVO's frame additionally holds
-       .arvo-anim pieces (Figma node 1396:71904 "smart animate" prototype) absolutely
-       positioned on top, percentages matching their position within the 472×615 source
-       frame — Seletar/PawHaus have the same #<project>-mockup wrapper ready for the
-       same treatment whenever their own animated pieces get added.
-       Fades the mockup's right edge into the card background instead of a hard cutoff —
-       keeps the image reading as bleeding into the composition rather than a rigid column. */
     .card__mockup-img {
       width: 100%;
       height: auto;
       display: block;
       pointer-events: none;
-      -webkit-mask-image: linear-gradient(to right, black 62%, transparent 90%);
-      mask-image: linear-gradient(to right, black 62%, transparent 90%);
     }
 
-    .arvo-anim {
+    /* ARVO data-populate fragments — real crops of the flat (un-rotated) Figma mockup export
+       (node 1507:53489), positioned/sized as % of the base image's own 270.597×417.554 frame
+       so they land exactly on the matching cutout in arvo-mockup-base.png regardless of the
+       card's rendered width. Each fragment is the literal pixels Figma exports for that piece
+       (badges/header/summary/panels), not a hand-redrawn approximation — see get_motion_context
+       node ids in the JS below for the source of each animation's timing/easing. */
+    .arvo-frag {
       position: absolute;
-      box-sizing: border-box;
+      display: block;
+      width: 100%;
+      height: 100%;
       pointer-events: none;
-      opacity: 0;
-    }
-    .arvo-anim--badge {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      gap: 3%;
-      background: #faf9f6;
-      border-radius: 14%;
-      padding: 6%;
-    }
-    .arvo-anim__num {
-      font-family: var(--font-body);
-      font-weight: 700;
-      font-size: clamp(6px, 1.5vw, 13px);
-      line-height: 1;
-    }
-    .arvo-anim__label {
-      font-family: var(--font-body);
-      font-weight: 700;
-      font-size: clamp(4px, 0.9vw, 8px);
-      line-height: 1.15;
-      color: #1c1c1c;
-      text-align: center;
     }
 
-    .arvo-anim--summary {
-      background: #faf9f6;
-      border: 1px solid #eaddc9;
-      border-radius: 6%;
-      padding: 8% 5%;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      gap: 10%;
-    }
-    .arvo-anim__summary-top { display: flex; align-items: baseline; justify-content: space-between; }
-    .arvo-anim__summary-title { font-family: var(--font-body); font-weight: 700; font-size: clamp(5px, 1.1vw, 9px); color: #1c1c1c; }
-    .arvo-anim__summary-score { font-family: var(--font-body); font-weight: 700; font-size: clamp(7px, 1.7vw, 15px); color: #e09b3b; }
-    .arvo-anim__summary-bar {
-      height: 18%;
-      border-radius: 999px;
-      background: linear-gradient(90deg, #e03b3b, #e09b3b 50%, #4a9b6f);
-    }
-
-    .arvo-anim--panel {
-      background: #faf9f6;
-      border: 1px solid #eaddc9;
-      border-radius: 4%;
-      padding: 6%;
-      display: flex;
-      flex-direction: column;
-      gap: 8%;
-    }
-    .arvo-anim__panel-title { font-family: var(--font-body); font-weight: 700; font-size: clamp(5px, 1.1vw, 9px); color: #1c1c1c; }
-    .arvo-anim__panel-row { flex: 1; background: #fffdf9; border: 1px solid #eaddc9; border-radius: 12%; }
-
-    /* "View all works" CTA — right-aligned */
-    .card__cta-btn {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      padding: 16px 32px;
-      white-space: nowrap;
-      overflow: hidden;
-      background: var(--lime);
-      border: 3px solid var(--lime);
-      border-radius: 10px;
-      font-family: var(--font-body);
-      font-weight: 600;
-      font-size: 13px;
-      line-height: normal;
-      color: #21281a;
-      text-decoration: none;
-      box-shadow: -8px 7px 3.6px -3px rgba(0,0,0,0.25), inset 1px -2px 4px 2px rgba(0,0,0,0.25);
-      align-self: flex-end;
-      transition: opacity var(--dur-fast);
-    }
-    .card__cta-btn:hover { opacity: 0.85; }
 
     /* ================================================================
        03 — CLIENTS & TESTIMONIALS
@@ -1283,13 +1228,6 @@
       .hero__tagline { font-size: clamp(1.5rem, 3vw, 2.5rem); line-height: 1.15; }
       .hero__location { font-size: clamp(1.15rem, 2.2vw, 1.75rem); line-height: 1.2; }
 
-      /* tablet: shorter cards, text stays in the right half */
-      .card { height: 320px; }
-      .card__case-text { max-width: 44%; }
-      .card__mockup--arvo    { left: -8%; width: 42%; }
-      .card__mockup--seletar { left: -6%; width: 44%; }
-      .card__mockup--pawhaus { left: -4%; width: 40%; }
-
       .contact__heading { line-height: 44px; }
     }
 
@@ -1333,20 +1271,15 @@
       .hero__tagline { font-size: clamp(1.4rem, 5vw, 2rem); line-height: 1.2; }
       .hero__location { font-size: clamp(1rem, 3.5vw, 1.4rem); line-height: 1.25; }
 
-      /* Works — mobile: mockup on top, text stacked below */
-      .card { height: auto; aspect-ratio: 4 / 5; }
-      .card__body {
-        flex-direction: column;
-        align-items: flex-start;
-        justify-content: flex-end;
-      }
-      .card__case-text { max-width: 100%; }
-      .card__mockup { left: 50%; top: 34%; transform: translate(-50%, -50%); }
-      .card__mockup--arvo    { width: 62%; }
-      .card__mockup--seletar { width: 68%; }
-      .card__mockup--pawhaus { width: 72%; }
-
-
+      /* Works — mobile: overlapping fan-deck doesn't hold up on narrow screens,
+         so cards fall back to a plain stacked column, each keeping its own
+         Figma aspect ratio (card-shell no longer absolutely positioned). */
+      .works__grid { position: static; aspect-ratio: unset; display: flex; flex-direction: column; gap: 20px; }
+      .card-shell { position: static; width: 100%; height: auto; z-index: auto; }
+      .card-shell--arvo    { aspect-ratio: 435.21 / 527.69; }
+      .card-shell--seletar { aspect-ratio: 445.25 / 535.40; }
+      .card-shell--pawhaus { aspect-ratio: 404.87 / 503.89; }
+      .card { height: 100%; }
 
       /* Contact */
       #contact .inner { flex-direction: column; }
@@ -1609,103 +1542,71 @@
 
         <!-- ARVO -->
         <div class="card-shell card-shell--arvo">
-          <article class="card card--arvo" onclick="location.href='case-studies/arvo.html'">
-            <div class="card__body">
-              <div class="card__case-text">
-                <p class="card__case-headline">ARVO, the AI Manager Copilot</p>
-                <p class="card__case-sub">Redesigning AI support so managers can lead.</p>
-              </div>
-            </div>
+          <article class="card card--arvo">
+            <div class="card__photo">
             <div class="card__mockup card__mockup--arvo" id="arvo-mockup">
-              <img class="card__mockup-img" src="Asset/Card 1 - ARVO - Default (clean).png?v=2" alt="ARVO product interface" />
+              <img class="card__mockup-img" src="Asset/arvo-mockup/arvo-mockup-base.png" alt="ARVO product interface" />
 
-              <!-- Team signals — 7 mood badges, populate in staggered -->
-              <div class="arvo-anim arvo-anim--badge" style="left:3.84%;top:17.3%;width:11.13%;height:9.53%;">
-                <span class="arvo-anim__num" style="color:#e03b3b">2.2</span>
-                <span class="arvo-anim__label">Strengths-use fit</span>
-              </div>
-              <div class="arvo-anim arvo-anim--badge" style="left:14.72%;top:17.3%;width:11.13%;height:9.53%;">
-                <span class="arvo-anim__num" style="color:#e03b3b">2.4</span>
-                <span class="arvo-anim__label">Energy</span>
-              </div>
-              <div class="arvo-anim arvo-anim--badge" style="left:25.59%;top:17.3%;width:11.13%;height:9.53%;">
-                <span class="arvo-anim__num" style="color:#e09b3b">2.5</span>
-                <span class="arvo-anim__label">Role clarity</span>
-              </div>
-              <div class="arvo-anim arvo-anim--badge" style="left:36.47%;top:17.3%;width:11.13%;height:9.53%;">
-                <span class="arvo-anim__num" style="color:#e09b3b">2.8</span>
-                <span class="arvo-anim__label">Autonomy</span>
-              </div>
-              <div class="arvo-anim arvo-anim--badge" style="left:47.35%;top:17.3%;width:11.13%;height:9.53%;">
-                <span class="arvo-anim__num" style="color:#e09b3b">3.0</span>
-                <span class="arvo-anim__label">Meaning at work</span>
-              </div>
-              <div class="arvo-anim arvo-anim--badge" style="left:58.22%;top:17.3%;width:11.13%;height:9.53%;">
-                <span class="arvo-anim__num" style="color:#e09b3b">3.4</span>
-                <span class="arvo-anim__label">Manager support</span>
-              </div>
-              <div class="arvo-anim arvo-anim--badge" style="left:69.1%;top:17.3%;width:11.13%;height:9.53%;">
-                <span class="arvo-anim__num" style="color:#4a9b6f">3.6</span>
-                <span class="arvo-anim__label">Psychological safety</span>
-              </div>
+              <!-- Data-populate fragments — real pixel crops from the flat Figma export (node
+                   1507:53489), each positioned to sit exactly back into its cutout in the base
+                   image. Timing/easing driven from JS below, sourced from get_motion_context. -->
+              <img class="arvo-frag" id="arvo-frag-header" src="Asset/arvo-mockup/crop_header.png" alt="" style="left:4.059%;top:4.773%;width:87.085%;height:7.399%;">
 
-              <!-- Overall team health summary -->
-              <div class="arvo-anim arvo-anim--summary" style="left:3.84%;top:27.26%;width:76.93%;height:15.57%;">
-                <div class="arvo-anim__summary-top">
-                  <span class="arvo-anim__summary-title">Overall team health</span>
-                  <span class="arvo-anim__summary-score">2.8</span>
-                </div>
-                <div class="arvo-anim__summary-bar"></div>
-              </div>
+              <img class="arvo-frag arvo-frag--badge" id="arvo-frag-badge1" src="Asset/arvo-mockup/crop_badge1.png" alt="" style="left:4.059%;top:17.184%;width:12.915%;height:10.024%;">
+              <img class="arvo-frag arvo-frag--badge" id="arvo-frag-badge2" src="Asset/arvo-mockup/crop_badge2.png" alt="" style="left:17.343%;top:17.184%;width:12.915%;height:10.024%;">
+              <img class="arvo-frag arvo-frag--badge" id="arvo-frag-badge3" src="Asset/arvo-mockup/crop_badge3.png" alt="" style="left:30.627%;top:17.184%;width:12.915%;height:10.024%;">
+              <img class="arvo-frag arvo-frag--badge" id="arvo-frag-badge4" src="Asset/arvo-mockup/crop_badge4.png" alt="" style="left:43.911%;top:17.184%;width:12.915%;height:10.024%;">
+              <img class="arvo-frag arvo-frag--badge" id="arvo-frag-badge5" src="Asset/arvo-mockup/crop_badge5.png" alt="" style="left:57.196%;top:17.184%;width:12.915%;height:10.024%;">
+              <img class="arvo-frag arvo-frag--badge" id="arvo-frag-badge6" src="Asset/arvo-mockup/crop_badge6.png" alt="" style="left:70.111%;top:17.184%;width:12.915%;height:10.024%;">
+              <img class="arvo-frag arvo-frag--badge" id="arvo-frag-badge7" src="Asset/arvo-mockup/crop_badge7.png" alt="" style="left:83.395%;top:17.184%;width:12.915%;height:10.024%;">
 
-              <!-- Critical alerts / Top priority actions panels -->
-              <div class="arvo-anim arvo-anim--panel" style="left:3.84%;top:40.68%;width:43.21%;height:36.24%;">
-                <span class="arvo-anim__panel-title">Critical alerts</span>
-                <div class="arvo-anim__panel-row"></div>
-                <div class="arvo-anim__panel-row"></div>
-              </div>
-              <div class="arvo-anim arvo-anim--panel" style="left:41.68%;top:40.68%;width:43.21%;height:36.24%;">
-                <span class="arvo-anim__panel-title">Top priority actions</span>
-                <div class="arvo-anim__panel-row"></div>
-                <div class="arvo-anim__panel-row"></div>
-              </div>
+              <img class="arvo-frag" id="arvo-frag-summary" src="Asset/arvo-mockup/crop_summary.png" alt="" style="left:4.059%;top:26.969%;width:90.775%;height:12.649%;">
+
+              <img class="arvo-frag arvo-frag--panel" id="arvo-frag-panel1" src="Asset/arvo-mockup/crop_panel1.png" alt="" style="left:4.059%;top:41.289%;width:43.173%;height:35.800%;">
+              <img class="arvo-frag arvo-frag--panel" id="arvo-frag-panel2" src="Asset/arvo-mockup/crop_panel2.png" alt="" style="left:48.339%;top:41.289%;width:46.863%;height:35.800%;">
+            </div>
+            </div>
+            <div class="card__text">
+              <p class="card__case-headline">ARVO, the AI Manager Copilot</p>
+              <p class="card__case-sub">Redesigning AI support so managers can lead.</p>
+              <a class="card__readmore" href="case-studies/arvo.html">Read more →</a>
             </div>
           </article>
         </div>
 
         <!-- Seletar Airport -->
         <div class="card-shell card-shell--seletar">
-          <article class="card card--seletar" onclick="location.href='case-studies/seletar.html'">
-            <div class="card__body">
-              <div class="card__case-text">
-                <p class="card__case-headline">Seletar Airport, the Subang Advantage</p>
-                <p class="card__case-sub">Redesigning a website to match an efficient airport.</p>
-              </div>
-            </div>
+          <article class="card card--seletar">
+            <div class="card__photo">
             <div class="card__mockup card__mockup--seletar" id="seletar-mockup">
               <img class="card__mockup-img" src="Asset/Card 2 - Seletar - Default (clean).png?v=2" alt="Seletar Airport on phone and tablet" />
+            </div>
+            </div>
+            <div class="card__text">
+              <p class="card__case-headline">Seletar Airport, the Subang Advantage</p>
+              <p class="card__case-sub">Redesigning a website to match an efficient airport.</p>
+              <a class="card__readmore" href="case-studies/seletar.html">Read more →</a>
             </div>
           </article>
         </div>
 
         <!-- Paw Haus -->
         <div class="card-shell card-shell--pawhaus">
-          <article class="card card--pawhaus" onclick="location.href='case-studies/pethaus.html'">
-            <div class="card__body">
-              <div class="card__case-text">
-                <p class="card__case-headline">PawHaus, trust over treats</p>
-                <p class="card__case-sub">An e-comm brand built around reading the label.</p>
-              </div>
-            </div>
+          <article class="card card--pawhaus">
+            <div class="card__photo">
             <div class="card__mockup card__mockup--pawhaus" id="pawhaus-mockup">
               <img class="card__mockup-img" src="Asset/Card 3 - Paw Haus - Default (clean).png?v=2" alt="Paw Haus app" />
+            </div>
+            </div>
+            <div class="card__text">
+              <p class="card__case-headline">PawHaus, trust over treats</p>
+              <p class="card__case-sub">An e-comm brand built around reading the label.</p>
+              <a class="card__readmore" href="case-studies/pethaus.html">Read more →</a>
             </div>
           </article>
         </div>
 
       </div><!-- end .works__grid -->
-
-      <a class="card__cta-btn" href="works.html">View all works →</a>
     </div>
   </section>
 
@@ -2092,8 +1993,13 @@
   <!-- GSAP + ScrollTrigger -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/CustomEase.min.js"></script>
   <script>
-    gsap.registerPlugin(ScrollTrigger);
+    gsap.registerPlugin(ScrollTrigger, CustomEase);
+    /* Figma's own easing curve for the ARVO badge pop-in settle (node 1396:72008 etc.,
+       get_motion_context): a smooth fast-out landing, no bounce/overshoot. */
+    CustomEase.create('arvoBadgeSettle', 'M0,0 C0.07,0.97 0.58,1 1,1');
+    CustomEase.create('arvoOpacityFlip', 'M0,0 C0.5,0 0.5,1 1,1');
 
     /* ── Loader progress bar + exit wipe (called by the loader script above,
        which loads before GSAP and can't call gsap directly) ── */
@@ -2275,37 +2181,44 @@
       scrollTrigger: { trigger: '.works__grid', start: 'top 74%' }
     });
 
-    /* ARVO mockup — signals/summary/panels populate in on a loop.
-       Exact keyframe data pulled from Figma's own smart-animate prototype (node 1396:71906
-       "ManagerBoardPage", via get_motion_context) rather than hand-approximated: all 7 signal
-       badges animate in together (not staggered), the panels do a two-phase entrance
-       (scale settles first, then they slide in from the right), and the health-summary bar
-       is a plain fade that lands last. Offsets are Figma px (116/200) converted to % of this
-       frame's own rendered size so they scale with the card responsively. */
+    /* ARVO mockup — data-populate fragments (see .arvo-frag CSS comment for what these are).
+       Timing/easing/loop-duration pulled directly from get_motion_context on the flat Figma
+       export (fileKey pwzfoD3dTKLHGScT4Kom1k, node 1507:53489, "Implement this design from
+       Figma" request) — a 2-second loop, not the 10s used by an earlier version of this file
+       (that was built against a different/stale prototype node). Percentages below convert
+       Figma's px offsets (116 for badge translateY, 200 for header/panel translateX) into %
+       of this frame's own 270.597px-wide "Body" node (get_metadata), so they scale with the
+       card responsively. Each fragment resets to its hidden state every repeat via .fromTo()
+       rather than an explicit fade-out — the source prototype has no fade-out keyframe, it's
+       a hard cut back to the start state at the loop boundary, and fromTo naturally
+       reproduces that on every GSAP repeat. */
     (function () {
       const frame = document.getElementById('arvo-mockup');
       if (!frame) return;
-      const badges  = frame.querySelectorAll('.arvo-anim--badge');
-      const summary = frame.querySelector('.arvo-anim--summary');
-      const panels  = frame.querySelectorAll('.arvo-anim--panel');
+      const header  = document.getElementById('arvo-frag-header');
+      const badges  = frame.querySelectorAll('.arvo-frag--badge');
+      const summary = document.getElementById('arvo-frag-summary');
+      const panels  = frame.querySelectorAll('.arvo-frag--panel');
 
-      const rect = frame.getBoundingClientRect();
-      const badgeOffsetY = rect.height * (116 / 615.143); // Figma: translateY 116px in a 615.143px-tall source frame
-      const panelOffsetX = rect.width  * (200 / 472.288); // Figma: translateX 200px in a 472.288px-wide source frame
-
-      gsap.set(badges,  { opacity: 0, y: badgeOffsetY, scale: 0.8 });
-      gsap.set(summary, { opacity: 0 });
-      gsap.set(panels,  { x: panelOffsetX, scale: 1.2 });
+      const FRAME_W_FIGMA = 270.597; // Figma "Body" frame width, node 1507:53489
+      const px = (figmaPx) => frame.getBoundingClientRect().width * (figmaPx / FRAME_W_FIGMA);
 
       const tl = gsap.timeline({ repeat: -1, scrollTrigger: { trigger: frame, start: 'top 85%' } });
-      tl.to(badges,  { opacity: 1, duration: 0.03, ease: 'none' }, 0.850)
-        .to(badges,  { y: 0, scale: 1, duration: 0.3, ease: 'back.out(1.4)' }, 0.850)
-        .to(panels,  { scale: 1, duration: 0.5, ease: 'power2.out' }, 0.736)
-        .to(panels,  { x: 0, duration: 0.5, ease: 'power2.out' }, 1.383)
-        .to(summary, { opacity: 1, duration: 0.5, ease: 'power2.out' }, 1.570)
-        .to([badges, summary, panels], { opacity: 0, duration: 0.4, ease: 'power1.in' }, 9.3)
-        .set(panels, { x: panelOffsetX, scale: 1.2 }, 9.7)
-        .set(badges, { y: badgeOffsetY, scale: 0.8 }, 9.7);
+
+      // Header "Team summary" block (node 1507:53526): translateX -200→0px, 0–500ms, ease-out
+      tl.fromTo(header, { x: () => -px(200) }, { x: 0, duration: 0.5, ease: 'power2.out' }, 0);
+
+      // 7 "Team signals" badges (nodes 1507:53592…53802) — identical motion on every badge:
+      // opacity flips 849.6–879.6ms; translateY(116px)+scale(0.8→1) settle 849.6–1149.6ms
+      tl.fromTo(badges, { opacity: 0 }, { opacity: 1, duration: 0.03, ease: 'arvoOpacityFlip' }, 0.8496)
+        .fromTo(badges, { y: () => px(116), scale: 0.8 }, { y: 0, scale: 1, duration: 0.3, ease: 'arvoBadgeSettle' }, 0.8496);
+
+      // "Overall team health" summary (node 1507:53823): opacity holds 0 until 78.49%, fades to 1 by the loop end
+      tl.fromTo(summary, { opacity: 0 }, { opacity: 1, duration: 0.4302, ease: 'power2.out' }, 1.5698);
+
+      // Panels (nodes 1507:53865 / 1507:53982) — scale settles first, then slides in from the right
+      tl.fromTo(panels, { scale: 1.2 }, { scale: 1, duration: 0.5, ease: 'power2.out' }, 0.7356)
+        .fromTo(panels, { x: () => px(200) }, { x: 0, duration: 0.5, ease: 'power2.out' }, 1.3834);
     })();
 
     /* Testimonials */
@@ -2434,6 +2347,32 @@
         gsap.to(img, { x: 0, y: 0, duration: 1, ease: 'elastic.out(1,0.42)' });
       });
     });
+
+    /* ── Card bring-to-front on tap (touch/no-hover devices only — desktop already gets this
+       from the .card-shell:hover CSS rule above). First tap on a card brings it to front
+       (adds .is-front) instead of navigating; tapping "Read more" inside it still navigates;
+       tapping anywhere outside all cards drops .is-front so the deck returns to its resting
+       fan order. */
+    (function () {
+      const isTouch = window.matchMedia('(hover: none), (pointer: coarse)').matches;
+      if (!isTouch) return;
+      const shells = document.querySelectorAll('.card-shell');
+      shells.forEach(shell => {
+        shell.addEventListener('click', e => {
+          if (e.target.closest('.card__readmore')) return; // let the real link navigate
+          if (!shell.classList.contains('is-front')) {
+            e.preventDefault();
+            shells.forEach(s => s.classList.remove('is-front'));
+            shell.classList.add('is-front');
+          }
+        });
+      });
+      document.addEventListener('click', e => {
+        if (!e.target.closest('.card-shell')) {
+          shells.forEach(s => s.classList.remove('is-front'));
+        }
+      });
+    })();
 
     /* ── Contact email: kinetic hover scale ── */
     (function () {
