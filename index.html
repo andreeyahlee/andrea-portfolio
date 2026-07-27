@@ -83,14 +83,8 @@
     body.light-mode .hero__location        { color: var(--ink-dark); }
     body.light-mode .t-label              { color: #6b7a00; }
     body.light-mode .works__headline,
-    body.light-mode .test__headline,
     body.light-mode .contact__heading      { color: var(--ink-dark); }
     body.light-mode .contact__desc         { color: rgba(26,28,22,0.65); }
-    body.light-mode .t-card__quote,
-    body.light-mode .t-card__name         { color: var(--ink-dark); }
-    body.light-mode .t-card__role          { color: rgba(26,28,22,0.55); }
-    body.light-mode .t-card__category      { color: #6b7a00; }
-    body.light-mode .client-logo           { filter: brightness(0); }
     body.light-mode .social-link           { color: var(--ink-dark); }
     body.light-mode .nav                   { background: var(--bg-light); }
     body.light-mode .nav__links a,
@@ -720,277 +714,6 @@
 
 
     /* ================================================================
-       03 — CLIENTS & TESTIMONIALS
-    ================================================================ */
-    #testimonials .inner {
-      display: flex;
-      flex-direction: column;
-      gap: 80px;
-    }
-
-    /* Groups the heading with its carousel — own 40px rhythm per Figma */
-    .test__group {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 40px;
-      width: 100%;
-    }
-
-    /* Heading — large Lora display text */
-    .test__headline {
-      font-family: var(--font-display);
-      font-weight: 400;
-      font-size: clamp(1.75rem, 3.6vw, 3.25rem);
-      line-height: 1.08;
-      letter-spacing: -0.03em;
-      color: var(--ink-light);
-      text-align: center;
-      width: 100%;
-    }
-    body.light-mode .test__headline { color: var(--ink-dark); }
-
-    /* Supporting context line under the headline */
-    .test__context {
-      font-family: var(--font-body);
-      font-size: 0.8rem;
-      line-height: 1.55;
-      opacity: 0.5;
-      max-width: 44ch;
-      text-align: center;
-      color: var(--ink-light);
-      margin: 0;
-    }
-    body.light-mode .test__context { color: var(--ink-dark); }
-
-    /* Carousel wrapper: groups the track + dots as one unit */
-    .test__carousel {
-      display: flex;
-      flex-direction: column;
-      gap: 16px;
-      width: 100%;
-    }
-
-    /* Spotlight carousel — active card front, adjacent faded.
-       Height is set per-active-card by JS so dots hug the card like Figma's auto-layout. */
-    .test__row {
-      position: relative;
-      width: 100%;
-      height: 300px;
-      transition: height 0.4s ease;
-      overflow: hidden;
-      -webkit-mask-image: linear-gradient(to right, transparent 0%, rgba(0,0,0,0.5) 12%, black 26%, black 74%, rgba(0,0,0,0.5) 88%, transparent 100%);
-      mask-image: linear-gradient(to right, transparent 0%, rgba(0,0,0,0.5) 12%, black 26%, black 74%, rgba(0,0,0,0.5) 88%, transparent 100%);
-    }
-
-    .t-card {
-      position: absolute;
-      left: 50%;
-      top: 0;
-      width: min(85%, 497px);
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      gap: 20px;
-      padding: 32px;
-      border: 1px solid var(--ink-light);
-      border-radius: 10px;
-      box-sizing: border-box;
-      text-align: center;
-      opacity: 0;
-      transform: translateX(-50%);
-      transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.4s ease;
-      pointer-events: none;
-    }
-    body.light-mode .t-card { border-color: var(--ink-dark); }
-
-    .t-card.active {
-      opacity: 1;
-      transform: translateX(-50%);
-      pointer-events: auto;
-      z-index: 2;
-    }
-
-    .t-card.t-prev {
-      opacity: 0.3;
-      transform: translateX(calc(-50% - 580px));
-      z-index: 1;
-    }
-
-    .t-card.t-next {
-      opacity: 0.3;
-      transform: translateX(calc(-50% + 580px));
-      z-index: 1;
-    }
-
-    /* Featured testimonial — Eileen Zhang's card carries a brighter accent
-       border and a slightly larger quote to signal top billing */
-    .t-card--featured {
-      border-color: var(--lime);
-      border-width: 2px;
-    }
-    body.light-mode .t-card--featured { border-color: #6b7a00; }
-    .t-card--featured .t-card__quote {
-      font-size: clamp(1.1875rem, 1.9vw, 1.5rem);
-      line-height: 1.4;
-    }
-
-    .t-card__body {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 20px;
-    }
-
-    .test__nav {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-
-    .test__dots {
-      display: flex;
-      gap: 18px;
-      align-items: center;
-    }
-
-    .test__dot {
-      width: 12px;
-      height: 12px;
-      border-radius: 50%;
-      background: rgba(244,244,235,0.25);
-      flex-shrink: 0;
-      transition: width 0.3s ease, height 0.3s ease, background 0.3s ease;
-      cursor: pointer;
-    }
-    .test__dot.active {
-      width: 20px;
-      height: 20px;
-      background: var(--lime);
-    }
-    body.light-mode .test__dot { background: rgba(26,28,22,0.2); }
-    body.light-mode .test__dot.active { background: #6b7a00; }
-
-    /* Category — smallest label, purely contextual */
-    .t-card__category {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      background: #6b7060;
-      padding: 4px 16px;
-      border-radius: 5px;
-      font-family: var(--font-body);
-      font-weight: 600;
-      font-size: 13px;
-      line-height: normal;
-      letter-spacing: 0.04em;
-      color: var(--ink-light);
-      white-space: nowrap;
-      opacity: 0.8;
-    }
-    body.light-mode .t-card__category { color: var(--ink-light); }
-
-    /* Quote — the headline of each card */
-    .t-card__quote {
-      font-family: var(--font-display);
-      font-style: italic;
-      font-weight: 400;
-      font-size: clamp(1.0625rem, 1.68vw, 1.375rem);
-      line-height: 1.45;
-      letter-spacing: -0.01em;
-      color: var(--ink-light);
-    }
-
-    .t-card__attribution {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 10px;
-    }
-
-    .t-card__avatar {
-      width: 38px;
-      height: 38px;
-      border-radius: 50%;
-      background: rgba(255, 255, 255, 0.08);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-family: var(--font-body);
-      font-size: 0.72rem;
-      font-weight: 600;
-      letter-spacing: 0.04em;
-      color: var(--ink-light);
-    }
-    body.light-mode .t-card__avatar {
-      background: rgba(26, 28, 22, 0.08);
-      color: var(--ink-dark);
-    }
-
-    /* Name — clear attribution */
-    .t-card__name {
-      font-family: var(--font-body);
-      font-weight: 600;
-      font-size: 15px;
-      line-height: 23px;
-      color: var(--ink-light);
-    }
-
-    /* Role — softest layer */
-    .t-card__role {
-      font-family: var(--font-body);
-      font-style: italic;
-      font-size: 13px;
-      line-height: 23px;
-      color: rgba(244,244,235,0.5);
-    }
-
-    /* Client logos — continuous marquee */
-    .clients-marquee {
-      overflow: hidden;
-      width: 100%;
-      -webkit-mask-image: linear-gradient(to right, transparent 0%, black 12%, black 88%, transparent 100%);
-      mask-image: linear-gradient(to right, transparent 0%, black 12%, black 88%, transparent 100%);
-    }
-
-    .clients-track {
-      display: flex;
-      align-items: center;
-      gap: 100px;
-      width: max-content;
-    }
-
-    .client-logo-item {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      flex-shrink: 0;
-    }
-
-    .client-logo-context {
-      font-size: 0.62rem;
-      letter-spacing: 0.07em;
-      text-transform: uppercase;
-      opacity: 0.38;
-      margin-top: -2px;
-      text-align: center;
-      display: block;
-      color: var(--ink-light);
-      white-space: nowrap;
-    }
-    body.light-mode .client-logo-context { color: var(--ink-dark); }
-
-    .client-logo {
-      object-fit: contain;
-      flex-shrink: 0;
-      opacity: 0.75;
-    }
-    .client-logo--guerlain { width: clamp(100px, 17.4vw, 228px); height: auto; }
-    .client-logo--arvo     { width: clamp(76px, 12.5vw, 164px); height: auto; }
-    .client-logo--cpf      { width: clamp(100px, 17.9vw, 235px); height: auto; }
-
-    /* ================================================================
        04 — CONTACT / ABOUT
     ================================================================ */
     #contact {
@@ -1610,117 +1333,6 @@
     </div>
   </section>
 
-  <!-- ── 03 CLIENTS & TESTIMONIALS ── -->
-  <section class="section" id="testimonials">
-    <div class="inner">
-      <span class="t-label">Clients &amp; Testimonials</span>
-
-      <div class="clients-marquee">
-        <div class="clients-track">
-          <div class="client-logo-item">
-            <img class="client-logo client-logo--guerlain" src="Asset/Logo_Guerlain_Light.png" alt="Guerlain" />
-            <span class="client-logo-context">Guerlain &middot; LVMH Group</span>
-          </div>
-          <div class="client-logo-item">
-            <img class="client-logo client-logo--arvo" src="Asset/Logo_ARVO_Light.png" alt="ARVO" />
-            <span class="client-logo-context">ARVO &middot; AI Startup</span>
-          </div>
-          <div class="client-logo-item">
-            <img class="client-logo client-logo--cpf" src="Asset/Logo_CPF_white.png" alt="CPF" />
-            <span class="client-logo-context">CPF Board &middot; Government</span>
-          </div>
-          <div class="client-logo-item" aria-hidden="true">
-            <img class="client-logo client-logo--guerlain" src="Asset/Logo_Guerlain_Light.png" alt="" />
-            <span class="client-logo-context">Guerlain &middot; LVMH Group</span>
-          </div>
-          <div class="client-logo-item" aria-hidden="true">
-            <img class="client-logo client-logo--arvo" src="Asset/Logo_ARVO_Light.png" alt="" />
-            <span class="client-logo-context">ARVO &middot; AI Startup</span>
-          </div>
-          <div class="client-logo-item" aria-hidden="true">
-            <img class="client-logo client-logo--cpf" src="Asset/Logo_CPF_white.png" alt="" />
-            <span class="client-logo-context">CPF Board &middot; Government</span>
-          </div>
-        </div>
-      </div>
-
-      <div class="test__group">
-      <p class="test__headline">
-        From digital systems to physical spaces:<br>
-        What they say about working with me.
-      </p>
-
-      <p class="test__context">
-        From product design to physical spaces &mdash; what collaborators say about working with me.
-      </p>
-
-      <div class="test__carousel">
-        <div class="test__row">
-
-          <div class="t-card t-card--featured active">
-            <div class="t-card__body">
-              <span class="t-card__category">Product Design</span>
-              <p class="t-card__quote">"Their design recommendations were methodically tested and immediately actionable, directly strengthening the product's user experience."</p>
-            </div>
-            <div class="t-card__attribution">
-              <div class="t-card__avatar" aria-hidden="true">EZ</div>
-              <div class="t-card__name">Eileen Zhang</div>
-              <div class="t-card__role">Founder, ARVO</div>
-            </div>
-          </div>
-
-          <div class="t-card">
-            <div class="t-card__body">
-              <span class="t-card__category">Workshop</span>
-              <p class="t-card__quote">"Andrea designed and executed an exclusive, high-touch Christmas wreath workshop tailored for us. Managing everything and the experience was meticulously crafted and matched well with our brand's luxury aesthetic."</p>
-            </div>
-            <div class="t-card__attribution">
-              <div class="t-card__avatar" aria-hidden="true">CT</div>
-              <div class="t-card__name">Charline Tang</div>
-              <div class="t-card__role">Brand General Manager, SEA, Guerlain</div>
-            </div>
-          </div>
-
-          <div class="t-card">
-            <div class="t-card__body">
-              <span class="t-card__category">Event Styling</span>
-              <p class="t-card__quote">"Engaged last minute for a proposal and she came through. Even though it was drizzling, she still powered through the setup with a smile. Amazing service and really beautiful set up."</p>
-            </div>
-            <div class="t-card__attribution">
-              <div class="t-card__avatar" aria-hidden="true">CL</div>
-              <div class="t-card__name">Clement Loh</div>
-              <div class="t-card__role">Private Client, Engagement</div>
-            </div>
-          </div>
-
-          <div class="t-card">
-            <div class="t-card__body">
-              <span class="t-card__category">Event Styling</span>
-              <p class="t-card__quote">"Engaged M&amp;P for my wedding at 1-Atico. Andrea listened patiently to my requests and conceptualised the design perfectly. The whole set up was so dreamy."</p>
-            </div>
-            <div class="t-card__attribution">
-              <div class="t-card__avatar" aria-hidden="true">DA</div>
-              <div class="t-card__name">Desiree Ang</div>
-              <div class="t-card__role">Private Client, Wedding</div>
-            </div>
-          </div>
-
-        </div><!-- end .test__row -->
-
-        <div class="test__nav">
-          <div class="test__dots">
-            <span class="test__dot active"></span>
-            <span class="test__dot"></span>
-            <span class="test__dot"></span>
-            <span class="test__dot"></span>
-          </div>
-        </div>
-      </div><!-- end .test__carousel -->
-      </div><!-- end .test__group -->
-
-    </div>
-  </section>
-
   <!-- ── 04 CONTACT / ABOUT ── -->
   <section class="section" id="contact">
     <div class="inner">
@@ -2176,10 +1788,35 @@
       y: '112%', duration: 0.92, ease: 'power4.out',
       scrollTrigger: { trigger: '#works', start: 'top 85%' }
     });
-    gsap.from('.card-shell', {
-      clipPath: 'inset(100% 0 0 0)', duration: 1.05, stagger: 0.13, ease: 'power4.out',
-      scrollTrigger: { trigger: '.works__grid', start: 'top 74%' }
-    });
+    /* Fan-open parallax (per user's sketch: a closed, nearly-flat stack of 3 cards rotates
+       open into the fan, like spreading a hand of cards from its base — not a straight
+       slide-apart). Closed state: all three pulled in to roughly Seletar's (the middle
+       card's) x position with only a small vertical stack offset and near-zero rotation, so
+       they read as one pile. Open state: each card's normal resting x/y (0,0 offset) plus a
+       fan rotation — ARVO leans left, PawHaus leans right, Seletar stays near-upright — with
+       transform-origin pinned to the bottom edge so they visibly pivot open from a base point,
+       the way a hand of cards does. scrub ties this directly to scroll position (not a
+       one-shot play), so scrolling back up closes the fan again. */
+    (function () {
+      const grid = document.querySelector('.works__grid');
+      const arvo = document.querySelector('.card-shell--arvo');
+      const seletar = document.querySelector('.card-shell--seletar');
+      const pawhaus = document.querySelector('.card-shell--pawhaus');
+      if (!grid || !arvo || !seletar || !pawhaus) return;
+
+      const gridW = grid.getBoundingClientRect().width;
+      const arvoStackX    = gridW * ((35.56 - 6.45) / 100);
+      const pawhausStackX = gridW * ((35.56 - 52.70) / 100);
+
+      gsap.set([arvo, seletar, pawhaus], { transformOrigin: '50% 100%' });
+
+      gsap.timeline({
+        scrollTrigger: { trigger: grid, start: 'top 85%', end: 'top 30%', scrub: 0.6 }
+      })
+        .fromTo(arvo,    { x: arvoStackX,    y: -8, rotate: -1 }, { x: 0, y: 0, rotate: -4, ease: 'none' }, 0)
+        .fromTo(seletar, { y: 0,             rotate: 0 },         { y: 0, rotate: 1,  ease: 'none' }, 0)
+        .fromTo(pawhaus, { x: pawhausStackX, y: 8,  rotate: 1 },  { x: 0, y: 0, rotate: 5,  ease: 'none' }, 0);
+    })();
 
     /* ARVO mockup — data-populate fragments (see .arvo-frag CSS comment for what these are).
        Timing/easing/loop-duration pulled directly from get_motion_context on the flat Figma
@@ -2220,27 +1857,6 @@
       tl.fromTo(panels, { scale: 1.2 }, { scale: 1, duration: 0.5, ease: 'power2.out' }, 0.7356)
         .fromTo(panels, { x: () => px(200) }, { x: 0, duration: 0.5, ease: 'power2.out' }, 1.3834);
     })();
-
-    /* Testimonials */
-    gsap.from('.test__headline', {
-      y: 40, opacity: 0, duration: 0.9, ease: 'power3.out',
-      scrollTrigger: { trigger: '#testimonials', start: 'top 85%' }
-    });
-    /* Carousel shows one card at a time, so the stagger from the prompt
-       collapses to a single slide-in on the active card; clearProps hands
-       both transform and opacity back to the carousel's own CSS classes
-       (.t-card{opacity:0} / .t-card.active{opacity:1}, translateX(-50%))
-       once the tween completes — otherwise the leftover inline opacity:1
-       outranks the CSS rule once nav moves the active class elsewhere,
-       leaving this card stuck visible and overlapping the new active one. */
-    gsap.from('.t-card.active', {
-      x: 60, opacity: 0, duration: 0.7, ease: 'power3.out', clearProps: 'transform,opacity',
-      scrollTrigger: { trigger: '.test__carousel', start: 'top 68%' }
-    });
-    gsap.from('.clients-marquee', {
-      opacity: 0, duration: 0.6,
-      scrollTrigger: { trigger: '.clients-marquee', start: 'top 90%' }
-    });
 
     /* Contact */
     gsap.from('.contact__heading', {
@@ -2297,39 +1913,6 @@
       });
     });
 
-    /* ── Testimonial spotlight ── */
-    (function () {
-      const cards = Array.from(document.querySelectorAll('.t-card'));
-      const dots  = Array.from(document.querySelectorAll('.test__dot'));
-      const row   = document.querySelector('.test__row');
-      let cur = 0, touchStartX = 0;
-
-      function go(n) {
-        const len = cards.length;
-        n = (n + len) % len;
-        const prev = (n - 1 + len) % len;
-        const next = (n + 1) % len;
-        cards.forEach(c => c.classList.remove('active', 't-prev', 't-next'));
-        dots.forEach(d => d.classList.remove('active'));
-        cards[n].classList.add('active');
-        cards[prev].classList.add('t-prev');
-        cards[next].classList.add('t-next');
-        dots[n].classList.add('active');
-        cur = n;
-        row.style.height = cards[n].offsetHeight + 'px';
-      }
-
-      dots.forEach((d, i) => d.addEventListener('click', () => go(i)));
-
-      row.addEventListener('touchstart', e => { touchStartX = e.touches[0].clientX; }, { passive: true });
-      row.addEventListener('touchend', e => {
-        const dx = e.changedTouches[0].clientX - touchStartX;
-        if (Math.abs(dx) > 40) go(dx < 0 ? cur + 1 : cur - 1);
-      }, { passive: true });
-
-      go(0);
-    })();
-
     /* ── Card hover: cursor tilt + image parallax ── */
     document.querySelectorAll('.card-shell').forEach(card => {
       const img = card.querySelector('img');
@@ -2380,28 +1963,6 @@
       if (!em) return;
       em.addEventListener('mouseenter', () => gsap.to(em, { scale: 1.022, duration: 0.38, ease: 'power2.out' }));
       em.addEventListener('mouseleave', () => gsap.to(em, { scale: 1, duration: 0.65, ease: 'elastic.out(1,0.5)' }));
-    })();
-
-    /* ── Client logo marquee: GSAP drive + spotlight hover ── */
-    (function () {
-      const marquee = document.querySelector('.clients-marquee');
-      const track = document.querySelector('.clients-track');
-      if (!marquee || !track) return;
-
-      const w = track.scrollWidth / 2;
-      const ticker = gsap.to(track, { x: -w, duration: 18, ease: 'none', repeat: -1 });
-      marquee.addEventListener('mouseenter', () => ticker.pause());
-      marquee.addEventListener('mouseleave', () => ticker.play());
-
-      const logos = document.querySelectorAll('.client-logo-item');
-      logos.forEach(logo => {
-        logo.addEventListener('mouseenter', () => {
-          gsap.to(logo, { opacity: 1, scale: 1.08, duration: 0.26 });
-          logos.forEach(l => { if (l !== logo) gsap.to(l, { opacity: 0.3, duration: 0.26 }); });
-        });
-        logo.addEventListener('mouseleave', () =>
-          gsap.to(logos, { opacity: 1, scale: 1, duration: 0.4 }));
-      });
     })();
 
   </script>

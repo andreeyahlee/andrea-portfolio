@@ -1,0 +1,2189 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Side Quests — Andrea Lee</title>
+  <meta name="description" content="Personal side projects and event styling work by Andrea Lee.">
+  <meta name="robots" content="index, follow">
+  <link rel="icon" href="/Asset/favicon.ico" sizes="any">
+  <link rel="icon" type="image/png" sizes="16x16" href="/Asset/favicon-16.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/Asset/favicon-32.png">
+  <link rel="icon" type="image/png" sizes="192x192" href="/Asset/favicon-192.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="/Asset/apple-touch-icon.png">
+  <meta property="og:title" content="Andrea Lee — Product Designer & UX Researcher">
+  <meta property="og:description" content="UX Designer & Researcher based in Singapore, open to full-time roles.">
+  <meta property="og:image" content="https://andrealee.co/Asset/favicon-512.png">
+  <meta property="og:url" content="https://andrealee.co/">
+  <meta property="og:type" content="website">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Andrea Lee — Product Designer & UX Researcher">
+  <meta name="twitter:description" content="UX Designer & Researcher based in Singapore, open to full-time roles.">
+  <meta name="twitter:image" content="https://andrealee.co/Asset/favicon-512.png">
+
+  <!-- Google Fonts: Lora (display) + Gochi Hand (handwritten) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Gochi+Hand&family=Lora:ital,wght@0,400;1,400&family=Poiret+One&display=swap" rel="stylesheet">
+
+  <style>
+    /* ── Self-hosted fonts ── */
+    @font-face { font-family:'DM Mono'; font-style:normal; font-weight:300; font-display:swap; src:url('Asset/fonts/dm-mono-300.woff2') format('woff2'); }
+    @font-face { font-family:'DM Mono'; font-style:italic; font-weight:300; font-display:swap; src:url('Asset/fonts/dm-mono-300-italic.woff2') format('woff2'); }
+    @font-face { font-family:'DM Mono'; font-style:normal; font-weight:400; font-display:swap; src:url('Asset/fonts/dm-mono-400.woff2') format('woff2'); }
+    @font-face { font-family:'DM Mono'; font-style:normal; font-weight:500; font-display:swap; src:url('Asset/fonts/dm-mono-500.woff2') format('woff2'); }
+    @font-face { font-family:'DM Sans'; font-style:normal; font-weight:400; font-display:swap; src:url('Asset/fonts/dm-sans-400.woff2') format('woff2'); }
+    @font-face { font-family:'DM Sans'; font-style:normal; font-weight:500; font-display:swap; src:url('Asset/fonts/dm-sans-500.woff2') format('woff2'); }
+    @font-face { font-family:'DM Sans'; font-style:italic; font-weight:400; font-display:swap; src:url('Asset/fonts/dm-sans-400-italic.woff2') format('woff2'); }
+    @font-face { font-family:'DM Sans'; font-style:normal; font-weight:600; font-display:swap; src:url('Asset/fonts/dm-sans-500.woff2') format('woff2'); }
+  </style>
+
+  <style>
+    /* ================================================================
+       DESIGN TOKENS
+    ================================================================ */
+    :root {
+      --bg-dark:   #1a1c16;
+      --bg-light:  #f4f4eb;
+      --lime:      #dee895;
+      --ink-light: #f4f4eb;
+      --ink-dark:  #1a1c16;
+      --ink-dim:   rgba(244,244,235,0.55);
+
+      --font-display: 'Lora', Georgia, serif;
+      --font-body:    'DM Sans', Arial, sans-serif;
+      --font-mono:    'DM Mono', 'IBM Plex Mono', monospace;
+      --font-hand:    'Gochi Hand', cursive;
+
+      --max-w: 1312px;
+      --pad:   64px;
+      --ease-bounce: cubic-bezier(0.175,0.885,0.327,1.41);
+      --dur-fast: 0.2s;
+      --dur-slow: 0.35s;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { font-size: 16px; scroll-behavior: smooth; }
+    body {
+      font-family: var(--font-body);
+      background: var(--bg-dark);
+      color: var(--ink-light);
+      overflow-x: hidden;
+      cursor: none;
+    }
+
+    /* ================================================================
+       LIGHT MODE
+    ================================================================ */
+    body.light-mode                        { background: var(--bg-light); color: var(--ink-dark); }
+    body.light-mode .section               { background: var(--bg-light); }
+    body.light-mode .t-label              { color: #6b7a00; }
+    body.light-mode .contact__heading      { color: var(--ink-dark); }
+    body.light-mode .contact__desc         { color: rgba(26,28,22,0.65); }
+    body.light-mode .social-link           { color: var(--ink-dark); }
+    body.light-mode .nav                   { background: var(--bg-light); }
+    body.light-mode .nav__links a,
+    body.light-mode .nav__work-trigger     { color: var(--ink-dark); }
+    body.light-mode .nav__links a:hover,
+    body.light-mode .nav__work-trigger:hover,
+    body.light-mode .nav__work-menu a:hover { color: #6b7a00; }
+    body.light-mode .nav__work-menu a      { color: var(--ink-dark); }
+    body.light-mode .nav__logo-text        { color: var(--ink-dark); }
+    body.light-mode .nav__ham-line         { background: var(--ink-dark); }
+    body.light-mode .nav__mobile-menu      { background: var(--bg-light); border-color: rgba(26,28,22,0.15); }
+    body.light-mode .nav__mobile-menu li a { color: rgba(26,28,22,0.7); }
+    body.light-mode .nav__mobile-menu li a:hover { color: #6b7a00; background: rgba(26,28,22,0.05); }
+    body.light-mode .pd-intro              { color: var(--ink-dark); }
+
+    /* ================================================================
+       NAVIGATION
+    ================================================================ */
+    .nav {
+      position: fixed;
+      top: 0; left: 0;
+      z-index: 999;
+      width: 100%;
+      min-height: 104px;
+      background: var(--bg-dark);
+      padding: 32px max(32px, calc((100% - 1440px) / 2 + 32px));
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      transition: background var(--dur-fast);
+    }
+
+    .nav__logo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      text-decoration: none;
+      flex-shrink: 0;
+    }
+
+    .nav__logo-text {
+      font-family: var(--font-hand);
+      font-weight: 400;
+      font-size: 36px;
+      line-height: 40px;
+      letter-spacing: normal;
+      text-transform: uppercase;
+      color: var(--ink-light);
+      white-space: nowrap;
+    }
+    .nav__logo-text--short { display: none; }
+
+    .nav__logo-flower {
+      width: 40px; height: 40px;
+      display: block;
+      flex-shrink: 0;
+      object-fit: contain;
+    }
+
+    .nav__right {
+      display: flex;
+      align-items: center;
+      gap: 40px;
+    }
+
+    .nav__links {
+      display: flex;
+      gap: 40px;
+      list-style: none;
+      align-items: center;
+    }
+
+    .nav__links a {
+      font-family: var(--font-hand);
+      font-weight: 400;
+      font-size: 32px;
+      line-height: 36px;
+      letter-spacing: 0;
+      color: var(--ink-light);
+      text-decoration: none;
+      transition: color var(--dur-fast);
+      white-space: nowrap;
+    }
+    .nav__links a:hover,
+    .nav__links a[aria-current="page"] { color: var(--lime); }
+
+    /* Work — dropdown trigger + menu (Figma node 784:30853 / 1394:58596) */
+    .nav__links-item--work { position: relative; }
+    .nav__work-trigger {
+      display: flex; align-items: center; gap: 4px; background: none; border: none; padding: 0; cursor: pointer;
+      font-family: var(--font-hand); font-weight: 400; font-size: 32px; line-height: 36px;
+      color: var(--ink-light); transition: color var(--dur-fast);
+    }
+    .nav__work-trigger:hover { color: var(--lime); }
+    .nav__work-chevron { width: 24px; height: 24px; flex-shrink: 0; transition: transform 0.25s ease; }
+    .nav__links-item--work.is-open .nav__work-chevron { transform: rotate(180deg); }
+    .nav__work-menu {
+      position: absolute; top: calc(100% + 12px); left: 0; min-width: 167px;
+      display: flex; flex-direction: column; gap: 10px; padding: 16px;
+      background: var(--bg-dark); border: 1px solid rgba(222,232,149,0.18); border-radius: 16px;
+      box-shadow: 0 4px 24px rgba(0,0,0,0.25); opacity: 0; visibility: hidden; transform: translateY(-8px);
+      transition: opacity 0.2s ease, transform 0.2s ease, visibility 0.2s; z-index: 10;
+    }
+    .nav__links-item--work.is-open .nav__work-menu { opacity: 1; visibility: visible; transform: translateY(0); }
+    .nav__work-menu a {
+      font-family: 'Poiret One', Georgia, serif; font-weight: 400; font-size: 22px; line-height: 28px;
+      color: var(--ink-light); text-decoration: none; white-space: nowrap; transition: color var(--dur-fast);
+    }
+    .nav__work-menu a:hover { color: var(--lime); }
+    body.light-mode .nav__work-menu { background: var(--bg-light); border-color: rgba(26,28,22,0.15); }
+
+    .nav__toggle {
+      box-sizing: border-box;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 4px;
+      width: 83px;
+      height: 30px;
+      background: #f4f4eb;
+      border: 0.95px solid var(--lime);
+      box-shadow: inset 0 4px 4px rgba(0,0,0,0.25);
+      border-radius: 95px;
+      cursor: pointer;
+      flex-shrink: 0;
+      transition: background 0.3s ease;
+    }
+    body.light-mode .nav__toggle { background: #6b7060; }
+    .nav__toggle:hover { opacity: 0.85; }
+
+    .toggle__inner {
+      display: flex;
+      flex-direction: row;
+      justify-content: space-between;
+      align-items: center;
+      width: 75px;
+      height: 22px;
+      gap: 3px;
+      pointer-events: none;
+    }
+    body.light-mode .toggle__inner { width: 72px; }
+
+    .toggle__icon {
+      width: 33px;
+      height: 22px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      order: 1;
+    }
+    body.light-mode .toggle__icon { order: 0; width: 27px; height: 20px; }
+
+    .toggle__sun  { display: block; width: 100%; height: 100%; }
+    .toggle__moon { display: none;  width: 100%; height: 100%; }
+    body.light-mode .toggle__sun  { display: none;  }
+    body.light-mode .toggle__moon { display: block; }
+
+    .toggle__thumb {
+      box-sizing: border-box;
+      width: 42px;
+      height: 22px;
+      background: #1a1c16;
+      border: 1px solid var(--lime);
+      box-shadow: 0 10px 4px rgba(0,0,0,0.25);
+      border-radius: 95px;
+      flex-shrink: 0;
+      order: 0;
+      transition: background 0.3s ease, box-shadow 0.3s ease, height 0.3s ease;
+    }
+    body.light-mode .toggle__thumb {
+      background: #f4f4eb;
+      box-shadow: -3px 2px 2px rgba(0,0,0,0.69), inset -1px -6px 4px rgba(0,0,0,0.25);
+      height: 20px;
+      order: 1;
+    }
+
+    .nav__hamburger {
+      display: none;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      gap: 4.5px;
+      background: none;
+      border: none;
+      cursor: pointer;
+      padding: 3px;
+      flex-shrink: 0;
+      width: 28px; height: 28px;
+    }
+    .nav__ham-line {
+      display: block;
+      width: 18px; height: 1.5px;
+      background: var(--ink-light);
+      border-radius: 2px;
+      transition: transform 0.25s ease, opacity 0.2s ease, width 0.2s ease;
+      transform-origin: center;
+    }
+    .nav.is-open .nav__ham-line:nth-child(1) { transform: translateY(6px) rotate(45deg); }
+    .nav.is-open .nav__ham-line:nth-child(2) { opacity: 0; width: 0; }
+    .nav.is-open .nav__ham-line:nth-child(3) { transform: translateY(-6px) rotate(-45deg); }
+
+    .nav__mobile-menu {
+      position: absolute;
+      top: calc(100% - 8px);
+      left: var(--pad); right: var(--pad);
+      background: var(--bg-dark);
+      border: 1px solid rgba(222,232,149,0.18);
+      border-radius: 20px;
+      box-shadow: 0 4px 24px rgba(0,0,0,0.25);
+      overflow: hidden;
+      max-height: 0; opacity: 0;
+      pointer-events: none;
+      transition: max-height 0.3s ease, opacity 0.2s ease;
+    }
+    .nav__mobile-menu ul {
+      list-style: none;
+      padding: 0.625rem 0.5rem;
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+    .nav__mobile-menu li a {
+      display: block;
+      padding: 0.75rem 0.875rem;
+      font-family: var(--font-hand);
+      font-weight: 400;
+      font-size: 20px;
+      letter-spacing: -0.03em;
+      color: rgba(244,244,235,0.8);
+      text-decoration: none;
+      border-radius: 10px;
+      transition: color var(--dur-fast), background var(--dur-fast);
+    }
+    .nav__mobile-menu li a:hover { color: var(--lime); background: rgba(244,244,235,0.05); }
+    .nav.is-open .nav__mobile-menu { max-height: 200px; opacity: 1; pointer-events: auto; }
+
+    /* ================================================================
+       SHARED UTILITIES
+    ================================================================ */
+    .section {
+      width: 100%;
+      background: var(--bg-dark);
+    }
+    .section + .section {
+      margin-top: 100px;
+    }
+
+    .inner {
+      max-width: calc(var(--max-w) + var(--pad) * 2);
+      margin: 0 auto;
+      padding: var(--pad);
+    }
+
+    .t-label {
+      font-family: var(--font-mono);
+      font-weight: 700;
+      font-size: 11px;
+      line-height: 14px;
+      letter-spacing: 0.6em;
+      text-transform: uppercase;
+      color: var(--lime);
+      display: block;
+    }
+
+    .social-link {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 30px; height: 30px;
+      color: var(--ink-light);
+      opacity: 0.6;
+      text-decoration: none;
+      transition: opacity var(--dur-fast), transform var(--dur-slow) var(--ease-bounce);
+    }
+    .social-link:hover { opacity: 1; transform: scale(1.1); }
+    .social-link svg { width: 100%; height: 100%; fill: currentColor; display: block; }
+
+    /* ================================================================
+       CURSOR FOLLOWER
+    ================================================================ */
+    #cursor-follower {
+      position: fixed;
+      top: 0; left: 0;
+      width: 52px;
+      pointer-events: none;
+      z-index: 9999;
+      display: none;
+      will-change: transform;
+    }
+
+    @keyframes cursor-spin {
+      from { transform: rotate(0deg); }
+      to   { transform: rotate(360deg); }
+    }
+
+    #cursor-follower img {
+      width: 100%;
+      height: auto;
+      display: block;
+      transform-origin: center center;
+      animation: cursor-spin 5s linear infinite;
+    }
+
+    @media (hover: none) {
+      #cursor-follower { display: none !important; }
+      body { cursor: auto; }
+    }
+
+    /* ================================================================
+       LOADER
+    ================================================================ */
+    #loader {
+      position: fixed;
+      inset: 0;
+      z-index: 9999;
+      background: var(--bg-dark);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      transition: opacity 0.7s ease, visibility 0.7s ease;
+    }
+    #loader.loader--hidden {
+      opacity: 0;
+      visibility: hidden;
+      pointer-events: none;
+    }
+    .loader__video {
+      width: 347px;
+      max-width: 80vw;
+    }
+    .loader__text {
+      font-family: var(--font-display);
+      font-size: 22px;
+      font-weight: 400;
+      line-height: 28px;
+      letter-spacing: -0.01em;
+      color: var(--ink-light);
+      text-align: center;
+    }
+    .loader__dots span {
+      opacity: 0;
+      animation: loader-dot 1.5s ease-in-out infinite;
+    }
+    .loader__dots span:nth-child(1) { animation-delay: 0s; }
+    .loader__dots span:nth-child(2) { animation-delay: 0.3s; }
+    .loader__dots span:nth-child(3) { animation-delay: 0.6s; }
+    @keyframes loader-dot {
+      0%, 100% { opacity: 0; }
+      30%, 70%  { opacity: 1; }
+    }
+
+    /* ================================================================
+       SECTION 1 — PRODUCT DESIGN
+    ================================================================ */
+    #product-design .inner {
+      padding-top: calc(var(--pad) + 104px);
+      display: flex;
+      flex-direction: column;
+      gap: 40px;
+    }
+
+    .page-eyebrow {
+      display: block;
+      font-size: 0.68rem;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      opacity: 0.38;
+      margin-bottom: 0.75rem;
+      color: var(--ink-light);
+    }
+    body.light-mode .page-eyebrow { color: var(--ink-dark); }
+
+    .pd-intro {
+      font-family: var(--font-display);
+      font-weight: 400;
+      font-size: clamp(20px, 2.44vw, 32px);
+      line-height: 1.156;
+      letter-spacing: -0.02em;
+      color: var(--ink-light);
+      max-width: min(658px, 55%);
+    }
+
+    /* Single-column stack of equal-height landscape cards (Figma node 846-5673) */
+    .pd-grid {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    /* ── Cards (shared base) ── */
+    .card {
+      position: relative;
+      overflow: hidden;
+      isolation: isolate;
+      width: 100%;
+      aspect-ratio: 1184 / 271;
+      border-radius: 16px;
+      cursor: pointer;
+      will-change: transform;
+      transition: box-shadow 0.3s ease;
+    }
+
+    .card--arvo    { background: #31332a; }
+    .card--seletar { background: #304c95; }
+    .card--pawhaus { background: #d09a94; }
+
+    /* Inner body — left text column; width/padding set per card to match Figma's
+       per-card text-column proportions. Mockups bleed outside it, positioned
+       absolutely against the full .card (see .card__mockup rules below). */
+    .card__body {
+      position: absolute;
+      left: 0;
+      top: 0;
+      bottom: 0;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      gap: 48px;
+      z-index: 2;
+    }
+    .card--arvo    .card__body,
+    .card--seletar .card__body,
+    .card--pawhaus .card__body { max-width: 40%; padding: 38px; }
+
+    /* All three cards share ARVO's Display/LG headline + Display/MD sub (locked tokens) */
+    .card__case-title {
+      font-family: var(--font-display);
+      font-size: 32px;
+      line-height: 37px;
+      letter-spacing: -0.02em;
+      color: var(--ink-light);
+      max-width: 100%;
+    }
+    .card__case-headline { font-weight: 700; margin: 0; }
+    .card__case-sub      {
+      font-weight: 400;
+      margin: 0;
+      font-size: 26px;
+      line-height: 32px;
+      letter-spacing: -0.015em;
+    }
+
+    .card__foot {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    /* All three cards: name + meta right-align within the text column */
+    .card--arvo    .card__foot,
+    .card--seletar .card__foot,
+    .card--pawhaus .card__foot {
+      align-self: flex-end;
+      text-align: right;
+    }
+
+    .card__project-name {
+      font-family: var(--font-hand);
+      font-size: clamp(28px, 3.47vw, 55px);
+      line-height: 50px;
+      letter-spacing: 0;
+      color: #f4f4eb;
+    }
+
+    .card__project-meta {
+      font-family: var(--font-body);
+      font-weight: 700;
+      font-size: 11px;
+      line-height: 1.3;
+      color: rgba(244,244,235,0.7);
+      text-transform: uppercase;
+      letter-spacing: 0.14em;
+    }
+    .card__project-meta p { margin: 0; }
+
+    /* Mockup images */
+    .card__mockup {
+      position: absolute;
+      pointer-events: none;
+      object-fit: contain;
+      z-index: 1;
+      height: auto;
+    }
+
+    /* ARVO — right half of the card, bleeding past top/bottom edges
+       (clipped by .card's overflow:hidden); rotation is already baked into
+       the source PNG, so no CSS transform is applied here */
+    .card__mockup--arvo {
+      left: 49.07%;
+      top: 1.85%;
+      width: 46.79%;
+      filter: drop-shadow(-25.175px 31.839px 1.851px black);
+    }
+
+    /* Seletar — right side, bleeding above the card's top edge; expanded to
+       touch the card's right edge (clipped by .card's overflow:hidden) */
+    .card__mockup--seletar {
+      left: 57.07%;
+      top: -13.43%;
+      width: 43%;
+      filter: drop-shadow(-12.492px 24.249px 1.58px rgba(0,0,0,0.5));
+    }
+
+    /* PawHaus — right side, nearly filling the card's full height */
+    .card__mockup--pawhaus {
+      left: 53.46%;
+      top: 3.69%;
+      width: 39.02%;
+      filter: drop-shadow(-14px 20px 4px rgba(0,0,0,0.35));
+    }
+
+    /* ================================================================
+       SECTION 2 — OTHER WORKS
+    ================================================================ */
+    #other-works .inner {
+      display: flex;
+      flex-direction: column;
+      gap: 40px;
+    }
+
+    /* List of project rows (Figma node 567-3170) — replaces the old 3-col card grid */
+    .ow-list {
+      display: flex;
+      flex-direction: column;
+      gap: 40px;
+    }
+
+    .ow-row {
+      display: flex;
+      align-items: center;
+      gap: 40px;
+      width: 100%;
+      cursor: default;
+    }
+
+    .card-disabled { opacity: 0.6; cursor: not-allowed; }
+    /* Side Quests rows: keep full-strength text per Figma — only the disabled
+       cursor/tooltip affordance applies, not the dimmed-opacity treatment */
+    .ow-row.card-disabled { opacity: 1; }
+
+    .ow-row__text {
+      display: flex;
+      flex: 1 0 0;
+      align-items: center;
+      gap: 40px;
+      min-width: 0;
+      color: var(--ink-light);
+    }
+
+    .ow-row__name {
+      font-family: var(--font-display);
+      font-weight: 500;
+      font-size: 18px;
+      line-height: 24px;
+      white-space: nowrap;
+      flex-shrink: 0;
+    }
+
+    .ow-row__desc {
+      font-family: var(--font-body);
+      font-weight: 400;
+      font-size: 13px;
+      line-height: 15px;
+      flex: 1 0 0;
+      min-width: 0;
+      color: var(--ink-light);
+    }
+
+    .ow-row__year {
+      font-family: var(--font-body);
+      font-weight: 600;
+      font-size: 13px;
+      color: var(--ink-light);
+      white-space: nowrap;
+      flex-shrink: 0;
+    }
+
+    .ow-row__badge {
+      font-family: var(--font-body);
+      font-size: 0.6rem;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--ink-light);
+      border: 1px solid rgba(244,244,235,0.2);
+      border-radius: 9999px;
+      padding: 0.18rem 0.55rem;
+      opacity: 0.65;
+      white-space: nowrap;
+      flex-shrink: 0;
+      transition: opacity 0.3s ease;
+    }
+    body.light-mode .ow-row__badge { color: var(--ink-dark); border-color: rgba(26,28,22,0.2); }
+    .ow-row:hover .ow-row__badge { opacity: 0.82; }
+
+    .ow-row__divider {
+      height: 1px;
+      width: 100%;
+      background: rgba(244,244,235,0.15);
+    }
+
+    /* Cursor-following hover preview — follows the pointer while hovering a row,
+       shows the matching project's image/video on loop until the cursor leaves */
+    .ow-preview {
+      position: fixed;
+      left: 0;
+      top: 0;
+      width: 320px;
+      height: 252px;
+      border-radius: 16px;
+      overflow: hidden;
+      pointer-events: none;
+      z-index: 50;
+      opacity: 0;
+      transform: translate(-50%, -120%);
+      box-shadow: 0 24px 48px rgba(0,0,0,0.35);
+      transition: opacity 0.2s ease;
+    }
+    .ow-preview--light { background: #f4f4eb; }
+    .ow-preview--dark  { background: #282c1e; }
+    .ow-preview--olive { background: #6b7060; }
+
+    .ow-preview__media {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: none;
+    }
+
+    /* ================================================================
+       SECTION 3 — EVENT STYLING
+    ================================================================ */
+    #event-styling .inner {
+      display: flex;
+      flex-direction: column;
+      gap: 40px;
+    }
+
+    .ev-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 20px;
+    }
+
+    /* Card: image on top, name/meta + "in construction" badge in a row below
+       (Figma node 552-4482) — replaces the old photo-with-text-overlay card */
+    .ev-card {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      cursor: default;
+    }
+
+    .ev-card__img {
+      width: 100%;
+      aspect-ratio: 450 / 250;
+      object-fit: cover;
+      border-radius: 12px;
+      display: block;
+    }
+
+    .ev-card__row {
+      display: flex;
+      align-items: center;
+      gap: 40px;
+      width: 100%;
+    }
+
+    .ev-card__text {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      flex: 1 0 0;
+      min-width: 0;
+    }
+
+    .ev-card__name {
+      font-family: var(--font-display);
+      font-weight: 700;
+      font-size: 18px;
+      line-height: 24px;
+      letter-spacing: -0.01em;
+      color: var(--ink-light);
+      margin: 0;
+    }
+
+    .ev-card__meta {
+      font-family: var(--font-body);
+      font-weight: 400;
+      font-size: 13px;
+      line-height: 15px;
+      color: var(--ink-light);
+      margin: 0;
+    }
+    .ev-card__meta strong { font-weight: 700; }
+
+    .ev-card__badge {
+      background: #dfe0de;
+      color: var(--ink-dark);
+      font-family: var(--font-body);
+      font-weight: 600;
+      font-size: 13px;
+      padding: 4px 16px;
+      border-radius: 10px;
+      white-space: nowrap;
+      flex-shrink: 0;
+    }
+
+    /* ----- Whirlwind 3D Carousel Ring ----- */
+    .ev-carousel-stage {
+      position: relative;
+      width: 100%;
+      height: 420px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      perspective: 1600px;
+      overflow: hidden;
+      touch-action: pan-y;
+    }
+
+    .ev-ring {
+      position: relative;
+      width: 380px;
+      height: 292px;
+      transform-style: preserve-3d;
+      cursor: grab;
+    }
+    .ev-ring.is-dragging { cursor: grabbing; }
+    .ev-carousel-card.is-active { cursor: pointer; }
+
+    .ev-carousel-card {
+      position: absolute;
+      inset: 0;
+      backface-visibility: hidden;
+      will-change: transform, opacity, filter;
+    }
+
+    .evc-shell {
+      width: 100%;
+      height: 100%;
+      border-radius: 16px;
+      overflow: hidden;
+      background: var(--bg-dark);
+      box-shadow: 0 20px 40px rgba(0,0,0,0.35);
+      display: flex;
+      flex-direction: column;
+      backface-visibility: hidden;
+    }
+    body.light .evc-shell { background: var(--bg-light); }
+
+    .evc-inner {
+      display: flex;
+      flex-direction: column;
+      height: 100%;
+    }
+
+    .evc-img-wrap {
+      width: 100%;
+      aspect-ratio: 450 / 250;
+      overflow: hidden;
+      flex-shrink: 0;
+    }
+    .evc-img-wrap img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+      transition: transform 0.5s ease;
+    }
+    .ev-carousel-card.is-active .evc-img-wrap img:hover {
+      transform: scale(1.05);
+    }
+
+    .section-bridge {
+      font-size: 0.85rem;
+      opacity: 0.55;
+      max-width: 50ch;
+      margin-bottom: 2rem;
+      line-height: 1.6;
+      color: var(--ink-light);
+    }
+    body.light-mode .section-bridge { color: var(--ink-dark); }
+
+    .evc-row {
+      display: flex;
+      align-items: center;
+      gap: 24px;
+      padding: 16px 18px;
+    }
+
+    .evc-text {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      flex: 1 0 0;
+      min-width: 0;
+    }
+
+    .evc-name {
+      font-family: var(--font-display);
+      font-weight: 700;
+      font-size: 18px;
+      line-height: 24px;
+      letter-spacing: -0.01em;
+      color: var(--ink-light);
+      margin: 0;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    body.light .evc-name { color: var(--ink-dark); }
+
+    .evc-meta {
+      font-family: var(--font-body);
+      font-weight: 400;
+      font-size: 13px;
+      line-height: 15px;
+      color: var(--ink-light);
+      margin: 0;
+    }
+    .evc-meta strong { font-weight: 700; }
+    body.light .evc-meta { color: var(--ink-dark); }
+
+    .evc-badge {
+      background: #dfe0de;
+      color: var(--ink-dark);
+      font-family: var(--font-body);
+      font-weight: 600;
+      font-size: 13px;
+      padding: 4px 16px;
+      border-radius: 10px;
+      white-space: nowrap;
+      flex-shrink: 0;
+    }
+
+    .evc-nav {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 24px;
+      margin-top: 80px;
+    }
+
+    .evc-dots {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .evc-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: rgba(244,244,235,0.25);
+      border: none;
+      padding: 0;
+      cursor: pointer;
+      transition: background 0.2s ease, transform 0.2s ease;
+    }
+    .evc-dot.is-active {
+      background: var(--lime);
+      transform: scale(1.25);
+    }
+    body.light .evc-dot { background: rgba(26,28,22,0.2); }
+
+    /* ----- Lightbox overlay ----- */
+    .evc-overlay {
+      position: fixed;
+      inset: 0;
+      z-index: 200;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: rgba(26,28,22,0.75);
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.25s ease;
+      padding: 40px 24px;
+    }
+    .evc-overlay.is-open {
+      opacity: 1;
+      pointer-events: auto;
+    }
+    .evc-overlay__box {
+      width: min(640px, 100%);
+      border-radius: 16px;
+      overflow: hidden;
+      background: var(--bg-dark);
+      box-shadow: 0 30px 60px rgba(0,0,0,0.5);
+      transform: scale(0.92);
+      transition: transform 0.25s ease;
+    }
+    .evc-overlay.is-open .evc-overlay__box { transform: scale(1); }
+    body.light .evc-overlay__box { background: var(--bg-light); }
+
+    .evc-overlay__img {
+      width: 100%;
+      aspect-ratio: 450 / 250;
+      object-fit: cover;
+      display: block;
+    }
+
+    .evc-overlay__row {
+      display: flex;
+      align-items: center;
+      gap: 24px;
+      padding: 20px 24px;
+    }
+    .evc-overlay__text {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      flex: 1 0 0;
+      min-width: 0;
+    }
+    .evc-overlay__name {
+      font-family: var(--font-display);
+      font-weight: 700;
+      font-size: 20px;
+      line-height: 26px;
+      letter-spacing: -0.01em;
+      color: var(--ink-light);
+      margin: 0;
+    }
+    body.light .evc-overlay__name { color: var(--ink-dark); }
+    .evc-overlay__meta {
+      font-family: var(--font-body);
+      font-weight: 400;
+      font-size: 13px;
+      line-height: 15px;
+      color: var(--ink-light);
+      margin: 0;
+    }
+    .evc-overlay__meta strong { font-weight: 700; }
+    body.light .evc-overlay__meta { color: var(--ink-dark); }
+
+    @media (max-width: 767px) {
+      .ev-carousel-stage { height: 340px; perspective: 1000px; }
+      .ev-ring { width: 280px; height: 216px; }
+    }
+
+    /* ================================================================
+       SECTION 4 — CONTACT
+    ================================================================ */
+    #contact {
+      overflow: hidden;
+    }
+
+    #contact .inner {
+      display: flex;
+      flex-direction: row;
+      align-items: flex-end;
+      gap: 40px;
+    }
+
+    .contact__copy {
+      flex-shrink: 0;
+      width: min(450px, 100%);
+      display: flex;
+      flex-direction: column;
+      gap: 40px;
+      padding-bottom: 8px;
+    }
+
+    .contact__copy-inner {
+      display: flex;
+      flex-direction: column;
+      gap: 40px;
+    }
+
+    .contact__text {
+      display: flex;
+      flex-direction: column;
+      gap: 40px;
+    }
+
+    .contact__email {
+      font-family: var(--font-hand);
+      font-size: 32px;
+      line-height: 30px;
+      letter-spacing: -0.05em;
+      color: var(--ink-light);
+      text-decoration: none;
+      display: block;
+    }
+    .contact__email:hover { text-decoration: underline; }
+    body.light-mode .contact__email { color: var(--ink-dark); }
+
+    .contact__heading {
+      font-family: var(--font-display);
+      font-weight: 400;
+      font-size: clamp(2.5rem, 3.61vw, 3.25rem);
+      line-height: 56px;
+      letter-spacing: -0.03em;
+      color: var(--ink-light);
+    }
+
+    .contact__desc {
+      font-family: var(--font-body);
+      font-weight: 400;
+      font-size: 17px;
+      line-height: 25px;
+      color: var(--ink-light);
+    }
+
+    .contact__socials {
+      display: flex;
+      gap: 40px;
+      align-items: center;
+    }
+
+    .contact__copyright {
+      font-family: var(--font-mono);
+      font-weight: 500;
+      font-size: 11px;
+      line-height: 14px;
+      letter-spacing: 0.0012em;
+      color: rgba(244,244,235,0.5);
+    }
+    body.light-mode .contact__copyright { color: rgba(26,28,22,0.5); }
+
+    .contact__decor {
+      flex: 1;
+      min-width: 0;
+      display: flex;
+      align-items: flex-end;
+    }
+
+    .footer-peeps-crowd {
+      position: relative;
+      width: 100%;
+      aspect-ratio: 817 / 542;
+      flex-shrink: 0;
+      overflow: visible;
+    }
+
+    .footer-peep {
+      position: absolute;
+      width: 22.53%;
+      height: 47.72%;
+      object-fit: contain;
+      object-position: bottom center;
+      transform-origin: center bottom;
+      transition: filter 0.3s ease;
+      will-change: transform;
+      cursor: default;
+    }
+
+    .footer-peep:hover {
+      filter: drop-shadow(0 18px 36px rgba(0,0,0,0.3));
+    }
+
+    /* Per-peep desktop/tablet positions (Figma Frame 461, 817x542 basis) */
+    .fp01 { left: 31.43%; top: 52.30%; }
+    .fp02 { left: 99.97%; top: 52.28%; }
+    .fp03 { left: 54.25%; top: 52.28%; }
+    .fp04 { left: 77.16%; top: 52.28%; }
+    .fp05 { left: 22.14%; top: 41.83%; }
+    .fp06 { left: 88.61%; top: 41.83%; }
+    .fp07 { left: 66.45%; top: 41.83%; }
+    .fp08 { left: 44.30%; top: 41.83%; }
+    .fp09 { left: 54.29%; top: 31.37%; }
+    .fp10 { left: 77.14%; top: 31.37%; }
+    .fp11 { left: 31.43%; top: 31.37%; }
+    .fp12 { left: 99.99%; top: 31.37%; }
+    .fp13 { left: 89.35%; top: 20.91%; }
+    .fp14 { left: 20.83%; top: 20.91%; }
+    .fp15 { left: 43.65%; top: 20.91%; }
+    .fp16 { left: 66.50%; top: 20.91%; }
+    .fp17 { left: 99.99%; top: 10.46%; }
+    .fp18 { left: 54.29%; top: 10.46%; }
+    .fp19 { left: 77.14%; top: 10.46%; }
+    .fp20 { left: 31.44%; top: 10.46%; }
+    .fp21 { left: 88.00%; top: -2.77%; }
+    .fp22 { left: 20.90%; top: 0%; }
+    .fp23 { left: 43.75%; top: 0%; }
+    .fp24 { left: 66.60%; top: 0%; }
+
+    /* ================================================================
+       RESPONSIVE — TABLET  768–1024px
+    ================================================================ */
+    @media (max-width: 1024px) {
+      :root { --pad: 40px; }
+
+      /* Nav — compact tablet/mobile nav (Figma Nav_bar_dark / Nav_bar_light) */
+      .nav__logo-text--full  { display: none; }
+      .nav__logo-text--short { display: inline; }
+      .nav__logo-text { font-size: 26px; line-height: 1; font-weight: 700; letter-spacing: -0.04em; }
+      .nav__links { display: none; }
+      .nav__hamburger { display: flex; width: 40px; height: 40px; }
+      .nav__ham-line { width: 22px; height: 2px; }
+
+      .nav__toggle { width: 40px; height: 40px; }
+      .toggle__inner { width: auto; height: auto; gap: 0; }
+      .toggle__thumb { display: none; }
+      .toggle__icon { width: 20px; height: 20px; order: 0; }
+      body.light-mode .toggle__icon { width: 27px; height: 20px; order: 0; }
+
+      /* tablet: the single-column landscape stack (846-5673) is desktop-only —
+         keep tablet's old 2-col grid (ARVO full left column, Seletar/PawHaus stacked right) */
+      .pd-grid { display: grid; grid-template-columns: 1fr 1fr; }
+      .pd-grid .card--arvo {
+        grid-column: 1;
+        grid-row: 1 / 3;
+        aspect-ratio: unset;
+        height: 520px;
+      }
+      .card--seletar { grid-column: 2; grid-row: 1; }
+      .card--pawhaus { grid-column: 2; grid-row: 2; }
+      .card.half-card { aspect-ratio: unset; height: 250px; }
+      .card__body { max-width: none; padding: clamp(20px, 2.44vw, 32px); }
+      .card__case-title { font-size: clamp(14px, 1.5vw, 22px); line-height: 1.27; max-width: min(280px, 55%); }
+      .card--arvo .card__case-headline, .card--arvo .card__case-sub { font-size: inherit; line-height: inherit; letter-spacing: inherit; }
+      .card--arvo .card__foot { align-self: flex-start; text-align: left; }
+      .card__project-name { font-size: clamp(26px, 2.5vw, 36px); line-height: 0.94; letter-spacing: -0.05em; }
+      .half-card .card__project-name { font-size: clamp(22px, 2vw, 30px); }
+
+      .pd-grid .card__mockup--arvo       { left: 25%; top: 12%; width: 90%; }
+      .half-card.card--seletar .card__mockup--seletar { left: 30%; top: -5%;  width: 85%; }
+      .half-card.card--pawhaus .card__mockup--pawhaus  { left: 38%; top: -10%; width: 80%; }
+
+      .contact__heading { line-height: 44px; }
+    }
+
+    /* ================================================================
+       RESPONSIVE — MOBILE  ≤767px
+    ================================================================ */
+    @media (max-width: 767px) {
+      :root { --pad: 24px; }
+
+      .nav { min-height: 80px; padding: 20px var(--pad); }
+      .nav__links { display: none; }
+      .nav__hamburger { display: flex; }
+
+      #product-design .inner { padding-top: calc(var(--pad) + 80px); }
+
+      .pd-intro { max-width: 100%; font-size: clamp(18px, 4vw, 24px); }
+
+      .pd-grid { grid-template-columns: 1fr; }
+      .card--arvo, .card--seletar, .card--pawhaus { grid-column: 1; grid-row: auto; }
+
+      .pd-grid .card--arvo { height: auto; aspect-ratio: 4 / 3; }
+      .pd-grid .card__mockup--arvo { left: 35%; top: 5%; width: 80%; }
+
+      .card.half-card { height: auto; aspect-ratio: 4 / 3; }
+      .half-card.card--seletar .card__mockup--seletar { left: 35%; top: -5%;  width: 80%; }
+      .half-card.card--pawhaus .card__mockup--pawhaus  { left: 40%; top: -10%; width: 78%; }
+
+      .ow-grid { grid-template-columns: 1fr 1fr; }
+      .ev-grid { grid-template-columns: 1fr 1fr; }
+
+      #contact .inner { flex-direction: column; }
+      .contact__heading { font-size: clamp(2rem, 7vw, 2.5rem); line-height: 1.15; }
+      .contact__decor { order: -1; flex: none; width: 100%; }
+      .footer-peeps-crowd { aspect-ratio: 376 / 468.7354; }
+      .footer-peep { width: 36.54%; height: 41.18%; }
+      .fp01 { left: 102.61%; top: 47.41%; }
+      .fp02 { left: -8.53%; top: 47.41%; }
+      .fp03 { left: 65.61%; top: 47.41%; }
+      .fp04 { left: 28.46%; top: 47.41%; }
+      .fp05 { left: 12.94%; top: 38.38%; }
+      .fp06 { left: 120.73%; top: 38.38%; }
+      .fp07 { left: 84.80%; top: 38.38%; }
+      .fp08 { left: 48.87%; top: 38.38%; }
+      .fp09 { left: 65.58%; top: 29.36%; }
+      .fp10 { left: 28.52%; top: 29.36%; }
+      .fp11 { left: 102.65%; top: 29.36%; }
+      .fp12 { left: -8.53%; top: 29.36%; }
+      .fp13 { left: 121.93%; top: 20.34%; }
+      .fp14 { left: 10.80%; top: 20.34%; }
+      .fp15 { left: 47.82%; top: 20.34%; }
+      .fp16 { left: 84.88%; top: 20.34%; }
+      .fp17 { left: -8.53%; top: 11.31%; }
+      .fp18 { left: 65.58%; top: 11.31%; }
+      .fp19 { left: 28.52%; top: 11.31%; }
+      .fp20 { left: 102.63%; top: 11.31%; }
+      .fp21 { left: 119.75%; top: -0.10%; }
+      .fp22 { left: 10.92%; top: 2.29%; }
+      .fp23 { left: 47.97%; top: 2.29%; }
+      .fp24 { left: 85.03%; top: 2.29%; }
+    }
+
+    /* ================================================================
+       SMALL MOBILE  ≤479px
+    ================================================================ */
+    @media (max-width: 479px) {
+      :root { --pad: 20px; }
+      .ow-grid { grid-template-columns: 1fr; }
+      .ev-grid { grid-template-columns: 1fr; }
+      .contact__heading { font-size: clamp(1.75rem, 8vw, 2.25rem); }
+    }
+  </style>
+  <link rel="stylesheet" href="Asset/skiper40.css">
+</head>
+<body>
+  <script>
+    try {
+      if (localStorage.getItem('andrea-theme') === 'light') document.body.classList.add('light-mode');
+    } catch (e) {}
+  </script>
+
+  <!-- ── LOADER ── -->
+  <div id="loader" role="status" aria-label="Loading">
+    <video class="loader__video" autoplay muted loop playsinline>
+      <source src="Asset/Loading_bicycle.mp4" type="video/mp4">
+    </video>
+    <p class="loader__text">loading<span class="loader__dots"><span>.</span><span>.</span><span>.</span></span></p>
+  </div>
+
+  <!-- ── CURSOR FOLLOWER ── -->
+  <div id="cursor-follower" aria-hidden="true">
+    <img id="cursor-img" src="Asset/cursor-light.png" alt="" />
+  </div>
+
+  <!-- ── NAV ── -->
+  <nav class="nav" id="main-nav">
+    <a class="nav__logo" href="/" aria-label="Andrea Lee">
+      <span class="nav__logo-text nav__logo-text--full">Andrea Lee</span>
+      <span class="nav__logo-text nav__logo-text--short">Andrea L.</span>
+      <img class="nav__logo-flower"
+           src="Asset/cursor-light.png"
+           data-dark-src="Asset/cursor-light.png"
+           data-light-src="Asset/cursor-dark.png"
+           alt="" aria-hidden="true" />
+    </a>
+    <div class="nav__right">
+      <ul class="nav__links">
+        <li class="nav__links-item nav__links-item--work" id="nav-work-item">
+          <button class="nav__work-trigger" id="nav-work-trigger" aria-haspopup="true" aria-expanded="false" aria-current="page">
+            Work
+            <svg class="nav__work-chevron" width="24" height="24" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+              <path d="M6 9l6 6 6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </button>
+          <div class="nav__work-menu" id="nav-work-menu">
+            <a href="case-studies/arvo.html">ARVO</a>
+            <a href="case-studies/seletar.html">Seletar Airport</a>
+            <a href="case-studies/pethaus.html">Paw Haus</a>
+          </div>
+        </li>
+        <li class="nav__links-item nav__links-item--work" id="nav-play-item">
+          <button class="nav__work-trigger" id="nav-play-trigger" aria-haspopup="true" aria-expanded="false">
+            Play
+            <svg class="nav__work-chevron" width="24" height="24" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+              <path d="M6 9l6 6 6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </button>
+          <div class="nav__work-menu" id="nav-play-menu">
+            <a href="#other-works">Side quests</a>
+            <a href="#event-styling">Event Stylings</a>
+          </div>
+        </li>
+        <li><a href="about.html">About</a></li>
+        <li><a href="#contact">Contact</a></li>
+      </ul>
+      <button class="nav__hamburger" id="nav-hamburger" aria-label="Toggle menu" aria-expanded="false">
+        <span class="nav__ham-line"></span>
+        <span class="nav__ham-line"></span>
+        <span class="nav__ham-line"></span>
+      </button>
+      <button class="nav__toggle" id="theme-toggle" aria-label="Toggle light mode">
+        <span class="toggle__inner">
+          <span class="toggle__icon" aria-hidden="true">
+            <svg class="toggle__sun" width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <circle cx="10" cy="10" r="3.5" fill="#1a1c16"/>
+              <line x1="10" y1="1.5" x2="10" y2="3.5" stroke="#1a1c16" stroke-width="1.5" stroke-linecap="round"/>
+              <line x1="10" y1="16.5" x2="10" y2="18.5" stroke="#1a1c16" stroke-width="1.5" stroke-linecap="round"/>
+              <line x1="1.5" y1="10" x2="3.5" y2="10" stroke="#1a1c16" stroke-width="1.5" stroke-linecap="round"/>
+              <line x1="16.5" y1="10" x2="18.5" y2="10" stroke="#1a1c16" stroke-width="1.5" stroke-linecap="round"/>
+              <line x1="3.93" y1="3.93" x2="5.34" y2="5.34" stroke="#1a1c16" stroke-width="1.5" stroke-linecap="round"/>
+              <line x1="14.66" y1="14.66" x2="16.07" y2="16.07" stroke="#1a1c16" stroke-width="1.5" stroke-linecap="round"/>
+              <line x1="16.07" y1="3.93" x2="14.66" y2="5.34" stroke="#1a1c16" stroke-width="1.5" stroke-linecap="round"/>
+              <line x1="5.34" y1="14.66" x2="3.93" y2="16.07" stroke="#1a1c16" stroke-width="1.5" stroke-linecap="round"/>
+            </svg>
+            <svg class="toggle__moon" width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M17 12.9A8 8 0 0 1 7.1 3a8 8 0 1 0 9.9 9.9z" fill="#dee895"/>
+            </svg>
+          </span>
+          <span class="toggle__thumb"></span>
+        </span>
+      </button>
+    </div>
+    <!-- Mobile dropdown -->
+    <div class="nav__mobile-menu" id="nav-mobile-menu">
+      <ul>
+        <li><a href="works.html">Work</a></li>
+        <li><a href="#other-works">Play</a></li>
+        <li><a href="about.html">About</a></li>
+        <li><a href="#contact">Contact</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <!-- ================================================================
+       02 — OTHER WORKS
+  ================================================================ -->
+  <section class="section" id="other-works">
+    <div class="inner">
+
+      <span class="t-label">Side Quests</span>
+
+      <div class="sq-grid">
+
+        <!-- Pulse -->
+        <article class="sq-card">
+          <div class="sq-card__img">
+            <img src="Asset/Work_Card_Pulse.png" alt="Pulse — voice-first wellbeing app" loading="lazy" />
+          </div>
+          <div class="sq-card__row">
+            <p class="sq-card__name">Pulse</p>
+            <span class="sq-card__year">2026</span>
+          </div>
+          <p class="sq-card__desc">The Good Hack: A civic tech hackathon for social good</p>
+        </article>
+
+        <!-- Tallyboard -->
+        <article class="sq-card">
+          <div class="sq-card__img">
+            <video src="Asset/Work_Card_Tallyboard.mov" autoplay muted loop playsinline preload="auto"></video>
+            <span class="sq-card__badge">In construction</span>
+          </div>
+          <div class="sq-card__row">
+            <p class="sq-card__name">Tallyboard</p>
+            <span class="sq-card__year">2026</span>
+          </div>
+          <p class="sq-card__desc">For board game lovers to track their group scores.</p>
+        </article>
+
+        <!-- KinCare -->
+        <article class="sq-card">
+          <div class="sq-card__img">
+            <video src="Asset/Work_Card_KinCare.mov" autoplay muted loop playsinline preload="auto"></video>
+            <span class="sq-card__badge">In construction</span>
+          </div>
+          <div class="sq-card__row">
+            <p class="sq-card__name">KinCare</p>
+            <span class="sq-card__year">2026</span>
+          </div>
+          <p class="sq-card__desc">Civic-tech: For the triple-hatting caregiver holding it altogether</p>
+        </article>
+
+        <!-- Longtail Valley -->
+        <article class="sq-card">
+          <div class="sq-card__img">
+            <video src="Asset/Work_Card_Dino.mov" autoplay muted loop playsinline preload="auto"></video>
+            <span class="sq-card__badge">In construction</span>
+          </div>
+          <div class="sq-card__row">
+            <p class="sq-card__name">Longtail Valley</p>
+            <span class="sq-card__year">2026</span>
+          </div>
+          <p class="sq-card__desc">An animated dino-short series produced for my nephews</p>
+        </article>
+
+        <!-- ThriveLab -->
+        <article class="sq-card">
+          <div class="sq-card__img">
+            <video src="Asset/Work_Card_Thrive.mov" autoplay muted loop playsinline preload="auto"></video>
+            <span class="sq-card__badge">In construction</span>
+          </div>
+          <div class="sq-card__row">
+            <p class="sq-card__name">ThriveLab</p>
+            <span class="sq-card__year">2025</span>
+          </div>
+          <p class="sq-card__desc">Health &amp; Wellness | All-in-one tracker</p>
+        </article>
+
+      </div><!-- /.sq-grid -->
+    </div><!-- /.inner -->
+  </section>
+
+  <!-- ================================================================
+       03 — EVENT STYLING
+  ================================================================ -->
+  <section class="section" id="event-styling">
+    <div class="inner">
+
+      <span class="t-label">Event Styling</span>
+
+      <p class="section-bridge">Before UX, I ran a luxury event design studio for four years. These are the physical spaces I shaped — same eye, different medium.</p>
+
+      <div class="ev-carousel-stage" role="region" aria-label="Event styling portfolio">
+        <div class="ev-ring" id="evRing">
+
+          <article class="ev-carousel-card" data-index="0" aria-label="Central Provident Fund – Corporate event">
+            <div class="evc-shell">
+              <div class="evc-inner">
+                <div class="evc-img-wrap">
+                  <img src="Asset/Event_Card_5.png"
+                       alt="Central Provident Fund corporate event styling"
+                       loading="lazy" draggable="false" />
+                </div>
+                <div class="evc-row">
+                  <div class="evc-text">
+                    <h3 class="evc-name">Central Provident Fund</h3>
+                    <p class="evc-meta">Corporate event | <strong>2024</strong></p>
+                  </div>
+                  <span class="evc-badge">in construction</span>
+                </div>
+              </div>
+            </div>
+          </article>
+
+          <article class="ev-carousel-card" data-index="1" aria-label="Guerlain – Team bonding workshop">
+            <div class="evc-shell">
+              <div class="evc-inner">
+                <div class="evc-img-wrap">
+                  <img src="Asset/Event_Card_6.png"
+                       alt="Guerlain team bonding workshop styling"
+                       loading="lazy" draggable="false" />
+                </div>
+                <div class="evc-row">
+                  <div class="evc-text">
+                    <h3 class="evc-name">Guerlain</h3>
+                    <p class="evc-meta">Team bonding workshop 2024</p>
+                  </div>
+                  <span class="evc-badge">in construction</span>
+                </div>
+              </div>
+            </div>
+          </article>
+
+          <article class="ev-carousel-card" data-index="2" aria-label="1-Atico – Wedding">
+            <div class="evc-shell">
+              <div class="evc-inner">
+                <div class="evc-img-wrap">
+                  <img src="Asset/Event_Card_1.png"
+                       alt="1-Atico wedding event styling"
+                       loading="lazy" draggable="false" />
+                </div>
+                <div class="evc-row">
+                  <div class="evc-text">
+                    <h3 class="evc-name">1-Atico</h3>
+                    <p class="evc-meta">Wedding | <strong>2025</strong></p>
+                  </div>
+                  <span class="evc-badge">in construction</span>
+                </div>
+              </div>
+            </div>
+          </article>
+
+          <article class="ev-carousel-card" data-index="3" aria-label="St Margaret – Wedding">
+            <div class="evc-shell">
+              <div class="evc-inner">
+                <div class="evc-img-wrap">
+                  <img src="Asset/Event_Card_2.png"
+                       alt="St Margaret wedding event styling"
+                       loading="lazy" draggable="false" />
+                </div>
+                <div class="evc-row">
+                  <div class="evc-text">
+                    <h3 class="evc-name">St Margaret</h3>
+                    <p class="evc-meta">Wedding | <strong>2025</strong></p>
+                  </div>
+                  <span class="evc-badge">in construction</span>
+                </div>
+              </div>
+            </div>
+          </article>
+
+          <article class="ev-carousel-card" data-index="4" aria-label="LASALLE Working Title – Wedding">
+            <div class="evc-shell">
+              <div class="evc-inner">
+                <div class="evc-img-wrap">
+                  <img src="Asset/Event_Card_3.png"
+                       alt="LASALLE Working Title wedding event styling"
+                       loading="lazy" draggable="false" />
+                </div>
+                <div class="evc-row">
+                  <div class="evc-text">
+                    <h3 class="evc-name">LASALLE | Working Title</h3>
+                    <p class="evc-meta">Wedding | <strong>2025</strong></p>
+                  </div>
+                  <span class="evc-badge">in construction</span>
+                </div>
+              </div>
+            </div>
+          </article>
+
+          <article class="ev-carousel-card" data-index="5" aria-label="Grace Assembly – Wedding">
+            <div class="evc-shell">
+              <div class="evc-inner">
+                <div class="evc-img-wrap">
+                  <img src="Asset/Event_Card_4.png"
+                       alt="Grace Assembly wedding event styling"
+                       loading="lazy" draggable="false" />
+                </div>
+                <div class="evc-row">
+                  <div class="evc-text">
+                    <h3 class="evc-name">Grace Assembly</h3>
+                    <p class="evc-meta">Wedding | <strong>2025</strong></p>
+                  </div>
+                  <span class="evc-badge">in construction</span>
+                </div>
+              </div>
+            </div>
+          </article>
+
+        </div><!-- /#evRing -->
+
+        <!-- Nav controls -->
+        <div class="evc-nav" aria-label="Carousel controls">
+          <div class="evc-dots" role="tablist"></div>
+        </div>
+
+      </div><!-- /.ev-carousel-stage -->
+
+      <!-- Click-to-expand overlay (lightbox) -->
+      <div class="evc-overlay" id="evcOverlay" aria-hidden="true">
+        <div class="evc-overlay__box">
+          <img class="evc-overlay__img" alt="" />
+          <div class="evc-overlay__row">
+            <div class="evc-overlay__text">
+              <h3 class="evc-overlay__name"></h3>
+              <p class="evc-overlay__meta"></p>
+            </div>
+            <span class="evc-badge">in construction</span>
+          </div>
+        </div>
+      </div>
+    </div><!-- /.inner -->
+  </section>
+
+  <!-- ================================================================
+       04 — CONTACT
+  ================================================================ -->
+  <section class="section" id="contact">
+    <div class="inner">
+
+      <div class="contact__copy">
+        <span class="t-label">Product Designer &middot; UX Researcher &middot; Singapore &middot; Open to opportunities</span>
+        <div class="contact__copy-inner">
+          <div class="contact__text">
+            <h2 class="contact__heading">Let&rsquo;s work together or chat!</h2>
+            <a class="contact__email" href="mailto:andreeyahlee@gmail.com">andreeyahlee@gmail.com</a>
+            <p class="contact__desc">
+              Open to UX design and research roles or freelancing service.
+              If you&rsquo;re building something complex that needs to feel simple
+              particularly for social good &mdash; let&rsquo;s talk!
+            </p>
+          </div>
+          <div class="contact__socials">
+            <a class="social-link" href="https://www.linkedin.com/in/andrealee-" target="_blank" rel="noopener" aria-label="LinkedIn">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>
+            </a>
+            <a class="social-link" href="https://www.instagram.com/lee.andrea/" target="_blank" rel="noopener" aria-label="Instagram">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 1 0 0 12.324 6.162 6.162 0 0 0 0-12.324zM12 16a4 4 0 1 1 0-8 4 4 0 0 1 0 8zm6.406-11.845a1.44 1.44 0 1 0 0 2.881 1.44 1.44 0 0 0 0-2.881z"/></svg>
+            </a>
+            <a class="social-link" href="https://drive.google.com/file/d/1bMgT6sMRa9Tbtc2sUFGb11WrcM488deY/view?usp=drive_link" target="_blank" rel="noopener" aria-label="Resume">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M14 2H6c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V8l-6-6zm2 16H8v-2h8v2zm0-4H8v-2h8v2zm-3-5V3.5L18.5 9H13z"/></svg>
+            </a>
+          </div>
+        </div>
+        <span class="contact__copyright">PORTFOLIO BUILT FROM SCRATCH BY ANDREA L. &copy;All rights reserved 2026</span>
+      </div>
+
+      <!-- Decorative crowd illustration -->
+      <div class="contact__decor" aria-hidden="true">
+        <div class="footer-peeps-crowd">
+          <!-- Row 6 — back row -->
+          <img class="footer-peep fp22" src="Asset/footer_peep22.png" alt="">
+          <img class="footer-peep fp23" src="Asset/footer_peep23.png" alt="">
+          <img class="footer-peep fp24" src="Asset/footer_peep24.png" alt="">
+          <img class="footer-peep fp21" src="Asset/footer_peep21.png" alt="">
+          <!-- Row 5 -->
+          <img class="footer-peep fp20" src="Asset/footer_peep20.png" alt="">
+          <img class="footer-peep fp18" src="Asset/footer_peep18.png" alt="">
+          <img class="footer-peep fp19" src="Asset/footer_peep19.png" alt="">
+          <img class="footer-peep fp17" src="Asset/footer_peep17.png" alt="">
+          <!-- Row 4 -->
+          <img class="footer-peep fp14" src="Asset/footer_peep14.png" alt="">
+          <img class="footer-peep fp15" src="Asset/footer_peep15.png" alt="">
+          <img class="footer-peep fp16" src="Asset/footer_peep16.png" alt="">
+          <img class="footer-peep fp13" src="Asset/footer_peep13.png" alt="">
+          <!-- Row 3 -->
+          <img class="footer-peep fp11" src="Asset/footer_peep11.png" alt="">
+          <img class="footer-peep fp09" src="Asset/footer_peep09.png" alt="">
+          <img class="footer-peep fp10" src="Asset/footer_peep10.png" alt="">
+          <img class="footer-peep fp12" src="Asset/footer_peep12.png" alt="">
+          <!-- Row 2 -->
+          <img class="footer-peep fp05" src="Asset/footer_peep05.png" alt="">
+          <img class="footer-peep fp08" src="Asset/footer_peep08.png" alt="">
+          <img class="footer-peep fp07" src="Asset/footer_peep07.png" alt="">
+          <img class="footer-peep fp06" src="Asset/footer_peep06.png" alt="">
+          <!-- Row 1 — front row -->
+          <img class="footer-peep fp01" src="Asset/footer_peep01.png" alt="">
+          <img class="footer-peep fp03" src="Asset/footer_peep03.png" alt="">
+          <img class="footer-peep fp04" src="Asset/footer_peep04.png" alt="">
+          <img class="footer-peep fp02" src="Asset/footer_peep02.png" alt="">
+        </div>
+      </div>
+
+    </div><!-- /.inner -->
+  </section>
+
+  <script>
+    /* ── Loader ── */
+    (function () {
+      const loaderEl = document.getElementById('loader');
+      const MIN_MS   = 1200;
+      const startTs  = Date.now();
+      let   hidden   = false;
+
+      function hideLoader() {
+        if (hidden) return;
+        hidden = true;
+        loaderEl.classList.add('loader--hidden');
+      }
+
+      function onPageLoad() {
+        const elapsed   = Date.now() - startTs;
+        const remaining = Math.max(0, MIN_MS - elapsed);
+        setTimeout(hideLoader, remaining);
+      }
+      if (document.readyState === 'complete') { onPageLoad(); }
+      else { window.addEventListener('load', onPageLoad); }
+
+      document.querySelectorAll('a[href]').forEach(function (link) {
+        const href = link.getAttribute('href');
+        if (href && href.endsWith('.html') && !href.startsWith('http') && !href.startsWith('//')) {
+          link.addEventListener('click', function (e) {
+            e.preventDefault();
+            hidden = false;
+            loaderEl.classList.remove('loader--hidden');
+            setTimeout(function () { window.location.href = href; }, 600);
+          });
+        }
+      });
+
+      var video  = loaderEl.querySelector('video');
+      var canvas = document.createElement('canvas');
+      canvas.className = 'loader__video';
+      video.parentNode.insertBefore(canvas, video);
+      video.style.display = 'none';
+
+      var ctx = canvas.getContext('2d', { willReadFrequently: true });
+      var rafId;
+
+      function removeBg(data, w, h) {
+        var n       = w * h;
+        var visited = new Uint8Array(n);
+        var stack   = [];
+
+        function tryPush(i) {
+          if (i >= 0 && i < n && !visited[i] &&
+              data[i * 4]     > 220 &&
+              data[i * 4 + 1] > 220 &&
+              data[i * 4 + 2] > 220) {
+            visited[i] = 1;
+            stack.push(i);
+          }
+        }
+
+        for (var x = 0; x < w; x++) { tryPush(x); tryPush((h - 1) * w + x); }
+        for (var y = 1; y < h - 1; y++) { tryPush(y * w); tryPush(y * w + w - 1); }
+
+        while (stack.length) {
+          var i = stack.pop();
+          data[i * 4 + 3] = 0;
+          var px = i % w, py = (i / w) | 0;
+          if (px > 0)     tryPush(i - 1);
+          if (px < w - 1) tryPush(i + 1);
+          if (py > 0)     tryPush(i - w);
+          if (py < h - 1) tryPush(i + w);
+        }
+      }
+
+      function renderFrame() {
+        if (video.readyState >= 2 && canvas.width > 0) {
+          ctx.clearRect(0, 0, canvas.width, canvas.height);
+          ctx.drawImage(video, 0, 0);
+          var imgData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+          removeBg(imgData.data, canvas.width, canvas.height);
+          ctx.putImageData(imgData, 0, 0);
+        }
+        rafId = requestAnimationFrame(renderFrame);
+      }
+
+      video.addEventListener('loadedmetadata', function () {
+        canvas.width  = video.videoWidth;
+        canvas.height = video.videoHeight;
+      });
+
+      video.addEventListener('play', function () {
+        cancelAnimationFrame(rafId);
+        renderFrame();
+      });
+
+      video.play().catch(function () {});
+    })();
+
+    /* ── Cursor follower ── */
+    const cursorEl  = document.getElementById('cursor-follower');
+    const cursorImg = document.getElementById('cursor-img');
+    const mainNavEl = document.getElementById('main-nav');
+    const HALF = 26;
+    let mouseX = -200, mouseY = -200, rafPending = false;
+
+    function updateCursorSrc() {
+      const isLight = document.body.classList.contains('light-mode');
+      const newSrc  = isLight ? 'Asset/cursor-dark.png' : 'Asset/cursor-light.png';
+      if (cursorImg.src !== newSrc) cursorImg.src = newSrc;
+    }
+
+    document.addEventListener('mousemove', e => {
+      mouseX = e.clientX; mouseY = e.clientY;
+      updateCursorSrc();
+      if (!rafPending) {
+        rafPending = true;
+        requestAnimationFrame(() => {
+          cursorEl.style.display = 'block';
+          cursorEl.style.transform = `translate(${mouseX - HALF}px, ${mouseY - HALF}px)`;
+          rafPending = false;
+        });
+      }
+    });
+
+    document.addEventListener('mouseleave', () => { cursorEl.style.display = 'none'; });
+
+    /* ── Theme toggle ── */
+    const toggle = document.getElementById('theme-toggle');
+
+    toggle.addEventListener('click', () => {
+      const isLight = document.body.classList.toggle('light-mode');
+      try { localStorage.setItem('andrea-theme', isLight ? 'light' : 'dark'); } catch (e) {}
+      updateCursorSrc();
+      document.querySelectorAll('[data-dark-src]').forEach(img => {
+        img.src = isLight ? img.dataset.lightSrc : img.dataset.darkSrc;
+      });
+    });
+
+    /* ── Hamburger ── */
+    const hamburger  = document.getElementById('nav-hamburger');
+    const mobileMenu = document.getElementById('nav-mobile-menu');
+
+    hamburger.addEventListener('click', () => {
+      const isOpen = mainNavEl.classList.toggle('is-open');
+      hamburger.setAttribute('aria-expanded', String(isOpen));
+    });
+
+    mobileMenu.querySelectorAll('a').forEach(link => {
+      link.addEventListener('click', () => {
+        mainNavEl.classList.remove('is-open');
+        hamburger.setAttribute('aria-expanded', 'false');
+      });
+    });
+
+    /* ── Nav dropdowns (Work, Play) ── */
+    const navDropdowns = [
+      { item: document.getElementById('nav-work-item'), trigger: document.getElementById('nav-work-trigger') },
+      { item: document.getElementById('nav-play-item'), trigger: document.getElementById('nav-play-trigger') },
+    ].filter(d => d.item && d.trigger);
+
+    function closeAllNavDropdowns() {
+      navDropdowns.forEach(({ item, trigger }) => {
+        item.classList.remove('is-open');
+        trigger.setAttribute('aria-expanded', 'false');
+      });
+    }
+
+    navDropdowns.forEach(({ item, trigger }) => {
+      trigger.addEventListener('click', (e) => {
+        e.stopPropagation();
+        const willOpen = !item.classList.contains('is-open');
+        closeAllNavDropdowns();
+        if (willOpen) {
+          item.classList.add('is-open');
+          trigger.setAttribute('aria-expanded', 'true');
+        }
+      });
+    });
+
+    document.addEventListener('click', (e) => {
+      const openInside = navDropdowns.some(({ item }) => item.contains(e.target));
+      if (!openInside) closeAllNavDropdowns();
+    });
+
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') closeAllNavDropdowns();
+    });
+  </script>
+
+  <!-- GSAP + ScrollTrigger -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+  <script>
+    gsap.registerPlugin(ScrollTrigger);
+
+    /* Product Design — entrance */
+    gsap.from('.works-hero', {
+      opacity: 0, y: 36, duration: 0.9, ease: 'power3.out', delay: 0.2
+    });
+    gsap.from('.pd-grid .card', {
+      y: 60, opacity: 0, duration: 0.9, stagger: 0.12, ease: 'power3.out', delay: 0.25
+    });
+
+    /* Other Works */
+    gsap.from('#other-works .t-label', {
+      y: 20, opacity: 0, duration: 0.6, ease: 'power3.out',
+      scrollTrigger: { trigger: '#other-works', start: 'top 85%' }
+    });
+    gsap.from('.ow-row', {
+      clipPath: 'inset(0 100% 0 0)', duration: 0.85, stagger: 0.1, ease: 'power4.inOut',
+      scrollTrigger: { trigger: '.ow-list', start: 'top 72%' }
+    });
+
+    /* Event Styling */
+    gsap.from('#event-styling .t-label', {
+      y: 20, opacity: 0, duration: 0.6, ease: 'power3.out',
+      scrollTrigger: { trigger: '#event-styling', start: 'top 85%' }
+    });
+    gsap.from('.section-bridge', {
+      y: 20, opacity: 0, duration: 0.6, delay: 0.1, ease: 'power3.out',
+      scrollTrigger: { trigger: '#event-styling', start: 'top 85%' }
+    });
+
+    /* Contact */
+    gsap.from('.contact__heading', {
+      y: 60, opacity: 0, duration: 1, ease: 'power3.out',
+      scrollTrigger: { trigger: '#contact', start: 'top 80%' }
+    });
+    gsap.from(['.contact__email', '.contact__desc', '.contact__socials', '#contact .t-label'], {
+      y: 25, opacity: 0, duration: 0.7, stagger: 0.12, ease: 'power3.out',
+      scrollTrigger: { trigger: '#contact', start: 'top 75%' }
+    });
+    gsap.from('.footer-peep', {
+      y: 30, opacity: 0, duration: 1, stagger: 0.025, ease: 'power3.out',
+      scrollTrigger: { trigger: '#contact', start: 'top 85%' }
+    });
+
+    /* Footer peep bounce */
+    document.querySelectorAll('.footer-peep').forEach(peep => {
+      peep.addEventListener('mouseenter', function () {
+        gsap.killTweensOf(this);
+        gsap.timeline()
+          .to(this, { y: '-12%', scaleY: 1.04, scaleX: 1.02, duration: 0.32, ease: 'back.out(1.6)' })
+          .to(this, { y: '-7%', duration: 0.38, ease: 'sine.inOut' })
+          .to(this, { y: '-13%', duration: 0.42, ease: 'sine.inOut' })
+          .to(this, { y: 0, scaleY: 1, scaleX: 1, duration: 0.5, ease: 'power2.inOut' });
+      });
+    });
+
+    /* ── Card hover: tilt + parallax + video play-on-hover ── */
+    (function () {
+      function lerp(a, b, t) { return a + (b - a) * t; }
+
+      function tilt(card, opts) {
+        const { maxTilt = 6, lift = -10, child = null, childShift = 12 } = opts;
+        let cX = 0, cY = 0, cL = 0, tX = 0, tY = 0, tL = 0, raf = null;
+
+        function frame() {
+          cX = lerp(cX, tX, 0.1);
+          cY = lerp(cY, tY, 0.1);
+          cL = lerp(cL, tL, 0.1);
+          const idle = tL === 0 && Math.abs(cX) < 0.02 && Math.abs(cY) < 0.02 && Math.abs(cL) < 0.02;
+          if (idle) {
+            card.style.transform = '';
+            if (child) child.style.transform = '';
+            raf = null; return;
+          }
+          card.style.transform = `perspective(900px) rotateX(${cY.toFixed(3)}deg) rotateY(${cX.toFixed(3)}deg) translateY(${cL.toFixed(2)}px)`;
+          if (child) child.style.transform = `translate(${(cX / maxTilt * childShift).toFixed(2)}px, ${(cY / maxTilt * childShift).toFixed(2)}px)`;
+          raf = requestAnimationFrame(frame);
+        }
+        function go() { if (!raf) raf = requestAnimationFrame(frame); }
+
+        card.addEventListener('mouseenter', () => { tL = lift; go(); });
+        card.addEventListener('mousemove', e => {
+          const r = card.getBoundingClientRect();
+          tX = ((e.clientX - r.left) / r.width  - 0.5) * 2 * maxTilt;
+          tY = -((e.clientY - r.top)  / r.height - 0.5) * 2 * maxTilt;
+          go();
+        });
+        card.addEventListener('mouseleave', () => { tX = 0; tY = 0; tL = 0; go(); });
+      }
+
+      document.querySelectorAll('.card').forEach(card => {
+        tilt(card, { maxTilt: 6, lift: -10, child: card.querySelector('.card__mockup'), childShift: 14 });
+      });
+
+      /* Side Quests rows — cursor-following preview, playing the matching
+         project's media on loop until the pointer leaves the row */
+      const owPreview = document.getElementById('ow-preview');
+      if (owPreview) {
+        document.querySelectorAll('.ow-row').forEach(row => {
+          const key = row.dataset.preview;
+          const media = owPreview.querySelectorAll('[data-media="' + key + '"]');
+
+          row.addEventListener('mouseenter', () => {
+            owPreview.className = 'ow-preview ow-preview--' + row.dataset.variant;
+            owPreview.querySelectorAll('.ow-preview__media').forEach(m => { m.style.display = 'none'; });
+            media.forEach(m => {
+              m.style.display = 'block';
+              if (m.tagName === 'VIDEO') { m.currentTime = 0; m.play().catch(() => {}); }
+            });
+            owPreview.style.opacity = '1';
+          });
+          row.addEventListener('mousemove', e => {
+            owPreview.style.left = e.clientX + 'px';
+            owPreview.style.top = e.clientY + 'px';
+          });
+          row.addEventListener('mouseleave', () => {
+            owPreview.style.opacity = '0';
+            media.forEach(m => { if (m.tagName === 'VIDEO') m.pause(); });
+          });
+        });
+      }
+
+    })();
+  </script>
+
+  <script>
+    (function () {
+      const ring = document.getElementById('evRing');
+      if (!ring) return;
+
+      const overlay = document.getElementById('evcOverlay');
+
+      const cards = Array.from(ring.querySelectorAll('.ev-carousel-card'));
+      const N = cards.length;
+      const STEP = 360 / N;
+      const RADIUS = 460;
+      const SPIN_DUR = 0.82;
+      const DRAG_FACTOR = 0.35;
+      const AUTOPLAY_SPEED = -12; // degrees per second, continuous (negative = left-to-right)
+
+      let angle = 0;       // current ring rotation (deg)
+      let activeIndex = 0;
+      let isDragging = false;
+      let dragStartX = 0;
+      let dragStartAngle = 0;
+      let spinning = false;
+      let autoplayOn = true;
+      let lightboxOpen = false;
+      let hovering = false;
+
+      cards.forEach((card, i) => {
+        card.style.transformOrigin = `50% 50% ${-RADIUS}px`;
+        gsap.set(card, { rotationY: i * STEP, z: RADIUS });
+      });
+
+      const dotsWrap = document.querySelector('.evc-dots');
+      cards.forEach((_, i) => {
+        const dot = document.createElement('button');
+        dot.className = 'evc-dot';
+        dot.setAttribute('role', 'tab');
+        dot.setAttribute('aria-label', 'Go to slide ' + (i + 1));
+        dot.addEventListener('click', () => spinTo(i));
+        dotsWrap.appendChild(dot);
+      });
+      const dots = Array.from(dotsWrap.querySelectorAll('.evc-dot'));
+
+      function normalize(a) {
+        a = a % 360;
+        if (a > 180) a -= 360;
+        if (a < -180) a += 360;
+        return a;
+      }
+
+      function updateDepth() {
+        cards.forEach((card, i) => {
+          const cardAngle = normalize(i * STEP - angle);
+          const t = Math.cos(cardAngle * Math.PI / 180); // 1 = front, -1 = back
+          const opacity = gsap.utils.mapRange(-1, 1, 0.1, 1, t);
+          const scale = gsap.utils.mapRange(-1, 1, 0.75, 1, t);
+          const blur = gsap.utils.mapRange(-1, 1, 6, 0, t);
+          gsap.set(card, {
+            opacity,
+            scale,
+            filter: `blur(${blur}px)`,
+            zIndex: Math.round(t * 100)
+          });
+          const isActive = Math.abs(cardAngle) < STEP / 2;
+          card.classList.toggle('is-active', isActive);
+          if (isActive) activeIndex = i;
+        });
+        dots.forEach((d, i) => d.classList.toggle('is-active', i === activeIndex));
+      }
+
+      function setAngle(a) {
+        angle = a;
+        gsap.set(ring, { rotationY: -angle });
+        updateDepth();
+      }
+
+      function spinTo(index) {
+        if (spinning) return;
+        const targetAngle = index * STEP;
+        let diff = normalize(targetAngle - normalize(angle));
+        const newAngle = angle + diff;
+        spinning = true;
+        gsap.fromTo(
+          { v: angle },
+          { v: angle },
+          {
+            v: newAngle,
+            duration: SPIN_DUR,
+            ease: 'power3.out',
+            onUpdate: function () { setAngle(this.targets()[0].v); },
+            onComplete: () => { spinning = false; }
+          }
+        );
+      }
+
+      /* Autoplay — smooth continuous turn, paused on hover / drag / lightbox */
+      function startAutoplay() { autoplayOn = true; }
+      function stopAutoplay() { autoplayOn = false; }
+
+      gsap.ticker.add((time, deltaMS) => {
+        if (autoplayOn && !isDragging && !spinning && !hovering && !lightboxOpen) {
+          setAngle(angle + AUTOPLAY_SPEED * (deltaMS / 1000));
+        }
+      });
+
+      const stage = document.querySelector('.ev-carousel-stage');
+      stage?.addEventListener('mouseenter', () => { hovering = true; });
+      stage?.addEventListener('mouseleave', () => { hovering = false; });
+
+      ring.addEventListener('keydown', (e) => {
+        if (e.key === 'ArrowRight') spinTo((activeIndex + 1) % N);
+        if (e.key === 'ArrowLeft') spinTo((activeIndex - 1 + N) % N);
+      });
+      ring.setAttribute('tabindex', '0');
+
+      function onDragStart(clientX) {
+        if (spinning) return;
+        isDragging = true;
+        dragStartX = clientX;
+        dragStartAngle = angle;
+        ring.classList.add('is-dragging');
+      }
+      function onDragMove(clientX) {
+        if (!isDragging) return;
+        const delta = (clientX - dragStartX) * DRAG_FACTOR;
+        setAngle(dragStartAngle + delta);
+      }
+      function onDragEnd() {
+        if (!isDragging) return;
+        isDragging = false;
+        ring.classList.remove('is-dragging');
+        const nearest = Math.round(-angle / STEP);
+        spinTo(((nearest % N) + N) % N);
+      }
+
+      ring.addEventListener('mousedown', (e) => onDragStart(e.clientX));
+      window.addEventListener('mousemove', (e) => onDragMove(e.clientX));
+      window.addEventListener('mouseup', onDragEnd);
+
+      ring.addEventListener('touchstart', (e) => onDragStart(e.touches[0].clientX), { passive: true });
+      ring.addEventListener('touchmove', (e) => onDragMove(e.touches[0].clientX), { passive: true });
+      ring.addEventListener('touchend', onDragEnd);
+
+      function openLightbox(card) {
+        if (!overlay) return;
+        lightboxOpen = true;
+        const img = card.querySelector('.evc-img-wrap img');
+        const name = card.querySelector('.evc-name');
+        const meta = card.querySelector('.evc-meta');
+        overlay.querySelector('.evc-overlay__img').src = img.src;
+        overlay.querySelector('.evc-overlay__img').alt = img.alt;
+        overlay.querySelector('.evc-overlay__name').textContent = name.textContent;
+        overlay.querySelector('.evc-overlay__meta').innerHTML = meta.innerHTML;
+        overlay.classList.add('is-open');
+        overlay.setAttribute('aria-hidden', 'false');
+      }
+      function closeLightbox() {
+        if (!overlay) return;
+        overlay.classList.remove('is-open');
+        overlay.setAttribute('aria-hidden', 'true');
+        lightboxOpen = false;
+      }
+      overlay?.addEventListener('click', (e) => {
+        if (e.target === overlay) closeLightbox();
+      });
+      document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape') closeLightbox();
+      });
+
+      cards.forEach((card, i) => {
+        card.addEventListener('click', () => {
+          if (i === activeIndex) {
+            openLightbox(card);
+          } else {
+            spinTo(i);
+          }
+        });
+      });
+
+      updateDepth();
+      startAutoplay();
+
+      gsap.from('.ev-carousel-stage', {
+        y: 40, opacity: 0, duration: 0.8, ease: 'power3.out',
+        scrollTrigger: { trigger: '.ev-carousel-stage', start: 'top 85%' }
+      });
+    })();
+  </script>
+
+</body>
+</html>
