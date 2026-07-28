@@ -50,7 +50,7 @@
       --ink-dark:  #1a1c16;
       --ink-dim:   rgba(244,244,235,0.55);
 
-      --font-display: 'Lora', Georgia, serif;
+      --font-display: 'Poiret One', Georgia, serif;
       --font-body:    'DM Sans', Arial, sans-serif;
       --font-mono:    'DM Mono', 'IBM Plex Mono', monospace;
       --font-hand:    'Gochi Hand', cursive;
@@ -298,7 +298,7 @@
     }
     .nav__mobile-menu ul {
       list-style: none;
-      padding: 0.625rem 0.5rem;
+      padding: 16px;
       display: flex;
       flex-direction: column;
       gap: 2px;
@@ -316,7 +316,64 @@
       transition: color var(--dur-fast), background var(--dur-fast);
     }
     .nav__mobile-menu li a:hover { color: var(--lime); background: rgba(244,244,235,0.05); }
-    .nav.is-open .nav__mobile-menu { max-height: 200px; opacity: 1; pointer-events: auto; }
+    .nav.is-open .nav__mobile-menu { max-height: 500px; opacity: 1; pointer-events: auto; }
+
+    /* Work/Play accordion rows inside the mobile menu — see index.html (source of truth)
+       for why these are scoped as ".nav__mobile-item .nav__mobile-trigger" (2 classes)
+       rather than bare ".nav__mobile-trigger" (1 class): "Play" is an <a>, and the
+       ".nav__mobile-menu li a" rule above (1 class + 2 elements) has higher specificity
+       than a single class, so it silently wins the cascade there unless matched. */
+    .nav__mobile-item .nav__mobile-trigger {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      width: 100%;
+      background: none;
+      border: none;
+      cursor: pointer;
+      padding: 0.75rem 0.875rem;
+      font-family: var(--font-hand);
+      font-weight: 400;
+      font-size: 20px;
+      letter-spacing: -0.03em;
+      color: rgba(244,244,235,0.8);
+      text-decoration: none;
+      border-radius: 10px;
+      transition: color var(--dur-fast), background var(--dur-fast);
+    }
+    .nav__mobile-item .nav__mobile-trigger:hover { color: var(--lime); background: rgba(244,244,235,0.05); }
+    .nav__mobile-item .nav__mobile-trigger .nav__work-chevron {
+      width: 18px; height: 18px; flex-shrink: 0;
+      transition: transform 0.25s ease;
+    }
+    .nav__mobile-item.is-open .nav__mobile-trigger .nav__work-chevron { transform: rotate(180deg); }
+
+    .nav__mobile-submenu {
+      display: flex;
+      flex-direction: column;
+      max-height: 0;
+      overflow: hidden;
+      opacity: 0;
+      transition: max-height 0.3s ease, opacity 0.2s ease;
+    }
+    .nav__mobile-item.is-open .nav__mobile-submenu { max-height: 220px; opacity: 1; }
+    .nav__mobile-item .nav__mobile-submenu a {
+      display: block;
+      padding: 0.6rem 0.875rem 0.6rem 1.625rem;
+      font-family: 'Poiret One', Georgia, serif;
+      font-weight: 400;
+      font-size: 17px;
+      color: rgba(244,244,235,0.65);
+      text-decoration: none;
+      border-radius: 8px;
+      transition: color var(--dur-fast), background var(--dur-fast);
+    }
+    .nav__mobile-item .nav__mobile-submenu a:hover { color: var(--lime); background: rgba(244,244,235,0.05); }
+    body.light-mode .nav__mobile-item .nav__mobile-trigger { color: rgba(26,28,22,0.7); }
+    body.light-mode .nav__mobile-item .nav__mobile-trigger:hover { color: #6b7a00; background: rgba(26,28,22,0.05); }
+    body.light-mode .nav__mobile-item .nav__mobile-submenu a { color: rgba(26,28,22,0.55); }
+    body.light-mode .nav__mobile-item .nav__mobile-submenu a:hover { color: #6b7a00; background: rgba(26,28,22,0.05); }
 
     /* ================================================================
        SHARED UTILITIES
@@ -447,7 +504,9 @@
 
     .page-eyebrow {
       display: block;
-      font-size: 0.68rem;
+      font-family: var(--font-body);
+      font-weight: 600;
+      font-size: clamp(0.6875rem, 0.6vw, 0.8125rem);
       letter-spacing: 0.14em;
       text-transform: uppercase;
       opacity: 0.38;
@@ -519,11 +578,12 @@
     }
     .card__case-headline { font-weight: 700; margin: 0; }
     .card__case-sub      {
+      font-family: var(--font-body);
       font-weight: 400;
       margin: 0;
-      font-size: 26px;
-      line-height: 32px;
-      letter-spacing: -0.015em;
+      font-size: clamp(1.125rem, 1.6vw, 1.375rem);
+      line-height: 1.33;
+      letter-spacing: normal;
     }
 
     .card__foot {
@@ -551,7 +611,7 @@
     .card__project-meta {
       font-family: var(--font-body);
       font-weight: 700;
-      font-size: 11px;
+      font-size: clamp(0.6875rem, 0.6vw, 0.8125rem);
       line-height: 1.3;
       color: rgba(244,244,235,0.7);
       text-transform: uppercase;
@@ -636,8 +696,9 @@
     .ow-row__name {
       font-family: var(--font-display);
       font-weight: 500;
-      font-size: 18px;
-      line-height: 24px;
+      font-size: clamp(1.125rem, 1.6vw, 1.375rem);
+      line-height: 1.33;
+      letter-spacing: normal;
       white-space: nowrap;
       flex-shrink: 0;
     }
@@ -645,8 +706,8 @@
     .ow-row__desc {
       font-family: var(--font-body);
       font-weight: 400;
-      font-size: 13px;
-      line-height: 15px;
+      font-size: clamp(0.75rem, 0.7vw, 0.8125rem);
+      line-height: 1.35;
       flex: 1 0 0;
       min-width: 0;
       color: var(--ink-light);
@@ -655,7 +716,8 @@
     .ow-row__year {
       font-family: var(--font-body);
       font-weight: 600;
-      font-size: 13px;
+      font-size: clamp(0.75rem, 0.7vw, 0.8125rem);
+      line-height: 1.35;
       color: var(--ink-light);
       white-space: nowrap;
       flex-shrink: 0;
@@ -663,9 +725,9 @@
 
     .ow-row__badge {
       font-family: var(--font-body);
-      font-size: 0.6rem;
+      font-size: clamp(0.6875rem, 0.6vw, 0.8125rem);
       font-weight: 600;
-      letter-spacing: 0.08em;
+      letter-spacing: 0.14em;
       text-transform: uppercase;
       color: var(--ink-light);
       border: 1px solid rgba(244,244,235,0.2);
@@ -765,8 +827,8 @@
     .ev-card__name {
       font-family: var(--font-display);
       font-weight: 700;
-      font-size: 18px;
-      line-height: 24px;
+      font-size: clamp(1.125rem, 1.6vw, 1.375rem);
+      line-height: 1.33;
       letter-spacing: -0.01em;
       color: var(--ink-light);
       margin: 0;
@@ -775,8 +837,8 @@
     .ev-card__meta {
       font-family: var(--font-body);
       font-weight: 400;
-      font-size: 13px;
-      line-height: 15px;
+      font-size: clamp(0.75rem, 0.7vw, 0.8125rem);
+      line-height: 1.35;
       color: var(--ink-light);
       margin: 0;
     }
@@ -889,8 +951,8 @@
     .evc-name {
       font-family: var(--font-display);
       font-weight: 700;
-      font-size: 18px;
-      line-height: 24px;
+      font-size: clamp(1.125rem, 1.6vw, 1.375rem);
+      line-height: 1.33;
       letter-spacing: -0.01em;
       color: var(--ink-light);
       margin: 0;
@@ -903,8 +965,8 @@
     .evc-meta {
       font-family: var(--font-body);
       font-weight: 400;
-      font-size: 13px;
-      line-height: 15px;
+      font-size: clamp(0.75rem, 0.7vw, 0.8125rem);
+      line-height: 1.35;
       color: var(--ink-light);
       margin: 0;
     }
@@ -916,7 +978,9 @@
       color: var(--ink-dark);
       font-family: var(--font-body);
       font-weight: 600;
-      font-size: 13px;
+      font-size: clamp(0.6875rem, 0.6vw, 0.8125rem);
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
       padding: 4px 16px;
       border-radius: 10px;
       white-space: nowrap;
@@ -1005,8 +1069,8 @@
     .evc-overlay__name {
       font-family: var(--font-display);
       font-weight: 700;
-      font-size: 20px;
-      line-height: 26px;
+      font-size: clamp(1.125rem, 1.6vw, 1.375rem);
+      line-height: 1.33;
       letter-spacing: -0.01em;
       color: var(--ink-light);
       margin: 0;
@@ -1015,8 +1079,8 @@
     .evc-overlay__meta {
       font-family: var(--font-body);
       font-weight: 400;
-      font-size: 13px;
-      line-height: 15px;
+      font-size: clamp(0.75rem, 0.7vw, 0.8125rem);
+      line-height: 1.35;
       color: var(--ink-light);
       margin: 0;
     }
@@ -1078,8 +1142,8 @@
     .contact__heading {
       font-family: var(--font-display);
       font-weight: 400;
-      font-size: clamp(2.5rem, 3.61vw, 3.25rem);
-      line-height: 56px;
+      font-size: clamp(1.75rem, 3.6vw, 3.25rem);
+      line-height: 1.1;
       letter-spacing: -0.03em;
       color: var(--ink-light);
     }
@@ -1087,8 +1151,8 @@
     .contact__desc {
       font-family: var(--font-body);
       font-weight: 400;
-      font-size: 17px;
-      line-height: 25px;
+      font-size: clamp(0.9375rem, 1vw, 1.0625rem);
+      line-height: 1.47;
       color: var(--ink-light);
     }
 
@@ -1175,6 +1239,7 @@
       .nav__logo-text--full  { display: none; }
       .nav__logo-text--short { display: inline; }
       .nav__logo-text { font-size: 26px; line-height: 1; font-weight: 700; letter-spacing: -0.04em; }
+      .nav__right { gap: 10px; }
       .nav__links { display: none; }
       .nav__hamburger { display: flex; width: 40px; height: 40px; }
       .nav__ham-line { width: 22px; height: 2px; }
@@ -1239,7 +1304,7 @@
       .ev-grid { grid-template-columns: 1fr 1fr; }
 
       #contact .inner { flex-direction: column; }
-      .contact__heading { font-size: clamp(2rem, 7vw, 2.5rem); line-height: 1.15; }
+      .contact__heading { font-size: clamp(1.4rem, 5vw, 2rem); line-height: 1.2; }
       .contact__decor { order: -1; flex: none; width: 100%; }
       .footer-peeps-crowd { aspect-ratio: 376 / 468.7354; }
       .footer-peep { width: 36.54%; height: 41.18%; }
@@ -1276,7 +1341,7 @@
       :root { --pad: 20px; }
       .ow-grid { grid-template-columns: 1fr; }
       .ev-grid { grid-template-columns: 1fr; }
-      .contact__heading { font-size: clamp(1.75rem, 8vw, 2.25rem); }
+      .contact__heading { font-size: clamp(1.25rem, 6vw, 1.75rem); }
     }
   </style>
   <link rel="stylesheet" href="Asset/skiper40.css">
@@ -1303,7 +1368,7 @@
 
   <!-- ── NAV ── -->
   <nav class="nav" id="main-nav">
-    <a class="nav__logo" href="/" aria-label="Andrea Lee">
+    <a class="nav__logo" href="index.html" aria-label="Andrea Lee">
       <span class="nav__logo-text nav__logo-text--full">Andrea Lee</span>
       <span class="nav__logo-text nav__logo-text--short">Andrea L.</span>
       <img class="nav__logo-flower"
@@ -1328,15 +1393,15 @@
           </div>
         </li>
         <li class="nav__links-item nav__links-item--work" id="nav-play-item">
-          <button class="nav__work-trigger" id="nav-play-trigger" aria-haspopup="true" aria-expanded="false">
+          <a class="nav__work-trigger" id="nav-play-trigger" href="side-quests.html" aria-haspopup="true" aria-expanded="false">
             Play
             <svg class="nav__work-chevron" width="24" height="24" viewBox="0 0 24 24" fill="none" aria-hidden="true">
               <path d="M6 9l6 6 6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
             </svg>
-          </button>
+          </a>
           <div class="nav__work-menu" id="nav-play-menu">
-            <a href="#other-works">Side quests</a>
-            <a href="#event-styling">Event Stylings</a>
+            <a href="side-quests.html#other-works">Side quests</a>
+            <a href="side-quests.html#event-styling">Event Stylings</a>
           </div>
         </li>
         <li><a href="about.html">About</a></li>
@@ -1372,8 +1437,31 @@
     <!-- Mobile dropdown -->
     <div class="nav__mobile-menu" id="nav-mobile-menu">
       <ul>
-        <li><a href="works.html">Work</a></li>
-        <li><a href="#other-works">Play</a></li>
+        <li class="nav__mobile-item" id="mob-work-item">
+          <button class="nav__mobile-trigger" id="mob-work-trigger" aria-haspopup="true" aria-expanded="false">
+            Work
+            <svg class="nav__work-chevron" width="24" height="24" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+              <path d="M6 9l6 6 6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </button>
+          <div class="nav__mobile-submenu" id="mob-work-submenu">
+            <a href="case-studies/arvo.html">ARVO</a>
+            <a href="case-studies/seletar.html">Seletar Airport</a>
+            <a href="case-studies/pethaus.html">Paw Haus</a>
+          </div>
+        </li>
+        <li class="nav__mobile-item" id="mob-play-item">
+          <a class="nav__mobile-trigger" id="mob-play-trigger" href="side-quests.html" aria-haspopup="true" aria-expanded="false">
+            Play
+            <svg class="nav__work-chevron" width="24" height="24" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+              <path d="M6 9l6 6 6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </a>
+          <div class="nav__mobile-submenu" id="mob-play-submenu">
+            <a href="side-quests.html#other-works">Side quests</a>
+            <a href="side-quests.html#event-styling">Event Stylings</a>
+          </div>
+        </li>
         <li><a href="about.html">About</a></li>
         <li><a href="#contact">Contact</a></li>
       </ul>
@@ -1899,15 +1987,49 @@
     const hamburger  = document.getElementById('nav-hamburger');
     const mobileMenu = document.getElementById('nav-mobile-menu');
 
+    /* Mobile menu Work/Play accordions — set up before the hamburger listeners
+       below since they reference closeAllMobileDropdowns. */
+    const mobileDropdowns = [
+      { item: document.getElementById('mob-work-item'), trigger: document.getElementById('mob-work-trigger') },
+      { item: document.getElementById('mob-play-item'), trigger: document.getElementById('mob-play-trigger') },
+    ].filter(d => d.item && d.trigger);
+
+    function closeAllMobileDropdowns() {
+      mobileDropdowns.forEach(({ item, trigger }) => {
+        item.classList.remove('is-open');
+        trigger.setAttribute('aria-expanded', 'false');
+      });
+    }
+
+    mobileDropdowns.forEach(({ item, trigger }) => {
+      function toggle(e) {
+        e.stopPropagation();
+        e.preventDefault();
+        const willOpen = !item.classList.contains('is-open');
+        closeAllMobileDropdowns();
+        if (willOpen) {
+          item.classList.add('is-open');
+          trigger.setAttribute('aria-expanded', 'true');
+        }
+      }
+      if (trigger.tagName === 'A') {
+        trigger.querySelector('.nav__work-chevron').addEventListener('click', toggle);
+      } else {
+        trigger.addEventListener('click', toggle);
+      }
+    });
+
     hamburger.addEventListener('click', () => {
       const isOpen = mainNavEl.classList.toggle('is-open');
       hamburger.setAttribute('aria-expanded', String(isOpen));
+      if (!isOpen) closeAllMobileDropdowns();
     });
 
     mobileMenu.querySelectorAll('a').forEach(link => {
       link.addEventListener('click', () => {
         mainNavEl.classList.remove('is-open');
         hamburger.setAttribute('aria-expanded', 'false');
+        closeAllMobileDropdowns();
       });
     });
 
@@ -1925,15 +2047,21 @@
     }
 
     navDropdowns.forEach(({ item, trigger }) => {
-      trigger.addEventListener('click', (e) => {
+      function toggle(e) {
         e.stopPropagation();
+        e.preventDefault();
         const willOpen = !item.classList.contains('is-open');
         closeAllNavDropdowns();
         if (willOpen) {
           item.classList.add('is-open');
           trigger.setAttribute('aria-expanded', 'true');
         }
-      });
+      }
+      if (trigger.tagName === 'A') {
+        trigger.querySelector('.nav__work-chevron').addEventListener('click', toggle);
+      } else {
+        trigger.addEventListener('click', toggle);
+      }
     });
 
     document.addEventListener('click', (e) => {

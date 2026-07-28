@@ -34,7 +34,7 @@
       --seletar:      #304c95;
       --rule-light:   #dfe0de;
 
-      --font-display: 'Lora', Georgia, serif;
+      --font-display: 'Poiret One', Georgia, serif;
       --font-body:    'DM Sans', Arial, sans-serif;
       --font-mono:    'DM Mono', 'IBM Plex Mono', monospace;
       --font-hand:    'Gochi Hand', cursive;
@@ -169,10 +169,26 @@
     .nav.is-open .nav__ham-line:nth-child(3) { transform: translateY(-6px) rotate(-45deg); }
 
     .nav__mobile-menu { position: absolute; top: calc(100% - 8px); left: var(--pad); right: var(--pad); background: var(--seletar); border: 1px solid rgba(222,232,149,0.25); border-radius: 20px; box-shadow: 0 4px 24px rgba(0,0,0,0.25); overflow: hidden; max-height: 0; opacity: 0; pointer-events: none; transition: max-height 0.3s ease, opacity 0.2s ease; }
-    .nav__mobile-menu ul { list-style: none; padding: 0.625rem 0.5rem; display: flex; flex-direction: column; gap: 2px; }
+    .nav__mobile-menu ul { list-style: none; padding: 16px; display: flex; flex-direction: column; gap: 2px; }
     .nav__mobile-menu li a { display: block; padding: 0.75rem 0.875rem; font-family: var(--font-hand); font-weight: 400; font-size: 20px; letter-spacing: -0.03em; color: rgba(244,244,235,0.8); text-decoration: none; border-radius: 10px; transition: color var(--dur-fast), background var(--dur-fast); }
     .nav__mobile-menu li a:hover { color: var(--lime); background: rgba(244,244,235,0.05); }
-    .nav.is-open .nav__mobile-menu { max-height: 200px; opacity: 1; pointer-events: auto; }
+    .nav.is-open .nav__mobile-menu { max-height: 500px; opacity: 1; pointer-events: auto; }
+
+    /* Work/Play accordion rows — scoped ".nav__mobile-item .nav__mobile-trigger" (2 classes)
+       so it reliably beats ".nav__mobile-menu li a" (1 class + 2 elements) for the "Play" <a>
+       case — see index.html (source of truth) for the full specificity explanation. */
+    .nav__mobile-item .nav__mobile-trigger { display: flex; align-items: center; justify-content: space-between; gap: 8px; width: 100%; background: none; border: none; cursor: pointer; padding: 0.75rem 0.875rem; font-family: var(--font-hand); font-weight: 400; font-size: 20px; letter-spacing: -0.03em; color: rgba(244,244,235,0.8); text-decoration: none; border-radius: 10px; transition: color var(--dur-fast), background var(--dur-fast); }
+    .nav__mobile-item .nav__mobile-trigger:hover { color: var(--lime); background: rgba(244,244,235,0.05); }
+    .nav__mobile-item .nav__mobile-trigger .nav__work-chevron { width: 18px; height: 18px; flex-shrink: 0; transition: transform 0.25s ease; }
+    .nav__mobile-item.is-open .nav__mobile-trigger .nav__work-chevron { transform: rotate(180deg); }
+    .nav__mobile-submenu { display: flex; flex-direction: column; max-height: 0; overflow: hidden; opacity: 0; transition: max-height 0.3s ease, opacity 0.2s ease; }
+    .nav__mobile-item.is-open .nav__mobile-submenu { max-height: 220px; opacity: 1; }
+    .nav__mobile-item .nav__mobile-submenu a { display: block; padding: 0.6rem 0.875rem 0.6rem 1.625rem; font-family: 'Poiret One', Georgia, serif; font-weight: 400; font-size: 17px; color: rgba(244,244,235,0.65); text-decoration: none; border-radius: 8px; transition: color var(--dur-fast), background var(--dur-fast); }
+    .nav__mobile-item .nav__mobile-submenu a:hover { color: var(--lime); background: rgba(244,244,235,0.05); }
+    body.light-mode .nav__mobile-item .nav__mobile-trigger { color: rgba(26,28,22,0.7); }
+    body.light-mode .nav__mobile-item .nav__mobile-trigger:hover { color: #6b7a00; background: rgba(26,28,22,0.05); }
+    body.light-mode .nav__mobile-item .nav__mobile-submenu a { color: rgba(26,28,22,0.55); }
+    body.light-mode .nav__mobile-item .nav__mobile-submenu a:hover { color: #6b7a00; background: rgba(26,28,22,0.05); }
 
     .nav__toggle { box-sizing: border-box; display: flex; align-items: center; justify-content: center; padding: 4px; width: 83px; height: 30px; background: #f4f4eb; border: 0.95px solid var(--lime); box-shadow: inset 0 4px 4px rgba(0,0,0,0.25); border-radius: 95px; cursor: pointer; flex-shrink: 0; transition: background 0.3s ease; }
     body.light-mode .nav__toggle { background: #6b7060; }
@@ -195,9 +211,9 @@
     .section + .section { margin-top: 100px; }
     .inner { max-width: calc(var(--max-w) + var(--pad) * 2); margin: 0 auto; padding: var(--pad); }
     /* UI/SectionTag per this Figma file is DM Sans Bold, not the site's usual DM Mono t-label */
-    .t-label { font-family: var(--font-body); font-weight: 700; font-size: 11px; line-height: 14px; letter-spacing: 0.6em; text-transform: uppercase; color: var(--lime); display: block; margin-bottom: 40px; }
+    .t-label { font-family: var(--font-mono); font-weight: 700; font-size: 11px; line-height: 14px; letter-spacing: 0.6em; text-transform: uppercase; color: var(--lime); display: block; margin-bottom: 40px; }
     /* UI/Tag per this Figma file: plain 13px SemiBold eyebrow, no tracking, ink-light — distinct from the tracked/lime t-label */
-    .cs-eyebrow { font-family: var(--font-body); font-weight: 600; font-size: 13px; color: var(--ink-light); display: block; margin-bottom: 40px; }
+    .cs-eyebrow { font-family: var(--font-body); font-weight: 600; font-size: clamp(0.6875rem, 0.6vw, 0.8125rem); letter-spacing: 0.14em; text-transform: uppercase; color: var(--ink-light); display: block; margin-bottom: 40px; }
 
     /* ================================================================
        CURSOR FOLLOWER / LOADER
@@ -266,8 +282,8 @@
     .cs-hero__tags { display: flex; flex-wrap: wrap; gap: 5px; }
     .cs-hero__tag { display: inline-flex; align-items: center; justify-content: center; padding: 4px 16px; background: #6b7060; color: var(--ink-light); font-family: var(--font-body); font-weight: 700; font-size: 11px; line-height: 1.5; letter-spacing: 0.14em; text-transform: uppercase; border-radius: 10px; white-space: nowrap; }
     .cs-hero__heading { display: flex; flex-direction: column; gap: 10px; }
-    .cs-hero__title { font-family: var(--font-display); font-weight: 400; font-size: clamp(2rem, 4vw, 3.25rem); line-height: 1.08; letter-spacing: -0.03em; color: var(--ink-light); }
-    .cs-hero__desc { font-family: var(--font-body); font-weight: 400; font-size: 17px; line-height: 1.47; color: var(--ink-light); }
+    .cs-hero__title { font-family: var(--font-display); font-weight: 400; font-size: clamp(1.75rem, 3.6vw, 3.25rem); line-height: 1.1; letter-spacing: -0.03em; color: var(--ink-light); }
+    .cs-hero__desc { font-family: var(--font-body); font-weight: 400; font-size: clamp(0.9375rem, 1vw, 1.0625rem); line-height: 1.47; letter-spacing: normal; color: var(--ink-light); }
     .cs-hero__cta { flex: 0 0 auto; display: flex; align-items: center; justify-content: center; padding: 16px 32px; background: var(--lime); border: 3px solid var(--lime); border-radius: 10px; box-shadow: -8px 7px 3.6px -3px rgba(0,0,0,0.25), inset 1px -2px 4px 2px rgba(0,0,0,0.25); text-decoration: none; transition: transform var(--dur-fast) var(--ease-bounce); }
     .cs-hero__cta:hover { transform: translateY(-2px); }
     .cs-hero__cta-text { font-family: var(--font-body); font-weight: 600; font-size: 13px; color: var(--ink-dark); text-decoration: underline; white-space: nowrap; }
@@ -280,8 +296,8 @@
     .cs-spec-caption { font-family: var(--font-body); font-size: 15px; line-height: 20px; color: var(--ink-light); margin-top: 10px; }
     .cs-spec-caption strong { font-weight: 700; }
     .cs-col-stack { display: flex; flex-direction: column; gap: 40px; width: 574px; max-width: 100%; }
-    .cs-col__title { font-family: var(--font-hand); font-size: 35px; line-height: 35px; font-weight: 400; color: var(--ink-light); }
-    .cs-col__body { font-family: var(--font-body); font-size: 15px; line-height: 20px; color: var(--ink-light); margin-top: 10px; }
+    .cs-col__title { font-family: var(--font-hand); font-size: clamp(1.5rem, 2.2vw, 2.1875rem); line-height: 1; font-weight: 400; color: var(--ink-light); }
+    .cs-col__body { font-family: var(--font-body); font-weight: 400; font-size: clamp(0.9375rem, 1vw, 1.0625rem); line-height: 1.47; letter-spacing: normal; color: var(--ink-light); margin-top: 10px; }
     .cs-col__body strong { font-weight: 700; }
 
     /* ── Problem space ── */
@@ -289,11 +305,11 @@
     /* Text stays pinned in view (like arvo.html's #cs-seven sticky pattern) while the taller
        image card scrolls past beside it — the section only releases once the image runs out. */
     .cs-problem-text { display: flex; flex-direction: column; width: 575px; max-width: 100%; flex-shrink: 0; position: sticky; top: 140px; }
-    .cs-problem-heading { font-family: var(--font-display); font-weight: 400; font-size: 40px; line-height: 44px; letter-spacing: -0.025em; color: var(--ink-light); margin-bottom: 20px; }
-    .cs-problem-body { font-family: var(--font-body); font-size: 17px; line-height: 25px; color: var(--ink-light); margin-bottom: 16px; }
+    .cs-problem-heading { font-family: var(--font-display); font-weight: 400; font-size: clamp(1.75rem, 3vw, 2.5rem); line-height: 1.2; letter-spacing: -0.025em; color: var(--ink-light); margin-bottom: 20px; }
+    .cs-problem-body { font-family: var(--font-body); font-weight: 400; font-size: clamp(0.9375rem, 1vw, 1.0625rem); line-height: 1.47; letter-spacing: normal; color: var(--ink-light); margin-bottom: 16px; }
     .cs-problem-body strong { font-weight: 700; }
-    .cs-mycall__title { font-family: var(--font-display); font-weight: 700; font-size: 22px; line-height: 28px; letter-spacing: -0.01em; color: var(--ink-light); margin-top: 24px; margin-bottom: 10px; }
-    .cs-mycall__body { font-family: var(--font-body); font-size: 17px; line-height: 25px; color: var(--ink-light); }
+    .cs-mycall__title { font-family: var(--font-display); font-weight: 700; font-size: clamp(1.125rem, 1.6vw, 1.375rem); line-height: 1.33; letter-spacing: -0.01em; color: var(--ink-light); margin-top: 24px; margin-bottom: 10px; }
+    .cs-mycall__body { font-family: var(--font-body); font-weight: 400; font-size: clamp(0.9375rem, 1vw, 1.0625rem); line-height: 1.47; letter-spacing: normal; color: var(--ink-light); }
     .cs-mycall__body strong { font-weight: 700; }
     .cs-problem-media { flex: 1; min-width: 0; }
     /* Card is a fixed 569x1182 design, kept at that aspect ratio; the screenshot is oversized (132% of card width)
@@ -306,24 +322,24 @@
     /* left = 69/569 = pill's horizontal center, so the line runs vertically through/behind the pill (Figma left:69 vs pill left:11/width:116) */
     .cs-problem-arrow-line { position: absolute; left: 12.13%; top: 4%; height: 36%; width: 15px; transform: translateX(-50%); }
     .cs-problem-arrow-line svg { display: block; width: 100%; height: 100%; }
-    .cs-problem-foldlabel { position: absolute; left: 1.93%; width: 20.39%; top: 22.67%; background: #6b7060; color: var(--ink-light); font-family: var(--font-body); font-weight: 600; font-size: 11px; line-height: 14px; text-align: center; padding: 8px 12px; border-radius: 10px; box-sizing: border-box; z-index: 2; }
+    .cs-problem-foldlabel { position: absolute; left: 1.93%; width: 20.39%; top: 22.67%; background: #6b7060; color: var(--ink-light); font-family: var(--font-body); font-weight: 600; font-size: clamp(0.75rem, 0.7vw, 0.8125rem); line-height: 1.35; text-align: center; padding: 8px 12px; border-radius: 10px; box-sizing: border-box; z-index: 2; }
     .cs-problem-caption { position: relative; z-index: 2; }
-    .cs-problem-caption__title { font-family: var(--font-body); font-weight: 700; font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--ink-dark); }
-    .cs-problem-caption__desc { font-family: var(--font-body); font-weight: 400; font-size: 11px; color: var(--ink-dark); margin-top: 6px; }
+    .cs-problem-caption__title { font-family: var(--font-body); font-weight: 700; font-size: clamp(0.6875rem, 0.6vw, 0.8125rem); letter-spacing: 0.14em; text-transform: uppercase; color: var(--ink-dark); }
+    .cs-problem-caption__desc { font-family: var(--font-body); font-weight: 400; font-size: clamp(0.75rem, 0.7vw, 0.8125rem); line-height: 1.35; color: var(--ink-dark); margin-top: 6px; }
 
     /* ── Our Findings ── */
     .cs-findings-grid { display: grid; grid-template-columns: repeat(3, minmax(0,1fr)); grid-template-rows: repeat(3, minmax(0,1fr)); gap: 20px; height: 715px; width: 100%; }
-    .cs-findings-heading { grid-column: 1; grid-row: 1; align-self: start; font-family: var(--font-display); font-weight: 400; font-size: 40px; line-height: 44px; letter-spacing: -0.025em; color: var(--ink-light); }
+    .cs-findings-heading { grid-column: 1; grid-row: 1; align-self: start; font-family: var(--font-display); font-weight: 400; font-size: clamp(1.75rem, 3vw, 2.5rem); line-height: 1.2; letter-spacing: -0.025em; color: var(--ink-light); }
     .cs-findings-mycall { grid-column: 1; grid-row: 2; align-self: end; display: flex; flex-direction: column; gap: 10px; }
-    .cs-findings-mycall__title { font-family: var(--font-display); font-weight: 700; font-size: 22px; line-height: 28px; letter-spacing: -0.01em; color: var(--ink-light); }
-    .cs-findings-mycall__body { font-family: var(--font-body); font-size: 17px; line-height: 25px; color: var(--ink-light); }
+    .cs-findings-mycall__title { font-family: var(--font-display); font-weight: 700; font-size: clamp(1.125rem, 1.6vw, 1.375rem); line-height: 1.33; letter-spacing: -0.01em; color: var(--ink-light); }
+    .cs-findings-mycall__body { font-family: var(--font-body); font-weight: 400; font-size: clamp(0.9375rem, 1vw, 1.0625rem); line-height: 1.47; letter-spacing: normal; color: var(--ink-light); }
 
     .cs-finding-card { position: relative; overflow: hidden; background: var(--bg-light); box-sizing: border-box; padding: 32px; display: flex; flex-direction: column; gap: 10px; }
     .cs-finding-card--p1 { grid-column: 2; grid-row: 1 / span 2; }
     .cs-finding-card--p2 { grid-column: 1 / span 2; grid-row: 3; }
     .cs-finding-card--p3 { grid-column: 3; grid-row: 1 / span 3; }
     .cs-finding__head { display: flex; align-items: center; justify-content: space-between; gap: 10px; position: relative; z-index: 2; }
-    .cs-finding__title { font-family: var(--font-display); font-weight: 700; font-size: 18px; line-height: 24px; color: var(--ink-dark); white-space: nowrap; }
+    .cs-finding__title { font-family: var(--font-display); font-weight: 700; font-size: clamp(1.125rem, 1.6vw, 1.375rem); line-height: 1.33; letter-spacing: -0.01em; color: var(--ink-dark); white-space: nowrap; }
     .cs-finding__badge { display: inline-flex; align-items: center; justify-content: center; padding: 4px 16px; border-radius: 100px; font-family: var(--font-body); font-weight: 600; font-size: 13px; white-space: nowrap; flex-shrink: 0; }
     .cs-finding__desc { font-family: var(--font-body); font-weight: 400; font-size: 13px; line-height: 15px; color: var(--ink-dark); max-width: 290px; position: relative; z-index: 2; }
     .cs-finding__count { font-family: var(--font-body); font-weight: 600; font-size: 13px; color: var(--ink-dark); position: relative; z-index: 2; }
@@ -342,8 +358,8 @@
     /* ── The Redesign ── */
     .cs-redesign-intro { display: flex; flex-direction: column; gap: 40px; width: 100%; }
     .cs-redesign-heading { display: flex; flex-direction: column; gap: 10px; }
-    .cs-redesign-heading h2 { font-family: var(--font-display); font-weight: 400; font-size: 40px; line-height: 44px; letter-spacing: -0.025em; color: var(--ink-light); max-width: 635px; }
-    .cs-redesign-heading p { font-family: var(--font-body); font-size: 17px; line-height: 25px; color: var(--ink-light); max-width: 635px; }
+    .cs-redesign-heading h2 { font-family: var(--font-display); font-weight: 400; font-size: clamp(1.75rem, 3vw, 2.5rem); line-height: 1.2; letter-spacing: -0.025em; color: var(--ink-light); max-width: 635px; }
+    .cs-redesign-heading p { font-family: var(--font-body); font-weight: 400; font-size: clamp(0.9375rem, 1vw, 1.0625rem); line-height: 1.47; letter-spacing: normal; color: var(--ink-light); max-width: 635px; }
 
     .cs-redesign-feature { display: flex; flex-direction: column; gap: 80px; width: 100%; }
     /* 80px between intro and each feature block, matching the redlined spec (64px side padding
@@ -351,7 +367,7 @@
     #cs-redesign .inner { display: flex; flex-direction: column; gap: 80px; }
     .cs-redesign-card { background: var(--bg-light); padding: 16px; display: flex; flex-direction: column; gap: 40px; box-sizing: border-box; }
     .cs-redesign-card--tight { gap: 10px; }
-    .cs-redesign-card__label { font-family: var(--font-body); font-weight: 700; font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--ink-dark); }
+    .cs-redesign-card__label { font-family: var(--font-body); font-weight: 700; font-size: clamp(0.6875rem, 0.6vw, 0.8125rem); letter-spacing: 0.14em; text-transform: uppercase; color: var(--ink-dark); }
     .cs-redesign-card__caption { font-family: var(--font-body); font-weight: 400; font-style: italic; font-size: 11px; line-height: 17px; color: var(--ink-dark); }
     .cs-redesign-card__caption--center { text-align: center; }
     .cs-redesign-card img { width: 100%; display: block; }
@@ -361,8 +377,8 @@
     .cs-redesign-qa { display: flex; gap: 40px; align-items: flex-start; width: 100%; }
     .cs-redesign-qa__q { flex: 1; min-width: 0; font-family: var(--font-display); font-weight: 700; font-size: 22px; line-height: 28px; letter-spacing: -0.01em; color: var(--ink-light); }
     .cs-redesign-qa__a { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 20px; }
-    .cs-redesign-qa__a-title { font-family: var(--font-hand); font-weight: 400; font-size: 32px; line-height: 30px; letter-spacing: -0.05em; color: var(--ink-light); }
-    .cs-redesign-qa__a-body { font-family: var(--font-body); font-size: 15px; line-height: 20px; color: var(--ink-light); display: flex; flex-direction: column; gap: 20px; }
+    .cs-redesign-qa__a-title { font-family: var(--font-hand); font-weight: 400; font-size: clamp(1.5rem, 2.2vw, 2.1875rem); line-height: 1; letter-spacing: -0.05em; color: var(--ink-light); }
+    .cs-redesign-qa__a-body { font-family: var(--font-body); font-weight: 400; font-size: clamp(0.9375rem, 1vw, 1.0625rem); line-height: 1.47; letter-spacing: normal; color: var(--ink-light); display: flex; flex-direction: column; gap: 20px; }
 
     @media (max-width: 1024px) {
       .cs-redesign-pair { flex-direction: column; }
@@ -372,24 +388,24 @@
     /* ── User Testing ── */
     .cs-testing-wrap { display: flex; flex-direction: column; gap: 80px; width: 100%; }
     .cs-testing-intro { display: flex; flex-direction: column; gap: 20px; align-items: center; text-align: center; max-width: 818px; margin: 0 auto; }
-    .cs-testing-intro h2 { font-family: var(--font-display); font-weight: 400; font-size: 40px; line-height: 44px; letter-spacing: -0.025em; color: var(--ink-light); }
-    .cs-testing-intro p { font-family: var(--font-body); font-size: 17px; line-height: 25px; color: var(--ink-light); }
+    .cs-testing-intro h2 { font-family: var(--font-display); font-weight: 400; font-size: clamp(1.75rem, 3vw, 2.5rem); line-height: 1.2; letter-spacing: -0.025em; color: var(--ink-light); }
+    .cs-testing-intro p { font-family: var(--font-body); font-weight: 400; font-size: clamp(0.9375rem, 1vw, 1.0625rem); line-height: 1.47; letter-spacing: normal; color: var(--ink-light); }
     .cs-testing-intro p strong { font-weight: 700; }
 
     .cs-testing-block { display: flex; flex-direction: column; align-items: center; width: 100%; }
     .cs-testing-block__inner { display: flex; flex-direction: column; gap: 40px; width: 626px; max-width: 100%; }
     .cs-testing-block__inner--wide { width: 1064px; }
-    .cs-testing-title { font-family: var(--font-hand); font-weight: 400; font-size: 32px; line-height: 30px; letter-spacing: -0.05em; color: var(--ink-light); }
+    .cs-testing-title { font-family: var(--font-hand); font-weight: 400; font-size: clamp(1.5rem, 2.2vw, 2.1875rem); line-height: 1; letter-spacing: -0.05em; color: var(--ink-light); }
     .cs-testing-title--center { text-align: center; }
     .cs-testing-quote { font-family: var(--font-display); font-style: italic; font-weight: 400; font-size: 20px; line-height: 29px; letter-spacing: -0.01em; color: var(--ink-light); }
     .cs-testing-quote--center { text-align: center; }
-    .cs-testing-body { font-family: var(--font-body); font-size: 17px; line-height: 25px; color: var(--ink-light); }
+    .cs-testing-body { font-family: var(--font-body); font-weight: 400; font-size: clamp(0.9375rem, 1vw, 1.0625rem); line-height: 1.47; letter-spacing: normal; color: var(--ink-light); }
     .cs-testing-body strong { font-weight: 700; }
 
     .cs-testing-grid { display: flex; gap: 20px; width: 100%; }
     .cs-testing-grid__col { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 10px; }
-    .cs-testing-grid__title { font-family: var(--font-display); font-weight: 700; font-size: 18px; line-height: 24px; color: var(--ink-light); }
-    .cs-testing-grid__body { font-family: var(--font-body); font-size: 17px; line-height: 25px; color: var(--ink-light); }
+    .cs-testing-grid__title { font-family: var(--font-display); font-weight: 700; font-size: clamp(1.125rem, 1.6vw, 1.375rem); line-height: 1.33; letter-spacing: -0.01em; color: var(--ink-light); }
+    .cs-testing-grid__body { font-family: var(--font-body); font-weight: 400; font-size: clamp(0.9375rem, 1vw, 1.0625rem); line-height: 1.47; letter-spacing: normal; color: var(--ink-light); }
 
     @media (max-width: 1024px) {
       .cs-testing-grid { flex-direction: column; gap: 24px; }
@@ -405,8 +421,8 @@
 
     /* ── Impact ── */
     .cs-impact-heading { display: flex; flex-direction: column; gap: 20px; align-items: center; text-align: center; margin-bottom: 16px; }
-    .cs-impact-heading__title { font-family: var(--font-display); font-weight: 400; font-size: 40px; line-height: 44px; letter-spacing: -0.025em; color: var(--ink-light); }
-    .cs-impact-heading__desc { font-family: var(--font-body); font-size: 17px; line-height: 25px; color: var(--ink-light); }
+    .cs-impact-heading__title { font-family: var(--font-display); font-weight: 400; font-size: clamp(1.75rem, 3vw, 2.5rem); line-height: 1.2; letter-spacing: -0.025em; color: var(--ink-light); }
+    .cs-impact-heading__desc { font-family: var(--font-body); font-weight: 400; font-size: clamp(0.9375rem, 1vw, 1.0625rem); line-height: 1.47; letter-spacing: normal; color: var(--ink-light); }
     .cs-impact-heading__desc strong { font-weight: 700; }
 
     .cs-impact-metrics { width: 1184px; max-width: 100%; margin: 0 auto; padding: 32px 64px; box-sizing: border-box; }
@@ -420,7 +436,7 @@
     .cs-impact-card__inner { background: var(--bg-dark); border-radius: 14px; width: 100%; height: 100%; padding: 16px; box-sizing: border-box; display: flex; flex-direction: column; justify-content: center; align-items: flex-end; gap: 20px; }
     .cs-impact-card__body { display: flex; flex-direction: column; gap: 10px; width: 100%; }
 
-    .cs-impact-pill { display: inline-flex; align-items: center; padding: 4px 16px; border-radius: 10px; font-family: var(--font-body); font-weight: 700; font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--ink-light); white-space: nowrap; }
+    .cs-impact-pill { display: inline-flex; align-items: center; padding: 4px 16px; border-radius: 10px; font-family: var(--font-body); font-weight: 700; font-size: clamp(0.6875rem, 0.6vw, 0.8125rem); letter-spacing: 0.14em; text-transform: uppercase; color: var(--ink-light); white-space: nowrap; }
     .cs-impact-pill--success { background: #4a9b6f; }
     .cs-impact-pill--risk    { background: #d6a36a; }
     .cs-impact-pill--miss    { background: #e03b3b; }
@@ -428,8 +444,8 @@
     .cs-impact-stat { text-align: center; }
     .cs-impact-stat__before { font-family: var(--font-display); font-weight: 400; font-size: 40px; line-height: 40px; letter-spacing: -0.03em; color: #6b7060; }
     .cs-impact-stat__after  { font-family: var(--font-display); font-weight: 400; font-size: 56px; line-height: 56px; letter-spacing: -0.07em; color: var(--ink-light); }
-    .cs-impact-label { font-family: var(--font-body); font-weight: 700; font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase; color: #6b7060; text-align: center; }
-    .cs-impact-desc { font-family: var(--font-body); font-size: 15px; line-height: 20px; color: var(--ink-light); text-align: center; }
+    .cs-impact-label { font-family: var(--font-body); font-weight: 700; font-size: clamp(0.6875rem, 0.6vw, 0.8125rem); letter-spacing: 0.14em; text-transform: uppercase; color: #6b7060; text-align: center; }
+    .cs-impact-desc { font-family: var(--font-body); font-weight: 400; font-size: clamp(0.9375rem, 1vw, 1.0625rem); line-height: 1.47; letter-spacing: normal; color: var(--ink-light); text-align: center; }
 
     @media (max-width: 1024px) {
       .cs-impact-metrics { width: 100%; padding: 32px 0; }
@@ -440,8 +456,8 @@
 
     /* ── The Result ── */
     .cs-result-wrap { display: flex; flex-direction: column; align-items: center; width: 100%; }
-    .cs-result-heading { width: 100%; max-width: 674px; font-family: var(--font-display); font-weight: 400; font-size: 40px; line-height: 44px; letter-spacing: -0.025em; color: var(--ink-light); margin-bottom: 20px; }
-    .cs-result-body { width: 100%; max-width: 674px; font-family: var(--font-body); font-size: 17px; line-height: 25px; color: var(--ink-light); }
+    .cs-result-heading { width: 100%; max-width: 674px; font-family: var(--font-display); font-weight: 400; font-size: clamp(1.75rem, 3vw, 2.5rem); line-height: 1.2; letter-spacing: -0.025em; color: var(--ink-light); margin-bottom: 20px; }
+    .cs-result-body { width: 100%; max-width: 674px; font-family: var(--font-body); font-weight: 400; font-size: clamp(0.9375rem, 1vw, 1.0625rem); line-height: 1.47; letter-spacing: normal; color: var(--ink-light); }
     .cs-result-body p { margin-bottom: 16px; }
     .cs-result-body p:last-child { margin-bottom: 0; }
 
@@ -449,16 +465,16 @@
     .cs-result-proto__frame { position: relative; width: 100%; aspect-ratio: 1312 / 482; background: var(--bg-light); overflow: hidden; box-sizing: border-box; }
     .cs-result-proto__frame img { position: absolute; left: 14.63%; top: 9.34%; width: 70.75%; height: 120.76%; object-fit: cover; filter: drop-shadow(-26.499px 39.749px 7.227px rgba(0,0,0,0.5)); }
     .cs-result-proto__caption { display: flex; flex-direction: column; width: 411px; max-width: 100%; }
-    .cs-result-proto__label { font-family: var(--font-body); font-weight: 700; font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--ink-light); }
-    .cs-result-proto__desc { font-family: var(--font-body); font-weight: 400; font-size: 11px; color: var(--ink-light); margin-top: 6px; }
+    .cs-result-proto__label { font-family: var(--font-body); font-weight: 700; font-size: clamp(0.6875rem, 0.6vw, 0.8125rem); letter-spacing: 0.14em; text-transform: uppercase; color: var(--ink-light); }
+    .cs-result-proto__desc { font-family: var(--font-body); font-weight: 400; font-size: clamp(0.75rem, 0.7vw, 0.8125rem); line-height: 1.35; color: var(--ink-light); margin-top: 6px; }
 
     .cs-result-fixes { width: 100%; margin-top: 100px; display: flex; gap: 20px; }
     .cs-result-fix { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 20px; }
     .cs-result-fix__frame { width: 100%; aspect-ratio: 646 / 402; background: var(--bg-light); box-sizing: border-box; overflow: hidden; display: flex; align-items: center; justify-content: center; }
     .cs-result-fix__frame img { width: 100%; height: 100%; object-fit: contain; }
     .cs-result-fix__caption { display: flex; flex-direction: column; }
-    .cs-result-fix__label { font-family: var(--font-body); font-weight: 700; font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--ink-light); }
-    .cs-result-fix__desc { font-family: var(--font-body); font-weight: 400; font-size: 11px; color: var(--ink-light); margin-top: 6px; }
+    .cs-result-fix__label { font-family: var(--font-body); font-weight: 700; font-size: clamp(0.6875rem, 0.6vw, 0.8125rem); letter-spacing: 0.14em; text-transform: uppercase; color: var(--ink-light); }
+    .cs-result-fix__desc { font-family: var(--font-body); font-weight: 400; font-size: clamp(0.75rem, 0.7vw, 0.8125rem); line-height: 1.35; color: var(--ink-light); margin-top: 6px; }
 
     @media (max-width: 767px) {
       .cs-result-fixes { flex-direction: column; }
@@ -467,13 +483,13 @@
     /* ── Reflections ── */
     .cs-reflections-grid { display: flex; gap: 40px; align-items: flex-start; width: 100%; }
     .cs-reflections-heading { width: 325px; flex-shrink: 0; padding-bottom: 32px; }
-    .cs-reflections-heading h2 { font-family: var(--font-display); font-weight: 400; font-size: 40px; line-height: 44px; letter-spacing: -0.025em; color: var(--ink-light); }
+    .cs-reflections-heading h2 { font-family: var(--font-display); font-weight: 400; font-size: clamp(1.75rem, 3vw, 2.5rem); line-height: 1.2; letter-spacing: -0.025em; color: var(--ink-light); }
     .cs-reflections-cards { flex: 1; min-width: 0; display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; }
     .cs-reflect-card { display: flex; flex-direction: column; gap: 20px; padding: 16px; }
-    .cs-reflect-card__num { font-family: var(--font-body); font-weight: 700; font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--ink-light); }
+    .cs-reflect-card__num { font-family: var(--font-body); font-weight: 700; font-size: clamp(0.6875rem, 0.6vw, 0.8125rem); letter-spacing: 0.14em; text-transform: uppercase; color: var(--ink-light); }
     .cs-reflect-card__body { display: flex; flex-direction: column; gap: 10px; }
-    .cs-reflect-card__title { font-family: var(--font-hand); font-size: 32px; line-height: 30px; letter-spacing: -0.05em; color: var(--ink-light); }
-    .cs-reflect-card__desc { font-family: var(--font-body); font-size: 15px; line-height: 20px; color: var(--ink-light); }
+    .cs-reflect-card__title { font-family: var(--font-hand); font-weight: 400; font-size: clamp(1.5rem, 2.2vw, 2.1875rem); line-height: 1; letter-spacing: -0.05em; color: var(--ink-light); }
+    .cs-reflect-card__desc { font-family: var(--font-body); font-weight: 400; font-size: clamp(0.9375rem, 1vw, 1.0625rem); line-height: 1.47; letter-spacing: normal; color: var(--ink-light); }
     .cs-reflect-card__desc strong { font-weight: 700; }
 
     @media (max-width: 1024px) {
@@ -485,7 +501,7 @@
     /* ── Project Stack ── */
     .cs-stack-row { display: flex; gap: 16px; padding: 16px; width: 100%; box-sizing: border-box; }
     .cs-stack-col { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 10px; padding: 32px; box-sizing: border-box; }
-    .cs-stack-col__title { font-family: var(--font-hand); font-size: 32px; line-height: 30px; letter-spacing: -0.05em; color: var(--ink-light); border-bottom: 1px solid var(--lime); padding: 8px 0; }
+    .cs-stack-col__title { font-family: var(--font-hand); font-weight: 400; font-size: clamp(1.5rem, 2.2vw, 2.1875rem); line-height: 1; letter-spacing: -0.05em; color: var(--ink-light); border-bottom: 1px solid var(--lime); padding: 8px 0; }
     .cs-stack-col__item { font-family: var(--font-body); font-size: 15px; line-height: 20px; color: var(--ink-light); padding: 8px 0; }
 
     @media (max-width: 1024px) {
@@ -507,9 +523,9 @@
     #contact { padding-bottom: 60px; }
     .contact__row { display: flex; gap: 40px; align-items: flex-end; width: 100%; }
     .contact__col { align-self: stretch; flex: 1 0 0; min-width: 0; display: flex; flex-direction: column; gap: 40px; }
-    .contact__tag { font-family: var(--font-mono); font-weight: 500; font-size: 11px; letter-spacing: 0.02em; text-transform: uppercase; color: var(--lime); display: block; }
+    .contact__tag { font-family: var(--font-mono); font-weight: 700; font-size: 11px; letter-spacing: 0.6em; text-transform: uppercase; color: var(--lime); display: block; }
     .contact__body { display: flex; flex-direction: column; gap: 40px; }
-    .contact__heading { font-family: var(--font-display); font-weight: 400; font-size: clamp(2rem, 4vw, 52px); line-height: 1.08; letter-spacing: -0.03em; color: var(--ink-light); }
+    .contact__heading { font-family: var(--font-display); font-weight: 400; font-size: clamp(1.75rem, 3.6vw, 3.25rem); line-height: 1.1; letter-spacing: -0.03em; color: var(--ink-light); }
     .contact__email { font-family: var(--font-hand); font-size: 32px; line-height: 30px; letter-spacing: -0.05em; color: var(--ink-light); display: block; text-decoration: none; transition: color var(--dur-fast); }
     .contact__email:hover { color: var(--lime); }
     .contact__desc { font-family: var(--font-body); font-size: 17px; line-height: 25px; color: var(--ink-light); max-width: 560px; }
@@ -564,6 +580,7 @@
       .nav__logo-text--full  { display: none; }
       .nav__logo-text--short { display: inline; }
       .nav__logo-text { font-size: 26px; line-height: 1; font-weight: 700; letter-spacing: -0.04em; }
+      .nav__right { gap: 10px; }
       .nav__links { display: none; }
       .nav__hamburger { display: flex; width: 40px; height: 40px; }
       .nav__ham-line { width: 22px; height: 2px; }
@@ -636,15 +653,15 @@
           </div>
         </li>
         <li class="nav__links-item nav__links-item--work" id="nav-play-item">
-          <button class="nav__work-trigger" id="nav-play-trigger" aria-haspopup="true" aria-expanded="false">
+          <a class="nav__work-trigger" id="nav-play-trigger" href="../side-quests.html" aria-haspopup="true" aria-expanded="false">
             Play
             <svg class="nav__work-chevron" width="24" height="24" viewBox="0 0 24 24" fill="none" aria-hidden="true">
               <path d="M6 9l6 6 6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
             </svg>
-          </button>
+          </a>
           <div class="nav__work-menu" id="nav-play-menu">
-            <a href="../works.html#other-works">Side quests</a>
-            <a href="../works.html#event-styling">Event Stylings</a>
+            <a href="../side-quests.html#other-works">Side quests</a>
+            <a href="../side-quests.html#event-styling">Event Stylings</a>
           </div>
         </li>
         <li><a href="../about.html">About</a></li>
@@ -679,8 +696,31 @@
     </div>
     <div class="nav__mobile-menu" id="nav-mobile-menu">
       <ul>
-        <li><a href="../works.html">Work</a></li>
-        <li><a href="../works.html#other-works">Play</a></li>
+        <li class="nav__mobile-item" id="mob-work-item">
+          <button class="nav__mobile-trigger" id="mob-work-trigger" aria-haspopup="true" aria-expanded="false">
+            Work
+            <svg class="nav__work-chevron" width="24" height="24" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+              <path d="M6 9l6 6 6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </button>
+          <div class="nav__mobile-submenu" id="mob-work-submenu">
+            <a href="arvo.html">ARVO</a>
+            <a href="seletar.html">Seletar Airport</a>
+            <a href="pethaus.html">Paw Haus</a>
+          </div>
+        </li>
+        <li class="nav__mobile-item" id="mob-play-item">
+          <a class="nav__mobile-trigger" id="mob-play-trigger" href="../side-quests.html" aria-haspopup="true" aria-expanded="false">
+            Play
+            <svg class="nav__work-chevron" width="24" height="24" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+              <path d="M6 9l6 6 6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </a>
+          <div class="nav__mobile-submenu" id="mob-play-submenu">
+            <a href="../side-quests.html#other-works">Side quests</a>
+            <a href="../side-quests.html#event-styling">Event Stylings</a>
+          </div>
+        </li>
         <li><a href="../about.html">About</a></li>
         <li><a href="#contact">Contact</a></li>
       </ul>
@@ -1351,14 +1391,46 @@
     const mobileMenu = document.getElementById('nav-mobile-menu');
     const mainNavEl  = document.getElementById('main-nav');
 
+    const mobileDropdowns = [
+      { item: document.getElementById('mob-work-item'), trigger: document.getElementById('mob-work-trigger') },
+      { item: document.getElementById('mob-play-item'), trigger: document.getElementById('mob-play-trigger') },
+    ].filter(d => d.item && d.trigger);
+
+    function closeAllMobileDropdowns() {
+      mobileDropdowns.forEach(({ item, trigger }) => {
+        item.classList.remove('is-open');
+        trigger.setAttribute('aria-expanded', 'false');
+      });
+    }
+
+    mobileDropdowns.forEach(({ item, trigger }) => {
+      function toggle(e) {
+        e.stopPropagation();
+        e.preventDefault();
+        const willOpen = !item.classList.contains('is-open');
+        closeAllMobileDropdowns();
+        if (willOpen) {
+          item.classList.add('is-open');
+          trigger.setAttribute('aria-expanded', 'true');
+        }
+      }
+      if (trigger.tagName === 'A') {
+        trigger.querySelector('.nav__work-chevron').addEventListener('click', toggle);
+      } else {
+        trigger.addEventListener('click', toggle);
+      }
+    });
+
     hamburger.addEventListener('click', () => {
       const isOpen = mainNavEl.classList.toggle('is-open');
       hamburger.setAttribute('aria-expanded', String(isOpen));
+      if (!isOpen) closeAllMobileDropdowns();
     });
     mobileMenu.querySelectorAll('a').forEach(link => {
       link.addEventListener('click', () => {
         mainNavEl.classList.remove('is-open');
         hamburger.setAttribute('aria-expanded', 'false');
+        closeAllMobileDropdowns();
       });
     });
 
@@ -1376,15 +1448,21 @@
     }
 
     navDropdowns.forEach(({ item, trigger }) => {
-      trigger.addEventListener('click', (e) => {
+      function toggle(e) {
         e.stopPropagation();
+        e.preventDefault();
         const willOpen = !item.classList.contains('is-open');
         closeAllNavDropdowns();
         if (willOpen) {
           item.classList.add('is-open');
           trigger.setAttribute('aria-expanded', 'true');
         }
-      });
+      }
+      if (trigger.tagName === 'A') {
+        trigger.querySelector('.nav__work-chevron').addEventListener('click', toggle);
+      } else {
+        trigger.addEventListener('click', toggle);
+      }
     });
 
     document.addEventListener('click', (e) => {

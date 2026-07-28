@@ -43,7 +43,7 @@
       --border:     rgba(244,244,235,0.18);
       --hover-wash: rgba(244,244,235,0.08);
 
-      --font-display: 'Lora', Georgia, serif;
+      --font-display: 'Poiret One', Georgia, serif;
       --font-body:    'DM Sans', Arial, sans-serif;
       --font-mono:    'DM Mono', 'IBM Plex Mono', monospace;
       --font-hand:    'Gochi Hand', cursive;
@@ -133,11 +133,25 @@
     .nav.is-open .nav__ham-line:nth-child(3) { transform: translateY(-6px) rotate(-45deg); }
 
     .nav__mobile-menu { position: absolute; top: calc(100% - 8px); left: var(--pad); right: var(--pad); background: var(--paw); border: 1px solid var(--border); border-radius: 20px; box-shadow: 0 4px 24px rgba(0,0,0,0.15); overflow: hidden; max-height: 0; opacity: 0; pointer-events: none; transition: max-height 0.3s ease, opacity 0.2s ease; }
-    .nav__mobile-menu ul { list-style: none; padding: 0.625rem 0.5rem; display: flex; flex-direction: column; gap: 2px; }
+    .nav__mobile-menu ul { list-style: none; padding: 16px; display: flex; flex-direction: column; gap: 2px; }
     .nav__mobile-menu li a { display: block; padding: 0.75rem 0.875rem; font-family: var(--font-hand); font-weight: 400; font-size: 20px; letter-spacing: -0.03em; color: var(--text-75); text-decoration: none; border-radius: 10px; transition: color var(--dur-fast), background var(--dur-fast); }
     .nav__mobile-menu li a:hover { color: var(--lime); background: var(--hover-wash); }
     body.light-mode .nav__mobile-menu li a:hover { color: #6b7a00; }
-    .nav.is-open .nav__mobile-menu { max-height: 200px; opacity: 1; pointer-events: auto; }
+    .nav.is-open .nav__mobile-menu { max-height: 500px; opacity: 1; pointer-events: auto; }
+
+    /* Work/Play accordion rows — scoped ".nav__mobile-item .nav__mobile-trigger" (2 classes)
+       so it reliably beats ".nav__mobile-menu li a" (1 class + 2 elements) for the "Play" <a>
+       case — see index.html (source of truth) for the full specificity explanation. */
+    .nav__mobile-item .nav__mobile-trigger { display: flex; align-items: center; justify-content: space-between; gap: 8px; width: 100%; background: none; border: none; cursor: pointer; padding: 0.75rem 0.875rem; font-family: var(--font-hand); font-weight: 400; font-size: 20px; letter-spacing: -0.03em; color: var(--text-75); text-decoration: none; border-radius: 10px; transition: color var(--dur-fast), background var(--dur-fast); }
+    .nav__mobile-item .nav__mobile-trigger:hover { color: var(--lime); background: var(--hover-wash); }
+    .nav__mobile-item .nav__mobile-trigger .nav__work-chevron { width: 18px; height: 18px; flex-shrink: 0; transition: transform 0.25s ease; }
+    .nav__mobile-item.is-open .nav__mobile-trigger .nav__work-chevron { transform: rotate(180deg); }
+    .nav__mobile-submenu { display: flex; flex-direction: column; max-height: 0; overflow: hidden; opacity: 0; transition: max-height 0.3s ease, opacity 0.2s ease; }
+    .nav__mobile-item.is-open .nav__mobile-submenu { max-height: 220px; opacity: 1; }
+    .nav__mobile-item .nav__mobile-submenu a { display: block; padding: 0.6rem 0.875rem 0.6rem 1.625rem; font-family: 'Poiret One', Georgia, serif; font-weight: 400; font-size: 17px; color: var(--text-60); text-decoration: none; border-radius: 8px; transition: color var(--dur-fast), background var(--dur-fast); }
+    .nav__mobile-item .nav__mobile-submenu a:hover { color: var(--lime); background: var(--hover-wash); }
+    body.light-mode .nav__mobile-item .nav__mobile-trigger:hover { color: #6b7a00; }
+    body.light-mode .nav__mobile-item .nav__mobile-submenu a:hover { color: #6b7a00; }
 
     .nav__toggle { box-sizing: border-box; display: flex; align-items: center; justify-content: center; padding: 4px; width: 83px; height: 30px; background: #f4f4eb; border: 0.95px solid var(--lime); box-shadow: inset 0 4px 4px rgba(0,0,0,0.25); border-radius: 95px; cursor: pointer; flex-shrink: 0; transition: background 0.3s ease; }
     .nav__toggle:hover { opacity: 0.85; }
@@ -156,7 +170,7 @@
     .inner { max-width: calc(var(--max-w) + var(--pad) * 2); margin: 0 auto; padding: var(--pad); }
     /* UI/SectionTag per this Figma file is DM Sans Bold; color is ink-dark (not lime) since
        the page background is already light. */
-    .t-label { font-family: var(--font-body); font-weight: 700; font-size: 11px; line-height: 14px; letter-spacing: 0.6em; text-transform: uppercase; color: var(--text); display: block; margin-bottom: 40px; }
+    .t-label { font-family: var(--font-mono); font-weight: 700; font-size: 11px; line-height: 14px; letter-spacing: 0.6em; text-transform: uppercase; color: var(--text); display: block; margin-bottom: 40px; }
 
     /* ================================================================
        CURSOR FOLLOWER / LOADER
@@ -214,8 +228,8 @@
     .ph-hero__col { flex: 0 0 570px; max-width: 570px; display: flex; flex-direction: column; justify-content: center; gap: 40px; padding: 40px var(--pad); }
     .ph-hero__eyebrow { font-family: var(--font-body); font-weight: 700; font-size: 11px; line-height: 14px; letter-spacing: 0.6em; text-transform: uppercase; color: var(--text); }
     .ph-hero__heading { display: flex; flex-direction: column; gap: 10px; }
-    .ph-hero__title { font-family: var(--font-display); font-weight: 400; font-size: clamp(2rem, 4vw, 3.25rem); line-height: 1.08; letter-spacing: -0.03em; color: var(--text); }
-    .ph-hero__desc { font-family: var(--font-body); font-weight: 400; font-size: 17px; line-height: 1.47; color: var(--text); }
+    .ph-hero__title { font-family: var(--font-display); font-weight: 400; font-size: clamp(1.75rem, 3.6vw, 3.25rem); line-height: 1.1; letter-spacing: -0.03em; color: var(--text); }
+    .ph-hero__desc { font-family: var(--font-body); font-weight: 400; font-size: clamp(0.9375rem, 1vw, 1.0625rem); line-height: 1.47; color: var(--text); }
     /* The exported PNG is already clipped exactly as Figma frames it (870:710) — size the
        box to that same ratio instead of stretching/cover-cropping it into an arbitrary
        height per breakpoint, which was cutting content Figma never intended to clip. */
@@ -229,8 +243,8 @@
     .ph-specs__value { font-family: var(--font-body); font-weight: 400; font-size: 15px; line-height: 20px; color: var(--text); margin: 0; }
     .ph-specs__cols { display: flex; gap: 40px; width: 100%; padding: 0 var(--pad); box-sizing: border-box; margin-top: 40px; }
     .ph-specs__col { flex: 1 1 0; min-width: 0; display: flex; flex-direction: column; gap: 10px; }
-    .ph-specs__col-title { font-family: var(--font-hand); font-weight: 400; font-size: 35px; line-height: 35px; color: var(--text); }
-    .ph-specs__col-body { font-family: var(--font-body); font-weight: 400; font-size: 15px; line-height: 20px; color: var(--text); margin: 0; }
+    .ph-specs__col-title { font-family: var(--font-hand); font-weight: 400; font-size: clamp(1.5rem, 2.2vw, 2.1875rem); line-height: 1; color: var(--text); }
+    .ph-specs__col-body { font-family: var(--font-body); font-weight: 400; font-size: clamp(0.9375rem, 1vw, 1.0625rem); line-height: 1.47; color: var(--text); margin: 0; }
 
     /* ── Homepage mockup showcase ── */
     /* Figma's frame for this mockup spans nearly the full 1440px section width (1411px),
@@ -241,28 +255,28 @@
     .ph-mockup-showcase img { width: 100%; max-width: var(--max-w); height: auto; display: block; }
 
     /* ── Key Metrics ── */
-    .ph-eyebrow { font-family: var(--font-body); font-weight: 600; font-size: 13px; color: var(--text); }
+    .ph-eyebrow { font-family: var(--font-body); font-weight: 600; font-size: clamp(0.6875rem, 0.6vw, 0.8125rem); letter-spacing: 0.14em; text-transform: uppercase; color: var(--text); }
     .ph-metrics { display: flex; flex-direction: column; align-items: center; width: 100%; }
     .ph-metrics__row { display: flex; align-items: flex-start; justify-content: center; gap: 40px; width: 100%; padding: 32px 16px; }
     .ph-metrics__num { font-family: var(--font-display); font-weight: 400; font-size: 56px; line-height: 56px; letter-spacing: -0.04em; color: var(--text); width: 150px; text-align: right; flex-shrink: 0; margin: 0; }
     .ph-metrics__text { display: flex; flex-direction: column; gap: 10px; max-width: 289px; }
-    .ph-metrics__label { font-family: var(--font-display); font-weight: 500; font-size: 18px; line-height: 24px; color: var(--text); margin: 0; }
-    .ph-metrics__desc { font-family: var(--font-body); font-size: 15px; line-height: 20px; color: var(--text); margin: 0; }
+    .ph-metrics__label { font-family: var(--font-display); font-weight: 500; font-size: clamp(1.125rem, 1.6vw, 1.375rem); line-height: 1.33; color: var(--text); margin: 0; }
+    .ph-metrics__desc { font-family: var(--font-body); font-size: clamp(0.9375rem, 1vw, 1.0625rem); line-height: 1.47; color: var(--text); margin: 0; }
 
     /* ── The Brief ── */
     .ph-brief { display: flex; flex-direction: column; gap: 40px; }
     .ph-brief__stack { display: flex; flex-direction: column; align-items: center; gap: 40px; width: 100%; padding: 0 var(--pad); box-sizing: border-box; }
     .ph-brief__intro { display: flex; flex-direction: column; gap: 20px; align-items: center; max-width: 871px; width: 100%; text-align: center; }
-    .ph-brief__title { font-family: var(--font-display); font-weight: 400; font-size: clamp(1.75rem, 4vw, 2.5rem); line-height: 1.1; letter-spacing: -0.025em; color: var(--text); margin: 0; width: 100%; }
-    .ph-brief__body { font-family: var(--font-body); font-size: 17px; line-height: 1.47; color: var(--text); margin: 0; }
-    .ph-brief__subhead { font-family: var(--font-display); font-weight: 400; font-size: clamp(1.5rem, 3vw, 2rem); line-height: 1.16; letter-spacing: -0.02em; color: var(--text); text-align: center; margin: 0; max-width: 1184px; width: 100%; }
+    .ph-brief__title { font-family: var(--font-display); font-weight: 400; font-size: clamp(1.75rem, 3vw, 2.5rem); line-height: 1.2; letter-spacing: -0.025em; color: var(--text); margin: 0; width: 100%; }
+    .ph-brief__body { font-family: var(--font-body); font-size: clamp(0.9375rem, 1vw, 1.0625rem); line-height: 1.47; color: var(--text); margin: 0; }
+    .ph-brief__subhead { font-family: var(--font-display); font-weight: 500; font-size: clamp(1.125rem, 1.6vw, 1.375rem); line-height: 1.33; letter-spacing: normal; color: var(--text); text-align: center; margin: 0; max-width: 1184px; width: 100%; }
 
     /* Stat row */
     .ph-stats { display: flex; width: 100%; max-width: 1184px; justify-content: center; }
     .ph-stats__item { flex: 1 1 0; min-width: 0; display: flex; flex-direction: column; gap: 20px; padding: 32px; }
     .ph-stats__num { font-family: var(--font-display); font-weight: 400; font-size: 56px; line-height: 56px; letter-spacing: -0.04em; color: var(--text); }
-    .ph-stats__label { font-family: var(--font-display); font-weight: 500; font-size: 18px; line-height: 24px; color: var(--text); margin: 0; }
-    .ph-stats__desc { font-family: var(--font-body); font-size: 15px; line-height: 20px; color: var(--text); margin: 0; }
+    .ph-stats__label { font-family: var(--font-display); font-weight: 500; font-size: clamp(1.125rem, 1.6vw, 1.375rem); line-height: 1.33; color: var(--text); margin: 0; }
+    .ph-stats__desc { font-family: var(--font-body); font-size: clamp(0.9375rem, 1vw, 1.0625rem); line-height: 1.47; color: var(--text); margin: 0; }
 
     /* Rotated competitor cards.
        Figma's left/top/width/height on each wrapper describe the POST-rotation bounding
@@ -277,7 +291,7 @@
     .ph-comp-card { position: absolute; width: 32.8%; border-radius: 30px; padding: 16px; box-sizing: border-box; }
     .ph-comp-card__inner { background: #6b7060; border-radius: 14px; padding: 16px; display: flex; flex-direction: column; gap: 10px; box-shadow: -11px 17px 3px rgba(0,0,0,0.5); position: relative; }
     .ph-comp-card__brand { font-family: var(--font-body); font-weight: 600; font-size: 13px; color: var(--ink-light); }
-    .ph-comp-card__title { font-family: var(--font-hand); font-size: 32px; line-height: 30px; letter-spacing: -0.05em; color: var(--ink-light); }
+    .ph-comp-card__title { font-family: var(--font-hand); font-weight: 400; font-size: clamp(1.5rem, 2.2vw, 2.1875rem); line-height: 1; letter-spacing: -0.05em; color: var(--ink-light); }
     .ph-comp-card__list { margin: 0; padding-left: 22px; display: flex; flex-direction: column; gap: 20px; }
     .ph-comp-card__list li { font-family: var(--font-body); font-size: 15px; line-height: 20px; color: var(--ink-light); }
     .ph-comp-card__logos { position: absolute; top: 2px; right: 6px; display: flex; align-items: flex-end; gap: 5px; }
@@ -292,7 +306,7 @@
     /* Competitive landscape (dark card) */
     .ph-landscape { background: var(--bg-dark); width: 871px; max-width: 100%; margin: 0 auto; padding: 16px var(--pad); display: flex; align-items: flex-end; gap: 20px; overflow: hidden; }
     .ph-landscape__meta { display: flex; flex-direction: column; justify-content: space-between; height: 409px; width: 201px; flex-shrink: 0; }
-    .ph-landscape__label { font-family: var(--font-body); font-weight: 700; font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--ink-light); }
+    .ph-landscape__label { font-family: var(--font-body); font-weight: 700; font-size: clamp(0.6875rem, 0.6vw, 0.8125rem); letter-spacing: 0.14em; text-transform: uppercase; color: var(--ink-light); }
     .ph-landscape__caption { font-family: var(--font-body); font-style: italic; font-size: 11px; line-height: 17px; color: var(--ink-light); margin: 0; }
     .ph-landscape__map { flex: 1 1 0; min-width: 0; display: flex; justify-content: center; }
     .ph-landscape__map img { width: 100%; max-width: 522px; height: auto; display: block; }
@@ -306,7 +320,7 @@
        it fills the full width and keeps its own centered text — so the pill sits flush at
        the block's left edge, not centered over the heading. */
     .ph-intro__head { display: flex; flex-direction: column; gap: 20px; align-items: flex-start; width: 100%; }
-    .ph-tag { display: inline-flex; align-items: center; justify-content: center; padding: 4px 16px; background: var(--bg-dark); color: var(--ink-light); border-radius: 10px; font-family: var(--font-body); font-weight: 600; font-size: 13px; }
+    .ph-tag { display: inline-flex; align-items: center; justify-content: center; padding: 4px 16px; background: var(--bg-dark); color: var(--ink-light); border-radius: 10px; font-family: var(--font-body); font-weight: 600; font-size: clamp(0.6875rem, 0.6vw, 0.8125rem); letter-spacing: 0.14em; text-transform: uppercase; }
     .ph-intro__body strong { font-weight: 700; }
 
     /* Dark showcase card (reused for the icon-grid snapshot and the dendrogram) */
@@ -314,7 +328,7 @@
     /* Figma's label has no text-center class — the flex wrapper's items-center only
        centers the (already full-width) block itself, which has no visible effect; the
        text inside stays left-aligned. */
-    .ph-dark-card__label { font-family: var(--font-body); font-weight: 700; font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--ink-light); text-align: left; margin: 0; }
+    .ph-dark-card__label { font-family: var(--font-body); font-weight: 700; font-size: clamp(0.6875rem, 0.6vw, 0.8125rem); letter-spacing: 0.14em; text-transform: uppercase; color: var(--ink-light); text-align: left; margin: 0; }
     .ph-dark-card img { width: 100%; height: auto; display: block; }
     /* Affinity map: Figma sizes this image as a fixed 916:598 graphic that's narrower than
        the card (~82% of the content width) and deliberately bleeds past the card's fixed
@@ -343,8 +357,8 @@
     .ph-pattern-card__num small { font-size: 22px; line-height: 28px; letter-spacing: -0.01em; font-weight: 400; }
     .ph-pattern-card__icon-wrap { width: 52px; height: 52px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
     .ph-pattern-card__icon-wrap img { max-width: 100%; max-height: 100%; display: block; }
-    .ph-pattern-card__title { font-family: var(--font-display); font-weight: 500; font-size: 18px; line-height: 24px; color: var(--ink-dark); margin: 0; }
-    .ph-pattern-card__desc { font-family: var(--font-body); font-size: 15px; line-height: 20px; color: var(--ink-dark); margin: 0; }
+    .ph-pattern-card__title { font-family: var(--font-display); font-weight: 500; font-size: clamp(1.125rem, 1.6vw, 1.375rem); line-height: 1.33; color: var(--ink-dark); margin: 0; }
+    .ph-pattern-card__desc { font-family: var(--font-body); font-size: clamp(0.9375rem, 1vw, 1.0625rem); line-height: 1.47; color: var(--ink-dark); margin: 0; }
     .ph-pattern-card--1 { left: 12.06%; top: 47.6%; transform: translate(-50%, -50%) rotate(-11.4deg); }
     .ph-pattern-card--2 { left: 36.9%; top: 45.7%; transform: translate(-50%, -50%) rotate(11.51deg); }
     .ph-pattern-card--3 { left: 62.7%; top: 46.4%; transform: translate(-50%, -50%) rotate(-8.46deg); }
@@ -359,15 +373,15 @@
     .ph-persona__quote { font-family: var(--font-display); font-weight: 400; font-size: 32px; line-height: 37px; letter-spacing: -0.02em; color: var(--text); margin: 0; text-align: center; }
     .ph-persona__question { background: var(--bg-dark); color: var(--ink-light); padding: 32px; display: flex; flex-direction: column; gap: 20px; width: 100%; box-sizing: border-box; text-align: center; }
     .ph-persona__question-label { font-family: var(--font-body); font-weight: 700; font-size: 11px; letter-spacing: 0.6em; text-transform: uppercase; margin: 0; }
-    .ph-persona__question-body { font-family: var(--font-body); font-size: 17px; line-height: 25px; margin: 0; }
+    .ph-persona__question-body { font-family: var(--font-body); font-size: clamp(0.9375rem, 1vw, 1.0625rem); line-height: 1.47; margin: 0; }
     .ph-persona__question-body strong { font-weight: 700; }
-    .ph-persona__body { font-family: var(--font-body); font-size: 17px; line-height: 25px; color: var(--text); margin: 0; }
+    .ph-persona__body { font-family: var(--font-body); font-size: clamp(0.9375rem, 1vw, 1.0625rem); line-height: 1.47; color: var(--text); margin: 0; }
     .ph-persona__divider { width: 100%; height: 1px; background: var(--border); border: none; margin: 0; }
     /* Figma's "Frame 813" gaps the "She Needs" title from the list by 18px; the 3 bullets
        inside the list use a tighter gap of their own — these were previously conflated into
        one 18px gap directly on the <ul>, leaving the title touching the list above it. */
     .ph-persona__needs { display: flex; flex-direction: column; gap: 18px; }
-    .ph-persona__needs-title { font-family: var(--font-display); font-weight: 500; font-size: 18px; line-height: 24px; color: var(--text); margin: 0; }
+    .ph-persona__needs-title { font-family: var(--font-display); font-weight: 500; font-size: clamp(1.125rem, 1.6vw, 1.375rem); line-height: 1.33; color: var(--text); margin: 0; }
     .ph-persona__needs-list { margin: 0; padding-left: 19.5px; display: flex; flex-direction: column; gap: 15px; }
     .ph-persona__needs-list li { font-family: var(--font-body); font-size: 13px; line-height: 15px; color: var(--text); }
     /* Photo column reserves its 240px flex slot in normal flow, but the photo itself is
@@ -441,7 +455,7 @@
        Onboarding and trust are rebuilt live (dark card + label + caption as real DOM),
        since their inner media are individually-exported mockups, not one flattened frame. */
     .ph-solution-move { display: flex; flex-direction: column; align-items: flex-start; gap: 20px; width: 100%; max-width: 856px; margin: 0 auto; }
-    .ph-solution-move__title { font-family: var(--font-display); font-weight: 400; font-size: clamp(1.75rem, 4vw, 2.5rem); line-height: 1.1; letter-spacing: -0.025em; color: var(--text); margin: 0; width: 100%; text-align: center; }
+    .ph-solution-move__title { font-family: var(--font-display); font-weight: 400; font-size: clamp(1.75rem, 3vw, 2.5rem); line-height: 1.2; letter-spacing: -0.025em; color: var(--text); margin: 0; width: 100%; text-align: center; }
     .ph-solution-move__quote-wrap { width: 100%; padding: 32px var(--pad); box-sizing: border-box; }
     .ph-solution-move__quote { font-family: var(--font-hand); font-size: 28px; line-height: 1.25; color: var(--text); margin: 0 auto; text-align: center; max-width: 728px; }
     .ph-solution-move__body { width: 100%; }
@@ -455,7 +469,7 @@
        dark card — the caption, in ink-dark (not light) text, centered. */
     .ph-solution-move__card-wrap { width: 100%; height: 327px; padding: 0 32px; box-sizing: border-box; display: flex; flex-direction: column; align-items: center; gap: 10px; }
     .ph-solution-move__card--dark { background: var(--bg-dark); width: 100%; flex: 1 1 0; min-height: 0; padding: 32px; box-sizing: border-box; display: flex; flex-direction: column; gap: 20px; overflow: hidden; }
-    .ph-solution-move__card-label { font-family: var(--font-body); font-weight: 700; font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--ink-light); margin: 0; flex-shrink: 0; }
+    .ph-solution-move__card-label { font-family: var(--font-body); font-weight: 700; font-size: clamp(0.6875rem, 0.6vw, 0.8125rem); letter-spacing: 0.14em; text-transform: uppercase; color: var(--ink-light); margin: 0; flex-shrink: 0; }
     .ph-solution-move__card-caption { font-family: var(--font-body); font-style: italic; font-weight: 400; font-size: 11px; line-height: 17px; text-align: center; color: var(--text); margin: 0; flex-shrink: 0; }
 
     /* Trust card ("ARVO OG - Annotated", Figma node 973:6225 — pulled directly via dev-mode
@@ -523,7 +537,7 @@
     ================================================================ */
     .ph-visual { display: flex; flex-direction: column; gap: 40px; width: 100%; }
     .ph-visual-intro { display: flex; flex-direction: column; gap: 20px; max-width: 760px; }
-    .ph-visual-label { font-family: var(--font-body); font-weight: 700; font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--text); margin: 0; }
+    .ph-visual-label { font-family: var(--font-body); font-weight: 700; font-size: clamp(0.6875rem, 0.6vw, 0.8125rem); letter-spacing: 0.14em; text-transform: uppercase; color: var(--text); margin: 0; }
     /* Reused inside fixed-light-bg cards (type samples, UI kit groups) — those must stay dark regardless of page theme */
     .ph-visual-label--fixed { color: var(--ink-dark); }
     .ph-visual-block { display: flex; flex-direction: column; gap: 20px; width: 100%; }
@@ -537,8 +551,8 @@
     .ph-visual-palette { display: flex; gap: 20px; width: 100%; }
     .ph-visual-swatch { flex: 1 1 0; min-width: 0; height: 149.5px; background: var(--bg-light); padding: 16px; box-sizing: border-box; display: flex; flex-direction: column; gap: 10px; }
     .ph-visual-swatch__color { flex: 1 1 0; min-height: 0; width: 100%; display: block; }
-    .ph-visual-swatch__name { font-family: var(--font-body); font-weight: 700; font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--ink-dark); margin: 0; }
-    .ph-visual-swatch__desc { font-family: var(--font-mono); font-size: 9px; color: var(--ink-dark); margin: 0; }
+    .ph-visual-swatch__name { font-family: var(--font-body); font-weight: 700; font-size: clamp(0.6875rem, 0.6vw, 0.8125rem); letter-spacing: 0.14em; text-transform: uppercase; color: var(--ink-dark); margin: 0; }
+    .ph-visual-swatch__desc { font-family: var(--font-mono); font-size: clamp(0.75rem, 0.7vw, 0.8125rem); line-height: 1.35; color: var(--ink-dark); margin: 0; }
     .ph-visual-swatch__hex { font-family: var(--font-body); font-size: 11px; color: var(--ink-dark); margin: 0; }
 
     .ph-visual-kit__inner { background: var(--bg-light); border: 1px solid #eaddc9; border-radius: 10px; padding: 32px; box-sizing: border-box; display: flex; flex-direction: column; gap: 20px; width: 100%; }
@@ -596,10 +610,10 @@
     .ph-test-stat--1 { left: 21.3305%; top: 50.6677%; transform: translate(-50%, -50%) rotate(6.76deg); z-index: 1; }
     .ph-test-stat--2 { left: 33.3079%; top: 0%; z-index: 2; background: #b91c1c; }
     .ph-test-stat--3 { left: 78.2349%; top: 59.9906%; transform: translate(-50%, -50%) rotate(10.77deg); z-index: 3; }
-    .ph-test-stat__label { font-family: var(--font-body); font-weight: 700; font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--ink-light); margin: 0; }
+    .ph-test-stat__label { font-family: var(--font-body); font-weight: 700; font-size: clamp(0.6875rem, 0.6vw, 0.8125rem); letter-spacing: 0.14em; text-transform: uppercase; color: var(--ink-light); margin: 0; }
     .ph-test-stat__num { font-family: var(--font-display); font-weight: 400; font-size: 56px; line-height: 56px; letter-spacing: -0.04em; color: var(--ink-light); margin: 0; }
-    .ph-test-stat__sub { font-family: var(--font-mono); font-size: 12px; color: var(--ink-light); margin: 0; }
-    .ph-test-stat__desc { font-family: var(--font-body); font-size: 13px; line-height: 15px; color: var(--ink-light); margin: 0; }
+    .ph-test-stat__sub { font-family: var(--font-mono); font-size: clamp(0.75rem, 0.7vw, 0.8125rem); line-height: 1.35; color: var(--ink-light); margin: 0; }
+    .ph-test-stat__desc { font-family: var(--font-body); font-size: clamp(0.75rem, 0.7vw, 0.8125rem); line-height: 1.35; color: var(--ink-light); margin: 0; }
 
     .ph-test-pivot-intro { display: flex; flex-direction: column; align-items: flex-start; gap: 20px; max-width: 856px; margin: 0 auto; width: 100%; }
     .ph-test-pivot-intro .ph-tag { align-self: flex-start; flex-shrink: 0; }
@@ -609,7 +623,7 @@
     .ph-test-compare { display: flex; gap: 10px; width: 100%; padding: 0 32px; box-sizing: border-box; }
     .ph-test-compare__col { flex: 1 1 0; min-width: 0; display: flex; flex-direction: column; gap: 10px; }
     .ph-test-compare__card { padding: 16px; display: flex; flex-direction: row; align-items: flex-start; gap: 20px; height: 300px; border-radius: 0; }
-    .ph-test-compare__label { font-family: var(--font-body); font-weight: 700; font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--ink-light); margin: 0; flex: 0 0 auto; white-space: nowrap; }
+    .ph-test-compare__label { font-family: var(--font-body); font-weight: 700; font-size: clamp(0.6875rem, 0.6vw, 0.8125rem); letter-spacing: 0.14em; text-transform: uppercase; color: var(--ink-light); margin: 0; flex: 0 0 auto; white-space: nowrap; }
     /* Figma (963:17881 "Before" / 963:17904 "After") deliberately makes the screenshot
        taller than the visible card: Frame893 (the padded content area) is 587×528, but the
        card itself only shows 268px of that (300px card − 32px padding) before the outer
@@ -625,7 +639,7 @@
     .ph-test-iter { flex: 1 1 0; min-width: 0; display: flex; flex-direction: column; gap: 10px; }
     .ph-test-iter__card { padding: 16px; display: flex; flex-direction: column; gap: 20px; height: 283px; box-sizing: border-box; border-radius: 0; }
     .ph-test-iter__head { display: flex; align-items: center; justify-content: space-between; gap: 10px; height: 25px; flex-shrink: 0; }
-    .ph-test-iter__label { font-family: var(--font-body); font-weight: 700; font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--ink-light); margin: 0; }
+    .ph-test-iter__label { font-family: var(--font-body); font-weight: 700; font-size: clamp(0.6875rem, 0.6vw, 0.8125rem); letter-spacing: 0.14em; text-transform: uppercase; color: var(--ink-light); margin: 0; }
     .ph-test-iter__severity { flex-shrink: 0; display: inline-flex; align-items: center; justify-content: center; padding: 4px 12px; border-radius: 999px; font-family: var(--font-body); font-weight: 600; font-size: 10px; text-transform: uppercase; letter-spacing: 0.05em; color: #fff; }
     .ph-test-iter__severity--high { background: #b84e38; }
     .ph-test-iter__severity--medium { background: #EADDC9; color: #92400E; }
@@ -710,7 +724,7 @@
     .ph-reflection-hero__device-col { display: flex; flex-direction: column; gap: 10px; width: 100%; }
 
     .ph-macbook { background: var(--bg-dark); padding: 32px; box-sizing: border-box; display: flex; flex-direction: column; gap: 20px; width: 100%; }
-    .ph-macbook__label { font-family: var(--font-body); font-weight: 700; font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--ink-light); margin: 0; }
+    .ph-macbook__label { font-family: var(--font-body); font-weight: 700; font-size: clamp(0.6875rem, 0.6vw, 0.8125rem); letter-spacing: 0.14em; text-transform: uppercase; color: var(--ink-light); margin: 0; }
     .ph-macbook__frame { position: relative; width: 100%; max-width: 760px; margin: 0 auto; }
     .ph-macbook__png { display: block; width: 100%; height: auto; position: relative; z-index: 1; pointer-events: none; }
     .ph-macbook__video {
@@ -722,8 +736,8 @@
 
     .ph-reflection-lessons { display: flex; gap: 40px; padding: 0 32px; box-sizing: border-box; width: 100%; }
     .ph-reflection-lesson { flex: 1 1 0; min-width: 0; display: flex; flex-direction: column; gap: 10px; align-items: center; justify-content: center; text-align: center; }
-    .ph-reflection-lesson__heading { font-family: var(--font-hand); font-weight: 400; font-size: 35px; line-height: 35px; color: var(--text); margin: 0; width: 100%; }
-    .ph-reflection-lesson__body { font-family: var(--font-body); font-weight: 400; font-size: 17px; line-height: 25px; color: var(--text); margin: 0; width: 100%; }
+    .ph-reflection-lesson__heading { font-family: var(--font-hand); font-weight: 400; font-size: clamp(1.5rem, 2.2vw, 2.1875rem); line-height: 1; color: var(--text); margin: 0; width: 100%; }
+    .ph-reflection-lesson__body { font-family: var(--font-body); font-weight: 400; font-size: clamp(0.9375rem, 1vw, 1.0625rem); line-height: 1.47; color: var(--text); margin: 0; width: 100%; }
 
     .ph-reflection-next { display: flex; flex-direction: column; gap: 40px; width: 100%; }
     .ph-reflection-next__head { display: flex; flex-direction: column; align-items: flex-start; gap: 20px; width: 100%; }
@@ -732,9 +746,9 @@
     .ph-reflection-next__title { max-width: 856px; margin: 0 auto; }
     .ph-reflection-next__cards { display: flex; height: 327px; padding: 0 32px; gap: 10px; width: 100%; box-sizing: border-box; }
     .ph-reflection-next__card { flex: 1 1 0; min-width: 0; background: var(--bg-dark); padding: 16px; box-sizing: border-box; display: flex; flex-direction: column; gap: 10px; }
-    .ph-reflection-next__card-label { font-family: var(--font-body); font-weight: 700; font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--ink-light); margin: 0; flex-shrink: 0; }
+    .ph-reflection-next__card-label { font-family: var(--font-body); font-weight: 700; font-size: clamp(0.6875rem, 0.6vw, 0.8125rem); letter-spacing: 0.14em; text-transform: uppercase; color: var(--ink-light); margin: 0; flex-shrink: 0; }
     .ph-reflection-next__card-media { flex: 1 1 auto; min-height: 0; display: flex; align-items: center; justify-content: center; gap: 5px; }
-    .ph-reflection-next__card-desc { font-family: var(--font-body); font-weight: 400; font-size: 13px; line-height: 15px; color: var(--ink-light); margin: 0; flex-shrink: 0; }
+    .ph-reflection-next__card-desc { font-family: var(--font-body); font-weight: 400; font-size: clamp(0.75rem, 0.7vw, 0.8125rem); line-height: 1.35; color: var(--ink-light); margin: 0; flex-shrink: 0; }
     .ph-reflection-next__card-video { max-width: 100%; max-height: 100%; width: auto; height: auto; object-fit: contain; border-radius: 8px; box-shadow: 0 0 20px rgba(0, 0, 0, 0.5); }
 
     /* iPhone 14 Pro device mockup (Figma node 1029:46722): real bezel PNG
@@ -1557,7 +1571,7 @@
     /* ── Project Stack (Figma node 815:11220) ── */
     .cs-stack-grid { display: flex; align-items: flex-start; padding: 16px; }
     .cs-stack-col { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 10px; padding: 32px; box-sizing: border-box; }
-    .cs-stack-col__title { font-family: var(--font-hand); font-size: 32px; line-height: 30px; letter-spacing: -0.05em; color: var(--text); padding-bottom: 8px; border-bottom: 1px solid var(--lime); margin: 0; }
+    .cs-stack-col__title { font-family: var(--font-hand); font-weight: 400; font-size: clamp(1.5rem, 2.2vw, 2.1875rem); line-height: 1; letter-spacing: -0.05em; color: var(--text); padding-bottom: 8px; border-bottom: 1px solid var(--lime); margin: 0; }
     .cs-stack-col__item { font-family: var(--font-body); font-size: 15px; line-height: 20px; color: var(--text); padding: 8px 0; border-bottom: 1px solid var(--border); }
     .cs-stack-col__item:last-child { border-bottom: none; }
 
@@ -1579,7 +1593,7 @@
     .contact__body { display: flex; flex-direction: column; gap: 40px; }
     .contact__email { font-family: var(--font-hand); font-size: 32px; line-height: 30px; letter-spacing: -0.05em; color: var(--text); text-decoration: none; display: block; }
     .contact__email:hover { text-decoration: underline; }
-    .contact__heading { font-family: var(--font-display); font-weight: 400; font-size: clamp(2.5rem, 3.61vw, 3.25rem); line-height: 56px; letter-spacing: -0.03em; color: var(--text); }
+    .contact__heading { font-family: var(--font-display); font-weight: 400; font-size: clamp(1.75rem, 3.6vw, 3.25rem); line-height: 1.1; letter-spacing: -0.03em; color: var(--text); }
     .contact__desc { font-family: var(--font-body); font-weight: 400; font-size: 17px; line-height: 25px; color: var(--text); }
     .contact__socials { display: flex; gap: 40px; align-items: center; }
     .social-link { display: flex; align-items: center; justify-content: center; width: 30px; height: 30px; color: var(--text); opacity: 0.6; text-decoration: none; transition: opacity var(--dur-fast), transform var(--dur-slow) var(--ease-bounce); }
@@ -1606,6 +1620,7 @@
       .nav__logo-text--full  { display: none; }
       .nav__logo-text--short { display: inline; }
       .nav__logo-text { font-size: 26px; line-height: 1; font-weight: 700; letter-spacing: -0.04em; }
+      .nav__right { gap: 10px; }
       .nav__links { display: none; }
       .nav__hamburger { display: flex; width: 40px; height: 40px; }
       .nav__ham-line { width: 22px; height: 2px; }
@@ -1756,15 +1771,15 @@
           </div>
         </li>
         <li class="nav__links-item nav__links-item--work" id="nav-play-item">
-          <button class="nav__work-trigger" id="nav-play-trigger" aria-haspopup="true" aria-expanded="false">
+          <a class="nav__work-trigger" id="nav-play-trigger" href="../side-quests.html" aria-haspopup="true" aria-expanded="false">
             Play
             <svg class="nav__work-chevron" width="24" height="24" viewBox="0 0 24 24" fill="none" aria-hidden="true">
               <path d="M6 9l6 6 6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
             </svg>
-          </button>
+          </a>
           <div class="nav__work-menu" id="nav-play-menu">
-            <a href="../works.html#other-works">Side quests</a>
-            <a href="../works.html#event-styling">Event Stylings</a>
+            <a href="../side-quests.html#other-works">Side quests</a>
+            <a href="../side-quests.html#event-styling">Event Stylings</a>
           </div>
         </li>
         <li><a href="../about.html">About</a></li>
@@ -1799,8 +1814,31 @@
     </div>
     <div class="nav__mobile-menu" id="nav-mobile-menu">
       <ul>
-        <li><a href="../works.html">Work</a></li>
-        <li><a href="../works.html#other-works">Play</a></li>
+        <li class="nav__mobile-item" id="mob-work-item">
+          <button class="nav__mobile-trigger" id="mob-work-trigger" aria-haspopup="true" aria-expanded="false">
+            Work
+            <svg class="nav__work-chevron" width="24" height="24" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+              <path d="M6 9l6 6 6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </button>
+          <div class="nav__mobile-submenu" id="mob-work-submenu">
+            <a href="arvo.html">ARVO</a>
+            <a href="seletar.html">Seletar Airport</a>
+            <a href="pethaus.html">Paw Haus</a>
+          </div>
+        </li>
+        <li class="nav__mobile-item" id="mob-play-item">
+          <a class="nav__mobile-trigger" id="mob-play-trigger" href="../side-quests.html" aria-haspopup="true" aria-expanded="false">
+            Play
+            <svg class="nav__work-chevron" width="24" height="24" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+              <path d="M6 9l6 6 6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </a>
+          <div class="nav__mobile-submenu" id="mob-play-submenu">
+            <a href="../side-quests.html#other-works">Side quests</a>
+            <a href="../side-quests.html#event-styling">Event Stylings</a>
+          </div>
+        </li>
         <li><a href="../about.html">About</a></li>
         <li><a href="#contact">Contact</a></li>
       </ul>
@@ -2918,14 +2956,46 @@
     const mobileMenu = document.getElementById('nav-mobile-menu');
     const mainNavEl  = document.getElementById('main-nav');
 
+    const mobileDropdowns = [
+      { item: document.getElementById('mob-work-item'), trigger: document.getElementById('mob-work-trigger') },
+      { item: document.getElementById('mob-play-item'), trigger: document.getElementById('mob-play-trigger') },
+    ].filter(d => d.item && d.trigger);
+
+    function closeAllMobileDropdowns() {
+      mobileDropdowns.forEach(({ item, trigger }) => {
+        item.classList.remove('is-open');
+        trigger.setAttribute('aria-expanded', 'false');
+      });
+    }
+
+    mobileDropdowns.forEach(({ item, trigger }) => {
+      function toggle(e) {
+        e.stopPropagation();
+        e.preventDefault();
+        const willOpen = !item.classList.contains('is-open');
+        closeAllMobileDropdowns();
+        if (willOpen) {
+          item.classList.add('is-open');
+          trigger.setAttribute('aria-expanded', 'true');
+        }
+      }
+      if (trigger.tagName === 'A') {
+        trigger.querySelector('.nav__work-chevron').addEventListener('click', toggle);
+      } else {
+        trigger.addEventListener('click', toggle);
+      }
+    });
+
     hamburger.addEventListener('click', () => {
       const isOpen = mainNavEl.classList.toggle('is-open');
       hamburger.setAttribute('aria-expanded', String(isOpen));
+      if (!isOpen) closeAllMobileDropdowns();
     });
     mobileMenu.querySelectorAll('a').forEach(link => {
       link.addEventListener('click', () => {
         mainNavEl.classList.remove('is-open');
         hamburger.setAttribute('aria-expanded', 'false');
+        closeAllMobileDropdowns();
       });
     });
 
@@ -2943,15 +3013,21 @@
     }
 
     navDropdowns.forEach(({ item, trigger }) => {
-      trigger.addEventListener('click', (e) => {
+      function toggle(e) {
         e.stopPropagation();
+        e.preventDefault();
         const willOpen = !item.classList.contains('is-open');
         closeAllNavDropdowns();
         if (willOpen) {
           item.classList.add('is-open');
           trigger.setAttribute('aria-expanded', 'true');
         }
-      });
+      }
+      if (trigger.tagName === 'A') {
+        trigger.querySelector('.nav__work-chevron').addEventListener('click', toggle);
+      } else {
+        trigger.addEventListener('click', toggle);
+      }
     });
 
     document.addEventListener('click', (e) => {

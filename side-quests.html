@@ -50,7 +50,7 @@
       --ink-dark:  #1a1c16;
       --ink-dim:   rgba(244,244,235,0.55);
 
-      --font-display: 'Lora', Georgia, serif;
+      --font-display: 'Poiret One', Georgia, serif;
       --font-body:    'DM Sans', Arial, sans-serif;
       --font-mono:    'DM Mono', 'IBM Plex Mono', monospace;
       --font-hand:    'Gochi Hand', cursive;
@@ -298,7 +298,7 @@
     }
     .nav__mobile-menu ul {
       list-style: none;
-      padding: 0.625rem 0.5rem;
+      padding: 16px;
       display: flex;
       flex-direction: column;
       gap: 2px;
@@ -316,7 +316,62 @@
       transition: color var(--dur-fast), background var(--dur-fast);
     }
     .nav__mobile-menu li a:hover { color: var(--lime); background: rgba(244,244,235,0.05); }
-    .nav.is-open .nav__mobile-menu { max-height: 200px; opacity: 1; pointer-events: auto; }
+    .nav.is-open .nav__mobile-menu { max-height: 500px; opacity: 1; pointer-events: auto; }
+
+    /* Work/Play accordion rows — scoped ".nav__mobile-item .nav__mobile-trigger" (2 classes)
+       so it reliably beats ".nav__mobile-menu li a" (1 class + 2 elements) for the "Play" <a>
+       case — see index.html (source of truth) for the full specificity explanation. */
+    .nav__mobile-item .nav__mobile-trigger {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      width: 100%;
+      background: none;
+      border: none;
+      cursor: pointer;
+      padding: 0.75rem 0.875rem;
+      font-family: var(--font-hand);
+      font-weight: 400;
+      font-size: 20px;
+      letter-spacing: -0.03em;
+      color: rgba(244,244,235,0.8);
+      text-decoration: none;
+      border-radius: 10px;
+      transition: color var(--dur-fast), background var(--dur-fast);
+    }
+    .nav__mobile-item .nav__mobile-trigger:hover { color: var(--lime); background: rgba(244,244,235,0.05); }
+    .nav__mobile-item .nav__mobile-trigger .nav__work-chevron {
+      width: 18px; height: 18px; flex-shrink: 0;
+      transition: transform 0.25s ease;
+    }
+    .nav__mobile-item.is-open .nav__mobile-trigger .nav__work-chevron { transform: rotate(180deg); }
+
+    .nav__mobile-submenu {
+      display: flex;
+      flex-direction: column;
+      max-height: 0;
+      overflow: hidden;
+      opacity: 0;
+      transition: max-height 0.3s ease, opacity 0.2s ease;
+    }
+    .nav__mobile-item.is-open .nav__mobile-submenu { max-height: 220px; opacity: 1; }
+    .nav__mobile-item .nav__mobile-submenu a {
+      display: block;
+      padding: 0.6rem 0.875rem 0.6rem 1.625rem;
+      font-family: 'Poiret One', Georgia, serif;
+      font-weight: 400;
+      font-size: 17px;
+      color: rgba(244,244,235,0.65);
+      text-decoration: none;
+      border-radius: 8px;
+      transition: color var(--dur-fast), background var(--dur-fast);
+    }
+    .nav__mobile-item .nav__mobile-submenu a:hover { color: var(--lime); background: rgba(244,244,235,0.05); }
+    body.light-mode .nav__mobile-item .nav__mobile-trigger { color: rgba(26,28,22,0.7); }
+    body.light-mode .nav__mobile-item .nav__mobile-trigger:hover { color: #6b7a00; background: rgba(26,28,22,0.05); }
+    body.light-mode .nav__mobile-item .nav__mobile-submenu a { color: rgba(26,28,22,0.55); }
+    body.light-mode .nav__mobile-item .nav__mobile-submenu a:hover { color: #6b7a00; background: rgba(26,28,22,0.05); }
 
     /* ================================================================
        SHARED UTILITIES
@@ -445,120 +500,6 @@
       gap: 40px;
     }
 
-    .page-eyebrow {
-      display: block;
-      font-size: 0.68rem;
-      letter-spacing: 0.14em;
-      text-transform: uppercase;
-      opacity: 0.38;
-      margin-bottom: 0.75rem;
-      color: var(--ink-light);
-    }
-    body.light-mode .page-eyebrow { color: var(--ink-dark); }
-
-    .pd-intro {
-      font-family: var(--font-display);
-      font-weight: 400;
-      font-size: clamp(20px, 2.44vw, 32px);
-      line-height: 1.156;
-      letter-spacing: -0.02em;
-      color: var(--ink-light);
-      max-width: min(658px, 55%);
-    }
-
-    /* Single-column stack of equal-height landscape cards (Figma node 846-5673) */
-    .pd-grid {
-      display: flex;
-      flex-direction: column;
-      gap: 20px;
-    }
-
-    /* ── Cards (shared base) ── */
-    .card {
-      position: relative;
-      overflow: hidden;
-      isolation: isolate;
-      width: 100%;
-      aspect-ratio: 1184 / 271;
-      border-radius: 16px;
-      cursor: pointer;
-      will-change: transform;
-      transition: box-shadow 0.3s ease;
-    }
-
-    .card--arvo    { background: #31332a; }
-    .card--seletar { background: #304c95; }
-    .card--pawhaus { background: #d09a94; }
-
-    /* Inner body — left text column; width/padding set per card to match Figma's
-       per-card text-column proportions. Mockups bleed outside it, positioned
-       absolutely against the full .card (see .card__mockup rules below). */
-    .card__body {
-      position: absolute;
-      left: 0;
-      top: 0;
-      bottom: 0;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      gap: 48px;
-      z-index: 2;
-    }
-    .card--arvo    .card__body,
-    .card--seletar .card__body,
-    .card--pawhaus .card__body { max-width: 40%; padding: 38px; }
-
-    /* All three cards share ARVO's Display/LG headline + Display/MD sub (locked tokens) */
-    .card__case-title {
-      font-family: var(--font-display);
-      font-size: 32px;
-      line-height: 37px;
-      letter-spacing: -0.02em;
-      color: var(--ink-light);
-      max-width: 100%;
-    }
-    .card__case-headline { font-weight: 700; margin: 0; }
-    .card__case-sub      {
-      font-weight: 400;
-      margin: 0;
-      font-size: 26px;
-      line-height: 32px;
-      letter-spacing: -0.015em;
-    }
-
-    .card__foot {
-      display: flex;
-      flex-direction: column;
-      gap: 12px;
-    }
-
-    /* All three cards: name + meta right-align within the text column */
-    .card--arvo    .card__foot,
-    .card--seletar .card__foot,
-    .card--pawhaus .card__foot {
-      align-self: flex-end;
-      text-align: right;
-    }
-
-    .card__project-name {
-      font-family: var(--font-hand);
-      font-size: clamp(28px, 3.47vw, 55px);
-      line-height: 50px;
-      letter-spacing: 0;
-      color: #f4f4eb;
-    }
-
-    .card__project-meta {
-      font-family: var(--font-body);
-      font-weight: 700;
-      font-size: 11px;
-      line-height: 1.3;
-      color: rgba(244,244,235,0.7);
-      text-transform: uppercase;
-      letter-spacing: 0.14em;
-    }
-    .card__project-meta p { margin: 0; }
-
     /* Mockup images */
     .card__mockup {
       position: absolute;
@@ -596,124 +537,99 @@
     }
 
     /* ================================================================
-       SECTION 2 — OTHER WORKS
+       SECTION 2 — SIDE QUESTS (Figma node 1399:72928, get_screenshot —
+       get_metadata/get_design_context both errored on this node with a
+       persistent SSE parse failure, so this was built from the rendered
+       screenshot + reusing this site's own existing card conventions,
+       not pulled node-by-node)
     ================================================================ */
     #other-works .inner {
+      padding-top: calc(var(--pad) + 104px);
       display: flex;
       flex-direction: column;
       gap: 40px;
     }
 
-    /* List of project rows (Figma node 567-3170) — replaces the old 3-col card grid */
-    .ow-list {
-      display: flex;
-      flex-direction: column;
-      gap: 40px;
+    .sq-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 40px 32px;
     }
 
-    .ow-row {
-      display: flex;
-      align-items: center;
-      gap: 40px;
+    .sq-card { display: flex; flex-direction: column; gap: 10px; }
+
+    .sq-card__img {
+      position: relative;
       width: 100%;
-      cursor: default;
-    }
-
-    .card-disabled { opacity: 0.6; cursor: not-allowed; }
-    /* Side Quests rows: keep full-strength text per Figma — only the disabled
-       cursor/tooltip affordance applies, not the dimmed-opacity treatment */
-    .ow-row.card-disabled { opacity: 1; }
-
-    .ow-row__text {
-      display: flex;
-      flex: 1 0 0;
-      align-items: center;
-      gap: 40px;
-      min-width: 0;
-      color: var(--ink-light);
-    }
-
-    .ow-row__name {
-      font-family: var(--font-display);
-      font-weight: 500;
-      font-size: 18px;
-      line-height: 24px;
-      white-space: nowrap;
-      flex-shrink: 0;
-    }
-
-    .ow-row__desc {
-      font-family: var(--font-body);
-      font-weight: 400;
-      font-size: 13px;
-      line-height: 15px;
-      flex: 1 0 0;
-      min-width: 0;
-      color: var(--ink-light);
-    }
-
-    .ow-row__year {
-      font-family: var(--font-body);
-      font-weight: 600;
-      font-size: 13px;
-      color: var(--ink-light);
-      white-space: nowrap;
-      flex-shrink: 0;
-    }
-
-    .ow-row__badge {
-      font-family: var(--font-body);
-      font-size: 0.6rem;
-      font-weight: 600;
-      letter-spacing: 0.08em;
-      text-transform: uppercase;
-      color: var(--ink-light);
-      border: 1px solid rgba(244,244,235,0.2);
-      border-radius: 9999px;
-      padding: 0.18rem 0.55rem;
-      opacity: 0.65;
-      white-space: nowrap;
-      flex-shrink: 0;
-      transition: opacity 0.3s ease;
-    }
-    body.light-mode .ow-row__badge { color: var(--ink-dark); border-color: rgba(26,28,22,0.2); }
-    .ow-row:hover .ow-row__badge { opacity: 0.82; }
-
-    .ow-row__divider {
-      height: 1px;
-      width: 100%;
-      background: rgba(244,244,235,0.15);
-    }
-
-    /* Cursor-following hover preview — follows the pointer while hovering a row,
-       shows the matching project's image/video on loop until the cursor leaves */
-    .ow-preview {
-      position: fixed;
-      left: 0;
-      top: 0;
-      width: 320px;
-      height: 252px;
-      border-radius: 16px;
+      aspect-ratio: 450 / 300;
+      border-radius: 12px;
       overflow: hidden;
-      pointer-events: none;
-      z-index: 50;
-      opacity: 0;
-      transform: translate(-50%, -120%);
-      box-shadow: 0 24px 48px rgba(0,0,0,0.35);
-      transition: opacity 0.2s ease;
+      background: #21281a;
     }
-    .ow-preview--light { background: #f4f4eb; }
-    .ow-preview--dark  { background: #282c1e; }
-    .ow-preview--olive { background: #6b7060; }
-
-    .ow-preview__media {
-      position: absolute;
-      inset: 0;
+    .sq-card__img img,
+    .sq-card__img video {
       width: 100%;
       height: 100%;
       object-fit: cover;
-      display: none;
+      display: block;
     }
+
+    .sq-card__badge {
+      position: absolute;
+      top: 16px;
+      right: 16px;
+      background: rgba(26,28,22,0.55);
+      backdrop-filter: blur(6px);
+      color: var(--ink-light);
+      font-family: var(--font-body);
+      font-weight: 600;
+      font-size: clamp(0.6875rem, 0.6vw, 0.8125rem);
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      padding: 5px 14px;
+      border-radius: 9999px;
+      white-space: nowrap;
+    }
+
+    .sq-card__row {
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      gap: 12px;
+    }
+
+    .sq-card__name {
+      font-family: var(--font-hand);
+      font-weight: 400;
+      font-size: clamp(1.375rem, 2vw, 1.75rem);
+      line-height: 1;
+      color: var(--ink-light);
+      margin: 0;
+    }
+
+    .sq-card__year {
+      font-family: var(--font-body);
+      font-weight: 400;
+      font-size: clamp(0.75rem, 0.7vw, 0.8125rem);
+      line-height: 1.35;
+      color: var(--ink-light);
+      opacity: 0.7;
+      white-space: nowrap;
+    }
+
+    .sq-card__desc {
+      font-family: var(--font-body);
+      font-weight: 400;
+      font-size: clamp(0.75rem, 0.7vw, 0.8125rem);
+      line-height: 1.35;
+      color: var(--ink-light);
+      opacity: 0.75;
+      margin: 0;
+    }
+
+    body.light-mode .sq-card__name,
+    body.light-mode .sq-card__year,
+    body.light-mode .sq-card__desc { color: var(--ink-dark); }
 
     /* ================================================================
        SECTION 3 — EVENT STYLING
@@ -726,8 +642,8 @@
 
     .ev-grid {
       display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 20px;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 40px 32px;
     }
 
     /* Card: image on top, name/meta + "in construction" badge in a row below
@@ -765,8 +681,8 @@
     .ev-card__name {
       font-family: var(--font-display);
       font-weight: 700;
-      font-size: 18px;
-      line-height: 24px;
+      font-size: clamp(1.125rem, 1.6vw, 1.375rem);
+      line-height: 1.33;
       letter-spacing: -0.01em;
       color: var(--ink-light);
       margin: 0;
@@ -775,8 +691,8 @@
     .ev-card__meta {
       font-family: var(--font-body);
       font-weight: 400;
-      font-size: 13px;
-      line-height: 15px;
+      font-size: clamp(0.75rem, 0.7vw, 0.8125rem);
+      line-height: 1.35;
       color: var(--ink-light);
       margin: 0;
     }
@@ -1078,8 +994,8 @@
     .contact__heading {
       font-family: var(--font-display);
       font-weight: 400;
-      font-size: clamp(2.5rem, 3.61vw, 3.25rem);
-      line-height: 56px;
+      font-size: clamp(1.75rem, 3.6vw, 3.25rem);
+      line-height: 1.1;
       letter-spacing: -0.03em;
       color: var(--ink-light);
     }
@@ -1087,8 +1003,8 @@
     .contact__desc {
       font-family: var(--font-body);
       font-weight: 400;
-      font-size: 17px;
-      line-height: 25px;
+      font-size: clamp(0.9375rem, 1vw, 1.0625rem);
+      line-height: 1.47;
       color: var(--ink-light);
     }
 
@@ -1175,6 +1091,7 @@
       .nav__logo-text--full  { display: none; }
       .nav__logo-text--short { display: inline; }
       .nav__logo-text { font-size: 26px; line-height: 1; font-weight: 700; letter-spacing: -0.04em; }
+      .nav__right { gap: 10px; }
       .nav__links { display: none; }
       .nav__hamburger { display: flex; width: 40px; height: 40px; }
       .nav__ham-line { width: 22px; height: 2px; }
@@ -1221,7 +1138,7 @@
       .nav__links { display: none; }
       .nav__hamburger { display: flex; }
 
-      #product-design .inner { padding-top: calc(var(--pad) + 80px); }
+      #other-works .inner { padding-top: calc(var(--pad) + 80px); }
 
       .pd-intro { max-width: 100%; font-size: clamp(18px, 4vw, 24px); }
 
@@ -1239,7 +1156,7 @@
       .ev-grid { grid-template-columns: 1fr 1fr; }
 
       #contact .inner { flex-direction: column; }
-      .contact__heading { font-size: clamp(2rem, 7vw, 2.5rem); line-height: 1.15; }
+      .contact__heading { font-size: clamp(1.4rem, 5vw, 2rem); line-height: 1.2; }
       .contact__decor { order: -1; flex: none; width: 100%; }
       .footer-peeps-crowd { aspect-ratio: 376 / 468.7354; }
       .footer-peep { width: 36.54%; height: 41.18%; }
@@ -1276,7 +1193,7 @@
       :root { --pad: 20px; }
       .ow-grid { grid-template-columns: 1fr; }
       .ev-grid { grid-template-columns: 1fr; }
-      .contact__heading { font-size: clamp(1.75rem, 8vw, 2.25rem); }
+      .contact__heading { font-size: clamp(1.25rem, 6vw, 1.75rem); }
     }
   </style>
   <link rel="stylesheet" href="Asset/skiper40.css">
@@ -1303,7 +1220,7 @@
 
   <!-- ── NAV ── -->
   <nav class="nav" id="main-nav">
-    <a class="nav__logo" href="/" aria-label="Andrea Lee">
+    <a class="nav__logo" href="index.html" aria-label="Andrea Lee">
       <span class="nav__logo-text nav__logo-text--full">Andrea Lee</span>
       <span class="nav__logo-text nav__logo-text--short">Andrea L.</span>
       <img class="nav__logo-flower"
@@ -1315,7 +1232,7 @@
     <div class="nav__right">
       <ul class="nav__links">
         <li class="nav__links-item nav__links-item--work" id="nav-work-item">
-          <button class="nav__work-trigger" id="nav-work-trigger" aria-haspopup="true" aria-expanded="false" aria-current="page">
+          <button class="nav__work-trigger" id="nav-work-trigger" aria-haspopup="true" aria-expanded="false">
             Work
             <svg class="nav__work-chevron" width="24" height="24" viewBox="0 0 24 24" fill="none" aria-hidden="true">
               <path d="M6 9l6 6 6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
@@ -1328,12 +1245,12 @@
           </div>
         </li>
         <li class="nav__links-item nav__links-item--work" id="nav-play-item">
-          <button class="nav__work-trigger" id="nav-play-trigger" aria-haspopup="true" aria-expanded="false">
+          <a class="nav__work-trigger" id="nav-play-trigger" href="side-quests.html" aria-haspopup="true" aria-expanded="false" aria-current="page">
             Play
             <svg class="nav__work-chevron" width="24" height="24" viewBox="0 0 24 24" fill="none" aria-hidden="true">
               <path d="M6 9l6 6 6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
             </svg>
-          </button>
+          </a>
           <div class="nav__work-menu" id="nav-play-menu">
             <a href="#other-works">Side quests</a>
             <a href="#event-styling">Event Stylings</a>
@@ -1372,8 +1289,31 @@
     <!-- Mobile dropdown -->
     <div class="nav__mobile-menu" id="nav-mobile-menu">
       <ul>
-        <li><a href="works.html">Work</a></li>
-        <li><a href="#other-works">Play</a></li>
+        <li class="nav__mobile-item" id="mob-work-item">
+          <button class="nav__mobile-trigger" id="mob-work-trigger" aria-haspopup="true" aria-expanded="false">
+            Work
+            <svg class="nav__work-chevron" width="24" height="24" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+              <path d="M6 9l6 6 6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </button>
+          <div class="nav__mobile-submenu" id="mob-work-submenu">
+            <a href="case-studies/arvo.html">ARVO</a>
+            <a href="case-studies/seletar.html">Seletar Airport</a>
+            <a href="case-studies/pethaus.html">Paw Haus</a>
+          </div>
+        </li>
+        <li class="nav__mobile-item" id="mob-play-item">
+          <a class="nav__mobile-trigger" id="mob-play-trigger" href="side-quests.html" aria-haspopup="true" aria-expanded="false">
+            Play
+            <svg class="nav__work-chevron" width="24" height="24" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+              <path d="M6 9l6 6 6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </a>
+          <div class="nav__mobile-submenu" id="mob-play-submenu">
+            <a href="#other-works">Side quests</a>
+            <a href="#event-styling">Event Stylings</a>
+          </div>
+        </li>
         <li><a href="about.html">About</a></li>
         <li><a href="#contact">Contact</a></li>
       </ul>
@@ -1466,147 +1406,69 @@
 
       <span class="t-label">Event Styling</span>
 
-      <p class="section-bridge">Before UX, I ran a luxury event design studio for four years. These are the physical spaces I shaped — same eye, different medium.</p>
+      <div class="ev-grid">
 
-      <div class="ev-carousel-stage" role="region" aria-label="Event styling portfolio">
-        <div class="ev-ring" id="evRing">
-
-          <article class="ev-carousel-card" data-index="0" aria-label="Central Provident Fund – Corporate event">
-            <div class="evc-shell">
-              <div class="evc-inner">
-                <div class="evc-img-wrap">
-                  <img src="Asset/Event_Card_5.png"
-                       alt="Central Provident Fund corporate event styling"
-                       loading="lazy" draggable="false" />
-                </div>
-                <div class="evc-row">
-                  <div class="evc-text">
-                    <h3 class="evc-name">Central Provident Fund</h3>
-                    <p class="evc-meta">Corporate event | <strong>2024</strong></p>
-                  </div>
-                  <span class="evc-badge">in construction</span>
-                </div>
-              </div>
+        <article class="ev-card">
+          <img class="ev-card__img" src="Asset/Event_Card_5.png" alt="Central Provident Fund corporate event styling" loading="lazy" />
+          <div class="ev-card__row">
+            <div class="ev-card__text">
+              <p class="ev-card__name">Central Provident Fund</p>
+              <p class="ev-card__meta">Corporate event | <strong>2024</strong></p>
             </div>
-          </article>
-
-          <article class="ev-carousel-card" data-index="1" aria-label="Guerlain – Team bonding workshop">
-            <div class="evc-shell">
-              <div class="evc-inner">
-                <div class="evc-img-wrap">
-                  <img src="Asset/Event_Card_6.png"
-                       alt="Guerlain team bonding workshop styling"
-                       loading="lazy" draggable="false" />
-                </div>
-                <div class="evc-row">
-                  <div class="evc-text">
-                    <h3 class="evc-name">Guerlain</h3>
-                    <p class="evc-meta">Team bonding workshop 2024</p>
-                  </div>
-                  <span class="evc-badge">in construction</span>
-                </div>
-              </div>
-            </div>
-          </article>
-
-          <article class="ev-carousel-card" data-index="2" aria-label="1-Atico – Wedding">
-            <div class="evc-shell">
-              <div class="evc-inner">
-                <div class="evc-img-wrap">
-                  <img src="Asset/Event_Card_1.png"
-                       alt="1-Atico wedding event styling"
-                       loading="lazy" draggable="false" />
-                </div>
-                <div class="evc-row">
-                  <div class="evc-text">
-                    <h3 class="evc-name">1-Atico</h3>
-                    <p class="evc-meta">Wedding | <strong>2025</strong></p>
-                  </div>
-                  <span class="evc-badge">in construction</span>
-                </div>
-              </div>
-            </div>
-          </article>
-
-          <article class="ev-carousel-card" data-index="3" aria-label="St Margaret – Wedding">
-            <div class="evc-shell">
-              <div class="evc-inner">
-                <div class="evc-img-wrap">
-                  <img src="Asset/Event_Card_2.png"
-                       alt="St Margaret wedding event styling"
-                       loading="lazy" draggable="false" />
-                </div>
-                <div class="evc-row">
-                  <div class="evc-text">
-                    <h3 class="evc-name">St Margaret</h3>
-                    <p class="evc-meta">Wedding | <strong>2025</strong></p>
-                  </div>
-                  <span class="evc-badge">in construction</span>
-                </div>
-              </div>
-            </div>
-          </article>
-
-          <article class="ev-carousel-card" data-index="4" aria-label="LASALLE Working Title – Wedding">
-            <div class="evc-shell">
-              <div class="evc-inner">
-                <div class="evc-img-wrap">
-                  <img src="Asset/Event_Card_3.png"
-                       alt="LASALLE Working Title wedding event styling"
-                       loading="lazy" draggable="false" />
-                </div>
-                <div class="evc-row">
-                  <div class="evc-text">
-                    <h3 class="evc-name">LASALLE | Working Title</h3>
-                    <p class="evc-meta">Wedding | <strong>2025</strong></p>
-                  </div>
-                  <span class="evc-badge">in construction</span>
-                </div>
-              </div>
-            </div>
-          </article>
-
-          <article class="ev-carousel-card" data-index="5" aria-label="Grace Assembly – Wedding">
-            <div class="evc-shell">
-              <div class="evc-inner">
-                <div class="evc-img-wrap">
-                  <img src="Asset/Event_Card_4.png"
-                       alt="Grace Assembly wedding event styling"
-                       loading="lazy" draggable="false" />
-                </div>
-                <div class="evc-row">
-                  <div class="evc-text">
-                    <h3 class="evc-name">Grace Assembly</h3>
-                    <p class="evc-meta">Wedding | <strong>2025</strong></p>
-                  </div>
-                  <span class="evc-badge">in construction</span>
-                </div>
-              </div>
-            </div>
-          </article>
-
-        </div><!-- /#evRing -->
-
-        <!-- Nav controls -->
-        <div class="evc-nav" aria-label="Carousel controls">
-          <div class="evc-dots" role="tablist"></div>
-        </div>
-
-      </div><!-- /.ev-carousel-stage -->
-
-      <!-- Click-to-expand overlay (lightbox) -->
-      <div class="evc-overlay" id="evcOverlay" aria-hidden="true">
-        <div class="evc-overlay__box">
-          <img class="evc-overlay__img" alt="" />
-          <div class="evc-overlay__row">
-            <div class="evc-overlay__text">
-              <h3 class="evc-overlay__name"></h3>
-              <p class="evc-overlay__meta"></p>
-            </div>
-            <span class="evc-badge">in construction</span>
           </div>
-        </div>
-      </div>
+        </article>
+
+        <article class="ev-card">
+          <img class="ev-card__img" src="Asset/Event_Card_6.png" alt="Guerlain team bonding workshop styling" loading="lazy" />
+          <div class="ev-card__row">
+            <div class="ev-card__text">
+              <p class="ev-card__name">Guerlain</p>
+              <p class="ev-card__meta">Team bonding workshop <strong>2024</strong></p>
+            </div>
+          </div>
+        </article>
+
+        <article class="ev-card">
+          <img class="ev-card__img" src="Asset/Event_Card_1.png" alt="1-Atico wedding event styling" loading="lazy" />
+          <div class="ev-card__row">
+            <div class="ev-card__text">
+              <p class="ev-card__name">1-Atico</p>
+              <p class="ev-card__meta">Wedding | <strong>2025</strong></p>
+            </div>
+          </div>
+        </article>
+
+        <article class="ev-card">
+          <img class="ev-card__img" src="Asset/Event_Card_2.png" alt="St Margaret wedding event styling" loading="lazy" />
+          <div class="ev-card__row">
+            <div class="ev-card__text">
+              <p class="ev-card__name">St Margaret</p>
+              <p class="ev-card__meta">Wedding | <strong>2025</strong></p>
+            </div>
+          </div>
+        </article>
+
+        <article class="ev-card">
+          <img class="ev-card__img" src="Asset/Event_Card_3.png" alt="LASALLE Working Title wedding event styling" loading="lazy" />
+          <div class="ev-card__row">
+            <div class="ev-card__text">
+              <p class="ev-card__name">LASALLE | Working Title</p>
+              <p class="ev-card__meta">Wedding | <strong>2025</strong></p>
+            </div>
+          </div>
+        </article>
+
+        <article class="ev-card">
+          <img class="ev-card__img" src="Asset/Event_Card_4.png" alt="Grace Assembly wedding event styling" loading="lazy" />
+          <div class="ev-card__row">
+            <div class="ev-card__text">
+              <p class="ev-card__name">Grace Assembly</p>
+              <p class="ev-card__meta">Wedding | <strong>2025</strong></p>
+            </div>
+          </div>
+        </article>
+
+      </div><!-- /.ev-grid -->
     </div><!-- /.inner -->
   </section>
 
@@ -1822,15 +1684,47 @@
     const hamburger  = document.getElementById('nav-hamburger');
     const mobileMenu = document.getElementById('nav-mobile-menu');
 
+    const mobileDropdowns = [
+      { item: document.getElementById('mob-work-item'), trigger: document.getElementById('mob-work-trigger') },
+      { item: document.getElementById('mob-play-item'), trigger: document.getElementById('mob-play-trigger') },
+    ].filter(d => d.item && d.trigger);
+
+    function closeAllMobileDropdowns() {
+      mobileDropdowns.forEach(({ item, trigger }) => {
+        item.classList.remove('is-open');
+        trigger.setAttribute('aria-expanded', 'false');
+      });
+    }
+
+    mobileDropdowns.forEach(({ item, trigger }) => {
+      function toggle(e) {
+        e.stopPropagation();
+        e.preventDefault();
+        const willOpen = !item.classList.contains('is-open');
+        closeAllMobileDropdowns();
+        if (willOpen) {
+          item.classList.add('is-open');
+          trigger.setAttribute('aria-expanded', 'true');
+        }
+      }
+      if (trigger.tagName === 'A') {
+        trigger.querySelector('.nav__work-chevron').addEventListener('click', toggle);
+      } else {
+        trigger.addEventListener('click', toggle);
+      }
+    });
+
     hamburger.addEventListener('click', () => {
       const isOpen = mainNavEl.classList.toggle('is-open');
       hamburger.setAttribute('aria-expanded', String(isOpen));
+      if (!isOpen) closeAllMobileDropdowns();
     });
 
     mobileMenu.querySelectorAll('a').forEach(link => {
       link.addEventListener('click', () => {
         mainNavEl.classList.remove('is-open');
         hamburger.setAttribute('aria-expanded', 'false');
+        closeAllMobileDropdowns();
       });
     });
 
@@ -1848,15 +1742,21 @@
     }
 
     navDropdowns.forEach(({ item, trigger }) => {
-      trigger.addEventListener('click', (e) => {
+      function toggle(e) {
         e.stopPropagation();
+        e.preventDefault();
         const willOpen = !item.classList.contains('is-open');
         closeAllNavDropdowns();
         if (willOpen) {
           item.classList.add('is-open');
           trigger.setAttribute('aria-expanded', 'true');
         }
-      });
+      }
+      if (trigger.tagName === 'A') {
+        trigger.querySelector('.nav__work-chevron').addEventListener('click', toggle);
+      } else {
+        trigger.addEventListener('click', toggle);
+      }
     });
 
     document.addEventListener('click', (e) => {
@@ -1875,22 +1775,12 @@
   <script>
     gsap.registerPlugin(ScrollTrigger);
 
-    /* Product Design — entrance */
-    gsap.from('.works-hero', {
-      opacity: 0, y: 36, duration: 0.9, ease: 'power3.out', delay: 0.2
-    });
-    gsap.from('.pd-grid .card', {
-      y: 60, opacity: 0, duration: 0.9, stagger: 0.12, ease: 'power3.out', delay: 0.25
-    });
-
-    /* Other Works */
+    /* Side Quests — entrance */
     gsap.from('#other-works .t-label', {
-      y: 20, opacity: 0, duration: 0.6, ease: 'power3.out',
-      scrollTrigger: { trigger: '#other-works', start: 'top 85%' }
+      y: 20, opacity: 0, duration: 0.6, ease: 'power3.out', delay: 0.2
     });
-    gsap.from('.ow-row', {
-      clipPath: 'inset(0 100% 0 0)', duration: 0.85, stagger: 0.1, ease: 'power4.inOut',
-      scrollTrigger: { trigger: '.ow-list', start: 'top 72%' }
+    gsap.from('.sq-card', {
+      y: 40, opacity: 0, duration: 0.8, stagger: 0.1, ease: 'power3.out', delay: 0.3
     });
 
     /* Event Styling */
@@ -1898,9 +1788,9 @@
       y: 20, opacity: 0, duration: 0.6, ease: 'power3.out',
       scrollTrigger: { trigger: '#event-styling', start: 'top 85%' }
     });
-    gsap.from('.section-bridge', {
-      y: 20, opacity: 0, duration: 0.6, delay: 0.1, ease: 'power3.out',
-      scrollTrigger: { trigger: '#event-styling', start: 'top 85%' }
+    gsap.from('.ev-card', {
+      y: 40, opacity: 0, duration: 0.8, stagger: 0.08, ease: 'power3.out',
+      scrollTrigger: { trigger: '.ev-grid', start: 'top 80%' }
     });
 
     /* Contact */

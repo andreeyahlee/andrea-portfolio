@@ -355,7 +355,7 @@
     }
     .nav__mobile-menu ul {
       list-style: none;
-      padding: 0.625rem 0.5rem;
+      padding: 16px;
       display: flex;
       flex-direction: column;
       gap: 2px;
@@ -374,7 +374,71 @@
       transition: color var(--dur-fast), background var(--dur-fast);
     }
     .nav__mobile-menu li a:hover { color: var(--lime); background: rgba(244,244,235,0.05); }
-    .nav.is-open .nav__mobile-menu { max-height: 200px; opacity: 1; pointer-events: auto; }
+    .nav.is-open .nav__mobile-menu { max-height: 500px; opacity: 1; pointer-events: auto; }
+
+    /* Work/Play accordion rows inside the mobile menu — same look as the plain
+       links above, but a button/link + chevron that expands a nested sub-list
+       instead of (or, for Play, in addition to) navigating straight away.
+       Selectors below are scoped as ".nav__mobile-item .nav__mobile-trigger"
+       (2 classes) rather than the bare ".nav__mobile-trigger" (1 class) —
+       "Play" is an <a>, and the pre-existing ".nav__mobile-menu li a" rule
+       above (1 class + 2 elements) has HIGHER specificity than a single
+       class alone, so it was silently winning and collapsing Play's layout
+       back to a plain block link (no flex, chevron squashed next to the
+       text) while "Work" — a <button>, which that li/a rule can't match —
+       looked correct. The extra ancestor class is what actually wins the
+       cascade for both tag types consistently. */
+    .nav__mobile-item .nav__mobile-trigger {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      width: 100%;
+      background: none;
+      border: none;
+      cursor: pointer;
+      padding: 0.75rem 0.875rem;
+      font-family: var(--font-hand);
+      font-weight: 400;
+      font-size: 20px;
+      letter-spacing: -0.03em;
+      color: rgba(244,244,235,0.8);
+      text-decoration: none;
+      border-radius: 10px;
+      transition: color var(--dur-fast), background var(--dur-fast);
+    }
+    .nav__mobile-item .nav__mobile-trigger:hover { color: var(--lime); background: rgba(244,244,235,0.05); }
+    .nav__mobile-item .nav__mobile-trigger .nav__work-chevron {
+      width: 18px; height: 18px; flex-shrink: 0;
+      transition: transform 0.25s ease;
+    }
+    .nav__mobile-item.is-open .nav__mobile-trigger .nav__work-chevron { transform: rotate(180deg); }
+
+    .nav__mobile-submenu {
+      display: flex;
+      flex-direction: column;
+      max-height: 0;
+      overflow: hidden;
+      opacity: 0;
+      transition: max-height 0.3s ease, opacity 0.2s ease;
+    }
+    .nav__mobile-item.is-open .nav__mobile-submenu { max-height: 220px; opacity: 1; }
+    .nav__mobile-item .nav__mobile-submenu a {
+      display: block;
+      padding: 0.6rem 0.875rem 0.6rem 1.625rem;
+      font-family: 'Poiret One', Georgia, serif;
+      font-weight: 400;
+      font-size: 17px;
+      color: rgba(244,244,235,0.65);
+      text-decoration: none;
+      border-radius: 8px;
+      transition: color var(--dur-fast), background var(--dur-fast);
+    }
+    .nav__mobile-item .nav__mobile-submenu a:hover { color: var(--lime); background: rgba(244,244,235,0.05); }
+    body.light-mode .nav__mobile-item .nav__mobile-trigger { color: rgba(26,28,22,0.7); }
+    body.light-mode .nav__mobile-item .nav__mobile-trigger:hover { color: #6b7a00; background: rgba(26,28,22,0.05); }
+    body.light-mode .nav__mobile-item .nav__mobile-submenu a { color: rgba(26,28,22,0.55); }
+    body.light-mode .nav__mobile-item .nav__mobile-submenu a:hover { color: #6b7a00; background: rgba(26,28,22,0.05); }
 
     /* ================================================================
        SHARED UTILITIES
@@ -492,8 +556,8 @@
     .hero__heading {
       font-family: var(--font-display);
       font-weight: 400;
-      font-size: clamp(1.75rem, 3.61vw, 3.25rem);
-      line-height: 56px;
+      font-size: clamp(1.75rem, 3.6vw, 3.25rem);
+      line-height: 1.1;
       letter-spacing: -0.03em;
       color: var(--ink-light);
       max-width: var(--max-w);
@@ -503,8 +567,8 @@
     .hero__tagline {
       font-family: var(--font-display);
       font-weight: 400;
-      font-size: clamp(1.75rem, 3.61vw, 3.25rem);
-      line-height: 56px;
+      font-size: clamp(1.75rem, 3.6vw, 3.25rem);
+      line-height: 1.1;
       letter-spacing: -0.03em;
       color: var(--ink-light);
       max-width: var(--max-w);
@@ -566,6 +630,10 @@
       width: 100%;
       aspect-ratio: 1184 / 615;
     }
+
+    /* Swipe hint — mobile-deck only (≤767px, see media query below); the desktop/tablet
+       fan deck has no drag interaction so this stays hidden there. */
+    .works__swipe-hint { display: none; }
 
     .card-shell {
       position: absolute;
@@ -777,10 +845,10 @@
     }
     .cta-pill:hover { background: var(--lime); color: var(--ink-dark); }
     .cta-label {
-      font-family: var(--font-mono);
+      font-family: var(--font-body);
       font-weight: 600;
-      font-size: 13px;
-      letter-spacing: 0.04em;
+      font-size: clamp(0.6875rem, 0.6vw, 0.8125rem);
+      letter-spacing: 0.14em;
       text-transform: uppercase;
     }
     .cta-icon {
@@ -793,8 +861,8 @@
     .contact__heading {
       font-family: var(--font-display);
       font-weight: 400;
-      font-size: clamp(2.5rem, 3.61vw, 3.25rem);
-      line-height: 56px;
+      font-size: clamp(1.75rem, 3.6vw, 3.25rem);
+      line-height: 1.1;
       letter-spacing: -0.03em;
       color: var(--ink-light);
     }
@@ -802,8 +870,8 @@
     .contact__desc {
       font-family: var(--font-body);
       font-weight: 400;
-      font-size: 17px;
-      line-height: 25px;
+      font-size: clamp(0.9375rem, 1vw, 1.0625rem);
+      line-height: 1.47;
       color: var(--ink-light);
     }
 
@@ -937,6 +1005,7 @@
       .nav__logo-text--full  { display: none; }
       .nav__logo-text--short { display: inline; }
       .nav__logo-text { font-size: 26px; line-height: 1; font-weight: 700; letter-spacing: -0.04em; }
+      .nav__right { gap: 10px; }
       .nav__links { display: none; }
       .nav__hamburger { display: flex; width: 40px; height: 40px; }
       .nav__ham-line { width: 22px; height: 2px; }
@@ -951,7 +1020,7 @@
       .hero__tagline { font-size: clamp(1.5rem, 3vw, 2.5rem); line-height: 1.15; }
       .hero__location { font-size: clamp(1.15rem, 2.2vw, 1.75rem); line-height: 1.2; }
 
-      .contact__heading { line-height: 44px; }
+      .contact__heading { font-size: clamp(1.5rem, 3vw, 2.5rem); line-height: 1.15; }
     }
 
     /* ================================================================
@@ -993,20 +1062,56 @@
       .hero__heading { font-size: clamp(1.4rem, 5vw, 2rem); line-height: 1.2; }
       .hero__tagline { font-size: clamp(1.4rem, 5vw, 2rem); line-height: 1.2; }
       .hero__location { font-size: clamp(1rem, 3.5vw, 1.4rem); line-height: 1.25; }
+      .contact__desc { font-size: clamp(0.875rem, 3vw, 0.9375rem); }
 
-      /* Works — mobile: overlapping fan-deck doesn't hold up on narrow screens,
-         so cards fall back to a plain stacked column, each keeping its own
-         Figma aspect ratio (card-shell no longer absolutely positioned). */
-      .works__grid { position: static; aspect-ratio: unset; display: flex; flex-direction: column; gap: 20px; }
-      .card-shell { position: static; width: 100%; height: auto; z-index: auto; }
-      .card-shell--arvo    { aspect-ratio: 435.21 / 527.69; }
-      .card-shell--seletar { aspect-ratio: 445.25 / 535.40; }
-      .card-shell--pawhaus { aspect-ratio: 404.87 / 503.89; }
+      /* Works — mobile: overlapping fan-deck doesn't hold up on narrow screens, so it's
+         replaced with a swipeable stacked deck (drag left/right sends the front card to
+         the back, revealing the next — order cycles ARVO → Seletar → PawHaus → ARVO).
+         Not specified in Figma (desktop-only fan design) — inferred mobile interaction
+         per user request, 2026-07-27. Card aspect ratios differ slightly per-card on
+         desktop (Figma bounding boxes); the deck needs one shared ratio so cards can
+         stack exactly on top of each other, so this uses the average of the three
+         (~0.82) rather than any single card's own ratio. JS drag logic sets `data-deck-i`
+         (0 = front … 2 = back) on each `.card-shell`, driving the transforms below. */
+      .works__grid { position: relative; aspect-ratio: 41 / 50; touch-action: pan-y; user-select: none; }
+      .card-shell {
+        position: absolute; inset: 0; width: 100%; height: auto;
+        transition: transform 0.35s cubic-bezier(0.22, 1, 0.36, 1), opacity 0.35s ease;
+        will-change: transform;
+      }
+      .card-shell:hover { transform: none; }
+      .card-shell[data-deck-i="0"] { z-index: 3; cursor: grab; transform: translateY(0) scale(1) rotate(0deg); opacity: 1; }
+      .card-shell[data-deck-i="1"] { z-index: 2; transform: translateY(14px) scale(0.94) rotate(-3deg); opacity: 1; }
+      .card-shell[data-deck-i="2"] { z-index: 1; transform: translateY(24px) scale(0.9) rotate(3deg); opacity: 1; }
+      .card-shell.is-dragging { transition: none; cursor: grabbing; }
       .card { height: 100%; }
+      /* All 3 desktop cards have their own slightly different Figma box (their
+         .card__photo/.card__text insets above are calibrated to that card's own
+         width/height), but the mobile deck forces every card into one shared box
+         (.works__grid's aspect-ratio). Re-point Seletar/PawHaus back to ARVO's base
+         insets here so photo height and text position line up identically across
+         all 3 cards while stacked — otherwise PawHaus in particular (67.28% photo
+         height, 75.61% text top) sits much lower than the other two. */
+      .card--seletar .card__photo,
+      .card--pawhaus .card__photo { left: 7.35%; right: 7.35%; top: 6.07%; height: 57.24%; }
+      .card--seletar .card__text,
+      .card--pawhaus .card__text { left: 7.35%; right: 7.35%; top: 65.19%; }
+
+      .works__swipe-hint {
+        display: block;
+        margin-top: 20px;
+        text-align: center;
+        font-family: var(--font-mono);
+        font-weight: 700;
+        font-size: 11px;
+        letter-spacing: 0.3em;
+        color: rgba(244, 244, 235, 0.4);
+      }
+      body.light-mode .works__swipe-hint { color: rgba(26, 28, 22, 0.4); }
 
       /* Contact */
       #contact .inner { flex-direction: column; }
-      .contact__heading { font-size: clamp(2rem, 7vw, 2.5rem); line-height: 1.15; }
+      .contact__heading { font-size: clamp(1.4rem, 5vw, 2rem); line-height: 1.2; }
       .contact__decor { order: -1; flex: none; width: 100%; }
       .footer-peeps-crowd { aspect-ratio: 376 / 468.7354; }
       .footer-peep { width: 36.54%; height: 41.18%; }
@@ -1044,7 +1149,7 @@
       .hero__heading { font-size: clamp(1.25rem, 6vw, 1.75rem); }
       .hero__tagline { font-size: clamp(1.25rem, 6vw, 1.75rem); }
       .hero__location { font-size: clamp(0.9rem, 4.5vw, 1.15rem); }
-      .contact__heading { font-size: clamp(1.75rem, 8vw, 2.25rem); }
+      .contact__heading { font-size: clamp(1.25rem, 6vw, 1.75rem); }
     }
 
     /* ================================================================
@@ -1118,7 +1223,7 @@
 
   <!-- ── NAV ── -->
   <nav class="nav" id="main-nav">
-    <a class="nav__logo" href="/" aria-label="Andrea Lee">
+    <a class="nav__logo" href="index.html" aria-label="Andrea Lee">
       <span class="nav__logo-text nav__logo-text--full">Andrea Lee</span>
       <span class="nav__logo-text nav__logo-text--short">Andrea L.</span>
       <img class="nav__logo-flower"
@@ -1143,15 +1248,15 @@
           </div>
         </li>
         <li class="nav__links-item nav__links-item--work" id="nav-play-item">
-          <button class="nav__work-trigger" id="nav-play-trigger" aria-haspopup="true" aria-expanded="false">
+          <a class="nav__work-trigger" id="nav-play-trigger" href="side-quests.html" aria-haspopup="true" aria-expanded="false">
             Play
             <svg class="nav__work-chevron" width="24" height="24" viewBox="0 0 24 24" fill="none" aria-hidden="true">
               <path d="M6 9l6 6 6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
             </svg>
-          </button>
+          </a>
           <div class="nav__work-menu" id="nav-play-menu">
-            <a href="works.html#other-works">Side quests</a>
-            <a href="works.html#event-styling">Event Stylings</a>
+            <a href="side-quests.html#other-works">Side quests</a>
+            <a href="side-quests.html#event-styling">Event Stylings</a>
           </div>
         </li>
         <li><a href="about.html">About</a></li>
@@ -1189,8 +1294,31 @@
     <!-- Mobile dropdown -->
     <div class="nav__mobile-menu" id="nav-mobile-menu">
       <ul>
-        <li><a href="works.html">Work</a></li>
-        <li><a href="works.html#other-works">Play</a></li>
+        <li class="nav__mobile-item" id="mob-work-item">
+          <button class="nav__mobile-trigger" id="mob-work-trigger" aria-haspopup="true" aria-expanded="false">
+            Work
+            <svg class="nav__work-chevron" width="24" height="24" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+              <path d="M6 9l6 6 6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </button>
+          <div class="nav__mobile-submenu" id="mob-work-submenu">
+            <a href="case-studies/arvo.html">ARVO</a>
+            <a href="case-studies/seletar.html">Seletar Airport</a>
+            <a href="case-studies/pethaus.html">Paw Haus</a>
+          </div>
+        </li>
+        <li class="nav__mobile-item" id="mob-play-item">
+          <a class="nav__mobile-trigger" id="mob-play-trigger" href="side-quests.html" aria-haspopup="true" aria-expanded="false">
+            Play
+            <svg class="nav__work-chevron" width="24" height="24" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+              <path d="M6 9l6 6 6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </a>
+          <div class="nav__mobile-submenu" id="mob-play-submenu">
+            <a href="side-quests.html#other-works">Side quests</a>
+            <a href="side-quests.html#event-styling">Event Stylings</a>
+          </div>
+        </li>
         <li><a href="about.html">About</a></li>
         <li><a href="#contact">Contact</a></li>
       </ul>
@@ -1330,6 +1458,10 @@
         </div>
 
       </div><!-- end .works__grid -->
+
+      <!-- Mobile-only hint for the swipeable deck — hidden on desktop/tablet where the fan
+           deck has no drag interaction. See .works__swipe-hint CSS in the ≤767px block. -->
+      <p class="works__swipe-hint" aria-hidden="true">&lt;&lt; swipe &gt;&gt;</p>
     </div>
   </section>
 
@@ -1555,15 +1687,52 @@
     const hamburger  = document.getElementById('nav-hamburger');
     const mobileMenu = document.getElementById('nav-mobile-menu');
 
+    /* ── Mobile menu Work/Play accordions (must be set up before the hamburger's
+       own listeners below, so closeAllMobileDropdowns exists when referenced) ── */
+    const mobileDropdowns = [
+      { item: document.getElementById('mob-work-item'), trigger: document.getElementById('mob-work-trigger') },
+      { item: document.getElementById('mob-play-item'), trigger: document.getElementById('mob-play-trigger') },
+    ].filter(d => d.item && d.trigger);
+
+    function closeAllMobileDropdowns() {
+      mobileDropdowns.forEach(({ item, trigger }) => {
+        item.classList.remove('is-open');
+        trigger.setAttribute('aria-expanded', 'false');
+      });
+    }
+
+    mobileDropdowns.forEach(({ item, trigger }) => {
+      function toggle(e) {
+        e.stopPropagation();
+        e.preventDefault();
+        const willOpen = !item.classList.contains('is-open');
+        closeAllMobileDropdowns();
+        if (willOpen) {
+          item.classList.add('is-open');
+          trigger.setAttribute('aria-expanded', 'true');
+        }
+      }
+      /* Same split as the desktop dropdowns: "Work" is a button (no page of its own,
+         whole row toggles); "Play" is a link (tapping the label navigates straight to
+         side-quests.html, only the chevron expands the sub-list in place). */
+      if (trigger.tagName === 'A') {
+        trigger.querySelector('.nav__work-chevron').addEventListener('click', toggle);
+      } else {
+        trigger.addEventListener('click', toggle);
+      }
+    });
+
     hamburger.addEventListener('click', () => {
       const isOpen = mainNavEl.classList.toggle('is-open');
       hamburger.setAttribute('aria-expanded', String(isOpen));
+      if (!isOpen) closeAllMobileDropdowns();
     });
 
     mobileMenu.querySelectorAll('a').forEach(link => {
       link.addEventListener('click', () => {
         mainNavEl.classList.remove('is-open');
         hamburger.setAttribute('aria-expanded', 'false');
+        closeAllMobileDropdowns();
       });
     });
 
@@ -1581,15 +1750,24 @@
     }
 
     navDropdowns.forEach(({ item, trigger }) => {
-      trigger.addEventListener('click', (e) => {
+      function toggle(e) {
         e.stopPropagation();
+        e.preventDefault();
         const willOpen = !item.classList.contains('is-open');
         closeAllNavDropdowns();
         if (willOpen) {
           item.classList.add('is-open');
           trigger.setAttribute('aria-expanded', 'true');
         }
-      });
+      }
+      /* "Work" has no page of its own, so its whole trigger toggles the dropdown. "Play" IS
+         a real link (side-quests.html) — clicking its label navigates there directly, only the
+         chevron opens the dropdown to jump straight to a specific section instead. */
+      if (trigger.tagName === 'A') {
+        trigger.querySelector('.nav__work-chevron').addEventListener('click', toggle);
+      } else {
+        trigger.addEventListener('click', toggle);
+      }
     });
 
     document.addEventListener('click', (e) => {
@@ -1938,7 +2116,8 @@
        fan order. */
     (function () {
       const isTouch = window.matchMedia('(hover: none), (pointer: coarse)').matches;
-      if (!isTouch) return;
+      const isMobileDeck = window.matchMedia('(max-width: 767px)').matches;
+      if (!isTouch || isMobileDeck) return; // ≤767px uses the swipeable deck below instead
       const shells = document.querySelectorAll('.card-shell');
       shells.forEach(shell => {
         shell.addEventListener('click', e => {
@@ -1955,6 +2134,83 @@
           shells.forEach(s => s.classList.remove('is-front'));
         }
       });
+    })();
+
+    /* ── Mobile swipeable card deck (≤767px): drag the front card left/right to send it
+       to the back of the stack and reveal the next. Order cycles ARVO → Seletar →
+       PawHaus → ARVO regardless of drag direction — only the exit animation direction
+       mirrors the swipe. Pointer Events unify touch/mouse so this is testable with a
+       mouse drag too. Separate from the tap-to-front logic above (gated off below
+       768px) since this is a real drag gesture, not a tap. */
+    (function () {
+      const grid = document.querySelector('.works__grid');
+      if (!grid) return;
+      const order = ['arvo', 'seletar', 'pawhaus'];
+      const shellFor = name => grid.querySelector('.card-shell--' + name);
+      const mq = window.matchMedia('(max-width: 767px)');
+
+      function layout() {
+        order.forEach((name, i) => {
+          const shell = shellFor(name);
+          if (shell) shell.setAttribute('data-deck-i', String(i));
+        });
+      }
+
+      let dragging = null, startX = 0, dx = 0, pointerId = null;
+
+      grid.addEventListener('pointerdown', e => {
+        if (!mq.matches) return;
+        const shell = e.target.closest('.card-shell');
+        if (!shell || shell.getAttribute('data-deck-i') !== '0') return;
+        if (e.target.closest('a')) return; // let "Read more" navigate normally
+        e.preventDefault(); // stop native text-selection/drag-image on hybrid mouse/trackpad input
+        dragging = shell;
+        startX = e.clientX;
+        dx = 0;
+        pointerId = e.pointerId;
+        try { shell.setPointerCapture(pointerId); } catch (err) {}
+        shell.classList.add('is-dragging');
+      });
+
+      window.addEventListener('pointermove', e => {
+        if (!dragging || e.pointerId !== pointerId) return;
+        dx = e.clientX - startX;
+        gsap.set(dragging, { x: dx, rotate: dx / 22 });
+      });
+
+      function release(e) {
+        if (!dragging || e.pointerId !== pointerId) return;
+        const shell = dragging;
+        const threshold = grid.getBoundingClientRect().width * 0.22;
+        shell.classList.remove('is-dragging');
+        dragging = null;
+
+        if (Math.abs(dx) > threshold) {
+          // Settle directly into the back-of-deck resting transform (same values as
+          // data-deck-i="2" below) instead of flying off past the frame — the card
+          // stays inside .works__grid the whole time and just recedes behind the
+          // other two. z-index drops immediately so it visually tucks in behind them
+          // as it eases back to center, rather than sliding over the top.
+          gsap.set(shell, { zIndex: 0 });
+          gsap.to(shell, {
+            x: 0, y: 24, scale: 0.9, rotate: 3,
+            duration: 0.4,
+            ease: 'power2.out',
+            onComplete: () => {
+              gsap.set(shell, { clearProps: 'transform,opacity,zIndex' });
+              order.push(order.shift());
+              layout();
+            }
+          });
+        } else {
+          gsap.to(shell, { x: 0, rotate: 0, duration: 0.4, ease: 'elastic.out(1,0.7)' });
+        }
+      }
+
+      window.addEventListener('pointerup', release);
+      window.addEventListener('pointercancel', release);
+
+      layout();
     })();
 
     /* ── Contact email: kinetic hover scale ── */

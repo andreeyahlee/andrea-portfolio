@@ -33,7 +33,7 @@
       --ink-dark:  #1a1c16;
       --arvo:      #31332a;
 
-      --font-display: 'Lora', Georgia, serif;
+      --font-display: 'Poiret One', Georgia, serif;
       --font-body:    'DM Sans', Arial, sans-serif;
       --font-mono:    'DM Mono', 'IBM Plex Mono', monospace;
       --font-hand:    'Gochi Hand', cursive;
@@ -155,10 +155,26 @@
     .nav.is-open .nav__ham-line:nth-child(3) { transform: translateY(-6px) rotate(-45deg); }
 
     .nav__mobile-menu { position: absolute; top: calc(100% - 8px); left: var(--pad); right: var(--pad); background: var(--bg-dark); border: 1px solid rgba(222,232,149,0.18); border-radius: 20px; box-shadow: 0 4px 24px rgba(0,0,0,0.25); overflow: hidden; max-height: 0; opacity: 0; pointer-events: none; transition: max-height 0.3s ease, opacity 0.2s ease; }
-    .nav__mobile-menu ul { list-style: none; padding: 0.625rem 0.5rem; display: flex; flex-direction: column; gap: 2px; }
+    .nav__mobile-menu ul { list-style: none; padding: 16px; display: flex; flex-direction: column; gap: 2px; }
     .nav__mobile-menu li a { display: block; padding: 0.75rem 0.875rem; font-family: var(--font-hand); font-weight: 400; font-size: 20px; letter-spacing: -0.03em; color: rgba(244,244,235,0.8); text-decoration: none; border-radius: 10px; transition: color var(--dur-fast), background var(--dur-fast); }
     .nav__mobile-menu li a:hover { color: var(--lime); background: rgba(244,244,235,0.05); }
-    .nav.is-open .nav__mobile-menu { max-height: 200px; opacity: 1; pointer-events: auto; }
+    .nav.is-open .nav__mobile-menu { max-height: 500px; opacity: 1; pointer-events: auto; }
+
+    /* Work/Play accordion rows — scoped ".nav__mobile-item .nav__mobile-trigger" (2 classes)
+       so it reliably beats ".nav__mobile-menu li a" (1 class + 2 elements) for the "Play" <a>
+       case — see index.html (source of truth) for the full specificity explanation. */
+    .nav__mobile-item .nav__mobile-trigger { display: flex; align-items: center; justify-content: space-between; gap: 8px; width: 100%; background: none; border: none; cursor: pointer; padding: 0.75rem 0.875rem; font-family: var(--font-hand); font-weight: 400; font-size: 20px; letter-spacing: -0.03em; color: rgba(244,244,235,0.8); text-decoration: none; border-radius: 10px; transition: color var(--dur-fast), background var(--dur-fast); }
+    .nav__mobile-item .nav__mobile-trigger:hover { color: var(--lime); background: rgba(244,244,235,0.05); }
+    .nav__mobile-item .nav__mobile-trigger .nav__work-chevron { width: 18px; height: 18px; flex-shrink: 0; transition: transform 0.25s ease; }
+    .nav__mobile-item.is-open .nav__mobile-trigger .nav__work-chevron { transform: rotate(180deg); }
+    .nav__mobile-submenu { display: flex; flex-direction: column; max-height: 0; overflow: hidden; opacity: 0; transition: max-height 0.3s ease, opacity 0.2s ease; }
+    .nav__mobile-item.is-open .nav__mobile-submenu { max-height: 220px; opacity: 1; }
+    .nav__mobile-item .nav__mobile-submenu a { display: block; padding: 0.6rem 0.875rem 0.6rem 1.625rem; font-family: 'Poiret One', Georgia, serif; font-weight: 400; font-size: 17px; color: rgba(244,244,235,0.65); text-decoration: none; border-radius: 8px; transition: color var(--dur-fast), background var(--dur-fast); }
+    .nav__mobile-item .nav__mobile-submenu a:hover { color: var(--lime); background: rgba(244,244,235,0.05); }
+    body.light-mode .nav__mobile-item .nav__mobile-trigger { color: rgba(26,28,22,0.7); }
+    body.light-mode .nav__mobile-item .nav__mobile-trigger:hover { color: #6b7a00; background: rgba(26,28,22,0.05); }
+    body.light-mode .nav__mobile-item .nav__mobile-submenu a { color: rgba(26,28,22,0.55); }
+    body.light-mode .nav__mobile-item .nav__mobile-submenu a:hover { color: #6b7a00; background: rgba(26,28,22,0.05); }
 
     /* ================================================================
        SHARED UTILITIES
@@ -193,12 +209,12 @@
     .cs-back:hover { color: var(--lime); }
     .cs-back svg { width: 18px; height: 18px; }
 
-    .cs-h2 { font-family: var(--font-display); font-weight: 400; font-size: clamp(1.75rem, 3vw, 2.5rem); line-height: 1.2; letter-spacing: -0.02em; color: var(--ink-light); }
-    .cs-body { font-family: var(--font-body); font-weight: 400; font-size: 17px; line-height: 1.6; color: rgba(244,244,235,0.7); }
+    .cs-h2 { font-family: var(--font-display); font-weight: 400; font-size: clamp(1.75rem, 3vw, 2.5rem); line-height: 1.2; letter-spacing: -0.025em; color: var(--ink-light); }
+    .cs-body { font-family: var(--font-body); font-weight: 400; font-size: clamp(0.9375rem, 1vw, 1.0625rem); line-height: 1.47; letter-spacing: normal; color: rgba(244,244,235,0.7); }
     .cs-body strong { font-weight: 700; color: var(--ink-light); }
     body.light-mode .cs-body strong { color: var(--ink-dark); }
     .cs-divider { width: 100%; height: 1px; background: rgba(244,244,235,0.15); margin: 40px 0; }
-    .cs-tag { display: inline-flex; align-items: center; font-family: var(--font-mono); font-size: 11px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: rgba(244,244,235,0.7); background: rgba(244,244,235,0.06); padding: 6px 12px; border-radius: 20px; }
+    .cs-tag { display: inline-flex; align-items: center; font-family: var(--font-body); font-size: clamp(0.6875rem, 0.6vw, 0.8125rem); font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; color: rgba(244,244,235,0.7); background: rgba(244,244,235,0.06); padding: 6px 12px; border-radius: 20px; }
     .cs-shot { width: 100%; display: block; border-radius: 14px; box-shadow: 0 24px 48px rgba(0,0,0,0.35); }
 
     /* ── Hero ── */
@@ -208,10 +224,10 @@
     .cs-hero__row { display: flex; align-items: flex-end; gap: 40px; width: 100%; padding: 32px 0; }
     .cs-hero__col { flex: 1 1 761px; min-width: 0; display: flex; flex-direction: column; gap: 20px; }
     .cs-hero__tags { display: flex; flex-wrap: wrap; gap: 5px; }
-    .cs-hero__tag { display: inline-flex; align-items: center; justify-content: center; padding: 4px 16px; background: #6b7060; color: var(--ink-light); font-family: var(--font-body); font-weight: 700; font-size: 11px; line-height: 1.5; letter-spacing: 0.14em; text-transform: uppercase; border-radius: 10px; white-space: nowrap; }
+    .cs-hero__tag { display: inline-flex; align-items: center; justify-content: center; padding: 4px 16px; background: #6b7060; color: var(--ink-light); font-family: var(--font-body); font-weight: 700; font-size: clamp(0.6875rem, 0.6vw, 0.8125rem); line-height: 1.5; letter-spacing: 0.14em; text-transform: uppercase; border-radius: 10px; white-space: nowrap; }
     .cs-hero__heading { display: flex; flex-direction: column; gap: 10px; }
-    .cs-hero__title { font-family: var(--font-display); font-weight: 400; font-size: clamp(2rem, 4vw, 3.25rem); line-height: 1.08; letter-spacing: -0.03em; color: var(--ink-light); }
-    .cs-hero__desc { font-family: var(--font-body); font-weight: 400; font-size: 17px; line-height: 1.47; color: var(--ink-light); }
+    .cs-hero__title { font-family: var(--font-display); font-weight: 400; font-size: clamp(1.75rem, 3.6vw, 3.25rem); line-height: 1.1; letter-spacing: -0.03em; color: var(--ink-light); }
+    .cs-hero__desc { font-family: var(--font-body); font-weight: 400; font-size: clamp(0.9375rem, 1vw, 1.0625rem); line-height: 1.47; letter-spacing: normal; color: var(--ink-light); }
     .cs-hero__cta { flex: 0 0 auto; display: flex; align-items: center; justify-content: center; padding: 16px 32px; background: var(--lime); border: 3px solid var(--lime); border-radius: 10px; box-shadow: -8px 7px 3.6px -3px rgba(0,0,0,0.25), inset 1px -2px 4px 2px rgba(0,0,0,0.25); text-decoration: none; transition: transform var(--dur-fast) var(--ease-bounce); }
     .cs-hero__cta:hover { transform: translateY(-2px); }
     .cs-hero__cta-text { font-family: var(--font-body); font-weight: 600; font-size: 13px; color: var(--ink-dark); text-decoration: underline; white-space: nowrap; }
@@ -258,8 +274,8 @@
     /* 2×2 grid: Challenge | Impact / (empty) | My Contribution */
     .cs-cols { display: grid; grid-template-columns: repeat(2, 1fr); gap: 40px; flex: 1; min-width: 0; align-content: start; }
     .cs-col { display: flex; flex-direction: column; gap: 10px; }
-    .cs-col__title { font-family: var(--font-hand); font-size: 35px; line-height: 35px; font-weight: 400; color: var(--ink-light); }
-    .cs-col__body { font-family: var(--font-body); font-size: 15px; line-height: 20px; color: var(--ink-light); }
+    .cs-col__title { font-family: var(--font-hand); font-size: clamp(1.5rem, 2.2vw, 2.1875rem); line-height: 1; font-weight: 400; color: var(--ink-light); }
+    .cs-col__body { font-family: var(--font-body); font-weight: 400; font-size: clamp(0.9375rem, 1vw, 1.0625rem); line-height: 1.47; letter-spacing: normal; color: var(--ink-light); }
     .cs-col__body strong { font-weight: 700; }
     body.light-mode .cs-col__body strong { color: var(--ink-dark); }
 
@@ -276,7 +292,7 @@
     .cs-redesign-panel { position: relative; background: #f4f4eb; border-radius: 16px; overflow: hidden; aspect-ratio: 572 / 407; }
     .cs-redesign-panel__label {
       position: absolute; top: 16px; left: 16px; z-index: 3;
-      font-family: var(--font-mono); font-weight: 700; font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--ink-dark);
+      font-family: var(--font-body); font-weight: 700; font-size: clamp(0.6875rem, 0.6vw, 0.8125rem); letter-spacing: 0.14em; text-transform: uppercase; color: var(--ink-dark);
     }
     .cs-redesign-panel--single img {
       position: absolute; top: 4%; left: 40%; width: 60%; height: auto;
@@ -326,7 +342,7 @@
       aspect-ratio: 1184 / 461; min-height: 0; overflow: hidden;
     }
     .cs-zigzag-media--card img { box-shadow: none; border-radius: 8px; }
-    .cs-zigzag-media__label { font-family: var(--font-body); font-weight: 700; font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--ink-dark); text-align: center; }
+    .cs-zigzag-media__label { font-family: var(--font-body); font-weight: 700; font-size: clamp(0.6875rem, 0.6vw, 0.8125rem); letter-spacing: 0.14em; text-transform: uppercase; color: var(--ink-dark); text-align: center; }
     .cs-zigzag-media__stage { flex: 1; min-height: 0; display: flex; align-items: center; justify-content: center; overflow: hidden; border-radius: 8px; }
     .cs-zigzag-media__stage img { width: 100%; height: 100%; object-fit: contain; }
     .cs-brief-text { max-width: 651px; display: flex; flex-direction: column; gap: 20px; }
@@ -338,7 +354,7 @@
       display: flex; flex-direction: column; gap: 20px;
     }
     .cs-role-card__stage { position: relative; flex: 1; min-height: 0; }
-    .cs-role-card__label { font-family: var(--font-body); font-weight: 700; font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--ink-dark); }
+    .cs-role-card__label { font-family: var(--font-body); font-weight: 700; font-size: clamp(0.6875rem, 0.6vw, 0.8125rem); letter-spacing: 0.14em; text-transform: uppercase; color: var(--ink-dark); }
 
     /* Role card tiles — individually rotated screenshot crops, positioned per Figma AABB */
     .rc-tile { position: absolute; display: flex; align-items: center; justify-content: center; pointer-events: none; }
@@ -377,22 +393,22 @@
 
     /* ── Workshop sub-sections ── */
     #cs-workshop .cs-zigzag-text { gap: 40px; }
-    #cs-workshop .cs-h2 { font-size: 40px; line-height: 44px; letter-spacing: -1px; }
+    #cs-workshop .cs-h2 { font-size: clamp(1.75rem, 3vw, 2.5rem); line-height: 1.2; letter-spacing: -0.025em; }
     .cs-workshop-subsection { display: flex; flex-direction: column; gap: 12px; }
-    .cs-workshop-subhead { font-family: var(--font-display); font-weight: 400; font-size: 26px; line-height: 32px; letter-spacing: -0.015em; color: var(--ink-light); }
-    .cs-workshop-meta { font-family: var(--font-body); font-weight: 600; font-size: 13px; line-height: 1.4; color: var(--lime); }
+    .cs-workshop-subhead { font-family: var(--font-display); font-weight: 500; font-size: clamp(1.125rem, 1.6vw, 1.375rem); line-height: 1.33; letter-spacing: normal; color: var(--ink-light); }
+    .cs-workshop-meta { font-family: var(--font-body); font-weight: 600; font-size: clamp(0.75rem, 0.7vw, 0.8125rem); line-height: 1.35; color: var(--lime); }
     .cs-pillrow { display: flex; flex-wrap: wrap; gap: 8px; }
     .cs-pill { display: inline-flex; align-items: center; font-family: var(--font-body); font-weight: 600; font-size: 13px; color: var(--ink-light); background: #6b7060; padding: 4px 16px; border-radius: 100px; }
 
     /* ── Decision framework (How I made the call) ── */
     .cs-decision-head { display: flex; flex-direction: column; align-items: center; gap: 40px; text-align: center; margin: 24px auto 56px; max-width: 722px; }
-    .cs-decision-head__title { font-family: var(--font-display); font-weight: 400; font-size: 40px; line-height: 44px; letter-spacing: -1px; color: var(--ink-light); }
-    .cs-decision-head__body { font-family: var(--font-body); font-size: 17px; line-height: 25px; color: var(--ink-light); }
+    .cs-decision-head__title { font-family: var(--font-display); font-weight: 400; font-size: clamp(1.75rem, 3vw, 2.5rem); line-height: 1.2; letter-spacing: -0.025em; color: var(--ink-light); }
+    .cs-decision-head__body { font-family: var(--font-body); font-weight: 400; font-size: clamp(0.9375rem, 1vw, 1.0625rem); line-height: 1.47; letter-spacing: normal; color: var(--ink-light); }
     .cs-decision-cards { display: flex; align-items: stretch; gap: 40px; }
     .cs-decision-card { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 10px; padding: 32px; border-radius: 10px; background: var(--ink-light); color: var(--ink-dark); }
-    .cs-decision-card__title { font-family: var(--font-hand); font-size: 35px; line-height: 35px; color: var(--ink-dark); }
-    .cs-decision-card__subtitle { font-family: var(--font-display); font-weight: 500; font-size: 18px; line-height: 24px; color: var(--ink-dark); }
-    .cs-decision-card__body { font-family: var(--font-body); font-size: 17px; line-height: 25px; color: var(--ink-dark); }
+    .cs-decision-card__title { font-family: var(--font-hand); font-weight: 400; font-size: clamp(1.5rem, 2.2vw, 2.1875rem); line-height: 1; color: var(--ink-dark); }
+    .cs-decision-card__subtitle { font-family: var(--font-display); font-weight: 500; font-size: clamp(1.125rem, 1.6vw, 1.375rem); line-height: 1.33; letter-spacing: normal; color: var(--ink-dark); }
+    .cs-decision-card__body { font-family: var(--font-body); font-weight: 400; font-size: clamp(0.9375rem, 1vw, 1.0625rem); line-height: 1.47; letter-spacing: normal; color: var(--ink-dark); }
     .cs-decision-or { flex-shrink: 0; width: 177px; display: flex; align-items: center; justify-content: center; font-family: var(--font-hand); font-size: 100px; line-height: 1; color: var(--ink-light); text-align: center; }
 
     /* ── Seven problems — two-column sticky layout ── */
@@ -408,14 +424,14 @@
     .cs-seven-card--dark { background: #31332a; }
     .cs-seven-card__badge {
       align-self: flex-end; flex-shrink: 0;
-      font-family: var(--font-mono); font-weight: 700; font-size: 10px; letter-spacing: 0.06em; text-transform: uppercase;
+      font-family: var(--font-body); font-weight: 700; font-size: clamp(0.6875rem, 0.6vw, 0.8125rem); letter-spacing: 0.14em; text-transform: uppercase;
       padding: 4px 16px; border-radius: 100px;
     }
     .cs-badge--solved { background: #374222; color: var(--lime); }
     .cs-badge--protected { background: var(--lime); color: var(--ink-dark); }
     .cs-badge--returned { background: #fdedd5; color: #a0622a; }
     .cs-seven-card__title {
-      font-family: var(--font-display); font-weight: 700; font-size: 18px; line-height: 24px;
+      font-family: var(--font-display); font-weight: 700; font-size: clamp(1.125rem, 1.6vw, 1.375rem); line-height: 1.33; letter-spacing: -0.01em;
       color: var(--ink-dark); flex-shrink: 0;
     }
     .cs-seven-card--dark .cs-seven-card__title { color: var(--ink-light); }
@@ -499,7 +515,7 @@
     /* ── Before / After ── */
     .cs-ba { display: flex; gap: 40px; margin-top: 40px; align-items: flex-start; }
     .cs-ba__col { flex: 1; min-width: 0; position: relative; background: #f4f4eb; overflow: hidden; height: 520px; padding: 16px; border-radius: 16px; }
-    .cs-ba__label { display: block; font-family: var(--font-body); font-size: 11px; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; color: var(--ink-dark); position: relative; z-index: 5; }
+    .cs-ba__label { display: block; font-family: var(--font-body); font-size: clamp(0.6875rem, 0.6vw, 0.8125rem); font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; color: var(--ink-dark); position: relative; z-index: 5; }
     .cs-ba__col img { position: absolute; display: block; border-radius: 6px; }
     /* Before card — 4 images at Figma-derived % positions (ref: 572×581px card) */
     .cs-ba__b1 { width: 59.6%; left: -1.6%; top: 18.9%; z-index: 1; box-shadow: -22px 33px 6px rgba(0,0,0,0.5); }
@@ -529,8 +545,8 @@
     .cs-impact__item:nth-child(3) { background: #f4f4eb; border-color: var(--lime); transform: rotate(-9.79deg); left: 61.7%; top: -20px; }
     .cs-impact__inner { display: flex; flex-direction: column; gap: 10px; align-items: center; text-align: center; width: 100%; padding: 32px 0; }
     .cs-impact__num { font-family: var(--font-display); font-size: 3.5rem; font-weight: 400; line-height: 1; letter-spacing: -0.04em; color: var(--ink-dark); }
-    .cs-impact__tag { display: block; font-family: var(--font-body); font-size: 11px; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; color: #6b7060; }
-    .cs-impact__body { font-family: var(--font-body); font-size: 15px; line-height: 20px; color: var(--ink-dark); }
+    .cs-impact__tag { display: block; font-family: var(--font-body); font-size: clamp(0.6875rem, 0.6vw, 0.8125rem); font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; color: #6b7060; }
+    .cs-impact__body { font-family: var(--font-body); font-weight: 400; font-size: clamp(0.9375rem, 1vw, 1.0625rem); line-height: 1.47; letter-spacing: normal; color: var(--ink-dark); }
     .cs-impact__peep { position: absolute; width: clamp(120px, 20.3%, 240px); height: auto; left: 20.4%; top: -32px; z-index: 3; pointer-events: none; }
     .cs-impact-text { max-width: 505px; display: flex; flex-direction: column; gap: 20px; }
 
@@ -542,11 +558,11 @@
     /* ── Reflections ── */
     .cs-reflections-row { display: flex; gap: 40px; align-items: flex-start; }
     .cs-reflections-left { width: 325px; flex-shrink: 0; }
-    .cs-reflections-left .cs-h2 { font-size: 40px; line-height: 44px; letter-spacing: -0.025em; }
+    .cs-reflections-left .cs-h2 { font-size: clamp(1.75rem, 3vw, 2.5rem); line-height: 1.2; letter-spacing: -0.025em; }
     .cs-cards-2x2 { flex: 1; min-width: 0; display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
     .cs-cards-2x2 > div { display: flex; flex-direction: column; gap: 10px; padding: 16px; }
-    .cs-card__title { font-family: var(--font-hand); font-size: 32px; line-height: 30px; letter-spacing: -0.05em; color: var(--ink-light); }
-    .cs-card__body { font-family: var(--font-body); font-size: 15px; line-height: 20px; color: var(--ink-light); }
+    .cs-card__title { font-family: var(--font-hand); font-weight: 400; font-size: clamp(1.5rem, 2.2vw, 2.1875rem); line-height: 1; letter-spacing: -0.05em; color: var(--ink-light); }
+    .cs-card__body { font-family: var(--font-body); font-weight: 400; font-size: clamp(0.9375rem, 1vw, 1.0625rem); line-height: 1.47; letter-spacing: normal; color: var(--ink-light); }
 
     /* ── Project Stack ── */
     .cs-context { display: flex; flex-direction: column; gap: 40px; margin-bottom: 80px; }
@@ -554,12 +570,12 @@
     .cs-context__cols { display: flex; gap: 40px; align-items: flex-start; }
     .cs-context__col { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 10px; }
     .cs-context__label { font-family: var(--font-mono); font-size: 11px; font-weight: 700; letter-spacing: 0.6em; text-transform: uppercase; color: var(--lime); }
-    .cs-context__heading { font-family: var(--font-display); font-size: 18px; font-weight: 500; line-height: 24px; color: var(--ink-light); margin: 0; }
-    .cs-context__body-sm { font-family: var(--font-body); font-size: 13px; line-height: 15px; color: var(--ink-light); margin: 0; }
-    .cs-context__body { font-family: var(--font-body); font-size: 17px; line-height: 25px; color: var(--ink-light); margin: 0; }
+    .cs-context__heading { font-family: var(--font-display); font-size: clamp(1.125rem, 1.6vw, 1.375rem); font-weight: 500; line-height: 1.33; letter-spacing: normal; color: var(--ink-light); margin: 0; }
+    .cs-context__body-sm { font-family: var(--font-body); font-weight: 400; font-size: clamp(0.75rem, 0.7vw, 0.8125rem); line-height: 1.35; color: var(--ink-light); margin: 0; }
+    .cs-context__body { font-family: var(--font-body); font-weight: 400; font-size: clamp(0.9375rem, 1vw, 1.0625rem); line-height: 1.47; letter-spacing: normal; color: var(--ink-light); margin: 0; }
     .cs-stack-grid { display: flex; align-items: flex-start; padding: 16px; }
     .cs-stack-col { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 10px; padding: 32px; }
-    .cs-stack-col__title { font-family: var(--font-hand); font-size: 32px; line-height: 30px; letter-spacing: -0.05em; color: var(--ink-light); padding-bottom: 8px; border-bottom: 1px solid var(--lime); margin: 0; }
+    .cs-stack-col__title { font-family: var(--font-hand); font-weight: 400; font-size: clamp(1.5rem, 2.2vw, 2.1875rem); line-height: 1; letter-spacing: -0.05em; color: var(--ink-light); padding-bottom: 8px; border-bottom: 1px solid var(--lime); margin: 0; }
     .cs-stack-col__item { font-family: var(--font-body); font-size: 15px; line-height: 20px; color: var(--ink-light); padding: 8px 0; }
 
     /* ── Next case study ── */
@@ -578,7 +594,7 @@
     .contact__text { display: flex; flex-direction: column; gap: 40px; }
     .contact__email { font-family: var(--font-hand); font-size: 32px; line-height: 30px; letter-spacing: -0.05em; color: var(--ink-light); text-decoration: none; display: block; }
     .contact__email:hover { text-decoration: underline; }
-    .contact__heading { font-family: var(--font-display); font-weight: 400; font-size: clamp(2.5rem, 3.61vw, 3.25rem); line-height: 56px; letter-spacing: -0.03em; color: var(--ink-light); }
+    .contact__heading { font-family: var(--font-display); font-weight: 400; font-size: clamp(1.75rem, 3.6vw, 3.25rem); line-height: 1.1; letter-spacing: -0.03em; color: var(--ink-light); }
     .contact__desc { font-family: var(--font-body); font-weight: 400; font-size: 17px; line-height: 25px; color: var(--ink-light); }
     .contact__socials { display: flex; gap: 40px; align-items: center; }
     .social-link { display: flex; align-items: center; justify-content: center; width: 30px; height: 30px; color: var(--ink-light); opacity: 0.6; text-decoration: none; transition: opacity var(--dur-fast), transform var(--dur-slow) var(--ease-bounce); }
@@ -605,6 +621,7 @@
       .nav__logo-text--full  { display: none; }
       .nav__logo-text--short { display: inline; }
       .nav__logo-text { font-size: 26px; line-height: 1; font-weight: 700; letter-spacing: -0.04em; }
+      .nav__right { gap: 10px; }
       .nav__links { display: none; }
       .nav__hamburger { display: flex; width: 40px; height: 40px; }
       .nav__ham-line { width: 22px; height: 2px; }
@@ -650,7 +667,7 @@
       /* Reflections — heading above card grid */
       .cs-reflections-row { flex-direction: column; }
       .cs-reflections-left { width: 100%; }
-      .cs-reflections-left .cs-h2 { font-size: clamp(1.5rem, 3.5vw, 2rem); line-height: 1.2; }
+      .cs-reflections-left .cs-h2 { font-size: clamp(1.75rem, 3vw, 2.5rem); line-height: 1.2; }
       .cs-cards-2x2 { grid-template-columns: repeat(2, 1fr); }
 
       /* Decision cards — stack */
@@ -658,8 +675,8 @@
       .cs-decision-or { width: 100%; font-size: 2.5rem; line-height: 1.1; padding: 4px 0; text-align: center; }
 
       /* Font size scaling */
-      #cs-workshop .cs-h2 { font-size: clamp(1.5rem, 3.5vw, 2rem); line-height: 1.2; letter-spacing: -0.5px; }
-      .cs-decision-head__title { font-size: clamp(1.5rem, 3.5vw, 2rem); line-height: 1.2; }
+      #cs-workshop .cs-h2 { font-size: clamp(1.75rem, 3vw, 2.5rem); line-height: 1.2; letter-spacing: -0.025em; }
+      .cs-decision-head__title { font-size: clamp(1.75rem, 3vw, 2.5rem); line-height: 1.2; letter-spacing: -0.025em; }
       .cs-next__link { font-size: clamp(2rem, 5vw, 3rem); line-height: 1.1; }
 
       /* Section spacing */
@@ -687,8 +704,7 @@
       .cs-decision-cards { flex-direction: column; }
       /* Typography */
       .cs-h2 { font-size: clamp(1.75rem, 7.5vw, 2.25rem); }
-      #cs-workshop .cs-h2, .cs-reflections-left .cs-h2 { font-size: clamp(1.5rem, 7.5vw, 2rem); line-height: 1.2; }
-      .cs-col__title { font-size: clamp(1.5rem, 7vw, 2rem); line-height: 1.15; }
+      #cs-workshop .cs-h2, .cs-reflections-left .cs-h2 { font-size: clamp(1.75rem, 3vw, 2.5rem); line-height: 1.2; }
 
       /* Before/After */
       .cs-ba { flex-direction: column; gap: 24px; }
@@ -725,7 +741,6 @@
       .cs-seven-left { position: static; flex: none; width: 100%; }
       .cs-seven-stack { gap: 10px; }
       .cs-seven-card { height: 260px; border-radius: 12px; }
-      .cs-seven-card__title { font-size: 16px; line-height: 21px; }
       .cs-seven-card__text { width: 110px; }
       .cs-seven-card__desc, .cs-seven-card__stat { font-size: 11px; line-height: 14px; }
 
@@ -793,15 +808,15 @@
           </div>
         </li>
         <li class="nav__links-item nav__links-item--work" id="nav-play-item">
-          <button class="nav__work-trigger" id="nav-play-trigger" aria-haspopup="true" aria-expanded="false">
+          <a class="nav__work-trigger" id="nav-play-trigger" href="../side-quests.html" aria-haspopup="true" aria-expanded="false">
             Play
             <svg class="nav__work-chevron" width="24" height="24" viewBox="0 0 24 24" fill="none" aria-hidden="true">
               <path d="M6 9l6 6 6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
             </svg>
-          </button>
+          </a>
           <div class="nav__work-menu" id="nav-play-menu">
-            <a href="../works.html#other-works">Side quests</a>
-            <a href="../works.html#event-styling">Event Stylings</a>
+            <a href="../side-quests.html#other-works">Side quests</a>
+            <a href="../side-quests.html#event-styling">Event Stylings</a>
           </div>
         </li>
         <li><a href="../about.html">About</a></li>
@@ -836,8 +851,31 @@
     </div>
     <div class="nav__mobile-menu" id="nav-mobile-menu">
       <ul>
-        <li><a href="../works.html">Work</a></li>
-        <li><a href="../works.html#other-works">Play</a></li>
+        <li class="nav__mobile-item" id="mob-work-item">
+          <button class="nav__mobile-trigger" id="mob-work-trigger" aria-haspopup="true" aria-expanded="false">
+            Work
+            <svg class="nav__work-chevron" width="24" height="24" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+              <path d="M6 9l6 6 6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </button>
+          <div class="nav__mobile-submenu" id="mob-work-submenu">
+            <a href="arvo.html">ARVO</a>
+            <a href="seletar.html">Seletar Airport</a>
+            <a href="pethaus.html">Paw Haus</a>
+          </div>
+        </li>
+        <li class="nav__mobile-item" id="mob-play-item">
+          <a class="nav__mobile-trigger" id="mob-play-trigger" href="../side-quests.html" aria-haspopup="true" aria-expanded="false">
+            Play
+            <svg class="nav__work-chevron" width="24" height="24" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+              <path d="M6 9l6 6 6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </a>
+          <div class="nav__mobile-submenu" id="mob-play-submenu">
+            <a href="../side-quests.html#other-works">Side quests</a>
+            <a href="../side-quests.html#event-styling">Event Stylings</a>
+          </div>
+        </li>
         <li><a href="../about.html">About</a></li>
         <li><a href="#contact">Contact</a></li>
       </ul>
@@ -1550,14 +1588,46 @@
     const mobileMenu = document.getElementById('nav-mobile-menu');
     const mainNavEl  = document.getElementById('main-nav');
 
+    const mobileDropdowns = [
+      { item: document.getElementById('mob-work-item'), trigger: document.getElementById('mob-work-trigger') },
+      { item: document.getElementById('mob-play-item'), trigger: document.getElementById('mob-play-trigger') },
+    ].filter(d => d.item && d.trigger);
+
+    function closeAllMobileDropdowns() {
+      mobileDropdowns.forEach(({ item, trigger }) => {
+        item.classList.remove('is-open');
+        trigger.setAttribute('aria-expanded', 'false');
+      });
+    }
+
+    mobileDropdowns.forEach(({ item, trigger }) => {
+      function toggle(e) {
+        e.stopPropagation();
+        e.preventDefault();
+        const willOpen = !item.classList.contains('is-open');
+        closeAllMobileDropdowns();
+        if (willOpen) {
+          item.classList.add('is-open');
+          trigger.setAttribute('aria-expanded', 'true');
+        }
+      }
+      if (trigger.tagName === 'A') {
+        trigger.querySelector('.nav__work-chevron').addEventListener('click', toggle);
+      } else {
+        trigger.addEventListener('click', toggle);
+      }
+    });
+
     hamburger.addEventListener('click', () => {
       const isOpen = mainNavEl.classList.toggle('is-open');
       hamburger.setAttribute('aria-expanded', String(isOpen));
+      if (!isOpen) closeAllMobileDropdowns();
     });
     mobileMenu.querySelectorAll('a').forEach(link => {
       link.addEventListener('click', () => {
         mainNavEl.classList.remove('is-open');
         hamburger.setAttribute('aria-expanded', 'false');
+        closeAllMobileDropdowns();
       });
     });
 
@@ -1575,15 +1645,21 @@
     }
 
     navDropdowns.forEach(({ item, trigger }) => {
-      trigger.addEventListener('click', (e) => {
+      function toggle(e) {
         e.stopPropagation();
+        e.preventDefault();
         const willOpen = !item.classList.contains('is-open');
         closeAllNavDropdowns();
         if (willOpen) {
           item.classList.add('is-open');
           trigger.setAttribute('aria-expanded', 'true');
         }
-      });
+      }
+      if (trigger.tagName === 'A') {
+        trigger.querySelector('.nav__work-chevron').addEventListener('click', toggle);
+      } else {
+        trigger.addEventListener('click', toggle);
+      }
     });
 
     document.addEventListener('click', (e) => {
