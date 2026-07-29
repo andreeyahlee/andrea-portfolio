@@ -646,6 +646,10 @@
       gap: 40px 32px;
     }
 
+    /* Dot pagination is mobile-only (≤767px, see media query) — desktop/tablet keeps
+       the 2-column grid with no scroll, so there's nothing to paginate. */
+    .ev-grid__dots { display: none; }
+
     /* Card: image on top, name/meta + "in construction" badge in a row below
        (Figma node 552-4482) — replaces the old photo-with-text-overlay card */
     .ev-card {
@@ -1153,7 +1157,41 @@
       .half-card.card--pawhaus .card__mockup--pawhaus  { left: 40%; top: -10%; width: 78%; }
 
       .ow-grid { grid-template-columns: 1fr 1fr; }
-      .ev-grid { grid-template-columns: 1fr 1fr; }
+
+      /* Side Quests + Event Styling — mobile deck, Figma node 1515:24677 "Play_Desktop"
+         (402px frame). Side Quests stacks to a single column (20px gap, matching the
+         Figma frame's card-to-card spacing exactly). Event Styling becomes a horizontal
+         snap-scroll strip of full-width cards — the Figma frame's row is 2128px wide
+         with 6 cards at 338px + 20px gaps inside a 338px-wide viewport, i.e. one card
+         per screen, swipeable — not a 2-column grid like the desktop/tablet tiers below. */
+      .sq-grid { grid-template-columns: 1fr; gap: 20px; }
+      .ev-grid {
+        display: flex;
+        grid-template-columns: none;
+        gap: 20px;
+        overflow-x: auto;
+        scroll-snap-type: x mandatory;
+        scroll-padding-left: var(--pad);
+        -webkit-overflow-scrolling: touch;
+        scrollbar-width: none;
+        -ms-overflow-style: none;
+      }
+      .ev-grid::-webkit-scrollbar { display: none; }
+      .ev-grid .ev-card { flex: 0 0 100%; scroll-snap-align: start; }
+
+      /* Dot pagination — replaces the native scrollbar (hidden above), one dot per
+         card, active dot tracks scroll position via JS (see the ev-grid__dots block
+         near the other GSAP setup). */
+      .ev-grid__dots { display: flex; justify-content: center; gap: 8px; margin-top: 20px; }
+      .ev-grid__dot {
+        width: 6px; height: 6px; border-radius: 50%;
+        background: rgba(244, 244, 235, 0.3);
+        cursor: pointer; border: none; padding: 0;
+        transition: background 0.2s ease, transform 0.2s ease;
+      }
+      .ev-grid__dot.is-active { background: var(--lime); transform: scale(1.4); }
+      body.light-mode .ev-grid__dot { background: rgba(26, 28, 22, 0.25); }
+      body.light-mode .ev-grid__dot.is-active { background: #6b7a00; }
 
       #contact .inner { flex-direction: column; }
       .contact__heading { font-size: clamp(1.4rem, 5vw, 2rem); line-height: 1.2; }
@@ -1192,7 +1230,6 @@
     @media (max-width: 479px) {
       :root { --pad: 20px; }
       .ow-grid { grid-template-columns: 1fr; }
-      .ev-grid { grid-template-columns: 1fr; }
       .contact__heading { font-size: clamp(1.25rem, 6vw, 1.75rem); }
     }
   </style>
@@ -1775,23 +1812,65 @@
   <script>
     gsap.registerPlugin(ScrollTrigger);
 
-    /* Side Quests — entrance */
+    /* Side Quests — progressive reveal: cards fade/slide in staggered as the grid scrolls
+       into view, and reverse (fade back out) if you scroll back up past it, replaying on
+       the way back down — toggleActions 'play reverse play reverse' drives that, in place
+       of the old delay-based on-load animation which only ever played once regardless of
+       scroll position. */
     gsap.from('#other-works .t-label', {
-      y: 20, opacity: 0, duration: 0.6, ease: 'power3.out', delay: 0.2
+      y: 20, opacity: 0, duration: 0.6, ease: 'power3.out',
+      scrollTrigger: { trigger: '#other-works', start: 'top 85%', toggleActions: 'play reverse play reverse' }
     });
     gsap.from('.sq-card', {
-      y: 40, opacity: 0, duration: 0.8, stagger: 0.1, ease: 'power3.out', delay: 0.3
+      y: 40, opacity: 0, duration: 0.8, stagger: 0.1, ease: 'power3.out',
+      scrollTrigger: { trigger: '.sq-grid', start: 'top 85%', toggleActions: 'play reverse play reverse' }
     });
 
-    /* Event Styling */
+    /* Event Styling — same progressive reveal-on-scroll, both directions */
     gsap.from('#event-styling .t-label', {
       y: 20, opacity: 0, duration: 0.6, ease: 'power3.out',
-      scrollTrigger: { trigger: '#event-styling', start: 'top 85%' }
+      scrollTrigger: { trigger: '#event-styling', start: 'top 85%', toggleActions: 'play reverse play reverse' }
     });
     gsap.from('.ev-card', {
       y: 40, opacity: 0, duration: 0.8, stagger: 0.08, ease: 'power3.out',
-      scrollTrigger: { trigger: '.ev-grid', start: 'top 80%' }
+      scrollTrigger: { trigger: '.ev-grid', start: 'top 80%', toggleActions: 'play reverse play reverse' }
     });
+
+    /* Event Styling — dot pagination for the mobile horizontal snap-scroll strip,
+       replacing the native scrollbar (hidden via CSS). One dot per card, active dot
+       tracks scroll position; clicking a dot scrolls to that card. */
+    (function () {
+      const evGrid = document.querySelector('.ev-grid');
+      if (!evGrid) return;
+      const evCards = evGrid.querySelectorAll('.ev-card');
+      const dotsWrap = document.createElement('div');
+      dotsWrap.className = 'ev-grid__dots';
+      evCards.forEach((_, i) => {
+        const dot = document.createElement('button');
+        dot.className = 'ev-grid__dot' + (i === 0 ? ' is-active' : '');
+        dot.setAttribute('aria-label', 'Go to slide ' + (i + 1));
+        dotsWrap.appendChild(dot);
+      });
+      evGrid.insertAdjacentElement('afterend', dotsWrap);
+      const evDots = dotsWrap.querySelectorAll('.ev-grid__dot');
+
+      let dotsTicking = false;
+      evGrid.addEventListener('scroll', () => {
+        if (dotsTicking) return;
+        dotsTicking = true;
+        requestAnimationFrame(() => {
+          const idx = Math.round(evGrid.scrollLeft / evGrid.clientWidth);
+          evDots.forEach((d, i) => d.classList.toggle('is-active', i === idx));
+          dotsTicking = false;
+        });
+      });
+
+      evDots.forEach((dot, i) => {
+        dot.addEventListener('click', () => {
+          evGrid.scrollTo({ left: i * evGrid.clientWidth, behavior: 'smooth' });
+        });
+      });
+    })();
 
     /* Contact */
     gsap.from('.contact__heading', {

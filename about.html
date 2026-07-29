@@ -97,15 +97,17 @@
     body.light-mode .toggle__icon     { order: 0; width: 27px; height: 20px; }
     body.light-mode .toggle__sun      { display: none;  }
     body.light-mode .toggle__moon     { display: block; }
-    body.light-mode .ab-zh,
     body.light-mode .ab-qa__title,
     body.light-mode .comm-name,
-    body.light-mode .ab-zigzag-text   { color: var(--ink-dark); }
+    body.light-mode .ab-hero__heading,
+    body.light-mode .ab-hero__bio     { color: var(--ink-dark); }
     body.light-mode .ab-qa__body,
     body.light-mode .comm-desc        { color: rgba(26,28,22,0.65); }
     body.light-mode .comm-year        { color: rgba(26,28,22,0.5); }
     body.light-mode .comm-heading     { color: var(--ink-dark); }
-    body.light-mode .ab-photo         { box-shadow: -6px 8px 4px rgba(0,0,0,0.18); }
+    body.light-mode .ab-photo,
+    body.light-mode .ab-hero__portrait img,
+    body.light-mode .ab-hero__strip-photo { box-shadow: -6px 8px 4px rgba(0,0,0,0.18); }
     body.light-mode .contact__heading,
     body.light-mode .contact__desc    { color: var(--ink-dark); }
     body.light-mode .contact__email   { color: var(--ink-dark); }
@@ -280,47 +282,51 @@
     @keyframes loader-dot { 0%, 100% { opacity: 0; } 30%, 70% { opacity: 1; } }
 
     /* ================================================================
-       ABOUT — HERO ZIGZAG
+       ABOUT — HERO
+       Figma node 1387:47658 "About_Desktop", hero section, 2026-07-29 —
+       replaces the old 3-row zigzag/scattered-photo layout with a single
+       text block + rotated portrait photo, and a full-width photo strip
+       below reusing 5 of the previously-zigzagged photos (pillow/desk,
+       stage florals, phone app, sticky-note whiteboard, hackathon team).
+       The other 7 old photos (pilates x2, lake, crosswalk, street photo,
+       painting) aren't part of this section in the new design — they may
+       resurface in a later section once we rebuild it (site is being
+       redone section by section per the new Figma file).
+       NOTE: the portrait photo (Andrea seated, white blouse) is a new
+       asset that doesn't exist in Asset/ yet — placeholder in place of
+       `Asset/about_portrait.jpg` until it's exported from Figma.
     ================================================================ */
-    #ab-hero { padding-top: calc(104px + clamp(40px, 6vw, 96px)); padding-bottom: clamp(40px, 6vw, 96px); }
-    .ab-zigzag { display: flex; flex-direction: column; gap: clamp(80px, 22vw, 320px); }
-    .ab-zigzag-row { display: flex; align-items: center; gap: clamp(24px, 5vw, 80px); }
-    .ab-zigzag-row--reverse { flex-direction: row-reverse; }
-    .ab-zigzag-text {
-      flex: 1; min-width: 0;
+    #ab-hero { padding-top: calc(104px + clamp(40px, 6vw, 96px)); padding-bottom: clamp(60px, 8vw, 120px); }
+    .ab-hero__top { display: flex; align-items: flex-start; justify-content: space-between; gap: clamp(40px, 6vw, 100px); }
+    .ab-hero__text { flex: 1; min-width: 0; max-width: 640px; display: flex; flex-direction: column; gap: 24px; }
+    .ab-hero__heading {
       font-family: var(--font-display); font-weight: 400;
       font-size: clamp(1.75rem, 3.6vw, 3.25rem); line-height: 1.1; letter-spacing: -0.03em;
       color: var(--ink-light);
     }
-    .ab-zh { font-family: var(--font-hand); font-size: 1.12em; letter-spacing: 0; display: inline-block; transition: color 0.2s ease; cursor: default; }
-    .ab-zh:hover { color: var(--lime); }
-    .ab-zh--compact { display: none; }
-    @media (max-width: 1024px) {
-      .ab-zh--desktop { display: none; }
-      .ab-zh--compact { display: inline-block; }
+    .ab-hero__bio {
+      font-family: var(--font-body); font-weight: 400;
+      font-size: clamp(0.9375rem, 1vw, 1.0625rem); line-height: 1.6;
+      color: var(--ink-light); opacity: 0.8;
     }
-    .ab-zigzag-photos { flex: 1; min-width: 0; position: relative; }
-    .ab-photos { position: relative; width: 100%; aspect-ratio: 636 / 300; }
-    .ab-photo {
-      position: absolute; object-fit: cover; border: clamp(4px, 1vw, 8px) solid #f4f4eb;
-      border-radius: 14px; box-sizing: border-box; box-shadow: -6px 8px 4px rgba(0,0,0,0.4);
-      background: #f4f4eb;
+    .ab-hero__portrait { flex: 0 0 auto; width: clamp(200px, 19vw, 280px); }
+    .ab-hero__portrait img {
+      display: block; width: 100%; aspect-ratio: 4 / 5; object-fit: cover;
+      border: clamp(4px, 1vw, 8px) solid #f4f4eb; border-radius: 4px; box-sizing: border-box;
+      box-shadow: -6px 8px 4px rgba(0,0,0,0.4); background: #f4f4eb;
+      transform: rotate(6deg);
     }
-    /* Group A — "A UX designer" photos (row 1, 2 photos) */
-    .ph-1 { left: -6.49%;  top: -9.27%;  width: 46.09%; height: 130.28%; transform: rotate(-23.47deg); z-index: 1; }
-    .ph-2 { left: 41.03%;  top: -7.81%;  width: 51.85%; height: 146.55%; transform: rotate(22.66deg);  z-index: 2; }
-    /* Group B — "many loves" photos (row 2, 7 photos) */
-    .ph-3 { left: 12.14%;  top: -69.73%; width: 33.94%; height: 95.95%;  transform: rotate(9.48deg);   z-index: 1; }
-    .ph-4 { left: 2.65%;   top: 5.23%;   width: 36.36%; height: 102.77%; transform: rotate(-14.47deg); z-index: 2; }
-    .ph-5 { left: 40.93%;  top: -86.12%; width: 36.36%; height: 102.77%; transform: rotate(-14.19deg); z-index: 3; }
-    .ph-6 { left: 64.32%;  top: 2.90%;   width: 34.43%; height: 97.32%;  transform: rotate(10.63deg);  z-index: 4; }
-    .ph-7 { left: 38.49%;  top: 1.84%;   width: 34.43%; height: 97.32%;  transform: rotate(7.81deg);   z-index: 5; }
-    .ph-8 { left: 31.23%;  top: 70.32%;  width: 36.51%; height: 103.22%; transform: rotate(-12.85deg); z-index: 6; }
-    .ph-9 { left: 70.81%;  top: 89.38%;  width: 31.79%; height: 89.87%;  transform: rotate(15.51deg);  z-index: 7; }
-    /* Group C — "building tools" photos (row 3, 3 photos) */
-    .ph-10 { left: 51.49%; top: -37.61%; width: 48.83%; height: 138.03%; transform: rotate(10.18deg);  z-index: 1; }
-    .ph-11 { left: -5.91%; top: -15.39%; width: 40.99%; height: 115.89%; transform: rotate(-15.37deg); z-index: 2; }
-    .ph-12 { left: 24.23%; top: 22.14%;  width: 50%;    height: 97.33%;  transform: rotate(14.88deg);  z-index: 3; }
+    .ab-hero__strip { display: flex; justify-content: space-between; gap: clamp(12px, 2vw, 24px); margin-top: clamp(60px, 9vw, 130px); }
+    .ab-hero__strip-photo {
+      flex: 1 1 0; min-width: 0; aspect-ratio: 3 / 4; object-fit: cover;
+      border: clamp(4px, 1vw, 8px) solid #f4f4eb; border-radius: 4px; box-sizing: border-box;
+      box-shadow: -6px 8px 4px rgba(0,0,0,0.4); background: #f4f4eb;
+    }
+    .ab-hero__strip .strip-1 { transform: rotate(-8deg) translateY(10px); }
+    .ab-hero__strip .strip-2 { transform: rotate(5deg) translateY(-8px); }
+    .ab-hero__strip .strip-3 { transform: rotate(-4deg) translateY(14px); }
+    .ab-hero__strip .strip-4 { transform: rotate(6deg) translateY(-6px); }
+    .ab-hero__strip .strip-5 { transform: rotate(-6deg) translateY(4px); }
 
     /* ================================================================
        ABOUT — Q&A BODY
@@ -417,10 +423,12 @@
       .nav__hamburger { display: flex; }
 
       #ab-hero { padding-top: calc(80px + 32px); }
-      .ab-zigzag { gap: 130px; }
-      .ab-zigzag-row,
-      .ab-zigzag-row--reverse { flex-direction: column; align-items: stretch; gap: 170px; }
-      .ab-zigzag-text { font-size: clamp(1.3rem, 5vw, 1.75rem); }
+      .ab-hero__top { flex-direction: column; align-items: center; gap: 40px; }
+      .ab-hero__text { max-width: 100%; }
+      .ab-hero__heading { font-size: clamp(1.3rem, 5vw, 1.75rem); }
+      .ab-hero__portrait { align-self: center; }
+      .ab-hero__strip { flex-wrap: wrap; justify-content: center; row-gap: 32px; margin-top: 60px; }
+      .ab-hero__strip-photo { flex: 0 0 42%; }
 
       .comm-row { flex-direction: column; align-items: flex-start; gap: 8px; }
       .comm-info { flex-direction: column; align-items: flex-start; gap: 4px; }
@@ -570,44 +578,26 @@
   <!-- ── HERO ZIGZAG ── -->
   <section class="section" id="ab-hero" aria-label="About Andrea Lee">
     <div class="inner">
-      <div class="ab-zigzag">
+      <span class="t-label">About me</span>
 
-        <div class="ab-zigzag-row">
-          <p class="ab-zigzag-text" data-gsap="zh">A <span class="ab-zh ab-zh--desktop">UX</span><span class="ab-zh ab-zh--compact">late bloomer</span> designer with an unconventional career path.</p>
-          <div class="ab-zigzag-photos">
-            <div class="ab-photos ab-photos--a">
-              <img class="ab-photo ph-1" src="Asset/about_photo_01.jpg" alt="Floral installation and stage lighting in an auditorium" loading="lazy">
-              <img class="ab-photo ph-2" src="Asset/about_photo_02.jpg" alt="Andrea resting on a travel pillow at her desk" loading="lazy">
-            </div>
-          </div>
+      <div class="ab-hero__top">
+        <div class="ab-hero__text">
+          <h1 class="ab-hero__heading">A little about how I got here</h1>
+          <p class="ab-hero__bio">I got my first camera when I was 10, and I never really put it down. I was always shooting something, chasing anything creative. Still, I chose the practical route: a business degree, a steady job. But the pull never really left. It came back sideways, through volunteering to build sets at church, and that&rsquo;s where I first got interested in spatial design and event styling.</p>
+          <p class="ab-hero__bio">I&rsquo;d always been curious about a career in something creative, and UX design is what I chanced upon. What actually made it stick wasn&rsquo;t the tools or the process. It was noticing how many people around me feel like they can&rsquo;t keep up as technology, particularly AI, moves faster than anyone can plan for. That&rsquo;s what pulled me in. The chance to stand in that gap and be part of making it make sense for people, instead of just watching from the side.</p>
         </div>
-
-        <div class="ab-zigzag-row ab-zigzag-row--reverse">
-          <p class="ab-zigzag-text" data-gsap="zh">I have many loves and passions, but there&rsquo;s nothing quite like meeting people where they are&hellip;</p>
-          <div class="ab-zigzag-photos">
-            <div class="ab-photos ab-photos--b">
-              <img class="ab-photo ph-3" src="Asset/about_photo_03.jpg" alt="Andrea taking a photo through a camera viewfinder" loading="lazy">
-              <img class="ab-photo ph-4" src="Asset/about_photo_05.png" alt="Andrea in a Pilates floor plank" loading="lazy">
-              <img class="ab-photo ph-5" src="Asset/about_photo_04.png" alt="Andrea doing reformer Pilates" loading="lazy">
-              <img class="ab-photo ph-6" src="Asset/about_photo_07.jpg" alt="Andrea looking out over a lake and mountains" loading="lazy">
-              <img class="ab-photo ph-7" src="Asset/about_photo_06.jpg" alt="Andrea walking across a crosswalk with a backpack" loading="lazy">
-              <img class="ab-photo ph-8" src="Asset/about_photo_08.jpg" alt="Andrea taking a street photo" loading="lazy">
-              <img class="ab-photo ph-9" src="Asset/about_photo_09.jpg" alt="Andrea painting in an art class" loading="lazy">
-            </div>
-          </div>
+        <div class="ab-hero__portrait">
+          <!-- TODO: new asset, not yet exported from Figma — placeholder photo below -->
+          <img src="Asset/about_photo_09.jpg" alt="Andrea Lee portrait" loading="lazy">
         </div>
+      </div>
 
-        <div class="ab-zigzag-row">
-          <p class="ab-zigzag-text" data-gsap="zh">and building tools so that they aren&rsquo;t left behind.</p>
-          <div class="ab-zigzag-photos">
-            <div class="ab-photos ab-photos--c">
-              <img class="ab-photo ph-10" src="Asset/about_photo_11.jpg" alt="UX research whiteboard with sticky notes" loading="lazy">
-              <img class="ab-photo ph-11" src="Asset/about_photo_10.jpg" alt="Phone screen showing the Pulse hackathon app" loading="lazy">
-              <img class="ab-photo ph-12" src="Asset/about_photo_12.jpg" alt="Andrea with her hackathon team at Open Government Products" loading="lazy">
-            </div>
-          </div>
-        </div>
-
+      <div class="ab-hero__strip">
+        <img class="ab-hero__strip-photo strip-1" src="Asset/about_photo_02.jpg" alt="Andrea resting on a travel pillow at her desk" loading="lazy">
+        <img class="ab-hero__strip-photo strip-2" src="Asset/about_photo_01.jpg" alt="Floral installation and stage lighting in an auditorium" loading="lazy">
+        <img class="ab-hero__strip-photo strip-3" src="Asset/about_photo_10.jpg" alt="Phone screen showing the Pulse hackathon app" loading="lazy">
+        <img class="ab-hero__strip-photo strip-4" src="Asset/about_photo_11.jpg" alt="UX research whiteboard with sticky notes" loading="lazy">
+        <img class="ab-hero__strip-photo strip-5" src="Asset/about_photo_12.jpg" alt="Andrea with her hackathon team at Open Government Products" loading="lazy">
       </div>
     </div>
   </section>
@@ -971,13 +961,13 @@
 
     /* ── Scroll reveals ── */
     if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
-      gsap.from('.ab-zigzag-text', {
+      gsap.from(['.ab-hero__heading', '.ab-hero__bio'], {
         y: 30, opacity: 0, duration: 0.8, stagger: 0.15, ease: 'power3.out',
-        scrollTrigger: { trigger: '.ab-zigzag', start: 'top 75%' }
+        scrollTrigger: { trigger: '#ab-hero', start: 'top 75%' }
       });
-      gsap.from('.ab-photo', {
+      gsap.from(['.ab-hero__portrait img', '.ab-hero__strip-photo'], {
         y: 24, opacity: 0, scale: 0.94, duration: 0.7, stagger: 0.06, ease: 'power3.out',
-        scrollTrigger: { trigger: '.ab-zigzag', start: 'top 70%' }
+        scrollTrigger: { trigger: '#ab-hero', start: 'top 70%' }
       });
       document.querySelectorAll('[data-gsap="stagger"]').forEach(container => {
         const cards = container.querySelectorAll('[data-gsap="card"]');
