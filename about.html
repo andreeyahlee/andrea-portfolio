@@ -296,27 +296,56 @@
        asset that doesn't exist in Asset/ yet — placeholder in place of
        `Asset/about_portrait.jpg` until it's exported from Figma.
     ================================================================ */
-    #ab-hero { padding-top: calc(104px + clamp(40px, 6vw, 96px)); padding-bottom: clamp(60px, 8vw, 120px); }
-    .ab-hero__top { display: flex; align-items: flex-start; justify-content: space-between; gap: clamp(40px, 6vw, 100px); }
-    .ab-hero__text { flex: 1; min-width: 0; max-width: 640px; display: flex; flex-direction: column; gap: 24px; }
+    #ab-hero { padding-top: calc(104px + clamp(40px, 9vw, 128px)); padding-bottom: clamp(60px, 9vw, 128px); }
+    /* Figma: label + content row are a true flex column (gap 80px), not a label with
+       its own margin-bottom plus a separately-nudged content row — matches the node's
+       own "display:flex; flex-direction:column; align-items:flex-start; gap:80px" spec
+       exactly, so .t-label's shared margin-bottom is cancelled out here to avoid double
+       spacing (40px margin + 80px gap). */
+    #ab-hero .inner { display: flex; flex-direction: column; align-items: flex-start; gap: clamp(40px, 7vw, 80px); }
+    #ab-hero .t-label { margin-bottom: 0; }
+    /* Figma node 1393:48934 "Other Projects" — three DISTINCT breakpoint snapshots handed
+       over directly (1184px desktop / 768px tablet / 338px mobile), not just one design
+       fluidly reflowed. Desktop+tablet share the same visual arrangement (heading+bio
+       stacked in a column beside the photo) but tablet's text column goes from a fixed
+       667px to flex-fill (1fr) and drops from Display/Hero+Body/Lead (52/24) down to
+       Display/XL+Body/Base (40/20) — same two sizes mobile also uses. Mobile is a
+       genuinely different ARRANGEMENT, not just a reflow: heading sits inline beside a
+       much smaller photo, and the bio paragraphs run full-width below that row — hence
+       CSS Grid with per-breakpoint grid-template-areas rather than the flex layout used
+       elsewhere, so the same 4 DOM children (heading, 2×bio, portrait) can be arranged
+       completely differently at each tier without duplicating markup. */
+    .ab-hero__top {
+      display: grid;
+      grid-template-columns: 667px auto;
+      grid-template-areas: "heading photo" "bio1 photo" "bio2 photo";
+      column-gap: clamp(24px, 3.3vw, 39px);
+      align-items: center;
+      justify-content: center;
+      width: 100%;
+    }
     .ab-hero__heading {
+      grid-area: heading;
       font-family: var(--font-display); font-weight: 400;
-      font-size: clamp(1.75rem, 3.6vw, 3.25rem); line-height: 1.1; letter-spacing: -0.03em;
+      font-size: 52px; line-height: 56px; letter-spacing: -0.03em;
       color: var(--ink-light);
+      margin-bottom: 10px;
     }
     .ab-hero__bio {
       font-family: var(--font-body); font-weight: 400;
-      font-size: clamp(0.9375rem, 1vw, 1.0625rem); line-height: 1.6;
+      font-size: 24px; line-height: 24px;
       color: var(--ink-light); opacity: 0.8;
     }
-    .ab-hero__portrait { flex: 0 0 auto; width: clamp(200px, 19vw, 280px); }
+    .ab-hero__bio:first-of-type { grid-area: bio1; }
+    .ab-hero__bio:last-of-type { grid-area: bio2; margin-top: 24px; }
+    .ab-hero__portrait { grid-area: photo; width: 230.94px; align-self: center; }
     .ab-hero__portrait img {
-      display: block; width: 100%; aspect-ratio: 4 / 5; object-fit: cover;
-      border: clamp(4px, 1vw, 8px) solid #f4f4eb; border-radius: 4px; box-sizing: border-box;
+      display: block; width: 100%; aspect-ratio: 2 / 3; object-fit: cover;
+      border: 10px solid #f4f4eb; border-radius: 4px; box-sizing: border-box;
       box-shadow: -6px 8px 4px rgba(0,0,0,0.4); background: #f4f4eb;
-      transform: rotate(6deg);
+      transform: rotate(16.03deg);
     }
-    .ab-hero__strip { display: flex; justify-content: space-between; gap: clamp(12px, 2vw, 24px); margin-top: clamp(60px, 9vw, 130px); }
+    .ab-hero__strip { display: flex; justify-content: space-between; gap: clamp(12px, 2vw, 24px); margin-top: clamp(60px, 8vw, 100px); width: 100%; }
     .ab-hero__strip-photo {
       flex: 1 1 0; min-width: 0; aspect-ratio: 3 / 4; object-fit: cover;
       border: clamp(4px, 1vw, 8px) solid #f4f4eb; border-radius: 4px; box-sizing: border-box;
@@ -327,6 +356,149 @@
     .ab-hero__strip .strip-3 { transform: rotate(-4deg) translateY(14px); }
     .ab-hero__strip .strip-4 { transform: rotate(6deg) translateY(-6px); }
     .ab-hero__strip .strip-5 { transform: rotate(-6deg) translateY(4px); }
+
+    /* ================================================================
+       ABOUT — THE PATH HERE (career timeline)
+       Figma "About Me" / "THE PATH HERE" node — desktop and tablet share the exact
+       same fixed 684px-wide, centered content column (only the outer section
+       container width changes, 1184→768, so nothing here needs a tablet override).
+       Mobile drops the list to full width and steps every text tier down one notch:
+       title Display/MD 26/32 → Display/SM 22/28; role Body/Lead 24/24 → Body/Base
+       20/20; year + description Body/Base 20/20 → Body/SM 16/16.
+    ================================================================ */
+    #ab-path { padding-top: 0; padding-bottom: 0; }
+    .ab-path__list { display: flex; flex-direction: column; align-items: center; gap: 40px; width: min(684px, 100%); margin: 0 auto; }
+    .ab-path__item { display: flex; flex-direction: column; gap: 10px; width: 100%; }
+    .ab-path__row { display: flex; align-items: flex-start; gap: 10px; width: 100%; }
+    .ab-path__titles { display: flex; flex-direction: column; gap: 10px; flex: 1 1 auto; min-width: 0; }
+    .ab-path__title {
+      font-family: var(--font-display); font-weight: 400;
+      font-size: 26px; line-height: 32px;
+      color: var(--ink-light);
+    }
+    .ab-path__role {
+      font-family: var(--font-body); font-weight: 400;
+      font-size: 24px; line-height: 24px;
+      color: var(--ink-light);
+    }
+    .ab-path__year {
+      flex: 0 0 auto;
+      font-family: var(--font-body); font-weight: 400;
+      font-size: 20px; line-height: 20px;
+      color: var(--ink-light); opacity: 0.7;
+    }
+    .ab-path__desc {
+      font-family: var(--font-body); font-weight: 400;
+      font-size: 20px; line-height: 20px;
+      color: var(--ink-light); opacity: 0.8;
+      width: 100%;
+    }
+    body.light-mode .ab-path__title,
+    body.light-mode .ab-path__role,
+    body.light-mode .ab-path__year,
+    body.light-mode .ab-path__desc { color: var(--ink-dark); }
+
+    /* ================================================================
+       ABOUT — MOMENTS PHOTO STRIP (Frame 7, after "The Path Here")
+       Desktop and tablet Figma nodes (1184px / 768px frames) share IDENTICAL
+       fixed-px photo sizes — only the section's own width changes, so the row
+       (fixed ~1122px total, no gap between photos) just re-centers and bleeds
+       symmetrically past the section's padding at narrower viewports rather
+       than shrinking; safe since body already has overflow-x:hidden. Mobile
+       (a separate, much smaller Figma node) is a compact absolute-positioned
+       collage instead — same pattern as the hero photo strip's mobile layout.
+    ================================================================ */
+    #ab-moments { padding-top: 0; }
+    .ab-moments__row { display: flex; align-items: center; justify-content: center; width: 100%; }
+    .ab-moments__photo {
+      flex: none; box-sizing: border-box; object-fit: cover; display: block;
+      position: relative; overflow: hidden;
+      border: 7.753px solid #f4f4eb;
+    }
+    .ab-moments__photo.mo-1 { width: 208.33px; height: 230.82px; transform: rotate(-16.76deg); }
+    .ab-moments__photo.mo-2 { width: 181.32px; height: 283.14px; transform: rotate(-9.69deg); box-shadow: 0 2.39px 2.39px rgba(0,0,0,0.25); }
+    .ab-moments__photo.mo-3 { width: 169px; height: 283.14px; transform: rotate(0.39deg); }
+    .ab-moments__photo.mo-4 { width: 169px; height: 283.14px; transform: rotate(8.28deg); }
+    .ab-moments__photo.mo-5 { width: 220.46px; height: 185.21px; transform: rotate(10.52deg); }
+    /* mo-1/2/4/5 use a custom zoomed crop (oversized absolutely-positioned inner img,
+       clipped by the bordered box's own overflow:hidden) rather than plain
+       object-fit:cover, matching Figma exactly — mo-3's source photo needed no
+       special crop there, so it stays a plain <img> with object-fit:cover. */
+    .ab-moments__crop-img { position: absolute; max-width: none; pointer-events: none; }
+    .mo-1 .ab-moments__crop-img { left: -40.26%; top: 0; width: 143.04%; height: 100%; }
+    .mo-2 .ab-moments__crop-img { left: -124.85%; top: -12.75%; width: 307.94%; height: 140.69%; }
+    .mo-4 .ab-moments__crop-img { left: -122.54%; top: -10.45%; width: 304.23%; height: 116.63%; }
+    .mo-5 .ab-moments__crop-img { left: -11.01%; top: 0.04%; width: 122.18%; height: 100%; }
+
+    /* ================================================================
+       ABOUT — TESTIMONIALS (Figma node 1387:48728)
+       Only one real testimonial exists so far — the 3 stacked cards in Figma all
+       contain IDENTICAL content (same quote/author), just rotated at slightly
+       different angles with a drop-shadow. It's a static "peeking stack" visual
+       (implying "more to come"), not a carousel with unique content per card, so
+       the two background layers are plain rotated rectangles — no need to duplicate
+       the full card markup for content that's never actually visible.
+    ================================================================ */
+    #ab-testimonials { padding-top: 0; }
+    .testi-heading {
+      font-family: var(--font-display); font-weight: 400;
+      font-size: 32px; line-height: 37px; text-align: center;
+      color: var(--ink-light); margin: 0 0 40px;
+    }
+    .testi-stack { position: relative; width: min(730px, 100%); margin: 0 auto; padding-top: 24px; }
+    .testi-peek {
+      position: absolute; left: 0; right: 0; bottom: 0; height: 427.265px;
+      background: #f4f4eb; border: 1px solid #21281a; border-radius: 20px;
+      box-shadow: -21px -10px 2px rgba(0,0,0,0.25);
+    }
+    .testi-peek--a { z-index: 1; transform: rotate(-0.98deg); }
+    .testi-peek--b { z-index: 2; transform: rotate(4.74deg) translateX(-1.7%); }
+    .testi-card {
+      position: relative; z-index: 3; transform: rotate(-0.97deg);
+      width: 100%; box-sizing: border-box; padding: 31px;
+      display: flex; flex-direction: column; gap: 20px;
+      background: #f4f4eb; border: 1px solid #21281a; border-radius: 20px;
+      box-shadow: -21px -10px 2px rgba(0,0,0,0.25);
+    }
+    .testi-card__row { display: flex; align-items: flex-start; justify-content: space-between; gap: 16px; }
+    .testi-card__logo { width: 155.27px; height: 89.265px; object-fit: contain; object-position: bottom left; }
+    .testi-card__tag {
+      flex: 0 0 auto; background: #1a1c16; color: #f4f4eb;
+      font-family: var(--font-body); font-weight: 600; font-size: 16px; line-height: 20px;
+      padding: 4px 16px; border-radius: 5px; white-space: nowrap;
+    }
+    .testi-card__quote {
+      margin: 0; font-family: var(--font-body); font-weight: 400;
+      font-size: 24px; line-height: 24px; text-align: center; color: #21281a;
+    }
+    .testi-card__author { display: flex; align-items: center; gap: 10px; }
+    .testi-card__avatar { flex: 0 0 auto; width: 56px; height: 55px; border-radius: 100px; object-fit: cover; }
+    .testi-card__author-text { flex: 1 1 0; min-width: 0; display: flex; flex-direction: column; gap: 5px; }
+    .testi-card__name { margin: 0; font-family: var(--font-body); font-weight: 600; font-size: 20px; line-height: 24px; color: #21281a; }
+    .testi-card__title { margin: 0; font-family: var(--font-body); font-weight: 400; font-style: italic; font-size: 12px; line-height: 16px; color: #21281a; }
+    .testi-card__linkedin { flex: 0 0 auto; width: 51px; height: 51px; display: flex; align-items: center; justify-content: center; padding: 3px; box-sizing: border-box; }
+    .testi-card__linkedin img { width: 100%; height: 100%; display: block; }
+
+    /* ================================================================
+       ABOUT — MORE ABOUT ME (Figma node 1393:48982) — teaser cards linking to
+       side-quests.html. A 2-column grid at every breakpoint (450+40+450px
+       desktop, 332+40+332px tablet, 159+20+159px mobile — each set sums to
+       exactly the available inner width, so it's the same layout throughout,
+       just re-sized), matching side-quests.html's own card conventions
+       (12px radius, object-fit:cover) rather than reinventing a new style.
+    ================================================================ */
+    .more-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 40px; }
+    .more-card { display: flex; flex-direction: column; gap: 10px; transition: transform var(--dur-fast) var(--ease-bounce); }
+    .more-card:hover { transform: translateY(-4px); }
+    .more-card__media { position: relative; width: 100%; aspect-ratio: 450 / 250; overflow: hidden; border-radius: 0; background: #21281a; }
+    .more-card__media video,
+    .more-card__media img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+    .more-card__label {
+      margin: 0; font-family: var(--font-display); font-weight: 400;
+      font-size: 32px; line-height: 37px; text-align: center;
+      color: var(--ink-light);
+    }
+    body.light-mode .more-card__label { color: var(--ink-dark); }
 
     /* ================================================================
        ABOUT — Q&A BODY
@@ -356,15 +528,74 @@
     /* ================================================================
        ABOUT — WHAT I'M HOOKED ON AT THE MOMENT
     ================================================================ */
-    .ab-hooked-row { display: flex; gap: 20px; overflow-x: auto; scrollbar-width: none; padding-bottom: 4px; }
+    .ab-hooked-row { display: flex; gap: 40px; align-items: center; overflow-x: auto; scrollbar-width: none; padding-bottom: 4px; }
     .ab-hooked-row::-webkit-scrollbar { display: none; }
     .ab-hooked-link { flex: 0 0 auto; display: flex; transition: transform var(--dur-fast) var(--ease-bounce); }
     .ab-hooked-link:hover { transform: translateY(-4px); }
     .ab-hooked-cover {
-      flex: 0 0 auto; height: clamp(135px, 16.5vw, 210px); width: auto;
-      border-radius: 6px; object-fit: cover;
+      flex: 0 0 auto; height: 286.681px; width: auto;
+      border-radius: 0; object-fit: cover;
       box-shadow: 0 6px 16px rgba(0,0,0,0.35);
     }
+
+    /* Podcast "Now Playing" lock-screen mockup card (Figma node 1399:74171) — built once
+       at desktop/tablet's full absolute-px size (both breakpoints use the identical
+       132.505×286.681 card and just let the row scroll horizontally at narrower widths,
+       same pattern as the "moments" photo strip above). Mobile reuses this exact same
+       markup but scales the whole card down via CSS transform (ratio 89.178/132.505 ≈
+       0.6731, matching Figma's own separately-exported mobile frame) rather than
+       duplicating every one of the ~25 positioned sub-elements a second time. */
+    .ph-card {
+      position: relative; flex: 0 0 auto;
+      width: 132.505px; height: 286.681px;
+      background: #121212; overflow: hidden;
+      box-shadow: -11px 17px 3px rgba(0,0,0,0.5);
+    }
+    .ph-card__gradient { position: absolute; inset: 0; }
+    .ph-card--purple .ph-card__gradient { background: linear-gradient(180deg, rgba(110,24,139,0) 0%, rgba(110,24,139,0.8) 44.789%, rgba(110,24,139,0.4) 100%); }
+    .ph-card--red .ph-card__gradient    { background: linear-gradient(180deg, rgba(153,27,27,0) 0%, rgba(153,27,27,0.85) 83.656%, rgba(153,27,27,0.4) 100%); }
+    .ph-card--peach .ph-card__gradient  { background: linear-gradient(180deg, #fdd4b6 0%, rgba(253,212,182,0.9) 50%, #f5934a 75.118%); }
+    .ph-card img { display: block; max-width: none; }
+    .ph-card__chevron { position: absolute; left: 6.525px; top: 23.243px; width: 6.525px; height: 6.525px; transform: rotate(-90.21deg); }
+    .ph-card__listening { position: absolute; left: 46.129px; top: 16.718px; width: 41.176px; margin: 0; font-family: 'Avenir Next', var(--font-body); font-weight: 600; font-size: 4.334px; line-height: normal; color: #fff; text-align: center; }
+    .ph-card__art { position: absolute; left: 8.359px; top: 47.677px; width: 115.787px; height: 115.787px; object-fit: cover; }
+    .ph-card__title { position: absolute; left: 8.359px; top: 187.921px; width: 115.787px; margin: 0; font-family: 'Avenir Next', var(--font-body); font-weight: 600; font-size: 6.811px; line-height: 8.669px; letter-spacing: -0.2043px; color: #fff; }
+    .ph-card__show { position: absolute; left: 8.359px; top: 196.899px; width: 115.787px; margin: 0; font-family: 'Avenir Next', var(--font-body); font-weight: 500; font-size: 4.953px; line-height: normal; color: #b3b3b3; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .ph-card__corner-icon { position: absolute; left: 117.644px; top: 195.042px; width: 7.121px; height: 6.811px; }
+    .ph-card__shuffle { position: absolute; left: 6.501px; top: 231.574px; width: 6.811px; height: 6.811px; }
+    .ph-card__play { position: absolute; left: 54.488px; top: 224.453px; width: 20.743px; height: 20.743px; }
+    .ph-card__playbar { position: absolute; top: 230.645px; width: 1.858px; height: 8.049px; background: #490f0a; border-radius: 1px; }
+    .ph-card__playbar--l { left: 61.608px; }
+    .ph-card__playbar--r { left: 66.252px; }
+    .ph-card__badge { position: absolute; left: 13.003px; top: 253.555px; width: 21.671px; margin: 0; font-family: 'Avenir Next', var(--font-body); font-weight: 400; font-size: 3.251px; line-height: normal; color: #17b54e; text-align: center; }
+    .ph-card__bluetooth { position: absolute; left: 8.049px; top: 252.316px; width: 6.811px; height: 6.811px; }
+    .ph-card__repeat { position: absolute; left: 116.715px; top: 229.407px; width: 8.978px; height: 8.978px; }
+    .ph-card__repeat-dot { position: absolute; left: 120.74px; top: 238.694px; width: 1.238px; height: 1.238px; border-radius: 50%; background: #fff; }
+    .ph-card__output { position: absolute; left: 100.619px; top: 238.951px; width: 7.123px; height: 8.056px; transform: rotate(179.52deg); }
+    .ph-card__back { position: absolute; left: 27.553px; top: 229.097px; width: 11.145px; height: 11.455px; }
+    .ph-card__appmore { position: absolute; left: 117.335px; top: 16.099px; width: 8.359px; height: 8.359px; }
+    .ph-card__share { position: absolute; left: 100.617px; top: 252.316px; width: 4.644px; height: 5.866px; }
+    .ph-card__home { position: absolute; left: 119.192px; top: 255.722px; width: 5.573px; height: 0.31px; background: #fff; border-radius: 1px; }
+    .ph-card__airplay { position: absolute; left: 119.192px; top: 252.935px; }
+    .ph-card--big-airplay .ph-card__airplay { width: 5.573px; height: 4.953px; }
+    .ph-card--sm-airplay .ph-card__airplay { width: 3.114px; height: 2.768px; }
+    .ph-card__morebar { position: absolute; left: 6.192px; top: 266.867px; width: 119.502px; height: 21.362px; border-radius: 2.167px; }
+    .ph-card--purple .ph-card__morebar { background: #7c25aa; }
+    .ph-card--red .ph-card__morebar    { background: #991b1b; }
+    .ph-card--peach .ph-card__morebar  { background: #fbcb71; }
+    .ph-card__morepill { position: absolute; left: 99.378px; top: 270.272px; width: 23.838px; height: 8.669px; background: #6b3311; border-radius: 6.5px; }
+    .ph-card__moretext { position: absolute; left: 102.784px; top: 272.749px; width: 11.455px; margin: 0; font-family: 'Avenir Next', var(--font-body); font-weight: 600; font-size: 3.251px; line-height: normal; color: #fff; text-align: center; }
+    .ph-card__morechevron { position: absolute; left: 116.406px; top: 273.059px; width: 3.715px; height: 3.715px; }
+    .ph-card__moreinfo { position: absolute; left: 10.526px; top: 270.273px; width: 71.825px; margin: 0; font-family: 'Avenir Next', var(--font-body); font-weight: 600; font-size: 5.573px; line-height: 8.669px; letter-spacing: -0.1672px; color: #fff; }
+    .ph-card__scrub { position: absolute; left: 4.334px; top: 207.116px; width: 124.455px; height: 13.932px; }
+    .ph-card__track { position: absolute; left: 1.858px; top: 4.025px; width: 118.573px; height: 1.238px; background: #777; border-radius: 1.238px; overflow: hidden; }
+    .ph-card__track-fill { position: absolute; left: 0; top: 0; width: 7.121px; height: 1.238px; background: #fff; border-radius: 1.238px; }
+    .ph-card__scrub-dot { position: absolute; left: 6.811px; top: 2.477px; width: 4.025px; height: 4.025px; border-radius: 50%; background: #fff; }
+    .ph-card__time { position: absolute; top: 7.121px; margin: 0; font-family: 'Avenir Next', var(--font-body); font-weight: 500; font-size: 2.084px; line-height: 2.5px; color: #b2b2b2; white-space: nowrap; }
+    .ph-card__time--start { left: 1.858px; }
+    .ph-card__time--end { left: 113.929px; }
+
+    .ph-card-wrap { flex: 0 0 auto; width: 132.505px; height: 286.681px; overflow: hidden; }
 
     /* ================================================================
        CONTACT / FOOTER
@@ -411,6 +642,28 @@
       .toggle__icon { width: 20px; height: 20px; order: 0; }
       body.light-mode .toggle__icon { width: 27px; height: 20px; order: 0; }
       .contact__heading { line-height: 44px; }
+
+      /* About hero — tablet (Figma's 768px snapshot): same heading-beside-photo
+         arrangement as desktop, but the text column goes from a fixed 667px to
+         flex-fill, and both heading and body drop a tier (Display/XL 40/44,
+         Body/Base 20/20 — the same two sizes mobile below also uses). */
+      .ab-hero__top { grid-template-columns: 1fr auto; }
+      .ab-hero__heading { font-size: 40px; line-height: 44px; }
+      .ab-hero__bio { font-size: 20px; line-height: 20px; }
+
+      /* Moments collage — switched to the scaled-to-fit percentage layout (see mobile
+         block below for the exact numbers) starting at tablet too, rather than the
+         desktop/tablet "let it bleed" full-size treatment Figma's own file used. That
+         literal-fidelity choice made sense for the outer page-width bleed effect but
+         reads as a bug here (photos overflowing the frame on a compact/tablet nav),
+         so tablet now gets the same compact, contained collage as mobile. */
+      .ab-moments__row { position: relative; width: 100%; aspect-ratio: 338 / 190; }
+      .ab-moments__photo { position: absolute; border-width: 3.35px; }
+      .ab-moments__photo.mo-1 { left: -1.64%; top: 29.55%; width: 26.65%; height: 52.52%; }
+      .ab-moments__photo.mo-2 { left: 18.86%; top: 0%; width: 23.19%; height: 64.42%; }
+      .ab-moments__photo.mo-3 { left: 39.18%; top: 35.54%; width: 21.62%; height: 64.42%; }
+      .ab-moments__photo.mo-4 { left: 58.12%; top: 6.26%; width: 21.62%; height: 64.42%; }
+      .ab-moments__photo.mo-5 { left: 73.23%; top: 46.48%; width: 28.2%; height: 42.14%; }
     }
 
     /* ================================================================
@@ -423,12 +676,84 @@
       .nav__hamburger { display: flex; }
 
       #ab-hero { padding-top: calc(80px + 32px); }
-      .ab-hero__top { flex-direction: column; align-items: center; gap: 40px; }
-      .ab-hero__text { max-width: 100%; }
-      .ab-hero__heading { font-size: clamp(1.3rem, 5vw, 1.75rem); }
-      .ab-hero__portrait { align-self: center; }
-      .ab-hero__strip { flex-wrap: wrap; justify-content: center; row-gap: 32px; margin-top: 60px; }
-      .ab-hero__strip-photo { flex: 0 0 42%; }
+      /* Mobile (Figma node 1407:75231) is a different ARRANGEMENT, not just a smaller
+         reflow: heading sits inline beside a much smaller, less-rotated photo, and both
+         bio paragraphs run full-width below that row. Type also drops its own tier here
+         — Display/LG 32/37 (the same locked 32px card-title size used elsewhere on the
+         site) and Body/SM 16/16 — rather than just inheriting tablet's 40/44 and 20/20. */
+      .ab-hero__top {
+        grid-template-columns: 1fr auto;
+        grid-template-areas: "heading photo" "bio1 bio1" "bio2 bio2";
+        column-gap: 10px;
+        row-gap: 10px;
+        align-items: flex-start;
+      }
+      .ab-hero__heading { font-size: 32px; line-height: 37px; }
+      .ab-hero__bio { font-size: 16px; line-height: 16px; }
+      .ab-hero__bio:last-of-type { margin-top: 0; }
+      .ab-hero__portrait { width: 132.53px; align-self: flex-start; }
+      .ab-hero__portrait img { transform: rotate(5.83deg); }
+      /* Mobile (Figma node 1407:75236) isn't a wrapped grid of equal-size photos —
+         it's a tight scattered collage, each photo individually sized/positioned/
+         rotated and overlapping its neighbors, inside one short 338×169-proportioned
+         box (the 169 already includes the tallest photo's bleed above/below Figma's
+         own reported 119px frame height — percentages below are computed against that
+         full bounding box, not the frame value, so nothing clips). */
+      .ab-hero__strip { display: block; position: relative; width: 100%; aspect-ratio: 338 / 169; margin-top: 60px; }
+      .ab-hero__strip-photo {
+        position: absolute; aspect-ratio: auto; flex: none;
+        border-width: 3px;
+      }
+      .ab-hero__strip .strip-1 { left: -3.85%; top: 28.4%; width: 17.95%; height: 60.14%; transform: rotate(-10.2deg); }
+      .ab-hero__strip .strip-2 { left: 15.09%; top: 0%; width: 25.4%; height: 66.72%; transform: rotate(4.44deg); }
+      .ab-hero__strip .strip-3 { left: 36.69%; top: 44.38%; width: 16.56%; height: 55.49%; transform: rotate(-5.18deg); }
+      .ab-hero__strip .strip-4 { left: 46.75%; top: 16.57%; width: 28.6%; height: 42.1%; transform: rotate(8.64deg); }
+      .ab-hero__strip .strip-5 { left: 68.93%; top: 44.38%; width: 26.18%; height: 49.42%; transform: rotate(8.46deg); }
+
+      .ab-path__list { width: 100%; }
+      .ab-path__title { font-size: 22px; line-height: 28px; }
+      .ab-path__role { font-size: 20px; line-height: 20px; }
+      .ab-path__year { font-size: 16px; line-height: 16px; }
+      .ab-path__desc { font-size: 16px; line-height: 16px; }
+
+      /* Moments collage percentage layout now lives in the ≤1024px block above
+         (shared by tablet and mobile) — nothing to override here. */
+
+      /* Testimonials — mobile (Figma node 1407:75471) drops the peeking card-stack
+         entirely and shows one flat card, not just a smaller version of desktop's
+         (the aspect ratio genuinely differs — shorter and proportionally wider —
+         so this uses mobile's own real numbers rather than a scale transform). */
+      .testi-heading { font-size: 26px; line-height: 32px; margin-bottom: 20px; }
+      .testi-stack { padding-top: 0; }
+      .testi-peek { display: none; }
+      .testi-card {
+        transform: none; padding: 18px; gap: 10px;
+        border-radius: 11.51px; border-width: 0.575px;
+        box-shadow: -12.085px -5.755px 1.151px rgba(0,0,0,0.25);
+      }
+      .testi-card__logo { width: 89.357px; height: 51.371px; }
+      .testi-card__tag { font-size: 9.208px; line-height: 11.51px; padding: 2.302px 9.208px; border-radius: 2.877px; }
+      .testi-card__quote { font-size: 11.51px; line-height: 13.812px; }
+      .testi-card__author { gap: 5.755px; }
+      .testi-card__avatar { width: 31.94px; height: 31.94px; }
+      .testi-card__name { font-size: 11.51px; line-height: 13.812px; }
+      .testi-card__title { font-size: 6.906px; line-height: 9.208px; }
+      .testi-card__linkedin { width: 29.35px; height: 37.983px; padding: 1.726px; }
+
+      /* More about me — mobile (Figma node 1407:75519) drops the label from
+         Display/LG (32/37) to Display/XS (18/24), same 2-col grid, tighter gap. */
+      .more-grid { gap: 20px; }
+      .more-card__label { font-size: 18px; line-height: 24px; }
+
+      /* Podcast card mobile scale (Figma node 1407:75351, its own 338px-wide export —
+         ratio 89.178/132.505 ≈ 0.6731 against the canonical desktop/tablet card built
+         above). The wrap div is resized to the true scaled footprint so it takes the
+         right amount of space in the flex row; the card itself keeps its original
+         132.505×286.681 box and is visually shrunk with transform, so every one of its
+         ~25 absolutely-positioned children scales as one unit instead of being
+         hand-repositioned a second time. */
+      .ph-card-wrap { width: 89.178px; height: 192.942px; }
+      .ph-card { transform: scale(0.6731); transform-origin: top left; }
 
       .comm-row { flex-direction: column; align-items: flex-start; gap: 8px; }
       .comm-info { flex-direction: column; align-items: flex-start; gap: 4px; }
@@ -581,14 +906,11 @@
       <span class="t-label">About me</span>
 
       <div class="ab-hero__top">
-        <div class="ab-hero__text">
-          <h1 class="ab-hero__heading">A little about how I got here</h1>
-          <p class="ab-hero__bio">I got my first camera when I was 10, and I never really put it down. I was always shooting something, chasing anything creative. Still, I chose the practical route: a business degree, a steady job. But the pull never really left. It came back sideways, through volunteering to build sets at church, and that&rsquo;s where I first got interested in spatial design and event styling.</p>
-          <p class="ab-hero__bio">I&rsquo;d always been curious about a career in something creative, and UX design is what I chanced upon. What actually made it stick wasn&rsquo;t the tools or the process. It was noticing how many people around me feel like they can&rsquo;t keep up as technology, particularly AI, moves faster than anyone can plan for. That&rsquo;s what pulled me in. The chance to stand in that gap and be part of making it make sense for people, instead of just watching from the side.</p>
-        </div>
+        <h1 class="ab-hero__heading">A little about how I got here</h1>
+        <p class="ab-hero__bio">I got my first camera when I was 10, and I never really put it down. I was always shooting something, chasing anything creative. Still, I chose the practical route: a business degree, a steady job. But the pull never really left. It came back sideways, through volunteering to build sets at church, and that&rsquo;s where I first got interested in spatial design and event styling.</p>
+        <p class="ab-hero__bio">I&rsquo;d always been curious about a career in something creative, and UX design is what I chanced upon. What actually made it stick wasn&rsquo;t the tools or the process. It was noticing how many people around me feel like they can&rsquo;t keep up as technology, particularly AI, moves faster than anyone can plan for. That&rsquo;s what pulled me in. The chance to stand in that gap and be part of making it make sense for people, instead of just watching from the side.</p>
         <div class="ab-hero__portrait">
-          <!-- TODO: new asset, not yet exported from Figma — placeholder photo below -->
-          <img src="Asset/about_photo_09.jpg" alt="Andrea Lee portrait" loading="lazy">
+          <img src="Asset/about_portrait.jpg" alt="Andrea Lee portrait, seated" loading="lazy">
         </div>
       </div>
 
@@ -598,6 +920,91 @@
         <img class="ab-hero__strip-photo strip-3" src="Asset/about_photo_10.jpg" alt="Phone screen showing the Pulse hackathon app" loading="lazy">
         <img class="ab-hero__strip-photo strip-4" src="Asset/about_photo_11.jpg" alt="UX research whiteboard with sticky notes" loading="lazy">
         <img class="ab-hero__strip-photo strip-5" src="Asset/about_photo_12.jpg" alt="Andrea with her hackathon team at Open Government Products" loading="lazy">
+      </div>
+    </div>
+  </section>
+
+  <!-- ── THE PATH HERE (career timeline) ── -->
+  <section class="section" id="ab-path" aria-label="Andrea's career path">
+    <div class="inner">
+      <span class="t-label">The path here</span>
+
+      <div class="ab-path__list">
+        <div class="ab-path__item">
+          <div class="ab-path__row">
+            <div class="ab-path__titles">
+              <p class="ab-path__title">Temasek Foundation Cares</p>
+              <p class="ab-path__role">Executive</p>
+            </div>
+            <span class="ab-path__year">2013</span>
+          </div>
+          <p class="ab-path__desc">My first real job. I supported the General Manager with communications and admin, and learned early how much good writing and quiet organisation can hold together behind the scenes.</p>
+        </div>
+
+        <div class="ab-path__item">
+          <div class="ab-path__row">
+            <div class="ab-path__titles">
+              <p class="ab-path__title">PSB Academy</p>
+              <p class="ab-path__role">Senior Executive</p>
+            </div>
+            <span class="ab-path__year">2014</span>
+          </div>
+          <p class="ab-path__desc">I became PA to the Dean and Senior Vice-President, and sat on academic boards helping shape policy. It taught me how much patience it takes to get people with different priorities to agree on anything.</p>
+        </div>
+
+        <div class="ab-path__item">
+          <div class="ab-path__row">
+            <div class="ab-path__titles">
+              <p class="ab-path__title">LASALLE College of the Arts</p>
+              <p class="ab-path__role">Assistant Manager, Quality, Planning &amp; Global Engagement</p>
+            </div>
+            <span class="ab-path__year">2017</span>
+          </div>
+          <p class="ab-path__desc">This is where I found my footing in global engagement. Over the years I grew student mobility from 11 placements a year to 144, and helped anchor 139 institutional partnerships across 4 regions. It&rsquo;s the longest I&rsquo;ve stayed anywhere, and I&rsquo;m still there.</p>
+        </div>
+
+        <div class="ab-path__item">
+          <div class="ab-path__row">
+            <div class="ab-path__titles">
+              <p class="ab-path__title">Magnolia &amp; Pine</p>
+              <p class="ab-path__role">Founder &amp; Creative Lead</p>
+            </div>
+            <span class="ab-path__year">2020</span>
+          </div>
+          <p class="ab-path__desc">I started an event styling studio on the side and ran it for four years alongside my full-time job. We worked with Guerlain, LVMH, and the CPF Board. Eventually I realised doing two demanding things well has an expiry date, so I chose, and closed it.</p>
+        </div>
+
+        <div class="ab-path__item">
+          <div class="ab-path__row">
+            <div class="ab-path__titles">
+              <p class="ab-path__title">General Assembly</p>
+              <p class="ab-path__role">UX Design Immersive</p>
+            </div>
+            <span class="ab-path__year">2025</span>
+          </div>
+          <p class="ab-path__desc">I finally gave a name to the kind of work I&rsquo;d always been drawn to, and started building myself as a product designer, one case study at a time.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── MOMENTS PHOTO STRIP ── -->
+  <section class="section" id="ab-moments" aria-label="Moments outside work">
+    <div class="inner">
+      <div class="ab-moments__row">
+        <div class="ab-moments__photo mo-1">
+          <img class="ab-moments__crop-img" src="Asset/about_photo_13.jpg" alt="Andrea painting" loading="lazy">
+        </div>
+        <div class="ab-moments__photo mo-2">
+          <img class="ab-moments__crop-img" src="Asset/about_photo_14.png" alt="Andrea doing a Pilates plank on a reformer" loading="lazy">
+        </div>
+        <img class="ab-moments__photo mo-3" src="Asset/about_photo_15.jpg" alt="Andrea taking a photo with a camera" loading="lazy">
+        <div class="ab-moments__photo mo-4">
+          <img class="ab-moments__crop-img" src="Asset/about_photo_16.png" alt="Andrea on a treadmill with resistance bands at the gym" loading="lazy">
+        </div>
+        <div class="ab-moments__photo mo-5">
+          <img class="ab-moments__crop-img" src="Asset/about_photo_17.jpg" alt="Silhouette overlooking a lake and mountains" loading="lazy">
+        </div>
       </div>
     </div>
   </section>
@@ -647,19 +1054,175 @@
     <div class="inner">
       <span class="t-label">What I&rsquo;m hooked on at the moment</span>
       <div class="ab-hooked-row">
-        <a class="ab-hooked-link" href="https://open.spotify.com/show/3DgfoleqaW61T2amZQKINx" target="_blank" rel="noopener">
-          <img class="ab-hooked-cover" src="Asset/about_hooked_crime-junkie.png" alt="Crime Junkie podcast cover" loading="lazy">
+        <a class="ab-hooked-link" href="https://open.spotify.com/show/3DgfoleqaW61T2amZQKINx" target="_blank" rel="noopener" aria-label="Crime Junkie — Murdered: JonBenét Ramsey, on Spotify">
+          <div class="ph-card-wrap">
+          <div class="ph-card ph-card--purple ph-card--big-airplay">
+            <div class="ph-card__gradient"></div>
+            <img class="ph-card__chevron" src="Asset/hooked/chevron.svg" alt="">
+            <p class="ph-card__listening">Listening now</p>
+            <img class="ph-card__art" src="Asset/hooked/art1.png" alt="">
+            <p class="ph-card__title">Murdered: JonBenét Ramsey</p>
+            <p class="ph-card__show">Crime Junkie</p>
+            <img class="ph-card__corner-icon" src="Asset/hooked/airplay-corner.svg" alt="">
+            <img class="ph-card__shuffle" src="Asset/hooked/shuffle.svg" alt="">
+            <img class="ph-card__play" src="Asset/hooked/play.svg" alt="">
+            <span class="ph-card__playbar ph-card__playbar--l"></span>
+            <span class="ph-card__playbar ph-card__playbar--r"></span>
+            <p class="ph-card__badge">OHOHDREA+</p>
+            <img class="ph-card__bluetooth" src="Asset/hooked/bluetooth.svg" alt="">
+            <img class="ph-card__repeat" src="Asset/hooked/repeat.svg" alt="">
+            <span class="ph-card__repeat-dot"></span>
+            <img class="ph-card__output" src="Asset/hooked/output-icon.svg" alt="">
+            <img class="ph-card__back" src="Asset/hooked/back.svg" alt="">
+            <img class="ph-card__appmore" src="Asset/hooked/more.svg" alt="">
+            <img class="ph-card__share" src="Asset/hooked/share1.svg" alt="">
+            <span class="ph-card__home"></span>
+            <img class="ph-card__airplay" src="Asset/hooked/airplay-icon.svg" alt="">
+            <div class="ph-card__morebar"></div>
+            <div class="ph-card__morepill"></div>
+            <p class="ph-card__moretext">MORE</p>
+            <img class="ph-card__morechevron" src="Asset/hooked/more-chevron.svg" alt="">
+            <p class="ph-card__moreinfo">More info...</p>
+            <div class="ph-card__scrub">
+              <div class="ph-card__track"><div class="ph-card__track-fill"></div></div>
+              <span class="ph-card__scrub-dot"></span>
+              <p class="ph-card__time ph-card__time--start">0:23</p>
+              <p class="ph-card__time ph-card__time--end">-3:00</p>
+            </div>
+          </div>
+          </div>
         </a>
-        <a class="ab-hooked-link" href="https://open.spotify.com/show/2DZwvzn6Z3xCFZrwZGDrbj" target="_blank" rel="noopener">
-          <img class="ab-hooked-cover" src="Asset/about_hooked_rotten.png" alt="Rotten Mango podcast cover" loading="lazy">
+        <a class="ab-hooked-link" href="https://open.spotify.com/show/2DZwvzn6Z3xCFZrwZGDrbj" target="_blank" rel="noopener" aria-label="Crime Junkie — Google Engineer Allegedly Punches Woman, on Spotify">
+          <div class="ph-card-wrap">
+          <div class="ph-card ph-card--red ph-card--sm-airplay">
+            <div class="ph-card__gradient"></div>
+            <img class="ph-card__chevron" src="Asset/hooked/chevron.svg" alt="">
+            <p class="ph-card__listening">Listening now</p>
+            <img class="ph-card__art" src="Asset/hooked/art2.png" alt="">
+            <p class="ph-card__title">Google Engineer Allegedly Punches W&hellip;</p>
+            <p class="ph-card__show">Crime Junkie</p>
+            <img class="ph-card__corner-icon" src="Asset/hooked/airplay-corner.svg" alt="">
+            <img class="ph-card__shuffle" src="Asset/hooked/shuffle.svg" alt="">
+            <img class="ph-card__play" src="Asset/hooked/play.svg" alt="">
+            <span class="ph-card__playbar ph-card__playbar--l"></span>
+            <span class="ph-card__playbar ph-card__playbar--r"></span>
+            <p class="ph-card__badge">OHOHDREA+</p>
+            <img class="ph-card__bluetooth" src="Asset/hooked/bluetooth.svg" alt="">
+            <img class="ph-card__repeat" src="Asset/hooked/repeat.svg" alt="">
+            <span class="ph-card__repeat-dot"></span>
+            <img class="ph-card__output" src="Asset/hooked/output-icon.svg" alt="">
+            <img class="ph-card__back" src="Asset/hooked/back.svg" alt="">
+            <img class="ph-card__appmore" src="Asset/hooked/more.svg" alt="">
+            <img class="ph-card__share" src="Asset/hooked/share2.svg" alt="">
+            <span class="ph-card__home"></span>
+            <img class="ph-card__airplay" src="Asset/hooked/airplay-icon.svg" alt="">
+            <div class="ph-card__morebar"></div>
+            <div class="ph-card__morepill"></div>
+            <p class="ph-card__moretext">MORE</p>
+            <img class="ph-card__morechevron" src="Asset/hooked/more-chevron.svg" alt="">
+            <p class="ph-card__moreinfo">More info...</p>
+            <div class="ph-card__scrub">
+              <div class="ph-card__track"><div class="ph-card__track-fill"></div></div>
+              <span class="ph-card__scrub-dot"></span>
+              <p class="ph-card__time ph-card__time--start">0:23</p>
+              <p class="ph-card__time ph-card__time--end">-3:00</p>
+            </div>
+          </div>
+          </div>
         </a>
-        <a class="ab-hooked-link" href="https://open.spotify.com/show/2dR1MUZEHCOnz1LVfNac0j" target="_blank" rel="noopener">
-          <img class="ab-hooked-cover" src="Asset/about_hooked_lenny.png" alt="Lenny's Podcast cover" loading="lazy">
+        <a class="ab-hooked-link" href="https://open.spotify.com/show/2dR1MUZEHCOnz1LVfNac0j" target="_blank" rel="noopener" aria-label="Lenny's Podcast — Why cultivating agency matters more, on Spotify">
+          <div class="ph-card-wrap">
+          <div class="ph-card ph-card--peach ph-card--sm-airplay">
+            <div class="ph-card__gradient"></div>
+            <img class="ph-card__chevron" src="Asset/hooked/chevron.svg" alt="">
+            <p class="ph-card__listening">Listening now</p>
+            <img class="ph-card__art" src="Asset/hooked/art3.png" alt="">
+            <p class="ph-card__title">Why cultivating agency matters more</p>
+            <p class="ph-card__show">Lenny&rsquo;s Podcast: Product | Career | Growth</p>
+            <img class="ph-card__corner-icon" src="Asset/hooked/airplay-corner.svg" alt="">
+            <img class="ph-card__shuffle" src="Asset/hooked/shuffle.svg" alt="">
+            <img class="ph-card__play" src="Asset/hooked/play.svg" alt="">
+            <span class="ph-card__playbar ph-card__playbar--l"></span>
+            <span class="ph-card__playbar ph-card__playbar--r"></span>
+            <p class="ph-card__badge">OHOHDREA+</p>
+            <img class="ph-card__bluetooth" src="Asset/hooked/bluetooth.svg" alt="">
+            <img class="ph-card__repeat" src="Asset/hooked/repeat.svg" alt="">
+            <span class="ph-card__repeat-dot"></span>
+            <img class="ph-card__output" src="Asset/hooked/output-icon.svg" alt="">
+            <img class="ph-card__back" src="Asset/hooked/back.svg" alt="">
+            <img class="ph-card__appmore" src="Asset/hooked/more.svg" alt="">
+            <img class="ph-card__share" src="Asset/hooked/share3.svg" alt="">
+            <span class="ph-card__home"></span>
+            <img class="ph-card__airplay" src="Asset/hooked/airplay-icon.svg" alt="">
+            <div class="ph-card__morebar"></div>
+            <div class="ph-card__morepill"></div>
+            <p class="ph-card__moretext">MORE</p>
+            <img class="ph-card__morechevron" src="Asset/hooked/more-chevron.svg" alt="">
+            <p class="ph-card__moreinfo">More info...</p>
+            <div class="ph-card__scrub">
+              <div class="ph-card__track"><div class="ph-card__track-fill"></div></div>
+              <span class="ph-card__scrub-dot"></span>
+              <p class="ph-card__time ph-card__time--start">0:23</p>
+              <p class="ph-card__time ph-card__time--end">-3:00</p>
+            </div>
+          </div>
+          </div>
         </a>
-        <img class="ab-hooked-cover" src="Asset/about_hooked_verity.png" alt="Verity by Colleen Hoover book cover" loading="lazy">
-        <img class="ab-hooked-cover" src="Asset/about_hooked_acortar.png" alt="A Court of Thorns and Roses by Sarah J. Maas book cover" loading="lazy">
-        <img class="ab-hooked-cover" src="Asset/about_hooked_thinkfast.png" alt="Thinking, Fast and Slow by Daniel Kahneman book cover" loading="lazy">
-        <img class="ab-hooked-cover" src="Asset/about_hooked_pd.png" alt="The Effective Product Design book cover" loading="lazy">
+        <img class="ab-hooked-cover" src="Asset/hooked/book1.png" alt="Verity by Colleen Hoover book cover" loading="lazy" style="aspect-ratio: 636/1000;">
+        <img class="ab-hooked-cover" src="Asset/hooked/book2.png" alt="A Court of Thorns and Roses by Sarah J. Maas book cover" loading="lazy" style="aspect-ratio: 500/750;">
+        <img class="ab-hooked-cover" src="Asset/hooked/book3.png" alt="Thinking, Fast and Slow by Daniel Kahneman book cover" loading="lazy" style="aspect-ratio: 650/1000;">
+        <img class="ab-hooked-cover" src="Asset/hooked/book4.png" alt="The Effective Product Design book cover" loading="lazy" style="aspect-ratio: 600/927;">
+        <img class="ab-hooked-cover" src="Asset/hooked/book5.png" alt="Book cover" loading="lazy" style="aspect-ratio: 1000/1545;">
+      </div>
+    </div>
+  </section>
+
+  <!-- ── TESTIMONIALS ── -->
+  <section class="section" id="ab-testimonials" aria-label="Client testimonials">
+    <div class="inner">
+      <span class="t-label">Testimonials</span>
+      <h2 class="testi-heading">What my clients had to say&hellip;</h2>
+      <div class="testi-stack">
+        <div class="testi-peek testi-peek--a"></div>
+        <div class="testi-peek testi-peek--b"></div>
+        <div class="testi-card">
+          <div class="testi-card__row">
+            <img class="testi-card__logo" src="Asset/testimonial/arvo-logo.png" alt="Arvo">
+            <span class="testi-card__tag">UX Design</span>
+          </div>
+          <p class="testi-card__quote">&ldquo;Working with this team was a genuinely impressive experience. From the outset, they handled all project concerns with professionalism&hellip; What stood out most was their user research capability, they recruited a surprisingly robust pool of the right user profiles&hellip; The final mockups reflected a level of craft and polish I wouldn&rsquo;t hesitate to put in front of investors. Any organisation looking to undertake serious UX work would be fortunate to have this team&hellip;&rdquo;</p>
+          <div class="testi-card__author">
+            <img class="testi-card__avatar" src="Asset/testimonial/eileen.png" alt="Eileen Zhang">
+            <div class="testi-card__author-text">
+              <p class="testi-card__name">Eileen Zhang</p>
+              <p class="testi-card__title">Founder, ARVO</p>
+            </div>
+            <a class="testi-card__linkedin" href="https://sg.linkedin.com/in/eileenzhang" target="_blank" rel="noopener" aria-label="Eileen Zhang on LinkedIn">
+              <img src="Asset/testimonial/linkedin.svg" alt="">
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── MORE ABOUT ME ── -->
+  <section class="section" id="ab-more" aria-label="More about me">
+    <div class="inner">
+      <span class="t-label">More about me</span>
+      <div class="more-grid">
+        <a class="more-card" href="side-quests.html#other-works">
+          <div class="more-card__media">
+            <video src="Asset/Work_Card_Tallyboard.mov" autoplay muted loop playsinline preload="none"></video>
+          </div>
+          <p class="more-card__label">Side quests</p>
+        </a>
+        <a class="more-card" href="side-quests.html#event-styling">
+          <div class="more-card__media">
+            <img src="Asset/more/event-styling.png" alt="Event styling — draped mantel with framed photos" loading="lazy">
+          </div>
+          <p class="more-card__label">Event Stylings</p>
+        </a>
       </div>
     </div>
   </section>
