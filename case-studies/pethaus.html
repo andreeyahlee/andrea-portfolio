@@ -180,21 +180,9 @@
     #cursor-follower img { width: 100%; height: auto; display: block; transform-origin: center center; animation: cursor-spin 5s linear infinite; }
     @media (hover: none) { #cursor-follower { display: none !important; } body { cursor: auto; } }
 
-    #loader {
-      position: fixed; inset: 0; z-index: 9999; background: var(--paw); display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 10px; transition: opacity 0.7s ease, visibility 0.7s ease, background var(--dur-fast);
-      --bike-track-w: 500px; --bike-size: 180px;
-    }
+    #loader { position: fixed; inset: 0; z-index: 9999; background: var(--paw); display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 10px; transition: opacity 0.7s ease, visibility 0.7s ease, background var(--dur-fast); }
     #loader.loader--hidden { opacity: 0; visibility: hidden; pointer-events: none; }
-    @media (max-width: 1024px) { #loader { --bike-track-w: 380px; --bike-size: 140px; } }
-    @media (max-width: 767px)  { #loader { --bike-track-w: 260px; --bike-size: 96px; } }
-
-    .loader__bike-track { position: relative; width: var(--bike-track-w); max-width: 85vw; height: var(--bike-size); overflow: hidden; }
-    .loader__video { position: absolute; top: 50%; width: var(--bike-size); height: var(--bike-size); transform: translateY(-50%); animation: bike-ride 3.5s linear infinite; }
-    @keyframes bike-ride {
-      from { left: calc(var(--bike-size) * -1 - 40px); transform: translateY(-50%); }
-      to   { left: calc(100% + var(--bike-size) + 40px); transform: translateY(-50%); }
-    }
-    @media (prefers-reduced-motion: reduce) { .loader__video { animation: none; left: 50%; margin-left: calc(var(--bike-size) / -2); transform: translateY(-50%); } }
+    .loader__video { width: 347px; max-width: 80vw; }
     .loader__text { font-family: var(--font-display); font-size: 22px; font-weight: 400; line-height: 28px; letter-spacing: -0.01em; color: var(--text); text-align: center; }
     .loader__dots span { opacity: 0; animation: loader-dot 1.5s ease-in-out infinite; }
     .loader__dots span:nth-child(1) { animation-delay: 0s; }
@@ -1733,11 +1721,9 @@
   </script>
 
   <div id="loader" role="status" aria-label="Loading">
-    <div class="loader__bike-track">
-      <video class="loader__video" autoplay muted loop playsinline>
-        <source src="../Asset/Loading_bicycle.mp4" type="video/mp4">
-      </video>
-    </div>
+    <video class="loader__video" autoplay muted loop playsinline>
+      <source src="../Asset/Loading_bicycle.mp4" type="video/mp4">
+    </video>
     <p class="loader__text">loading<span class="loader__dots"><span>.</span><span>.</span><span>.</span></span></p>
   </div>
 
@@ -2846,7 +2832,7 @@
 
       /* When transiting to another case study, match the loader's background to that page's
          own background so the handoff doesn't flash the wrong color. */
-      const CASE_STUDY_BG = { 'seletar.html': '#304c95', 'arvo.html': '#1a1c16', 'pethaus.html': '#ebeae0' };
+      const CASE_STUDY_BG = { 'seletar.html': '#304c95', 'arvo.html': '#1a1c16', 'pethaus.html': '#8c4d00' };
 
       document.querySelectorAll('a[href]').forEach(function (link) {
         const href = link.getAttribute('href');
