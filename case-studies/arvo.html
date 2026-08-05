@@ -578,7 +578,14 @@
     #cs-tldr, #cs-discovery, #cs-pivot, #cs-redesign2, #cs-fixes, #cs-final2, #cs-outcome, #cs-reflection2 { scroll-margin-top: 225px; }
 
     .arvo2-fail-row { display: flex; gap: 20px; align-items: stretch; flex-wrap: wrap; }
-    .arvo2-fail-card { flex: 1 1 200px; min-width: 0; background: var(--bg-light); display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 10px; padding: 16px; min-height: 183px; box-shadow: 0 4px 2px rgba(0,0,0,0.25); }
+    /* Flip card (v2 — Figma 1591:52660, hover reveals expanded context on the back) */
+    .arvo2-fail-card { flex: 1 1 200px; min-width: 0; min-height: 183px; perspective: 1200px; }
+    .arvo2-fail-card__inner { position: relative; width: 100%; height: 100%; min-height: 183px; transition: transform 0.6s cubic-bezier(0.4,0.2,0.2,1); transform-style: preserve-3d; }
+    .arvo2-fail-card:hover .arvo2-fail-card__inner, .arvo2-fail-card:focus-within .arvo2-fail-card__inner { transform: rotateY(180deg); }
+    .arvo2-fail-card__front, .arvo2-fail-card__back { position: absolute; inset: 0; backface-visibility: hidden; -webkit-backface-visibility: hidden; background: var(--bg-light); box-shadow: 0 4px 2px rgba(0,0,0,0.25); display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 10px; padding: 16px; }
+    .arvo2-fail-card__back { transform: rotateY(180deg); }
+    .arvo2-fail-card__back-text { font-family: var(--font-body); font-weight: 400; font-size: 20px; line-height: 1.2; color: var(--ink-dark); text-align: center; }
+    @media (hover: none) { .arvo2-fail-card__inner { transition: none; } }
     .arvo2-fail-card__head { display: flex; align-items: center; gap: 10px; }
     .arvo2-fail-card__head img { width: 24px; height: 24px; flex-shrink: 0; display: block; }
     .arvo2-fail-card__label { font-family: var(--font-body); font-weight: 700; font-size: 12px; line-height: 16px; letter-spacing: 0.02em; text-transform: uppercase; color: var(--ink-dark); }
@@ -1128,32 +1135,67 @@
         <div class="arvo2-stack-20" data-gsap="stagger">
           <h2 class="arvo2-h2">The five failures identified in our initial discovery interviews</h2>
           <div class="arvo2-fail-row">
-            <div class="arvo2-fail-card" data-gsap="card">
-              <div class="arvo2-fail-card__head"><img src="../Asset/arvo2-icon-clock.svg" alt=""><span class="arvo2-fail-card__label">Manager's Paradox</span></div>
-              <p class="arvo2-fail-card__num">83%</p>
-              <p class="arvo2-fail-card__desc">managers citing <strong>no time</strong> to read through report</p>
+            <div class="arvo2-fail-card" data-gsap="card" tabindex="0">
+              <div class="arvo2-fail-card__inner">
+                <div class="arvo2-fail-card__front">
+                  <div class="arvo2-fail-card__head"><img src="../Asset/arvo2-icon-clock.svg" alt=""><span class="arvo2-fail-card__label">Manager's Paradox</span></div>
+                  <p class="arvo2-fail-card__num">83%</p>
+                  <p class="arvo2-fail-card__desc">managers citing <strong>no time</strong> to read through report</p>
+                </div>
+                <div class="arvo2-fail-card__back">
+                  <p class="arvo2-fail-card__back-text">10 of 12 managers spend most of their week doing tasks, not managing people. If ARVO took more than 5 minutes, they dropped it.</p>
+                </div>
+              </div>
             </div>
-            <div class="arvo2-fail-card" data-gsap="card">
-              <div class="arvo2-fail-card__head"><img src="../Asset/arvo2-icon-cloud-zap.svg" alt=""><span class="arvo2-fail-card__label">Jargons &amp; Mgt 101</span></div>
-              <p class="arvo2-fail-card__num">92%</p>
-              <p class="arvo2-fail-card__desc">Found it <strong>confusing and basic</strong></p>
+            <div class="arvo2-fail-card" data-gsap="card" tabindex="0">
+              <div class="arvo2-fail-card__inner">
+                <div class="arvo2-fail-card__front">
+                  <div class="arvo2-fail-card__head"><img src="../Asset/arvo2-icon-cloud-zap.svg" alt=""><span class="arvo2-fail-card__label">Jargons &amp; Mgt 101</span></div>
+                  <p class="arvo2-fail-card__num">92%</p>
+                  <p class="arvo2-fail-card__desc">Found it <strong>confusing and basic</strong></p>
+                </div>
+                <div class="arvo2-fail-card__back">
+                  <p class="arvo2-fail-card__back-text">11 of 12 got tripped up by jargon like "emotional labour" — language that reads fine in a research paper, not on a Tuesday afternoon.</p>
+                </div>
+              </div>
             </div>
           </div>
           <div class="arvo2-fail-row">
-            <div class="arvo2-fail-card" data-gsap="card">
-              <div class="arvo2-fail-card__head"><img src="../Asset/arvo2-icon-anonymous.svg" alt=""><span class="arvo2-fail-card__label">Honesty Gap</span></div>
-              <p class="arvo2-fail-card__num">67%</p>
-              <p class="arvo2-fail-card__desc">felt anonymity of feedback was not possible</p>
+            <div class="arvo2-fail-card" data-gsap="card" tabindex="0">
+              <div class="arvo2-fail-card__inner">
+                <div class="arvo2-fail-card__front">
+                  <div class="arvo2-fail-card__head"><img src="../Asset/arvo2-icon-anonymous.svg" alt=""><span class="arvo2-fail-card__label">Honesty Gap</span></div>
+                  <p class="arvo2-fail-card__num">67%</p>
+                  <p class="arvo2-fail-card__desc">felt anonymity of feedback was not possible</p>
+                </div>
+                <div class="arvo2-fail-card__back">
+                  <p class="arvo2-fail-card__back-text">8 of 12 said small team sizes made it easy to guess who wrote what, so they held back the truth instead.</p>
+                </div>
+              </div>
             </div>
-            <div class="arvo2-fail-card" data-gsap="card">
-              <div class="arvo2-fail-card__head"><img src="../Asset/arvo2-icon-layout.svg" alt=""><span class="arvo2-fail-card__label">Cognitive Overload</span></div>
-              <p class="arvo2-fail-card__num">67%</p>
-              <p class="arvo2-fail-card__desc">missed key alerts due to <strong>cluttered layout</strong></p>
+            <div class="arvo2-fail-card" data-gsap="card" tabindex="0">
+              <div class="arvo2-fail-card__inner">
+                <div class="arvo2-fail-card__front">
+                  <div class="arvo2-fail-card__head"><img src="../Asset/arvo2-icon-layout.svg" alt=""><span class="arvo2-fail-card__label">Cognitive Overload</span></div>
+                  <p class="arvo2-fail-card__num">67%</p>
+                  <p class="arvo2-fail-card__desc">missed key alerts due to <strong>cluttered layout</strong></p>
+                </div>
+                <div class="arvo2-fail-card__back">
+                  <p class="arvo2-fail-card__back-text">8 of 12 managers scrolled straight past the one signal that actually needed their attention that week.</p>
+                </div>
+              </div>
             </div>
-            <div class="arvo2-fail-card" data-gsap="card">
-              <div class="arvo2-fail-card__head"><img src="../Asset/arvo2-icon-repair.svg" alt=""><span class="arvo2-fail-card__label">Structural Resignation</span></div>
-              <p class="arvo2-fail-card__num">58%</p>
-              <p class="arvo2-fail-card__desc">felt powerless to fix issues not within their authority</p>
+            <div class="arvo2-fail-card" data-gsap="card" tabindex="0">
+              <div class="arvo2-fail-card__inner">
+                <div class="arvo2-fail-card__front">
+                  <div class="arvo2-fail-card__head"><img src="../Asset/arvo2-icon-repair.svg" alt=""><span class="arvo2-fail-card__label">Structural Resignation</span></div>
+                  <p class="arvo2-fail-card__num">58%</p>
+                  <p class="arvo2-fail-card__desc">felt powerless to fix issues not within their authority</p>
+                </div>
+                <div class="arvo2-fail-card__back">
+                  <p class="arvo2-fail-card__back-text">Salary, headcount, and leave policy came up again and again — none of it something a dashboard redesign can fix.</p>
+                </div>
+              </div>
             </div>
           </div>
           <p class="arvo2-fail-caption">The five patterns we identified based on feedback by 12 Managers.</p>
